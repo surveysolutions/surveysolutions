@@ -9,31 +9,45 @@ using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
+using Raven.Abstractions.Logging;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using Raven.Client.Indexes;
 
+using ILog = WB.Core.SharedKernel.Logger.ILog;
+
 namespace WB.Core.Infrastructure.Implementation
 {
     internal class ReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
     {
-        private static readonly object LockObject = new object();
+        private const int MaxAllowedFailedEvents = 100;
+
+        private static readonly object RebuildAllViewsLockObject = new object();
+        private static readonly object ErrorsLockObject = new object();
 
         private static bool areViewsBeingRebuiltNow = false;
+        private static bool shouldStopViewsRebuilding = false;
 
-        private static string statusMessage = "No administration operations were performed so far.";
+        private static string statusMessage;
         private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
 
         private readonly IStreamableEventStore eventStore;
         private readonly IEventBus eventBus;
         private readonly DocumentStore ravenStore;
+        private readonly ILog logger;
 
-        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore)
+        static ReadLayerService()
+        {
+            UpdateStatusMessage("No administration operations were performed so far.");
+        }
+
+        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.ravenStore = ravenStore;
+            this.logger = logger;
         }
 
         #region IReadLayerStatusService implementation
@@ -49,7 +63,7 @@ namespace WB.Core.Infrastructure.Implementation
 
         public string GetReadableStatus()
         {
-            return string.Format("{1}{0}Are views being rebuilt now: {2}{0}Errors: {3}",
+            return string.Format("{1}{0}{0}Are views being rebuilt now: {2}{0}{0}{3}",
                 Environment.NewLine,
                 statusMessage,
                 areViewsBeingRebuiltNow ? "Yes" : "No",
@@ -61,13 +75,21 @@ namespace WB.Core.Infrastructure.Implementation
             new Task(this.RebuildAllViews).Start();
         }
 
+        public void StopAllViewsRebuilding()
+        {
+            if (!areViewsBeingRebuiltNow)
+                return;
+
+            shouldStopViewsRebuilding = true;
+        }
+
         #endregion // IReadLayerAdministrationService implementation
 
         private void RebuildAllViews()
         {
             if (!areViewsBeingRebuiltNow)
             {
-                lock (LockObject)
+                lock (RebuildAllViewsLockObject)
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
@@ -89,7 +111,9 @@ namespace WB.Core.Infrastructure.Implementation
             }
             catch (Exception exception)
             {
-                SaveErrorForStatusReport("Unexpected error occurred", exception);
+                this.SaveErrorForStatusReport("Unexpected error occurred", exception);
+                UpdateStatusMessage(string.Format("Unexpectedly failed. Last status message:{0}{1}",
+                    Environment.NewLine, statusMessage));
                 throw;
             }
             finally
@@ -100,6 +124,8 @@ namespace WB.Core.Infrastructure.Implementation
 
         private void DeleteAllViews()
         {
+            ThrowIfShouldStopViewsRebuilding();
+
             UpdateStatusMessage("Determining count of views to be deleted.");
 
             this.ravenStore
@@ -109,11 +135,10 @@ namespace WB.Core.Infrastructure.Implementation
             this.ravenStore
                 .DatabaseCommands
                 .ForDatabase("Views")
-                .PutIndex("AllViews",
-                    new IndexDefinition
-                    {
-                        Map = "from view in views let ViewId = doc[\"@metadata\"][\"@id\"] select new { ViewId };"
-                    });
+                .PutIndex(
+                    "AllViews",
+                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
+                    overwrite: true);
 
             int initialViewCount;
             using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
@@ -124,6 +149,8 @@ namespace WB.Core.Infrastructure.Implementation
                     .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
                     .Count();
             }
+
+            ThrowIfShouldStopViewsRebuilding();
 
             UpdateStatusMessage(string.Format("Deleting {0} views.", initialViewCount));
 
@@ -156,36 +183,80 @@ namespace WB.Core.Infrastructure.Implementation
             int processedEventsCount = 0;
             int failedEventsCount = 0;
 
+            ThrowIfShouldStopViewsRebuilding();
+
             UpdateStatusMessage("Determining count of events to be republished.");
 
-            int allEventsCount = this.eventStore.CountOfAllEventsWithoutSnapshots();
+            int allEventsCount = this.eventStore.CountOfAllEventsIncludingSnapshots();
 
-            UpdateStatusMessage(string.Format("Preparing to republish {0} events.", allEventsCount));
+            DateTime republishStarted = DateTime.Now;
+            UpdateStatusMessage(
+                "Acquiring first portion of events. "
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
 
-            foreach (CommittedEvent @event in this.eventStore.GetAllEventsWithoutSnapshots())
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEventsIncludingSnapshots())
             {
-                UpdateStatusMessage(string.Format("Publishing event {0} of {1}. Failed events: {2}.",
-                    processedEventsCount + 1, allEventsCount, failedEventsCount));
-
-                try
+                foreach (CommittedEvent @event in eventBulk)
                 {
-                    this.eventBus.Publish(@event);
-                }
-                catch (Exception exception)
-                {
-                    SaveErrorForStatusReport(
-                        string.Format("Failed to publish event {0} of {1} ({2})",
-                            processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
-                        exception);
+                    ThrowIfShouldStopViewsRebuilding();
 
-                    failedEventsCount++;
+                    UpdateStatusMessage(
+                        string.Format("Publishing event {0}. ", processedEventsCount + 1)
+                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
+
+                    try
+                    {
+                        this.eventBus.Publish(@event);
+                    }
+                    catch (Exception exception)
+                    {
+                        this.SaveErrorForStatusReport(
+                            string.Format("Failed to publish event {0} of {1} ({2})",
+                                processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
+                            exception);
+
+                        failedEventsCount++;
+                    }
+
+                    processedEventsCount++;
+
+                    if (failedEventsCount >= MaxAllowedFailedEvents)
+                        throw new Exception(string.Format("Failed to rebuild read layer. Too many events failed: {0}.", failedEventsCount));
                 }
 
-                processedEventsCount++;
+                UpdateStatusMessage(
+                    "Acquiring next portion of events. "
+                    + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
             }
 
-            UpdateStatusMessage(string.Format("{0} events were republished. Failed events: {1}.",
-                processedEventsCount, failedEventsCount));
+            UpdateStatusMessage(string.Format("All events were republished. "
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount)));
+        }
+
+        private static string GetReadablePublishingDetails(DateTime republishStarted,
+            int processedEventsCount, int allEventsCount, int failedEventsCount)
+        {
+            TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
+
+            int speedInEventsPerMinute = (int)(
+                republishTimeSpent.TotalSeconds == 0
+                ? 0
+                : 60 * processedEventsCount / republishTimeSpent.TotalSeconds);
+
+            return string.Format(
+                "Processed events: {1}. Total events: {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute.",
+                Environment.NewLine,
+                processedEventsCount, allEventsCount, failedEventsCount,
+                republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute);
+        }
+
+        private static void ThrowIfShouldStopViewsRebuilding()
+        {
+            if (shouldStopViewsRebuilding)
+            {
+                shouldStopViewsRebuilding = false;
+                throw new Exception("Views rebuilding stopped by request.");
+            }
         }
 
         private static void UpdateStatusMessage(string newMessage)
@@ -195,27 +266,48 @@ namespace WB.Core.Infrastructure.Implementation
 
         #region Error reporting methods
 
-        private static void SaveErrorForStatusReport(string message, Exception exception)
+        private void SaveErrorForStatusReport(string message, Exception exception)
         {
-            errors.Add(Tuple.Create(DateTime.Now, message, exception));
+            lock (ErrorsLockObject)
+            {
+                errors.Add(Tuple.Create(DateTime.Now, message, exception));
+            }
+
+            this.logger.Error(message, exception);
         }
 
         private static string GetReadableErrors()
         {
-            bool areThereNoErrors = errors.Count == 0;
+            lock (ErrorsLockObject)
+            {
+                bool areThereNoErrors = errors.Count == 0;
 
-            return areThereNoErrors
-                ? "Errors: None"
-                : string.Format(
-                    "Errors: {1}{0}{2}",
-                    Environment.NewLine,
-                    errors.Count,
-                    string.Join(Environment.NewLine, errors.Select(GetReadableError).ToArray()));
+                return areThereNoErrors
+                    ? "Errors: None"
+                    : string.Format(
+                        "Errors: {1}{0}{0}{2}",
+                        Environment.NewLine,
+                        errors.Count,
+                        string.Join(
+                            Environment.NewLine + Environment.NewLine,
+                            ReverseList(errors)
+                                .Select((error, index) => GetReadableError(error, shouldShowStackTrace: index < 10))
+                                .ToArray()));
+            }
         }
 
-        private static string GetReadableError(Tuple<DateTime, string, Exception> error)
+        private static IEnumerable<T> ReverseList<T>(List<T> list)
         {
-            return string.Format("{1}: {2}{0}{3}", Environment.NewLine, error.Item1, error.Item2, error.Item3);
+            for (int indexOfElement = list.Count - 1; indexOfElement >= 0; indexOfElement--)
+                yield return list[indexOfElement];
+        }
+
+        private static string GetReadableError(Tuple<DateTime, string, Exception> error, bool shouldShowStackTrace)
+        {
+            return string.Format("{1}: {2}{0}{3}", Environment.NewLine,
+                error.Item1,
+                error.Item2,
+                shouldShowStackTrace ? error.Item3.ToString() : error.Item3.Message);
         }
 
         #endregion // Error reporting methods
