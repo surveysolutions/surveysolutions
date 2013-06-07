@@ -14,12 +14,14 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Question;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.CompleteQuestionnaire
 {
     /// <summary>
     /// The complete questionnaire browse item.
     /// </summary>
-    public class CompleteQuestionnaireBrowseItem
+    public class CompleteQuestionnaireBrowseItem : IView
     {
         #region Constructors and Destructors
 

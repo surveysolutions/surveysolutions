@@ -9,6 +9,8 @@ using System.Threading;
 using Moq;
 using NUnit.Framework;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage.Tests
 {
     using System;
@@ -27,9 +29,9 @@ namespace Main.DenormalizerStorage.Tests
         {
             Mock<IPersistentStorage> storageMock=new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            PersistentDenormalizer<object> target = new PersistentDenormalizer<object>(cache, storageMock.Object);
+            var target = new PersistentDenormalizer<IView>(cache, storageMock.Object);
             var key = Guid.NewGuid();
-            var objectToStore = new object();
+            var objectToStore = Mock.Of<IView>();
             target.Store(objectToStore, key);
             storageMock.Verify(x => x.Store(objectToStore, key.ToString()), Times.Never());
             Assert.IsTrue(cache.Contains(key.ToString()));
@@ -129,7 +131,7 @@ namespace Main.DenormalizerStorage.Tests
         }
     }
 
-    public class TestObjectDump
+    public class TestObjectDump : IView
     {
         public TestObjectDump(string name, Guid key)
         {

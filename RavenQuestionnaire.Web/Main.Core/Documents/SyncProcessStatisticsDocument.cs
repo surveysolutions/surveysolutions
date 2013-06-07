@@ -6,6 +6,8 @@
 
 using Main.Core.View.SyncProcess;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -15,7 +17,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// Collect user statistics
     /// </summary>
-    public class SyncProcessStatisticsDocument
+    public class SyncProcessStatisticsDocument : IView
     {
         #region Constructors and Destructors
 

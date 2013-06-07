@@ -132,6 +132,10 @@
       <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>

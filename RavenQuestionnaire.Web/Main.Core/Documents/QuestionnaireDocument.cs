@@ -10,6 +10,8 @@
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -23,7 +25,7 @@ namespace Main.Core.Documents
     using WB.Core.SharedKernel.Utils.Logging;
 
     [SmartDenormalizer]
-    public class QuestionnaireDocument : IQuestionnaireDocument
+    public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
 
         private readonly List<Guid> triggers = new List<Guid>();

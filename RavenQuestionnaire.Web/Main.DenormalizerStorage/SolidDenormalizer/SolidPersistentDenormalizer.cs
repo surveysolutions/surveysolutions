@@ -27,7 +27,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
     /// </typeparam>
     [Obsolete]
     public class SolidPersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
-        where TView : class
+        where TView : class, IView
     {
         #region Fields
 
