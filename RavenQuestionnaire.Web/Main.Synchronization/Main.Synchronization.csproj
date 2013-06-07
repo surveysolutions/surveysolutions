@@ -101,7 +101,6 @@
     <Compile Include="SyncManager\SyncronizationStatus.cs" />
     <Compile Include="SyncSreamProvider\AllIntEventsStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\ExtFileEventStreamProvider.cs" />
-    <Compile Include="SyncSreamProvider\IExtSyncEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\IIntSyncEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\IntClientEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\ISyncEventStreamProvider.cs" />
