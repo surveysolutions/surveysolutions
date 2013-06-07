@@ -95,8 +95,9 @@ namespace Main.Synchronization.SyncSreamProvider
         /// </returns>
         public IEnumerable<AggregateRootEvent> GetEventStream()
         {
+            #warning ReadLayer: ToList
             return
-                this.storage.Query(_ => _.Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
+                this.storage.Query(_ => _.ToList().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
                     item =>
                     this.eventStore.ReadFrom(item.CompleteQuestionnaireId, int.MinValue, int.MaxValue).Select(
                         e => new AggregateRootEvent(e))).ToList());

@@ -65,8 +65,9 @@ namespace Main.Core.View.User
                     return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
 
                 // Perform the paged query
+                #warning ReadLayer: ToList
                 IEnumerable<UserDocument> query =
-                    queryableItems.Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(
+                    queryableItems.ToList().Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(
                         input.PageSize);
 
                 // And enact this query

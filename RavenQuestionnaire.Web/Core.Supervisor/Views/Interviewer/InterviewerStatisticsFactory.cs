@@ -79,7 +79,7 @@ namespace Core.Supervisor.Views.Interviewer
             {
                 var questionnairesGroupedByTemplate =
                     BuildItems(
-                        queryableDocumentItems.Where(q => q.Responsible!=null && q.Responsible.Id == input.InterviewerId).GroupBy(x => x.TemplateId))
+                        queryableDocumentItems.Where(q => q.Responsible!=null && q.Responsible.Id == input.InterviewerId).ToList().GroupBy(x => x.TemplateId))
                             .AsQueryable();
 
                 var retval = new InterviewerStatisticsView(input.InterviewerId.Value, user.UserName, input.Order,

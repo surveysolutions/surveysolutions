@@ -43,9 +43,14 @@ namespace Core.Supervisor.Views.Summary
 
             return this.survey.Query(queryableSurveys =>
             {
-                var groupedSurveys = queryableSurveys
-                    .Where(x => x.Responsible != null)
-                    .Where(x => !input.TemplateId.HasValue || x.TemplateId == input.TemplateId)
+                var surveyQuery = queryableSurveys.Where(x => x.Responsible != null);
+
+                if (input.TemplateId.HasValue)
+                {
+                    surveyQuery = surveyQuery.Where(x => x.TemplateId == input.TemplateId);
+                }
+
+                var groupedSurveys = surveyQuery
                     .ToList()
                     .Where(x => interviewers.Contains(x.Responsible.Id))
                     .GroupBy(x => x.Responsible);

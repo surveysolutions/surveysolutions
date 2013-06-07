@@ -32,12 +32,11 @@ namespace Core.Supervisor.Views.User
                 query = (x) => x.Roles.Contains(input.Role);
             }
 
-            query = query.AndAlso(x => !x.IsDeleted);
-
             return this.users.Query(queryable =>
             {
+                #warning ReadLayer: ToList
                 var queryResult =
-                    queryable.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+                    queryable.Where(x => !x.IsDeleted).ToList().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
 
                 var retVal = queryResult.Skip((input.Page - 1) * input.PageSize)
                                                 .Take(input.PageSize)

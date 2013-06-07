@@ -39,14 +39,23 @@ namespace Core.Supervisor.Views.Status
                 .Distinct()
                 .ToList());
 
-            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
-                this.surveys.Query(_ => _
-                    .Where(x => x.Responsible != null)
-                    .Where(x => status.PublicId == SurveyStatus.Unknown.PublicId || x.Status.PublicId == status.PublicId)
-                    .ToList()
-                    .Where(x => interviewers.Contains(x.Responsible.Id))
-                    .GroupBy(x => x.Responsible)
-                    .ToList());
+            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys =
+                this.surveys.Query(queryable =>
+                {
+                    IQueryable<CompleteQuestionnaireBrowseItem> query = queryable
+                        .Where(x => x.Responsible != null);
+
+                    if (status.PublicId != SurveyStatus.Unknown.PublicId)
+                    {
+                        query = query.Where(x => x.Status.PublicId == status.PublicId);
+                    }
+
+                    return query
+                        .ToList()
+                        .Where(x => interviewers.Contains(x.Responsible.Id))
+                        .GroupBy(x => x.Responsible)
+                        .ToList();
+                });
 
             var items = BuildItems(groupedSurveys).AsQueryable();
 
