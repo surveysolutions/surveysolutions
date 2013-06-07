@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Synchronization.SyncManager;
+
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
@@ -79,6 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 this.DataExportMock.Object,
                 (new Mock<IViewRepository>()).Object,
                 this.SyncProcessFactoryMock.Object,
+                (new Mock<ISyncManager>()).Object,
                 (new Mock<ILog>()).Object);
         }
 
