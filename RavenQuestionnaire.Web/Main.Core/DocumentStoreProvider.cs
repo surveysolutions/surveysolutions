@@ -17,15 +17,17 @@ namespace Main.Core
         private readonly string username;
         private readonly string password;
         private readonly string storagePath;
+        private readonly string defaultDatabase;
 
         private EmbeddableDocumentStore embeddedStorage;
 
-        public DocumentStoreProvider(string storagePath, bool isEmbedded, string username, string password)
+        public DocumentStoreProvider(string storagePath, string defaultDatabase, bool isEmbedded, string username, string password)
         {
             this.storagePath = storagePath;
             this.isEmbedded = isEmbedded;
             this.username = username;
             this.password = password;
+            this.defaultDatabase = defaultDatabase;
         }
 
         protected override DocumentStore CreateInstance(IContext context)
@@ -39,11 +41,13 @@ namespace Main.Core
 
         private DocumentStore GetServerStorage()
         {
-            bool shouldSupplyCredentials = !string.IsNullOrWhiteSpace(this.username);
+            var store = new DocumentStore { Url = this.storagePath, DefaultDatabase = this.defaultDatabase };
+            if (!string.IsNullOrWhiteSpace(this.username))
+            {
+                store.Credentials = new NetworkCredential(this.username, this.password);
+            }
 
-            return shouldSupplyCredentials
-                ? new DocumentStore { Url = this.storagePath, Credentials = new NetworkCredential(this.username, this.password) }
-                : new DocumentStore { Url = this.storagePath };
+            return store;
         }
 
         private EmbeddableDocumentStore GetEmbededStorage()

@@ -81,8 +81,10 @@ namespace Web.Supervisor.App_Start
             string username = WebConfigurationManager.AppSettings["Raven.Username"];
             string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
+            string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+
             var kernel = new StandardKernel(
-                new SupervisorCoreRegistry(storePath, isEmbeded, username, password, isApprovedSended),
+                new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
                 new CoreInfrastructureModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
