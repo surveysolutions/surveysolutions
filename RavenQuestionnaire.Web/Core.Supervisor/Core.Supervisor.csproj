@@ -94,6 +94,8 @@
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="SyncCacher\ISyncCacher.cs" />
+    <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
