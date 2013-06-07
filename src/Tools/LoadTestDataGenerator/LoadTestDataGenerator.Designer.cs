@@ -49,6 +49,11 @@
             this.chkHeadquarter = new System.Windows.Forms.CheckBox();
             this.txtHQName = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
+            this.label6 = new System.Windows.Forms.Label();
+            this.eventsStatistics = new System.Windows.Forms.TextBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.processStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // generate
@@ -249,7 +254,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(435, 409);
+            this.ClientSize = new System.Drawing.Size(830, 487);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.eventsStatistics);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.defaultDatabaseName);
             this.Controls.Add(this.txtHQName);
@@ -303,6 +311,10 @@
         private System.Windows.Forms.CheckBox chkGenerateSnapshoots;
         private System.Windows.Forms.CheckBox chkHeadquarter;
         private System.Windows.Forms.TextBox txtHQName;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox eventsStatistics;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel processStatus;
     }
 }
 

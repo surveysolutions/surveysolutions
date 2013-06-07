@@ -51,6 +51,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,9 +60,13 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WB.Core.SharedKernel.Utils">
+      <HintPath>..\..\Core\Infrastructure\WB.Core.Infrastructure\bin\Debug\WB.Core.SharedKernel.Utils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="EventStatisticItem.cs" />
     <Compile Include="LoadTestDataGeneratorRegistry.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="CompositionRoot.cs" />
