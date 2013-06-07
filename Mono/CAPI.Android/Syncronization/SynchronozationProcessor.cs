@@ -67,7 +67,7 @@ namespace CAPI.Android.Syncronization
 
         private void Validate()
         {
-            OnStatusChanged(new SynchronizationEventArgs("validating",Operation.Validation));
+            OnStatusChanged(new SynchronizationEventArgs("validating",Operation.Validation,false));
 
             CancelIfException(() =>
                 {
@@ -75,13 +75,16 @@ namespace CAPI.Android.Syncronization
                     {
                         pullDataProcessor.Proccess(chunck);
                     }
+
                 });
+            if (remoteChuncksForDownload.Any(c => !c.Value))
+                throw new OperationCanceledException("pull wasn't completed");
         }
 
         private void Pull()
         {
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, 0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true, 0));
 
             CancelIfException(() =>
                 {
@@ -110,7 +113,7 @@ namespace CAPI.Android.Syncronization
                     return;
                     
                 }
-                OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull,
+                OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
                                                                         (i*100)/remoteChuncksForDownload.Count));
                 i++;
             }
@@ -120,7 +123,7 @@ namespace CAPI.Android.Syncronization
         {
 
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, 0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, 0));
 
             CancelIfException(() =>
                 {
@@ -131,7 +134,7 @@ namespace CAPI.Android.Syncronization
                         ExitIfCanceled();
                         push.PushChunck(chunckDescription.Id, chunckDescription.Content, syncId);
                         pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
-                        OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, (i * 100) / dataByChuncks.Count));
+                        OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;
                     }
                 });
@@ -148,7 +151,7 @@ namespace CAPI.Android.Syncronization
                     credentials = authentificator.RequestCredentials();
 
                     OnStatusChanged(
-                        new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId), Operation.Handshake));
+                        new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId), Operation.Handshake, true));
                     Thread.Sleep(1000);
                     syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
                 });

@@ -192,7 +192,7 @@ namespace CAPI.Android
 
 
                     if (currentOperation != e.OperationType)
-                        CreateDialog(currentStyle, e.OperationTitle, true);
+                        CreateDialog(currentStyle, e.OperationTitle, e.Cancelable);
                     else
                         progressDialog.SetMessage(e.OperationTitle);
 
