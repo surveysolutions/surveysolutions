@@ -37,11 +37,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.interviewersCount = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.generateSupervisorEvents = new System.Windows.Forms.CheckBox();
+            this.clearDatabase = new System.Windows.Forms.CheckBox();
             this.chkSetAnswers = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.ctrlProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.generateCapiEvents = new System.Windows.Forms.CheckBox();
+            this.defaultDatabaseName = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.chkGenerateSnapshoots = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -125,25 +128,58 @@
             this.label4.TabIndex = 7;
             this.label4.Text = "Interviewers count";
             // 
-            // checkBox1
+            // generateSupervisorEvents
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(18, 43);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(163, 17);
-            this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "Generate supervisor\'s events";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.generateSupervisorEvents.AutoSize = true;
+            this.generateSupervisorEvents.Checked = true;
+            this.generateSupervisorEvents.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.generateSupervisorEvents.Location = new System.Drawing.Point(15, 66);
+            this.generateSupervisorEvents.Name = "generateSupervisorEvents";
+            this.generateSupervisorEvents.Size = new System.Drawing.Size(163, 17);
+            this.generateSupervisorEvents.TabIndex = 9;
+            this.generateSupervisorEvents.Text = "Generate supervisor\'s events";
+            this.generateSupervisorEvents.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // clearDatabase
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(18, 13);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(97, 17);
-            this.checkBox2.TabIndex = 10;
-            this.checkBox2.Text = "Clear database";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.clearDatabase.AutoSize = true;
+            this.clearDatabase.Checked = true;
+            this.clearDatabase.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.clearDatabase.Location = new System.Drawing.Point(15, 36);
+            this.clearDatabase.Name = "clearDatabase";
+            this.clearDatabase.Size = new System.Drawing.Size(97, 17);
+            this.clearDatabase.TabIndex = 10;
+            this.clearDatabase.Text = "Clear database";
+            this.clearDatabase.UseVisualStyleBackColor = true;
+            // 
+            // generateCapiEvents
+            // 
+            this.generateCapiEvents.AutoSize = true;
+            this.generateCapiEvents.Checked = true;
+            this.generateCapiEvents.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.generateCapiEvents.Location = new System.Drawing.Point(15, 253);
+            this.generateCapiEvents.Name = "generateCapiEvents";
+            this.generateCapiEvents.Size = new System.Drawing.Size(139, 17);
+            this.generateCapiEvents.TabIndex = 11;
+            this.generateCapiEvents.Text = "Generate CAPI\'s events";
+            this.generateCapiEvents.UseVisualStyleBackColor = true;
+            // 
+            // defaultDatabaseName
+            // 
+            this.defaultDatabaseName.Enabled = false;
+            this.defaultDatabaseName.Location = new System.Drawing.Point(163, 13);
+            this.defaultDatabaseName.Name = "defaultDatabaseName";
+            this.defaultDatabaseName.Size = new System.Drawing.Size(257, 20);
+            this.defaultDatabaseName.TabIndex = 12;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(82, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Database name";
             // 
             // chkSetAnswers
             // 
@@ -190,11 +226,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(435, 356);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.defaultDatabaseName);
+            this.Controls.Add(this.generateCapiEvents);
             this.Controls.Add(this.chkGenerateSnapshoots);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.chkSetAnswers);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.clearDatabase);
+            this.Controls.Add(this.generateSupervisorEvents);
             this.Controls.Add(this.interviewersCount);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.supervisorsCount);
@@ -227,11 +266,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox interviewersCount;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox generateSupervisorEvents;
+        private System.Windows.Forms.CheckBox clearDatabase;
         private System.Windows.Forms.CheckBox chkSetAnswers;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar ctrlProgress;
+        private System.Windows.Forms.CheckBox generateCapiEvents;
+        private System.Windows.Forms.TextBox defaultDatabaseName;
+        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox chkGenerateSnapshoots;
     }
 }
