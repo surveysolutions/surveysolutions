@@ -120,6 +120,7 @@ namespace Main.Core.Documents
 
         #region Properties
 
+        #warning ReadLayer: this is now serialized to DB. but should not
         private GroupHash QuestionHash
         {
             get
