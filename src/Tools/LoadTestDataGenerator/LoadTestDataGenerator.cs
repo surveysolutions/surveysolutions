@@ -130,7 +130,12 @@ namespace LoadTestDataGenerator
 
         private void UpdateStatus(string status)
         {
-            processStatus.Text = status;
+            processStatus.GetCurrentParent().InvokeIfRequired(x => processStatus.Text = status);
+        }
+
+        private void UpdateStatistic(string statistic)
+        {
+            eventsStatistics.InvokeIfRequired(x => eventsStatistics.Text = statistic);
         }
 
         private void UpdateEventsStatistics()
@@ -148,7 +153,7 @@ namespace LoadTestDataGenerator
                 sb.AppendFormat("{0,-7} {1}", statistic.Count, statistic.Type);
                 sb.AppendLine();
             }
-            eventsStatistics.Text = sb.ToString();
+            UpdateStatistic(sb.ToString());
         }
 
         private void PrepareDatabase()

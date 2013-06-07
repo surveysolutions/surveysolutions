@@ -197,7 +197,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(454, 10);
+            this.label5.Location = new System.Drawing.Point(457, 10);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 13);
             this.label5.TabIndex = 13;
@@ -249,7 +249,7 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ctrlProgress});
+            this.ctrlProgress, this.processStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 402);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(859, 22);
@@ -260,6 +260,7 @@
             // 
             this.processStatus.Name = "processStatus";
             this.processStatus.Size = new System.Drawing.Size(23, 23);
+            this.processStatus.Spring = true;
             // 
             // LoadTestDataGenerator
             // 
