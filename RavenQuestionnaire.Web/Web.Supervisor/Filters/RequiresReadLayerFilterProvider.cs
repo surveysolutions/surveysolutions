@@ -20,6 +20,7 @@ namespace Web.Supervisor.Filters
                 return new[]
                 {
                     typeof(MaintenanceController),
+                    typeof(ControlPanelController),
                 };
             }
         }

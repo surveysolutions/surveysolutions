@@ -35,12 +35,8 @@
     <Reference Include="NConfig">
       <HintPath>..\..\..\packages\NConfig.1.0.15\lib\Net40\NConfig.dll</HintPath>
     </Reference>
-    <Reference Include="Ncqrs">
-      <HintPath>..\..\Core\Infrastructure\WB.Core.Infrastructure\bin\Debug\Ncqrs.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\RavenQuestionnaire.Web\Main.Core\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
@@ -60,11 +56,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WB.Core.SharedKernel.Utils">
-      <HintPath>..\..\Core\Infrastructure\WB.Core.Infrastructure\bin\Debug\WB.Core.SharedKernel.Utils.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="LoadTestDataGeneratorRegistry.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="CompositionRoot.cs" />
@@ -108,6 +102,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
@@ -123,6 +121,10 @@
     <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{DEDC7ECF-21F8-4D39-81C4-5DBE2E8B9D5D}</Project>
       <Name>WB.Core.Questionnaire</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

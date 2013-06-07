@@ -42,11 +42,10 @@
             return this.survey.Query(queryableSurveys =>
             {
                 var groupedSurveys = queryableSurveys
-                    .Where(x =>
-                        !input.TemplateId.HasValue
-                        ? (x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                        : (x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
+                    .Where(x => x.Responsible != null)
+                    .Where(x => !input.TemplateId.HasValue || x.TemplateId == input.TemplateId)
                     .ToList()
+                    .Where(x => interviewers.Contains(x.Responsible.Id))
                     .GroupBy(x => x.Responsible);
 
                 var items = this.BuildItems(groupedSurveys).AsQueryable();

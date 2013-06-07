@@ -1,3 +1,5 @@
+using System.Web.Configuration;
+
 using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Shared.Web.Filters;
 
@@ -35,8 +37,8 @@ namespace Web.Supervisor.Injections
     {
         private readonly bool isApprovedSended;
 
-        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, string username, string password, bool isApprovedSended)
-            : base(repositoryPath, isEmbeded, username, password)
+        public SupervisorCoreRegistry(string repositoryPath, string defaultDatabase, bool isEmbeded, string username, string password, bool isApprovedSended)
+            : base(repositoryPath, isEmbeded, username, password, defaultDatabase)
         {
             this.isApprovedSended = isApprovedSended;
         }
@@ -53,18 +55,31 @@ namespace Web.Supervisor.Injections
 
         protected override object GetStorage(IContext context)
         {
-            Type storageType = typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+            Type storageType = ShouldUsePersistentReadLayer()
+                ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
+                : typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
 
             return this.Kernel.Get(storageType);
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {
-            return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
+            var supervisorSpecificTypes = new Dictionary<Type, Type>
             {
-                { typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider) },
-                {typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute)}
-            });
+                { typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute) }
+            };
+
+            if (!ShouldUsePersistentReadLayer())
+            {
+                supervisorSpecificTypes.Add(typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider));
+            }
+
+            return base.GetTypesForRegistration().Concat(supervisorSpecificTypes);
+        }
+
+        private static bool ShouldUsePersistentReadLayer()
+        {
+            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }
 
         public override void Load()

@@ -125,12 +125,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PersistentDenormalizerTests.cs" />
-    <Compile Include="RavenDenormalizerStorageTests\RavenDenormalizerStorageTestsContext.cs" />
-    <Compile Include="RavenDenormalizerStorageTests\when_counting_views_and_views_are_being_rebuilt.cs" />
-    <Compile Include="RavenDenormalizerStorageTests\when_getting_view_by_id_and_views_are_being_rebuilt.cs" />
-    <Compile Include="RavenDenormalizerStorageTests\when_querying_views_and_views_are_being_rebuilt.cs" />
-    <Compile Include="RavenDenormalizerStorageTests\when_removing_view_and_views_are_being_rebuilt.cs" />
-    <Compile Include="RavenDenormalizerStorageTests\when_storing_view_and_views_are_being_rebuilt.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
