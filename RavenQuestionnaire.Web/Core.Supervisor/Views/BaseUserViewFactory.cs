@@ -6,6 +6,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views
 {
     using System.Linq.Expressions;

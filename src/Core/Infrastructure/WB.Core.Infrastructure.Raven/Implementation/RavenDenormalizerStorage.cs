@@ -1,13 +1,12 @@
-﻿namespace Main.DenormalizerStorage
+﻿using System;
+using System.Linq;
+
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Extensions;
+
+namespace WB.Core.Infrastructure.Raven.Implementation
 {
-    using System;
-    using System.Linq;
-
-    using Raven.Client;
-    using Raven.Client.Document;
-
-    using Raven.Client.Extensions;
-
     #warning TLK: make string identifiers here after switch to new storage
     public class RavenDenormalizerStorage<TView> : IQueryableDenormalizerStorage<TView>
         where TView : class

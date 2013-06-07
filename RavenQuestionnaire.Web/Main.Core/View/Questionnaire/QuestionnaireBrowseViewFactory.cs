@@ -11,6 +11,8 @@ using Main.DenormalizerStorage;
 using System;
 using System.Linq;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.Questionnaire
 {
     using Main.Core.Utility;

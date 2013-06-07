@@ -120,6 +120,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Utils"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure", "..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Raven", "..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj", "{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RavenQuestionnaire.Web.vsmdi
@@ -811,6 +813,21 @@ Global
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|x86.ActiveCfg = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -27,6 +27,9 @@ using Ninject.Modules;
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
+
+using WB.Core.Infrastructure;
+
 #endif
 
 namespace Main.Core

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
     using WB.UI.Designer.Providers.CQRS.Accounts.View;

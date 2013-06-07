@@ -18,6 +18,8 @@ using Main.Core.View.CompleteQuestionnaire;
 using Main.Core.Utility;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views.Interviewer
 {
     using Core.Supervisor.Views.Survey;

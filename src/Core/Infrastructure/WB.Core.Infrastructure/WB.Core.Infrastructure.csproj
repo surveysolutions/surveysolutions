@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDenormalizerStorage.cs" />
+    <Compile Include="IFilterableDenormalizerStorage.cs" />
+    <Compile Include="IQueryableDenormalizerStorage.cs" />
     <Compile Include="IReadLayerAdministrationService.cs" />
     <Compile Include="IReadLayerStatusService.cs" />
     <Compile Include="IView.cs" />

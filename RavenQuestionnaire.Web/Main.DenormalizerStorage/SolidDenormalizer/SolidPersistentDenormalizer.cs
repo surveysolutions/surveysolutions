@@ -10,6 +10,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage.SolidDenormalizer
 {
     using System;

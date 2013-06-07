@@ -6,6 +6,9 @@
 //   The int client event stream provider.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.Synchronization.SyncSreamProvider
 {
     using System.Collections.Generic;

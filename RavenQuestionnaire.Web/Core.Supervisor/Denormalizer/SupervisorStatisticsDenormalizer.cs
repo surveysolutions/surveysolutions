@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Denormalizer
 {
     using System;

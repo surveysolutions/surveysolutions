@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.Views.Status
+﻿using WB.Core.Infrastructure;
+
+namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
