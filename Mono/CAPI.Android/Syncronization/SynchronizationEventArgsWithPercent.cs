@@ -14,12 +14,13 @@ namespace CAPI.Android.Syncronization
 {
     public class SynchronizationEventArgsWithPercent:SynchronizationEventArgs
     {
-        public SynchronizationEventArgsWithPercent(string operationTitle, int percent)
-            : base(operationTitle)
+        public SynchronizationEventArgsWithPercent(string operationTitle, Operation operationType, int percent)
+            : base(operationTitle, operationType)
         {
             if (percent < 0 || percent > 100)
                 throw new ArgumentException("percent value is incorrect");
             Percent = percent;
+            
         }
 
         public int Percent { get; private set; }

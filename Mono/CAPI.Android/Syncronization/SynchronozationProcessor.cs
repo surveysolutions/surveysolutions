@@ -67,7 +67,7 @@ namespace CAPI.Android.Syncronization
 
         private void Validate()
         {
-            OnStatusChanged(new SynchronizationEventArgs("validating"));
+            OnStatusChanged(new SynchronizationEventArgs("validating",Operation.Validation));
 
             CancelIfException(() =>
                 {
@@ -81,7 +81,7 @@ namespace CAPI.Android.Syncronization
         private void Pull()
         {
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", 0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, 0));
 
             CancelIfException(() =>
                 {
@@ -110,7 +110,7 @@ namespace CAPI.Android.Syncronization
                     return;
                     
                 }
-                OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling",
+                OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull,
                                                                         (i*100)/remoteChuncksForDownload.Count));
                 i++;
             }
@@ -120,7 +120,7 @@ namespace CAPI.Android.Syncronization
         {
 
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", 0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, 0));
 
             CancelIfException(() =>
                 {
@@ -131,7 +131,7 @@ namespace CAPI.Android.Syncronization
                         ExitIfCanceled();
                         push.PushChunck(chunckDescription.Id, chunckDescription.Content, syncId);
                         pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
-                        OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", (i*100)/dataByChuncks.Count));
+                        OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, (i * 100) / dataByChuncks.Count));
                         i++;
                     }
                 });
@@ -148,7 +148,7 @@ namespace CAPI.Android.Syncronization
                     credentials = authentificator.RequestCredentials();
 
                     OnStatusChanged(
-                        new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId)));
+                        new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId), Operation.Handshake));
                     Thread.Sleep(1000);
                     syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
                 });
@@ -174,14 +174,17 @@ namespace CAPI.Android.Syncronization
 
         public void Cancel()
         {
+            if(tokenSource2.IsCancellationRequested)
+                return;
             Task.Factory.StartNew(CancelInternal);
         }
 
         private void CancelInternal()
         {
-         
-            tokenSource2.Cancel();
             OnProcessCanceling();
+
+            tokenSource2.Cancel();
+           
             List<Exception> exceptions = new List<Exception>();
             try
             {
@@ -191,7 +194,7 @@ namespace CAPI.Android.Syncronization
             {
                 exceptions = e.InnerExceptions.ToList();
             }
-
+            exceptions.Add(new Exception("operation was canceled"));
             OnProcessCanceled(exceptions);
         }
 
@@ -204,6 +207,8 @@ namespace CAPI.Android.Syncronization
 
         protected void OnProcessFinished()
         {
+            if(tokenSource2.IsCancellationRequested)
+                return;
             var handler = ProcessFinished;
             if (handler != null)
                 handler(this, EventArgs.Empty);

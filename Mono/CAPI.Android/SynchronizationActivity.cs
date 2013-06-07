@@ -140,33 +140,33 @@ namespace CAPI.Android
 
         private void synchronizer_ProcessFinished(object sender, EventArgs e)
         {
-            DestroyDialog();
+            this.RunOnUiThread(DestroyDialog);
             DestroySynchronizer();
         }
 
         void synchronizer_ProcessCanceling(object sender, EventArgs e)
         {
-            this.RunOnUiThread(() =>
-                {
-                    DestroyDialog();
-                    CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false);
-                });
+            this.RunOnUiThread(() => CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false));
         }
 
         private void synchronizer_ProcessCanceled(object sender, SynchronizationCanceledEventArgs evt)
         {
-            DestroyDialog();
-            DestroySynchronizer();
-
-            if (evt.Exceptions != null || evt.Exceptions.Count > 0)
-            {
-                StringBuilder sb=new StringBuilder();
-                foreach (var exception in evt.Exceptions)
+            this.RunOnUiThread(() =>
                 {
-                    sb.AppendLine(exception.Message);
-                }
-                tvSyncResult.Text = sb.ToString();
-            }
+                    DestroyDialog();
+
+
+                    if (evt.Exceptions != null || evt.Exceptions.Count > 0)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var exception in evt.Exceptions)
+                        {
+                            sb.AppendLine(exception.Message);
+                        }
+                        tvSyncResult.Text = sb.ToString();
+                    }
+                });
+            DestroySynchronizer();
         }
 
         private void DestroySynchronizer()
@@ -178,6 +178,8 @@ namespace CAPI.Android
             synchronizer = null;
         }
 
+        private Operation? currentOperation;
+
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {
             this.RunOnUiThread(() =>
@@ -187,15 +189,14 @@ namespace CAPI.Android
                     var currentStyle = messageWithPersents == null
                                            ? ProgressDialogStyle.Spinner
                                            : ProgressDialogStyle.Horizontal;
-                    if (currentStyle != dialogStyle)
-                    {
-                        DestroyDialog();
+
+
+                    if (currentOperation != e.OperationType)
                         CreateDialog(currentStyle, e.OperationTitle, true);
-                    }
                     else
-                    {
                         progressDialog.SetMessage(e.OperationTitle);
-                    }
+
+                    currentOperation = e.OperationType;
 
                     if (messageWithPersents != null)
                     {
@@ -205,16 +206,15 @@ namespace CAPI.Android
 
         }
 
-        private ProgressDialogStyle dialogStyle;
         #region diialog manipulation
 
         private void CreateDialog(ProgressDialogStyle style, string title, bool cancelable)
         {
-            dialogStyle = style;
+            DestroyDialog();
             progressDialog = new ProgressDialog(this);
             
             progressDialog.SetTitle("Synchronizing");
-            progressDialog.SetProgressStyle(dialogStyle);
+            progressDialog.SetProgressStyle(style);
             progressDialog.SetMessage(title);
             progressDialog.SetCancelable(false);
 
@@ -231,14 +231,13 @@ namespace CAPI.Android
 
         private void DestroyDialog()
         {
-            this.RunOnUiThread(() =>
-                {
-                    if (progressDialog == null)
-                        return;
-                    progressDialog.Dismiss();
-                    progressDialog.Dispose();
-                    progressDialog = null;
-                });
+
+            if (progressDialog == null)
+                return;
+            progressDialog.Dismiss();
+            progressDialog.Dispose();
+            progressDialog = null;
+
         }
 
         #endregion

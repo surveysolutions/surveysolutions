@@ -14,11 +14,21 @@ namespace CAPI.Android.Syncronization
 {
     public class SynchronizationEventArgs:EventArgs
     {
-        public SynchronizationEventArgs(string operationTitle)
+        public SynchronizationEventArgs(string operationTitle, Operation operationType)
         {
             OperationTitle = operationTitle;
+            OperationType = operationType;
         }
 
         public string OperationTitle { get; private set; }
+        public Operation OperationType { get; private set; }
+    }
+
+    public enum Operation
+    {
+        Handshake,
+        Pull,
+        Push,
+        Validation
     }
 }
