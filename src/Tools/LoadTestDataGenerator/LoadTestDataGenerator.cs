@@ -40,7 +40,6 @@ namespace LoadTestDataGenerator
         protected readonly DocumentStore RavenStore;
         const string IndexForDelete = "AllEvents";
         const string IndexForStatistics = "EventsStatistics";
-        string databaseName = "";
 
         public LoadTestDataGenerator(ICommandService commandService,
             IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveyStorage,
@@ -51,8 +50,12 @@ namespace LoadTestDataGenerator
             this.SurveyStorage = surveyStorage;
             InitializeComponent();
 
-            this.databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
-            defaultDatabaseName.Text = this.databaseName;
+            var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+            if (string.IsNullOrWhiteSpace(databaseName))
+            {
+                databaseName = "<system>";
+            }
+            defaultDatabaseName.Text = databaseName;
 
             this.UpdateEventsStatistics();
         }
@@ -61,7 +64,7 @@ namespace LoadTestDataGenerator
         {
             this.PrepareDatabase();
 
-            
+
 
             if (this.clearDatabase.Checked)
             {
@@ -116,10 +119,6 @@ namespace LoadTestDataGenerator
 
         private void PrepareDatabase()
         {
-            this.RavenStore
-                .DatabaseCommands
-                .EnsureDatabaseExists(this.databaseName);
-
             this.RavenStore
                 .DatabaseCommands
                 .PutIndex(IndexForDelete,
@@ -424,7 +423,7 @@ namespace LoadTestDataGenerator
 
         private static Random GetRandom()
         {
-            var random = new Random((int)(new DateTime()).Ticks);
+            var random = new Random();
             return random;
         }
 
