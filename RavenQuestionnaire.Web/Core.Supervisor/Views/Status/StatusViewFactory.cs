@@ -7,7 +7,6 @@
     using Main.Core.Documents;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Utility;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.DenormalizerStorage;
@@ -39,23 +38,14 @@
                         (tmplId, questionnaires) =>
                         new TemplateLight(tmplId, questionnaires.FirstOrDefault().QuestionnaireTitle)));
 
-            List<TemplateLight> headers = this.surveys.Query(_ => _
-                .ToList()
-                .Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle))
-                .Distinct()
-                .ToList());
-
-            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
-                this.surveys.Query(_ => _
-                    .Where(x => x.Responsible != null)
-                    .Where(x => status.PublicId == SurveyStatus.Unknown.PublicId || x.Status.PublicId == status.PublicId)
-                    .ToList()
-                    .Where(x => interviewers.Contains(x.Responsible.Id))
-                    .GroupBy(x => x.Responsible)
-                    .ToList());
-
-            var items = BuildItems(groupedSurveys).AsQueryable();
-
+            var items =
+                this.surveys.Query(
+                    _ =>
+                    _.Where(
+                        x =>
+                        x.Responsible != null && interviewers.Contains(x.Responsible.Id)
+                        && (status.PublicId == SurveyStatus.Unknown.PublicId || x.Status.PublicId == status.PublicId)))
+                    .GroupBy(x => x.Responsible, x => x, (u, q) => this.BuildItems(u, q));
           
             if (input.Orders.Count == 0)
             {

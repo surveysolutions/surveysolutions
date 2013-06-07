@@ -3,12 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using Main.Core.Documents;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Utility;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Questionnaire;
@@ -41,13 +39,16 @@
             }
 
             return this.survey.Query(queryableSurveys =>
-            {
-                var groupedSurveys = queryableSurveys
-                    .Where(x => x.Responsible != null)
-                    .Where(x => !input.TemplateId.HasValue || x.TemplateId == input.TemplateId)
-                    .ToList()
-                    .Where(x => interviewers.Contains(x.Responsible.Id))
-                    .GroupBy(x => x.Responsible);
+                {
+                    var items =
+                        queryableSurveys.Where(
+                            x =>
+                            x.Responsible != null && interviewers.Contains(x.Responsible.Id)
+                            && (!input.TemplateId.HasValue || x.TemplateId == input.TemplateId))
+                                        .GroupBy(
+                                            x => x.Responsible,
+                                            x => x,
+                                            (u, q) => this.BuildItems(u, q));
 
                         return new SummaryView(input.Page, input.PageSize, 0, template)
                                    {
@@ -66,16 +67,16 @@
                     });
         }
 
-        protected SummaryViewItem BuildItems(UserLight user, IEnumerable<CompleteQuestionnaireBrowseItem> tmpl)
+        protected SummaryViewItem BuildItems(UserLight user, IEnumerable<CompleteQuestionnaireBrowseItem> questionnaires)
         {
             return new SummaryViewItem(
                 user,
-                tmpl.Count(),
-                tmpl.Count(q => q.Status.PublicId == SurveyStatus.Initial.PublicId),
-                tmpl.Count(q => q.Status.PublicId == SurveyStatus.Error.PublicId),
-                tmpl.Count(q => q.Status.PublicId == SurveyStatus.Complete.PublicId),
-                tmpl.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId),
-                tmpl.Count(q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
+                questionnaires.Count(),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Initial.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Error.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Complete.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
 
         }
     }
