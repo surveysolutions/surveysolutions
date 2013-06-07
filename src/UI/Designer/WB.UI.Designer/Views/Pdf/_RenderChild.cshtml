@@ -10,24 +10,13 @@
     }
     else
     {
-
-
-        if (this.Model.Parent == ViewBag.QuestionnaireGuid)
-        {
-            <h1>
-                @this.Model.Title
-            </h1>
-        }
-        else
-        {
-            <h2>
-                @this.Model.Title
-            </h2>
-        }
-        @*<dl>
+        <text>
+            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Model.GetDepthIn() + 1, Html.Encode(Model.Title)))
+        </text>
+        <dl>
             <dt>Guid: </dt><dd>@Model.PublicKey</dd>
-            <dt>parentguid:</dt><dd>@Model.Parent</dd>
-        </dl>*@
+            <dt>parentguid:</dt><dd>@(Model.ParentView != null ? Model.ParentView.PublicKey.ToString() : string.Empty)</dd>
+        </dl>
     }
 
     @if (this.Model.Children != null && this.Model.Children.Count > 0)
