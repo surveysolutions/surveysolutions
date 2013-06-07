@@ -17,14 +17,13 @@ namespace CAPI.Android.Syncronization.Pull
     public class RestPull
     {
         private readonly string baseAddress;
-        private readonly ISyncAuthenticator validator;
+     
         private const string getChunckPath = "GetChunckPath";
         private const string GetARKeysPath = "importexport/GetARKeys";
 
-        public RestPull(string baseAddress, ISyncAuthenticator validator)
+        public RestPull(string baseAddress)
         {
             this.baseAddress = baseAddress;
-            this.validator = validator;
         }
 
         public byte[] RequestChunck(Guid id,Guid synckId)
@@ -55,7 +54,7 @@ namespace CAPI.Android.Syncronization.Pull
             return response.Content;*/
         }
 
-        public IDictionary<Guid, bool> GetChuncks(Guid synckId)
+        public IDictionary<Guid, bool> GetChuncks(string login, string password, Guid synckId)
         {
             var restClient = new RestClient(this.baseAddress);
 
@@ -64,9 +63,8 @@ namespace CAPI.Android.Syncronization.Pull
 
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
-            var currentCredentials = validator.RequestCredentials();
-            request.AddParameter("login", currentCredentials.Login);
-            request.AddParameter("password", currentCredentials.Password);
+            request.AddParameter("login", login);
+            request.AddParameter("password", password);
 
             IRestResponse response = restClient.Execute(request);
 

@@ -10,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Handshake;
@@ -43,6 +44,8 @@ namespace CAPI.Android.Syncronization
         
         private IDictionary<Guid, bool> remoteChuncksForDownload;
 
+        private readonly ISyncAuthenticator authentificator;
+        private SyncCredentials credentials;
         private Guid syncId;
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
@@ -50,10 +53,11 @@ namespace CAPI.Android.Syncronization
             this.context = context;
             
             Preparation();
+            this.authentificator = authentificator;
 
-            pull = new RestPull(SettingsManager.GetSyncAddressPoint(), authentificator);
+            pull = new RestPull(SettingsManager.GetSyncAddressPoint());
             push = new RestPush(SettingsManager.GetSyncAddressPoint());
-            handshake = new RestHandshake(SettingsManager.GetSyncAddressPoint(), authentificator);
+            handshake = new RestHandshake(SettingsManager.GetSyncAddressPoint());
 
             pullDataProcessor = new PullDataProcessor(changelog, NcqrsEnvironment.Get<ICommandService>());
             pushDataProcessor = new PushDataProcessor(changelog);
@@ -75,7 +79,8 @@ namespace CAPI.Android.Syncronization
         {
             ExitIfCanceled();
             OnStatusChanged(new SynchronizationEventWithPercent("pulling", 0));
-            remoteChuncksForDownload = pull.GetChuncks(syncId);
+
+            remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId);
             int i = 1;
             foreach (var chunckId in remoteChuncksForDownload.Select(c=>c.Key).ToList())
             {
@@ -112,8 +117,14 @@ namespace CAPI.Android.Syncronization
         private void Handshake()
         {
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEvent("handshake"));
-            syncId = handshake.Execute(null);
+         
+            var androidId = SettingsManager.AndroidId;
+            var appId = SettingsManager.InstallationId;
+            credentials = authentificator.RequestCredentials();
+            
+            OnStatusChanged(new SynchronizationEvent(string.Format("handshake app {0}, device {1}", appId, androidId)));
+            Thread.Sleep(1000);
+            syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
         }
 
         #endregion
