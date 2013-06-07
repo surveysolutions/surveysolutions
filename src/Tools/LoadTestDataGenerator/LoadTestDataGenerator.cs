@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Text;
 using Main.Core.Commands.Questionnaire;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
@@ -6,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using Main.DenormalizerStorage;
@@ -72,31 +74,29 @@ namespace LoadTestDataGenerator
             {
                 this.PrepareDatabase();
 
-            
-
-            if (this.clearDatabase.Checked)
+                if (this.clearDatabase.Checked)
                 {
-                UpdateStatus("start cleaning database");
+                    UpdateStatus("start cleaning database");
                     this.ClearDatabase();
-                UpdateStatus("database cleaned successfully");
+                    UpdateStatus("database cleaned successfully");
                 }
 
-            this.UpdateEventsStatistics();
+                this.UpdateEventsStatistics();
 
-            if (this.generateSupervisorEvents.Checked)
+                if (this.generateSupervisorEvents.Checked)
                 {
-                UpdateStatus("start generating supervisor's events");
+                    UpdateStatus("start generating supervisor's events");
                     this.GenerateSupervisorsEvents();
-                UpdateStatus("supervisor's events generated successfully");
+                    UpdateStatus("supervisor's events generated successfully");
                 }
 
-            this.UpdateEventsStatistics();
+                this.UpdateEventsStatistics();
 
-            if (this.generateCapiEvents.Checked)
+                if (this.generateCapiEvents.Checked)
                 {
-                UpdateStatus("start generating CAPI's events");
-                this.GenerateCapiEvents();
-                UpdateStatus("CAPI's events generated successfully");
+                    UpdateStatus("start generating CAPI's events");
+                    this.GenerateCapiEvents();
+                    UpdateStatus("CAPI's events generated successfully");
                 }
             });
         }
@@ -185,7 +185,7 @@ namespace LoadTestDataGenerator
                 this.CreateSnapshoot(surveyId);
             }
 
-            var rand = GetRandom();
+            var rand = RandomObject;
 
             foreach (var surveyId in surveyIds)
             {
@@ -201,7 +201,7 @@ namespace LoadTestDataGenerator
 
         private void FillAnswers(Guid surveyId, bool partially = false)
         {
-            var rand = GetRandom();
+            var rand = RandomObject;
             var survey = this.SurveyStorage.GetById(surveyId);
             survey.ConnectChildsWithParent();
             var autoPropagateQuestoins = survey.GetQuestions().Where(x => x is IAutoPropagate).ToList();
@@ -451,7 +451,7 @@ namespace LoadTestDataGenerator
 
         private List<Guid> GetDummyAnswers(IQuestion q)
         {
-            var random = GetRandom();
+            var random = RandomObject;
             if (q is IMultyOptionsQuestion)
             {
                 var rand = random;
@@ -535,6 +535,11 @@ namespace LoadTestDataGenerator
         private void chkHeadquarter_CheckedChanged(object sender, EventArgs e)
         {
             txtHQName.Enabled = (sender as CheckBox).Checked;
+        }
+
+        private void LoadTestDataGenerator_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
