@@ -77,31 +77,30 @@ namespace Core.Supervisor.Views.Interviewer
 
             return this.documentItemSession.Query(queryable =>
             {
-                var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
+                var items = new List<InterviewerGroupView>();
 
-                IQueryable<CompleteQuestionnaireBrowseItem> docs =
-                    queryable.Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
+                var docs = queryable.Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
 
                 if (input.TemplateId.HasValue)
                 {
                     InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId.Value, docs, input);
                     if (interviewerGroupView.Items.Count > 0)
                     {
-                        items.Items.Add(interviewerGroupView);
+                        items.Add(interviewerGroupView);
                     }
                 }
                 else
                 {
-                    IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
-                    foreach (InterviewerGroupView interviewerGroupView in
-                        gr.ToList().Select(template => this.SelectItems(template.Key, docs, input)).Where(
-                            interviewerGroupView => interviewerGroupView.Items.Count > 0))
-                    {
-                        items.Items.Add(interviewerGroupView);
-                    }
+                    docs.GroupBy(
+                        t => t.TemplateId,
+                        t => t,
+                        (templateId, questionnaires) => this.SelectItems(templateId, questionnaires, input))
+                        .Where(_ => _.Items.Any())
+                        .ToList()
+                        .ForEach(items.Add);
                 }
 
-                return items;
+                return new InterviewerView(user.UserName, user.PublicKey, items.ToList());
             });
         }
 
@@ -125,56 +124,41 @@ namespace Core.Supervisor.Views.Interviewer
         /// The RavenQuestionnaire.Core.Views.User.InterviewerGroupView.
         /// </returns>
         private InterviewerGroupView SelectItems(
-            Guid templateId, IQueryable<CompleteQuestionnaireBrowseItem> docs, InterviewerInputModel input)
+            Guid templateId, IEnumerable<CompleteQuestionnaireBrowseItem> docs, InterviewerInputModel input)
         {
-            int count = docs.Where(t => t.TemplateId == templateId).Count();
-            if (count == 0)
+            var query = docs.Where(t => t.TemplateId == templateId);
+            if (input.Orders.Any())
             {
-                return new InterviewerGroupView(
-                    templateId, 
-                    string.Empty, 
-                    new List<CompleteQuestionnaireBrowseItem>(), 
-                    input.Order, 
-                    input.Page, 
-                    input.PageSize, 
-                    count);
-            }
-
-            docs = docs.Where(t => t.TemplateId == templateId);
-            if (input.Orders.Count > 0)
-            {
-                List<string> o =
-                    Queryable.Distinct<string>(docs.Where(t => t.FeaturedQuestions.Count() != 0).SelectMany(t => t.FeaturedQuestions).Select(
-                            y => y.PublicKey.ToString())).ToList();
+                var o =
+                    query.Where(t => t.FeaturedQuestions.Any())
+                        .SelectMany(t => t.FeaturedQuestions.Select(y => y.PublicKey.ToString()));
                 if (o.Contains(input.Orders[0].Field))
                 {
-                    docs = input.Orders[0].Direction == OrderDirection.Asc
-                               ? docs.OrderBy(
-                                   t =>
-                                   t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field).
-                                       Select(x => x.Answer.ToString()).FirstOrDefault())
-                               : docs.OrderByDescending(
-                                   t =>
-                                   t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field).
-                                       Select(x => x.Answer.ToString()).FirstOrDefault());
+                    Func<CompleteQuestionnaireBrowseItem, string> order =
+                        t =>
+                        t.FeaturedQuestions.Where(y => y.PublicKey.ToString() == input.Orders[0].Field)
+                         .Select(x => x.Answer.ToString())
+                         .FirstOrDefault();
+
+                    query = input.Orders[0].Direction == OrderDirection.Asc
+                                ? query.OrderBy(_ => order)
+                                : query.OrderByDescending(_ => order);
                 }
                 else
                 {
-                    docs = input.Orders[0].Direction == OrderDirection.Asc
-                               ? docs.OrderBy(input.Orders[0].Field)
-                               : docs.OrderByDescending(input.Orders[0].Field);
+                    query = query.AsQueryable().OrderUsingSortExpression(input.Order).AsQueryable();
                 }
             }
 
-            docs = docs.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            var items = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             return new InterviewerGroupView(
-                templateId, 
-                docs.ToList().Count > 0 ? docs.ToList().FirstOrDefault().QuestionnaireTitle : string.Empty, 
-                docs.ToList(), 
+                templateId,
+                items.FirstOrDefault() == null ? string.Empty : items.FirstOrDefault().QuestionnaireTitle, 
+                items, 
                 input.Order, 
                 input.Page, 
                 input.PageSize, 
-                count);
+                query.Count());
         }
 
         #endregion

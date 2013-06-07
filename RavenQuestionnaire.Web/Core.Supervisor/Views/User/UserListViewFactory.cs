@@ -21,16 +21,8 @@
         
         public UserListView Load(UserListViewInputModel input)
         {
-            var hasRole = input.Role != UserRoles.Undefined;
-
-            Func<UserDocument, bool> query = (x) => false;
-
-            if (hasRole)
-            {
-                query = (x) => x.Roles.Contains(input.Role);
-            }
-
-            query = query.AndAlso(x => !x.IsDeleted);
+            Func<UserDocument, bool> query =
+                x => !x.IsDeleted && (input.Role == UserRoles.Undefined || x.Roles.Contains(input.Role));
 
             return this.users.Query(queryable =>
             {
