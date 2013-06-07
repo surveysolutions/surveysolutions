@@ -17,6 +17,7 @@ using CAPI.Android.Syncronization.Handshake;
 using CAPI.Android.Syncronization.Pull;
 using CAPI.Android.Syncronization.Push;
 using CAPI.Android.Utils;
+using Main.Core.Events;
 using Main.Synchronization.Credentials;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -41,8 +42,8 @@ namespace CAPI.Android.Syncronization
 
         private readonly PullDataProcessor pullDataProcessor;
         private readonly PushDataProcessor pushDataProcessor;
-        
-        private IDictionary<Guid, bool> remoteChuncksForDownload;
+
+        private IDictionary<SyncItemsMeta, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -73,7 +74,7 @@ namespace CAPI.Android.Syncronization
                 {
                     foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value).Select(c => c.Key).ToList())
                     {
-                        pullDataProcessor.Proccess(chunck);
+                        pullDataProcessor.Proccess(chunck.AggregateRootId);
                     }
 
                 });
@@ -102,8 +103,8 @@ namespace CAPI.Android.Syncronization
 
                 try
                 {
-                    var data = pull.RequestChunck(chunckId, syncId);
-                    pullDataProcessor.Save(data, chunckId);
+                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.AggregateRootId, chunckId.AggregateRootType, syncId);
+                    pullDataProcessor.Save(data, chunckId.AggregateRootId);
                     remoteChuncksForDownload[chunckId] = true;
                 }
                 catch
