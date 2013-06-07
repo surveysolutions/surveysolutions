@@ -65,22 +65,22 @@ namespace LoadTestDataGenerator
 
             this.Start();
 
-            Task.Run(() => {
-            this.PrepareDatabase();
+            Task.Run(() =>
+            {
+                this.PrepareDatabase();
 
-            if (clearDatabase.Checked)
-            {
-                this.ClearDatabase();
-            }
-            if (generateSupervisorEvents.Checked)
-            {
-                this.GenerateSupervisorsEvents();
+                if (clearDatabase.Checked)
+                {
+                    this.ClearDatabase();
+                }
+                if (generateSupervisorEvents.Checked)
+                {
+                    this.GenerateSupervisorsEvents();
                 }
                 if (generateCapiEvents.Checked)
-            {
-                GenerateCapiEvents();
-            }
-            
+                {
+                    GenerateCapiEvents();
+                }
             });
         }
 
@@ -105,11 +105,6 @@ namespace LoadTestDataGenerator
         private void IncreaseProgress()
         {
             ctrlProgress.GetCurrentParent().InvokeIfRequired(x => ctrlProgress.Value += 1);
-            }
-            if (generateCapiEvents.Checked)
-            {
-                GenerateCapiEvents();
-            }
         }
 
         private void PrepareDatabase()
