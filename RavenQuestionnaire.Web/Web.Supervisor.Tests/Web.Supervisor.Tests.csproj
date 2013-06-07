@@ -131,6 +131,10 @@
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
+      <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Web.Supervisor\Web.Supervisor.csproj">
       <Project>{41e11b34-5beb-48e6-b9b0-2dea05cfa7fb}</Project>
       <Name>Web.Supervisor</Name>

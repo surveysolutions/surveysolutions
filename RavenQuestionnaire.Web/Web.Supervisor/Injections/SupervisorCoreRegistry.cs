@@ -1,4 +1,6 @@
 using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.Synchronization.SyncManager;
+using WB.Core.Synchronization.SyncProvider;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Injections
@@ -86,6 +88,10 @@ namespace Web.Supervisor.Injections
                 context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
 
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
+
+            this.Bind<ISyncManager>().To<SyncManager>();
+            this.Bind<ISyncProvider>().To<SyncProvider>();
+
         }
     }
 }
