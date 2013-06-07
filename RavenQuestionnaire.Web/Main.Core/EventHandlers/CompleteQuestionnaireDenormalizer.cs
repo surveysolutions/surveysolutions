@@ -206,6 +206,8 @@ namespace Main.Core.EventHandlers
             CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             item.Remove(evnt.Payload.PublicKey, evnt.Payload.PropagationKey, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
+
+            this._documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>

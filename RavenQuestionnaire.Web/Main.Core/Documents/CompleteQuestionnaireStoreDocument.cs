@@ -539,7 +539,7 @@ namespace Main.Core.Documents
         /// </returns>
         public CompleteQuestionWrapper GetQuestionByKey(string key)
         {
-            return this.questionHash.GetQuestionByKey(key);
+            return this.QuestionHash.GetQuestionByKey(key);
         }
 
         /// <summary>

@@ -135,7 +135,17 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             throw new NotImplementedException("Not needed for Mono so far.");
         }
 
-        public IEnumerable<CommittedEvent> GetAllEventsWithoutSnapshots()
+        public int CountOfAllEventsIncludingSnapshots()
+        {
+            throw new NotImplementedException("Not needed for Mono so far.");
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
+        {
+            throw new NotImplementedException("Not needed for Mono so far.");
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
         {
             throw new NotImplementedException("Not needed for Mono so far.");
         }
