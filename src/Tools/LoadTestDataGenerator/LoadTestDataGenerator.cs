@@ -157,7 +157,6 @@ namespace LoadTestDataGenerator
                                           .ForEach(x => _.Items.Add(string.Format("{0,-7} {1}", x.Count, x.Type)));
                             });
                     });
-            eventsStatistics.Text = sb.ToString();
         }
 
         private void PrepareDatabase()
