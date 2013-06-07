@@ -36,32 +36,8 @@ namespace CAPI.Android.Syncronization.Pull
                                                            new KeyValuePair<string, string>("rootType", rootType));
             if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new NullReferenceException("content is absent");
-            return GetBytes(ExtractData(package.ItemsContainer[0]));
+            return GetBytes(package.ItemsContainer[0].Content);
         }
-
-        private string ExtractData(SyncItem package)
-        {
-            var content = package.Content;
-            if (package.IsCompressed)
-                using (Stream s = GenerateStreamFromString(package.Content))
-                {
-                    content = PackageHelper.Decompress(s);
-                }
-
-            return
-                content;
-        }
-
-        public Stream GenerateStreamFromString(string s)
-        {
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
 
         public IDictionary<SyncItemsMeta, bool> GetChuncks(string login, string password, Guid synckId)
         {

@@ -68,13 +68,13 @@ namespace CAPI.Android.Syncronization
 
         private void Validate()
         {
-            OnStatusChanged(new SynchronizationEventArgs("validating",Operation.Validation,false));
+            OnStatusChanged(new SynchronizationEventArgs("validating",Operation.Validation,true));
 
             CancelIfException(() =>
                 {
                     foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value).Select(c => c.Key).ToList())
                     {
-                        pullDataProcessor.Proccess(chunck.AggregateRootId);
+                        pullDataProcessor.Proccess(chunck.AggregateRootId, true);
                     }
 
                 });

@@ -42,17 +42,27 @@ namespace CAPI.Android.Syncronization.Pull
             }
         }
 
-        public void Proccess(Guid chunckId)
+        public void Proccess(Guid chunckId,bool isCompressed)
         {
 
             Thread.Sleep(500);
             var path = GetFileName(chunckId);
             var unzippedData = string.Empty;
-            using (var fs = File.Open(path, FileMode.Open))
+
+
+            if (isCompressed)
             {
-                unzippedData = PackageHelper.Decompress(fs) ;
+                using (var fs = File.Open(path, FileMode.Open))
+                {
+                    unzippedData = PackageHelper.Decompress(fs);
+                }
+            }
+            else
+            {
+                unzippedData = File.ReadAllText(path);
             }
 
+        
             if(string.IsNullOrEmpty(unzippedData))
                 return;
             /*var command = new UploadSupervisorData(unzippedData);
