@@ -309,9 +309,14 @@ namespace LoadTestDataGenerator
             var supervisors = this.GenerateSupervisors(int.Parse(this.supervisorsCount.Text));
             UpdateStatus("create interviewers");
             var interviewers = this.GenerateInterviewers(int.Parse(this.interviewersCount.Text), supervisors);
-            UpdateStatus("create survey");
+            UpdateStatus("create surveys");
             var surveyIds = this.GenerateSurveys(int.Parse(this.surveys_amount.Text), template, hq).ToList();
-            UpdateStatus("create featured questions");
+
+            if (featuredQuestions != null)
+            {
+                UpdateStatus("create featured questions");    
+            }
+            
             foreach (var surveyId in surveyIds)
             {
                 if (featuredQuestions != null)
