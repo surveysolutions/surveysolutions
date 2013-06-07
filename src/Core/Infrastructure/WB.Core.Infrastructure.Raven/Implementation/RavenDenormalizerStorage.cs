@@ -9,7 +9,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
 {
     #warning TLK: make string identifiers here after switch to new storage
     public class RavenDenormalizerStorage<TView> : IQueryableDenormalizerStorage<TView>
-        where TView : class
+        where TView : class, IView
     {
         private readonly DocumentStore ravenStore;
 
