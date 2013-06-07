@@ -16,14 +16,12 @@ namespace CAPI.Android.Syncronization.Pull
     {
         private readonly string baseAddress;
         private const string getChunckPath = "GetChunckPath";
-        private readonly ISyncAuthenticator validator;
 
-        public RestPull(string baseAddress, ISyncAuthenticator validator)
+        public RestPull(string baseAddress)
         {
             this.baseAddress = baseAddress;
-            this.validator = validator;
         }
-        public byte[] RequestChunck(Guid id)
+        public byte[] RequestChunck(Guid id,Guid synckId)
         {
             Thread.Sleep(500);
             return PackageHelper.Compress(string.Format("hello capi pull {0}", id));
@@ -49,6 +47,18 @@ namespace CAPI.Android.Syncronization.Pull
                 throw exception;
             }
             return response.Content;*/
+        }
+
+        public IDictionary<Guid, bool> GetChuncks(Guid synckId)
+        {
+            Thread.Sleep(1000);
+            var retval = new Dictionary<Guid, bool>();
+            for (int i = 0; i < 3; i++)
+            {
+                retval.Add(Guid.NewGuid(), false);
+            }
+
+            return retval;
         }
     }
 }

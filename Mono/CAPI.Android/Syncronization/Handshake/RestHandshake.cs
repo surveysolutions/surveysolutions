@@ -9,21 +9,25 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Main.Synchronization.Credentials;
 
 namespace CAPI.Android.Syncronization.Handshake
 {
     public class RestHandshake
     {
-        public IDictionary<Guid, bool> GetChuncks()
-        {
-            Thread.Sleep(1000);
-            var retval = new Dictionary<Guid, bool>();
-            for (int i = 0; i < 3; i++)
-            {
-                retval.Add(Guid.NewGuid(), false);
-            }
+        private readonly ISyncAuthenticator validator;
+        private readonly string baseAddress;
 
-            return retval;
+        public RestHandshake(string baseAddress, ISyncAuthenticator validator)
+        {
+            this.validator = validator;
+            this.baseAddress = baseAddress;
+        }
+
+        public Guid Execute( /*string login,string password, string deviceId,*/ Guid? lastState)
+        {
+            var currentCredentials = validator.RequestCredentials();
+            return Guid.NewGuid();
         }
     }
 }

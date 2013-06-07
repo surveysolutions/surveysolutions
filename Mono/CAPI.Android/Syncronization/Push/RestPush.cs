@@ -15,8 +15,14 @@ namespace CAPI.Android.Syncronization.Push
     public class RestPush
     {
         private const int MillisecondsTimeout=1000;
+        private readonly string baseAddress;
 
-        public void PushChunck(Guid chunckId,byte[] content)
+        public RestPush(string baseAddress)
+        {
+            this.baseAddress = baseAddress;
+        }
+
+        public void PushChunck(Guid chunckId, byte[] content, Guid synckId)
         {
             Thread.Sleep(MillisecondsTimeout);
         }
