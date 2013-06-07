@@ -12,6 +12,8 @@ using Main.Core.Events.Synchronization;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
+using WB.Core.Infrastructure;
+
 namespace RavenQuestionnaire.Core.EventHandlers
 {
     /// <summary>
