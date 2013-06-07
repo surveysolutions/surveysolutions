@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
     using System;

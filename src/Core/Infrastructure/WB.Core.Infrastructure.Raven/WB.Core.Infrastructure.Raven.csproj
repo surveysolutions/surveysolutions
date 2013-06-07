@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\RavenDenormalizerStorage.cs" />
     <Compile Include="RavenInfrastructureModule.cs" />
     <Compile Include="Implementation\RavenReadLayerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
