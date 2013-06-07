@@ -153,10 +153,20 @@ namespace CAPI.Android
                 });
         }
 
-        private void synchronizer_ProcessCanceled(object sender, EventArgs evt)
+        private void synchronizer_ProcessCanceled(object sender, SynchronizationCanceledEventArgs evt)
         {
             DestroyDialog();
             DestroySynchronizer();
+
+            if (evt.Exceptions != null || evt.Exceptions.Count > 0)
+            {
+                StringBuilder sb=new StringBuilder();
+                foreach (var exception in evt.Exceptions)
+                {
+                    sb.AppendLine(exception.Message);
+                }
+                tvSyncResult.Text = sb.ToString();
+            }
         }
 
         private void DestroySynchronizer()

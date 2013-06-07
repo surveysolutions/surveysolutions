@@ -69,10 +69,13 @@ namespace CAPI.Android.Syncronization
         {
             OnStatusChanged(new SynchronizationEventArgs("validating"));
 
-            foreach (var chunck in remoteChuncksForDownload.Where(c=>c.Value).Select(c=>c.Key).ToList())
-            {
-                pullDataProcessor.Proccess(chunck);
-            }
+            CancelIfException(() =>
+                {
+                    foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value).Select(c => c.Key).ToList())
+                    {
+                        pullDataProcessor.Proccess(chunck);
+                    }
+                });
         }
 
         private void Pull()
@@ -80,51 +83,75 @@ namespace CAPI.Android.Syncronization
             ExitIfCanceled();
             OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", 0));
 
-            remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId);
+            CancelIfException(() =>
+                {
+                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId);
+                });
+
             int i = 1;
-            foreach (var chunckId in remoteChuncksForDownload.Select(c=>c.Key).ToList())
+
+            foreach (var chunckId in remoteChuncksForDownload.Select(c => c.Key).ToList())
             {
                 //if process is canceled we stop pulling but without exception 
                 //in order to move forward and proccess uploaded data
-                if(ct.IsCancellationRequested)
+                if (ct.IsCancellationRequested)
                     return;
 
-                var data = pull.RequestChunck(chunckId, syncId);
-                pullDataProcessor.Save(data, chunckId);
-                remoteChuncksForDownload[chunckId] = true;
+                try
+                {
+                    var data = pull.RequestChunck(chunckId, syncId);
+                    pullDataProcessor.Save(data, chunckId);
+                    remoteChuncksForDownload[chunckId] = true;
+                }
+                catch
+                {
+                    //in case of exception we stop pulling but without exception 
+                    //in order to move forward and proccess uploaded data
+                    return;
+                    
+                }
                 OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling",
-                                                                    (i*100)/remoteChuncksForDownload.Count));
+                                                                        (i*100)/remoteChuncksForDownload.Count));
                 i++;
             }
         }
 
         private void Push()
         {
+
             ExitIfCanceled();
             OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", 0));
-            var dataByChuncks = pushDataProcessor.GetChuncks();
-            int i = 1;
-            foreach (var chunckDescription in dataByChuncks)
-            {
-                ExitIfCanceled();
-                push.PushChunck(chunckDescription.Id, chunckDescription.Content, syncId);
-                pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
-                OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", (i*100)/dataByChuncks.Count));
-                i++;
-            }
+
+            CancelIfException(() =>
+                {
+                    var dataByChuncks = pushDataProcessor.GetChuncks();
+                    int i = 1;
+                    foreach (var chunckDescription in dataByChuncks)
+                    {
+                        ExitIfCanceled();
+                        push.PushChunck(chunckDescription.Id, chunckDescription.Content, syncId);
+                        pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
+                        OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", (i*100)/dataByChuncks.Count));
+                        i++;
+                    }
+                });
         }
 
         private void Handshake()
         {
             ExitIfCanceled();
-         
-            var androidId = SettingsManager.AndroidId;
-            var appId = SettingsManager.InstallationId;
-            credentials = authentificator.RequestCredentials();
-            
-            OnStatusChanged(new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId)));
-            Thread.Sleep(1000);
-            syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
+
+            CancelIfException(() =>
+                {
+                    var androidId = SettingsManager.AndroidId;
+                    var appId = SettingsManager.InstallationId;
+                    credentials = authentificator.RequestCredentials();
+
+                    OnStatusChanged(
+                        new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId)));
+                    Thread.Sleep(1000);
+                    syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
+                });
         }
 
         #endregion
@@ -227,6 +254,19 @@ namespace CAPI.Android.Syncronization
             if (ct.IsCancellationRequested)
                 ct.ThrowIfCancellationRequested();
         }
- 
+
+        private void CancelIfException(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch
+            {
+                Cancel();
+                throw;
+            }
+        }
+
     }
 }
