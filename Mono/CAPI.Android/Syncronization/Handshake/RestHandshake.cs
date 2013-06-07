@@ -26,7 +26,7 @@ namespace CAPI.Android.Syncronization.Handshake
 
         public Guid Execute( /*string login,string password, string deviceId,*/ Guid? lastState)
         {
-            var currentCredentials = validator.RequestCredentials();
+        //    var currentCredentials = validator.RequestCredentials();
             return Guid.NewGuid();
         }
     }

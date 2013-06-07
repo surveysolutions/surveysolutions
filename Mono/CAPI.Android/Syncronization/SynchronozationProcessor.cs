@@ -51,7 +51,7 @@ namespace CAPI.Android.Syncronization
             
             Preparation();
 
-            pull = new RestPull(SettingsManager.GetSyncAddressPoint());
+            pull = new RestPull(SettingsManager.GetSyncAddressPoint(), authentificator);
             push = new RestPush(SettingsManager.GetSyncAddressPoint());
             handshake = new RestHandshake(SettingsManager.GetSyncAddressPoint(), authentificator);
 

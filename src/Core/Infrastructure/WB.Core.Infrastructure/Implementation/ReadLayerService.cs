@@ -153,7 +153,8 @@ namespace WB.Core.Infrastructure.Implementation
 
         private void RepublishAllEvents()
         {
-            int processedEventsCount = 0;
+            throw new NotImplementedException("not implemented");
+         /*   int processedEventsCount = 0;
             int failedEventsCount = 0;
 
             UpdateStatusMessage("Determining count of events to be republished.");
@@ -185,7 +186,7 @@ namespace WB.Core.Infrastructure.Implementation
             }
 
             UpdateStatusMessage(string.Format("{0} events were republished. Failed events: {1}.",
-                processedEventsCount, failedEventsCount));
+                processedEventsCount, failedEventsCount));*/
         }
 
         private static void UpdateStatusMessage(string newMessage)
