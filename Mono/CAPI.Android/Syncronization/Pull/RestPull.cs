@@ -22,7 +22,7 @@ namespace CAPI.Android.Syncronization.Pull
         private readonly string baseAddress;
 
         private const string getChunckPath = "importexport/GetSyncPackage";
-        private const string GetARKeysPath = "importexport/GetARKeys";
+        private const string getARKeysPath = "importexport/GetARKeys";
 
         public RestPull(string baseAddress)
         {
@@ -31,7 +31,7 @@ namespace CAPI.Android.Syncronization.Pull
 
         public byte[] RequestChunck(string login, string password, Guid id, string rootType, Guid synckId)
         {
-            var package = ExcecuteRestRequest<SyncPackage>(this.baseAddress, login, password,
+            var package = ExcecuteRestRequest<SyncPackage>(getChunckPath, login, password,
                                                            new KeyValuePair<string, string>("aRKey", id.ToString()),
                                                            new KeyValuePair<string, string>("rootType", rootType));
             if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
@@ -65,7 +65,7 @@ namespace CAPI.Android.Syncronization.Pull
 
         public IDictionary<SyncItemsMeta, bool> GetChuncks(string login, string password, Guid synckId)
         {
-            var syncItemsMetaContainer = ExcecuteRestRequest<SyncItemsMetaContainer>(this.baseAddress, login, password);
+            var syncItemsMetaContainer = ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, login, password);
 
             return syncItemsMetaContainer.ARId.ToDictionary((s) => s, (s) => false);
         }
@@ -82,7 +82,7 @@ namespace CAPI.Android.Syncronization.Pull
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = new RestRequest(GetARKeysPath, Method.POST);
+            var request = new RestRequest(url, Method.POST);
             request.RequestFormat = DataFormat.Json;
 
             request.AddHeader("Accept-Encoding", "gzip,deflate");
