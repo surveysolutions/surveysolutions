@@ -197,8 +197,9 @@
     <Compile Include="Syncronization\RemoteServiceEventStreamRestProvider.cs" />
     <Compile Include="Syncronization\RemoteCollector.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
-    <Compile Include="Syncronization\SynchronizationEvent.cs" />
-    <Compile Include="Syncronization\SynchronizationEventWithPercent.cs" />
+    <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
+    <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
+    <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>

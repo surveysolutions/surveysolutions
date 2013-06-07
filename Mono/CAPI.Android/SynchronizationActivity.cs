@@ -71,14 +71,17 @@ namespace CAPI.Android
                 return;
             }
 
-            synchronizer.StatusChanged += (s, evt) => this.RunOnUiThread(() => synchronizer_StatusChanged(s, evt));
+            synchronizer.StatusChanged += synchronizer_StatusChanged;
             synchronizer.ProcessFinished += synchronizer_ProcessFinished;
+            synchronizer.ProcessCanceling += synchronizer_ProcessCanceling;
             synchronizer.ProcessCanceled += synchronizer_ProcessCanceled;
 
-            CreateDialog(ProgressDialogStyle.Spinner, "Initializing");
+            CreateDialog(ProgressDialogStyle.Spinner, "Initializing", false);
 
             synchronizer.Run();
         }
+
+
 
         protected ISyncAuthenticator CreateAuthenticator()
         {
@@ -140,6 +143,16 @@ namespace CAPI.Android
             DestroyDialog();
             DestroySynchronizer();
         }
+
+        void synchronizer_ProcessCanceling(object sender, EventArgs e)
+        {
+            this.RunOnUiThread(() =>
+                {
+                    DestroyDialog();
+                    CreateDialog(ProgressDialogStyle.Spinner, "Canceling....", false);
+                });
+        }
+
         private void synchronizer_ProcessCanceled(object sender, EventArgs evt)
         {
             DestroyDialog();
@@ -151,36 +164,41 @@ namespace CAPI.Android
             synchronizer.ProcessCanceled -= synchronizer_ProcessCanceled;
             synchronizer.ProcessFinished -= synchronizer_ProcessFinished;
             synchronizer.StatusChanged -= synchronizer_StatusChanged;
+            synchronizer.ProcessCanceling -= synchronizer_ProcessCanceling;
             synchronizer = null;
         }
 
-        private void synchronizer_StatusChanged(object sender, SynchronizationEvent e)
+        private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {
-            var messageWithPersents = e as SynchronizationEventWithPercent;
-            var currentStyle = messageWithPersents == null
-                                   ? ProgressDialogStyle.Spinner
-                                   : ProgressDialogStyle.Horizontal;
-            if (currentStyle != dialogStyle)
-            {
-                DestroyDialog();
-                CreateDialog(currentStyle, e.OperationTitle);
-            }
-            else
-            {
-                progressDialog.SetMessage(e.OperationTitle);
-            }
+            this.RunOnUiThread(() =>
+                {
+                    var
+                        messageWithPersents = e as SynchronizationEventArgsWithPercent;
+                    var currentStyle = messageWithPersents == null
+                                           ? ProgressDialogStyle.Spinner
+                                           : ProgressDialogStyle.Horizontal;
+                    if (currentStyle != dialogStyle)
+                    {
+                        DestroyDialog();
+                        CreateDialog(currentStyle, e.OperationTitle, true);
+                    }
+                    else
+                    {
+                        progressDialog.SetMessage(e.OperationTitle);
+                    }
 
-            if (messageWithPersents != null)
-            {
-                progressDialog.Progress = messageWithPersents.Percent;
-            }
+                    if (messageWithPersents != null)
+                    {
+                        progressDialog.Progress = messageWithPersents.Percent;
+                    }
+                });
 
         }
 
         private ProgressDialogStyle dialogStyle;
         #region diialog manipulation
 
-        private void CreateDialog(ProgressDialogStyle style, string title)
+        private void CreateDialog(ProgressDialogStyle style, string title, bool cancelable)
         {
             dialogStyle = style;
             progressDialog = new ProgressDialog(this);
@@ -190,7 +208,8 @@ namespace CAPI.Android
             progressDialog.SetMessage(title);
             progressDialog.SetCancelable(false);
 
-            progressDialog.SetButton("Cancel", progressDialog_Cancel);
+            if (cancelable)
+                progressDialog.SetButton("Cancel", progressDialog_Cancel);
 
             progressDialog.Show();
         }

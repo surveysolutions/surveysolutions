@@ -67,7 +67,7 @@ namespace CAPI.Android.Syncronization
 
         private void Validate()
         {
-            OnStatusChanged(new SynchronizationEvent("validating"));
+            OnStatusChanged(new SynchronizationEventArgs("validating"));
 
             foreach (var chunck in remoteChuncksForDownload.Where(c=>c.Value).Select(c=>c.Key).ToList())
             {
@@ -78,7 +78,7 @@ namespace CAPI.Android.Syncronization
         private void Pull()
         {
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEventWithPercent("pulling", 0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", 0));
 
             remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId);
             int i = 1;
@@ -92,7 +92,7 @@ namespace CAPI.Android.Syncronization
                 var data = pull.RequestChunck(chunckId, syncId);
                 pullDataProcessor.Save(data, chunckId);
                 remoteChuncksForDownload[chunckId] = true;
-                OnStatusChanged(new SynchronizationEventWithPercent("pulling",
+                OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling",
                                                                     (i*100)/remoteChuncksForDownload.Count));
                 i++;
             }
@@ -101,7 +101,7 @@ namespace CAPI.Android.Syncronization
         private void Push()
         {
             ExitIfCanceled();
-            OnStatusChanged(new SynchronizationEventWithPercent("pushing", 0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", 0));
             var dataByChuncks = pushDataProcessor.GetChuncks();
             int i = 1;
             foreach (var chunckDescription in dataByChuncks)
@@ -109,7 +109,7 @@ namespace CAPI.Android.Syncronization
                 ExitIfCanceled();
                 push.PushChunck(chunckDescription.Id, chunckDescription.Content, syncId);
                 pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
-                OnStatusChanged(new SynchronizationEventWithPercent("pushing", (i*100)/dataByChuncks.Count));
+                OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", (i*100)/dataByChuncks.Count));
                 i++;
             }
         }
@@ -122,7 +122,7 @@ namespace CAPI.Android.Syncronization
             var appId = SettingsManager.InstallationId;
             credentials = authentificator.RequestCredentials();
             
-            OnStatusChanged(new SynchronizationEvent(string.Format("handshake app {0}, device {1}", appId, androidId)));
+            OnStatusChanged(new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId)));
             Thread.Sleep(1000);
             syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
         }
@@ -152,25 +152,28 @@ namespace CAPI.Android.Syncronization
 
         private void CancelInternal()
         {
-            OnStatusChanged(new SynchronizationEvent("Synchronization is canceling"));
+         
             tokenSource2.Cancel();
-
+            OnProcessCanceling();
+            List<Exception> exceptions = new List<Exception>();
             try
             {
                 Task.WaitAll(task);
             }
             catch (AggregateException e)
             {
+                exceptions = e.InnerExceptions.ToList();
             }
 
-            OnProcessCanceled();
+            OnProcessCanceled(exceptions);
         }
 
         #region events
 
-        public event EventHandler<SynchronizationEvent> StatusChanged;
+        public event EventHandler<SynchronizationEventArgs> StatusChanged;
         public event EventHandler ProcessFinished;
-        public event EventHandler ProcessCanceled;
+        public event EventHandler ProcessCanceling;
+        public event EventHandler<SynchronizationCanceledEventArgs> ProcessCanceled;
 
         protected void OnProcessFinished()
         {
@@ -178,13 +181,19 @@ namespace CAPI.Android.Syncronization
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
-        protected void OnProcessCanceled()
+        protected void OnProcessCanceling()
         {
-            var handler = ProcessCanceled;
+            var handler = ProcessCanceling;
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
-        protected void OnStatusChanged(SynchronizationEvent evt)
+        protected void OnProcessCanceled(IList<Exception> exceptions)
+        {
+            var handler = ProcessCanceled;
+            if (handler != null)
+                handler(this, new SynchronizationCanceledEventArgs(exceptions));
+        }
+        protected void OnStatusChanged(SynchronizationEventArgs evt)
         {
             if(tokenSource2.IsCancellationRequested)
                 return;

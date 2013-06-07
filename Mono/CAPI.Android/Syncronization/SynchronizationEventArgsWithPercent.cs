@@ -12,9 +12,9 @@ using Android.Widget;
 
 namespace CAPI.Android.Syncronization
 {
-    public class SynchronizationEventWithPercent:SynchronizationEvent
+    public class SynchronizationEventArgsWithPercent:SynchronizationEventArgs
     {
-        public SynchronizationEventWithPercent(string operationTitle, int percent)
+        public SynchronizationEventArgsWithPercent(string operationTitle, int percent)
             : base(operationTitle)
         {
             if (percent < 0 || percent > 100)

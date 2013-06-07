@@ -12,9 +12,9 @@ using Android.Widget;
 
 namespace CAPI.Android.Syncronization
 {
-    public class SynchronizationEvent:EventArgs
+    public class SynchronizationEventArgs:EventArgs
     {
-        public SynchronizationEvent(string operationTitle)
+        public SynchronizationEventArgs(string operationTitle)
         {
             OperationTitle = operationTitle;
         }
