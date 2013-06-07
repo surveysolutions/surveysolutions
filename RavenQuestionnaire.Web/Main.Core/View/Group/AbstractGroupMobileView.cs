@@ -89,6 +89,8 @@ namespace Main.Core.View.Group
         /// </summary>
         public string Title { get; set; }
 
+        public ICompositeView ParentView { get; private set; }
+
         /// <summary>
         /// Gets or sets the unique key.
         /// </summary>

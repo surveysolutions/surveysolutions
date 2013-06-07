@@ -113,6 +113,8 @@ namespace Main.Core.View.Answer
         /// </summary>
         public string Title { get; set; }
 
+        public ICompositeView ParentView { get; private set; }
+
         #endregion
     }
 }

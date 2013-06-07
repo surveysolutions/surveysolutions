@@ -9,36 +9,36 @@
 
 using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 
 namespace Main.Core.View
 {
-    /// <summary>
-    /// The CompositeView interface.
-    /// </summary>
     public interface ICompositeView
     {
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
         List<ICompositeView> Children { get; set; }
 
-        /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
         Guid? Parent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
+        
         Guid PublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
         string Title { get; set; }
 
-        #endregion
+        ICompositeView ParentView { get; }
+    }
+
+    public static class CompositeViewExtensions
+    {
+        public static int GetDepthIn(this ICompositeView view)
+        {
+            int result = 0;
+            var parent = view.ParentView;
+            while (parent != null)
+            {
+                result++;
+                parent = parent.ParentView;
+            }
+
+            return result;
+        }
     }
 }
