@@ -93,7 +93,8 @@ namespace LoadTestDataGenerator
         {
             ctrlProgress.Maximum = (int.Parse(surveys_amount.Text) * (chkGenerateSnapshoots.Checked ? 5 : 4))
                                    + int.Parse(supervisorsCount.Text) + int.Parse(interviewersCount.Text)
-                                   + (chkSetAnswers.Checked ? featuredQuestions.Count() : 0) + 2;
+                                   + (chkSetAnswers.Checked ? featuredQuestions.Count() : 0)
+                                   + (chkHeadquarter.Checked ? 2 : 1);
         }
 
         private void Stop()
@@ -199,7 +200,12 @@ namespace LoadTestDataGenerator
 
         private void GenerateSupervisorsEvents()
         {
-            var hq = this.GenerateHeadquarter();
+            UserDocument hq = null;
+            if (chkHeadquarter.Checked && !string.IsNullOrEmpty(txtHQName.Text))
+            {
+                hq = this.GenerateHeadquarter();
+            }
+
             this.StoreTemplate(template, hq);
 
             var supervisors = this.GenerateSupervisors(int.Parse(this.supervisorsCount.Text));
@@ -243,10 +249,10 @@ namespace LoadTestDataGenerator
             var hq = new UserDocument()
                 {
                     PublicKey = Guid.NewGuid(),
-                    UserName = "hq",
+                    UserName = txtHQName.Text,
                     Roles = new List<UserRoles>() { UserRoles.Headquarter }
                 };
-            CommandService.Execute(new CreateUserCommand(hq.PublicKey, hq.UserName, SimpleHash.ComputeHash(hq.UserName), hq.UserName + "@worldbank.org", hq.Roles.ToArray(), false, null));
+            CommandService.Execute(new CreateUserCommand(hq.PublicKey, hq.UserName, SimpleHash.ComputeHash(hq.UserName), hq.UserName + "@mail.org", hq.Roles.ToArray(), false, null));
             this.IncreaseProgress();
 
             return hq;
@@ -254,7 +260,8 @@ namespace LoadTestDataGenerator
 
         private void StoreTemplate(QuestionnaireDocument template, UserDocument initiator)
         {
-            this.CommandService.Execute(new ImportQuestionnaireCommand(initiator.PublicKey, template));
+            this.CommandService.Execute(
+                new ImportQuestionnaireCommand(initiator == null ? Guid.Empty : initiator.PublicKey, template));
             this.IncreaseProgress();
         }
 
@@ -425,6 +432,11 @@ namespace LoadTestDataGenerator
             {
                 templatePath.Text = templateFileChooser.FileName;
             }
+        }
+
+        private void chkHeadquarter_CheckedChanged(object sender, EventArgs e)
+        {
+            txtHQName.Enabled = (sender as CheckBox).Checked;
         }
     }
 }
