@@ -9,12 +9,14 @@
 
 using System;
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Views.Questionnaire
 {
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
-    public class QuestionnaireListViewItem
+    public class QuestionnaireListViewItem : IView
     {
         #region Constructors and Destructors
         public QuestionnaireListViewItem()
