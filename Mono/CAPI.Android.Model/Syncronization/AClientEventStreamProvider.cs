@@ -19,6 +19,8 @@ using Main.Synchronization.SyncSreamProvider;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.Syncronization
 {
     /// <summary>

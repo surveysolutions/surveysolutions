@@ -8,6 +8,8 @@ using Main.Core.View.User;
 using Main.DenormalizerStorage;
 using Main.Synchronization.Credentials;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.Authorization
 {
     public class AndroidAuthentication : IAuthentication

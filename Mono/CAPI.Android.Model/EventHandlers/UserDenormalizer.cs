@@ -9,6 +9,8 @@ using Main.Core.View.User;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class UserDenormalizer : IEventHandler<NewUserCreated>

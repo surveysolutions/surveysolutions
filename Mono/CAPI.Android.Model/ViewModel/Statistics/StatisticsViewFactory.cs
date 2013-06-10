@@ -3,6 +3,8 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
     public class StatisticsViewFactory : IViewFactory<StatisticsInput, StatisticsViewModel>
