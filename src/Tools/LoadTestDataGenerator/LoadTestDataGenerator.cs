@@ -27,6 +27,8 @@ using Raven.Client.Extensions;
 using Raven.Imports.Newtonsoft.Json;
 using System.Windows.Forms;
 
+using WB.Core.Infrastructure;
+
 namespace LoadTestDataGenerator
 {
     using System.Threading.Tasks;
