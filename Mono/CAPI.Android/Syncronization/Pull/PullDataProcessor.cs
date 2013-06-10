@@ -36,7 +36,7 @@ namespace CAPI.Android.Syncronization.Pull
         public void Save(byte[] bytes, Guid chunckId)
         {
             var path = GetFileName(chunckId);
-            using (var fs = File.Open(path, FileMode.CreateNew))
+            using (var fs = File.Open(path, FileMode.Create))
             {
                 fs.Write(bytes, 0, bytes.Length);
             }
