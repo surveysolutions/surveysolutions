@@ -10,15 +10,93 @@
 @section Scripts
 {
     @Scripts.Render("~/simplepage")
+    @Scripts.Render("~/Scripts/pdf.js")
+    @Scripts.Render("~/Scripts/compatibility.js")
+    
+    
+    <script type="text/javascript">
+        $(function () {
+            var url = '@Url.Action("ExportQuestionnaire", "Pdf", new {id = Model.PublicKey})';
+
+            //
+            // Disable workers to avoid yet another cross-origin issue (workers need the URL of
+            // the script to be loaded, and currently do not allow cross-origin scripts)
+            //
+            PDFJS.disableWorker = true;
+
+            var pdfDoc = null,
+                pageNum = 1,
+                scale = 1.6,
+                canvas = $('#the-canvas')[0],
+                ctx = canvas.getContext('2d');
+
+            //
+            // Get page info from document, resize canvas accordingly, and render page
+            //
+
+            function renderPage(num) {
+                // Using promise to fetch the page
+                pdfDoc.getPage(num).then(function (page) {
+                    var viewport = page.getViewport(scale);
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    // Render PDF page into canvas context
+                    var renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+
+            //
+            // Go to previous page
+            //
+            $('#prev').click(function() {
+                if (pageNum <= 1)
+                    return;
+                pageNum--;
+                renderPage(pageNum);
+            });
+
+            $('#next').click(function() {
+                if (pageNum >= pdfDoc.numPages)
+                    return;
+                pageNum++;
+                renderPage(pageNum);
+            });
+            
+            //
+            // Asynchronously download PDF as an ArrayBuffer
+            //
+            PDFJS.getDocument(url).then(function (_pdfDoc) {
+                pdfDoc = _pdfDoc;
+                renderPage(pageNum);
+            });
+        })
+    </script>
+
 }
 <div class="pdf-preview">
 
     <div class="buttons">
         @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+        <div class="well-small">
+            <a class="btn icon-arrow-left" id="prev" title="prev page"></a>
+            <a class="btn icon-arrow-right" id="next" title="next page"></a>
+        </div>
     </div>
 
     <div class="content">
-        @{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
+        
+        <div class="title-page">
+            @Html.Partial("_RenderTitlePage")
+        </div>
+        <div class="document-content">
+            <canvas id="the-canvas"></canvas>
+            @*@Html.Partial("_RenderQuestionnaire", this.Model.Questionnaire)*@
+        </div>
     </div>
 
     <div class="buttons">
