@@ -9,17 +9,15 @@ using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
-using Raven.Abstractions.Logging;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
-using Raven.Client.Indexes;
 
 using ILog = WB.Core.SharedKernel.Logger.ILog;
 
-namespace WB.Core.Infrastructure.Implementation
+namespace WB.Core.Infrastructure.Raven.Implementation
 {
-    internal class ReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
+    internal class RavenReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
     {
         private const int MaxAllowedFailedEvents = 100;
 
@@ -37,12 +35,12 @@ namespace WB.Core.Infrastructure.Implementation
         private readonly DocumentStore ravenStore;
         private readonly ILog logger;
 
-        static ReadLayerService()
+        static RavenReadLayerService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
+        public RavenReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
