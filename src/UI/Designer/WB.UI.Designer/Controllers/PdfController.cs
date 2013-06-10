@@ -3,23 +3,23 @@ using WB.UI.Designer.Pdf;
 
 namespace WB.UI.Designer.Controllers
 {
-	using Main.Core.View;
+    using Main.Core.View;
     using System;
     using System.Configuration;
     using System.IO;
     using System.Web.Mvc;
-    
+
     using WB.UI.Designer.Views.Questionnaire;
     using WB.UI.Shared.Web.Membership;
 
     public class PdfController : BaseController
     {
-         public PdfController(
-             IViewRepository repository,
-             IMembershipUserService userHelper)
-             : base(repository, null, userHelper)
-         {
-         }
+        public PdfController(
+            IViewRepository repository,
+            IMembershipUserService userHelper)
+            : base(repository, null, userHelper)
+        {
+        }
 
         [Authorize]
         public ActionResult PreviewQuestionnaire(Guid id)
@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Controllers
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
                     {
-                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new {id = id}),
+                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id }),
                     },
                 new PdfOutput
                     {
