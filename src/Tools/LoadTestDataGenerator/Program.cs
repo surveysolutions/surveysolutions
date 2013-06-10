@@ -22,8 +22,6 @@ namespace LoadTestDataGenerator
 
             var kernel = CompositionRoot.Wire(new MainModule());
 
-            NcqrsInit.EnsureReadLayerIsBuilt();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(kernel.Get<LoadTestDataGenerator>());
