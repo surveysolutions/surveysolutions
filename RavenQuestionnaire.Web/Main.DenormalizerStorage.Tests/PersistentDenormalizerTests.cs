@@ -37,24 +37,24 @@ namespace Main.DenormalizerStorage.Tests
             Assert.IsTrue(cache.Contains(key.ToString()));
             cache.Remove(key.ToString());
 
-            storageMock.Setup(x => x.GetByGuid<object>(key.ToString())).Returns(objectToStore);
+            storageMock.Setup(x => x.GetByGuid<IView>(key.ToString())).Returns(objectToStore);
 
             var result = target.GetById(key);
             Assert.IsTrue(objectToStore == result);
 
-            storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<IView>(key.ToString()), Times.Once());
             result = target.GetById(key);
             
             //still once!
-            storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<IView>(key.ToString()), Times.Once());
 
         //    result = objectToStore = null;
             //befoure collect once
-            storageMock.Verify(x => x.Store(It.IsAny<object>(), key.ToString()), Times.Once());
+            storageMock.Verify(x => x.Store(It.IsAny<IView>(), key.ToString()), Times.Once());
             cache.Remove(key.ToString());
            
             //after collect twice
-            storageMock.Verify(x => x.Store(It.IsAny<object>(), key.ToString()), Times.Exactly(2));
+            storageMock.Verify(x => x.Store(It.IsAny<IView>(), key.ToString()), Times.Exactly(2));
         }
         [Test]
         public void Store_WhenObjectWasChangedAndExpired_ObjectWillDumpTheLatestVersion()
