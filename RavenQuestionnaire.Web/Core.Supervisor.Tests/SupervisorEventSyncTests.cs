@@ -201,7 +201,10 @@ namespace Core.Supervisor.Tests
             Assert.IsTrue(result[0].EventIdentifier == eventId);
 
         }
+
+        #warning test ignored, Nastia said, it it going to be deleted
         [Test]
+        [Ignore]
         public void GetEventStreamById_LastEventIsSnapshootLoaded_ReadFromWasntCalled()
         {
             var eventStoreMock = PrepareSnapshotableEventStore();
