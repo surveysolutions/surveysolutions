@@ -16,6 +16,8 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.DenormalizerStorage;
 using SQLite;
 
+using WB.Core.Infrastructure;
+
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
     public class SqliteDenormalizerStorage<TView> : IFilterableDenormalizerStorage<TView>, IMvxServiceConsumer
