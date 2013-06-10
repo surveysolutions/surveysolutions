@@ -3,12 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using Main.Core.Documents;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Utility;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Questionnaire;
@@ -28,10 +26,11 @@
             this.survey = survey;
             this.templates = templates;
         }
-        
+
         public SummaryView Load(SummaryInputModel input)
         {
-            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(x=>x.PublicKey);
+
             TemplateLight template = null;
             if (input.TemplateId.HasValue)
             {
@@ -40,52 +39,45 @@
             }
 
             return this.survey.Query(queryableSurveys =>
-            {
-                var groupedSurveys = queryableSurveys
-                    .Where(x => x.Responsible != null)
-                    .Where(x => !input.TemplateId.HasValue || x.TemplateId == input.TemplateId)
-                    .ToList()
-                    .Where(x => interviewers.Contains(x.Responsible.Id))
-                    .GroupBy(x => x.Responsible);
-
-                var items = this.BuildItems(groupedSurveys).AsQueryable();
-
-                var retval = new SummaryView(input.Page, input.PageSize, 0, template);
-                if (input.Orders.Count > 0)
                 {
-                    items = input.Orders[0].Direction == OrderDirection.Asc
-                                                          ? items.OrderBy(input.Orders[0].Field)
-                                                          : items.OrderByDescending(input.Orders[0].Field);
-                }
+                    var items =
+                        queryableSurveys.Where(
+                            x =>
+                            x.Responsible != null && interviewers.Contains(x.Responsible.Id)
+                            && (!input.TemplateId.HasValue || x.TemplateId == input.TemplateId))
+                                        .GroupBy(
+                                            x => x.Responsible,
+                                            x => x,
+                                            (u, q) => this.BuildItems(u, q));
 
-                retval.Summary = new SummaryViewItem(
-                    new UserLight(Guid.Empty, "Summary"),
-                    items.Sum(x => x.Total),
-                    items.Sum(x => x.Initial),
-                    items.Sum(x => x.Error),
-                    items.Sum(x => x.Completed),
-                    items.Sum(x => x.Approved),
-                    items.Sum(x => x.Redo));
-
-                retval.TotalCount = items.Count();
-
-                retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-                return retval;
-            });
+                        return new SummaryView(input.Page, input.PageSize, 0, template)
+                                   {
+                                       Summary =
+                                           new SummaryViewItem(
+                                           new UserLight(Guid.Empty, "Summary"),
+                                           items.Sum(x => x.Total),
+                                           items.Sum(x => x.Initial),
+                                           items.Sum(x => x.Error),
+                                           items.Sum(x => x.Completed),
+                                           items.Sum(x => x.Approved),
+                                           items.Sum(x => x.Redo)),
+                                       TotalCount = items.Count(),
+                                       Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList()
+                                   };
+                    });
         }
 
-        protected IEnumerable<SummaryViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
+        protected SummaryViewItem BuildItems(UserLight user, IEnumerable<CompleteQuestionnaireBrowseItem> questionnaires)
         {
-            foreach (var templateGroup in grouped)
-            {
-                yield
-                    return new SummaryViewItem(templateGroup.Key,
-                                            templateGroup.Count(),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Initial.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Error.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Complete.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId), templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
-            }
+            return new SummaryViewItem(
+                user,
+                questionnaires.Count(),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Initial.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Error.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Complete.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId),
+                questionnaires.Count(q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
+
         }
     }
 }

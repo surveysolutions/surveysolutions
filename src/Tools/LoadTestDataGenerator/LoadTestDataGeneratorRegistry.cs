@@ -38,20 +38,28 @@ namespace LoadTestDataGenerator
             });
         }
 
- 
+
         protected override void RegisterAdditionalElements()
         {
             base.RegisterAdditionalElements();
 
             this.Unbind<DocumentStore>();
             var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
-            var store = new DocumentStore()
+            var store = new DocumentStore
                 {
-                    Url = repositoryPath,
-                    DefaultDatabase = databaseName
+                    Url = repositoryPath
                 };
+            bool isNotSystemDatabase = !string.IsNullOrWhiteSpace(databaseName);
+            if (isNotSystemDatabase)
+            {
+                store.DefaultDatabase = databaseName;
+            }
             store.Initialize();
-            store.DatabaseCommands.EnsureDatabaseExists(databaseName); 
+            if (isNotSystemDatabase)
+            {
+                store.DatabaseCommands.EnsureDatabaseExists(databaseName);
+            }
+            
             this.Bind<DocumentStore>().ToConstant(store);
         }
     }
