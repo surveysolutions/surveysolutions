@@ -1,4 +1,5 @@
 ﻿
+using System.Globalization;
 using WB.UI.Designer.Pdf;
 
 namespace WB.UI.Designer.Controllers
@@ -38,6 +39,17 @@ namespace WB.UI.Designer.Controllers
             return this.View(questionnaire);
         }
 
+        public ActionResult RenderTitlePage(Guid id)
+        {
+            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+
+            var model = new TitlePageDto();
+            model.SurveyName = questionnaire.Title;
+            model.CreationDate = questionnaire.CreationDate.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern);
+
+            return this.View(model);
+        }
+
         [Authorize]
         public ActionResult ExportQuestionnaire(Guid id)
         {
@@ -59,6 +71,7 @@ namespace WB.UI.Designer.Controllers
                 new PdfDocument
                     {
                         Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id }),
+                        CoverUrl = GlobalHelper.GenerateUrl("RenderTitlePage", "Pdf", new {id = id})
                     },
                 new PdfOutput
                     {

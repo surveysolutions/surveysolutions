@@ -73,6 +73,11 @@ namespace WB.UI.Designer.Pdf
                 paramsBuilder.AppendFormat("--header-right \"{0}\" ", document.PageNumbersFormat);
             }
 
+            if (!string.IsNullOrEmpty(document.CoverUrl))
+            {
+                paramsBuilder.AppendFormat("cover \"{0}\" ", document.CoverUrl);
+            }
+
 			paramsBuilder.AppendFormat("\"{0}\" \"{1}\"", document.Url, outputPdfFilePath);
            
 

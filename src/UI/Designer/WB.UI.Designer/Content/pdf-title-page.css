@@ -1,0 +1,10 @@
+﻿header {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 400px;
+    font-size: 2.5em;
+}
+.create-date {
+    text-align: center;
+}
