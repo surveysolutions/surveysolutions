@@ -30,8 +30,6 @@ using WB.Core.Infrastructure;
 using Raven.Client;
 using Raven.Client.Document;
 
-using WB.Core.Infrastructure;
-
 #endif
 
 namespace Main.Core
