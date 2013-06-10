@@ -224,7 +224,12 @@ namespace LoadTestDataGenerator
                 {
                     continue;
                 }
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, this.GetDummyCompleteAnswers(question), GetDummyAnswer(question), null));
+                if (question.Enabled)
+                {
+                    this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey,
+                                                                     this.GetDummyCompleteAnswers(question),
+                                                                     GetDummyAnswer(question), null));
+                }
             }
             var allQuestions = survey.GetQuestions().Where(x => !(x is IAutoPropagate)).ToList();
             foreach (var question in allQuestions)
@@ -233,7 +238,13 @@ namespace LoadTestDataGenerator
                 {
                     continue;
                 }
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyCompleteAnswers(question), GetDummyAnswer(question), question.PropagationPublicKey));
+                if (question.Enabled)
+                {
+                    this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey,
+                                                                     GetDummyCompleteAnswers(question),
+                                                                     GetDummyAnswer(question),
+                                                                     question.PropagationPublicKey));
+                }
             }
         }
 
@@ -528,7 +539,7 @@ namespace LoadTestDataGenerator
                         question.Answers[random.Next(answersCount)].PublicKey
                     };
             }
-            return new List<Guid>() { Guid.NewGuid() };
+            return new List<Guid>() { };
         }
 
         private List<Guid> GetDummyCompleteAnswers(IQuestion q)
