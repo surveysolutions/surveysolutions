@@ -36,14 +36,25 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<LinearLayout>(Resource.Id.llNavigationHolder); }
         }
+        protected LinearLayout llNavigationButton
+        {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llNavigationButton); }
+        }
+        protected RelativeLayout lNavigationContainer
+        {
+            get { return this.FindViewById<RelativeLayout>(Resource.Id.lNavigationContainer); }
+        }
         protected RelativeLayout llContainer
         {
             get { return this.FindViewById<RelativeLayout>(Resource.Id.llContainer); }
         }
-        
+        protected ImageButton btnNavigation
+        {
+            get { return this.FindViewById<ImageButton>(Resource.Id.btnNavigation); }
+        }
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
-
+        private readonly int leftPanelWidth = 30;
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -83,29 +94,35 @@ namespace CAPI.Android
             {
                 NavList = this.SupportFragmentManager.FindFragmentByTag("navigation") as QuestionnaireNavigationFragment;
             }
-            llNavigationHolder.BringToFront();
-            llNavigationHolder.Click += llNavigationHolder_Click;
+
+            btnNavigation.Click += llNavigationHolder_Click;
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, ScreenId);
             VpContent.Adapter = Adapter;
             VpContent.PageSelected += VpContent_PageSelected;
 
             llNavigationHolder.SetBackgroundColor(this.Resources.GetColor(global::Android.Resource.Color.DarkerGray));
-            
-            var llNavigationContainerParams =
+
+            UpdateLayout(leftPanelWidth);
+        }
+
+        private void UpdateLayout(int leftSize)
+        {
+            var lNavigationContainerParams =
                 new RelativeLayout.LayoutParams(this.WindowManager.DefaultDisplay.Width/2,
                                                 ViewGroup
                                                     .LayoutParams
                                                     .FillParent);
-            llNavigationContainerParams.LeftMargin = llNavigationHolder.PaddingRight - llNavigationContainerParams.Width;
-            llNavigationHolder.LayoutParameters = llNavigationContainerParams;
+            lNavigationContainerParams.LeftMargin = leftSize - lNavigationContainerParams.Width;
+            lNavigationContainer.LayoutParameters = lNavigationContainerParams;
 
 
             var VpContentParams =
-               new RelativeLayout.LayoutParams(this.WindowManager.DefaultDisplay.Width - llNavigationHolder.PaddingRight,
-                                               ViewGroup
-                                                   .LayoutParams
-                                                   .FillParent);
-            VpContentParams.LeftMargin = llNavigationHolder.PaddingRight;
+                new RelativeLayout.LayoutParams(
+                    this.WindowManager.DefaultDisplay.Width - leftSize,
+                    ViewGroup
+                        .LayoutParams
+                        .FillParent);
+            VpContentParams.LeftMargin = leftSize;
             VpContent.LayoutParameters = VpContentParams;
         }
 
@@ -116,20 +133,24 @@ namespace CAPI.Android
             int right, left;
             if (isChaptersVisible)
             {
-                right = llNavigationHolder.PaddingRight;
-                left = llNavigationHolder.PaddingRight - this.WindowManager.DefaultDisplay.Width / 2;
+                right = leftPanelWidth;
+                left = leftPanelWidth - this.WindowManager.DefaultDisplay.Width / 2;
+                btnNavigation.SetImageResource(Resource.Drawable.navigateRightIcon);
+             
                 isChaptersVisible = false;
             }
             else
             {
                 right = this.WindowManager.DefaultDisplay.Width/2;
                 left = 0;
+                btnNavigation.SetImageResource(Resource.Drawable.navigateLeftIcon);
+
                 isChaptersVisible = true;
             }
-            ((RelativeLayout.LayoutParams) llNavigationHolder.LayoutParameters).LeftMargin = left;
-            ((RelativeLayout.LayoutParams) VpContent.LayoutParameters).LeftMargin = right;
 
-            llNavigationHolder.Layout(left, llNavigationHolder.Top, right, llNavigationHolder.Bottom);
+            UpdateLayout(right);
+
+            lNavigationContainer.Layout(left, lNavigationContainer.Top, right, lNavigationContainer.Bottom);
 
             VpContent.Layout(right, VpContent.Top, right + VpContent.Width, VpContent.Bottom);
 
