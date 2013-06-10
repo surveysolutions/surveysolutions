@@ -71,7 +71,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         }
     }
 
-    public abstract class DenormalizerRow
+    public abstract class DenormalizerRow : IView
     {
         [PrimaryKey]
         public string Id { get; set; }
