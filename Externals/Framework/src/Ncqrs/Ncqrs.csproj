@@ -278,10 +278,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.SharedKernel.Logger</Name>

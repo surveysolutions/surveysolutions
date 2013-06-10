@@ -92,7 +92,6 @@
     <Compile Include="SnapshootDomainEventHandler.cs" />
     <Compile Include="SnapshootLoaded.cs" />
     <Compile Include="SnapshotCommandMapper.cs" />
-    <Compile Include="SnapshotDenormalizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
@@ -102,10 +101,6 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>

@@ -1,15 +1,12 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
-using WB.Core.Infrastructure;
-
 namespace Ncqrs.Eventing
 {
     /// <summary>
     /// Represents an event which has been persisted.
     /// </summary>
-    #warning Nastya : CommittedEvent should not implement IView, neither used in denormalizer storage. please clean this out
-    public class CommittedEvent : IPublishableEvent, IView
+    public class CommittedEvent : IPublishableEvent
     {
         private readonly object _payload;
         private readonly long _eventSequence;
