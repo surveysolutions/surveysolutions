@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Main.Core.Documents;
 
 namespace Main.Core.View
@@ -23,22 +24,7 @@ namespace Main.Core.View
 
         string Title { get; set; }
 
+        [IgnoreDataMember]
         ICompositeView ParentView { get; }
-    }
-
-    public static class CompositeViewExtensions
-    {
-        public static int GetDepthIn(this ICompositeView view)
-        {
-            int result = 0;
-            var parent = view.ParentView;
-            while (parent != null)
-            {
-                result++;
-                parent = parent.ParentView;
-            }
-
-            return result;
-        }
     }
 }
