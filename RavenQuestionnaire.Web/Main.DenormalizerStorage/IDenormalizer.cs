@@ -6,6 +6,9 @@
 //   The Denormalizer interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage
 {
     using System;
@@ -13,17 +16,23 @@ namespace Main.DenormalizerStorage
 
     public interface IDenormalizer
     {
-        int Count<T>() where T : class;
+        int Count<T>()
+            where T : class, IView;
 
-        T GetByGuid<T>(Guid key) where T : class;
+        T GetByGuid<T>(Guid key)
+            where T : class, IView;
 
         [Obsolete]
-        IQueryable<T> Query<T>() where T : class;
+        IQueryable<T> Query<T>()
+            where T : class, IView;
 
-        TResult Query<T, TResult>(Func<IQueryable<T>, TResult> query) where T : class;
+        TResult Query<T, TResult>(Func<IQueryable<T>, TResult> query)
+            where T : class, IView;
 
-        void Remove<T>(Guid key) where T : class;
+        void Remove<T>(Guid key)
+            where T : class, IView;
 
-        void Store<T>(T denormalizer, Guid key) where T : class;
+        void Store<T>(T denormalizer, Guid key)
+            where T : class, IView;
     }
 }

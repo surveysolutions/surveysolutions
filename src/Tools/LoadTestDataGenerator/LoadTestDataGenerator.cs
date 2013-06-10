@@ -25,6 +25,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
+using WB.Core.Infrastructure;
+
 namespace LoadTestDataGenerator
 {
     using Main.Core.View;

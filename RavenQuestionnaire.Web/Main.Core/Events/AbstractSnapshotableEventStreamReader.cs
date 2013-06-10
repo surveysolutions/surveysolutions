@@ -113,11 +113,12 @@ namespace Main.Core.Events
             }
 
             this.commandInvoker.Execute(new CreateSnapshotForAR(aggregateRootId, arType));
-            var snapshotLoaded = denormalizer.GetByGuid<CommittedEvent>(aggregateRootId);
+            //var snapshotLoaded = denormalizer.GetByGuid<CommittedEvent>(aggregateRootId);
 
+            #warning implementation commented out, Nastia said, it it going to be deleted
             return new List<AggregateRootEvent>()
                 {
-                    new AggregateRootEvent(snapshotLoaded)
+                    //new AggregateRootEvent(snapshotLoaded)
                 };
         }
 

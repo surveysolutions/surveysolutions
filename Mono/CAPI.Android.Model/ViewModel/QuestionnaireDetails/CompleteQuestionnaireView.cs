@@ -9,9 +9,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel
+    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel, IView
     {
         public CompleteQuestionnaireView(string publicKey)
         {

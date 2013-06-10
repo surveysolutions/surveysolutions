@@ -12,6 +12,8 @@ using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.StatusReport
 {
     /// <summary>
@@ -67,11 +69,19 @@ namespace Main.Core.View.StatusReport
             var status = new StatusItem {Title = statuseFirst.Name};*/
 
             // statuses.FirstOrDefault(s => s.PublicId == input.StatusId);}
-            List<CompleteQuestionnaireBrowseItem> query =
-                this.documentItemSession.Query(_ => _.Where(
-                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList());
+            List<CompleteQuestionnaireBrowseItem> documents = this.documentItemSession.Query(queryable =>
+            {
+                var query = queryable.Where(x => x.TemplateId == input.QuestionnaireId);
 
-            return new CQStatusReportView(query);
+                if (input.StatusId.HasValue)
+                {
+                    query = query.Where(x => x.Status.PublicId == input.StatusId);
+                }
+
+                return query.ToList();
+            });
+
+            return new CQStatusReportView(documents);
         }
 
         #endregion

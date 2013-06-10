@@ -1,3 +1,5 @@
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views.Assignment
 {
     using System.Collections.Generic;

@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
@@ -18,7 +20,7 @@ namespace Core.Supervisor.DenormalizerStorageItem
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SupervisorStatisticsItem
+    public class SupervisorStatisticsItem : IView
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SupervisorStatisticsItem"/> class.

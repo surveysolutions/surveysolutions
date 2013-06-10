@@ -92,7 +92,6 @@
     <Compile Include="SnapshootDomainEventHandler.cs" />
     <Compile Include="SnapshootLoaded.cs" />
     <Compile Include="SnapshotCommandMapper.cs" />
-    <Compile Include="SnapshotDenormalizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">

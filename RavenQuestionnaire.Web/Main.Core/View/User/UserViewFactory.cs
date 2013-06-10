@@ -12,6 +12,8 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.User
 {
     /// <summary>

@@ -13,6 +13,8 @@ using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
 
+using WB.Core.Infrastructure;
+
 namespace RavenQuestionnaire.Core.Tests
 {
     using System;

@@ -10,6 +10,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage.SolidDenormalizer
 {
     using System;
@@ -25,7 +27,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
     /// </typeparam>
     [Obsolete]
     public class SolidPersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
-        where TView : class
+        where TView : class, IView
     {
         #region Fields
 

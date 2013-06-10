@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.Device
 {
     using System;

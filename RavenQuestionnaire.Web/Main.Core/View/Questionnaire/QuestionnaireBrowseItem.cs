@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.Questionnaire
 {
     using System;
@@ -17,7 +19,7 @@ namespace Main.Core.View.Questionnaire
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
-    public class QuestionnaireBrowseItem
+    public class QuestionnaireBrowseItem : IView
     {
         #region Constructors and Destructors
         public QuestionnaireBrowseItem()

@@ -11,6 +11,8 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.EventHandlers
 {
     using System;
