@@ -1,10 +1,10 @@
 ﻿.pdf-preview .content {
-    width: 855px;
+    width: 1000px;
     margin: 0 auto;
-    padding: 60px 55px 60px 50px;
 
     border: 1px solid black;
     box-shadow: 5px 5px 3px #888;
+	overflow: visible;
 }
 
 .pdf-preview .buttons {
