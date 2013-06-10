@@ -11,7 +11,7 @@
     else
     {
         <text>
-            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, Model.GetDepthIn() + 1), Html.Encode(Model.Title)))
+            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, Model.GetDepth() + 1), Html.Encode(Model.Title)))
         </text>
         @*<dl>
             <dt>Guid: </dt><dd>@Model.PublicKey</dd>
