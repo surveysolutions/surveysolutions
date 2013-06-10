@@ -15,7 +15,6 @@
     <LinearLayout android:id="@+id/llNavigationButton"
       android:orientation="vertical"
       android:layout_alignParentRight="true"
-                    android:padding="0dp"
       android:layout_width="30dp"
       android:layout_height="fill_parent">
 
@@ -30,7 +29,7 @@
 
     <LinearLayout android:id="@+id/llNavigationHolder"
       android:orientation="vertical"
-                
+                      android:padding="0dp"
       android:layout_toLeftOf="@id/llNavigationButton"
       android:layout_width="wrap_content"
       android:layout_height="fill_parent"/>

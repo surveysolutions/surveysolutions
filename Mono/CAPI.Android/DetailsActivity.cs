@@ -105,6 +105,18 @@ namespace CAPI.Android
             UpdateLayout(leftPanelWidth);
         }
 
+        public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+
+            if (isChaptersVisible)
+            {
+                isChaptersVisible = false;
+                btnNavigation.SetImageResource(Resource.Drawable.navigateRightIcon);
+            }
+            UpdateLayout(leftPanelWidth);
+        }
+
         private void UpdateLayout(int leftSize)
         {
             var lNavigationContainerParams =
