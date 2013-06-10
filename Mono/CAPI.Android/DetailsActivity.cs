@@ -48,9 +48,9 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<RelativeLayout>(Resource.Id.llContainer); }
         }
-        protected ImageButton btnNavigation
+        protected Button btnNavigation
         {
-            get { return this.FindViewById<ImageButton>(Resource.Id.btnNavigation); }
+            get { return this.FindViewById<Button>(Resource.Id.btnNavigation); }
         }
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
@@ -109,11 +109,7 @@ namespace CAPI.Android
         {
             base.OnConfigurationChanged(newConfig);
 
-            if (isChaptersVisible)
-            {
-                isChaptersVisible = false;
-                btnNavigation.SetImageResource(Resource.Drawable.navigateRightIcon);
-            }
+            isChaptersVisible = false;
             UpdateLayout(leftPanelWidth);
         }
 
@@ -147,7 +143,6 @@ namespace CAPI.Android
             {
                 right = leftPanelWidth;
                 left = leftPanelWidth - this.WindowManager.DefaultDisplay.Width / 2;
-                btnNavigation.SetImageResource(Resource.Drawable.navigateRightIcon);
              
                 isChaptersVisible = false;
             }
@@ -155,7 +150,6 @@ namespace CAPI.Android
             {
                 right = this.WindowManager.DefaultDisplay.Width/2;
                 left = 0;
-                btnNavigation.SetImageResource(Resource.Drawable.navigateLeftIcon);
 
                 isChaptersVisible = true;
             }

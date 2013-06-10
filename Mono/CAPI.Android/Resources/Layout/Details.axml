@@ -18,12 +18,12 @@
       android:layout_width="30dp"
       android:layout_height="fill_parent">
 
-      <ImageButton android:id="@+id/btnNavigation"
+      <Button android:id="@+id/btnNavigation"
                      android:padding="0dp"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-         android:src="@drawable/navigateRightIcon"     
-                    android:scaleType="centerInside"
+         android:text="..."
+              android:gravity="center"
                    />
     </LinearLayout>
 
