@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
     using System;
@@ -19,7 +21,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
     /// <summary>
     /// The account document.
     /// </summary>
-    public class AccountDocument : IMembershipAccount, IUserWithRoles
+    public class AccountDocument : IMembershipAccount, IUserWithRoles, IView
     {
         #region Public Properties
 

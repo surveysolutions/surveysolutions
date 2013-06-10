@@ -12,6 +12,8 @@ using Main.Core.View;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {
     using System;
