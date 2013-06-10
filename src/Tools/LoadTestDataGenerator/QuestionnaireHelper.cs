@@ -13,7 +13,7 @@ namespace LoadTestDataGenerator
             return document.GetAllQuestions().Where(x => x.Featured).ToList();
         }
 
-        public static IEnumerable<IQuestion> GetAllQuestions(this QuestionnaireDocument document)
+        public static IEnumerable<IQuestion> GetAllQuestions(this QuestionnaireDocument document, bool skipPropagateGroups = false)
         {
             var treeStack = new Stack<IComposite>();
             treeStack.Push(document);
@@ -25,7 +25,10 @@ namespace LoadTestDataGenerator
                 {
                     if (child is IGroup)
                     {
-                        treeStack.Push(child);
+                        if (!skipPropagateGroups || ((IGroup) child).Propagated == Propagate.None)
+                        {
+                            treeStack.Push(child);
+                        }
                     }
                     else if (child is IQuestion)
                     {
