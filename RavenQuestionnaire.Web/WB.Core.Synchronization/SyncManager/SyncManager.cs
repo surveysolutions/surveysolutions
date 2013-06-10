@@ -12,12 +12,33 @@
 
         private readonly ISyncProvider syncProvider;
 
-        public bool InitSending(ClientIdentifier identifier)
+        public HandshakePackage ItitSync(ClientIdentifier identifier)
+        {
+            if (identifier.ClientInstanceKey == Guid.Empty)
+                throw new ArgumentException("ClientInstanceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(identifier.ClientDeviceKey))
+                throw new ArgumentException("ClientDeviceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(identifier.ClientVersionIdentifier))
+                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
+
+            this.CheckAndCreateNewProcess(identifier);
+
+            return new HandshakePackage(identifier.ClientInstanceKey);
+        }
+
+        private void CheckAndCreateNewProcess(object clientIdentifier)
         {
             throw new NotImplementedException();
         }
 
-        public void SendSyncPackage()
+        public bool InitSending(ClientIdentifier identifier)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public bool SendSyncPackage(SyncPackage package)
         {
             throw new NotImplementedException();
         }

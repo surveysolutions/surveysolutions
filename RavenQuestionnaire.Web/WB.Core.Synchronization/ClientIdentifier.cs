@@ -10,10 +10,15 @@ namespace WB.Core.Synchronization
     {
         public Guid ClientInstanceKey;
         public string ClientDeviceKey;
-        public string ClientVersionNumber;
+        public string ClientVersionIdentifier;
         
         public Guid? LastSyncIdentifier;
 
         public Guid? CurrentProcessKey;
+
+        public ClientIdentifier()
+        {
+
+        }
     }
 }
