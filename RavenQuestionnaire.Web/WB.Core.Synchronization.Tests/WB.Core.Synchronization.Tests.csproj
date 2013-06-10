@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncManager\SyncManagerTests.cs" />
+    <Compile Include="SyncProvider\SyncProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

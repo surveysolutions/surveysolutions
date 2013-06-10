@@ -42,5 +42,33 @@ namespace SynchronizationMessages.Synchronization
             }
             return Encoding.UTF8.GetString(result.ToArray());
         }
+
+        public static string CompressString(string s)
+        {
+            var bytes = Encoding.Unicode.GetBytes(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                {
+                    msi.CopyTo(gs);
+                }
+                return Convert.ToBase64String(mso.ToArray());
+            }
+        }
+
+        public static string DecompressString(string s)
+        {
+            var bytes = Convert.FromBase64String(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return Encoding.Unicode.GetString(mso.ToArray());
+            }
+        }
     }
 }

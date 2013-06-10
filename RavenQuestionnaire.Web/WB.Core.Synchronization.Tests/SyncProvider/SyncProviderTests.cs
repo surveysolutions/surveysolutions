@@ -5,12 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace WB.Core.Synchronization.Tests.SyncManager
+namespace WB.Core.Synchronization.Tests.SyncProvider
 {
     [TestFixture]
-    class SyncManagerTests
+    class SyncProviderTests
     {
-        
-
     }
 }
