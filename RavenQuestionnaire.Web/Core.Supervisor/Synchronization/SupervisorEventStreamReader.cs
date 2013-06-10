@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Synchronization;
+
 namespace Core.Supervisor.Synchronization
 {
     using System;
@@ -99,13 +101,13 @@ namespace Core.Supervisor.Synchronization
             var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", null)));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", null)));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
 
             List<Guid> files = GetFiles();
-            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", null)));
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, SyncItemType.File, null)));
 
             return result;
         }
@@ -113,13 +115,13 @@ namespace Core.Supervisor.Synchronization
         {
             switch (ARType)
             {
-                case "f":
+                case SyncItemType.File:
                     return this.GetEventStreamById(ARId);
                     break;
-                case "q":
+                case SyncItemType.Questionnare:
                     return this.GetEventStreamById(ARId);
                     break;
-                case "u":
+                case SyncItemType.User:
                     return this.GetEventStreamById(ARId);
                     break;
                 default:

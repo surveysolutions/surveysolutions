@@ -4,7 +4,6 @@ namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
     using Main.Core.Documents;
-    using Main.Core.Utility;
     using Main.DenormalizerStorage;
     using Newtonsoft.Json;
     using SynchronizationMessages.Synchronization;
@@ -31,13 +30,13 @@ namespace WB.Core.Synchronization.SyncProvider
         {
             switch (type)
             {
-                case "f":
+                case SyncItemType.File:
                     return null;
                     break;
-                case "q":
+                case SyncItemType.Questionnare:
                     return GetItem(this.questionnaires.GetById(id), id, type);
                     break;
-                case "u":
+                case SyncItemType.User:
                     return GetItem(this.users.GetById(id), id, type);
                     break;
                 default:
@@ -70,7 +69,7 @@ namespace WB.Core.Synchronization.SyncProvider
             
             if (UseCompression)
             {
-                return Encoding.UTF8.GetString(PackageHelper.Compress(itemToSync));
+                return PackageHelper.CompressString(itemToSync);
             }
             else
             {

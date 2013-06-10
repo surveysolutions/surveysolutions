@@ -4,11 +4,13 @@
 
     public interface ISyncManager
     {
+        HandshakePackage ItitSync(ClientIdentifier identifier);
+
         bool InitSending(ClientIdentifier identifier);
 
         bool ItitReceiving(ClientIdentifier identifier);
 
-        void SendSyncPackage();
+        bool SendSyncPackage(SyncPackage package);
 
         SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id, string itemType);
     }
