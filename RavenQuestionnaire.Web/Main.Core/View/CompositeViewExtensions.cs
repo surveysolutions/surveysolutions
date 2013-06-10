@@ -4,7 +4,7 @@ namespace Main.Core.View
 {
     public static class CompositeViewExtensions
     {
-        public static int GetDepthIn(this ICompositeView view)
+        public static int GetDepth(this ICompositeView view)
         {
             if (view == null) throw new ArgumentNullException("view");
             int result = 0;
