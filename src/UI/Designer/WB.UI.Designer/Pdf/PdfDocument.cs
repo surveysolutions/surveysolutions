@@ -14,5 +14,6 @@ namespace WB.UI.Designer.Pdf
         public String FooterUrl { get; set; }
         public object State { get; set; }
         public string PageNumbersFormat { get; set; }
+        public string CoverUrl { get; set; }
     }
 }

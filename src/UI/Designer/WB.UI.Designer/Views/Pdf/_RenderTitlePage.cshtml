@@ -1,1 +1,9 @@
-﻿@*<p>This is title page</p>*@
+﻿@model WB.UI.Designer.Pdf.TitlePageDto
+
+
+<header>
+    @Model.SurveyName
+</header>
+<div class="create-date">
+    Creation date: @Model.CreationDate
+</div>
