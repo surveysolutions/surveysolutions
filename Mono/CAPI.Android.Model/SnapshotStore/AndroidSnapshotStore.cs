@@ -44,7 +44,9 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             var filePath = GetFileName(eventSourceId);
             if (!File.Exists(filePath))
                 return null;
-            return GetObject(File.ReadAllText(filePath));
+            var snapshot = GetObject(File.ReadAllText(filePath));
+            internalStorage.SaveShapshot(snapshot);
+            return snapshot;
         }
 
         public void Flush(Guid eventSourceId)

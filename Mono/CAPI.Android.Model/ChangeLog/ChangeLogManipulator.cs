@@ -64,7 +64,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             var record = GetLastDraftRecord(eventSourceId);
             if (record == null)
                 return;
-            if(record.Start>=end)
+            if (record.Start > end)
                 throw new ArgumentException("end is more than start");
             record.End = end;
             var storedEvents = eventStore.ReadFrom(eventSourceId, record.Start, end);
