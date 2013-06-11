@@ -46,6 +46,9 @@ namespace WB.UI.Designer.Controllers
             var model = new TitlePageDto();
             model.SurveyName = questionnaire.Title;
             model.CreationDate = questionnaire.CreationDate.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern);
+            model.ChaptersCount = questionnaire.GetChaptersCount();
+            model.QuestionsCount = questionnaire.GetQuestionsCount();
+            model.QuestionsWithConditionsCount = questionnaire.GetQuestionsWithConditionsCount();
 
             return this.View(model);
         }

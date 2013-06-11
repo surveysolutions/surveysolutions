@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
+using Main.Core.View.Question;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -78,5 +79,21 @@ namespace WB.UI.Designer.Views.Questionnaire
                 return this.Source.IsPublic;
             }
         }
+
+        public int GetChaptersCount()
+        {
+            return Children.Count();
+        }
+
+        public int GetQuestionsCount()
+        {
+            return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count());
+        }
+
+        public int GetQuestionsWithConditionsCount()
+        {
+            return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count(x => !string.IsNullOrEmpty(x.ConditionExpression)));
+        }
     }
 }
+
