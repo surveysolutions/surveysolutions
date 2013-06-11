@@ -23,37 +23,33 @@ namespace Core.Supervisor.Views.User
         
         public UserListView Load(UserListViewInputModel input)
         {
-            var hasRole = input.Role != UserRoles.Undefined;
+            Func<UserDocument, bool> query =
+                _ => !_.IsDeleted && (input.Role == UserRoles.Undefined || _.Roles.Contains(input.Role));
 
-            Func<UserDocument, bool> query = (x) => false;
+            return this.users.Query(
+                _ =>
+                    {
+                        var all = _.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
 
-            if (hasRole)
-            {
-                query = (x) => x.Roles.Contains(input.Role);
-            }
+                        var selection =
+                            all.Skip((input.Page - 1) * input.PageSize)
+                                       .Take(input.PageSize)
+                                       .ToList()
+                                       .Select(
+                                           x =>
+                                           new UserListItem
+                                               {
+                                                   PublicKey = x.PublicKey,
+                                                   CreationDate = x.CreationDate,
+                                                   Email = x.Email,
+                                                   IsLocked = x.IsLocked,
+                                                   UserName = x.UserName,
+                                                   Roles = x.Roles
+                                               });
 
-            return this.users.Query(queryable =>
-            {
-                #warning ReadLayer: ToList
-                var queryResult =
-                    queryable.Where(x => !x.IsDeleted).ToList().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
-
-                var retVal = queryResult.Skip((input.Page - 1) * input.PageSize)
-                                                .Take(input.PageSize)
-                                                .Select(
-                                                    x =>
-                                                    new UserListItem
-                                                        {
-                                                            PublicKey = x.PublicKey,
-                                                            CreationDate = x.CreationDate, 
-                                                            Email = x.Email, 
-                                                            IsLocked = x.IsLocked, 
-                                                            UserName = x.UserName, 
-                                                            Roles = x.Roles
-                                                        });
-
-                return new UserListView(input.Page, input.PageSize, queryResult.Count(), retVal.ToList(), input.Order);
-            });
+                        return new UserListView(
+                            input.Page, input.PageSize, all.Count(), selection, input.Order);
+                    });
         }
     }
 }
