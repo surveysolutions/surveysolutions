@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -13,7 +15,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SyncDeviceRegisterDocument
+    public class SyncDeviceRegisterDocument : IView
     {
         #region Fields
 

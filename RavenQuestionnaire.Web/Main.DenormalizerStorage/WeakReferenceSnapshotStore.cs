@@ -17,25 +17,26 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
+    [Obsolete]
     public class WeakReferenceSnapshotStore : ISnapshotStore
     {
-        private readonly PersistentDenormalizer<Snapshot> storage;
+        //private readonly PersistentDenormalizer<Snapshot> storage;
 
-        public WeakReferenceSnapshotStore(PersistentDenormalizer<Snapshot> storage)
+        public WeakReferenceSnapshotStore(/*PersistentDenormalizer<Snapshot> storage*/)
         {
-            this.storage = storage;
+            //this.storage = storage;
         }
 
         #region Implementation of ISnapshotStore
 
         public void SaveShapshot(Snapshot snapshot)
         {
-            storage.Store(snapshot, snapshot.EventSourceId);
+            //storage.Store(snapshot, snapshot.EventSourceId);
         }
 
         public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
         {
-            return storage.GetById(eventSourceId);
+            return null;// storage.GetById(eventSourceId);
 
 
         }

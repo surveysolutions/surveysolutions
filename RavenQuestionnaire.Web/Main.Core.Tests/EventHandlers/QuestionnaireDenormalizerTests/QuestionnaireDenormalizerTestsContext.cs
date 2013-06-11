@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
 {
     using Machine.Specifications;

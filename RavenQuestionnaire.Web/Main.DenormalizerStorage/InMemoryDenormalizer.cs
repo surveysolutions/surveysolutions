@@ -5,10 +5,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage
 {
     public class InMemoryDenormalizer<TView> : IQueryableDenormalizerStorage<TView>
-        where TView : class
+        where TView : class, IView
     {
         private readonly ConcurrentDictionary<Guid, TView> _hash;
 

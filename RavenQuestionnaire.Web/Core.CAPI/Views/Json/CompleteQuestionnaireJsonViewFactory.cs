@@ -9,6 +9,8 @@
 
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.CAPI.Views.Json
 {
     using System;

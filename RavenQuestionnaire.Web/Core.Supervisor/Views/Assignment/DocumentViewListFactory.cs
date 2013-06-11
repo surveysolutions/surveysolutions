@@ -1,3 +1,5 @@
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views.Assignment
 {
     using System.Collections.Generic;
@@ -36,7 +38,9 @@ namespace Core.Supervisor.Views.Assignment
                 var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
                 var view = new AssignmentView(input.Page, input.PageSize, 0);
 
-                view.AssignableUsers = this.GetInterviewersListForViewer(input.ViewerId);
+                view.AssignableUsers = this.IsHq(input.ViewerId)
+                    ? this.GetSupervisorsListForViewer(input.ViewerId)
+                    : this.GetInterviewersListForViewer(input.ViewerId);
 
                 view.Template = !input.TemplateId.HasValue
                                 ? null

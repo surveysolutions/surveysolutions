@@ -134,6 +134,10 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>

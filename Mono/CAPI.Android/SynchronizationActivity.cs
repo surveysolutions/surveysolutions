@@ -17,6 +17,8 @@ using Main.Core.Utility;
 
 using Main.Core.View.User;
 using Main.Synchronization.Credentials;
+
+using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android

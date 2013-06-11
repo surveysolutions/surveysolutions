@@ -1,5 +1,7 @@
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views.Interviewer
 {
     using System.Linq;

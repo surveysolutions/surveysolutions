@@ -6,6 +6,9 @@
 //   The file description.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -14,7 +17,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The file description.
     /// </summary>
-    public class FileDescription
+    public class FileDescription : IView
     {
         #region Public Properties
 

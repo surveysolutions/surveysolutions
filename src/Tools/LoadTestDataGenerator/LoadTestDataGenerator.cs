@@ -25,8 +25,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
+using WB.Core.Infrastructure;
+
 namespace LoadTestDataGenerator
 {
+    using Main.Core;
     using Main.Core.View;
     using Main.Core.View.User;
     using System.Threading.Tasks;
@@ -183,6 +186,9 @@ namespace LoadTestDataGenerator
 
         private void GenerateCapiEvents()
         {
+            this.UpdateStatus("reduild read layer");
+            NcqrsInit.EnsureReadLayerIsBuilt();
+
             var surveyIds = this.GetSurveyIds();
             this.UpdateStatus("full capi events");
             foreach (var surveyId in surveyIds)
@@ -222,7 +228,12 @@ namespace LoadTestDataGenerator
                 {
                     continue;
                 }
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, this.GetDummyCompleteAnswers(question), GetDummyAnswer(question), null));
+                if (question.Enabled)
+                {
+                    this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey,
+                                                                     this.GetDummyCompleteAnswers(question),
+                                                                     GetDummyAnswer(question), null));
+                }
             }
             var allQuestions = survey.GetQuestions().Where(x => !(x is IAutoPropagate)).ToList();
             foreach (var question in allQuestions)
@@ -231,7 +242,13 @@ namespace LoadTestDataGenerator
                 {
                     continue;
                 }
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyCompleteAnswers(question), GetDummyAnswer(question), question.PropagationPublicKey));
+                if (question.Enabled)
+                {
+                    this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey,
+                                                                     GetDummyCompleteAnswers(question),
+                                                                     GetDummyAnswer(question),
+                                                                     question.PropagationPublicKey));
+                }
             }
         }
 
@@ -526,7 +543,7 @@ namespace LoadTestDataGenerator
                         question.Answers[random.Next(answersCount)].PublicKey
                     };
             }
-            return new List<Guid>() { Guid.NewGuid() };
+            return new List<Guid>() { };
         }
 
         private List<Guid> GetDummyCompleteAnswers(IQuestion q)

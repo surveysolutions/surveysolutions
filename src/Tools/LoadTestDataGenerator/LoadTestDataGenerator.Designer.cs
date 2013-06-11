@@ -147,8 +147,6 @@
             // clearDatabase
             // 
             this.clearDatabase.AutoSize = true;
-            this.clearDatabase.Checked = true;
-            this.clearDatabase.CheckState = System.Windows.Forms.CheckState.Checked;
             this.clearDatabase.Location = new System.Drawing.Point(21, 19);
             this.clearDatabase.Name = "clearDatabase";
             this.clearDatabase.Size = new System.Drawing.Size(97, 17);

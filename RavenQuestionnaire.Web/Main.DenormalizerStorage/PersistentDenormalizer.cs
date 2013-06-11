@@ -12,6 +12,8 @@ using System.Linq.Expressions;
 using System.Runtime.Caching;
 using System.Threading;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage
 {
     /// <summary>
@@ -19,7 +21,7 @@ namespace Main.DenormalizerStorage
     /// </summary>
     [Obsolete]
     public class PersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
-        where TView : class
+        where TView : class, IView
     {
         #region Fields
 

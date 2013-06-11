@@ -3,6 +3,9 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System.Linq;

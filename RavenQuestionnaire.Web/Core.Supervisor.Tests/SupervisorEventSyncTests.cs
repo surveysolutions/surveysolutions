@@ -63,7 +63,8 @@ namespace Core.Supervisor.Tests
                                                    new object(), new Version(1, 1, 1, 1));
             eventStoreMock.Setup(x => x.GetLatestSnapshoot(It.IsAny<Guid>()))
                           .Returns(commitedEvent);
-            denormalizerMock.Setup(x => x.GetByGuid<CommittedEvent>(It.IsAny<Guid>())).Returns(commitedEvent);
+            #warning implementation commented out, Nastia said, it it going to be deleted
+            //denormalizerMock.Setup(x => x.GetByGuid<CommittedEvent>(It.IsAny<Guid>())).Returns(commitedEvent);
             return eventStoreMock;
         }
 
@@ -200,7 +201,10 @@ namespace Core.Supervisor.Tests
             Assert.IsTrue(result[0].EventIdentifier == eventId);
 
         }
+
+        #warning test ignored, Nastia said, it it going to be deleted
         [Test]
+        [Ignore]
         public void GetEventStreamById_LastEventIsSnapshootLoaded_ReadFromWasntCalled()
         {
             var eventStoreMock = PrepareSnapshotableEventStore();

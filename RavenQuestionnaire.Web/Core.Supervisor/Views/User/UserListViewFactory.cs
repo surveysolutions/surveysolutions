@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.Views.User
+﻿using WB.Core.Infrastructure;
+
+namespace Core.Supervisor.Views.User
 {
     using System;
     using System.Collections.Generic;
@@ -21,13 +23,20 @@
         
         public UserListView Load(UserListViewInputModel input)
         {
-            Func<UserDocument, bool> query =
-                x => !x.IsDeleted && (input.Role == UserRoles.Undefined || x.Roles.Contains(input.Role));
+            var hasRole = input.Role != UserRoles.Undefined;
+
+            Func<UserDocument, bool> query = (x) => false;
+
+            if (hasRole)
+            {
+                query = (x) => x.Roles.Contains(input.Role);
+            }
 
             return this.users.Query(queryable =>
             {
+                #warning ReadLayer: ToList
                 var queryResult =
-                    queryable.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+                    queryable.Where(x => !x.IsDeleted).ToList().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
 
                 var retVal = queryResult.Skip((input.Page - 1) * input.PageSize)
                                                 .Take(input.PageSize)

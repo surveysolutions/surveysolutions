@@ -50,7 +50,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 }
 
                 var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
-
+              
                 var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
                 if (position < Count - 1)
                 {

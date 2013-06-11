@@ -3,6 +3,8 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views.Assign
 {
     public class AssignSurveyViewFactory : BaseUserViewFactory, IViewFactory<AssignSurveyInputModel, AssignSurveyView> 

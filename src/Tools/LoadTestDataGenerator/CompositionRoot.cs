@@ -9,6 +9,8 @@ using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Ninject;
 using Ninject.Modules;
+
+using WB.Core.Infrastructure;
 using WB.Core.Questionnaire.ExportServices;
 
 namespace LoadTestDataGenerator

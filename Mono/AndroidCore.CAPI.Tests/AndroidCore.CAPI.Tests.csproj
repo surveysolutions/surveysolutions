@@ -55,6 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
       <Project>{ED790AED-465E-4787-A9A3-8380229E0470}</Project>
       <Name>AndroidCore.Capi</Name>
@@ -83,7 +87,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="fd52af46-2a79-4ca1-bfc0-fa4bb95c1a87" />
+      <UserProperties ProjectLinkReference="fd52af46-2a79-4ca1-bfc0-fa4bb95c1a87" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
