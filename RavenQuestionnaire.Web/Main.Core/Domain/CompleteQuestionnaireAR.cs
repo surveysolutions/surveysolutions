@@ -574,7 +574,7 @@ namespace Main.Core.Domain
 
         public void CreateNewAssigment(CompleteQuestionnaireDocument source)
         {
-            ApplyEvent(new NewCompleteQuestionnaireCreated() {Questionnaire = source});
+            ApplyEvent(new NewAssigmentCreated() { Source = source });
         }
 
         /// <summary>
@@ -619,7 +619,11 @@ namespace Main.Core.Domain
                         Responsible = responsible
                     });
         }
-        
+
+        protected void OnNewAssigmentCreated(NewAssigmentCreated e)
+        {
+            this.doc = e.Source.Clone() as CompleteQuestionnaireDocument;
+        }
 
         // Event handler for the AnswerSet event. This method
         // is automaticly wired as event handler based on convension.

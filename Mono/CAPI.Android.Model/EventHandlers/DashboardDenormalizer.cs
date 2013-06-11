@@ -13,7 +13,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, IEventHandler<QuestionnaireStatusChanged>{
+    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, IEventHandler<QuestionnaireStatusChanged>
+    {
         private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
         private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
 
@@ -27,9 +28,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
-        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
+        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
-            var document = evnt.Payload.Questionnaire;
+            var document = evnt.Payload.Source;
             PropeedCompleteQuestionnaire(document);
         }
 

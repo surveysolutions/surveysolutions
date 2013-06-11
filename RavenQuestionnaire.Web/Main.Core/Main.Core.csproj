@@ -462,6 +462,7 @@
     <Compile Include="Events\Questionnaire\Completed\FlagSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs">
       <SubType>Code</SubType>
     </Compile>

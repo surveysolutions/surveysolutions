@@ -103,7 +103,7 @@ namespace CAPI.Android
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(
                     kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
-            bus.RegisterHandler(eventHandler, typeof(NewCompleteQuestionnaireCreated));
+            bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(eventHandler, typeof (AnswerSet));
             bus.RegisterHandler(eventHandler, typeof (CommentSet));
             bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
@@ -143,7 +143,7 @@ namespace CAPI.Android
             
             var dashboardeventHandler =
                 new DashboardDenormalizer(questionnaireStore, surveyStore);
-            bus.RegisterHandler(dashboardeventHandler, typeof (NewCompleteQuestionnaireCreated));
+            bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
         }
 
@@ -159,7 +159,7 @@ namespace CAPI.Android
             Kernel.Bind<IFilterableDenormalizerStorage<DraftChangesetDTO>>().ToConstant(draftStore);
 
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(NewCompleteQuestionnaireCreated));
+            bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
         }
         public override void OnCreate()

@@ -7,7 +7,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer: IEventHandler<NewCompleteQuestionnaireCreated>,
+    public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>,
         IEventHandler<ConditionalStatusChanged>,
     IEventHandler<CommentSet>, 
                                                     /* IEventHandler<SnapshootLoaded>,*/
@@ -30,9 +30,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
         #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
 
-        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
+        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
-            var document = evnt.Payload.Questionnaire;
+            var document = evnt.Payload.Source;
             
             var view = new CompleteQuestionnaireView(document);
 

@@ -19,7 +19,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CommitDenormalizer : IEventHandler<QuestionnaireStatusChanged>, IEventHandler<NewCompleteQuestionnaireCreated>
+    public class CommitDenormalizer : IEventHandler<QuestionnaireStatusChanged>, IEventHandler<NewAssigmentCreated>
     {
         public CommitDenormalizer(IChangeLogManipulator changeLog)
         {
@@ -30,12 +30,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            if (evnt.Payload.Status == SurveyStatus.Initial || evnt.Payload.Status == SurveyStatus.Redo)
-            {
-                changeLog.OpenDraftRecord(evnt.EventSourceId, evnt.EventSequence);
-                return;
-            }
-
             if (evnt.Payload.Status == SurveyStatus.Complete || evnt.Payload.Status == SurveyStatus.Error)
             {
                 changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence);
@@ -48,7 +42,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             }
         }
 
-        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
+        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
             changeLog.OpenDraftRecord(evnt.EventSourceId, evnt.EventSequence + 1);
         }

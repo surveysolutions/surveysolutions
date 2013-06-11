@@ -32,9 +32,6 @@ namespace CAPI.Android.Syncronization.Pull
             this.changelog = changelog;
             this.commandService = commandService;
             this.chuncksFroProccess=new List<SyncItem>();
-          /*  var dirPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), syncTemp);
-            if (!Directory.Exists(dirPath))
-                Directory.CreateDirectory(dirPath);*/
         }
         private IList<SyncItem> chuncksFroProccess;
         private readonly IChangeLogManipulator changelog;
@@ -49,18 +46,10 @@ namespace CAPI.Android.Syncronization.Pull
         {
 
             var item = chuncksFroProccess.FirstOrDefault(i => i.Id == chunkId);
-            var unzippedData = string.Empty;
+            if (item == null)
+                return;
 
-
-            if (item.IsCompressed)
-            {
-                unzippedData = PackageHelper.DecompressString(item.Content);
-            }
-            else
-            {
-                unzippedData = item.Content;
-            }
-
+            string unzippedData = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
         
             if(string.IsNullOrEmpty(unzippedData))
                 return;
