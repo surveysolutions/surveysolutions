@@ -173,7 +173,7 @@ namespace CAPI.Androids.Core.Model.Tests
             // assert
             Assert.That(draftStorage.Count,Is.EqualTo(0));
             Assert.That(publicStorage.Count,Is.EqualTo(1));
-            Assert.That(publicStorage[recordId].EventSourceId, Is.EqualTo(eventSourceId.ToString()));
+            Assert.That(publicStorage[recordId].Id, Is.EqualTo(recordId.ToString()));
             changeLogStoreMock.Verify(x => x.DeleteDraftChangeSet(recordId), Times.Once());
 
         }
@@ -206,14 +206,13 @@ namespace CAPI.Androids.Core.Model.Tests
                 CreateChangeLogManipulatorWithAccesibleChangelogStorageAndDraftStorageAndPublic(
                     changeLogStoreMock.Object, publicStorage, draftStorage);
             Guid recordId = Guid.NewGuid();
-            Guid eventSourceId = Guid.NewGuid();
 
             // act
-            unitUnderTest.CreatePublicRecord(recordId, eventSourceId);
+            unitUnderTest.CreatePublicRecord(recordId);
 
             // assert
             Assert.That(publicStorage.Count, Is.EqualTo(1));
-            Assert.That(publicStorage[recordId].EventSourceId, Is.EqualTo(eventSourceId.ToString()));
+            Assert.That(publicStorage[recordId].Id, Is.EqualTo(recordId.ToString()));
 
         }
 
