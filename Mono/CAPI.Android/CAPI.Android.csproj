@@ -195,6 +195,7 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\Drawable\navigateRightIcon.png" />
     <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -359,6 +360,7 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
+    <AndroidResource Include="Resources\Drawable\navigateLeftIcon.png" />
     <EmbeddedResource Include="researchDeptSurvey.txt" />
     <EmbeddedResource Include="userEvent.txt" />
     <EmbeddedResource Include="initEvent.txt" />
