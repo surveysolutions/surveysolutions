@@ -168,18 +168,19 @@ namespace CAPI.Androids.Core.Model.Tests
             draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, end);
 
             // act
-            unitUnderTest.MarkDraftChangesetAsPublic(recordId);
+            var result =unitUnderTest.MarkDraftChangesetAsPublicAndReturnARId(recordId);
 
             // assert
             Assert.That(draftStorage.Count,Is.EqualTo(0));
             Assert.That(publicStorage.Count,Is.EqualTo(1));
             Assert.That(publicStorage[recordId].Id, Is.EqualTo(recordId.ToString()));
+            Assert.That(result, Is.EqualTo(eventSourceId));
             changeLogStoreMock.Verify(x => x.DeleteDraftChangeSet(recordId), Times.Once());
 
         }
 
         [Test]
-        public void MarkDraftChangesetAsPublic_When_record_is_absent_Then_nothing()
+        public void MarkDraftChangesetAsPublic_When_record_is_absent_Then_InvalidOperationException()
         {
             // arrange
             var draftStorage = new Dictionary<Guid, DraftChangesetDTO>();
@@ -188,9 +189,11 @@ namespace CAPI.Androids.Core.Model.Tests
             Guid recordId = Guid.NewGuid();
 
             // act
-            unitUnderTest.MarkDraftChangesetAsPublic(recordId);
+            Assert.Throws<InvalidOperationException>(
+                  () => unitUnderTest.MarkDraftChangesetAsPublicAndReturnARId(recordId));
 
             // assert
+            
             Assert.That(draftStorage.Count, Is.EqualTo(0));
 
         }
