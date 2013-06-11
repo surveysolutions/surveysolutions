@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WB.UI.Designer.MembershipProviders")]
+[assembly: AssemblyTitle("WB.Core.Infrastructure.Raven")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WB.UI.Designer.MembershipProviders")]
+[assembly: AssemblyProduct("WB.Core.Infrastructure.Raven")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5a275a75-0acf-48ec-b94e-2a3ddb4031f7")]
+[assembly: Guid("5063700b-8316-43fc-bcac-72b5b540b3a7")]
 
 // Version information for an assembly consists of the following four values:
 //
