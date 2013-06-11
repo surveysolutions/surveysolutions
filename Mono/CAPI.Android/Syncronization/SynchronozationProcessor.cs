@@ -16,6 +16,7 @@ using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Handshake;
 using CAPI.Android.Syncronization.Pull;
 using CAPI.Android.Syncronization.Push;
+using CAPI.Android.Syncronization.RestUtils;
 using CAPI.Android.Utils;
 using Main.Core.Events;
 using Main.Synchronization.Credentials;
@@ -57,9 +58,10 @@ namespace CAPI.Android.Syncronization
             Preparation();
             this.authentificator = authentificator;
 
-            pull = new RestPull(SettingsManager.GetSyncAddressPoint());
-            push = new RestPush(SettingsManager.GetSyncAddressPoint());
-            handshake = new RestHandshake(SettingsManager.GetSyncAddressPoint());
+            var executor = new AndroidRestUrils(SettingsManager.GetSyncAddressPoint());
+            pull = new RestPull(executor);
+            push = new RestPush(executor);
+            handshake = new RestHandshake(executor);
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             pullDataProcessor = new PullDataProcessor(changelog, commandService);
@@ -142,7 +144,7 @@ namespace CAPI.Android.Syncronization
                     foreach (var chunckDescription in dataByChuncks)
                     {
                         ExitIfCanceled();
-                        push.PushChunck(chunckDescription.Id, chunckDescription.Content, syncId);
+                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription);
                         pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;

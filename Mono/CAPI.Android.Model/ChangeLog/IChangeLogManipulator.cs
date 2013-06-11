@@ -10,7 +10,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         void CloseDraftRecord(Guid eventSourceId, long end);
         void ReopenDraftRecord(Guid eventSourceId);
 
-        IList<Guid> GetClosedDraftChunksIds();
+        IDictionary<Guid, Guid> GetClosedDraftChunksIds();
         string GetDraftRecordContent(Guid recordId);
 
         void CreatePublicRecord(Guid recordId);

@@ -6,6 +6,7 @@ using System.Net;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading;
+using CAPI.Android.Syncronization.RestUtils;
 using Main.Core.Events;
 using Main.Synchronization.Credentials;
 using Newtonsoft.Json;
@@ -19,21 +20,24 @@ namespace CAPI.Android.Syncronization.Pull
 {
     public class RestPull
     {
-        private readonly string baseAddress;
+        private readonly IRestUrils webExecutor;
 
         private const string getChunckPath = "importexport/GetSyncPackage";
         private const string getARKeysPath = "importexport/GetARKeys";
 
-        public RestPull(string baseAddress)
+        public RestPull(IRestUrils webExecutor)
         {
-            this.baseAddress = baseAddress;
+            this.webExecutor = webExecutor;
         }
 
         public SyncItem RequestChunck(string login, string password, Guid id, string rootType, Guid synckId)
         {
-            var package = ExcecuteRestRequest<SyncPackage>(getChunckPath, login, password,
-                                                           new KeyValuePair<string, string>("aRKey", id.ToString()),
-                                                           new KeyValuePair<string, string>("rootType", rootType));
+            var package = webExecutor.ExcecuteRestRequest<SyncPackage>(getChunckPath,
+                                                                       new KeyValuePair<string, string>("login", login),
+                                                                       new KeyValuePair<string, string>("password",password),
+                                                                       new KeyValuePair<string, string>("aRKey",id.ToString()),
+                                                                       new KeyValuePair<string, string>("rootType",rootType));
+
             if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new NullReferenceException("content is absent");
             return package.ItemsContainer[0];
@@ -41,50 +45,12 @@ namespace CAPI.Android.Syncronization.Pull
 
         public IDictionary<SyncItemsMeta,bool> GetChuncks(string login, string password, Guid synckId)
         {
-            var syncItemsMetaContainer = ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, login, password);
+            var syncItemsMetaContainer = webExecutor.ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, 
+                                                                       new KeyValuePair<string, string>("login", login),
+                                                                       new KeyValuePair<string, string>("password", password));
 
             return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
         }
 
-
-        protected T ExcecuteRestRequest<T>(string url, string login, string password,
-                                           params KeyValuePair<string, string>[] additionalParams) where T : class
-        {
-            var restClient = new RestClient(this.baseAddress);
-
-            var request = new RestRequest(url, Method.POST);
-            request.RequestFormat = DataFormat.Json;
-
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
-            request.AddParameter("login", login);
-            request.AddParameter("password", password);
-            foreach (var additionalParam in additionalParams)
-            {
-                request.AddParameter(additionalParam.Key, additionalParam.Value);
-            }
-            var response = restClient.Execute(request);
-
-            if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
-            {
-                var exception = new Exception("Target returned unsupported result.");
-
-                if (response.StatusCode == HttpStatusCode.Forbidden)
-                    exception = new AuthenticationException("user wasn't authorized");
-
-                LogManager.GetLogger(GetType())
-                          .Error("Sync error. Responce status:" + response.StatusCode, exception);
-
-                throw exception;
-            }
-
-            var syncItemsMetaContainer =
-                JsonConvert.DeserializeObject<T>(response.Content, new JsonSerializerSettings());
-
-            if (syncItemsMetaContainer == null)
-            {
-                throw new Exception("Elements to be synchronized are not found.");
-            }
-            return syncItemsMetaContainer;
-        }
     }
 }

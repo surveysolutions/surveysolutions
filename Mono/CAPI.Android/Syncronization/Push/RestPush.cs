@@ -9,22 +9,30 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Syncronization.RestUtils;
+using WB.Core.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
 {
     public class RestPush
     {
-        private const int MillisecondsTimeout=1000;
-        private readonly string baseAddress;
-
-        public RestPush(string baseAddress)
+        private readonly IRestUrils webExecutor;
+        private const string getChunckPath = "importexport/PostPackage";
+        public RestPush(IRestUrils webExecutor)
         {
-            this.baseAddress = baseAddress;
+            this.webExecutor = webExecutor;
         }
 
-        public void PushChunck(Guid chunckId, string content, Guid synckId)
+
+        public void PushChunck(string login, string password, SyncPackage chunck)
         {
-         //   Thread.Sleep(MillisecondsTimeout);
+            if (chunck.ItemsContainer == null || chunck.ItemsContainer.Count == 0)
+                throw new InvalidOperationException("container is empty");
+            webExecutor.ExcecuteRestRequest(getChunckPath, chunck.ItemsContainer[0].Content,
+                                            new KeyValuePair<string, string>("login", login),
+                                            new KeyValuePair<string, string>("password", password),
+                                            new KeyValuePair<string, string>("aRKey",
+                                                                             chunck.ItemsContainer[0].Id.ToString()));
         }
     }
 }

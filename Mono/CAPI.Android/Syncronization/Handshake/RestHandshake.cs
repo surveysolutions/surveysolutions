@@ -10,20 +10,18 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
+using CAPI.Android.Syncronization.RestUtils;
 using Main.Synchronization.Credentials;
 
 namespace CAPI.Android.Syncronization.Handshake
 {
     public class RestHandshake
     {
-      
-        private readonly string baseAddress;
- //       private readonly Context context;
+        private readonly IRestUrils webExecutor;
 
-        public RestHandshake(string baseAddress)
+        public RestHandshake(IRestUrils webExecutor)
         {
-        
-            this.baseAddress = baseAddress;
+            this.webExecutor = webExecutor;
         }
 
         public Guid Execute( string login,string password, string deviceId, string appID, Guid? lastState)

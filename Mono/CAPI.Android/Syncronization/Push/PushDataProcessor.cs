@@ -13,6 +13,7 @@ using CAPI.Android.Core.Model.ChangeLog;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
 using SynchronizationMessages.Synchronization;
+using WB.Core.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
 {
@@ -26,15 +27,29 @@ namespace CAPI.Android.Syncronization.Push
             this.commandService = commandService;
         }
 
-        
-        public IList<ChunckDescription> GetChuncks()
-        {
-            var chunksIds = changelog.GetClosedDraftChunksIds();
-            var retval = new List<ChunckDescription>();
-            for (int i = 0; i < chunksIds.Count; i++)
-            {
 
-                retval.Add(new ChunckDescription(chunksIds[i], changelog.GetDraftRecordContent(chunksIds[i])));
+        public IList<SyncPackage> GetChuncks()
+        {
+            var chunks = changelog.GetClosedDraftChunksIds();
+            var retval = new List<SyncPackage>();
+            foreach (var chunk in chunks)
+            {
+                retval.Add(new SyncPackage()
+                    {
+                        Id = chunk.Key,
+                        Status = true,
+                        ItemsContainer =
+                            new List<SyncItem>()
+                                {
+                                    new SyncItem()
+                                        {
+                                            Content = changelog.GetDraftRecordContent(chunk.Key),
+                                            IsCompressed = true,
+                                            ItemType = SyncItemType.Questionnare,
+                                            Id = chunk.Value
+                                        }
+                                }
+                    });
             }
             return retval;
         }

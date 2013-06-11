@@ -37,9 +37,10 @@ namespace CAPI.Android.Core.Model.ChangeLog
             fileChangeLogStore = changeLogStore;
         }
 
-        public IList<Guid> GetClosedDraftChunksIds()
+        public IDictionary<Guid, Guid> GetClosedDraftChunksIds()
         {
-            return draftChangeLog.Query(c => c.End != null).Select(c => Guid.Parse(c.Id)).ToList();
+            var records= draftChangeLog.Query(c => c.End != null).ToList();
+            return records.ToDictionary(d => Guid.Parse(d.Id), d => Guid.Parse(d.EventSourceId));
         }
 
         public string GetDraftRecordContent(Guid recordId)
