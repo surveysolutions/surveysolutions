@@ -8,7 +8,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         void OpenDraftRecord(Guid eventSourceId, long start);
         void CloseDraftRecord(Guid eventSourceId, long end);
         void ReopenDraftRecord(Guid eventSourceId);
-        void CreatePublicRecord(Guid recordId, Guid eventSourceId);
+        void CreatePublicRecord(Guid recordId);
         void MarkDraftChangesetAsPublic(Guid recordId);
     }
 }

@@ -71,6 +71,12 @@ namespace Main.Core.Domain
         {
         }
 
+        public CompleteQuestionnaireAR(CompleteQuestionnaireDocument source)
+            : base(source.PublicKey)
+        {
+            CreateNewAssigment(source);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
         /// </summary>
@@ -566,6 +572,10 @@ namespace Main.Core.Domain
             }
         }
 
+        public void CreateNewAssigment(CompleteQuestionnaireDocument source)
+        {
+            ApplyEvent(new NewCompleteQuestionnaireCreated() {Questionnaire = source});
+        }
 
         /// <summary>
         /// The change assignment.

@@ -21,6 +21,7 @@ using Main.Core.Events;
 using Main.Synchronization.Credentials;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Synchronization;
 
 namespace CAPI.Android.Syncronization
 {
@@ -43,7 +44,7 @@ namespace CAPI.Android.Syncronization
         private readonly PullDataProcessor pullDataProcessor;
         private readonly PushDataProcessor pushDataProcessor;
 
-        private IDictionary<SyncItemsMeta, bool> remoteChuncksForDownload;
+        private IDictionary<SyncItemsMeta,bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -68,18 +69,23 @@ namespace CAPI.Android.Syncronization
 
         private void Validate()
         {
-            OnStatusChanged(new SynchronizationEventArgs("validating",Operation.Validation,true));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,0));
 
             CancelIfException(() =>
                 {
-                    foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value).Select(c => c.Key).ToList())
+                    int i = 1;
+                    foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value))
                     {
-                        pullDataProcessor.Proccess(chunck.AggregateRootId, true);
+                        pullDataProcessor.Proccess(chunck.Key.AggregateRootId);
+                        OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,
+                                                                       (i * 100) / remoteChuncksForDownload.Count));
+                        i++;
                     }
 
+                /*    if (remoteChuncksForDownload.Any(i => !i.Value))
+                        throw new OperationCanceledException("pull wasn't completed");*/
                 });
-            if (remoteChuncksForDownload.Any(c => !c.Value))
-                throw new OperationCanceledException("pull wasn't completed");
+
         }
 
         private void Pull()
@@ -94,7 +100,7 @@ namespace CAPI.Android.Syncronization
 
             int i = 1;
 
-            foreach (var chunckId in remoteChuncksForDownload.Select(c => c.Key).ToList())
+            foreach (var chunckId in remoteChuncksForDownload.Keys.ToList())
             {
                 //if process is canceled we stop pulling but without exception 
                 //in order to move forward and proccess uploaded data
@@ -103,16 +109,18 @@ namespace CAPI.Android.Syncronization
 
                 try
                 {
-                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.AggregateRootId, chunckId.AggregateRootType, syncId);
-                    pullDataProcessor.Save(data, chunckId.AggregateRootId);
+                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.AggregateRootId,
+                                                  chunckId.AggregateRootType, syncId);
+                  
+                    pullDataProcessor.Save(data);
                     remoteChuncksForDownload[chunckId] = true;
                 }
                 catch
                 {
                     //in case of exception we stop pulling but without exception 
                     //in order to move forward and proccess uploaded data
-                    return;
                     
+
                 }
                 OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
                                                                         (i*100)/remoteChuncksForDownload.Count));

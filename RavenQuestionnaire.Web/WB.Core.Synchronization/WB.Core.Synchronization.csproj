@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="HandshakePackage.cs" />
+    <Compile Include="HandshakePackage.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncItem.cs" />
     <Compile Include="SyncItemType.cs" />

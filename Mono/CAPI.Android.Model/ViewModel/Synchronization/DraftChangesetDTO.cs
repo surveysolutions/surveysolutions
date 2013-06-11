@@ -15,8 +15,9 @@ namespace CAPI.Android.Core.Model.ViewModel.Synchronization
     public class DraftChangesetDTO : PublicChangeSetDTO
     {
         public DraftChangesetDTO(Guid id, Guid eventSourceId, DateTime timeStamp, long start, long? end)
-            : base(id, eventSourceId, timeStamp)
+            : base(id, timeStamp)
         {
+            EventSourceId = eventSourceId.ToString();
             Start = start;
             End = end;
         }
@@ -24,7 +25,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Synchronization
         public DraftChangesetDTO()
         {
         }
-
+        public string EventSourceId { get; set; }
         public long Start { get; set; }
         public long? End { get; set; }
     }

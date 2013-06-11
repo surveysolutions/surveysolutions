@@ -104,7 +104,7 @@ namespace Core.Supervisor.Synchronization
             result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
 
             List<Guid> files = GetFiles();
             result.AddRange(files.Select(i => new SyncItemsMeta(i, SyncItemType.File, null)));

@@ -34,7 +34,7 @@ namespace WB.Core.Synchronization.SyncProvider
                     return null;
                     break;
                 case SyncItemType.Questionnare:
-                    return GetItem(this.questionnaires.GetById(id), id, type);
+                    return GetItem(CreateQuestionnarieDocument(id), id, type);
                     break;
                 case SyncItemType.User:
                     return GetItem(this.users.GetById(id), id, type);
@@ -44,6 +44,25 @@ namespace WB.Core.Synchronization.SyncProvider
             }
 
             return null;
+        }
+
+        private CompleteQuestionnaireDocument CreateQuestionnarieDocument(Guid id)
+        {
+            var retval = new CompleteQuestionnaireDocument();
+            var data = this.questionnaires.GetById(id);
+
+            retval.CreatedBy = data.CreatedBy;
+            retval.CreationDate = data.CreationDate;
+            retval.Creator = data.Creator;
+            retval.LastEntryDate = data.LastEntryDate;
+            retval.PublicKey = data.PublicKey;
+            retval.Responsible = data.Responsible;
+            retval.Status = data.Status;
+            retval.TemplateId = data.TemplateId;
+            retval.Title = data.Title;
+            
+            retval.Children = data.Children;
+            return retval;
         }
 
         private SyncItem GetItem(object item, Guid id, string type)

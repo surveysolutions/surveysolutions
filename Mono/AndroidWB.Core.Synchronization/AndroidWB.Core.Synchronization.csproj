@@ -46,8 +46,14 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\ClientIdentifier.cs">
       <Link>ClientIdentifier.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\HandshakePackage.cs">
+      <Link>HandshakePackage.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncItem.cs">
       <Link>SyncItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncItemType.cs">
+      <Link>SyncItemType.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncManager\ISyncManager.cs">
       <Link>SyncManager\ISyncManager.cs</Link>
@@ -88,7 +94,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="75d70eb8-1e56-4bfe-816c-5231112f64c0" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="75d70eb8-1e56-4bfe-816c-5231112f64c0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

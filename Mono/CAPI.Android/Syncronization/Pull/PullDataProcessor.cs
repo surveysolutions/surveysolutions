@@ -11,10 +11,15 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ChangeLog;
+using Main.Core.Commands.Questionnaire.Completed;
+using Main.Core.Commands.User;
+using Main.Core.Documents;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Newtonsoft.Json;
 using SynchronizationMessages.Synchronization;
+using WB.Core.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
 {
@@ -26,63 +31,83 @@ namespace CAPI.Android.Syncronization.Pull
         {
             this.changelog = changelog;
             this.commandService = commandService;
-            var dirPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), syncTemp);
+            this.chuncksFroProccess=new List<SyncItem>();
+          /*  var dirPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), syncTemp);
             if (!Directory.Exists(dirPath))
-                Directory.CreateDirectory(dirPath);
+                Directory.CreateDirectory(dirPath);*/
         }
-
+        private IList<SyncItem> chuncksFroProccess;
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
-        public void Save(byte[] bytes, Guid chunckId)
+
+        public void Save(SyncItem  data)
         {
-            var path = GetFileName(chunckId);
-            using (var fs = File.Open(path, FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-            }
+            chuncksFroProccess.Add(data);
         }
 
-        public void Proccess(Guid chunckId,bool isCompressed)
+        public void Proccess(Guid chunkId)
         {
 
-            Thread.Sleep(500);
-            var path = GetFileName(chunckId);
+            var item = chuncksFroProccess.FirstOrDefault(i => i.Id == chunkId);
             var unzippedData = string.Empty;
 
 
-            if (isCompressed)
+            if (item.IsCompressed)
             {
-                using (var fs = File.Open(path, FileMode.Open))
-                {
-                    unzippedData = PackageHelper.Decompress(fs);
-                }
+                unzippedData = PackageHelper.DecompressString(item.Content);
             }
             else
             {
-                unzippedData = File.ReadAllText(path);
+                unzippedData = item.Content;
             }
 
         
             if(string.IsNullOrEmpty(unzippedData))
                 return;
-            /*var command = new UploadSupervisorData(unzippedData);
-            commandService.Execute(command);
-            changelog.CreatePublicRecord(chunckId, command.EventSourceId);*/
 
-//            throw new NotImplementedException("implement excecution logic");
-            File.Delete(path);
+            ExecuteCommand(unzippedData, item);
+
+            changelog.CreatePublicRecord(item.Id);
+
+            chuncksFroProccess.Remove(item);
+        }
+        
+        protected void ExecuteCommand(string content, SyncItem item)
+        {
+            switch (item.ItemType)
+            {
+                case SyncItemType.Questionnare:
+                    ExecuteQuestionnarie(content);
+                    break;
+                case SyncItemType.User:
+                    ExecuteUser(content);
+                    break;
+                default: break;
+            }
+        
         }
 
-        private string GetFileName(Guid id)
+        private void ExecuteUser(string content)
         {
-            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),syncTemp,
-                                          id.ToString());
+            var user = GetObject<UserDocument>(content);
+            commandService.Execute(new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
+                                                         user.Roles.ToArray(), user.IsLocked, user.Supervisor));
         }
-        private byte[] GetBytes(string str)
+
+        private void ExecuteQuestionnarie(string content)
         {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
+            var questionnarieContent = GetObject<CompleteQuestionnaireDocument>(content);
+            commandService.Execute(new CreateNewAssigment(questionnarieContent));
+        }
+
+
+        private T GetObject<T>(string json) where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(json,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Objects
+                });
         }
     }
 }

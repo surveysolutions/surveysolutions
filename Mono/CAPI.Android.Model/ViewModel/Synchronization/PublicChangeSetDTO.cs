@@ -15,10 +15,9 @@ namespace CAPI.Android.Core.Model.ViewModel.Synchronization
 {
     public class PublicChangeSetDTO : DenormalizerRow
     {
-        public PublicChangeSetDTO(Guid id, Guid eventSourceId, DateTime timeStamp)
+        public PublicChangeSetDTO(Guid id, DateTime timeStamp)
         {
             Id = id.ToString();
-            this.EventSourceId = eventSourceId.ToString();
             TimeStamp = timeStamp.Ticks;
         }
 
@@ -27,7 +26,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Synchronization
         }
 
         public long TimeStamp { get; set; }
-        public string EventSourceId { get; set; }
+     
 
     }
 }

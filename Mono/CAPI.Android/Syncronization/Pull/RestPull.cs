@@ -29,29 +29,23 @@ namespace CAPI.Android.Syncronization.Pull
             this.baseAddress = baseAddress;
         }
 
-        public byte[] RequestChunck(string login, string password, Guid id, string rootType, Guid synckId)
+        public SyncItem RequestChunck(string login, string password, Guid id, string rootType, Guid synckId)
         {
             var package = ExcecuteRestRequest<SyncPackage>(getChunckPath, login, password,
                                                            new KeyValuePair<string, string>("aRKey", id.ToString()),
                                                            new KeyValuePair<string, string>("rootType", rootType));
             if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new NullReferenceException("content is absent");
-            return GetBytes(package.ItemsContainer[0].Content);
+            return package.ItemsContainer[0];
         }
 
-        public IDictionary<SyncItemsMeta, bool> GetChuncks(string login, string password, Guid synckId)
+        public IDictionary<SyncItemsMeta,bool> GetChuncks(string login, string password, Guid synckId)
         {
             var syncItemsMetaContainer = ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, login, password);
 
-            return syncItemsMetaContainer.ARId.ToDictionary((s) => s, (s) => false);
+            return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
         }
 
-        protected byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
 
         protected T ExcecuteRestRequest<T>(string url, string login, string password,
                                            params KeyValuePair<string, string>[] additionalParams) where T : class

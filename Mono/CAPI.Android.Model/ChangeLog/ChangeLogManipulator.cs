@@ -35,9 +35,9 @@ namespace CAPI.Android.Core.Model.ChangeLog
             fileChangeLogStore = changeLogStore;
         }
 
-        public void CreatePublicRecord(Guid recordId, Guid eventSourceId)
+        public void CreatePublicRecord(Guid recordId)
         {
-            publicChangeLog.Store(new PublicChangeSetDTO(recordId, eventSourceId, DateTime.Now),
+            publicChangeLog.Store(new PublicChangeSetDTO(recordId,  DateTime.Now),
                             recordId);
         }
 
@@ -89,7 +89,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
                 return;
             draftChangeLog.Remove(recordId);
             fileChangeLogStore.DeleteDraftChangeSet(recordId);
-            CreatePublicRecord(recordId, Guid.Parse(record.EventSourceId));
+            CreatePublicRecord(recordId);
         }
 
         #endregion

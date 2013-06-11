@@ -156,6 +156,7 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
