@@ -11,6 +11,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model.ModelUtils;
 using Newtonsoft.Json;
 using RestSharp;
 using WB.Core.SharedKernel.Utils.Logging;
@@ -112,8 +113,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                 throw exception;
             }
 
-            var syncItemsMetaContainer =
-                JsonConvert.DeserializeObject<T>(response.Content, new JsonSerializerSettings());
+            var syncItemsMetaContainer = JsonUtils.GetObject<T>(response.Content);
 
             if (syncItemsMetaContainer == null)
             {

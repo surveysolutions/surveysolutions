@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ChangeLog;
+using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
@@ -78,25 +79,15 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteUser(string content)
         {
-            var user = GetObject<UserDocument>(content);
+            var user = JsonUtils.GetObject<UserDocument>(content);
             commandService.Execute(new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
                                                          user.Roles.ToArray(), user.IsLocked, user.Supervisor));
         }
 
         private void ExecuteQuestionnarie(string content)
         {
-            var questionnarieContent = GetObject<CompleteQuestionnaireDocument>(content);
+            var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
             commandService.Execute(new CreateNewAssigment(questionnarieContent));
-        }
-
-
-        private T GetObject<T>(string json) where T : class
-        {
-            return JsonConvert.DeserializeObject<T>(json,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects
-                });
         }
     }
 }

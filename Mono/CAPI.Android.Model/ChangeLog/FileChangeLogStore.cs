@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core.Events;
 using Newtonsoft.Json;
 using SynchronizationMessages.Synchronization;
@@ -15,7 +16,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId)
         {
             var path = GetFileName(recordId);
-            File.WriteAllText(path, PackageHelper.CompressString(GetJsonData(recordData)));
+            File.WriteAllText(path, PackageHelper.CompressString(JsonUtils.GetJsonData(recordData)));
         }
 
         public string GetChangesetContent(Guid recordId)
@@ -40,15 +41,5 @@ namespace CAPI.Android.Core.Model.ChangeLog
         }
 
 
-        private string GetJsonData(AggregateRootEvent[] payload)
-        {
-            var data = JsonConvert.SerializeObject(payload, Formatting.None,
-                                                   new JsonSerializerSettings
-                                                       {
-                                                           TypeNameHandling = TypeNameHandling.Objects,
-                                                           NullValueHandling = NullValueHandling.Ignore
-                                                       });
-            return data;
-        }
     }
 }

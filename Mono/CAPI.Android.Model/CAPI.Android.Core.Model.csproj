@@ -68,6 +68,7 @@
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
+    <Compile Include="ModelUtils\JsonUtils.cs" />
     <Compile Include="ProjectionStorage\DefaultProjectionStorage.cs" />
     <Compile Include="ProjectionStorage\InternalProjectionStorage.cs" />
     <Compile Include="ProjectionStorage\IProjection.cs" />

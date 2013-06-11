@@ -10,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model.ModelUtils;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -44,7 +45,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             var filePath = GetFileName(eventSourceId);
             if (!File.Exists(filePath))
                 return null;
-            var snapshot = GetObject(File.ReadAllText(filePath));
+            var snapshot = JsonUtils.GetObject<Snapshot>(File.ReadAllText(filePath));
             internalStorage.SaveShapshot(snapshot);
             return snapshot;
         }
@@ -56,7 +57,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
                 return;
 
             var path = GetFileName(eventSourceId);
-            File.WriteAllText(path, GetJsonData(snapshot));
+            File.WriteAllText(path, JsonUtils.GetJsonData(snapshot));
         }
 
         private string GetFileName(Guid id)
@@ -65,24 +66,5 @@ namespace CAPI.Android.Core.Model.SnapshotStore
                                           id.ToString());
         }
 
-        private string GetJsonData(object payload)
-        {
-            var data = JsonConvert.SerializeObject(payload, Formatting.None,
-                                                   new JsonSerializerSettings
-                                                   {
-                                                       TypeNameHandling = TypeNameHandling.Objects
-                                                   });
-            
-            return data;
-        }
-
-        private Snapshot GetObject(string json) 
-        {
-            return JsonConvert.DeserializeObject<Snapshot>(json,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects
-                });
-        }
     }
 }
