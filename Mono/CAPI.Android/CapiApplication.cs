@@ -10,6 +10,7 @@ using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.FileStorage;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -175,7 +176,7 @@ namespace CAPI.Android
             kernel.Bind<Context>().ToConstant(this);
             kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             NcqrsInit.Init(kernel);
-
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
 
             #region register handlers

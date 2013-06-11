@@ -44,8 +44,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             var filePath = GetFileName(eventSourceId);
             if (!File.Exists(filePath))
                 return null;
-            byte[] cachedBytes = System.IO.File.ReadAllBytes(filePath);
-            return GetObject(GetString(cachedBytes));
+            return GetObject(File.ReadAllText(filePath));
         }
 
         public void Flush(Guid eventSourceId)
@@ -55,11 +54,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
                 return;
 
             var path = GetFileName(eventSourceId);
-            var bytes = GetBytes(GetJsonData(snapshot));
-            using (var fs = File.Open(path, FileMode.CreateNew))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-            }
+            File.WriteAllText(path, GetJsonData(snapshot));
         }
 
         private string GetFileName(Guid id)
@@ -68,19 +63,6 @@ namespace CAPI.Android.Core.Model.SnapshotStore
                                           id.ToString());
         }
 
-
-        private byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-        private string GetString(byte[] bytes)
-        {
-            char[] chars = new char[bytes.Length / sizeof(char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
         private string GetJsonData(object payload)
         {
             var data = JsonConvert.SerializeObject(payload, Formatting.None,
