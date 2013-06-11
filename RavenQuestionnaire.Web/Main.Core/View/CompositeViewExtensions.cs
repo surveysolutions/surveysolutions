@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Main.Core.View
 {
@@ -16,6 +18,23 @@ namespace Main.Core.View
             }
 
             return result;
+        }
+
+        public static IEnumerable<ICompositeView> Descendants(this ICompositeView root)
+        {
+            var nodes = new Stack<ICompositeView>(new[] { root });
+            while (nodes.Any())
+            {
+                ICompositeView node = nodes.Pop();
+                yield return node;
+                if (node.Children != null)
+                {
+                    foreach (var n in node.Children)
+                    {
+                        nodes.Push(n);
+                    }
+                }
+            }
         }
     }
 }
