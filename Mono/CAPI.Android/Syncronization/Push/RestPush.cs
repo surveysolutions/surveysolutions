@@ -22,9 +22,9 @@ namespace CAPI.Android.Syncronization.Push
             this.baseAddress = baseAddress;
         }
 
-        public void PushChunck(Guid chunckId, byte[] content, Guid synckId)
+        public void PushChunck(Guid chunckId, string content, Guid synckId)
         {
-            Thread.Sleep(MillisecondsTimeout);
+         //   Thread.Sleep(MillisecondsTimeout);
         }
     }
 }

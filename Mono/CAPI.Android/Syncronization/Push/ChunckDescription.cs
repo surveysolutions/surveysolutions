@@ -14,13 +14,13 @@ namespace CAPI.Android.Syncronization.Push
 {
     public class ChunckDescription
     {
-        public ChunckDescription(Guid id, byte[] content)
+        public ChunckDescription(Guid id, string content)
         {
             Id = id;
             Content = content;
         }
 
         public Guid Id { get; private set; }
-        public byte[] Content { get; private set; }
+        public string Content { get; private set; }
     }
 }

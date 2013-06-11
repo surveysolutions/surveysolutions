@@ -23,16 +23,15 @@ namespace CAPI.Android.Syncronization.Push
             this.changelog = changelog;
         }
 
-        private const int chunkCount = 10;
         
         public IList<ChunckDescription> GetChuncks()
         {
+            var chunksIds = changelog.GetClosedDraftChunksIds();
             var retval = new List<ChunckDescription>();
-            for (int i = 0; i < chunkCount; i++)
+            for (int i = 0; i < chunksIds.Count; i++)
             {
-                var chunckId = Guid.NewGuid();
-                
-                retval.Add(new ChunckDescription(chunckId, PackageHelper.Compress(string.Format("hello capi push {0}", chunckId))));
+
+                retval.Add(new ChunckDescription(chunksIds[i], changelog.GetDraftRecordContent(chunksIds[i])));
             }
             return retval;
         }

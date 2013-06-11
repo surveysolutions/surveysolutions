@@ -35,6 +35,16 @@ namespace CAPI.Android.Core.Model.ChangeLog
             fileChangeLogStore = changeLogStore;
         }
 
+        public IList<Guid> GetClosedDraftChunksIds()
+        {
+            return draftChangeLog.Query(c => c.End != null).Select(c => Guid.Parse(c.Id)).ToList();
+        }
+
+        public string GetDraftRecordContent(Guid recordId)
+        {
+            return fileChangeLogStore.GetChangesetContent(recordId);
+        }
+
         public void CreatePublicRecord(Guid recordId)
         {
             publicChangeLog.Store(new PublicChangeSetDTO(recordId,  DateTime.Now),

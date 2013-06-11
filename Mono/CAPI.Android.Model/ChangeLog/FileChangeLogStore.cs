@@ -15,11 +15,15 @@ namespace CAPI.Android.Core.Model.ChangeLog
         public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId)
         {
             var path = GetFileName(recordId);
-            using (var fs = File.Open(path, FileMode.CreateNew))
-            {
-                var bytes = PackageHelper.Compress(GetJsonData(recordData));
-                fs.Write(bytes, 0, bytes.Length);
-            }
+            File.WriteAllText(path, PackageHelper.CompressString(GetJsonData(recordData)));
+        }
+
+        public string GetChangesetContent(Guid recordId)
+        {
+            var path = GetFileName(recordId);
+            if (!File.Exists(path))
+                return string.Empty;
+            return File.ReadAllText(path);
         }
 
         public void DeleteDraftChangeSet(Guid recordId)

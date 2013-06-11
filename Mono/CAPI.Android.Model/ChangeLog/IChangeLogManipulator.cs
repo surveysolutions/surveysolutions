@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Main.Core.Events;
 
 namespace CAPI.Android.Core.Model.ChangeLog
@@ -8,6 +9,10 @@ namespace CAPI.Android.Core.Model.ChangeLog
         void OpenDraftRecord(Guid eventSourceId, long start);
         void CloseDraftRecord(Guid eventSourceId, long end);
         void ReopenDraftRecord(Guid eventSourceId);
+
+        IList<Guid> GetClosedDraftChunksIds();
+        string GetDraftRecordContent(Guid recordId);
+
         void CreatePublicRecord(Guid recordId);
         void MarkDraftChangesetAsPublic(Guid recordId);
     }
