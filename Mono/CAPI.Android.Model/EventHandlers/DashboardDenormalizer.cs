@@ -13,7 +13,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, IEventHandler<QuestionnaireStatusChanged>
+    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, IEventHandler<QuestionnaireStatusChanged>, IEventHandler<CompleteQuestionnaireDeleted>
     {
         private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
         private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
@@ -79,6 +79,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
                    status == SurveyStatus.Reinit || status == SurveyStatus.Error;
+        }
+
+        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
+        {
+            _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
         }
     }
 }

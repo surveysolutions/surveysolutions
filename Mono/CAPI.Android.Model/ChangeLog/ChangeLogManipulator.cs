@@ -27,7 +27,9 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         #region public
 
-        public ChangeLogManipulator(IFilterableDenormalizerStorage<PublicChangeSetDTO> publicChangeLog, IFilterableDenormalizerStorage<DraftChangesetDTO> draftChangeLog, IEventStore eventStore,IChangeLogStore changeLogStore)
+        public ChangeLogManipulator(IFilterableDenormalizerStorage<PublicChangeSetDTO> publicChangeLog,
+                                    IFilterableDenormalizerStorage<DraftChangesetDTO> draftChangeLog,
+                                    IEventStore eventStore, IChangeLogStore changeLogStore)
         {
             this.publicChangeLog = publicChangeLog;
             this.draftChangeLog = draftChangeLog;
@@ -47,8 +49,8 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void CreatePublicRecord(Guid recordId)
         {
-            publicChangeLog.Store(new PublicChangeSetDTO(recordId,  DateTime.Now),
-                            recordId);
+            publicChangeLog.Store(new PublicChangeSetDTO(recordId, DateTime.Now),
+                                  recordId);
         }
 
         #endregion
@@ -96,22 +98,20 @@ namespace CAPI.Android.Core.Model.ChangeLog
             draftChangeLog.Store(record, recodId);
         }
 
-        public void MarkDraftChangesetAsPublic(Guid recordId)
+        public Guid MarkDraftChangesetAsPublicAndReturnARId(Guid recordId)
         {
             var record = draftChangeLog.GetById(recordId);
-            if (record==null)
-                return;
+            if (record == null)
+                throw new InvalidOperationException("changeset wasn't found");
             draftChangeLog.Remove(recordId);
             fileChangeLogStore.DeleteDraftChangeSet(recordId);
             CreatePublicRecord(recordId);
+            return Guid.Parse(record.EventSourceId);
         }
+
 
         #endregion
 
-
-        
-
-       
         private DraftChangesetDTO GetLastDraftRecord(Guid eventSourceId)
         {
             var evtIdAsString = eventSourceId.ToString();

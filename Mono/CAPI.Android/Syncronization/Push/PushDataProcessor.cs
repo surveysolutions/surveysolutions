@@ -10,6 +10,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ChangeLog;
+using Main.Core.Commands.Questionnaire.Completed;
+using Ncqrs.Commanding.ServiceModel;
 using SynchronizationMessages.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
@@ -17,10 +19,11 @@ namespace CAPI.Android.Syncronization.Push
     public class PushDataProcessor
     {
         private readonly IChangeLogManipulator changelog;
-
-        public PushDataProcessor(IChangeLogManipulator changelog)
+        private readonly ICommandService commandService;
+        public PushDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
             this.changelog = changelog;
+            this.commandService = commandService;
         }
 
         
@@ -38,7 +41,8 @@ namespace CAPI.Android.Syncronization.Push
 
         public void MarkChunckAsPushed(Guid chunckId)
         {
-            changelog.MarkDraftChangesetAsPublic(chunckId);
+            var arId = changelog.MarkDraftChangesetAsPublicAndReturnARId(chunckId);
+            commandService.Execute(new DeleteCompleteQuestionnaireCommand(arId));
         }
     }
 

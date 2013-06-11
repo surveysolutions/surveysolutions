@@ -126,5 +126,10 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
             throw new NotImplementedException("Not needed for Mono so far.");
         }
+
+        public void CleanStream(Guid id)
+        {
+            _connection.Execute("delete from StoredEvent where EventSourceId = ?", id);
+        }
     }
 }

@@ -145,6 +145,7 @@ namespace CAPI.Android
                 new DashboardDenormalizer(questionnaireStore, surveyStore);
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
+            bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
         }
 
         private void InitChangeLog(InProcessEventBus bus)

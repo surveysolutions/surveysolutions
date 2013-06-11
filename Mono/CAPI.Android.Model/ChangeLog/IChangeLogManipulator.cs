@@ -14,6 +14,6 @@ namespace CAPI.Android.Core.Model.ChangeLog
         string GetDraftRecordContent(Guid recordId);
 
         void CreatePublicRecord(Guid recordId);
-        void MarkDraftChangesetAsPublic(Guid recordId);
+        Guid MarkDraftChangesetAsPublicAndReturnARId(Guid recordId);
     }
 }
