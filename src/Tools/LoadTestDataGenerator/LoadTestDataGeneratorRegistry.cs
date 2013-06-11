@@ -42,7 +42,7 @@ namespace LoadTestDataGenerator
         protected override void RegisterAdditionalElements()
         {
             base.RegisterAdditionalElements();
-
+/*
             this.Unbind<DocumentStore>();
             var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
             var store = new DocumentStore
@@ -61,6 +61,7 @@ namespace LoadTestDataGenerator
             }
             
             this.Bind<DocumentStore>().ToConstant(store);
+ */
         }
     }
 }
