@@ -50,7 +50,11 @@ namespace CAPI.Android.Core.Model.ChangeLog
         {
             var record = GetLastDraftRecord(eventSourceId);
             if (record != null)
+            {
+                if (record.Start == start)
+                    return;
                 throw new InvalidOperationException("draft record already had been created");
+            }
             var recordId = Guid.NewGuid();
             draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null), recordId);
         }

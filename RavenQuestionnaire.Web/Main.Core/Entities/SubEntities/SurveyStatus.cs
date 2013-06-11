@@ -185,7 +185,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Unassign, Initial, Error, Complete, Approve, Redo, Unknown };
+            return new[] { Unassign, Initial, Error, Complete, Approve, Redo, Unknown, Reinit };
         }
 
         /// <summary>

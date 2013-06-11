@@ -7,6 +7,7 @@ using Android.Runtime;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.FileStorage;
@@ -156,6 +157,10 @@ namespace CAPI.Android
 
             Kernel.Unbind<IFilterableDenormalizerStorage<DraftChangesetDTO>>();
             Kernel.Bind<IFilterableDenormalizerStorage<DraftChangesetDTO>>().ToConstant(draftStore);
+
+            var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
+            bus.RegisterHandler(changeLogHandler, typeof(NewCompleteQuestionnaireCreated));
+            bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
         }
         public override void OnCreate()
         {
