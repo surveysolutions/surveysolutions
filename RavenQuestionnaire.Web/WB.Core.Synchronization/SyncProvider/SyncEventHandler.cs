@@ -21,6 +21,7 @@ namespace WB.Core.Synchronization.SyncProvider
         public SyncEventHandler()
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
+            this.IncomeEvents = new List<UncommittedEventStream>();
         }
 
 

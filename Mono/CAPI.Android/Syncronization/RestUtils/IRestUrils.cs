@@ -14,8 +14,7 @@ namespace CAPI.Android.Syncronization.RestUtils
 {
     public interface IRestUrils
     {
-        void ExcecuteRestRequest(string url,string fileContent, params KeyValuePair<string, string>[] additionalParams);
         void ExcecuteRestRequest(string url, params KeyValuePair<string, string>[] additionalParams);
-        T ExcecuteRestRequest<T>(string url, params KeyValuePair<string, string>[] additionalParams) where T : class;
+        T ExcecuteRestRequest<T>(string url, params KeyValuePair<string, string>[] additionalParams);
     }
 }

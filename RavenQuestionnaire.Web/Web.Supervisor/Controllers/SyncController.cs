@@ -113,24 +113,24 @@ namespace Web.Supervisor.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public bool PostPackage(string login, string password)
+        public ActionResult PostPackage(string login, string password, string syncItemContent)
         {
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
-            
-            if (Request.Files == null || Request.Files.Count == 0)
-                return false;
+
             try
             {
                 SyncItem syncItem = null;
                 try
                 {
-                    using (var reader = new StreamReader(Request.InputStream, Encoding.UTF8))
-                    {
-                        syncItem =  JsonConvert.DeserializeObject<SyncItem>(
-                            reader.ReadToEnd(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-                    }
+                    syncItem = JsonConvert.DeserializeObject<SyncItem>(syncItemContent,
+                                                                           new JsonSerializerSettings
+                                                                               {
+                                                                                   TypeNameHandling =
+                                                                                       TypeNameHandling.Objects
+                                                                               });
+                    
                 }
                 catch (Exception exc)
                 {
@@ -140,10 +140,10 @@ namespace Web.Supervisor.Controllers
 
                 if (syncItem == null)
                 {
-                    return false;
+                    return Json(false, JsonRequestBehavior.AllowGet);
                 }
 
-                return this.syncManager.SendSyncItem(syncItem);
+                return Json(this.syncManager.SendSyncItem(syncItem), JsonRequestBehavior.AllowGet);
                 
             }
             catch (Exception ex)
@@ -152,7 +152,7 @@ namespace Web.Supervisor.Controllers
                 logger.Fatal("Exception message: " + ex.Message);
                 logger.Fatal("Stack: " + ex.StackTrace);
 
-                return false;
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
 

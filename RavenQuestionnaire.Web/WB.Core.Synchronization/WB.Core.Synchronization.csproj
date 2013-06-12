@@ -52,10 +52,18 @@
     <Compile Include="SyncManager\ISyncManager.cs" />
     <Compile Include="SyncManager\SyncManager.cs" />
     <Compile Include="SyncPackage.cs" />
-    <Compile Include="SyncProvider\ISyncEventHandler.cs" />
-    <Compile Include="SyncProvider\ISyncProvider.cs" />
-    <Compile Include="SyncProvider\SyncEventHandler.cs" />
-    <Compile Include="SyncProvider\SyncProvider.cs" />
+    <Compile Include="SyncProvider\ISyncEventHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SyncProvider\ISyncProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SyncProvider\SyncEventHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SyncProvider\SyncProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
