@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
