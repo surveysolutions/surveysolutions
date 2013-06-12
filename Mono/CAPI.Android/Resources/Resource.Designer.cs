@@ -73,32 +73,37 @@ namespace CAPI.Android
 			public const int grid_headerItem = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public const int navigation_Selector = 2130837511;
+			public const int navigateLeftIcon = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public const int questionAnsweredShape = 2130837512;
+			public const int navigateRightIcon = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int questionDisabledShape = 2130837513;
+			public const int navigation_Selector = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public const int questionInvalidShape = 2130837514;
+			public const int questionAnsweredShape = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public const int questionShape = 2130837515;
+			public const int questionDisabledShape = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public const int splash = 2130837516;
+			public const int questionInvalidShape = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public const int statistics_row_style = 2130837517;
+			public const int questionShape = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public const int SurveyShape = 2130837518;
+			public const int splash = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public const int SurveyTableHeader = 2130837519;
+			public const int statistics_row_style = 2130837519;
 			
+			// aapt resource value: 0x7f020010
+			public const int SurveyShape = 2130837520;
+			
+			// aapt resource value: 0x7f020011
+			public const int SurveyTableHeader = 2130837521;
 			private Drawable()
 			{
 			}
@@ -110,8 +115,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040005
 			public const int AnswerId = 2130968581;
 			
-			// aapt resource value: 0x7f040031
-			public const int ImageSwitcher01 = 2130968625;
+			// aapt resource value: 0x7f040034
+			public const int ImageSwitcher01 = 2130968628;
 			
 			// aapt resource value: 0x7f040006
 			public const int Index = 2130968582;
@@ -125,8 +130,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04000f
 			public const int MyLayout = 2130968591;
 			
-			// aapt resource value: 0x7f04001c
-			public const int NavList = 2130968604;
+			// aapt resource value: 0x7f04001f
+			public const int NavList = 2130968607;
 			
 			// aapt resource value: 0x7f040004
 			public const int PrpagationKey = 2130968580;
@@ -137,74 +142,83 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040003
 			public const int ScreenId = 2130968579;
 			
+			// aapt resource value: 0x7f040035
+			public const int btnAnswered = 2130968629;
+			
+			// aapt resource value: 0x7f04003d
+			public const int btnBackup = 2130968637;
+			
+			// aapt resource value: 0x7f040031
+			public const int btnCollect = 2130968625;
+			
 			// aapt resource value: 0x7f040032
-			public const int btnAnswered = 2130968626;
+			public const int btnCollectMajor = 2130968626;
 			
-			// aapt resource value: 0x7f04003a
-			public const int btnBackup = 2130968634;
-			
-			// aapt resource value: 0x7f04002e
-			public const int btnCollect = 2130968622;
-			
-			// aapt resource value: 0x7f04002f
-			public const int btnCollectMajor = 2130968623;
-			
-			// aapt resource value: 0x7f040036
-			public const int btnComplete = 2130968630;
+			// aapt resource value: 0x7f040039
+			public const int btnComplete = 2130968633;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f040035
-			public const int btnInvalid = 2130968629;
-			
-			// aapt resource value: 0x7f040023
-			public const int btnLogin = 2130968611;
-			
 			// aapt resource value: 0x7f040038
-			public const int btnPull = 2130968632;
+			public const int btnInvalid = 2130968632;
 			
-			// aapt resource value: 0x7f040039
-			public const int btnPush = 2130968633;
+			// aapt resource value: 0x7f040026
+			public const int btnLogin = 2130968614;
+			
+			// aapt resource value: 0x7f04001b
+			public const int btnNavigation = 2130968603;
 			
 			// aapt resource value: 0x7f04003b
-			public const int btnRestore = 2130968635;
+			public const int btnPull = 2130968635;
 			
-			// aapt resource value: 0x7f040037
-			public const int btnSync = 2130968631;
+			// aapt resource value: 0x7f04003c
+			public const int btnPush = 2130968636;
 			
-			// aapt resource value: 0x7f04002d
-			public const int btnSyncPoint = 2130968621;
+			// aapt resource value: 0x7f04003e
+			public const int btnRestore = 2130968638;
 			
-			// aapt resource value: 0x7f040033
-			public const int btnUnanswered = 2130968627;
+			// aapt resource value: 0x7f04003a
+			public const int btnSync = 2130968634;
 			
-			// aapt resource value: 0x7f04002c
-			public const int editSettingsSyncPoint = 2130968620;
+			// aapt resource value: 0x7f040030
+			public const int btnSyncPoint = 2130968624;
+			
+			// aapt resource value: 0x7f040036
+			public const int btnUnanswered = 2130968630;
+			
+			// aapt resource value: 0x7f04002f
+			public const int editSettingsSyncPoint = 2130968623;
 			
 			// aapt resource value: 0x7f04000e
 			public const int etComments = 2130968590;
 			
-			// aapt resource value: 0x7f04001b
-			public const int flDetails = 2130968603;
+			// aapt resource value: 0x7f04001e
+			public const int flDetails = 2130968606;
 			
-			// aapt resource value: 0x7f040020
-			public const int footer = 2130968608;
+			// aapt resource value: 0x7f040023
+			public const int footer = 2130968611;
 			
-			// aapt resource value: 0x7f04001f
-			public const int header = 2130968607;
+			// aapt resource value: 0x7f040022
+			public const int header = 2130968610;
 			
-			// aapt resource value: 0x7f040027
-			public const int llButtom = 2130968615;
+			// aapt resource value: 0x7f040019
+			public const int lNavigationContainer = 2130968601;
+			
+			// aapt resource value: 0x7f04002a
+			public const int llButtom = 2130968618;
 			
 			// aapt resource value: 0x7f040018
 			public const int llContainer = 2130968600;
 			
-			// aapt resource value: 0x7f040028
-			public const int llContent = 2130968616;
+			// aapt resource value: 0x7f04002b
+			public const int llContent = 2130968619;
 			
-			// aapt resource value: 0x7f040019
-			public const int llNavigationContainer = 2130968601;
+			// aapt resource value: 0x7f04001a
+			public const int llNavigationButton = 2130968602;
+			
+			// aapt resource value: 0x7f04001c
+			public const int llNavigationHolder = 2130968604;
 			
 			// aapt resource value: 0x7f040014
 			public const int llPropertyHolder = 2130968596;
@@ -218,35 +232,35 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
 			
-			// aapt resource value: 0x7f04002a
-			public const int llScreen = 2130968618;
+			// aapt resource value: 0x7f04002d
+			public const int llScreen = 2130968621;
 			
-			// aapt resource value: 0x7f040024
-			public const int llSurveyHolder = 2130968612;
+			// aapt resource value: 0x7f040027
+			public const int llSurveyHolder = 2130968615;
 			
-			// aapt resource value: 0x7f040025
-			public const int llTop = 2130968613;
+			// aapt resource value: 0x7f040028
+			public const int llTop = 2130968616;
 			
 			// aapt resource value: 0x7f040009
 			public const int llWrapper = 2130968585;
 			
+			// aapt resource value: 0x7f04002c
+			public const int qGuid = 2130968620;
+			
 			// aapt resource value: 0x7f040029
-			public const int qGuid = 2130968617;
+			public const int sv = 2130968617;
 			
-			// aapt resource value: 0x7f040026
-			public const int sv = 2130968614;
+			// aapt resource value: 0x7f040024
+			public const int teLogin = 2130968612;
 			
-			// aapt resource value: 0x7f040021
-			public const int teLogin = 2130968609;
+			// aapt resource value: 0x7f040025
+			public const int tePassword = 2130968613;
 			
-			// aapt resource value: 0x7f040022
-			public const int tePassword = 2130968610;
+			// aapt resource value: 0x7f040033
+			public const int textMem = 2130968627;
 			
-			// aapt resource value: 0x7f040030
-			public const int textMem = 2130968624;
-			
-			// aapt resource value: 0x7f04002b
-			public const int textSyncPoint = 2130968619;
+			// aapt resource value: 0x7f04002e
+			public const int textSyncPoint = 2130968622;
 			
 			// aapt resource value: 0x7f04000c
 			public const int tvComments = 2130968588;
@@ -254,23 +268,23 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04000d
 			public const int tvCommentsTitle = 2130968589;
 			
-			// aapt resource value: 0x7f04001e
-			public const int tvCount = 2130968606;
+			// aapt resource value: 0x7f040021
+			public const int tvCount = 2130968609;
 			
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f040034
-			public const int tvErrorWarning = 2130968628;
+			// aapt resource value: 0x7f040037
+			public const int tvErrorWarning = 2130968631;
 			
-			// aapt resource value: 0x7f04001d
-			public const int tvITem = 2130968605;
+			// aapt resource value: 0x7f040020
+			public const int tvITem = 2130968608;
 			
 			// aapt resource value: 0x7f040013
 			public const int tvStatus = 2130968595;
 			
-			// aapt resource value: 0x7f04003c
-			public const int tvSyncResult = 2130968636;
+			// aapt resource value: 0x7f04003f
+			public const int tvSyncResult = 2130968639;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;
@@ -287,8 +301,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040010
 			public const int txtSurveyName = 2130968592;
 			
-			// aapt resource value: 0x7f04001a
-			public const int vpContent = 2130968602;
+			// aapt resource value: 0x7f04001d
+			public const int vpContent = 2130968605;
 			
 			private Id()
 			{

@@ -672,7 +672,7 @@
       <Name>NCalc</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
-      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
+      <Project>{ea93a91d-7bc9-4ec0-8a22-8a772afd76c3}</Project>
       <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
@@ -682,6 +682,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>

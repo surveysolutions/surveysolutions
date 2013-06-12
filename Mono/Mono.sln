@@ -108,6 +108,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Logger", "..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj", "{AE5B9E45-0758-47AA-AFB4-E2795F09F850}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Synchronization", "..\RavenQuestionnaire.Web\WB.Core.Synchronization\WB.Core.Synchronization.csproj", "{75D70EB8-1E56-4BFE-816C-5231112F64C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure", "..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidWB.Core.Synchronization", "AndroidWB.Core.Synchronization\AndroidWB.Core.Synchronization.csproj", "{F4682532-F624-4044-9194-A0137EB9CA8F}"
 EndProject

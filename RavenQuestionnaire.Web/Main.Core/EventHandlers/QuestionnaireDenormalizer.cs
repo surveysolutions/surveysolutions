@@ -7,6 +7,8 @@ using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+
+using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.EventHandlers

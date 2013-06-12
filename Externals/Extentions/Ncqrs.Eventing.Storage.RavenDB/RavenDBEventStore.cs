@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Net;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 
 using Raven.Client.Indexes;
@@ -64,7 +65,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="pageSize"></param>
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
-            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions() }.Initialize();
+            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions()}.Initialize();
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
@@ -159,6 +160,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         }
 
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
+        {
+            return this.GetAllEvents(bulkSize, includeShapshots: true);
         /// <summary>
         /// The read from.
         /// </summary>
@@ -238,6 +244,54 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
         #endregion
+
+        private int CountOfAllEvents(bool includeShapshots)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return
+                    QueryAllEvents(session, includeShapshots)
+                    .Count();
+            }
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, bool includeShapshots)
+        {
+            int returnedEventCount = 0;
+
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    StoredEvent[] storedEventsBulk =
+                        QueryAllEvents(session, includeShapshots)
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(returnedEventCount)
+                        .Take(bulkSize)
+                        .ToArray();
+
+                    bool allEventsWereAlreadyReturned = storedEventsBulk.Length == 0;
+                    if (allEventsWereAlreadyReturned)
+                        yield break;
+
+                    yield return Array.ConvertAll(storedEventsBulk, ToCommittedEvent);
+
+                    returnedEventCount += bulkSize;
+                }
+            }
+        }
+
+        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session, bool includeShapshots)
+        {
+            return includeShapshots
+                ? session
+                    .Query<StoredEvent>()
+                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                : session
+                    .Query<StoredEvent>()
+                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                    .Where(@event => !@event.IsSnapshot);
+        }
 
         #region Methods
 
@@ -321,6 +375,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     Data = uncommittedEvent.Payload,
                     EventSequence = uncommittedEvent.EventSequence,
                     EventSourceId = uncommittedEvent.EventSourceId
+                    EventType = uncommittedEvent.Payload.GetType().Name
                 };
         }
 

@@ -40,6 +40,9 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Main.Synchronization.SycProcessRepository;
+
+using WB.Core.Infrastructure;
+
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android

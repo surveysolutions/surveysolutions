@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
     using System;

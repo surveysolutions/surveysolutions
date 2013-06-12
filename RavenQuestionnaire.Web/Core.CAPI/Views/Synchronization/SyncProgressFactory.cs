@@ -11,6 +11,8 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.CAPI.Views.Synchronization
 {
     /// <summary>

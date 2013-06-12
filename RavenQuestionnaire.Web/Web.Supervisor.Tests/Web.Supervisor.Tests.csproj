@@ -103,10 +103,6 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
-      <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
-      <Name>RavenQuestionnaire.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.SharedKernel.Logger</Name>

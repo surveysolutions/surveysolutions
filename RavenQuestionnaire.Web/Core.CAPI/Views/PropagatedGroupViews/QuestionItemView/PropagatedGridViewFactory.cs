@@ -10,6 +10,8 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 {
     using System;

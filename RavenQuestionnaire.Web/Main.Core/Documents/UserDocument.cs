@@ -6,6 +6,9 @@
 //   Defines the UserDocument type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -16,7 +19,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The user document.
     /// </summary>
-    public class UserDocument
+    public class UserDocument : IView
     {
         #region Constructors and Destructors
 

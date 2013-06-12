@@ -116,6 +116,10 @@
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
       <Name>SynchronizationMessages</Name>

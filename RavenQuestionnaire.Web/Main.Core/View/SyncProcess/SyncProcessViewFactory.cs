@@ -6,6 +6,8 @@
 
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.SyncProcess
 {
     using System;

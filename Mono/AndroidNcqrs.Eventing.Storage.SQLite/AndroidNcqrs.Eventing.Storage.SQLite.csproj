@@ -71,6 +71,10 @@
     <Compile Include="StoredEventWithoutPayload.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.DenormalizerStorage\AndroidMain.DenormalizerStorage.csproj">
       <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
       <Name>AndroidMain.DenormalizerStorage</Name>

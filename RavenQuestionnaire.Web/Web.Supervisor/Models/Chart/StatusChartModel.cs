@@ -75,7 +75,7 @@ namespace Web.Supervisor.Models.Chart
                     new PieData
                         {
                             y = t.Total,
-                            color = this.GetColor(index),
+                            color = GetColor(index), 
                             name = t.User.Name,
                             title = t.User.Name,
                             categories = model.Headers.Select(k => k.Title.Acronim()).ToArray(),

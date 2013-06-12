@@ -76,6 +76,7 @@ namespace Main.Core
             var store = InitializeEventStore(kernel.Get<DocumentStore>(), pageSize);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
+            kernel.Bind<IStreamableEventStore>().ToConstant(store);
 
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
@@ -90,12 +91,16 @@ namespace Main.Core
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new  InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
+                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
+
+            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
 
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
         public static void EnsureReadLayerIsBuilt()

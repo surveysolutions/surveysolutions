@@ -16,6 +16,8 @@ using Main.Core.View;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.CAPI.Views.Grouped
 {
     /// <summary>

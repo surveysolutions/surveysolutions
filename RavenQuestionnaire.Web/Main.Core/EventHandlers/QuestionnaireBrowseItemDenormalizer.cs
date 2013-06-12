@@ -10,6 +10,8 @@ using Main.Core.View.Questionnaire;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.EventHandlers
 {
     using System;

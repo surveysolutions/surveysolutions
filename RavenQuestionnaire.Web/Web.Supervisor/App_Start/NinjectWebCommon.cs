@@ -12,6 +12,8 @@ using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Raven;
+
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
 using WebActivator;
@@ -81,9 +83,11 @@ namespace Web.Supervisor.App_Start
             string username = WebConfigurationManager.AppSettings["Raven.Username"];
             string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
+            string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+
             var kernel = new StandardKernel(
-                new SupervisorCoreRegistry(storePath, isEmbeded, username, password, isApprovedSended),
-                new CoreInfrastructureModule());
+                new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
+                new RavenInfrastructureModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

@@ -10,6 +10,8 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+
+using WB.Core.Infrastructure;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.EventHandler;
 using WB.UI.Designer.Views.Questionnaire;

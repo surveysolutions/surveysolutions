@@ -222,6 +222,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HQController.cs" />
@@ -481,6 +482,7 @@
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -495,6 +497,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

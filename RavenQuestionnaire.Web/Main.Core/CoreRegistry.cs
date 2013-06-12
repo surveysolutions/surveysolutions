@@ -23,9 +23,12 @@ using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
+using WB.Core.Infrastructure;
+
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
+
 #endif
 
 namespace Main.Core
@@ -41,15 +44,17 @@ namespace Main.Core
         private readonly string repositoryPath;
         private readonly string username;
         private readonly string password;
+        private readonly string defaultDatabase;
 
         // private bool _isWeb;
 
-        public CoreRegistry(string repositoryPath, bool isEmbeded, string username = null, string password = null)
+        public CoreRegistry(string repositoryPath, bool isEmbeded, string username = null, string password = null, string defaultDatabase = null)
         {
             this.repositoryPath = repositoryPath;
             this.isEmbeded = isEmbeded;
             this.username = username;
             this.password = password;
+            this.defaultDatabase = defaultDatabase;
 
             // _isWeb = isWeb;
         }
@@ -96,7 +101,7 @@ namespace Main.Core
         protected virtual void RegisterAdditionalElements()
         {
 #if !MONODROID
-            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded, this.username, this.password);
+            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.defaultDatabase, this.isEmbeded, this.username, this.password);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
 #endif
