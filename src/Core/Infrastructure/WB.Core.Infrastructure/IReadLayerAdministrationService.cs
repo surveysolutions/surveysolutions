@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure
 {
@@ -11,5 +10,7 @@ namespace WB.Core.Infrastructure
         string GetReadableStatus();
 
         void RebuildAllViewsAsync();
+
+        void StopAllViewsRebuilding();
     }
 }
