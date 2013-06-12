@@ -10,6 +10,8 @@ using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Restoring.EventStapshoot;
+
+using WB.Core.Infrastructure;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.EventHandler;
 using WB.UI.Designer.Views.Questionnaire;
@@ -62,7 +64,7 @@ namespace WB.UI.Designer.Views.Tests
             Guid questionnaireId = Guid.NewGuid();
 
             QuestionnaireListViewItem currentItem = new QuestionnaireListViewItem(questionnaireId, "title", DateTime.Now,
-                                                                                  DateTime.Now, null);
+                                                                                  DateTime.Now, null, false);
 
             string newtitle = "newTitle";
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle};

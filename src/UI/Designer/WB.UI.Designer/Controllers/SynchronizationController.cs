@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Commands.Questionnaire;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -15,7 +17,6 @@ namespace WB.UI.Designer.Controllers
 
     using Ncqrs.Commanding.ServiceModel;
     using WB.Core.Questionnaire.ExportServices;
-    using WB.Core.Questionnaire.ImportService.Commands;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Shared.Web.Membership;
 

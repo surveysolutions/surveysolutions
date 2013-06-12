@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using Main.Core.Commands.Questionnaire;
 using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Questionnaire.ExportServices;
-using WB.Core.Questionnaire.ImportService.Commands;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer.Tests

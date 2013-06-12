@@ -10,34 +10,20 @@ namespace WB.UI.Designer.Exceptions
     using System.Web.Mvc;
     using System.Web.Routing;
 
-    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Logging;
 
     /// <summary>
     /// The custom handle error attribute.
     /// </summary>
     public class CustomHandleErrorAttribute : FilterAttribute, IExceptionFilter
     {
-        #region Fields
-
-        /// <summary>
-        /// The _logger.
-        /// </summary>
-        private readonly ILog logger;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomHandleErrorAttribute"/> class.
         /// </summary>
-        /// <param name="logger">
-        /// The logger.
-        /// </param>
-        public CustomHandleErrorAttribute(ILog logger)
+        public CustomHandleErrorAttribute()
         {
-            this.logger = logger;
-
             this.Order = 1;
         }
 
@@ -85,7 +71,7 @@ namespace WB.UI.Designer.Exceptions
             }
 
             // log the error 
-            this.logger.Error(filterContext.Exception.Message, filterContext.Exception);
+            LogManager.GetLogger(this.GetType()).Error(filterContext.Exception.Message, filterContext.Exception);
 
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();

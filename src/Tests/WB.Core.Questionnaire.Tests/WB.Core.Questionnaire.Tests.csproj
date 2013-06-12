@@ -51,7 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultImportServiceTests.cs" />
     <Compile Include="EventBusStub.cs" />
     <Compile Include="EventStoreStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
