@@ -23,15 +23,13 @@ namespace Core.Supervisor.Denormalizer
     using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
     /// </summary>
     public class SupervisorStatisticsDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                     IEventHandler<QuestionnaireStatusChanged>, 
-                                                    IEventHandler<QuestionnaireAssignmentChanged>, 
-                                                    IEventHandler<SnapshootLoaded>
+                                                    IEventHandler<QuestionnaireAssignmentChanged>
     {
         #region Constants and Fields
 
@@ -99,25 +97,6 @@ namespace Core.Supervisor.Denormalizer
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             this.HandleNewQuestionnaire(evnt.Payload.Questionnaire);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this.HandleStatusChanges(SurveyStatus.Unknown, document.Status, evnt.EventTimeStamp, document.PublicKey);
-            
-            this.HandleNewQuestionnaire(document);
         }
 
         /// <summary>

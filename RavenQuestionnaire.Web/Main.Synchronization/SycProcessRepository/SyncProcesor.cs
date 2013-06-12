@@ -30,7 +30,6 @@ namespace Main.Synchronization.SycProcessRepository
     using Ncqrs.Eventing;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Eventing.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// TODO: Update summary.

@@ -26,7 +26,6 @@ namespace Main.Core.Domain
     using Main.Core.ExpressionExecutors;
 
     using Ncqrs;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.

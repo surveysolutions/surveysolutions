@@ -123,10 +123,6 @@
       <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
       <Name>Main.Synchronization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.SharedKernel.Logger</Name>

@@ -544,10 +544,6 @@
       <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
       <Name>Main.Synchronization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>

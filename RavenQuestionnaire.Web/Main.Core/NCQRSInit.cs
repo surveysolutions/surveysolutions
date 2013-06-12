@@ -30,8 +30,6 @@ namespace Main.Core
 
     using Main.Core.Entities.Extensions;
     using Ncqrs.Domain.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
-    using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 #if MONODROID
     using AndroidNcqrs.Eventing.Storage.SQLite;

@@ -18,7 +18,6 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;

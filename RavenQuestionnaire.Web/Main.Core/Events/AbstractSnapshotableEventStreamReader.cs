@@ -10,7 +10,6 @@
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace Main.Core.Events
 {
@@ -23,7 +22,6 @@ namespace Main.Core.Events
     using Ncqrs.Eventing;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// For load Snapshots.

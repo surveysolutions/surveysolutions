@@ -20,7 +20,6 @@ namespace Main.Core.Domain
 
     
     using Ncqrs;
-    using Ncqrs.Restoring.EventStapshoot;
 
     public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {

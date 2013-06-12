@@ -20,7 +20,6 @@ namespace Main.Core.EventHandlers
     using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// The complete questionnaire denormalizer.
@@ -28,7 +27,6 @@ namespace Main.Core.EventHandlers
     public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                      IEventHandler<CommentSet>,
                                                      IEventHandler<FlagSet>, 
-                                                     IEventHandler<SnapshootLoaded>, 
                                                      IEventHandler<CompleteQuestionnaireDeleted>, 
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<ConditionalStatusChanged>, 
@@ -244,23 +242,6 @@ namespace Main.Core.EventHandlers
                     });
             item.LastEntryDate = evnt.EventTimeStamp;
             this._documentStorage.Store(item, item.PublicKey);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this._documentStorage.Store((CompleteQuestionnaireStoreDocument)document, document.PublicKey);
         }
 
         /// <summary>
