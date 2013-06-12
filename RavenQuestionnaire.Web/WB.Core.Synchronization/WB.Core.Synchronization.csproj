@@ -52,13 +52,19 @@
     <Compile Include="SyncManager\ISyncManager.cs" />
     <Compile Include="SyncManager\SyncManager.cs" />
     <Compile Include="SyncPackage.cs" />
+    <Compile Include="SyncProvider\ISyncEventHandler.cs" />
     <Compile Include="SyncProvider\ISyncProvider.cs" />
+    <Compile Include="SyncProvider\SyncEventHandler.cs" />
     <Compile Include="SyncProvider\SyncProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
@@ -70,6 +76,10 @@
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
       <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{CAFF029B-9FE0-4AE9-A475-C384D9022471}</Project>
+      <Name>Main.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

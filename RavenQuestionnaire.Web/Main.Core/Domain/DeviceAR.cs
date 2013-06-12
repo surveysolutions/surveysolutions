@@ -8,7 +8,6 @@ namespace Main.Core.Domain
 {
     using System;
 
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
     using Ncqrs.Domain;
 

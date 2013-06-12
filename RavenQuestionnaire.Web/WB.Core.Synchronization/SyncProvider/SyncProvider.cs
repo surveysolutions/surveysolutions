@@ -1,4 +1,10 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Events;
+using Main.Synchronization.SycProcessRepository;
+using Ncqrs;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -12,18 +18,28 @@ namespace WB.Core.Synchronization.SyncProvider
     {
         private const bool UseCompression = true;
 
-        //compressed content could be more than uncompressed for small items 
+        //compressed content could be larger than uncompressed for small items 
         private int limitLengtForCompression = 0;
 
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
 
         private readonly IDenormalizerStorage<UserDocument> users;
 
-        public SyncProvider(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, 
-            IDenormalizerStorage<UserDocument> users)
+        private IDenormalizerStorage<ClientDeviceDocument> devices;
+
+        protected readonly ISyncProcessRepository syncProcessRepository;
+
+        public SyncProvider(
+            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, 
+            IDenormalizerStorage<UserDocument> users,
+            IDenormalizerStorage<ClientDeviceDocument> devices,
+            ISyncProcessRepository syncProcessRepository
+            )
         {
             this.questionnaires = surveys;
             this.users = users;
+            this.devices = devices;
+            this.syncProcessRepository = syncProcessRepository;
         }
 
         public SyncItem GetSyncItem(Guid id, string type)
@@ -31,7 +47,7 @@ namespace WB.Core.Synchronization.SyncProvider
             switch (type)
             {
                 case SyncItemType.File:
-                    return null;
+                    return null; // todo: file support
                     break;
                 case SyncItemType.Questionnare:
                     return GetItem(CreateQuestionnarieDocument(id), id, type);
@@ -42,8 +58,36 @@ namespace WB.Core.Synchronization.SyncProvider
                 default:
                     return null;
             }
+        }
 
-            return null;
+        public Guid CheckAndCreateNewProcess(ClientIdentifier identifier)
+        {
+            ClientDeviceDocument device = null;
+            if (identifier.ClientKey.HasValue || identifier.ClientKey!=Guid.Empty)
+            {
+                device = devices.GetById(identifier.ClientKey.Value);
+            }
+
+            if (device == null)
+            {
+                //create new device
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public bool HandleSyncItem(SyncItem item)
+        {
+            if (string.IsNullOrWhiteSpace(item.Content))
+                return false;
+
+            var items = GetContentAsItem<AggregateRootEvent[]>(item.Content);
+
+            var processor = new SyncEventHandler();
+            processor.Merge(items);
+            processor.Commit();
+
+            return true;
         }
 
         private CompleteQuestionnaireDocument CreateQuestionnarieDocument(Guid id)
@@ -73,27 +117,26 @@ namespace WB.Core.Synchronization.SyncProvider
             }
 
             var result = new SyncItem {Id = id, 
-                Content = GetItemContent(item), 
+                Content = GetItemAsContent(item), 
                 ItemType = type, 
                 IsCompressed = UseCompression};
 
             return result;
-
         }
 
-        private string GetItemContent(object item)
+        private string GetItemAsContent(object item)
         {
             var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
             string itemToSync = JsonConvert.SerializeObject(item, Formatting.None, settings);
             
-            if (UseCompression)
-            {
-                return PackageHelper.CompressString(itemToSync);
-            }
-            else
-            {
-                return itemToSync;
-            }
+            return UseCompression ? PackageHelper.CompressString(itemToSync) : itemToSync;
+        }
+
+
+        private T GetContentAsItem<T>(string content)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            return JsonConvert.DeserializeObject<T>(PackageHelper.DecompressString(content), settings);
         }
 
     }

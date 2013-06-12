@@ -14,22 +14,24 @@
 
         public HandshakePackage ItitSync(ClientIdentifier identifier)
         {
-            if (identifier.ClientInstanceKey == Guid.Empty)
-                throw new ArgumentException("ClientInstanceKey is incorrecct.");
-
-            if (string.IsNullOrWhiteSpace(identifier.ClientDeviceKey))
-                throw new ArgumentException("ClientDeviceKey is incorrecct.");
-
-            if (string.IsNullOrWhiteSpace(identifier.ClientVersionIdentifier))
-                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
-
             this.CheckAndCreateNewProcess(identifier);
 
             return new HandshakePackage(identifier.ClientInstanceKey);
         }
 
-        private void CheckAndCreateNewProcess(object clientIdentifier)
+        private void CheckAndCreateNewProcess(ClientIdentifier clientIdentifier)
         {
+            if (clientIdentifier.ClientInstanceKey == Guid.Empty)
+                throw new ArgumentException("ClientInstanceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
+                throw new ArgumentException("ClientDeviceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
+                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
+            
+            //TODO: create new 
+
             throw new NotImplementedException();
         }
 
@@ -41,6 +43,11 @@
         public bool SendSyncPackage(SyncPackage package)
         {
             throw new NotImplementedException();
+        }
+
+        public bool SendSyncItem(SyncItem item)
+        {
+            return syncProvider.HandleSyncItem(item);
         }
 
         public bool ItitReceiving(ClientIdentifier identifier)

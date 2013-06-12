@@ -7,6 +7,8 @@ namespace WB.Core.Synchronization
     {
         public Guid Id;
 
+        public Guid SyncProcessKey;
+
         public List<SyncItem> ItemsContainer;
 
         public bool Status;
