@@ -196,6 +196,9 @@
     <Compile Include="Commands\Synchronization\RegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewDeviceCapiCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
+    <Compile Include="Commands\Sync\CreateClientDeviceCommand.cs" />
+    <Compile Include="Commands\Sync\CreateSyncActivity.cs" />
+    <Compile Include="Commands\Sync\UpdateSyncActivity.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
@@ -205,7 +208,7 @@
     <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ChangeStatusDocument.cs" />
-    <Compile Include="Documents\ClientSettingsDocument.cs" />
+    <Compile Include="Documents\ClientDeviceDocument.cs" />
     <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs" />
@@ -230,6 +233,7 @@
     <Compile Include="Documents\SyncProcessDocument.cs" />
     <Compile Include="Documents\SyncProcessStatisticsDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Domain\ClientDeviceAR.cs" />
     <Compile Include="Domain\CollectionAR.cs" />
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
@@ -238,6 +242,7 @@
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\QuestionnaireAR.cs" />
+    <Compile Include="Domain\SyncActivityAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
@@ -423,6 +428,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\TemplateLight.cs" />
+    <Compile Include="EventHandlers\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
@@ -537,6 +543,7 @@
     <Compile Include="Events\SyncItemsMeta.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
     <Compile Include="Events\UserEventStreamReader.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserBaseEvent.cs" />
@@ -703,6 +710,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WB.Core.Synchronization
+﻿namespace WB.Core.Synchronization
 {
+    using System;
+
     public class ClientIdentifier
     {
         public Guid ClientInstanceKey;
+        public Guid? ClientKey;
+
         public string ClientDeviceKey;
         public string ClientVersionIdentifier;
         
-        public Guid? LastSyncIdentifier;
+        public Guid? LastSyncKey;
 
         public Guid? CurrentProcessKey;
 

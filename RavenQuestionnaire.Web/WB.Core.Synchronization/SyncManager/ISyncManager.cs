@@ -12,6 +12,9 @@
 
         bool SendSyncPackage(SyncPackage package);
 
+        bool SendSyncItem(SyncItem package);
+        
+
         SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id, string itemType);
     }
 }

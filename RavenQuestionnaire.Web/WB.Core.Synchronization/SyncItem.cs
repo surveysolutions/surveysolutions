@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WB.Core.Synchronization
+﻿namespace WB.Core.Synchronization
 {
+    using System;
+
     public class SyncItem
     {
         public Guid Id ;
