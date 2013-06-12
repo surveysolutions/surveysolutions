@@ -9,25 +9,28 @@
 
 using System;
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Views.Questionnaire
 {
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
-    public class QuestionnaireListViewItem
+    public class QuestionnaireListViewItem : IView
     {
         #region Constructors and Destructors
         public QuestionnaireListViewItem()
         {
         }
 
-        public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy)
+        public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
         {
             this.Id = id;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
+            this.IsPublic = isPublic;
         }
 
         #endregion
@@ -68,6 +71,11 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// Gets or sets a value indicating whether is deleted.
         /// </summary>
         public bool IsDeleted { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
 
         #endregion
     }

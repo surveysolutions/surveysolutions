@@ -3,6 +3,9 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System.Linq;
@@ -76,7 +79,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
                                    x =>
                                    new QuestionnaireListViewItem
                                        {
-                                           Id = x.Id,
+                                           Id = x.QuestionnaireId,
                                            Title = x.Title
                                        }).ToArray(),
                            Order = input.Order

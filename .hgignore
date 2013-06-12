@@ -24,6 +24,7 @@ _ReSharper.*
 
 *.ncrunchsolution.user
 _NCrunch_*
+nCrunchTemp_*
 
 ClientDependency
 
@@ -37,3 +38,5 @@ lib/Debug
 App_Data/LocalStorage/*
 
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/Elmah/*
+
+scaffolding.config

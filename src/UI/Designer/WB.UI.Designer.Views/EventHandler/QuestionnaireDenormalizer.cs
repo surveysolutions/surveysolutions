@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -25,7 +26,7 @@ namespace WB.UI.Designer.Views.EventHandler
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                              IEventHandler<SnapshootLoaded>,
                                              IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>
+                                             IEventHandler<QuestionnaireDeleted>,IEventHandler<TemplateImported>
     {
         #region Fields
 
@@ -56,7 +57,8 @@ namespace WB.UI.Designer.Views.EventHandler
                 evnt.Payload.Title,
                 evnt.Payload.CreationDate,
                 DateTime.Now,
-                evnt.Payload.CreatedBy);
+                evnt.Payload.CreatedBy,
+                evnt.Payload.IsPublic);
             if (evnt.Payload.CreatedBy.HasValue)
             {
                 var user = this.accountStorage.GetById(evnt.Payload.CreatedBy.Value);
@@ -89,7 +91,8 @@ namespace WB.UI.Designer.Views.EventHandler
                 document.Title,
                 document.CreationDate,
                 document.LastEntryDate,
-                document.CreatedBy);
+                document.CreatedBy,
+                document.IsPublic);
             if (document.CreatedBy.HasValue)
             {
                 var user = this.accountStorage.GetById(document.CreatedBy.Value);
@@ -112,6 +115,7 @@ namespace WB.UI.Designer.Views.EventHandler
             if (browseItem != null)
             {
                 browseItem.Title = evnt.Payload.Title;
+                browseItem.IsPublic = evnt.Payload.IsPublic;
             }
         }
 
@@ -124,6 +128,27 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 browseItem.IsDeleted = true;
             }
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            var item = new QuestionnaireListViewItem(
+                document.PublicKey,
+                document.Title,
+                document.CreationDate,
+                document.LastEntryDate,
+                document.CreatedBy,
+                document.IsPublic);
+            if (document.CreatedBy.HasValue)
+            {
+                var user = this.accountStorage.GetById(document.CreatedBy.Value);
+                if (user != null)
+                {
+                    item.CreatorName = user.UserName;
+                }
+            }
+            this.documentStorage.Store(item, document.PublicKey);
         }
     }
 }
