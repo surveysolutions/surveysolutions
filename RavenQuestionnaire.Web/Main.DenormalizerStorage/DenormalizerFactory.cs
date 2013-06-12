@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage
 {
     using System;
@@ -23,37 +25,44 @@ namespace Main.DenormalizerStorage
             this.container = container;
         }
 
-        public int Count<T>() where T : class
+        public int Count<T>()
+            where T : class, IView
         {
             return this.GetDenormalizer<T>().Count();
         }
 
-        public T GetByGuid<T>(Guid key) where T : class
+        public T GetByGuid<T>(Guid key)
+            where T : class, IView
         {
             return this.GetDenormalizer<T>().GetById(key);
         }
 
-        public IQueryable<T> Query<T>() where T : class
+        public IQueryable<T> Query<T>()
+            where T : class, IView
         {
             return this.GetDenormalizer<T>().Query();
         }
 
-        public TResult Query<T, TResult>(Func<IQueryable<T>, TResult> query) where T : class
+        public TResult Query<T, TResult>(Func<IQueryable<T>, TResult> query)
+            where T : class, IView
         {
             return this.GetDenormalizer<T>().Query(query);
         }
 
-        public void Remove<T>(Guid key) where T : class
+        public void Remove<T>(Guid key)
+            where T : class, IView
         {
             this.GetDenormalizer<T>().Remove(key);
         }
 
-        public void Store<T>(T denormalizer, Guid key) where T : class
+        public void Store<T>(T denormalizer, Guid key)
+            where T : class, IView
         {
             this.GetDenormalizer<T>().Store(denormalizer, key);
         }
 
-        protected IQueryableDenormalizerStorage<T> GetDenormalizer<T>() where T : class
+        protected IQueryableDenormalizerStorage<T> GetDenormalizer<T>()
+            where T : class, IView
         {
             return this.container.Get<IQueryableDenormalizerStorage<T>>();
         }

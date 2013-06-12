@@ -6,8 +6,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views
 {
+    using System.Linq.Expressions;
+
     public abstract class BaseUserViewFactory
     {
         protected IQueryableDenormalizerStorage<UserDocument> users;
@@ -23,31 +27,10 @@ namespace Core.Supervisor.Views
             return IsHq(viewer);
         }
 
-        protected bool IsHq(UserDocument viewer)
-        {
-            if (viewer.Roles.Contains(UserRoles.Headquarter))
-                return true;
-            return false;
-        }
-
         protected bool IsSupervisor(Guid viewerId)
         {
             var viewer = users.GetById(viewerId);
-            return IsSupervisor(viewer);
-        }
-
-        protected bool IsSupervisor(UserDocument viewer)
-        {
-            if (viewer.Roles.Contains(UserRoles.Supervisor))
-                return true;
-            return false;
-        }
-
-        protected bool IsInterviewer(UserDocument viewer)
-        {
-            if (viewer.Roles.Contains(UserRoles.Operator))
-                return true;
-            return false;
+            return viewer.Roles.Any(role => role == UserRoles.Supervisor);
         }
 
         protected void ValidateInterviewer(UserDocument user, UserDocument viewer)
@@ -69,26 +52,34 @@ namespace Core.Supervisor.Views
 
             if (IsHq(viewer))
                 return GetTeamMembersForHeadquarter();
-            if (IsSupervisor(viewer))
-                return GetTeamMembersForSupervisor(viewer);
+
+            bool isSupervisor = viewer.Roles.Any(role => role == UserRoles.Supervisor);
+            if (isSupervisor)
+                return this.GetTeamMembersForSupervisor(viewer.PublicKey);
 
             throw new ArgumentException(String.Format("Operation is allowed only for ViewerId and Hq users. Current viewer rolse is {0}",
                                                       String.Concat(viewer.Roles)));
         }
 
-        protected IEnumerable<UserDocument> GetTeamMembersForSupervisor(UserDocument viewer)
+        protected IEnumerable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId)
         {
-            return users.Query(_ => _.Where(u => (IsInterviewer(u) && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey).ToList());
+            return this.users.Query(_ => _
+                .Where(IsSupervisorTeamMemberExpression(supervisorId))
+                .ToList());
         }
 
         protected IEnumerable<UserDocument> GetTeamMembersForHeadquarter()
         {
-            return users.Query(_ => _.Where(u => IsInterviewer(u) || IsSupervisor(u)).ToList());
+            return this.users.Query(_ => _
+                .Where(IsHeadquarterTeamMemberExpression())
+                .ToList());
         }
 
         protected IEnumerable<UserDocument> GetInterviewersListForViewer(Guid viewerId)
         {
-            return GetTeamMembersForViewer(viewerId).Where(IsInterviewer);
+            return this
+                .GetTeamMembersForViewer(viewerId)
+                .Where(viewer => viewer.Roles.Any(role => role == UserRoles.Operator));
         }
 
         protected IEnumerable<UserDocument> GetSupervisorsListForViewer(Guid viewerId)
@@ -98,7 +89,33 @@ namespace Core.Supervisor.Views
             if (viewer == null || !IsHq(viewer))
                 return Enumerable.Empty<UserDocument>();
 
-            return users.Query(_ => _.Where(u => IsSupervisor(u)).ToList());
+            return this.users.Query(_ => _
+                .Where(IsSupervisorExpression())
+                .ToList());
+        }
+
+        protected static bool IsHq(UserDocument user)
+        {
+            return user.Roles.Any(role => role == UserRoles.Headquarter);
+        }
+
+        private static Expression<Func<UserDocument, bool>> IsSupervisorExpression()
+        {
+            return user => user.Roles.Any(role => role == UserRoles.Supervisor);
+        }
+
+        private static Expression<Func<UserDocument, bool>> IsSupervisorTeamMemberExpression(Guid supervisorId)
+        {
+            return user =>
+                (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId)
+                || user.PublicKey == supervisorId;
+        }
+
+        private static Expression<Func<UserDocument, bool>> IsHeadquarterTeamMemberExpression()
+        {
+            return user =>
+                user.Roles.Any(role => role == UserRoles.Operator)
+                || user.Roles.Any(role => role == UserRoles.Supervisor);
         }
     }
 }

@@ -10,8 +10,10 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
-using WB.Core.Questionnaire.ImportService;
-using WB.Core.Questionnaire.ImportService.Commands;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Raven;
+
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
 using WebActivator;
@@ -72,12 +74,20 @@ namespace Web.Supervisor.App_Start
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+
             bool isApprovedSended;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["IsApprovedSended"], out isApprovedSended))
             {
                 isApprovedSended = false;
             }
-            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, isApprovedSended));
+            string username = WebConfigurationManager.AppSettings["Raven.Username"];
+            string password = WebConfigurationManager.AppSettings["Raven.Password"];
+
+            string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+
+            var kernel = new StandardKernel(
+                new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
+                new RavenInfrastructureModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
@@ -97,9 +107,6 @@ namespace Web.Supervisor.App_Start
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
-            #warning Nastya: invent a new way of domain service registration
-            var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
-            commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand), new DefaultImportService());
             // SuccessMarker.Start(kernel);
             return kernel;
         }

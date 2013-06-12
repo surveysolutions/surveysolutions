@@ -13,6 +13,8 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Main.Core.Tests.Utils;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage.Tests
 {
     [TestFixture]

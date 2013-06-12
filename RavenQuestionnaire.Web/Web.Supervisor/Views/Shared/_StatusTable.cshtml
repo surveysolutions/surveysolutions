@@ -30,7 +30,7 @@
                     </td>
                     @foreach (var it in Model.Headers)
                     {
-                        var value = collect.Items[it];
+                        var value = collect.GetCount(it.TemplateId);
                         <td>
                             @if (value != 0)
                             {
@@ -50,7 +50,7 @@
                 @foreach (var it in Model.Headers)
                 {
                     <th>
-                        @Model.Summary.Items[it]
+                        @Model.Summary.GetCount(it.TemplateId)
                     </th>
                 }
                 <th>@Model.Summary.Total</th>

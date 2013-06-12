@@ -3,6 +3,8 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Views.Questionnaire
 {
     public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>,

@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Commands.Questionnaire;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -20,7 +22,6 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
-    using WB.Core.Questionnaire.ImportService.Commands;
     using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
 

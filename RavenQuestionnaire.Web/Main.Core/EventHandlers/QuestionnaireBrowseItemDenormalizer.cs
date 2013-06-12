@@ -11,6 +11,8 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.EventHandlers
 {
     using System;
@@ -23,6 +25,7 @@ namespace Main.Core.EventHandlers
     /// </summary>
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                                        IEventHandler<SnapshootLoaded>,
+        IEventHandler<TemplateImported>,
                                                        IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>
     {
@@ -50,7 +53,8 @@ namespace Main.Core.EventHandlers
                     evnt.Payload.Title,
                     evnt.Payload.CreationDate,
                     DateTime.Now,
-                    evnt.Payload.CreatedBy),
+                    evnt.Payload.CreatedBy,
+                    evnt.Payload.IsPublic),
                 evnt.EventSourceId);
         }
 
@@ -75,7 +79,8 @@ namespace Main.Core.EventHandlers
                     document.Title,
                     document.CreationDate,
                     document.LastEntryDate,
-                    document.CreatedBy);
+                    document.CreatedBy,
+                    document.IsPublic);
               
             //}
             this.documentStorage.Store(browseItem, document.PublicKey);
@@ -91,6 +96,7 @@ namespace Main.Core.EventHandlers
             if (browseItem != null)
             {
                 browseItem.Title = evnt.Payload.Title;
+                browseItem.IsPublic = evnt.Payload.IsPublic;
             }
         }
 
@@ -103,6 +109,21 @@ namespace Main.Core.EventHandlers
             {
                 browseItem.IsDeleted = true;
             }
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            var browseItem = new QuestionnaireBrowseItem(
+                document.PublicKey,
+                document.Title,
+                document.CreationDate,
+                document.LastEntryDate,
+                document.CreatedBy,
+                document.IsPublic);
+
+            //}
+            this.documentStorage.Store(browseItem, document.PublicKey);
         }
     }
 }

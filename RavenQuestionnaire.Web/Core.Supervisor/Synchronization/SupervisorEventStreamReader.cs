@@ -184,22 +184,6 @@ namespace Core.Supervisor.Synchronization
                retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item));
             }
         }
-        
-        /// <summary>
-        /// Responsible for added questionnaire templates
-        /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
-        protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
-        {
-            var model = this.denormalizer.Query<QuestionnaireBrowseItem, List<AggregateRootEvent>>(_ => _
-                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.Id))
-                .ToList());
-
-            retval.AddRange(model);
-        }
-
         /// <summary>
         /// The add register device.
         /// </summary>

@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
@@ -14,10 +16,9 @@ namespace Core.Supervisor.DenormalizerStorageItem
 
     using Main.Core.Entities.SubEntities;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class HistoryStatusStatistics
+    #warning TLK: delete as no longer needed
+    [Obsolete]
+    public class HistoryStatusStatistics : IView
     {
         #region Constructors and Destructors
 

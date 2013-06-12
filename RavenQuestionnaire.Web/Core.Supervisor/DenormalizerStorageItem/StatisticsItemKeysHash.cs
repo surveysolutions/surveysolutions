@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
@@ -14,7 +16,7 @@ namespace Core.Supervisor.DenormalizerStorageItem
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class StatisticsItemKeysHash
+    public class StatisticsItemKeysHash : IView
     {
         /// <summary>
         /// Gets or sets StorageGuid.

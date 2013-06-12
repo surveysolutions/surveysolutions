@@ -1,11 +1,16 @@
 using System;
+
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
+using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
+
+using WB.Core.Infrastructure;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.EventHandlers
 {
@@ -26,14 +31,9 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<GroupDeleted>,
                                              IEventHandler<GroupUpdated>,
                                              IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>
+                                             IEventHandler<QuestionnaireDeleted>,
+        IEventHandler<TemplateImported>
     {
-#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
-#if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireDenormalizer));
-#else
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-#endif
 
         private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
 
@@ -51,6 +51,7 @@ namespace Main.Core.EventHandlers
             var item = new QuestionnaireDocument();
 
             item.Title = evnt.Payload.Title;
+            item.IsPublic = evnt.Payload.IsPublic;
             item.PublicKey = evnt.Payload.PublicKey;
             item.CreationDate = evnt.Payload.CreationDate;
             item.CreatedBy = evnt.Payload.CreatedBy;
@@ -107,7 +108,7 @@ namespace Main.Core.EventHandlers
 
             if (isLegacyEvent)
             {
-                Logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
                 return;
             }
 
@@ -228,6 +229,7 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.Title = evnt.Payload.Title;
+            document.IsPublic = evnt.Payload.IsPublic;
             this.UpdateQuestionnaire(evnt, document);
         }
 
@@ -241,6 +243,12 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.IsDeleted = true;
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
     }
 }

@@ -132,5 +132,7 @@ namespace Main.Core.Domain
         MoreThanOneQuestionsWithSuchIdExists,
 
         MoreThanOneGroupsWithSuchIdExists,
+
+        TemplateIsInvalid
     }
 }

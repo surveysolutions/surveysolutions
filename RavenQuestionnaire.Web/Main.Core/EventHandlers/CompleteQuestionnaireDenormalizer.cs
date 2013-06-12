@@ -6,6 +6,9 @@
 //   The complete questionnaire denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.Core.EventHandlers
 {
     using System.Linq;
@@ -206,6 +209,8 @@ namespace Main.Core.EventHandlers
             CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             item.Remove(evnt.Payload.PublicKey, evnt.Payload.PropagationKey, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
+
+            this._documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>

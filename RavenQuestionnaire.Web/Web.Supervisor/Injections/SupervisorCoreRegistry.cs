@@ -1,3 +1,7 @@
+using System.Web.Configuration;
+
+using WB.Core.Infrastructure.Raven.Implementation;
+using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Injections
@@ -16,23 +20,26 @@ namespace Web.Supervisor.Injections
     using Main.Core.Events;
     using Main.Core.Export;
     using Main.Core.View.Export;
+    using Main.DenormalizerStorage;
     using Main.Synchronization.SycProcessRepository;
+
+    using Ninject;
+    using Ninject.Activation;
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
 
     using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
-    using WB.Core.SharedKernel.Utils.NLog;
-
+    
     using Web.Supervisor.Filters;
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
         private readonly bool isApprovedSended;
 
-        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, bool isApprovedSended)
-            : base(repositoryPath, isEmbeded)
+        public SupervisorCoreRegistry(string repositoryPath, string defaultDatabase, bool isEmbeded, string username, string password, bool isApprovedSended)
+            : base(repositoryPath, isEmbeded, username, password, defaultDatabase)
         {
             this.isApprovedSended = isApprovedSended;
         }
@@ -47,13 +54,33 @@ namespace Web.Supervisor.Injections
                     });
         }
 
+        protected override object GetStorage(IContext context)
+        {
+            Type storageType = ShouldUsePersistentReadLayer()
+                ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
+                : typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+
+            return this.Kernel.Get(storageType);
+        }
+
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {
-            return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
+            var supervisorSpecificTypes = new Dictionary<Type, Type>
             {
-                { typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider) },
-                {typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute)}
-            });
+                { typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute) }
+            };
+
+            if (!ShouldUsePersistentReadLayer())
+            {
+                supervisorSpecificTypes.Add(typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider));
+            }
+
+            return base.GetTypesForRegistration().Concat(supervisorSpecificTypes);
+        }
+
+        private static bool ShouldUsePersistentReadLayer()
+        {
+            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }
 
         public override void Load()
@@ -71,7 +98,8 @@ namespace Web.Supervisor.Injections
             this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
 
-            this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
+            this.Bind<ILog>().ToMethod(
+                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
 
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
         }

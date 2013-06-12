@@ -14,6 +14,8 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     /// <summary>

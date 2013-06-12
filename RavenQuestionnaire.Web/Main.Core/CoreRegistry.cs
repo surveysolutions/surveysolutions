@@ -24,9 +24,12 @@ using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
+using WB.Core.Infrastructure;
+
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
+
 #endif
 
 namespace Main.Core
@@ -38,41 +41,24 @@ namespace Main.Core
     /// </summary>
     public abstract class CoreRegistry : NinjectModule
     {
-        #region Fields
-
-        /// <summary>
-        /// The _is embeded.
-        /// </summary>
         private readonly bool isEmbeded;
-
-        /// <summary>
-        /// The _repository path.
-        /// </summary>
         private readonly string repositoryPath;
-
-        #endregion
+        private readonly string username;
+        private readonly string password;
+        private readonly string defaultDatabase;
 
         // private bool _isWeb;
-        #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoreRegistry"/> class.
-        /// </summary>
-        /// <param name="repositoryPath">
-        /// The repository path.
-        /// </param>
-        /// <param name="isEmbeded">
-        /// The is embeded.
-        /// </param>
-        public CoreRegistry(string repositoryPath, bool isEmbeded)
+        public CoreRegistry(string repositoryPath, bool isEmbeded, string username = null, string password = null, string defaultDatabase = null)
         {
             this.repositoryPath = repositoryPath;
             this.isEmbeded = isEmbeded;
+            this.username = username;
+            this.password = password;
+            this.defaultDatabase = defaultDatabase;
 
             // _isWeb = isWeb;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -116,7 +102,7 @@ namespace Main.Core
         protected virtual void RegisterAdditionalElements()
         {
 #if !MONODROID
-            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
+            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.defaultDatabase, this.isEmbeded, this.username, this.password);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
 #endif
@@ -170,7 +156,7 @@ namespace Main.Core
                    null;
         }
 
-        protected object GetStorage(IContext context)
+        protected virtual object GetStorage(IContext context)
         {
             var genericParameter = context.GenericArguments[0];
 
@@ -181,7 +167,7 @@ namespace Main.Core
 
             else
             #endif*/
-                return Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
+                return this.Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
         }
 
         #endregion

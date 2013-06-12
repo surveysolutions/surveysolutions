@@ -17,6 +17,8 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.Export
 {
     /// <summary>

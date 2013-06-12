@@ -6,6 +6,8 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, */

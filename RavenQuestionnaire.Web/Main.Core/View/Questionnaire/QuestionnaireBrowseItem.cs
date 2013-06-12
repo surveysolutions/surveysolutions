@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.Questionnaire
 {
     using System;
@@ -17,7 +19,7 @@ namespace Main.Core.View.Questionnaire
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
-    public class QuestionnaireBrowseItem
+    public class QuestionnaireBrowseItem : IView
     {
         #region Constructors and Destructors
         public QuestionnaireBrowseItem()
@@ -27,7 +29,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireBrowseItem"/> class.
         /// </summary>
-        /// <param name="id">
+        /// <param name="questionnaireId">
         /// The id.
         /// </param>
         /// <param name="title">
@@ -42,13 +44,14 @@ namespace Main.Core.View.Questionnaire
         /// <param name="createdBy">
         /// The created by.
         /// </param>
-        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy)
+        public QuestionnaireBrowseItem(Guid questionnaireId, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
         {
-            this.Id = id;
+            this.QuestionnaireId = questionnaireId;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
+            this.IsPublic = isPublic;
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace Main.Core.View.Questionnaire
         /// The doc.
         /// </param>
         public QuestionnaireBrowseItem(QuestionnaireDocument doc)
-            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy)
+            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic)
         {
         }
 
@@ -75,7 +78,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid Id { get; private set; }
+        public Guid QuestionnaireId { get; private set; }
 
         /// <summary>
         /// Gets the last entry date.
@@ -86,6 +89,11 @@ namespace Main.Core.View.Questionnaire
         /// Gets or sets the title.
         /// </summary>
         public string Title { get;  set; }
+
+        /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
 
         /// <summary>
         /// Gets the created by.
@@ -109,7 +117,7 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public static QuestionnaireBrowseItem New()
         {
-            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now, null);
+            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now, null, false);
         }
 
         /// <summary>
@@ -120,7 +128,7 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public TemplateLight GetTemplateLight()
         {
-            return new TemplateLight(this.Id, this.Title);
+            return new TemplateLight(this.QuestionnaireId, this.Title);
         }
 
         #endregion

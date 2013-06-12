@@ -3,6 +3,8 @@ using System.Linq;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class DashboardFactory : IViewFactory<DashboardInput, DashboardModel>

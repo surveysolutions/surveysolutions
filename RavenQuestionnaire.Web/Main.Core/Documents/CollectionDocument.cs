@@ -6,6 +6,9 @@
 //   The CollectionDocument interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.Core.Documents
 {
     using System.Collections.Generic;
@@ -15,7 +18,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The collection document.
     /// </summary>
-    public class CollectionDocument : ICollectionDocument
+    public class CollectionDocument : ICollectionDocument, IView
     {
         #region Constructors and Destructors
 

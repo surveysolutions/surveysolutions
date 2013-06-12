@@ -9,6 +9,8 @@ using System.Threading;
 using Moq;
 using NUnit.Framework;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage.Tests
 {
     using System;
@@ -27,32 +29,32 @@ namespace Main.DenormalizerStorage.Tests
         {
             Mock<IPersistentStorage> storageMock=new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            PersistentDenormalizer<object> target = new PersistentDenormalizer<object>(cache, storageMock.Object);
+            var target = new PersistentDenormalizer<IView>(cache, storageMock.Object);
             var key = Guid.NewGuid();
-            var objectToStore = new object();
+            var objectToStore = Mock.Of<IView>();
             target.Store(objectToStore, key);
             storageMock.Verify(x => x.Store(objectToStore, key.ToString()), Times.Never());
             Assert.IsTrue(cache.Contains(key.ToString()));
             cache.Remove(key.ToString());
 
-            storageMock.Setup(x => x.GetByGuid<object>(key.ToString())).Returns(objectToStore);
+            storageMock.Setup(x => x.GetByGuid<IView>(key.ToString())).Returns(objectToStore);
 
             var result = target.GetById(key);
             Assert.IsTrue(objectToStore == result);
 
-            storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<IView>(key.ToString()), Times.Once());
             result = target.GetById(key);
             
             //still once!
-            storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<IView>(key.ToString()), Times.Once());
 
         //    result = objectToStore = null;
             //befoure collect once
-            storageMock.Verify(x => x.Store(It.IsAny<object>(), key.ToString()), Times.Once());
+            storageMock.Verify(x => x.Store(It.IsAny<IView>(), key.ToString()), Times.Once());
             cache.Remove(key.ToString());
            
             //after collect twice
-            storageMock.Verify(x => x.Store(It.IsAny<object>(), key.ToString()), Times.Exactly(2));
+            storageMock.Verify(x => x.Store(It.IsAny<IView>(), key.ToString()), Times.Exactly(2));
         }
         [Test]
         public void Store_WhenObjectWasChangedAndExpired_ObjectWillDumpTheLatestVersion()
@@ -129,7 +131,7 @@ namespace Main.DenormalizerStorage.Tests
         }
     }
 
-    public class TestObjectDump
+    public class TestObjectDump : IView
     {
         public TestObjectDump(string name, Guid key)
         {

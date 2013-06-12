@@ -9,9 +9,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 
+using WB.Core.Infrastructure;
+
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel
+    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel, IView
     {
         public CompleteQuestionnaireView(string publicKey)
         {
@@ -447,10 +449,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected QuestionType CalculateViewType(QuestionType type)
         {
-            if (type == QuestionType.Numeric || type == QuestionType.AutoPropagate)
-                return QuestionType.Numeric;
-            if (type == QuestionType.Text || type == QuestionType.Text)
-                return QuestionType.Text;
             if (type == QuestionType.SingleOption || type == QuestionType.DropDownList || type == QuestionType.YesNo)
                 return QuestionType.SingleOption;
             return type;

@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.Views.Summary
+﻿using WB.Core.Infrastructure;
+
+namespace Core.Supervisor.Views.Summary
 {
     using System;
     using System.Collections.Generic;
@@ -36,16 +38,21 @@
             if (input.TemplateId.HasValue)
             {
                 var tbi = this.templates.GetById(input.TemplateId.Value);
-                template = new TemplateLight(tbi.Id, tbi.Title);
+                template = new TemplateLight(tbi.QuestionnaireId, tbi.Title);
             }
 
             return this.survey.Query(queryableSurveys =>
             {
-                var groupedSurveys = queryableSurveys
-                    .Where(x =>
-                        !input.TemplateId.HasValue
-                        ? (x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                        : (x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
+                var surveyQuery = queryableSurveys.Where(x => x.Responsible != null);
+
+                if (input.TemplateId.HasValue)
+                {
+                    surveyQuery = surveyQuery.Where(x => x.TemplateId == input.TemplateId);
+                }
+
+                var groupedSurveys = surveyQuery
+                    .ToList()
+                    .Where(x => interviewers.Contains(x.Responsible.Id))
                     .GroupBy(x => x.Responsible);
 
                 var items = this.BuildItems(groupedSurveys).AsQueryable();
@@ -74,7 +81,7 @@
             });
         }
 
-        protected IEnumerable<SummaryViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
+        protected IEnumerable<SummaryViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)
             {

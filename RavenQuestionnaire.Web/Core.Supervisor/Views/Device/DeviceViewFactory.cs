@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.Views.Device
+﻿using WB.Core.Infrastructure;
+
+namespace Core.Supervisor.Views.Device
 {
     using System;
     using System.Collections.Generic;

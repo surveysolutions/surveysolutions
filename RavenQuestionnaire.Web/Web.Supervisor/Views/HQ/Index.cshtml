@@ -55,14 +55,14 @@
                         </td>
                         <td class="buttons">
                             <div class="btn-group">
-                                <a href="@Url.Action("TakeNew", "HQ", new { id = item.Id })" class="btn btn-primary"><i class="icon-plus icon-white"></i>New survey</a>
+                                <a href="@Url.Action("TakeNew", "HQ", new { id = item.QuestionnaireId })" class="btn btn-primary"><i class="icon-plus icon-white"></i>New survey</a>
                             </div>
                         </td>
                          <td>
                         <div class="btn-group">
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.Id, type = "csv" })">
+                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId, type = "csv" })">
                                 <i class="icon-download icon-white"></i>CSV</a>
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.Id, type = "tab" })">
+                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId, type = "tab" })">
                                 <i class="icon-download icon-white"></i>TAB</a>
                         </div>
                     </td>

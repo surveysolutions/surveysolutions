@@ -18,7 +18,7 @@ namespace Web.Supervisor
     using System.Web.Routing;
 
     using WB.Core.SharedKernel.Logger;
-    using WB.Core.SharedKernel.Utils.NLog;
+    using WB.Core.SharedKernel.Utils.Logging;
 
     using Web.Supervisor.App_Start;
 
@@ -41,7 +41,7 @@ namespace Web.Supervisor
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly ILog logger = LogManager.Logger;
+        private readonly ILog logger = LogManager.GetLogger(typeof(MvcApplication));
 
         /// <summary>
         /// The correctly initialized.
@@ -94,6 +94,8 @@ namespace Web.Supervisor
         /// </summary>
         protected void Application_Start()
         {
+            this.logger.Info("Starting application.");
+
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
             
@@ -129,7 +131,6 @@ namespace Web.Supervisor
             }
             catch (Exception)
             {
-                
                 //throw;
             }
             

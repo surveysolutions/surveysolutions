@@ -62,10 +62,6 @@ namespace Ncqrs.Restoring.EventStapshoot
                 return;
             CreateNewSnapshotInternal(CreateSnapshot());
         }
-        public virtual void CreateNewSnapshot(T shapshot)
-        {
-            CreateNewSnapshotInternal(shapshot);
-        }
         protected virtual void CreateNewSnapshotInternal(T shapshot)
         {
             var eventSnapshoot = new SnapshootLoaded()

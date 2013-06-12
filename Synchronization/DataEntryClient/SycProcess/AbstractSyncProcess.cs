@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Ninject.Parameters;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace DataEntryClient.SycProcess
 {
@@ -26,9 +27,7 @@ namespace DataEntryClient.SycProcess
     using Ncqrs.Commanding.ServiceModel;
 
     using Ninject;
-
-    using NLog;
-
+    
     using SynchronizationMessages.CompleteQuestionnaire;
 
     /// <summary>
@@ -134,8 +133,7 @@ namespace DataEntryClient.SycProcess
             }
             catch (Exception ex)
             {
-                Logger logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal("Import error: " + ex.Message, ex);
+                LogManager.GetLogger(this.GetType()).Fatal("Import error: " + ex.Message, ex);
                 this.Invoker.Execute(
                     new EndProcessComand(
                         this.ProcessGuid,
@@ -167,8 +165,7 @@ namespace DataEntryClient.SycProcess
             }
             catch (Exception ex)
             {
-                Logger logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal("Import error", ex);
+                LogManager.GetLogger(this.GetType()).Fatal("Import error", ex);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, ex.Message));
                 return ErrorCodes.Fail;
             }

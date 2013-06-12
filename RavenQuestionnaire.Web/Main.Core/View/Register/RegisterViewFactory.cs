@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using WB.Core.Infrastructure;
+
 namespace Main.Core.View.Register
 {
     using System.Linq;

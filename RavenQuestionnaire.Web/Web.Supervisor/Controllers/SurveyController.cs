@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -63,7 +65,8 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                var logger = LogManager.GetLogger(this.GetType());
+                logger.Fatal(e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -151,7 +154,7 @@ namespace Web.Supervisor.Controllers
                 {
                     PageSize = int.MaxValue
                 });
-            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
+            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)

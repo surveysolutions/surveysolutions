@@ -2,6 +2,7 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using Main.Core;
+using Main.Core.Commands.Questionnaire;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -9,9 +10,9 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Ninject.Web.Common;
+
+using WB.Core.Infrastructure;
 using WB.Core.Questionnaire.ExportServices;
-using WB.Core.Questionnaire.ImportService;
-using WB.Core.Questionnaire.ImportService.Commands;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WebActivator;
@@ -81,9 +82,6 @@ namespace WB.UI.Designer.App_Start
             #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);
 
-            #warning Nastya: invent a new way of domain service registration
-            var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
-            commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand),new DefaultImportService());
             kernel.Bind<IExportService>()
                   .ToConstant(new JsonExportService(kernel.Get<IDenormalizerStorage<QuestionnaireDocument>>()));
 
