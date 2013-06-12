@@ -178,8 +178,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation
 
         private void RepublishAllEvents()
         {
-            throw new NotImplementedException("not implemented");
-         /*   int processedEventsCount = 0;
+            int processedEventsCount = 0;
             int failedEventsCount = 0;
 
             ThrowIfShouldStopViewsRebuilding();
