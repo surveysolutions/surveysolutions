@@ -2,9 +2,13 @@
     display: block;
     text-align: center;
     font-weight: bold;
-    margin-top: 400px;
+    margin-top: 600px;
     font-size: 2.5em;
 }
 .create-date {
     text-align: center;
+}
+
+.statistics {
+    margin-top: 800px;
 }
