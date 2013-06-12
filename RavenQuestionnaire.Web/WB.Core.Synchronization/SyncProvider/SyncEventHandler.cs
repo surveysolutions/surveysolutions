@@ -17,13 +17,11 @@ namespace WB.Core.Synchronization.SyncProvider
         /// </summary>
         private readonly IEventStore eventStore;
 
-
         public SyncEventHandler()
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             this.IncomeEvents = new List<UncommittedEventStream>();
         }
-
 
         public bool Process(IEnumerable<AggregateRootEvent> stream)
         {
@@ -31,7 +29,6 @@ namespace WB.Core.Synchronization.SyncProvider
             Commit();
             return true;
         }
-
 
         /// <summary>
         /// The merge events.
@@ -71,26 +68,11 @@ namespace WB.Core.Synchronization.SyncProvider
             }
         }
 
-
-        /// <summary>
-        /// The build event streams.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <returns>
-        /// List of UncommittedEventStream
-        /// </returns>
         protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
         {
             return
                 stream.GroupBy(x => x.EventSourceId).Select(
                     g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
-
-            // foreach (IGrouping<Guid, AggregateRootEvent> g in stream.GroupBy(x => x.EventSourceId))
-            // {
-            // yield return g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue));
-            // }
         }
 
         /// <summary>
