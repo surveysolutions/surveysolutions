@@ -1,4 +1,6 @@
-﻿namespace Main.Core.EventHandlers
+﻿using WB.Core.Infrastructure;
+
+namespace Main.Core.EventHandlers
 {
     using System;
     using Main.Core.Events.Sync;

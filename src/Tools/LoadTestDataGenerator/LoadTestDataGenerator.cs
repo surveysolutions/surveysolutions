@@ -11,7 +11,6 @@ using Main.Core.Utility;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
-using Ncqrs.Restoring.EventStapshoot;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
@@ -114,7 +113,6 @@ namespace LoadTestDataGenerator
 
             ctrlProgress.Maximum = (surveys_count
                                     * ( /*template+status+assignment to supervisor+assignment to interviewer*/4))
-                                   + (chkGenerateSnapshoots.Checked ? surveys_count : 0)
                                    + int.Parse(supervisorsCount.Text) + int.Parse(interviewersCount.Text)
                                    + (chkSetAnswers.Checked ? featuredQuestions.Count() * surveys_count : 0)
                                    + (chkHeadquarter.Checked ? 1 : 0)
@@ -196,7 +194,6 @@ namespace LoadTestDataGenerator
                 FillAnswers(surveyId);
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
                 CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
-                this.CreateSnapshoot(surveyId);
                 this.IncreaseProgress();
             }
 
@@ -210,7 +207,6 @@ namespace LoadTestDataGenerator
                 this.CompleteSurvey(surveyId, SurveyStatus.Initial, responsible);
                 this.FillAnswers(surveyId, true);
                 this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
-                this.CreateSnapshoot(surveyId);
                 this.IncreaseProgress();
             }
         }
@@ -347,14 +343,6 @@ namespace LoadTestDataGenerator
                 {
                     this.AssignSurveyToOneOfInterviewers(surveyId, supervisorTeamMembers);
                     this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Initial, surveyId, responsible);
-                }
-            }
-            if (chkGenerateSnapshoots.Checked)
-            {
-                UpdateStatus("create snapshoots");
-                foreach (var surveyId in surveyIds)
-                {
-                    this.CreateSnapshoot(surveyId);
                 }
             }
         }
@@ -604,12 +592,6 @@ namespace LoadTestDataGenerator
                         Status = surveyStatus,
                         Responsible = initiator.ToUserLight()
                     });
-            this.IncreaseProgress();
-        }
-
-        private void CreateSnapshoot(Guid surveyId)
-        {
-            this.CommandService.Execute(new CreateSnapshotForAR(surveyId, typeof(CompleteQuestionnaireAR)));
             this.IncreaseProgress();
         }
 

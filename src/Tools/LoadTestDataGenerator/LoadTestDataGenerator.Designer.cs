@@ -44,7 +44,6 @@
             this.generateCapiEvents = new System.Windows.Forms.CheckBox();
             this.defaultDatabaseName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.chkGenerateSnapshoots = new System.Windows.Forms.CheckBox();
             this.chkHeadquarter = new System.Windows.Forms.CheckBox();
             this.txtHQName = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -204,18 +203,6 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Database name";
             // 
-            // chkGenerateSnapshoots
-            // 
-            this.chkGenerateSnapshoots.AutoSize = true;
-            this.chkGenerateSnapshoots.Checked = true;
-            this.chkGenerateSnapshoots.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkGenerateSnapshoots.Location = new System.Drawing.Point(21, 65);
-            this.chkGenerateSnapshoots.Name = "chkGenerateSnapshoots";
-            this.chkGenerateSnapshoots.Size = new System.Drawing.Size(127, 17);
-            this.chkGenerateSnapshoots.TabIndex = 13;
-            this.chkGenerateSnapshoots.Text = "Generate snapshoots";
-            this.chkGenerateSnapshoots.UseVisualStyleBackColor = true;
-            // 
             // chkHeadquarter
             // 
             this.chkHeadquarter.AutoSize = true;
@@ -277,7 +264,6 @@
             this.Controls.Add(this.txtHQName);
             this.Controls.Add(this.chkHeadquarter);
             this.Controls.Add(this.generateCapiEvents);
-            this.Controls.Add(this.chkGenerateSnapshoots);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.chkSetAnswers);
             this.Controls.Add(this.clearDatabase);
@@ -323,7 +309,6 @@
         private System.Windows.Forms.CheckBox generateCapiEvents;
         private System.Windows.Forms.TextBox defaultDatabaseName;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.CheckBox chkGenerateSnapshoots;
         private System.Windows.Forms.CheckBox chkHeadquarter;
         private System.Windows.Forms.TextBox txtHQName;
         private System.Windows.Forms.ListBox lstLog;

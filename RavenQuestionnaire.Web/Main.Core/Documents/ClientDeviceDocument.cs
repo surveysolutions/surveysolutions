@@ -1,8 +1,9 @@
 ﻿using System;
+using WB.Core.Infrastructure;
 
 namespace Main.Core.Documents
 {
-    public class ClientDeviceDocument
+    public class ClientDeviceDocument : IView
     {
         public Guid Id;
 

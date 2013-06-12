@@ -7,6 +7,12 @@ namespace Ncqrs.Eventing.Storage
     public interface IStreamableEventStore : IEventStore
     {
         IEnumerable<CommittedEvent> GetEventStream();
+
+        int CountOfAllEventsWithoutSnapshots();
+
+        int CountOfAllEventsIncludingSnapshots();
+
+        IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize = 32);
         
     }
 }

@@ -5,12 +5,12 @@ using Main.Synchronization.SycProcessRepository;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
     using Main.Core.Documents;
-    using Main.DenormalizerStorage;
     using Newtonsoft.Json;
     using SynchronizationMessages.Synchronization;
 

@@ -85,10 +85,6 @@
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
       <Name>WB.Core.Questionnaire.Events</Name>

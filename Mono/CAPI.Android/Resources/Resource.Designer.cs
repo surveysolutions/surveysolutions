@@ -104,6 +104,7 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0x7f020011
 			public const int SurveyTableHeader = 2130837521;
+			
 			private Drawable()
 			{
 			}

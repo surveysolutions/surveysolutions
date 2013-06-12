@@ -15,6 +15,7 @@ using Main.Core.Events;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {

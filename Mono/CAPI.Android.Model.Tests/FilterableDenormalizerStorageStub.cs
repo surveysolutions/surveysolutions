@@ -11,10 +11,11 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Main.DenormalizerStorage;
+using WB.Core.Infrastructure;
 
 namespace CAPI.Androids.Core.Model.Tests
 {
-    public class FilterableDenormalizerStorageStub<T> : IFilterableDenormalizerStorage<T> where T : class
+    public class FilterableDenormalizerStorageStub<T> : IFilterableDenormalizerStorage<T> where T : class, IView 
     {
         private Dictionary<Guid,T> container;
 

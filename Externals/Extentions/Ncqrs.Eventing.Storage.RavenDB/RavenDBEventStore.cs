@@ -160,26 +160,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         }
 
-        }
 
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: true);
-        /// <summary>
-        /// The read from.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="minVersion">
-        /// The min version.
-        /// </param>
-        /// <param name="maxVersion">
-        /// The max version.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommittedEventStream"/>.
-        /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             var storedEvents =
@@ -245,53 +226,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         #endregion
 
-        private int CountOfAllEvents(bool includeShapshots)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                return
-                    QueryAllEvents(session, includeShapshots)
-                    .Count();
-            }
-        }
-
-        private IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, bool includeShapshots)
-        {
-            int returnedEventCount = 0;
-
-            while (true)
-            {
-                using (IDocumentSession session = this.DocumentStore.OpenSession())
-                {
-                    StoredEvent[] storedEventsBulk =
-                        QueryAllEvents(session, includeShapshots)
-                        .OrderBy(y => y.EventSequence)
-                        .Skip(returnedEventCount)
-                        .Take(bulkSize)
-                        .ToArray();
-
-                    bool allEventsWereAlreadyReturned = storedEventsBulk.Length == 0;
-                    if (allEventsWereAlreadyReturned)
-                        yield break;
-
-                    yield return Array.ConvertAll(storedEventsBulk, ToCommittedEvent);
-
-                    returnedEventCount += bulkSize;
-                }
-            }
-        }
-
-        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session, bool includeShapshots)
-        {
-            return includeShapshots
-                ? session
-                    .Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                : session
-                    .Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                    .Where(@event => !@event.IsSnapshot);
-        }
 
         #region Methods
 
@@ -374,11 +308,76 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     CommitId = commitId,
                     Data = uncommittedEvent.Payload,
                     EventSequence = uncommittedEvent.EventSequence,
-                    EventSourceId = uncommittedEvent.EventSourceId
+                    EventSourceId = uncommittedEvent.EventSourceId,
                     EventType = uncommittedEvent.Payload.GetType().Name
                 };
         }
 
         #endregion
+        private int CountOfAllEvents(bool includeShapshots)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return
+                    QueryAllEvents(session, includeShapshots)
+                    .Count();
+            }
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, bool includeShapshots)
+        {
+            int returnedEventCount = 0;
+
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    StoredEvent[] storedEventsBulk =
+                        QueryAllEvents(session, includeShapshots)
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(returnedEventCount)
+                        .Take(bulkSize)
+                        .ToArray();
+
+                    bool allEventsWereAlreadyReturned = storedEventsBulk.Length == 0;
+                    if (allEventsWereAlreadyReturned)
+                        yield break;
+
+                    yield return Array.ConvertAll(storedEventsBulk, ToCommittedEvent);
+
+                    returnedEventCount += bulkSize;
+                }
+            }
+        }
+
+        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session, bool includeShapshots)
+        {
+            return includeShapshots
+                       ? session
+                             .Query<StoredEvent>()
+                             .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                       : session
+                             .Query<StoredEvent>()
+                             .Customize(x => x.WaitForNonStaleResultsAsOfNow());
+        }
+        public int CountOfAllEventsWithoutSnapshots()
+        {
+            return this.CountOfAllEvents(includeShapshots: false);
+        }
+
+        public int CountOfAllEventsIncludingSnapshots()
+        {
+            return this.CountOfAllEvents(includeShapshots: true);
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
+        {
+            return this.GetAllEvents(bulkSize, includeShapshots: false);
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
+        {
+            return this.GetAllEvents(bulkSize, includeShapshots: true);
+        }
     }
 }

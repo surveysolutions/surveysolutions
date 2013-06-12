@@ -91,9 +91,6 @@ namespace Main.Core
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
-                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
-
             var bus = new InProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
