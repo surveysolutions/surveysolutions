@@ -5,11 +5,11 @@
     @Model.SurveyName
 </header>
 <div class="create-date">
-    Creation date: @Model.CreationDate
+    Created by: @Model.AuthorName, @Model.CreationDate
 </div>
 <div class="statistics">
-    Chapters number: @Model.ChaptersCount <br/>
+    Chapters: @Model.ChaptersCount <br/>
+    Groups: @Model.GroupsCount<br/>
     Questions with conditions: @Model.QuestionsWithConditionsCount <br/>
-    Questions number: @Model.QuestionsCount <br/>
-    
+    Questions: @Model.QuestionsCount <br/>
 </div>
