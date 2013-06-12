@@ -94,6 +94,12 @@ namespace WB.UI.Designer.Views.Questionnaire
         {
             return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count(x => !string.IsNullOrEmpty(x.ConditionExpression)));
         }
+
+        public int GetGroupsCount()
+        {
+            int result = Children.Sum(child => child.Descendants().OfType<GroupView>().Count());
+            return result;
+        }
     }
 }
 

@@ -13,5 +13,9 @@ namespace WB.UI.Designer.Pdf
         public int QuestionsCount { get; set; }
 
         public int QuestionsWithConditionsCount { get; set; }
+
+        public string AuthorName { get; set; }
+
+        public int GroupsCount { get; set; }
     }
 }

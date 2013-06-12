@@ -1,6 +1,9 @@
 ﻿
 using System.Globalization;
+using System.Linq;
+using Main.Core.View.User;
 using WB.UI.Designer.Pdf;
+using WB.UI.Designer.Providers.CQRS.Accounts.View;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -15,11 +18,15 @@ namespace WB.UI.Designer.Controllers
 
     public class PdfController : BaseController
     {
+        private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
+
         public PdfController(
             IViewRepository repository,
-            IMembershipUserService userHelper)
+            IMembershipUserService userHelper,
+            IViewFactory<AccountViewInputModel, AccountView> userViewFactory)
             : base(repository, null, userHelper)
         {
+            this.userViewFactory = userViewFactory;
         }
 
         [Authorize]
@@ -49,6 +56,24 @@ namespace WB.UI.Designer.Controllers
             model.ChaptersCount = questionnaire.GetChaptersCount();
             model.QuestionsCount = questionnaire.GetQuestionsCount();
             model.QuestionsWithConditionsCount = questionnaire.GetQuestionsWithConditionsCount();
+            model.GroupsCount = questionnaire.GetGroupsCount();
+
+            if (questionnaire.CreatedBy.HasValue)
+            {
+                AccountView accountView = userViewFactory.Load(new AccountViewInputModel(questionnaire.CreatedBy.Value));
+                if (accountView != null)
+                {
+                    model.AuthorName = accountView.UserName;
+                }
+                else
+                {
+                    model.AuthorName = "No Author";
+                }
+            }
+            else
+            {
+                model.AuthorName = "No Author";
+            }
 
             return this.View(model);
         }
