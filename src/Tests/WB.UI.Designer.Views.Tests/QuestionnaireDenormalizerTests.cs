@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Restoring.EventStapshoot;
 
 using WB.Core.Infrastructure;
 using WB.UI.Designer.Providers.CQRS.Accounts;
@@ -21,22 +21,6 @@ namespace WB.UI.Designer.Views.Tests
     [TestFixture]
     public class QuestionnaireDenormalizerTests
     {
-
-        [Test]
-        public void Handle_When_SnapshotLoaded_event_donot_contains_questionnairie_document_Then_No_actions_was_performed()
-        {
-            // arrange
-            QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
-
-            // act
-            target.Handle(CreateEvent(new SnapshootLoaded(){Template = new Snapshot(Guid.NewGuid(),1,new object())}));
-
-            // assert
-            questionnaireStorageMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Never());
-            questionnaireStorageMock.Verify(x => x.Store(It.IsAny<QuestionnaireListViewItem>(), It.IsAny<Guid>()),
-                                            Times.Never());
-        }
-
         [Test]
         public void Handle_When_SnapshotLoaded_event_template_is_absent_Then_new_document_is_added()
         {
@@ -48,7 +32,7 @@ namespace WB.UI.Designer.Views.Tests
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle };
 
             // act
-            target.Handle(CreateEvent(CreateSnapshotEvent(documentReplacement)));
+            target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
             // assert
             questionnaireStorageMock.Verify(
@@ -72,7 +56,7 @@ namespace WB.UI.Designer.Views.Tests
             questionnaireStorageMock.Setup(x => x.GetById(questionnaireId)).Returns(currentItem);
 
             // act
-            target.Handle(CreateEvent(CreateSnapshotEvent(documentReplacement)));
+            target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
             // assert
             questionnaireStorageMock.Verify(
@@ -80,10 +64,10 @@ namespace WB.UI.Designer.Views.Tests
         }
 
 
-        private SnapshootLoaded CreateSnapshotEvent(QuestionnaireDocument content)
+        private TemplateImported CreateTemplateImportedEvent(QuestionnaireDocument content)
         {
-            var result = new SnapshootLoaded();
-            result.Template = new Snapshot(content.PublicKey, 1, content);
+            var result = new TemplateImported();
+            result.Source = content;
             return result;
         }
 
