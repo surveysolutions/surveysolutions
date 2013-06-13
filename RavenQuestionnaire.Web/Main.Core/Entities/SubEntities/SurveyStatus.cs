@@ -279,8 +279,12 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
         {
-            return status.PublicId == Initial.PublicId || status.PublicId == Approve.PublicId
-                   || status.PublicId == Redo.PublicId;
+            return StatusAllowDownSupervisorSync().Contains(status.PublicId);
+        }
+
+        public static Guid[] StatusAllowDownSupervisorSync()
+        {
+            return new Guid[] {Initial.PublicId, Approve.PublicId, Redo.PublicId};
         }
 
         /// <summary>

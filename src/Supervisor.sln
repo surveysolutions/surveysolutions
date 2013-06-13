@@ -87,6 +87,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure", "Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Synchronization", "..\RavenQuestionnaire.Web\WB.Core.Synchronization\WB.Core.Synchronization.csproj", "{75D70EB8-1E56-4BFE-816C-5231112F64C0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Raven", "Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj", "{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Synchronization.Tests", "..\RavenQuestionnaire.Web\WB.Core.Synchronization.Tests\WB.Core.Synchronization.Tests.csproj", "{8201D769-B0B5-4430-B978-B380048976A5}"
@@ -339,6 +340,14 @@ Global
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.MONODROID|Any CPU.Build.0 = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.MONODROID|Any CPU.ActiveCfg = Release|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.MONODROID|Any CPU.Build.0 = Release|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75D70EB8-1E56-4BFE-816C-5231112F64C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU

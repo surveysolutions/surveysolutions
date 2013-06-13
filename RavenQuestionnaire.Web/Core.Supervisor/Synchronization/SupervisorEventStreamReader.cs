@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+
+using Raven.Client.Linq;
 using WB.Core.Synchronization;
 
 namespace Core.Supervisor.Synchronization
@@ -82,8 +84,8 @@ namespace Core.Supervisor.Synchronization
 
             //this.AddQuestionnairesTemplates(retval);
 
-            List<Guid> fileNames = GetFiles();
 
+            List<Guid> fileNames = GetFiles();
             this.AddFiles(retval, fileNames);
             
             //this.AddRegisterDevice(retval);
@@ -105,9 +107,11 @@ namespace Core.Supervisor.Synchronization
 
             List<Guid> questionnaires = GetQuestionnaires(users);
             result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
-
+/*
+            //temporary disabled due to non support in android app
             List<Guid> files = GetFiles();
             result.AddRange(files.Select(i => new SyncItemsMeta(i, SyncItemType.File, null)));
+*/
 
             return result;
         }
@@ -138,9 +142,10 @@ namespace Core.Supervisor.Synchronization
 
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
+            var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
             return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
-                                
-                .Where(q => IsQuestionnarieRequiresSync(users, q))
+                .Where(q => q.Status.PublicId.In (listOfStatuses) 
+                            && q.Responsible != null && q.Responsible.Id.In(users))
                 .Select(i => i.CompleteQuestionnaireId)
                 .ToList());
         }
