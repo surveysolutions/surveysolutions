@@ -1,7 +1,7 @@
-﻿namespace WB.Core.Synchronization
-{
-    using System;
+﻿using System;
 
+namespace WB.Core.SharedKernel.Structures.Synchronization
+{
     public class SyncItem
     {
         public Guid Id ;

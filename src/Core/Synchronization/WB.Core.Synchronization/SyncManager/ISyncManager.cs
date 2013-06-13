@@ -1,4 +1,8 @@
-﻿namespace WB.Core.Synchronization.SyncManager
+﻿using System.Collections.Generic;
+using Main.Core.Events;
+using WB.Core.SharedKernel.Structures.Synchronization;
+
+namespace WB.Core.Synchronization.SyncManager
 {
     using System;
 
@@ -13,7 +17,8 @@
         bool SendSyncPackage(SyncPackage package);
 
         bool SendSyncItem(SyncItem package);
-        
+
+        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId);
 
         SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id, string itemType);
     }

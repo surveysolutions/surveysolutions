@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Main.Core;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Main.Synchronization.SycProcessRepository;
+using Main.Core.View.CompleteQuestionnaire;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -21,26 +25,23 @@ namespace WB.Core.Synchronization.SyncProvider
         //compressed content could be larger than uncompressed for small items 
         private int limitLengtForCompression = 0;
 
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
 
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
-        private IDenormalizerStorage<ClientDeviceDocument> devices;
+        private IQueryableDenormalizerStorage<ClientDeviceDocument> devices;
 
-        protected readonly ISyncProcessRepository syncProcessRepository;
         
 
         public SyncProvider(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, 
-            IDenormalizerStorage<UserDocument> users,
-            IDenormalizerStorage<ClientDeviceDocument> devices,
-            ISyncProcessRepository syncProcessRepository
+            IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys,
+            IQueryableDenormalizerStorage<UserDocument> users,
+            IQueryableDenormalizerStorage<ClientDeviceDocument> devices
             )
         {
             this.questionnaires = surveys;
             this.users = users;
             this.devices = devices;
-            this.syncProcessRepository = syncProcessRepository;
         }
 
         public SyncItem GetSyncItem(Guid id, string type)
@@ -59,6 +60,50 @@ namespace WB.Core.Synchronization.SyncProvider
                 default:
                     return null;
             }
+        }
+
+        public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId)
+        {
+            var result = new List<SyncItemsMeta>();
+
+            List<Guid> users = GetUsers(userId);
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
+
+            List<Guid> questionnaires = GetQuestionnaires(users);
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
+            /*
+                        //temporary disabled due to non support in android app
+                        List<Guid> files = GetFiles();
+                        result.AddRange(files.Select(i => new SyncItemsMeta(i, SyncItemType.File, null)));
+            */
+
+            return result;
+        }
+
+
+        private List<Guid> GetQuestionnaires(List<Guid> users)
+        {
+            var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
+            return this.questionnaires.Query<List<Guid>>(_ => _
+                                                                  .Where(q => q.Status.PublicId.In(listOfStatuses)
+                                                                              && q.Responsible != null &&
+                                                                              q.Responsible.Id.In(users))
+                                                                  .Select(i => i.PublicKey)
+                                                                  .ToList());
+        }
+
+        private List<Guid> GetUsers(Guid userId)
+        {
+            var supervisorId =
+                users.Query<Guid>(_ => _.Where(u => u.PublicKey == userId).Select(u => u.Supervisor.Id).FirstOrDefault());
+            if (supervisorId == null)
+                throw new ArgumentException("user is absent");
+            return
+                 this.users.Query<List<Guid>>(_ => _
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                     .Select(u => u.PublicKey)
+                     .ToList());
+
         }
 
         public Guid CheckAndCreateNewProcess(ClientIdentifier identifier)
