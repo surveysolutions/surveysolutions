@@ -13,12 +13,12 @@
     public class QuestionnaireHelper : IQuestionnaireHelper
     {
         private readonly IMembershipUserService userService;
-        private readonly IViewRepository repository;
+        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
 
-        public QuestionnaireHelper(IMembershipUserService userSevice, IViewRepository repository)
+        public QuestionnaireHelper(IMembershipUserService userSevice, IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)
         {
             this.userService = userSevice;
-            this.repository = repository;
+            this.viewFactory = viewFactory;
         }
 
         public IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
@@ -113,7 +113,7 @@
             string filter = null)
         {
             return
-                repository.Load<QuestionnaireListViewInputModel, QuestionnaireListView>(
+                this.viewFactory.Load(
                     input:
                         new QuestionnaireListViewInputModel
                             {
