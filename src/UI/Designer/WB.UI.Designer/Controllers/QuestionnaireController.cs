@@ -297,7 +297,6 @@ namespace WB.UI.Designer.Controllers
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
             return this._questionnaireHelper.GetPublicQuestionnaires(
-                repository: this.Repository, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
@@ -353,7 +352,6 @@ namespace WB.UI.Designer.Controllers
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
             return this._questionnaireHelper.GetQuestionnaires(
-                repository: this.Repository, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 

@@ -138,7 +138,7 @@ namespace WB.UI.Designer.Controllers
         {
             MembershipUser account = this.GetUser(id);
 
-            var questionnaires = _questionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
+            var questionnaires = _questionnaireHelper.GetQuestionnairesByUserId(userId: id);
             questionnaires.ToList().ForEach(
                 x =>
                     {
