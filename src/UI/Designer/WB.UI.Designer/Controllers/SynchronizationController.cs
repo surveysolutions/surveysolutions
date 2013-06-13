@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SynchronizationController.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Commands.Questionnaire;
+﻿using Main.Core.Commands.Questionnaire;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -19,104 +13,47 @@ namespace WB.UI.Designer.Controllers
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Shared.Web.Membership;
 
-    /// <summary>
-    /// The synchronization controller.
-    /// </summary>
     [CustomAuthorize(Roles = "Administrator")]
     public class SynchronizationController : BaseController
     {
-        #region Fields
+        private readonly ICommandService commandService;
+        private readonly IExportService exportService;
+        private readonly IStringCompressor zipUtils;
 
-        /// <summary>
-        /// The export service.
-        /// </summary>
-        protected readonly IExportService ExportService;
-
-        /// <summary>
-        /// The zip utils.
-        /// </summary>
-        protected readonly IStringCompressor ZipUtils;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SynchronizationController"/> class.
-        /// </summary>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        /// <param name="userHelper">
-        /// The user helper.
-        /// </param>
-        /// <param name="zipUtils">
-        /// The zip utils.
-        /// </param>
-        /// <param name="exportService">
-        /// The export service.
-        /// </param>
         public SynchronizationController(
             ICommandService commandService, 
             IMembershipUserService userHelper, 
             IStringCompressor zipUtils, 
             IExportService exportService)
-            : base(commandService, userHelper)
+            : base(userHelper)
         {
-            this.ZipUtils = zipUtils;
-            this.ExportService = exportService;
+            this.commandService = commandService;
+            this.zipUtils = zipUtils;
+            this.exportService = exportService;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The export.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="FileStreamResult"/>.
-        /// </returns>
         [HttpGet]
         public FileStreamResult Export(Guid id)
         {
-            string data = this.ExportService.GetQuestionnaireTemplate(id);
+            string data = this.exportService.GetQuestionnaireTemplate(id);
 
             if (string.IsNullOrEmpty(data))
             {
                 return null;
             }
 
-            return new FileStreamResult(this.ZipUtils.Compress(data), "application/zip")
+            return new FileStreamResult(this.zipUtils.Compress(data), "application/zip")
                        {
                            FileDownloadName = "template.zip"
                        };
         }
 
-        /// <summary>
-        /// The import.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpGet]
         public ActionResult Import()
         {
             return this.View("ViewTestUploadFile");
         }
 
-        /// <summary>
-        /// The import.
-        /// </summary>
-        /// <param name="uploadFile">
-        /// The upload file.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         public ActionResult Import(HttpPostedFileBase uploadFile)
         {
@@ -124,10 +61,10 @@ namespace WB.UI.Designer.Controllers
 
             if (uploadFile != null && uploadFile.ContentLength > 0)
             {
-                var document = this.ZipUtils.Decompress<IQuestionnaireDocument>(uploadFile.InputStream);
+                var document = this.zipUtils.Decompress<IQuestionnaireDocument>(uploadFile.InputStream);
                 if (document != null)
                 {
-                    this.CommandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
+                    this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
                     return this.RedirectToAction("Index", "Questionnaire");
                 }
             }
@@ -138,7 +75,5 @@ namespace WB.UI.Designer.Controllers
             
             return this.Import();
         }
-
-        #endregion
     }
 }

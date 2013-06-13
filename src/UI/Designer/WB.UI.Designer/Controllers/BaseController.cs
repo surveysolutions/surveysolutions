@@ -11,19 +11,15 @@ namespace WB.UI.Designer.Controllers
 {
     using System.Web.Mvc;
 
-    using Ncqrs.Commanding.ServiceModel;
-
     using WB.UI.Designer.BootstrapSupport;
     using WB.UI.Shared.Web.Membership;
 
     public class BaseController : Controller
     {
-        protected readonly ICommandService CommandService;
         protected readonly IMembershipUserService UserHelper;
 
-        public BaseController(ICommandService commandService, IMembershipUserService userHelper)
+        public BaseController(IMembershipUserService userHelper)
         {
-            this.CommandService = commandService;
             this.UserHelper = userHelper;
         }
 
