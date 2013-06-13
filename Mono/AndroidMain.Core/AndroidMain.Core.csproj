@@ -585,12 +585,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\UserDenormalizer.cs">
       <Link>EventHandlers\UserDenormalizer.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\AbstractEventStreamReader.cs">
-      <Link>Events\AbstractEventStreamReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\AbstractSnapshotableEventStreamReader.cs">
-      <Link>Events\AbstractSnapshotableEventStreamReader.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\AggregateRootEvent.cs">
       <Link>Events\AggregateRootEvent.cs</Link>
     </Compile>
@@ -603,9 +597,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Collection\NewCollectionCreated.cs">
       <Link>Events\Collection\NewCollectionCreated.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\EventSyncExtensions.cs">
-      <Link>Events\EventSyncExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\File\FileDeleted.cs">
       <Link>Events\File\FileDeleted.cs</Link>
     </Compile>
@@ -614,12 +605,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\File\FileUploaded.cs">
       <Link>Events\File\FileUploaded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\IEventStreamReader.cs">
-      <Link>Events\IEventStreamReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\IUserEventSync.cs">
-      <Link>Events\IUserEventSync.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Location\LocationDeleted.cs">
       <Link>Events\Location\LocationDeleted.cs</Link>
@@ -744,8 +729,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\UpdateRegisteredDevice.cs">
       <Link>Events\Synchronization\UpdateRegisteredDevice.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\SyncItemsMeta.cs">
-      <Link>Events\SyncItemsMeta.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Sync\NewClientDeviceCreated.cs">
+      <Link>Events\Sync\NewClientDeviceCreated.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\NewUserCreated.cs">
       <Link>Events\User\NewUserCreated.cs</Link>
@@ -809,6 +794,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\NCQRSInit.cs">
       <Link>NCQRSInit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\PackageHelper.cs">
+      <Link>PackageHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Services\IFileStorageService.cs">
       <Link>Services\IFileStorageService.cs</Link>
@@ -1096,7 +1084,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

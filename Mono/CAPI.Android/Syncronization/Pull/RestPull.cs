@@ -8,13 +8,10 @@ using System.Text;
 using System.Threading;
 using CAPI.Android.Syncronization.RestUtils;
 using Main.Core.Events;
-using Main.Synchronization.Credentials;
 using Newtonsoft.Json;
 using RestSharp;
-using SynchronizationMessages.CompleteQuestionnaire;
-using SynchronizationMessages.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Utils.Logging;
-using WB.Core.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
 {
@@ -22,8 +19,8 @@ namespace CAPI.Android.Syncronization.Pull
     {
         private readonly IRestUrils webExecutor;
 
-        private const string getChunckPath = "importexport/GetSyncPackage";
-        private const string getARKeysPath = "importexport/GetARKeys";
+        private const string getChunckPath = "sync/GetSyncPackage";
+        private const string getARKeysPath = "sync/GetARKeys";
 
         public RestPull(IRestUrils webExecutor)
         {

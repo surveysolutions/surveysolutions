@@ -11,7 +11,6 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
 using CAPI.Android.Syncronization.RestUtils;
-using Main.Synchronization.Credentials;
 
 namespace CAPI.Android.Syncronization.Handshake
 {

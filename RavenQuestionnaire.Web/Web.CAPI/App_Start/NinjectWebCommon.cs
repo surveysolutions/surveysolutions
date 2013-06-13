@@ -24,7 +24,6 @@ namespace Web.CAPI.App_Start
     using System.Web.Mvc;
     
     using Main.Core;
-    using Main.Synchronization.SycProcessRepository;
 
     using Microsoft.Practices.ServiceLocation;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -108,7 +107,6 @@ namespace Web.CAPI.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
-            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
 
             NcqrsInit.Init(kernel);
             // SuccessMarker.Start(kernel);

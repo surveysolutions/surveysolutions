@@ -436,20 +436,33 @@
     <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="Events\AbstractEventStreamReader.cs" />
-    <Compile Include="Events\AbstractSnapshotableEventStreamReader.cs" />
-    <Compile Include="Events\AggregateRootEvent.cs" />
-    <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
-    <Compile Include="Events\Collection\CollectionRemoved.cs" />
-    <Compile Include="Events\Collection\NewCollectionCreated.cs" />
-    <Compile Include="Events\EventSyncExtensions.cs" />
-    <Compile Include="Events\File\FileDeleted.cs" />
-    <Compile Include="Events\File\FileMetaUpdated.cs" />
-    <Compile Include="Events\File\FileUploaded.cs" />
-    <Compile Include="Events\IEventStreamReader.cs" />
-    <Compile Include="Events\IUserEventSync.cs" />
-    <Compile Include="Events\Location\LocationDeleted.cs" />
-    <Compile Include="Events\Location\NewLocationCreated.cs" />
+    <Compile Include="Events\AggregateRootEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Collection\CollectionItemRemoved.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Collection\CollectionRemoved.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Collection\NewCollectionCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\File\FileDeleted.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\File\FileMetaUpdated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\File\FileUploaded.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Location\LocationDeleted.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Location\NewLocationCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -468,7 +481,9 @@
     <Compile Include="Events\Questionnaire\Completed\FlagSet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs" />
+    <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -490,10 +505,15 @@
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\QuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\GroupCloned.cs" />
+    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Questionnaire\GroupCloned.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\GroupDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -521,6 +541,9 @@
     <Compile Include="Events\Questionnaire\QuestionChanged.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\QuestionCloned.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -533,24 +556,48 @@
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\TemplateImported.cs" />
-    <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
-    <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
-    <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs" />
-    <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs" />
-    <Compile Include="Events\Synchronization\NewDeviceRegistered.cs" />
-    <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
-    <Compile Include="Events\Synchronization\ProcessEnded.cs" />
-    <Compile Include="Events\SyncItemsMeta.cs">
+    <Compile Include="Events\Questionnaire\TemplateImported.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
-    <Compile Include="Events\UserEventStreamReader.cs" />
-    <Compile Include="Events\User\NewUserCreated.cs" />
-    <Compile Include="Events\User\UserBaseEvent.cs" />
-    <Compile Include="Events\User\UserChanged.cs" />
-    <Compile Include="Events\User\UserLocked.cs" />
-    <Compile Include="Events\User\UserUnlocked.cs" />
+    <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\NewDeviceRegistered.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\ProcessEnded.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Sync\NewClientDeviceCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\NewUserCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserBaseEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserChanged.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserLocked.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserUnlocked.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\FileType.cs" />
     <Compile Include="Export\IDataExport.cs" />
@@ -567,6 +614,9 @@
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
+    <Compile Include="PackageHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />

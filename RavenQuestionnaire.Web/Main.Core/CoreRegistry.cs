@@ -63,7 +63,7 @@ namespace Main.Core
 
         public virtual IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return new[] {(typeof (CoreRegistry)).Assembly, typeof(IDenormalizer).Assembly};
+            return new[] {(typeof (CoreRegistry)).Assembly};
 
         }
 

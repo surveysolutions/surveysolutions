@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using CAPI.Android.Core.Model.ModelUtils;
+using Main.Core;
 using Main.Core.Events;
 using Newtonsoft.Json;
-using SynchronizationMessages.Synchronization;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {

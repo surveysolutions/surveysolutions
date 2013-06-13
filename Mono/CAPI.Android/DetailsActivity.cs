@@ -1,6 +1,7 @@
 using System;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.View;
 using Android.Views;
@@ -51,9 +52,9 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<RelativeLayout>(Resource.Id.llContainer); }
         }
-        protected Button btnNavigation
+        protected TextView btnNavigation
         {
-            get { return this.FindViewById<Button>(Resource.Id.btnNavigation); }
+            get { return this.FindViewById<TextView>(Resource.Id.btnNavigation); }
         }
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
@@ -104,8 +105,11 @@ namespace CAPI.Android
             VpContent.PageSelected += VpContent_PageSelected;
 
             llNavigationHolder.SetBackgroundColor(this.Resources.GetColor(global::Android.Resource.Color.DarkerGray));
+            btnNavigation.SetBackgroundColor(Color.ParseColor("#00FF00"));
 
             UpdateLayout(leftPanelWidth);
+
+            btnNavigation.BringToFront();
         }
 
         public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)

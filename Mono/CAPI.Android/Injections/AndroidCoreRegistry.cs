@@ -11,14 +11,12 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
-using Core.CAPI.Synchronization;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Activation;
 using Main.Core;
-using SynchronizationMessages.WcfInfrastructure;
 
 namespace CAPI.Android.Injections
 {
@@ -40,7 +38,7 @@ namespace CAPI.Android.Injections
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
             return
-                Enumerable.Concat(base.GetAssweblysForRegister(), new[] { typeof(ClientEventStreamReader).Assembly, typeof(DashboardModel).Assembly, GetType().Assembly });
+                Enumerable.Concat(base.GetAssweblysForRegister(), new[] { typeof(DashboardModel).Assembly, GetType().Assembly });
         }
         public override void Load()
         {
@@ -49,14 +47,9 @@ namespace CAPI.Android.Injections
             this.Bind<IEventStore>().ToConstant(new MvvmCrossSqliteEventStore(EventStoreDatabaseName));
             this.Unbind<IAuthentication>();
 
-           
-
-            this.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
             this.Unbind<IProjectionStorage>();
             this.Bind<IProjectionStorage>().ToMethod(CreateStorage).
-                InScope(c => CapiApplication.Context);
-
-            this.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();                
+                InScope(c => CapiApplication.Context);      
         }
         protected IProjectionStorage CreateStorage(IContext c)
         {

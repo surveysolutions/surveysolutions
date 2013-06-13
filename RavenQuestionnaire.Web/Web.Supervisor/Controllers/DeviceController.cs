@@ -111,24 +111,6 @@ namespace Web.Supervisor.Controllers
             return Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Confirms made authorization to CAPI
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        /// <remarks>At the moment the only action is to update respective authorization request</remarks>
-        public bool ConfirmAuthorization(RegisterData data)
-        {
-            try
-            {
-                return Supervisor.WCF.AuthorizationService.ConfirmAuthorizedRequest(data);
-            }
-            catch 
-            { 
-            }
-
-            return false;
-        }
 
         protected override Guid GetARPublicKey(RegisterData data)
         {

@@ -1,4 +1,5 @@
 
+using CAPI.Android.Core.Model.Authorization;
 using WB.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,6 @@ using CAPI.Android.Extensions;
 using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
 using Main.Core.Utility;
-using Main.Synchronization.Credentials;
 using Ninject;
 
 namespace CAPI.Android

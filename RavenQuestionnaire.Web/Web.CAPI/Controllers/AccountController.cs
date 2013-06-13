@@ -36,10 +36,6 @@ namespace Web.CAPI.Controllers
         /// </summary>
         private readonly IGlobalInfoProvider globalProvider;
 
-        /// <summary>
-        /// The _user event sync.
-        /// </summary>
-        private readonly IUserEventSync userEventSync;
 
         /// <summary>
         /// The authentication.
@@ -63,11 +59,10 @@ namespace Web.CAPI.Controllers
         /// The user event sync.
         /// </param>
         public AccountController(
-            IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IUserEventSync userEventSync)
+            IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
-            this.userEventSync = userEventSync;
         }
 
         #endregion
@@ -96,25 +91,6 @@ namespace Web.CAPI.Controllers
         public bool IsLoggedIn()
         {
             return this.globalProvider.GetCurrentUser() != null;
-        }
-
-        /// <summary>
-        /// The is user in base.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool IsUserInBase()
-        {
-            IEnumerable<AggregateRootEvent> count = this.userEventSync.GetUsers(UserRoles.Operator);
-            if (count == null)
-            {
-                return false;
-            }
-
-            return count.ToList().Count > 0;
-
-            // return this._globalProvider.IsAnyUserExist();
         }
 
         /// <summary>

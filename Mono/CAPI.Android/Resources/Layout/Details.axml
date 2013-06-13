@@ -15,15 +15,16 @@
     <LinearLayout android:id="@+id/llNavigationButton"
       android:orientation="vertical"
       android:layout_alignParentRight="true"
-      android:layout_width="30dp"
+      android:layout_width="40dp"
       android:layout_height="fill_parent">
 
-      <Button android:id="@+id/btnNavigation"
-                     android:padding="0dp"
-        android:layout_width="wrap_content"
+      <TextView android:id="@+id/btnNavigation"
+        android:clickable="true"
+        android:focusable="true"
+                android:paddingRight="8dp"
+        android:layout_width="40dp"
         android:layout_height="fill_parent"
-         android:text="..."
-              android:gravity="center"
+         android:text="..."  android:gravity="center"
                    />
     </LinearLayout>
 

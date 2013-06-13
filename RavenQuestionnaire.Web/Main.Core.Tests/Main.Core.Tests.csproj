@@ -182,7 +182,6 @@
     <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
-    <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="Export\HeaderCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
     <Compile Include="Export\HeaderItemTests.cs" />

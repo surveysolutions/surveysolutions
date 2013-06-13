@@ -39,7 +39,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using Main.Synchronization.SycProcessRepository;
 
 using WB.Core.Infrastructure;
 
@@ -184,7 +183,6 @@ namespace CAPI.Android
 
             kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
             kernel.Bind<Context>().ToConstant(this);
-            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             NcqrsInit.Init(kernel);
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);

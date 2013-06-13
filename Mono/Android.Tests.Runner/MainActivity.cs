@@ -33,7 +33,7 @@ namespace Android.Tests.Runner
 
 		private TestAssemblyInfo CapiTests()
 		{
-			var assembly = typeof (Core.CAPI.Tests.Synchronization.ClientEventSyncTests).Assembly;
+            var assembly = typeof(Core.CAPI.Tests.ExportStatisticsFactoryTests).Assembly;
 
 			return new TestAssemblyInfo(assembly);
 		}

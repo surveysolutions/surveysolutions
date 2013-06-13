@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
-using Main.Synchronization.Credentials;
 
 using WB.Core.Infrastructure;
 
@@ -29,7 +28,7 @@ namespace CAPI.Android.Core.Model.Authorization
         }
 
 
-        public SyncCredentials RequestSyncCredentials()
+        public SyncCredentials? RequestSyncCredentials()
         {
             if(!IsLoggedIn)
                 throw new InvalidOperationException("please logoin first");

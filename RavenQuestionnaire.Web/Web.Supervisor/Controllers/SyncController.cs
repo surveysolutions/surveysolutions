@@ -4,7 +4,6 @@ using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
-using DataEntryClient.SycProcessFactory;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Main.Core.Export;
@@ -14,6 +13,7 @@ using Newtonsoft.Json;
 using SynchronizationMessages.CompleteQuestionnaire;
 using SynchronizationMessages.Synchronization;
 using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
@@ -24,10 +24,6 @@ namespace Web.Supervisor.Controllers
     {
         #region Fields
 
-        /// <summary>
-        /// The syncs process factory
-        /// </summary>
-        private readonly ISyncProcessFactory syncProcessFactory;
 
         /// <summary>
         /// View repository
@@ -47,12 +43,11 @@ namespace Web.Supervisor.Controllers
         #endregion
 
         public SyncController(
-            IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, 
+            IViewRepository viewRepository,
             WB.Core.Synchronization.SyncManager.ISyncManager syncManager, ILog logger)
         {
             
             this.viewRepository = viewRepository;
-            this.syncProcessFactory = syncProcessFactory;
             this.syncManager = syncManager;
 
             this.logger = logger;
@@ -111,6 +106,36 @@ namespace Web.Supervisor.Controllers
             }
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public JsonResult GetARKeys(string login, string password)
+        {
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            return Json(this.GetListOfAR(user.PublicKey));
+        }
+
+        private SyncItemsMetaContainer GetListOfAR(Guid userId)
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new SyncItemsMetaContainer();
+
+            try
+            {
+                var package = this.syncManager.GetAllARIds(userId);
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
+                logger.Fatal(ex.Message);
+                logger.Fatal(ex.StackTrace);
+            }
+
+            return result;
+        }
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult PostPackage(string login, string password, string syncItemContent)

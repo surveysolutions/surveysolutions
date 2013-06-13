@@ -11,8 +11,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Syncronization.RestUtils;
 using Newtonsoft.Json;
-using WB.Core.Synchronization;
-
+using WB.Core.SharedKernel.Structures.Synchronization;
 namespace CAPI.Android.Syncronization.Push
 {
     public class RestPush

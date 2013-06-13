@@ -226,7 +226,6 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HQController.cs" />
-    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -273,21 +272,6 @@
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
-    <Compile Include="WCF\EventPipeService.svc.cs">
-      <DependentUpon>EventPipeService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\GetAggragateRootListService.svc.cs">
-      <DependentUpon>GetAggragateRootListService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\GetEventStreamService.svc.cs">
-      <DependentUpon>GetEventStreamService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\SpotSyncService.svc.cs">
-      <DependentUpon>SpotSyncService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\AuthorizationService.svc.cs">
-      <DependentUpon>AuthorizationService.svc</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap\bootstrap-editable.css" />
@@ -443,11 +427,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </Content>
-    <Content Include="WCF\EventPipeService.svc" />
-    <Content Include="WCF\GetAggragateRootListService.svc" />
-    <Content Include="WCF\GetEventStreamService.svc" />
-    <Content Include="WCF\SpotSyncService.svc" />
-    <Content Include="WCF\AuthorizationService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -467,7 +446,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Configuration\Stacy.Supervisor.Web.config" />
+    <Content Include="Configuration\Stacy.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -527,10 +508,6 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Synchronization\DataEntryClient\DataEntryClient.csproj">
-      <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
-      <Name>DataEntryClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
       <Name>SynchronizationMessages</Name>
@@ -546,10 +523,6 @@
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
-      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
-      <Name>Main.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>

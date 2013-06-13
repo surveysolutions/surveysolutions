@@ -98,7 +98,6 @@
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
     <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synchronization\ClientEventStreamReader.cs" />
     <Compile Include="Views\CapiScreenGroupView.cs" />
     <Compile Include="Views\CapiScreenViewSupplier.cs" />
     <Compile Include="Views\ExporStatistics\ExporStatisticsInputModel.cs" />

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Security.Authentication;
+using CAPI.Android.Core.Model.Authorization;
 using Main.Core.Utility;
-using Main.Synchronization.Credentials;
 using RestSharp;
 
 namespace CAPI.Android.Syncronization

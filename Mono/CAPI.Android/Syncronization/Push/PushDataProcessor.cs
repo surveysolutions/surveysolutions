@@ -12,8 +12,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ChangeLog;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
-using SynchronizationMessages.Synchronization;
-using WB.Core.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
 {

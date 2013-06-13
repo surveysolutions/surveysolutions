@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ModelUtils;
+using Main.Core;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
@@ -19,8 +20,7 @@ using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Newtonsoft.Json;
-using SynchronizationMessages.Synchronization;
-using WB.Core.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
 {

@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
+using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Handshake;
@@ -19,10 +20,9 @@ using CAPI.Android.Syncronization.Push;
 using CAPI.Android.Syncronization.RestUtils;
 using CAPI.Android.Utils;
 using Main.Core.Events;
-using Main.Synchronization.Credentials;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization
 {
