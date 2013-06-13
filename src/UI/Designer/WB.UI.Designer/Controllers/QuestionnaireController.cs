@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory,
-            IExpressionReplacer expressionReplacer,)
+            IExpressionReplacer expressionReplacer)
             : base(userHelper)
         {
             this.commandService = commandService;
