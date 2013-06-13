@@ -102,9 +102,13 @@ namespace CAPI.Android
 
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
+            var bigSurveyStore = new InMemoryDenormalizer<CompleteQuestionnaireView>();
+
+            Kernel.Unbind<IDenormalizerStorage<CompleteQuestionnaireView>>();
+            Kernel.Bind<InMemoryDenormalizer<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
+
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(
-                    kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
+                new CompleteQuestionnaireViewDenormalizer(bigSurveyStore);
             bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(eventHandler, typeof (AnswerSet));
             bus.RegisterHandler(eventHandler, typeof (CommentSet));

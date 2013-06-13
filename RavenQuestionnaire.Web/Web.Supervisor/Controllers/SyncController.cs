@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
@@ -126,6 +127,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var package = this.syncManager.GetAllARIds(userId);
+                result.ARId = package.ToList();
             }
             catch (Exception ex)
             {
