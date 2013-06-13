@@ -9,7 +9,7 @@
 
 using System.Net;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
@@ -20,8 +20,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Ncqrs.Restoring.EventStapshoot;
-
     using Raven.Client;
     using Raven.Client.Document;
 
@@ -30,7 +28,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     /// <summary>
     /// The raven DB event store.
     /// </summary>
-    public class RavenDBEventStore : IStreamableEventStore, ISnapshootEventStore
+    public class RavenDBEventStore : IStreamableEventStore
     {
         #region Fields
 
@@ -163,96 +161,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
 
-        public Guid? GetLastEvent(Guid aggregateRootId)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                var eventLast = session
-                    .Query<StoredEvent, Event_ByEventSource>().AsProjection<StoredEventWithoutPayload>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                    .Where(e => e.EventSourceId == aggregateRootId).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
-
-                if (eventLast != null)
-                    return eventLast.EventIdentifier;
-                return null;
-            }
-        }
-
-        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                return session.Query<StoredEvent, Event_ByEventSource>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
-            }
-        }
-
-        public CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion)
-        {
-            List<CommittedEvent> result = new List<CommittedEvent>();
-            int page = 0;
-            while (true)
-            {
-                using (IDocumentSession session = this.DocumentStore.OpenSession())
-                {
-                    var chunk = session
-                        .Query<StoredEvent, Event_ByEventSource>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .AsProjection<StoredEventWithoutPayload>()
-                        .Where(
-                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(e => e.EventSequence)
-                        .Skip(page * pageSize)
-                        .Take(pageSize).ToList();
-                        
-
-                    if (!chunk.Any())
-                    {
-                        break;
-                    }
-                    result.AddRange(chunk.Select(
-                            e =>
-                            new CommittedEvent(Guid.Empty, e.EventIdentifier, e.EventSourceId, e.EventSequence,
-                                               DateTime.Now, new object(), new Version(1, 1))));
-                    page++;
-                }
-            }
-
-            return new CommittedEventStream(id, result);
-        }
-
-        public int CountOfAllEventsWithoutSnapshots()
-        {
-            return this.CountOfAllEvents(includeShapshots: false);
-        }
-
-        public int CountOfAllEventsIncludingSnapshots()
-        {
-            return this.CountOfAllEvents(includeShapshots: true);
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: false);
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: true);
-        }
-
-        /// <summary>
-        /// The read from.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="minVersion">
-        /// The min version.
-        /// </param>
-        /// <param name="maxVersion">
-        /// The max version.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommittedEventStream"/>.
-        /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             var storedEvents =
@@ -316,72 +224,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
         }
 
-        public CommittedEvent GetLatestSnapshoot(Guid aggreagateRootId)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-
-                var snapshoot =
-                    session.Query<StoredEvent, Event_ByEventSource>()
-                           .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                           .Where(e => e.EventSourceId == aggreagateRootId &&  e.IsSnapshot ).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
-                if (snapshoot!=null)
-                {
-                    return ToCommittedEvent(snapshoot);
-                }
-            }
-            return null;
-        }
-
         #endregion
 
-        private int CountOfAllEvents(bool includeShapshots)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                return
-                    QueryAllEvents(session, includeShapshots)
-                    .Count();
-            }
-        }
-
-        private IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, bool includeShapshots)
-        {
-            int returnedEventCount = 0;
-
-            while (true)
-            {
-                using (IDocumentSession session = this.DocumentStore.OpenSession())
-                {
-                    StoredEvent[] storedEventsBulk =
-                        QueryAllEvents(session, includeShapshots)
-                        .OrderBy(y => y.EventSequence)
-                        .Skip(returnedEventCount)
-                        .Take(bulkSize)
-                        .ToArray();
-
-                    bool allEventsWereAlreadyReturned = storedEventsBulk.Length == 0;
-                    if (allEventsWereAlreadyReturned)
-                        yield break;
-
-                    yield return Array.ConvertAll(storedEventsBulk, ToCommittedEvent);
-
-                    returnedEventCount += bulkSize;
-                }
-            }
-        }
-
-        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session, bool includeShapshots)
-        {
-            return includeShapshots
-                ? session
-                    .Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                : session
-                    .Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                    .Where(@event => !@event.IsSnapshot);
-        }
 
         #region Methods
 
@@ -465,11 +309,75 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     Data = uncommittedEvent.Payload,
                     EventSequence = uncommittedEvent.EventSequence,
                     EventSourceId = uncommittedEvent.EventSourceId,
-                    IsSnapshot = uncommittedEvent.Payload is SnapshootLoaded,
                     EventType = uncommittedEvent.Payload.GetType().Name
                 };
         }
 
         #endregion
+        private int CountOfAllEvents(bool includeShapshots)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return
+                    QueryAllEvents(session, includeShapshots)
+                    .Count();
+            }
+        }
+
+        private IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, bool includeShapshots)
+        {
+            int returnedEventCount = 0;
+
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    StoredEvent[] storedEventsBulk =
+                        QueryAllEvents(session, includeShapshots)
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(returnedEventCount)
+                        .Take(bulkSize)
+                        .ToArray();
+
+                    bool allEventsWereAlreadyReturned = storedEventsBulk.Length == 0;
+                    if (allEventsWereAlreadyReturned)
+                        yield break;
+
+                    yield return Array.ConvertAll(storedEventsBulk, ToCommittedEvent);
+
+                    returnedEventCount += bulkSize;
+                }
+            }
+        }
+
+        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session, bool includeShapshots)
+        {
+            return includeShapshots
+                       ? session
+                             .Query<StoredEvent>()
+                             .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                       : session
+                             .Query<StoredEvent>()
+                             .Customize(x => x.WaitForNonStaleResultsAsOfNow());
+        }
+        public int CountOfAllEventsWithoutSnapshots()
+        {
+            return this.CountOfAllEvents(includeShapshots: false);
+        }
+
+        public int CountOfAllEventsIncludingSnapshots()
+        {
+            return this.CountOfAllEvents(includeShapshots: true);
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
+        {
+            return this.GetAllEvents(bulkSize, includeShapshots: false);
+        }
+
+        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
+        {
+            return this.GetAllEvents(bulkSize, includeShapshots: true);
+        }
     }
 }

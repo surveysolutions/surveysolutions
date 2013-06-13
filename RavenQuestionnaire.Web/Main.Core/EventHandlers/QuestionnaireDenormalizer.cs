@@ -7,7 +7,6 @@ using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
 
 using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Utils.Logging;
@@ -17,7 +16,6 @@ namespace Main.Core.EventHandlers
     using Ncqrs.Eventing;
 
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                             IEventHandler<SnapshootLoaded>,
                                              IEventHandler<NewGroupAdded>,
                                              IEventHandler<GroupCloned>,
                                              IEventHandler<QuestionnaireItemMoved>,
@@ -59,16 +57,6 @@ namespace Main.Core.EventHandlers
             this.documentStorage.Store(item, item.PublicKey);
         }
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
-        }
 
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {

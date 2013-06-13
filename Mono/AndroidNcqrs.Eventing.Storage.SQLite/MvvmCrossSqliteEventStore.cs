@@ -15,13 +15,13 @@ using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 using SQLite;
 using SQLiteException = Android.Database.Sqlite.SQLiteException;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
-    public class MvvmCrossSqliteEventStore : IStreamableEventStore, ISnapshootEventStore, IMvxServiceConsumer
+    public class MvvmCrossSqliteEventStore : IStreamableEventStore, IMvxServiceConsumer
     {
         private readonly ISQLiteConnection _connection;
 
@@ -30,23 +30,10 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
             _connection = connectionFactory.Create(databaseName);
-            //  _connection = connectionFactory.Create("EventStore");
             _connection.CreateTable<StoredEvent>();
 
         }
 
-        // private readonly  ISQLiteConnectionFactory _connectionFactory;
-
-
-        public Ncqrs.Eventing.CommittedEvent GetLatestSnapshoot(Guid id)
-        {
-            var idString = id.ToString();
-            return ((TableQuery<StoredEvent>)_connection.Table<StoredEvent>()).Where(x => x.IsSnapshot && x.EventSourceId == idString)
-                            .OrderByDescending(x => x.Sequence)
-                            .First()
-                            .ToCommitedEvent();
-
-        }
 
         public void Store(UncommittedEventStream eventStream)
         {
@@ -148,6 +135,11 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
         {
             throw new NotImplementedException("Not needed for Mono so far.");
+        }
+
+        public void CleanStream(Guid id)
+        {
+            _connection.Execute("delete from StoredEvent where EventSourceId = ?", id);
         }
     }
 }

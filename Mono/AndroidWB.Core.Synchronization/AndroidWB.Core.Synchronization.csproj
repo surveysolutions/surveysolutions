@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F4682532-F624-4044-9194-A0137EB9CA8F}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidWB.Core.Synchronization</RootNamespace>
+    <AssemblyName>AndroidWB.Core.Synchronization</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\ClientIdentifier.cs">
+      <Link>ClientIdentifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\HandshakePackage.cs">
+      <Link>HandshakePackage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncItem.cs">
+      <Link>SyncItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncItemType.cs">
+      <Link>SyncItemType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncManager\ISyncManager.cs">
+      <Link>SyncManager\ISyncManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncManager\SyncManager.cs">
+      <Link>SyncManager\SyncManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncPackage.cs">
+      <Link>SyncPackage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\ISyncEventHandler.cs">
+      <Link>SyncProvider\ISyncEventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\ISyncProvider.cs">
+      <Link>SyncProvider\ISyncProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\SyncEventHandler.cs">
+      <Link>SyncProvider\SyncEventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\SyncProvider.cs">
+      <Link>SyncProvider\SyncProvider.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\packages.config">
+      <Link>packages.config</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.DenormalizerStorage\AndroidMain.DenormalizerStorage.csproj">
+      <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
+      <Name>AndroidMain.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.Synchronization\AndroidMain.Synchronization.csproj">
+      <Project>{613558d5-9ab8-4908-b904-3b8ea86ffb96}</Project>
+      <Name>AndroidMain.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
+      <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
+      <Name>AndroidSynchronizationMessages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="75d70eb8-1e56-4bfe-816c-5231112f64c0" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

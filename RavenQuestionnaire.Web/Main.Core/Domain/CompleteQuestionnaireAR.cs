@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+
 namespace Main.Core.Domain
 {
     using System;
@@ -23,12 +26,11 @@ namespace Main.Core.Domain
     using Main.Core.ExpressionExecutors;
 
     using Ncqrs;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
     /// </summary>
-    public class CompleteQuestionnaireAR : SnapshootableAggregateRoot<CompleteQuestionnaireDocument>
+    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
         #region Fields
 
@@ -66,6 +68,12 @@ namespace Main.Core.Domain
         /// </summary>
         public CompleteQuestionnaireAR()
         {
+        }
+
+        public CompleteQuestionnaireAR(CompleteQuestionnaireDocument source)
+            : base(source.PublicKey)
+        {
+            CreateNewAssigment(source);
         }
 
         /// <summary>
@@ -162,7 +170,7 @@ namespace Main.Core.Domain
         /// <returns>
         /// The RavenQuestionnaire.Core.Documents.CompleteQuestionnaireDocument.
         /// </returns>
-        public override CompleteQuestionnaireDocument CreateSnapshot()
+        public  CompleteQuestionnaireDocument CreateSnapshot()
         {
             return this.doc;
         }
@@ -228,7 +236,7 @@ namespace Main.Core.Domain
         /// <param name="snapshot">
         /// The snapshot.
         /// </param>
-        public override void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
+        public  void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
             // Due to the storing snapshot in the memory
             // to provide consistency of UoW we have to make copy of the memory structure.
@@ -268,19 +276,6 @@ namespace Main.Core.Domain
                     QuestionPublickey = questionPublickey
                 });
         }
-
-        /// <summary>
-        /// The set comment.
-        /// </summary>
-        /// <param name="questionPublickey">
-        /// The question public key.
-        /// </param>
-        /// <param name="comments">
-        /// The comments.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propagation public key.
-        /// </param>
         public void SetFlag(Guid questionPublickey, Guid? propogationPublicKey, bool isFlaged)
         {
             this.ApplyEvent(
@@ -576,6 +571,10 @@ namespace Main.Core.Domain
             }
         }
 
+        public void CreateNewAssigment(CompleteQuestionnaireDocument source)
+        {
+            ApplyEvent(new NewAssigmentCreated() { Source = source });
+        }
 
         /// <summary>
         /// The change assignment.
@@ -619,7 +618,11 @@ namespace Main.Core.Domain
                         Responsible = responsible
                     });
         }
-        
+
+        protected void OnNewAssigmentCreated(NewAssigmentCreated e)
+        {
+            this.doc = e.Source.Clone() as CompleteQuestionnaireDocument;
+        }
 
         // Event handler for the AnswerSet event. This method
         // is automaticly wired as event handler based on convension.

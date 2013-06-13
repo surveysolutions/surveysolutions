@@ -18,7 +18,7 @@ namespace Main.Core.EventHandlers
     /// TODO: Update summary.
     /// </summary>
     public class DeviceDenormalizer : IEventHandler<NewDeviceRegistered>,
-                                        IEventHandler<UpdateRegisteredDevice>
+                                      IEventHandler<UpdateRegisteredDevice>
     {
         #region Fields
 

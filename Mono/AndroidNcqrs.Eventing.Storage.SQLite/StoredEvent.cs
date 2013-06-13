@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Plugins.Sqlite;
-using Ncqrs.Restoring.EventStapshoot;
+
 using Newtonsoft.Json;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
@@ -31,7 +31,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             Data = GetJsonData(data);
             
             Version = version.ToString();
-            IsSnapshot = data is SnapshootLoaded;
+        
 
         }
         private string GetJsonData(object payload)
@@ -50,6 +50,6 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         public long TimeStamp { get; set; }
         public string Data { get; set; }
         public string Version { get; set; }
-        public bool IsSnapshot { get; set; }
+        
     }
 }

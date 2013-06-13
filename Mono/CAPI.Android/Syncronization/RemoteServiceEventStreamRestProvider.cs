@@ -259,7 +259,7 @@ namespace AndroidMain.Synchronization
 
         private static bool SkipAgregateRootIfNoChanges(SyncItemsMeta root)
         {
-            if (!root.AggregateRootPeak.HasValue)
+           /* if (!root.AggregateRootPeak.HasValue)
                 return false;
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             if (eventStore == null)
@@ -268,6 +268,8 @@ namespace AndroidMain.Synchronization
             if (streamableEventStore == null)
                 return false;
             return streamableEventStore.IsEventPresent(root.AggregateRootId, root.AggregateRootPeak.Value);
+            */
+            return false;
         }
 
         #endregion

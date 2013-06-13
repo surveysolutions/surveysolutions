@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Android.Content;
+using CAPI.Android.Core.Model.ModelUtils;
 using Newtonsoft.Json;
 
 namespace CAPI.Android.Core.Model.ProjectionStorage
@@ -26,7 +27,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
         {
             using (var fs = File.Open(GetFileName(publicKey),FileMode.OpenOrCreate))
             {
-                var bytes = GetBytes(GetJsonData(projection));
+                var bytes = GetBytes(JsonUtils.GetJsonData(projection));
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
@@ -37,7 +38,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             if (!File.Exists(filePath))
                 return null;
             byte[] cachedBytes = System.IO.File.ReadAllBytes(filePath);
-            return GetObject<T>(GetString(cachedBytes));
+            return JsonUtils.GetObject<T>(GetString(cachedBytes));
             /*    using (var fs = context.OpenFileInput(publicKey.ToString()))
                 {
 
@@ -78,28 +79,6 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
-        private string GetJsonData(object payload)
-        {
-            var data = JsonConvert.SerializeObject(payload, Formatting.None,
-                                                   new JsonSerializerSettings
-                                                   {
-                                                       TypeNameHandling = TypeNameHandling.Objects/*,
-                                                           Converters =
-                                                               new List<JsonConverter>() {new ItemPublicKeyConverter()}*/
-                                                   });
-            Console.WriteLine(data);
-            return data;
-        }
-        
-        private T GetObject<T>(string json)where  T:class 
-        {
-            return JsonConvert.DeserializeObject<T>(json,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects/*,
-                    Converters =
-                        new List<JsonConverter>() { new ItemPublicKeyConverter() }*/
-                });
-        }
+      
     }
 }

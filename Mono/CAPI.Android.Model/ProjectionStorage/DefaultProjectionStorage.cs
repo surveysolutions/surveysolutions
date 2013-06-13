@@ -1,5 +1,6 @@
 using System;
 using Android.Content;
+using CAPI.Android.Core.Model.ModelUtils;
 using Newtonsoft.Json;
 
 namespace CAPI.Android.Core.Model.ProjectionStorage
@@ -16,29 +17,6 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
 
 			//_propertyBagConverter = new PropertyBagConverter();
 		}
-        private string GetJsonData(object payload)
-        {
-            var data = JsonConvert.SerializeObject(payload, Formatting.None,
-                                                   new JsonSerializerSettings
-                                                       {
-                                                           TypeNameHandling = TypeNameHandling.Objects/*,
-                                                           Converters =
-                                                               new List<JsonConverter>() {new ItemPublicKeyConverter()}*/
-                                                       });
-            Console.WriteLine(data);
-            return data;
-        }
-
-        private T GetObject<T>(string json)where  T:class 
-        {
-            return JsonConvert.DeserializeObject<T>(json,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects/*,
-                    Converters =
-                        new List<JsonConverter>() { new ItemPublicKeyConverter() }*/
-                });
-        }
         #region Implementation of IProjectionStorage
 
         public void SaveOrUpdateProjection<T>(T projection, Guid publicKey)where  T:class 
@@ -55,7 +33,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
                 break;
                 
             }
-            var data = GetJsonData(projection);
+            var data = JsonUtils.GetJsonData(projection);
             var values = new ContentValues();
             values.Put("PublicKey", publicKey.ToString());
             values.Put("Data", data);
@@ -74,7 +52,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             var dataIndex = cursor.GetColumnIndex("Data");
             while (cursor.MoveToNext())
             {
-                return GetObject<T>(cursor.GetString(dataIndex));
+                return JsonUtils.GetObject<T>(cursor.GetString(dataIndex));
             }
             return null;
         }

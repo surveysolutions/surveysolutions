@@ -79,7 +79,7 @@ namespace Main.Core.Events
         protected List<AggregateRootEvent> ExtractUsers()
         {
             return this.denormalizer.Query<UserDocument, List<AggregateRootEvent>>(_ => _
-                .SelectMany(item => this.GetEventStreamById<UserAR>(item.PublicKey))
+                .SelectMany(item => this.GetEventStreamById(item.PublicKey))
                 .ToList());
         }
 

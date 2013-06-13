@@ -110,10 +110,6 @@
     <Compile Include="TypeNameSerializationBinder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>

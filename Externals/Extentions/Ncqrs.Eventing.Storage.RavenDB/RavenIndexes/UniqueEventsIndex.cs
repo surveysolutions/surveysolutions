@@ -13,7 +13,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
                           select new
                               {
                                   EventSourceId = doc.EventSourceId,
-                                  LastSnapshot = doc.IsSnapshot ? doc.EventSequence : 1,
+                                  LastSnapshot = 1,
                                   EventTimeStamp = doc.EventTimeStamp
                               };
             Reduce = results => from result in results

@@ -10,6 +10,7 @@
 using System.Net;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
 using Main.Core.View.User;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
@@ -74,17 +75,25 @@ namespace Web.Supervisor.Controllers
         /// The logger.
         /// </summary>
         private readonly ILog logger;
+
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly WB.Core.Synchronization.SyncManager.ISyncManager syncManager;
+
         #endregion
 
         #region Constructors and Destructors
 
         
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, ILog logger)
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, WB.Core.Synchronization.SyncManager.ISyncManager syncManager, ILog logger)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
             this.syncProcessFactory = syncProcessFactory;
+            this.syncManager = syncManager;
+
             this.logger = logger;
         }
 
@@ -388,6 +397,7 @@ namespace Web.Supervisor.Controllers
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+
             return Json(this.GetListOfAR(user.Supervisor.Id));
         }
 
@@ -412,7 +422,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var process = this.syncProcessFactory.GetRestProcess(syncProcess, supervisorId);
-                result = process.GetAR("ViewerId export AR events.", key,rootType, ln);
+                result = process.GetAR("ViewerId export AR events.", key, rootType, ln);
             }
             catch (Exception ex)
             {
@@ -430,6 +440,7 @@ namespace Web.Supervisor.Controllers
             var user = GetUser(login, password);
             if (user==null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
+
             var item = this.GetARInt(user.Supervisor.Id, aRKey, length, rootType);
             
             if (item == null)
@@ -508,6 +519,43 @@ namespace Web.Supervisor.Controllers
                 logger.Fatal("Stack: " + ex.StackTrace);
                 
                 return false;
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public bool Handshake(string login, string password, string clientID, string LastSyncID)
+        {
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+            return true;
+        }
+
+        
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public ActionResult GetSyncPackage(string aRKey, string rootType, string login, string password)
+        {
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            Guid key;
+            if (!Guid.TryParse(aRKey, out key))
+            {
+                return null; //todo: return correct description
+            }
+
+            try
+            {
+                var package = syncManager.ReceiveSyncPackage(null, key, rootType);
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal("Error on sync", ex);
+                return null;
             }
         }
 

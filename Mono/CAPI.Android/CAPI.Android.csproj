@@ -187,9 +187,22 @@
     <Compile Include="StartApplicationObject.cs" />
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
+    <Compile Include="SynchronizationActivityOld.cs" />
+    <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
+    <Compile Include="Syncronization\Pull\PullDataProcessor.cs" />
+    <Compile Include="Syncronization\Pull\RestPull.cs" />
+    <Compile Include="Syncronization\Push\PushDataProcessor.cs" />
+    <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RemoteServiceEventStreamRestProvider.cs" />
     <Compile Include="Syncronization\RemoteCollector.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
+    <Compile Include="Syncronization\RestUtils\AndroidRestUrils.cs" />
+    <Compile Include="Syncronization\RestUtils\IRestUrils.cs" />
+    <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
+    <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
+    <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
+    <Compile Include="Syncronization\SynchronizationException.cs" />
+    <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -300,10 +313,6 @@
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
-      <Project>{30be60c9-980f-40e1-a8fd-c2a5959827d3}</Project>
-      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
@@ -323,6 +332,10 @@
     <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
       <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
       <Name>AndroidSynchronizationMessages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.Synchronization\AndroidWB.Core.Synchronization.csproj">
+      <Project>{f4682532-f624-4044-9194-a0137eb9ca8f}</Project>
+      <Name>AndroidWB.Core.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>

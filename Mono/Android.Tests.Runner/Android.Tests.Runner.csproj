@@ -96,10 +96,6 @@
       <Project>{5DEEE833-95C4-4D28-AAA7-E281FF1569D8}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot.Test\AndroidNcqrs.Restoring.EventStapshoot.Test.csproj">
-      <Project>{7D58D343-D618-4FD2-A4C5-CFA90D533229}</Project>
-      <Name>AndroidNcqrs.Restoring.EventStapshoot.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Tests\AndroidNcqrs.Tests.csproj">
       <Project>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</Project>
       <Name>AndroidNcqrs.Tests</Name>

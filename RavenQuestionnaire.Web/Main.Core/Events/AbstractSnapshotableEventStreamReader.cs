@@ -10,7 +10,6 @@
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace Main.Core.Events
 {
@@ -23,7 +22,6 @@ namespace Main.Core.Events
     using Ncqrs.Eventing;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// For load Snapshots.
@@ -59,16 +57,6 @@ namespace Main.Core.Events
 
         #endregion
 
-        protected Guid? GetLastEventFromStream(Guid aggregateRootId)
-        {
-            var stremableEventStore = myEventStore as IStreamableEventStore;
-            if (stremableEventStore != null)
-            {
-                return stremableEventStore.GetLastEvent(aggregateRootId);
-            }
-            return null;
-        }
-
         protected List<AggregateRootEvent> ReturnAllEventStream(Guid aggregateRootId)
         {
             var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
@@ -82,19 +70,14 @@ namespace Main.Core.Events
 
         #region PublicMethods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="aggregateRootId"></param>
-        /// <returns></returns>
-        public virtual List<AggregateRootEvent> GetEventStreamById<T>(Guid aggregateRootId) where T : AggregateRoot
+       
+        public virtual List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId)
         {
-            var snapshotableEventStore = this.myEventStore as ISnapshootEventStore;
+          /*  var snapshotableEventStore = this.myEventStore as ISnapshootEventStore;
             if (snapshotableEventStore == null)
-            {
+            {*/
                 return ReturnAllEventStream(aggregateRootId);
-            }
+         /*   }
 
             Type arType = typeof (T);
             var snapshotables = from i in arType.GetInterfaces()
@@ -119,7 +102,7 @@ namespace Main.Core.Events
             return new List<AggregateRootEvent>()
                 {
                     //new AggregateRootEvent(snapshotLoaded)
-                };
+                };*/
         }
 
         #endregion

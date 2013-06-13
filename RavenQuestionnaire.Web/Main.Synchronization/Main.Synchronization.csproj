@@ -101,7 +101,6 @@
     <Compile Include="SyncManager\SyncronizationStatus.cs" />
     <Compile Include="SyncSreamProvider\AllIntEventsStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\ExtFileEventStreamProvider.cs" />
-    <Compile Include="SyncSreamProvider\IExtSyncEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\IIntSyncEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\IntClientEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\ISyncEventStreamProvider.cs" />
@@ -132,10 +131,6 @@
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

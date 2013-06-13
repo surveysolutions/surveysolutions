@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+
+using Raven.Client.Linq;
+using WB.Core.Synchronization;
+
 namespace Core.Supervisor.Synchronization
 {
     using System;
@@ -80,8 +84,8 @@ namespace Core.Supervisor.Synchronization
 
             //this.AddQuestionnairesTemplates(retval);
 
-            List<Guid> fileNames = GetFiles();
 
+            List<Guid> fileNames = GetFiles();
             this.AddFiles(retval, fileNames);
             
             //this.AddRegisterDevice(retval);
@@ -99,13 +103,15 @@ namespace Core.Supervisor.Synchronization
             var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", GetLastEventFromStream(i))));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", GetLastEventFromStream(i))));
-
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
+/*
+            //temporary disabled due to non support in android app
             List<Guid> files = GetFiles();
-            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", GetLastEventFromStream(i))));
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, SyncItemType.File, null)));
+*/
 
             return result;
         }
@@ -113,14 +119,14 @@ namespace Core.Supervisor.Synchronization
         {
             switch (ARType)
             {
-                case "f":
-                    return this.GetEventStreamById<FileAR>(ARId);
+                case SyncItemType.File:
+                    return this.GetEventStreamById(ARId);
                     break;
-                case "q":
-                    return this.GetEventStreamById<CompleteQuestionnaireAR>(ARId);
+                case SyncItemType.Questionnare:
+                    return this.GetEventStreamById(ARId);
                     break;
-                case "u":
-                    return this.GetEventStreamById<UserAR>(ARId);
+                case SyncItemType.User:
+                    return this.GetEventStreamById(ARId);
                     break;
                 default:
                     return null;
@@ -136,9 +142,10 @@ namespace Core.Supervisor.Synchronization
 
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
+            var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
             return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
-                                
-                .Where(q => IsQuestionnarieRequiresSync(users, q))
+                .Where(q => q.Status.PublicId.In (listOfStatuses) 
+                            && q.Responsible != null && q.Responsible.Id.In(users))
                 .Select(i => i.CompleteQuestionnaireId)
                 .ToList());
         }
@@ -173,7 +180,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (var item in fileNames)
             {
-                retval.AddRange(this.GetEventStreamById<FileAR>(item));
+                retval.AddRange(this.GetEventStreamById(item));
             }
         }
         
@@ -181,7 +188,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (Guid item in questionnaries)
             {
-               retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item));
+               retval.AddRange(this.GetEventStreamById(item));
             }
         }
         /// <summary>
@@ -193,7 +200,7 @@ namespace Core.Supervisor.Synchronization
         protected void AddRegisterDevice(List<AggregateRootEvent> retval)
         {
             var model = this.denormalizer.Query<SyncDeviceRegisterDocument, List<AggregateRootEvent>>(_ => _
-                .SelectMany(item => this.GetEventStreamById<DeviceAR>(item.PublicKey))
+                .SelectMany(item => this.GetEventStreamById(item.PublicKey))
                 .ToList());
 
             retval.AddRange(model);
@@ -212,7 +219,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (var item in users)
             {
-                retval.AddRange(this.GetEventStreamById<UserAR>(item));
+                retval.AddRange(this.GetEventStreamById(item));
             }
         }
 

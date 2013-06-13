@@ -67,11 +67,7 @@ namespace DataEntryClientTests
 
             this.SyncProcessRepository = new Mock<ISyncProcessRepository>();
             this.Kernel.Bind<ISyncProcessRepository>().ToConstant(this.SyncProcessRepository.Object);
-
-            /*  clientSettingsMock = new Mock<IClientSettingsProvider>();
-            clientSettingsMock.Setup(x => x.ClientSettings).Returns(
-                new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
-            Kernel.Bind<IClientSettingsProvider>().ToConstant(clientSettingsMock.Object);*/
+            
             NcqrsEnvironment.SetDefault(this.CommandService.Object);
         }
 

@@ -9,7 +9,6 @@ using Main.Core.Events.Questionnaire;
 using Main.Core.View.Questionnaire;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
 
 using WB.Core.Infrastructure;
 
@@ -24,7 +23,6 @@ namespace Main.Core.EventHandlers
     /// TODO: Update summary.
     /// </summary>
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                                       IEventHandler<SnapshootLoaded>,
         IEventHandler<TemplateImported>,
                                                        IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>
@@ -60,33 +58,6 @@ namespace Main.Core.EventHandlers
 
         #endregion
 
-        #region Implementation of IEventHandler<in SnapshootLoaded>
-
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-          /*  // getting all featured questions
-            QuestionnaireBrowseItem browseItem = this.documentStorage.GetByGuid(document.PublicKey);
-            if (browseItem == null)
-            {*/
-               var browseItem = new QuestionnaireBrowseItem(
-                    document.PublicKey,
-                    document.Title,
-                    document.CreationDate,
-                    document.LastEntryDate,
-                    document.CreatedBy,
-                    document.IsPublic);
-              
-            //}
-            this.documentStorage.Store(browseItem, document.PublicKey);
-        }
-
-        #endregion
 
         #region Implementation of IEventHandler<in QuestionnaireUpdated>
 

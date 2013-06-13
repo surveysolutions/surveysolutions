@@ -7,12 +7,15 @@ using Android.Runtime;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.FileStorage;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
@@ -35,8 +38,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
 using Ninject;
 using Main.Synchronization.SycProcessRepository;
 
@@ -95,36 +96,9 @@ namespace CAPI.Android
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
-
-            // initialize app if necessary
-            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
-            {
-                _setup.Initialize();
-            }
-
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
-            kernel.Bind<Context>().ToConstant(this);
-            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
-            NcqrsInit.Init(kernel);
-     
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-
-            #region register handlers
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-
-            InitQuestionnariesStorage(bus);
-
-            InitUserStorage(bus);
-
-            InitFileStorage(bus);
-
-            InitDashboard(bus);
-
-            #endregion
-
            
+           
+
         }
 
         private void InitQuestionnariesStorage(InProcessEventBus bus)
@@ -132,7 +106,7 @@ namespace CAPI.Android
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(
                     kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
-            bus.RegisterHandler(eventHandler, typeof (SnapshootLoaded));
+            bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(eventHandler, typeof (AnswerSet));
             bus.RegisterHandler(eventHandler, typeof (CommentSet));
             bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
@@ -172,16 +146,63 @@ namespace CAPI.Android
             
             var dashboardeventHandler =
                 new DashboardDenormalizer(questionnaireStore, surveyStore);
-            bus.RegisterHandler(dashboardeventHandler, typeof (SnapshootLoaded));
+            bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
+            bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
         }
 
+        private void InitChangeLog(InProcessEventBus bus)
+        {
+            var publicStore = new SqliteDenormalizerStorage<PublicChangeSetDTO>();
+            var draftStore = new SqliteDenormalizerStorage<DraftChangesetDTO>();
+
+            Kernel.Unbind<IFilterableDenormalizerStorage<PublicChangeSetDTO>>();
+            Kernel.Bind<IFilterableDenormalizerStorage<PublicChangeSetDTO>>().ToConstant(publicStore);
+
+            Kernel.Unbind<IFilterableDenormalizerStorage<DraftChangesetDTO>>();
+            Kernel.Bind<IFilterableDenormalizerStorage<DraftChangesetDTO>>().ToConstant(draftStore);
+
+            var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
+            bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
+            bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
+        }
         public override void OnCreate()
         {
             base.OnCreate();
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             RestoreAppState();
+
+            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
+
+            // initialize app if necessary
+            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
+            {
+                _setup.Initialize();
+            }
+
+            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
+            kernel.Bind<Context>().ToConstant(this);
+            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
+            NcqrsInit.Init(kernel);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+
+            #region register handlers
+
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+
+            InitQuestionnariesStorage(bus);
+
+            InitUserStorage(bus);
+
+            InitFileStorage(bus);
+
+            InitDashboard(bus);
+
+            InitChangeLog(bus);
+
+            #endregion
         }
 
         private void RestoreAppState()

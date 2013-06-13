@@ -22,7 +22,6 @@ namespace Core.CAPI.Denormalizer
     using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// TODO: Update summary.

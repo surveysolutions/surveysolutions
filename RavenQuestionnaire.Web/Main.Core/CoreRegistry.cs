@@ -18,7 +18,6 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -129,7 +128,7 @@ namespace Main.Core
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(GetAssweblysForRegister().Union(new Assembly[]{typeof(SnapshootLoaded).Assembly}), typeof(IEventHandler<>), (c) => this.Kernel);
+            BindInterface(GetAssweblysForRegister(), typeof(IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()

@@ -14,8 +14,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
                                      {
                                          sEvent.EventSourceId,
                                          sEvent.EventSequence,
-                                         sEvent.EventIdentifier,
-                                         sEvent.IsSnapshot
+                                         sEvent.EventIdentifier
                                      };
          
             Sort(x => x.EventSequence, SortOptions.Long);
@@ -23,7 +22,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
             Index(x => x.EventSourceId, FieldIndexing.NotAnalyzed);
             Index(x => x.EventIdentifier, FieldIndexing.NotAnalyzed);
           //  Index(x => x.EventSequence, FieldIndexing.Analyzed);
-            Index(x => x.IsSnapshot, FieldIndexing.Default);
 
         }
     }

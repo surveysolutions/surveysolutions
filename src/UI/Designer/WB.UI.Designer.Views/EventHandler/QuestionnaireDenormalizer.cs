@@ -17,14 +17,12 @@ namespace WB.UI.Designer.Views.EventHandler
     using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                             IEventHandler<SnapshootLoaded>,
                                              IEventHandler<QuestionnaireUpdated>,
                                              IEventHandler<QuestionnaireDeleted>,IEventHandler<TemplateImported>
     {
@@ -68,41 +66,6 @@ namespace WB.UI.Designer.Views.EventHandler
                 }
             }
             this.documentStorage.Store(item, evnt.EventSourceId);
-        }
-
-        #endregion
-
-        #region Implementation of IEventHandler<in SnapshootLoaded>
-
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            /* // getting all featured questions
-             var item = this.documentStorage.GetByGuid(document.PublicKey);
-             if (item == null)
-             {*/
-            var item = new QuestionnaireListViewItem(
-                document.PublicKey,
-                document.Title,
-                document.CreationDate,
-                document.LastEntryDate,
-                document.CreatedBy,
-                document.IsPublic);
-            if (document.CreatedBy.HasValue)
-            {
-                var user = this.accountStorage.GetById(document.CreatedBy.Value);
-                if (user != null)
-                {
-                    item.CreatorName = user.UserName;
-                }
-            }
-            this.documentStorage.Store(item, document.PublicKey);
-            // }
         }
 
         #endregion

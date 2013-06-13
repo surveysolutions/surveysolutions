@@ -80,7 +80,11 @@
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
-    </Reference>
+    </Reference>	
+	<Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>	
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,6 +98,8 @@
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="SyncCacher\ISyncCacher.cs" />
+    <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
@@ -184,9 +190,9 @@
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
       <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    <ProjectReference Include="..\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
+      <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
