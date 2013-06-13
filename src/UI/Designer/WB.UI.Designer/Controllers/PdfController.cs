@@ -18,7 +18,7 @@ namespace WB.UI.Designer.Controllers
         public PdfController(
              IMembershipUserService userHelper,
              IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory)
-             : base(null, userHelper)
+             : base(userHelper)
         {
             this.viewFactory = viewFactory;
         }
