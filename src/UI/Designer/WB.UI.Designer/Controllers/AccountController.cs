@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Designer.Code;
@@ -42,7 +41,7 @@ namespace WB.UI.Designer.Controllers
 
         #region Public Methods and Operators
 
-        public AccountController(IViewRepository repository, ICommandService commandService, IMembershipUserService userHelper, ISystemMailer mailer) : base(repository, commandService, userHelper)
+        public AccountController(ICommandService commandService, IMembershipUserService userHelper, ISystemMailer mailer) : base(commandService, userHelper)
         {
             this.Mailer = mailer;
         }
