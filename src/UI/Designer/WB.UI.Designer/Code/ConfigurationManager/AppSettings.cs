@@ -28,7 +28,7 @@ namespace WB.UI.Designer
             IsReCaptchaEnabled = this.GetBoolean(ISRECATPCHAENABLED, true);
             RavenDocumentStore = this.GetString(RAVENDOCUMENTSTORE);
             WKHtmlToPdfExecutablePath = this.GetString(WKHTMLTOPDFEXECUTABLEPATH);
-            IsTrackingEnabled = this.GetBoolean(ISTRACKINGENABLED, true);
+            IsTrackingEnabled = this.GetBoolean(ISTRACKINGENABLED, false);
             StorageLoadingChunkSize = this.GetInt(STORAGELOADINGCHUNKSIZE, 1024);
             AdminEmail = this.GetString(ADMINEMAIL);
         }
