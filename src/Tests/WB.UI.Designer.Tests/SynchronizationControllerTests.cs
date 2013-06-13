@@ -23,7 +23,6 @@ namespace WB.UI.Designer.Tests
     public class SynchronizationControllerTests
     {
         protected Mock<ICommandService> CommandServiceMock;
-        protected Mock<IViewRepository> ViewRepositoryMock;
         protected Mock<IStringCompressor> ZipUtilsMock;
         protected Mock<IExportService> ExportServiceMock;
         protected Mock<IMembershipUserService> UserHelperMock;
@@ -32,7 +31,6 @@ namespace WB.UI.Designer.Tests
         public void Setup()
         {
             CommandServiceMock=new Mock<ICommandService>();
-            ViewRepositoryMock=new Mock<IViewRepository>();
             ZipUtilsMock = new Mock<IStringCompressor>();
             ExportServiceMock = new Mock<IExportService>();
             UserHelperMock=new Mock<IMembershipUserService>();
@@ -121,7 +119,7 @@ namespace WB.UI.Designer.Tests
 
         private SynchronizationController CreateSynchronizationController()
         {
-            return new SynchronizationController(ViewRepositoryMock.Object, CommandServiceMock.Object,
+            return new SynchronizationController(CommandServiceMock.Object,
                                                  UserHelperMock.Object,
                                                  ZipUtilsMock.Object, ExportServiceMock.Object);
         }
