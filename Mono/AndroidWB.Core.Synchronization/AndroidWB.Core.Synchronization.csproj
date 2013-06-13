@@ -43,43 +43,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\ClientIdentifier.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\ClientIdentifier.cs">
       <Link>ClientIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\HandshakePackage.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\HandshakePackage.cs">
       <Link>HandshakePackage.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncItem.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncItem.cs">
       <Link>SyncItem.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncItemType.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncItemType.cs">
       <Link>SyncItemType.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncManager\ISyncManager.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncManager\ISyncManager.cs">
       <Link>SyncManager\ISyncManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncManager\SyncManager.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncManager\SyncManager.cs">
       <Link>SyncManager\SyncManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncPackage.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncPackage.cs">
       <Link>SyncPackage.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\ISyncEventHandler.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncProvider\ISyncEventHandler.cs">
       <Link>SyncProvider\ISyncEventHandler.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\ISyncProvider.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncProvider\ISyncProvider.cs">
       <Link>SyncProvider\ISyncProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\SyncEventHandler.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncProvider\SyncEventHandler.cs">
       <Link>SyncProvider\SyncEventHandler.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\SyncProvider\SyncProvider.cs">
+    <Compile Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\SyncProvider\SyncProvider.cs">
       <Link>SyncProvider\SyncProvider.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\RavenQuestionnaire.Web\WB.Core.Synchronization\packages.config">
+    <None Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
