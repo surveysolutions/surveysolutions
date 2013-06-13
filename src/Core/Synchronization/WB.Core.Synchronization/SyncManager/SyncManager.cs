@@ -1,4 +1,12 @@
-﻿namespace WB.Core.Synchronization.SyncManager
+﻿using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
+using Main.Core.View.CompleteQuestionnaire;
+using WB.Core.SharedKernel.Structures.Synchronization;
+
+namespace WB.Core.Synchronization.SyncManager
 {
     using System;
     using SyncProvider;
@@ -50,6 +58,11 @@
             return syncProvider.HandleSyncItem(item);
         }
 
+        public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId)
+        {
+           return syncProvider.GetAllARIds(userId);
+        }
+
         public bool ItitReceiving(ClientIdentifier identifier)
         {
             throw new NotImplementedException();
@@ -75,5 +88,6 @@
 
             return syncPackage;
         }
+
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Main.Core.Events;
 
-namespace SynchronizationMessages.CompleteQuestionnaire
+namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class SyncItemsMetaContainer
     {

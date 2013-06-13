@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WB.Core.Synchronization
+namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class SyncPackage
     {
