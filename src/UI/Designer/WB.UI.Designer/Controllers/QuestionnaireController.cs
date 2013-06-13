@@ -21,16 +21,11 @@ namespace WB.UI.Designer.Controllers
     using WB.UI.Designer.Views.Questionnaire;
     using WB.UI.Shared.Web.Membership;
 
-    /// <summary>
-    ///     The questionnaire controller.
-    /// </summary>
     [CustomAuthorize]
     public class QuestionnaireController : BaseController
     {
-        // GET: /Questionnaires/
-        #region Constructors and Destructors
-
-        private readonly IQuestionnaireHelper _questionnaireHelper;
+        private readonly ICommandService commandService;
+        private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
         private readonly IExpressionReplacer expressionReplacer;
 
@@ -39,27 +34,15 @@ namespace WB.UI.Designer.Controllers
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory,
-            IExpressionReplacer expressionReplacer)
-            : base(commandService, userHelper)
+            IExpressionReplacer expressionReplacer,)
+            : base(userHelper)
         {
-            this._questionnaireHelper = questionnaireHelper;
+            this.commandService = commandService;
+            this.questionnaireHelper = questionnaireHelper;
             this.viewFactory = viewFactory;
             this.expressionReplacer = expressionReplacer;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The clone.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Clone(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
@@ -68,15 +51,6 @@ namespace WB.UI.Designer.Controllers
                     new QuestionnaireCloneModel { Title = string.Format("Copy of {0}", model.Title), Id = model.PublicKey });
         }
 
-        /// <summary>
-        /// The clone.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Clone(QuestionnaireCloneModel model)
@@ -90,7 +64,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 try
                 {
-                    this.CommandService.Execute(
+                    this.commandService.Execute(
                         new CloneQuestionnaireCommand(
                             Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId, sourceModel.Source));
                     return this.RedirectToAction("Index");
@@ -111,33 +85,18 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        ///     The create.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         public ActionResult Create()
         {
             return this.View(new QuestionnaireViewModel());
         }
 
-        /// <summary>
-        /// The create.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionnaireViewModel model)
         {
             if (this.ModelState.IsValid)
             {
-                this.CommandService.Execute(
+                this.commandService.Execute(
                     new CreateQuestionnaireCommand(
                         questionnaireId: Guid.NewGuid(),
                         text: model.Title,
@@ -149,15 +108,6 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// The delete confirmed.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -170,22 +120,13 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                this.CommandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
+                this.commandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
                 this.Success(string.Format("Questionnaire \"{0}\" successfully deleted", model.Title));
             }
 
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Edit(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
@@ -202,97 +143,27 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// The export.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Export(Guid id)
         {
             return this.RedirectToAction("PreviewQuestionnaire", "Pdf", new { id });
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <summary>
-        /// The public.
-        /// </summary>
-        /// <param name="p">
-        /// The page index.
-        /// </param>
-        /// <param name="sb">
-        /// The sort by.
-        /// </param>
-        /// <param name="so">
-        /// The sort order.
-        /// </param>
-        /// <param name="f">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Index(int? p, string sb, int? so, string f)
         {
             return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
-        /// <summary>
-        /// The public.
-        /// </summary>
-        /// <param name="p">
-        /// The page index.
-        /// </param>
-        /// <param name="sb">
-        /// The sort by.
-        /// </param>
-        /// <param name="so">
-        /// The sort order.
-        /// </param>
-        /// <param name="f">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Public(int? p, string sb, int? so, string f)
         {
             return this.View(this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get public questionnaires.
-        /// </summary>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
         private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
             int? pageIndex, string sortBy, int? sortOrder, string filter)
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            return this._questionnaireHelper.GetPublicQuestionnaires(
+            return this.questionnaireHelper.GetPublicQuestionnaires(
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
@@ -300,15 +171,6 @@ namespace WB.UI.Designer.Controllers
                 userId: UserHelper.WebUser.UserId);
         }
 
-        /// <summary>
-        /// The get questionnaire by id.
-        /// </summary>
-        /// <param name="id">
-        /// The questionnaire id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QuestionnaireView"/>.
-        /// </returns>
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire =
@@ -324,30 +186,12 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
-        /// <summary>
-        /// The get items.
-        /// </summary>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
         private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
             int? pageIndex, string sortBy, int? sortOrder, string filter)
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            return this._questionnaireHelper.GetQuestionnaires(
+            return this.questionnaireHelper.GetQuestionnaires(
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
@@ -355,12 +199,6 @@ namespace WB.UI.Designer.Controllers
                 userId: UserHelper.WebUser.UserId);
         }
 
-        /// <summary>
-        /// The replace guids in validation and comdition rules.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
         private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
         {
             var elements = new Queue<ICompositeView>();
@@ -397,21 +235,6 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        /// <summary>
-        /// The save request.
-        /// </summary>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
         {
             this.ViewBag.PageIndex = pageIndex;
@@ -424,7 +247,5 @@ namespace WB.UI.Designer.Controllers
                 sortBy = string.Format("{0} Desc", sortBy);
             }
         }
-
-        #endregion
     }
 }
