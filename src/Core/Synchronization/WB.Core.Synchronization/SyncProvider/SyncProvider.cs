@@ -94,13 +94,13 @@ namespace WB.Core.Synchronization.SyncProvider
 
         private List<Guid> GetUsers(Guid userId)
         {
-            var supervisorId =
-                users.Query<Guid>(_ => _.Where(u => u.PublicKey == userId).Select(u => u.Supervisor.Id).FirstOrDefault());
-            if (supervisorId == null)
+            var supervisor =
+                users.Query<UserLight>(_ => _.Where(u => u.PublicKey == userId).Select(u => u.Supervisor).FirstOrDefault());
+            if (supervisor == null)
                 throw new ArgumentException("user is absent");
             return
                  this.users.Query<List<Guid>>(_ => _
-                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisor.Id)
                      .Select(u => u.PublicKey)
                      .ToList());
 
