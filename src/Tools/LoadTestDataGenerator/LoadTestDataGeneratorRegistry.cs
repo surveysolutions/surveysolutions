@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 using Main.Core;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
 
 namespace LoadTestDataGenerator
 {
+    using System.Web.Configuration;
+
+    using Main.DenormalizerStorage;
+
+    using Ninject;
+    using Ninject.Activation;
+
+    using WB.Core.Infrastructure.Raven.Implementation;
+
     public class LoadTestDataGeneratorRegistry : CoreRegistry
     {
-        private readonly string repositoryPath;
-
         public LoadTestDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
             : base(repositoryPath, isEmbeded)
         {
-            this.repositoryPath = repositoryPath;
         }
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
@@ -38,30 +40,18 @@ namespace LoadTestDataGenerator
             });
         }
 
-
-        protected override void RegisterAdditionalElements()
+        protected override object GetStorage(IContext context)
         {
-            base.RegisterAdditionalElements();
-/*
-            this.Unbind<DocumentStore>();
-            var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
-            var store = new DocumentStore
-                {
-                    Url = repositoryPath
-                };
-            bool isNotSystemDatabase = !string.IsNullOrWhiteSpace(databaseName);
-            if (isNotSystemDatabase)
-            {
-                store.DefaultDatabase = databaseName;
-            }
-            store.Initialize();
-            if (isNotSystemDatabase)
-            {
-                store.DatabaseCommands.EnsureDatabaseExists(databaseName);
-            }
-            
-            this.Bind<DocumentStore>().ToConstant(store);
- */
+            Type storageType = ShouldUsePersistentReadLayer()
+                ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
+                : typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+
+            return this.Kernel.Get(storageType);
+        }
+
+        private static bool ShouldUsePersistentReadLayer()
+        {
+            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }
     }
 }
