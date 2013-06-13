@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Externals\Framework\src\Ncqrs\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,26 +69,26 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+    <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+    <ProjectReference Include="..\..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Main.Core\Main.Core.csproj">
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Synchronization\Main.Synchronization.csproj">
       <Project>{CAFF029B-9FE0-4AE9-A475-C384D9022471}</Project>
       <Name>Main.Synchronization</Name>
     </ProjectReference>
