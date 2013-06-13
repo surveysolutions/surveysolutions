@@ -18,7 +18,7 @@
     
     
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             var url = '@Url.Action("ExportQuestionnaire", "Pdf", new {id = Model.PublicKey})';
 
             //
@@ -39,7 +39,7 @@
 
             function renderPage(num) {
                 // Using promise to fetch the page
-                pdfDoc.getPage(num).then(function (page) {
+                pdfDoc.getPage(num).then(function(page) {
                     var viewport = page.getViewport(scale);
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
@@ -53,27 +53,52 @@
                 });
             }
 
+            var togglePrevNextButtons = function(currentPageNum, totalPages) {
+                if (currentPageNum <= 1) {
+                    $('.prevPage').attr('disabled', 'disabled');
+                }
+                
+                if (currentPageNum > 1) {
+                    $('.prevPage').removeAttr('disabled');
+                }
+
+                if (currentPageNum == totalPages) {
+                    $('.nextPage').attr('disabled', 'disabled');
+                }
+                
+                if (currentPageNum < totalPages) {
+                    $('.next').removeAttr('disabled');
+                }
+            };
+
             //
             // Go to previous page
             //
-            $('#prev').click(function() {
-                if (pageNum <= 1)
+            $('.prevPage').click(function() {
+                if (pageNum <= 1) {
                     return;
+                }
+                debugger;
                 pageNum--;
+                togglePrevNextButtons(pageNum, pdfDoc.numPages);
                 renderPage(pageNum);
             });
 
-            $('#next').click(function() {
-                if (pageNum >= pdfDoc.numPages)
+            $('.nextPage').click(function() {
+                if (pageNum >= pdfDoc.numPages) {
                     return;
+                }
+
                 pageNum++;
+                togglePrevNextButtons(pageNum, pdfDoc.numPages);
+
                 renderPage(pageNum);
             });
-            
+
             //
             // Asynchronously download PDF as an ArrayBuffer
             //
-            PDFJS.getDocument(url).then(function (_pdfDoc) {
+            PDFJS.getDocument(url).then(function(_pdfDoc) {
                 pdfDoc = _pdfDoc;
                 renderPage(pageNum);
             });
@@ -86,8 +111,8 @@
     <div class="buttons">
         @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
         <div class="well-small">
-            <a class="btn icon-arrow-left" id="prev" title="prev page"></a>
-            <a class="btn icon-arrow-right" id="next" title="next page"></a>
+            <a class="btn icon-arrow-left prevPage" title="prev page" disabled="disabled"></a>
+            <a class="btn icon-arrow-right nextPage" title="next page"></a>
         </div>
     </div>
 
@@ -96,6 +121,10 @@
     </div>
 
     <div class="buttons">
+         <div class="well-small">
+            <a class="btn icon-arrow-left prevPage" title="prev page" disabled="disabled"></a>
+            <a class="btn icon-arrow-right nextPage" title="next page"></a>
+        </div>
         @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
     </div>
 
