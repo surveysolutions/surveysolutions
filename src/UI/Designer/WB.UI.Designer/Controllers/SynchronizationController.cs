@@ -13,7 +13,6 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Mvc;
 
     using Main.Core.Documents;
-    using Main.Core.View;
 
     using Ncqrs.Commanding.ServiceModel;
     using WB.Core.Questionnaire.ExportServices;
@@ -45,9 +44,6 @@ namespace WB.UI.Designer.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="SynchronizationController"/> class.
         /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
         /// <param name="commandService">
         /// The command service.
         /// </param>
@@ -61,12 +57,11 @@ namespace WB.UI.Designer.Controllers
         /// The export service.
         /// </param>
         public SynchronizationController(
-            IViewRepository repository, 
             ICommandService commandService, 
             IMembershipUserService userHelper, 
             IStringCompressor zipUtils, 
             IExportService exportService)
-            : base(repository, commandService, userHelper)
+            : base(commandService, userHelper)
         {
             this.ZipUtils = zipUtils;
             this.ExportService = exportService;

@@ -18,7 +18,6 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Security;
 
     using Main.Core.Utility;
-    using Main.Core.View;
 
     using Ncqrs.Commanding.ServiceModel;
 
@@ -40,11 +39,10 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper _questionnaireHelper;
 
         public AdminController(
-            IViewRepository repository,
             ICommandService commandService,
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper)
-            : base(repository, commandService, userHelper)
+            : base(commandService, userHelper)
         {
             this._questionnaireHelper = questionnaireHelper;
         }

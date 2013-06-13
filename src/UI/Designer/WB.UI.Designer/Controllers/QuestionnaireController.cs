@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Domain;
+﻿using Main.Core.Domain;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -40,15 +31,20 @@ namespace WB.UI.Designer.Controllers
         #region Constructors and Destructors
 
         private readonly IQuestionnaireHelper _questionnaireHelper;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
+        private readonly IExpressionReplacer expressionReplacer;
 
         public QuestionnaireController(
-            IViewRepository repository,
             ICommandService commandService,
             IMembershipUserService userHelper,
-            IQuestionnaireHelper questionnaireHelper)
-            : base(repository, commandService, userHelper)
+            IQuestionnaireHelper questionnaireHelper,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory,
+            IExpressionReplacer expressionReplacer)
+            : base(commandService, userHelper)
         {
             this._questionnaireHelper = questionnaireHelper;
+            this.viewFactory = viewFactory;
+            this.expressionReplacer = expressionReplacer;
         }
 
         #endregion
@@ -316,7 +312,7 @@ namespace WB.UI.Designer.Controllers
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire =
-                this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                this.viewFactory.Load(
                     new QuestionnaireViewInputModel(id));
 
             if (questionnaire == null)
@@ -367,8 +363,6 @@ namespace WB.UI.Designer.Controllers
         /// </param>
         private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
         {
-            var transformator = new ExpressionReplacer(this.Repository);
-
             var elements = new Queue<ICompositeView>();
 
             foreach (ICompositeView compositeView in model.Children)
@@ -385,16 +379,16 @@ namespace WB.UI.Designer.Controllers
                     var question = (QuestionView)element;
 
                     question.ConditionExpression =
-                        transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
+                        this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
                     question.ValidationExpression =
-                        transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
+                        this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
                 }
 
                 if (element is GroupView)
                 {
                     var group = (GroupView)element;
                     group.ConditionExpression =
-                      transformator.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
+                        this.expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
                     foreach (ICompositeView child in element.Children)
                     {
                         elements.Enqueue(child);
