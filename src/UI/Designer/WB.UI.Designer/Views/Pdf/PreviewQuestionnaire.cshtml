@@ -54,20 +54,21 @@
             }
 
             var togglePrevNextButtons = function(currentPageNum, totalPages) {
+                var disabledText = 'disabled';
                 if (currentPageNum <= 1) {
-                    $('.prevPage').attr('disabled', 'disabled');
+                    $('.prevPage').attr(disabledText, disabledText);
                 }
                 
                 if (currentPageNum > 1) {
-                    $('.prevPage').removeAttr('disabled');
+                    $('.prevPage').removeAttr(disabledText);
                 }
 
                 if (currentPageNum == totalPages) {
-                    $('.nextPage').attr('disabled', 'disabled');
+                    $('.nextPage').attr(disabledText, disabledText);
                 }
                 
                 if (currentPageNum < totalPages) {
-                    $('.next').removeAttr('disabled');
+                    $('.nextPage').removeAttr(disabledText);
                 }
             };
 
@@ -78,7 +79,6 @@
                 if (pageNum <= 1) {
                     return;
                 }
-                debugger;
                 pageNum--;
                 togglePrevNextButtons(pageNum, pdfDoc.numPages);
                 renderPage(pageNum);
