@@ -28,6 +28,7 @@ namespace WB.Core.Synchronization.SyncProvider
         private IDenormalizerStorage<ClientDeviceDocument> devices;
 
         protected readonly ISyncProcessRepository syncProcessRepository;
+        
 
         public SyncProvider(
             IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, 
