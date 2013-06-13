@@ -169,6 +169,7 @@ namespace CAPI.Android
         public override void OnCreate()
         {
             base.OnCreate();
+
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             RestoreAppState();
@@ -210,6 +211,11 @@ namespace CAPI.Android
             AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironmentUnhandledExceptionRaiser;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            AndroidEnvironment.UnhandledExceptionRaiser -= AndroidEnvironmentUnhandledExceptionRaiser;
+        }
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
             this.ClearAllBackStack<SplashScreenActivity>();
