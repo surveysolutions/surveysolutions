@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BaseController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The base controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Controllers
+﻿namespace WB.UI.Designer.Controllers
 {
     using System.Web.Mvc;
 
