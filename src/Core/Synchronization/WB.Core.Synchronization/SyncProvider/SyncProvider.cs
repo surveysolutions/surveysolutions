@@ -81,8 +81,8 @@ namespace WB.Core.Synchronization.SyncProvider
             }
 
 
-            Guid id = Guid.NewGuid();
-            commandService.Execute(new CreateClientDeviceCommand(id, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+            Guid syncActivityId = Guid.NewGuid();
+            commandService.Execute(new CreateSyncActivityCommand(syncActivityId,));
 
             throw new NotImplementedException();
         }
