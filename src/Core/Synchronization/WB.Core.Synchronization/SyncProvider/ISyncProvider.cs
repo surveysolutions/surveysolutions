@@ -12,7 +12,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
         IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId);
 
-        Guid CheckAndCreateNewProcess(ClientIdentifier identifier);
+        Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 
         bool HandleSyncItem(SyncItem item);
     }
