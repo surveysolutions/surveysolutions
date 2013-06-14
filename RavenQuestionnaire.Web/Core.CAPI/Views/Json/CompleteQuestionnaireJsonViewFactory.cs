@@ -10,6 +10,7 @@
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Views.Json
 {
@@ -34,7 +35,7 @@ namespace Core.CAPI.Views.Json
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store;
 
         #endregion
 
@@ -46,7 +47,7 @@ namespace Core.CAPI.Views.Json
         /// <param name="store">
         /// The store.
         /// </param>
-        public CompleteQuestionnaireJsonViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public CompleteQuestionnaireJsonViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }

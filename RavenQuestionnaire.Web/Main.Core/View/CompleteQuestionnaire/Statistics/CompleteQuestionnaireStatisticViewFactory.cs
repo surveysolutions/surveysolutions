@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
@@ -27,7 +28,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store;
 
         #endregion
 
@@ -39,7 +40,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="store">
         /// The store.
         /// </param>
-        public CompleteQuestionnaireStatisticViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public CompleteQuestionnaireStatisticViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }

@@ -10,9 +10,9 @@ namespace Core.Supervisor.Views.Assign
 {
     public class AssignSurveyViewFactory : BaseUserViewFactory, IViewFactory<AssignSurveyInputModel, AssignSurveyView> 
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys;
 
-        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
+        public AssignSurveyViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
             this.surveys = surveys;

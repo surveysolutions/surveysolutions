@@ -39,7 +39,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IReadSideRepositoryReader<UserDocument> users;
         #endregion
 
         #region Constructors and Destructors
@@ -51,7 +51,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <param name="users">
         /// The users.
         /// </param>
-        public InterviewerStatisticsFactory(IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession, IDenormalizerStorage<UserDocument> users)
+        public InterviewerStatisticsFactory(IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession, IReadSideRepositoryReader<UserDocument> users)
         {
             this.documentItemSession = documentItemSession;
             this.users = users;
