@@ -25,13 +25,8 @@ namespace WB.UI.Designer
         {
             Bind<IPasswordStrategy>().To<HashPasswordStrategy>().InSingletonScope();
             Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy());
-            Bind<IAccountRepository>()
-                .ToConstructor(x => new CQRSAccountRepository(NcqrsEnvironment.Get<ICommandService>()))
-                .InSingletonScope();
-            Bind<IRoleRepository>()
-                .ToConstructor(
-                    x => new CQRSRoleRepository(NcqrsEnvironment.Get<ICommandService>()))
-                .InSingletonScope();
+            Bind<IAccountRepository>().To<CQRSAccountRepository>().InSingletonScope();
+            Bind<IRoleRepository>().To<CQRSRoleRepository>().InSingletonScope();
         }
     }
 }
