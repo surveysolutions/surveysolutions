@@ -40,20 +40,14 @@ namespace Web.Supervisor.Controllers
         private readonly IDataExport exporter;
         private readonly IImportManager importManager;
         private readonly ILog logger;
-        private readonly WB.Core.Synchronization.SyncManager.ISyncManager syncManager;
-        private readonly IViewFactory<SyncProcessLogInputModel, SyncProcessLogView> syncProcessLogViewFactory;
-        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
 
         public ImportExportController(
-            IImportManager importManager, WB.Core.Synchronization.SyncManager.ISyncManager syncManager,
-            ILog logger, IViewFactory<SyncProcessLogInputModel, SyncProcessLogView> syncProcessLogViewFactory,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory)
+            IImportManager importManager,
+            ILog logger, IDataExport exporter)
         {
             this.exporter = exporter;
             this.importManager = importManager;
-            this.syncManager = syncManager;
             this.logger = logger;
-            this.userViewFactory = userViewFactory;
         }
 
   
@@ -117,5 +111,55 @@ namespace Web.Supervisor.Controllers
         {
             return this.RedirectToAction("Index", "Survey");
         }
+
+        /// <summary>
+        /// Gets exported data
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <exception cref="HttpException">
+        /// Not found exception
+        /// </exception>
+        [Authorize(Roles = "Headquarter")]
+        public void GetExportedDataAsync(Guid id, string type)
+        {
+            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
+            {
+                throw new HttpException(404, "Invalid quesry string parameters");
+            }
+
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
+                    }
+                    catch
+                    {
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
+        }
+
+        /// <summary>
+        /// Gets exported data
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// Zipped data file
+        /// </returns>
+        public ActionResult GetExportedDataCompleted(byte[] result)
+        {
+            return this.File(result, "application/zip", "data.zip");
+        }
+
     }
 }
