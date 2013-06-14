@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             }
 
             return
-                this.accounts.Query()
+                this.accounts.Query(_ => _
                     .Where(query)
                     .Select(
                         x =>
@@ -118,7 +118,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                 PasswordResetExpirationDate = x.PasswordResetExpirationDate, 
                                 SimpleRoles = x.SimpleRoles
                             })
-                    .FirstOrDefault();
+                    .FirstOrDefault());
         }
 
         #endregion
