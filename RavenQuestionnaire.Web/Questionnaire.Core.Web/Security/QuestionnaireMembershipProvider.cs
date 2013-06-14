@@ -21,14 +21,12 @@
     {
         private static readonly string PERSON_TO_REQUEST = "FEF8050CBFAC46edBDF6B73C5C14DF0B.";
 
-        private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
-
-        public QuestionnaireMembershipProvider(IViewFactory<UserViewInputModel, UserView> viewFactory)
-        {
-            this.viewFactory = viewFactory;
-        }
-
         private string applicationName = "Questionnaire";
+
+        private IViewFactory<UserViewInputModel, UserView> ViewFactory
+        {
+            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
+        }
 
         #region Public Properties
 
@@ -48,16 +46,9 @@
             }
         }
 
-        /// <summary>
-        /// Gets the command invoker.
-        /// </summary>
         public ICommandService CommandInvoker
         {
-            get
-            {
-                return NcqrsEnvironment.Get<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
-                ;
-            }
+            get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
         /// <summary>
@@ -416,7 +407,7 @@
             if (retval == null)
             {
                 UserView person =
-                    this.viewFactory.Load(
+                    this.ViewFactory.Load(
                         new UserViewInputModel((Guid)providerUserKey));
                 if (person == null)
                 {
@@ -455,7 +446,7 @@
             if (retval == null)
             {
                 UserView person =
-                    this.viewFactory.Load(new UserViewInputModel(username, null));
+                    this.ViewFactory.Load(new UserViewInputModel(username, null));
                 if (person == null)
                 {
                     return null;
@@ -546,7 +537,7 @@
         public override bool ValidateUser(string username, string password)
         {
             UserView user =
-                this.viewFactory.Load(
+                this.ViewFactory.Load(
                     new UserViewInputModel(
                         username.ToLower(), 
                         // bad hack due to key insensitivity of login

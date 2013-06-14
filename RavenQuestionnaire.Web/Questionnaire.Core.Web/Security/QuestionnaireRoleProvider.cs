@@ -21,15 +21,16 @@ namespace Questionnaire.Core.Web.Security
 
     public class QuestionnaireRoleProvider : RoleProvider
     {
-        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
-        private readonly IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory;
-
         private string applicationName = "Questionnaire";
 
-        public QuestionnaireRoleProvider(IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory)
+        private IViewFactory<UserViewInputModel, UserView> UserViewFactory
         {
-            this.userViewFactory = userViewFactory;
-            this.userBrowseViewFactory = userBrowseViewFactory;
+            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
+        }
+
+        private IViewFactory<UserBrowseInputModel, UserBrowseView> UserBrowseViewFactory
+        {
+            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserBrowseInputModel, UserBrowseView>>(); }
         }
 
         #region Public Properties
@@ -155,7 +156,7 @@ namespace Questionnaire.Core.Web.Security
         public override string[] GetRolesForUser(string username)
         {
             UserView user =
-                this.userViewFactory.Load(
+                this.UserViewFactory.Load(
                     new UserViewInputModel(
                         username.ToLower() // bad approach
                         , 
@@ -183,7 +184,7 @@ namespace Questionnaire.Core.Web.Security
             if (Enum.TryParse(roleName, out role))
             {
                 return
-                    this.userBrowseViewFactory.Load(
+                    this.UserBrowseViewFactory.Load(
                         new UserBrowseInputModel(role) { PageSize = 100 }).Items.Select(u => u.UserName).ToArray();
             }
 
@@ -210,7 +211,7 @@ namespace Questionnaire.Core.Web.Security
             {
                 retval = false;
                 string[] roles =
-                    this.userViewFactory.Load(
+                    this.UserViewFactory.Load(
                         new UserViewInputModel(username.ToLower(), null)).Roles.Select(r => r.ToString()).ToArray();
 
                 foreach (string dr in roles)
