@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.EventHandlers
 {
@@ -44,7 +45,7 @@ namespace Main.Core.EventHandlers
         /// <summary>
         /// The _document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> _documentStorage;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> _documentStorage;
 
         #endregion
 
@@ -57,7 +58,7 @@ namespace Main.Core.EventHandlers
         /// The document storage.
         /// </param>
         public CompleteQuestionnaireDenormalizer(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentStorage)
+            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage)
         {
             this._documentStorage = documentStorage;
         }

@@ -14,6 +14,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Main.Core.Tests.Utils;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.DenormalizerStorage.Tests
 {
@@ -165,7 +166,7 @@ namespace Main.DenormalizerStorage.Tests
             Assert.That(evnt.ValidationMessage, Is.EqualTo(question.ValidationMessage));
         }
 
-        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IDenormalizerStorage<QuestionnaireDocument>> storageStub)
+        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
             #warning: we shouldn't use CompleteQuestionFactory here?
             var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new CompleteQuestionFactory());
@@ -173,9 +174,9 @@ namespace Main.DenormalizerStorage.Tests
             return denormalizer;
         }
 
-        private static Mock<IDenormalizerStorage<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
+        private static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
         {
-            var storageStub = new Mock<IDenormalizerStorage<QuestionnaireDocument>>();
+            var storageStub = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
 
             storageStub.Setup(d => d.GetById(document.PublicKey)).Returns(document);
 
