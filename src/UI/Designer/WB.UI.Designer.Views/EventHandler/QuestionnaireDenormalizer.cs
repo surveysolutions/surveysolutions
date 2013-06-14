@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -31,14 +32,14 @@ namespace WB.UI.Designer.Views.EventHandler
         /// <summary>
         /// The document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireListViewItem> documentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage;
 
         /// <summary>
         /// The account storage.
         /// </summary>
-        private readonly IDenormalizerStorage<AccountDocument> accountStorage; 
+        private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
 
-        public QuestionnaireDenormalizer(IDenormalizerStorage<QuestionnaireListViewItem> documentStorage, IDenormalizerStorage<AccountDocument> accountStorage)
+        public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage, IReadSideRepositoryWriter<AccountDocument> accountStorage)
         {
             this.documentStorage = documentStorage;
             this.accountStorage = accountStorage;
