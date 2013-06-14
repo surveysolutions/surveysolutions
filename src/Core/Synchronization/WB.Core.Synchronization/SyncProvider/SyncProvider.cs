@@ -9,6 +9,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncProvider
@@ -25,19 +26,18 @@ namespace WB.Core.Synchronization.SyncProvider
         //compressed content could be larger than uncompressed for small items 
         private int limitLengtForCompression = 0;
 
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires;
 
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        private IQueryableDenormalizerStorage<ClientDeviceDocument> devices;
+        private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
         
 
         public SyncProvider(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys,
-            IQueryableDenormalizerStorage<UserDocument> users,
-            IQueryableDenormalizerStorage<ClientDeviceDocument> devices
-            )
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys,
+            IQueryableReadSideRepositoryReader<UserDocument> users,
+            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices)
         {
             this.questionnaires = surveys;
             this.users = users;
