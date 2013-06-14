@@ -120,8 +120,7 @@ namespace Web.Supervisor.Controllers
 
         private SyncItemsMetaContainer GetListOfAR(Guid userId)
         {
-            Guid syncProcess = Guid.NewGuid();
-
+           
             var result = new SyncItemsMetaContainer();
 
             try
