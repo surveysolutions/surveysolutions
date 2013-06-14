@@ -15,11 +15,15 @@
     public class DeviceController : RegistrationController
     {
         private readonly IGlobalInfoProvider globalInfo;
+        private readonly IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory;
 
-        public DeviceController(IGlobalInfoProvider globalInfo, IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory, IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
+        public DeviceController(IGlobalInfoProvider globalInfo,
+            IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory,
+            IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
             : base(deviceItemViewFactory, deviceViewFactory)
         {
             this.globalInfo = globalInfo;
+            this.deviceViewFactory = deviceViewFactory;
         }
 
         #region Public Methods and Operators
