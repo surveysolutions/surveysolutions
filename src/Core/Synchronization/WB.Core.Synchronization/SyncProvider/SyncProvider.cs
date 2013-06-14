@@ -1,15 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Main.Core.Commands.Sync;
 using Main.Core;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events;
-using Main.Core.View.CompleteQuestionnaire;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Client.Linq;
-using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncProvider
@@ -17,10 +14,8 @@ namespace WB.Core.Synchronization.SyncProvider
     using System;
     using Main.Core.Documents;
     using Newtonsoft.Json;
-    using SynchronizationMessages.Synchronization;
-
+    
     using Main.Core.Events;
-    using Main.Synchronization.SycProcessRepository;
     using Infrastructure;
 
     public class SyncProvider : ISyncProvider
@@ -35,21 +30,17 @@ namespace WB.Core.Synchronization.SyncProvider
         private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         private IQueryableDenormalizerStorage<ClientDeviceDocument> devices;
-
-        protected readonly ISyncProcessRepository syncProcessRepository;
         
 
         public SyncProvider(
             IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys,
             IQueryableDenormalizerStorage<UserDocument> users,
-            IQueryableDenormalizerStorage<ClientDeviceDocument> devices,
-            ISyncProcessRepository syncProcessRepository
+            IQueryableDenormalizerStorage<ClientDeviceDocument> devices
             )
         {
             this.questionnaires = surveys;
             this.users = users;
             this.devices = devices;
-            this.syncProcessRepository = syncProcessRepository;
         }
 
         public SyncItem GetSyncItem(Guid id, string type)
