@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
+using Main.Core.Commands.Sync;
 using Main.Core;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Main.Core.View.CompleteQuestionnaire;
 using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Raven.Client.Linq;
@@ -18,12 +19,16 @@ namespace WB.Core.Synchronization.SyncProvider
     using Newtonsoft.Json;
     using SynchronizationMessages.Synchronization;
 
+    using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
+    using Infrastructure;
+
     public class SyncProvider : ISyncProvider
     {
         private const bool UseCompression = true;
 
         //compressed content could be larger than uncompressed for small items 
-        private int limitLengtForCompression = 0;
+        //private int limitLengtForCompression = 0;
 
         private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
 
@@ -31,17 +36,20 @@ namespace WB.Core.Synchronization.SyncProvider
 
         private IQueryableDenormalizerStorage<ClientDeviceDocument> devices;
 
+        protected readonly ISyncProcessRepository syncProcessRepository;
         
 
         public SyncProvider(
             IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys,
             IQueryableDenormalizerStorage<UserDocument> users,
-            IQueryableDenormalizerStorage<ClientDeviceDocument> devices
+            IQueryableDenormalizerStorage<ClientDeviceDocument> devices,
+            ISyncProcessRepository syncProcessRepository
             )
         {
             this.questionnaires = surveys;
             this.users = users;
             this.devices = devices;
+            this.syncProcessRepository = syncProcessRepository;
         }
 
         public SyncItem GetSyncItem(Guid id, string type)
@@ -50,13 +58,10 @@ namespace WB.Core.Synchronization.SyncProvider
             {
                 case SyncItemType.File:
                     return null; // todo: file support
-                    break;
                 case SyncItemType.Questionnare:
                     return GetItem(CreateQuestionnarieDocument(id), id, type);
-                    break;
                 case SyncItemType.User:
                     return GetItem(this.users.GetById(id), id, type);
-                    break;
                 default:
                     return null;
             }
@@ -106,22 +111,41 @@ namespace WB.Core.Synchronization.SyncProvider
 
         }
 
-        public Guid CheckAndCreateNewProcess(ClientIdentifier identifier)
+
+        public Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {
+
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            Guid deviceId;
+            //device verification
             ClientDeviceDocument device = null;
-            if (identifier.ClientKey.HasValue || identifier.ClientKey!=Guid.Empty)
+            if (identifier.ClientKey.HasValue || identifier.ClientKey != Guid.Empty)
             {
                 device = devices.GetById(identifier.ClientKey.Value);
+                if (device == null)
+                {
+                    //keys were provided but we can't find device
+                    throw new InvalidDataException("Unknown device.");
+                }
+
+                deviceId = identifier.ClientKey.Value;
+            }
+            else //register new device
+            {
+                deviceId = Guid.NewGuid();
+                
+                commandService.Execute(new CreateClientDeviceCommand(deviceId, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
-            if (device == null)
-            {
-                //create new device
-            }
+
+            Guid syncActivityId = Guid.NewGuid();
+            commandService.Execute(new CreateSyncActivityCommand(syncActivityId, deviceId));
+
+
 
             throw new NotImplementedException();
         }
-
+        
         public bool HandleSyncItem(SyncItem item)
         {
             if (string.IsNullOrWhiteSpace(item.Content))
