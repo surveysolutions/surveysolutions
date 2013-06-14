@@ -58,10 +58,12 @@ namespace WB.Core.Synchronization.SyncProvider
             }
         }
 
+
         public Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
 
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            Guid deviceId;
             //device verification
             ClientDeviceDocument device = null;
             if (identifier.ClientKey.HasValue || identifier.ClientKey != Guid.Empty)
@@ -72,17 +74,21 @@ namespace WB.Core.Synchronization.SyncProvider
                     //keys were provided but we can't find device
                     throw new InvalidDataException("Unknown device.");
                 }
+
+                deviceId = identifier.ClientKey.Value;
             }
             else //register new device
             {
-                Guid deviceId = Guid.NewGuid();
+                deviceId = Guid.NewGuid();
                 
                 commandService.Execute(new CreateClientDeviceCommand(deviceId, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
 
             Guid syncActivityId = Guid.NewGuid();
-            commandService.Execute(new CreateSyncActivityCommand(syncActivityId,));
+            commandService.Execute(new CreateSyncActivityCommand(syncActivityId, deviceId));
+
+
 
             throw new NotImplementedException();
         }

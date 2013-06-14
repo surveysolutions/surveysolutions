@@ -6,7 +6,7 @@
     {
         SyncItem GetSyncItem(Guid id, string type);
 
-        Guid CheckAndCreateNewProcess(ClientIdentifier identifier);
+        Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 
         bool HandleSyncItem(SyncItem item);
     }

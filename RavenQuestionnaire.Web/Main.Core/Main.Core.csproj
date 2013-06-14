@@ -545,6 +545,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
+    <Compile Include="Events\Sync\NewSyncActivityCreated.cs" />
     <Compile Include="Events\UserEventStreamReader.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserBaseEvent.cs" />
@@ -625,7 +626,6 @@
     <Compile Include="View\Group\ScreenNavigation.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
-    <Compile Include="View\IViewRepsoitory.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs" />
@@ -660,7 +660,6 @@
     <Compile Include="View\User\UserView.cs" />
     <Compile Include="View\User\UserViewFactory.cs" />
     <Compile Include="View\User\UserViewInputModel.cs" />
-    <Compile Include="View\ViewRepository.cs" />
     <Compile Include="WCF\AuthorizationPacket.cs" />
     <Compile Include="WCF\BaseAuthorizationService.cs" />
     <Compile Include="WCF\IAuthorizationPacket.cs" />
