@@ -6,6 +6,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 using Formatting = System.Xml.Formatting;
 
@@ -13,9 +14,10 @@ namespace WB.Core.Questionnaire.ExportServices
 {
     public class JsonExportService : IExportService
     {
-        private readonly IDenormalizerStorage<QuestionnaireDocument> questionnaireStorage;
+        #warning ViewFactory should be used here
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage;
 
-        public JsonExportService(IDenormalizerStorage<QuestionnaireDocument> questionnaireStorage)
+        public JsonExportService(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
         }
