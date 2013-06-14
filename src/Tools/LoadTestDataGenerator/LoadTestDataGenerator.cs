@@ -25,6 +25,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace LoadTestDataGenerator
 {
@@ -38,7 +39,7 @@ namespace LoadTestDataGenerator
         private static readonly Random RandomObject = new Random((int)DateTime.Now.Ticks);
 
         protected readonly ICommandService CommandService;
-        protected readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> SurveyStorage;
+        protected readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> SurveyStorage;
         protected readonly DocumentStore RavenStore;
         private readonly IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory;
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
@@ -49,7 +50,7 @@ namespace LoadTestDataGenerator
         private IEnumerable<IQuestion> featuredQuestions;
 
         public LoadTestDataGenerator(ICommandService commandService,
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveyStorage,
+            IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveyStorage,
             DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory)
         {
             this.RavenStore = ravenStore;
