@@ -87,7 +87,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                 query = (x) => x.Email.Compare(input.Email);
             }
 
-            var queryResult = _accounts.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+            var queryResult = _accounts.Query(_ => _.Where(query).AsQueryable().OrderUsingSortExpression(input.Order).ToList());
 
             retVal = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
                               .Select(x => new AccountListItem()
