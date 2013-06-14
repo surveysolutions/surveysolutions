@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SynchronizationsController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The synchronizations controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.CAPI.Controllers
+﻿namespace Web.CAPI.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -40,66 +31,31 @@ namespace Web.CAPI.Controllers
 
     using LogManager = NLog.LogManager;
 
-    /// <summary>
-    /// The synchronizations controller.
-    /// </summary>
     [NoAsyncTimeout]
     public class SynchronizationsController : AsyncController
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The _global provider.
-        /// </summary>
-        private readonly IGlobalInfoProvider _globalProvider;
-
-        /// <summary>
-        /// The synchronizer.
-        /// </summary>
+        private readonly IGlobalInfoProvider globalProvider;
         private readonly IEventStreamReader synchronizer;
-
-        /// <summary>
-        /// The view repository.
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        /// <summary>
-        /// The syncs process factory
-        /// </summary>
         private readonly ISyncProcessFactory syncProcessFactory;
+        private readonly IViewFactory<SyncProgressInputModel, SyncProgressView> syncProgressViewFactory;
+        private readonly IViewFactory<SyncProcessInputModel, SyncProcessView> syncProcessViewFactory;
+        private readonly IViewFactory<ExporStatisticsInputModel, ExportStatisticsView> exportStatisticsViewFactory;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SynchronizationsController"/> class.
-        /// </summary>
-        /// <param name="viewRepository">
-        /// The view repository.
-        /// </param>
-        /// <param name="globalProvider">
-        /// The global provider.
-        /// </param>
-        /// <param name="synchronizer">
-        /// The synchronizer.
-        /// </param>
-        /// <param name="syncProcessFactory">
-        /// The syncs process factory
-        /// </param>
         public SynchronizationsController(
-            IViewRepository viewRepository,
             IGlobalInfoProvider globalProvider,
             IEventStreamReader synchronizer,
-            ISyncProcessFactory syncProcessFactory)
+            ISyncProcessFactory syncProcessFactory,
+            IViewFactory<SyncProgressInputModel, SyncProgressView> syncProgressViewFactory,
+            IViewFactory<SyncProcessInputModel, SyncProcessView> syncProcessViewFactory,
+            IViewFactory<ExporStatisticsInputModel, ExportStatisticsView> exportStatisticsViewFactory)
         {
-            this.viewRepository = viewRepository;
-            this._globalProvider = globalProvider;
+            this.globalProvider = globalProvider;
             this.synchronizer = synchronizer;
             this.syncProcessFactory = syncProcessFactory;
+            this.syncProgressViewFactory = syncProgressViewFactory;
+            this.syncProcessViewFactory = syncProcessViewFactory;
+            this.exportStatisticsViewFactory = exportStatisticsViewFactory;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -124,7 +80,7 @@ namespace Web.CAPI.Controllers
         {
             var events = this.synchronizer.ReadEvents();
             var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key).ToList();
-            var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
+            var model = this.exportStatisticsViewFactory.Load(
                   new ExporStatisticsInputModel(keys));
 
             return this.Json(model.Items, JsonRequestBehavior.AllowGet);
@@ -257,7 +213,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public ActionResult Progress(Guid id)
         {
-            return this.View(this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            return this.View(this.syncProgressViewFactory.Load(new SyncProgressInputModel(id)));
         }
 
         /// <summary>
@@ -271,7 +227,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public int ProgressInPersentage(Guid id)
         {
-            SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+            SyncProgressView stat = this.syncProgressViewFactory.Load(new SyncProgressInputModel(id));
 
             if (stat == null)
             {
@@ -296,7 +252,7 @@ namespace Web.CAPI.Controllers
 
             try
             {
-                SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+                SyncProgressView stat = this.syncProgressViewFactory.Load(new SyncProgressInputModel(id));
 
                 if (stat == null)
                 {
@@ -433,8 +389,8 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public JsonResult PullStatistics(Guid id)
         {
-            var user = this._globalProvider.GetCurrentUser();
-            var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
+            var user = this.globalProvider.GetCurrentUser();
+            var model = this.syncProcessViewFactory.Load(
                     new SyncProcessInputModel(id, user == null ? Guid.Empty : user.Id));
             return this.Json(model.Messages, JsonRequestBehavior.AllowGet);
         }
