@@ -34,14 +34,9 @@ namespace Main.DenormalizerStorage
             return this._hash[id];
         }
 
-        public IQueryable<TView> Query()
-        {
-            return this._hash.Values.AsQueryable();
-        }
-
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
-            return query.Invoke(this.Query());
+            return query.Invoke(this._hash.Values.AsQueryable());
         }
 
         public void Remove(Guid id)
