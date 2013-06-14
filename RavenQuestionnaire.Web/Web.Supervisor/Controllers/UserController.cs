@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserController.cs" company="The World bank">
-//   2012
-// </copyright>
-// <summary>
-//  Define User controller
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Security;
 using Core.Supervisor.Views.Interviewer;
 using Main.Core.Utility;
@@ -31,35 +22,23 @@ namespace Web.Supervisor.Controllers
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
     /// </summary>
-   [Authorize]
+    [Authorize]
     public class UserController : BaseController
     {
         private readonly IFormsAuthentication authentication;
+        private IViewFactory<InterviewersInputModel, InterviewersView> viewFactory;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserController"/> class.
-        /// </summary>
-        /// <param name="auth">
-        /// The auth.
-        /// </param>
-        /// <param name="viewRepository">
-        /// The view repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        /// <param name="globalInfo">
-        /// The global info.
-        /// </param>
         public UserController(
             IFormsAuthentication auth,
             IViewRepository viewRepository,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
-            ILog logger)
+            ILog logger,
+            IViewFactory<InterviewersInputModel, InterviewersView> viewFactory)
             : base(viewRepository, commandService, globalInfo, logger)
         {
             this.authentication = auth;
+            this.viewFactory = viewFactory;
         }
 
         [AllowAnonymous]
@@ -145,7 +124,7 @@ namespace Web.Supervisor.Controllers
             ViewBag.ActivePage = MenuItem.Administration;
             var user = this.GlobalInfo.GetCurrentUser();
             input.ViewerId = user.Id;
-            var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
+            var model = this.viewFactory.Load(input);
             return this.View(model);
         }
 
@@ -167,7 +146,7 @@ namespace Web.Supervisor.Controllers
                 Orders = data.SortOrder,
                 ViewerId = this.GlobalInfo.GetCurrentUser().Id
             };
-            var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
+            var model = this.viewFactory.Load(input);
             return this.PartialView("_PartialUsersGridTemplate", model);
         }
     }

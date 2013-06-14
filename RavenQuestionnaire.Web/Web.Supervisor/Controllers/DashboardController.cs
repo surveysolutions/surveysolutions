@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DashboardController.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the DashboardController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.View;
+﻿using Main.Core.View;
 using Main.Core.View.Questionnaire;
 
 namespace Web.Supervisor.Controllers
@@ -25,22 +16,22 @@ namespace Web.Supervisor.Controllers
 
     using Web.Supervisor.Models;
 
-    /// <summary>
-    /// Show Statistics
-    /// </summary>
     [Authorize(Roles = "Headquarter")]
     public class DashboardController : BaseController
-    { 
+    {
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory;
+
         public DashboardController(
-            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider globalProvider, ILog logger)
+            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider globalProvider, ILog logger, IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory)
             : base(viewRepository, commandService, globalProvider, logger)
         {
+            this.viewFactory = viewFactory;
         }
-      
+
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
             ViewBag.ActivePage = MenuItem.Administration;
-             var model = this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+             var model = this.viewFactory.Load(input);
              return this.View(model);
         }
       

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireRoleProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire role provider.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.View;
+﻿using Main.Core.View;
 using Main.Core.View.User;
 
 namespace Questionnaire.Core.Web.Security
@@ -28,19 +19,18 @@ namespace Questionnaire.Core.Web.Security
 
     using Questionnaire.Core.Web.Helpers;
 
-    /// <summary>
-    /// The questionnaire role provider.
-    /// </summary>
     public class QuestionnaireRoleProvider : RoleProvider
     {
-        #region Fields
+        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory;
 
-        /// <summary>
-        /// The application name.
-        /// </summary>
         private string applicationName = "Questionnaire";
 
-        #endregion
+        public QuestionnaireRoleProvider(IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory)
+        {
+            this.userViewFactory = userViewFactory;
+            this.userBrowseViewFactory = userBrowseViewFactory;
+        }
 
         #region Public Properties
 
@@ -68,18 +58,6 @@ namespace Questionnaire.Core.Web.Security
             get
             {
                 return NcqrsEnvironment.Get<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
-                ;
-            }
-        }
-
-        /// <summary>
-        /// Gets the view repository.
-        /// </summary>
-        public IViewRepository ViewRepository
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IViewRepository>();
             }
         }
 
@@ -177,7 +155,7 @@ namespace Questionnaire.Core.Web.Security
         public override string[] GetRolesForUser(string username)
         {
             UserView user =
-                this.ViewRepository.Load<UserViewInputModel, UserView>(
+                this.userViewFactory.Load(
                     new UserViewInputModel(
                         username.ToLower() // bad approach
                         , 
@@ -205,7 +183,7 @@ namespace Questionnaire.Core.Web.Security
             if (Enum.TryParse(roleName, out role))
             {
                 return
-                    this.ViewRepository.Load<UserBrowseInputModel, UserBrowseView>(
+                    this.userBrowseViewFactory.Load(
                         new UserBrowseInputModel(role) { PageSize = 100 }).Items.Select(u => u.UserName).ToArray();
             }
 
@@ -232,7 +210,7 @@ namespace Questionnaire.Core.Web.Security
             {
                 retval = false;
                 string[] roles =
-                    this.ViewRepository.Load<UserViewInputModel, UserView>(
+                    this.userViewFactory.Load(
                         new UserViewInputModel(username.ToLower(), null)).Roles.Select(r => r.ToString()).ToArray();
 
                 foreach (string dr in roles)

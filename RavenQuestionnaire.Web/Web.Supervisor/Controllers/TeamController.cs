@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TeamController.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Utility;
+﻿using Main.Core.Utility;
 
 namespace Web.Supervisor.Controllers
 {
@@ -26,34 +20,23 @@ namespace Web.Supervisor.Controllers
 
     using Web.Supervisor.Models;
 
-    /// <summary>
-    ///     The teams controller.
-    /// </summary>
     [Authorize(Roles = "Headquarter")]
     public class TeamController : BaseController
     {
-        #region Constructors and Destructors
+        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
+        private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
+        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TeamController"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command Service.
-        /// </param>
-        /// <param name="globalInfo">
-        /// The global Info.
-        /// </param>
         public TeamController(
-            IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+            IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger,
+            IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserListViewInputModel, UserListView> userListViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
             : base(repository, commandService, globalInfo, logger)
         {
+            this.userViewFactory = userViewFactory;
+            this.userListViewFactory = userListViewFactory;
+            this.interviewersViewFactory = interviewersViewFactory;
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
-
-        #endregion
 
         // GET: /Teams/
         #region Public Methods and Operators
@@ -87,7 +70,7 @@ namespace Web.Supervisor.Controllers
             if (this.ModelState.IsValid)
             {
                 var user =
-                    this.Repository.Load<UserViewInputModel, UserView>(
+                    this.userViewFactory.Load(
                         new UserViewInputModel(UserName: model.Name, UserEmail: null));
                 if (user == null)
                 {
@@ -137,7 +120,7 @@ namespace Web.Supervisor.Controllers
             if (this.ModelState.IsValid)
             {
                 var user =
-                    this.Repository.Load<UserViewInputModel, UserView>(
+                    this.userViewFactory.Load(
                         new UserViewInputModel(UserName: model.Name, UserEmail: null));
                 if (user == null)
                 {
@@ -174,7 +157,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult GetSupervisors(GridDataRequestModel data)
         {
             var model =
-                this.Repository.Load<UserListViewInputModel, UserListView>(
+                this.userListViewFactory.Load(
                     new UserListViewInputModel
                         {
                             Role = UserRoles.Supervisor, 
@@ -197,7 +180,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Index(UserListViewInputModel data)
         {
             var model =
-                this.Repository.Load<UserListViewInputModel, UserListView>(
+                this.userListViewFactory.Load(
                     new UserListViewInputModel
                         {
                             Role = UserRoles.Supervisor,
@@ -221,7 +204,7 @@ namespace Web.Supervisor.Controllers
         {
             UserView user = this.GetUser(data.Id);
             var interviewers =
-                this.Repository.Load<InterviewersInputModel, InterviewersView>(
+                this.interviewersViewFactory.Load(
                     new InterviewersInputModel
                         {
                             ViewerId = data.Id,
@@ -252,7 +235,7 @@ namespace Web.Supervisor.Controllers
         {
             UserView user = this.GetUser(data.Id);
             var interviewers =
-                this.Repository.Load<InterviewersInputModel, InterviewersView>(
+                this.interviewersViewFactory.Load(
                     new InterviewersInputModel
                     {
                         ViewerId = data.Id,
@@ -312,7 +295,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         private UserView GetUser(Guid id)
         {
-            return this.Repository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
+            return this.userViewFactory.Load(new UserViewInputModel(id));
         }
 
         #endregion

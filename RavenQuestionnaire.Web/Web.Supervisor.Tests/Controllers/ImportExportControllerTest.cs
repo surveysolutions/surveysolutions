@@ -7,6 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.SyncProcess;
+
+using Main.Core.View;
+using Main.Core.View.User;
+
 using WB.Core.Synchronization.SyncManager;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
@@ -19,7 +24,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Export;
-    using Main.Core.View;
 
     using Moq;
 
@@ -79,10 +83,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     syncProcessMock.Object);
             return new ImportExportController(
                 this.DataExportMock.Object,
-                (new Mock<IViewRepository>()).Object,
                 this.SyncProcessFactoryMock.Object,
                 (new Mock<ISyncManager>()).Object,
-                (new Mock<ILog>()).Object);
+                (new Mock<ILog>()).Object,
+                Mock.Of<IViewFactory<SyncProcessLogInputModel, SyncProcessLogView>>(),
+                Mock.Of<IViewFactory<UserViewInputModel, UserView>>());
         }
 
         /// <summary>
