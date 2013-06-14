@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImportExportController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The import export controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Net;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -43,56 +34,27 @@ namespace Web.Supervisor.Controllers
     using Web.Supervisor.Models;
     using Web.Supervisor.Utils.Attributes;
 
-    /// <summary>
-    /// The import export controller.
-    /// </summary>
     [NoAsyncTimeout]
     public class ImportExportController : AsyncController
     {
-        #region Fields
-       
-        /// <summary>
-        /// Data exporter
-        /// </summary>
         private readonly IDataExport exporter;
-
-        /// <summary>
-        /// The syncs process factory
-        /// </summary>
         private readonly IImportManager importManager;
-
-        /// <summary>
-        /// View repository
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
         private readonly ILog logger;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
         private readonly WB.Core.Synchronization.SyncManager.ISyncManager syncManager;
+        private readonly IViewFactory<SyncProcessLogInputModel, SyncProcessLogView> syncProcessLogViewFactory;
+        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, IImportManager importManager, WB.Core.Synchronization.SyncManager.ISyncManager syncManager, ILog logger)
+            IImportManager importManager, WB.Core.Synchronization.SyncManager.ISyncManager syncManager,
+            ILog logger, IViewFactory<SyncProcessLogInputModel, SyncProcessLogView> syncProcessLogViewFactory,
+            IViewFactory<UserViewInputModel, UserView> userViewFactory)
         {
             this.exporter = exporter;
-            this.viewRepository = viewRepository;
             this.importManager = importManager;
             this.syncManager = syncManager;
-
             this.logger = logger;
+            this.userViewFactory = userViewFactory;
         }
-
-        #endregion
 
   
 

@@ -109,6 +109,10 @@
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
+      <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>
+      <Name>Core.Supervisor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>

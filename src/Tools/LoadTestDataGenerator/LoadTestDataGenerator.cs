@@ -35,24 +35,28 @@ namespace LoadTestDataGenerator
 
     public partial class LoadTestDataGenerator : Form
     {
+        private static readonly Random RandomObject = new Random((int)DateTime.Now.Ticks);
+
         protected readonly ICommandService CommandService;
-        protected readonly IViewRepository ViewRepository;
         protected readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> SurveyStorage;
         protected readonly DocumentStore RavenStore;
+        private readonly IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory;
+        private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
         const string IndexForDelete = "AllEvents";
         const string IndexForStatistics = "EventsStatistics";
 
         private QuestionnaireDocument template;
         private IEnumerable<IQuestion> featuredQuestions;
 
-        public LoadTestDataGenerator(IViewRepository repository, ICommandService commandService,
+        public LoadTestDataGenerator(ICommandService commandService,
             IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveyStorage,
-            DocumentStore ravenStore)
+            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory)
         {
             this.RavenStore = ravenStore;
+            this.userBrowseViewFactory = userBrowseViewFactory;
+            this.userViewFactory = userViewFactory;
             this.CommandService = commandService;
             this.SurveyStorage = surveyStorage;
-            this.ViewRepository = repository;
             InitializeComponent();
 
             var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
@@ -362,7 +366,7 @@ namespace LoadTestDataGenerator
             {
                 UpdateStatus("create headquarter");
                 var hqView =
-                    this.ViewRepository.Load<UserViewInputModel, UserView>(
+                    this.userViewFactory.Load(
                         new UserViewInputModel(txtHQName.Text, txtHQName.Text));
                 if (hqView == null)
                 {
@@ -383,7 +387,7 @@ namespace LoadTestDataGenerator
             else
             {
                 var hqView =
-                    this.ViewRepository.Load<UserBrowseInputModel, UserBrowseView>(
+                    this.userBrowseViewFactory.Load(
                         new UserBrowseInputModel(UserRoles.Headquarter));
                 if (hqView.Items.Any())
                 {
@@ -562,8 +566,6 @@ namespace LoadTestDataGenerator
             }
             return new List<Guid>() { Guid.NewGuid() };
         }
-
-        private static Random RandomObject = new Random((int)DateTime.Now.Ticks);
 
         private UserDocument AssignSurveyToOneOfSupervisors(Guid surveyId, List<UserDocument> supervisors, UserDocument hq)
         {

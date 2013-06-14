@@ -948,9 +948,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewRepsoitory.cs">
-      <Link>View\IViewRepsoitory.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseInputModel.cs">
       <Link>View\Questionnaire\QuestionnaireBrowseInputModel.cs</Link>
     </Compile>
@@ -1013,9 +1010,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\User\UserViewInputModel.cs">
       <Link>View\User\UserViewInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\ViewRepository.cs">
-      <Link>View\ViewRepository.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\WCF\AuthorizationPacket.cs">
       <Link>WCF\AuthorizationPacket.cs</Link>

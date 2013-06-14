@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireHelper.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using System;
     using System.Linq;
@@ -15,63 +10,18 @@ namespace WB.UI.Designer
     using WB.UI.Designer.Views.Questionnaire;
     using WB.UI.Shared.Web.Membership;
 
-    /// <summary>
-    ///     The questionnaire helper.
-    /// </summary>
     public class QuestionnaireHelper : IQuestionnaireHelper
     {
-        #region Fields
-
-        /// <summary>
-        /// The _user service.
-        /// </summary>
         private readonly IMembershipUserService userService;
+        private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireHelper"/> class.
-        /// </summary>
-        /// <param name="userSevice">
-        /// The user sevice.
-        /// </param>
-        public QuestionnaireHelper(IMembershipUserService userSevice)
+        public QuestionnaireHelper(IMembershipUserService userSevice, IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)
         {
             this.userService = userSevice;
+            this.viewFactory = viewFactory;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The get public questionnaires.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
         public IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            IViewRepository repository, 
             Guid userId, 
             int? pageIndex = null, 
             string sortBy = null, 
@@ -79,7 +29,6 @@ namespace WB.UI.Designer
             string filter = null)
         {
             QuestionnaireListView model = this.GetQuestionnaireView(
-                repository: repository, 
                 userId: userId, 
                 isPublic: true, 
                 pageIndex: pageIndex, 
@@ -91,32 +40,7 @@ namespace WB.UI.Designer
                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
         }
 
-        /// <summary>
-        /// The get items.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            IViewRepository repository, 
             Guid userId, 
             int? pageIndex = null, 
             string sortBy = null, 
@@ -124,7 +48,6 @@ namespace WB.UI.Designer
             string filter = null)
         {
             QuestionnaireListView model = this.GetQuestionnaireView(
-                repository: repository, 
                 userId: userId, 
                 isPublic: false, 
                 pageIndex: pageIndex, 
@@ -136,36 +59,11 @@ namespace WB.UI.Designer
                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
         }
 
-        /// <summary>
-        /// The get questionnaires by user id.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
-        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(IViewRepository repository, Guid userId)
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(Guid userId)
         {
-            return this.GetQuestionnaires(repository: repository, userId: userId);
+            return this.GetQuestionnaires(userId: userId);
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get public questionnaire.
-        /// </summary>
-        /// <param name="x">
-        /// The x.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QuestionnairePublicListViewModel"/>.
-        /// </returns>
         private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
         {
             return new QuestionnairePublicListViewModel
@@ -189,15 +87,6 @@ namespace WB.UI.Designer
                        };
         }
 
-        /// <summary>
-        /// The get questionnaire.
-        /// </summary>
-        /// <param name="x">
-        /// The x.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QuestionnaireListViewModel"/>.
-        /// </returns>
         private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x)
         {
             return new QuestionnaireListViewModel
@@ -215,35 +104,7 @@ namespace WB.UI.Designer
                        };
         }
 
-        /// <summary>
-        /// The get questionnaire view.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <param name="isPublic">
-        /// Only public questionnaires.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QuestionnaireListView"/>.
-        /// </returns>
         private QuestionnaireListView GetQuestionnaireView(
-            IViewRepository repository, 
             Guid userId, 
             bool isPublic = true, 
             int? pageIndex = null, 
@@ -252,7 +113,7 @@ namespace WB.UI.Designer
             string filter = null)
         {
             return
-                repository.Load<QuestionnaireListViewInputModel, QuestionnaireListView>(
+                this.viewFactory.Load(
                     input:
                         new QuestionnaireListViewInputModel
                             {
@@ -265,95 +126,24 @@ namespace WB.UI.Designer
                                 Filter = filter
                             });
         }
-
-        #endregion
     }
 
-    /// <summary>
-    /// The QuestionnaireHelper interface.
-    /// </summary>
     public interface IQuestionnaireHelper
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The get public questionnaires.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
         IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            IViewRepository repository, 
             Guid userId, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string filter = null);
 
-        /// <summary>
-        /// The get questionnaires.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
         IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            IViewRepository repository, 
             Guid userId, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string filter = null);
 
-        /// <summary>
-        /// The get questionnaires by user id.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPagedList"/>.
-        /// </returns>
-        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(IViewRepository repository, Guid userId);
-
-        #endregion
+        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(Guid userId);
     }
 }

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeviceController.cs" company="WorldBank">
-//   2012
-// </copyright>
-// <summary>
-//   The device controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Controllers
+﻿namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -21,47 +12,19 @@ namespace Web.Supervisor.Controllers
 
     using Web.Supervisor.Models;
 
-    /// <summary>
-    /// The device controller.
-    /// </summary>
     public class DeviceController : RegistrationController
     {
-        #region Fields
-
-        /// <summary>
-        /// Field of deviceRegister
-        /// </summary>
         private readonly IGlobalInfoProvider globalInfo;
+        private readonly IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory;
 
-        /// <summary>
-        /// View repository
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-        
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceController"/> class.
-        /// </summary>
-        /// <param name="register">
-        /// The register.
-        /// </param>
-        /// <param name="viewRepository">
-        /// The view Repository.
-        /// </param>
-        /// <param name="globalInfo">
-        /// The global Info.
-        /// </param>
-        public DeviceController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
-            : base(viewRepository)
+        public DeviceController(IGlobalInfoProvider globalInfo,
+            IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory,
+            IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
+            : base(deviceItemViewFactory, deviceViewFactory)
         {
-            this.viewRepository = viewRepository;
             this.globalInfo = globalInfo;
+            this.deviceViewFactory = deviceViewFactory;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -75,7 +38,7 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.globalInfo.GetCurrentUser();
             ViewBag.ActivePage = MenuItem.Administration;
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(user.Id));
+            var model = this.deviceViewFactory.Load(new DeviceViewInputModel(user.Id));
             return this.View(model);
         }
 

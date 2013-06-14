@@ -58,7 +58,9 @@ namespace CAPI.Android
 
         public static TOutput LoadView<TInput, TOutput>(TInput input)
         {
-            return Kernel.Get<IViewRepository>().Load<TInput, TOutput>(input);
+            var factory = Kernel.TryGet<IViewFactory<TInput, TOutput>>();
+
+            return factory == null ? default(TOutput) : factory.Load(input);
         }
 
         public static ICommandService CommandService
