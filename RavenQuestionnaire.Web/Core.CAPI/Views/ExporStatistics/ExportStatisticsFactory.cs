@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 using WB.Core.Infrastructure;
 
 namespace Core.CAPI.Views.ExporStatistics
@@ -60,10 +62,10 @@ namespace Core.CAPI.Views.ExporStatistics
         /// </returns>
         public ExportStatisticsView Load(ExporStatisticsInputModel input)
         {
-            IQueryable<CompleteQuestionnaireBrowseItem> cqs =
+            List<CompleteQuestionnaireBrowseItem> cqs =
                 this.store.Query(_ => _.Where(cq => input.Keys.Contains(cq.CompleteQuestionnaireId)).ToList());
 
-            return new ExportStatisticsView(cqs.ToList());
+            return new ExportStatisticsView(cqs);
         }
 
         #endregion
