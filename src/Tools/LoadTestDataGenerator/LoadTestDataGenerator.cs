@@ -2,13 +2,11 @@
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
-using Main.DenormalizerStorage;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Abstractions.Data;
@@ -28,6 +26,8 @@ using WB.Core.Infrastructure;
 
 namespace LoadTestDataGenerator
 {
+    using System.Threading;
+
     using Main.Core;
     using Main.Core.View;
     using Main.Core.View.User;
@@ -74,11 +74,8 @@ namespace LoadTestDataGenerator
         {
             this.PrepareToStart();
 
+            this.UpdateStatus("read template");
             template = this.ReadTemplate(this.templatePath.Text);
-            if (chkSetAnswers.Checked)
-            {
-                featuredQuestions = template.GetFeaturedQuestions();
-            }
 
             this.Start();
 
@@ -86,18 +83,15 @@ namespace LoadTestDataGenerator
             {
                 if (this.clearDatabase.Checked)
                 {
-                    UpdateStatus("clean database");
+                    this.UpdateStatus("clean database");
                     this.ClearDatabase();
                 }
 
-                if (this.generateSupervisorEvents.Checked)
+                this.GenerateSupervisorsEvents();
+                
+                if (statistics.hasCAPIevents)
                 {
-                    this.GenerateSupervisorsEvents();
-                }
-
-                if (this.generateCapiEvents.Checked)
-                {
-                    UpdateStatus("create CAPI's events");
+                    this.UpdateStatus("create CAPI's events");
                     this.GenerateCapiEvents();
                 }
 
@@ -115,32 +109,217 @@ namespace LoadTestDataGenerator
         {
             var surveys_count = int.Parse(surveys_amount.Text);
 
-            ctrlProgress.Maximum = (surveys_count
-                                    * ( /*template+status+assignment to supervisor+assignment to interviewer*/4))
-                                   + int.Parse(supervisorsCount.Text) + int.Parse(interviewersCount.Text)
-                                   + (chkSetAnswers.Checked ? featuredQuestions.Count() * surveys_count : 0)
-                                   + (chkHeadquarter.Checked ? 1 : 0)
-                                   + (generateCapiEvents.Checked ? surveys_count * 2 : 0) + ( /*create template*/1);
+            statistics = new Statistics(
+                hasHeadQuarter: chkHeadquarter.Checked,
+                hasCAPIevents: chkGenerateCapiEvents.Checked,
+                hasFeaturedQuestions: chkSetAnswers.Checked,
+                hasSupervisorEvents: chkGenerateSupervisorEvents.Checked)
+                             {
+                                 SurveysCount = surveys_count,
+                                 SupervisorEventsCount = surveys_count * 3
+                                 /*change status+assignment to supervisor+assignment to interviewer*/,
+                                 InterviewersCount =
+                                     int.Parse(interviewersCount.Text),
+                                 SupervisorsCount =
+                                     int.Parse(supervisorsCount.Text),
+                                 FullCAPIEventsCount = surveys_count
+                             };
+            statistics.ElapsedTimeTick += statistics_ElapsedTimeTick;
+
+            if (statistics.hasFeaturedQuestions)
+            {
+                featuredQuestions = template.GetFeaturedQuestions();
+                if (featuredQuestions != null)
+                {
+                    statistics.FeaturedQuestionsCount = featuredQuestions.Count() * statistics.SurveysCount;
+                }
+            }
+
+            ctrlProgress.Maximum = statistics.TotalCount;
         }
 
+        void statistics_ElapsedTimeTick(TimeSpan time)
+        {
+            txtElapsedTime.GetCurrentParent()
+                          .InvokeIfRequired(
+                              x =>
+                              txtElapsedTime.Text =
+                              string.Format("Elapsed time: {0}", time.ToString(@"dd\.hh\:mm\:ss")));
+        }
+        
         private void Stop()
         {
             generate.InvokeIfRequired(x => x.Enabled = true);
-            ctrlProgress.GetCurrentParent().InvokeIfRequired(x => ctrlProgress.Value = 0);
+
+            currentOperation = null;
+            statistics.Dispose();
+
+            statusStrip1.InvokeIfRequired(x => { ctrlProgress.Value = 0; });
+
             this.UpdateStatus("done");
         }
-
-        private void IncreaseProgress()
+        
+        private void UpdateProgress()
         {
-            ctrlProgress.GetCurrentParent().InvokeIfRequired(x => ctrlProgress.Value += 1);
+            statistics.ProgressTotalIndex += 1;
+            statusStrip1.InvokeIfRequired(
+                x =>
+                    {
+                        ctrlProgress.Value = statistics.ProgressTotalIndex;
+                        txtStatus.Text = string.Format(
+                            "Total:  {0} of {1}", statistics.ProgressTotalIndex, statistics.TotalCount);
+                    });
+
+            this.UpdateLastStatement();
         }
 
-        private void UpdateStatus(string status)
+        internal class ProgressOperation
         {
-            lstLog.InvokeIfRequired(x=>x.Items.Add(status));
+            public string Text { get; set; }
+
+            public int Value { get; set; }
+
+            public int Count { get; set; }
+        }
+
+        private ProgressOperation currentOperation;
+
+        internal class Statistics : IDisposable
+        {
+            public readonly bool hasHeadQuarter;
+            public readonly bool hasCAPIevents;
+            public readonly bool hasFeaturedQuestions;
+            public  readonly bool hasSupervisorEvents;
+            private readonly DateTime startTime;
+            private Timer timer;
+
+            public delegate void ElapsedTimerTickHandler(TimeSpan time);
+            public event ElapsedTimerTickHandler ElapsedTimeTick;
+
+            public Statistics(bool hasHeadQuarter, bool hasCAPIevents, bool hasFeaturedQuestions, bool hasSupervisorEvents)
+            {
+                this.hasCAPIevents = hasCAPIevents;
+                this.hasFeaturedQuestions = hasFeaturedQuestions;
+                this.hasHeadQuarter = hasHeadQuarter;
+                this.hasSupervisorEvents = hasSupervisorEvents;
+                this.TemplatesCount = 1;
+                this.HeadquartersCount = 1;
+                this.FeaturedQuestionsCount = 0;
+                this.ProgressTotalIndex = 0;
+                this.startTime = DateTime.Now;
+                timer = new Timer(ElapsedTime, null, 0, 1000);
+            }
+
+            private void ElapsedTime(object state)
+            {
+                if (ElapsedTimeTick != null)
+                {
+                    ElapsedTimeTick(DateTime.Now.Subtract(this.startTime));
+                }
+            }
+
+            public int SurveysCount { get; set; }
+            public int InterviewersCount { get; set; }
+            public int SupervisorsCount { get; set; }
+            public int FeaturedQuestionsCount { get; set; }
+            public int FullCAPIEventsCount { get; set; }
+            public int TemplatesCount { get; private set; }
+            public int HeadquartersCount { get; private set; }
+            public int SupervisorEventsCount { get; set; }
+
+            public int PartialCAPIEventsCount {
+                get
+                {
+                    return this.FullCAPIEventsCount;
+                }
+            }
+
+            public int TotalCount
+            {
+                get
+                {
+                    return this.InterviewersCount + this.SupervisorsCount + this.SurveysCount + this.TemplatesCount
+                           + (this.hasSupervisorEvents ? this.SupervisorEventsCount : 0)
+                           + (this.hasFeaturedQuestions ? this.FeaturedQuestionsCount : 0)
+                           + (this.hasHeadQuarter ? this.HeadquartersCount : 0)
+                           + (this.hasCAPIevents ? this.FullCAPIEventsCount + this.PartialCAPIEventsCount : 0);
+                }
+            }
+
+            public DateTime StartTime
+            {
+                get
+                {
+                    return this.startTime;
+                }
+            }
+
+            public int ProgressTotalIndex { get; set; }
+
+
+            #region [dispose]
+
+            private bool _disposed = false;
+
+            public void Dispose()
+            {
+                Dispose(true);
+
+                GC.SuppressFinalize(this);
+            }
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (!_disposed)
+                {
+                    if (disposing)
+                    {
+                        if (timer != null)
+                            timer.Dispose();
+                    }
+
+                    timer = null;
+                    _disposed = true;
+                }
+            }
+            #endregion
+        }
+
+        private Statistics statistics;
+
+        private void UpdateStatus(string status, int count = 0)
+        {
+            if (currentOperation == null)
+            {
+                currentOperation = new ProgressOperation() { Count = count, Value = 0, Text = status };
+            }
+            else
+            {
+                currentOperation.Value = 0;
+                currentOperation.Text = status;
+                currentOperation.Count = count;
+            }
+
+            lstLog.InvokeIfRequired(
+                x =>
+                x.Items.Add(
+                    currentOperation.Count == 0
+                        ? currentOperation.Text
+                        : string.Format(
+                            "{0} {1} of {2}", currentOperation.Text, currentOperation.Value, currentOperation.Count)));
+
             UpdateEventsStatistics();
         }
 
+        private void UpdateLastStatement()
+        {
+            currentOperation.Value += 1;
+            lstLog.InvokeIfRequired(
+                x =>
+                x.Items[x.Items.Count - 1] =
+                string.Format("{0} {1} of {2}", currentOperation.Text, currentOperation.Value, currentOperation.Count));
+        }
+        
         private void UpdateEventsStatistics()
         {
             Task.Run(
@@ -192,17 +371,17 @@ namespace LoadTestDataGenerator
             NcqrsInit.EnsureReadLayerIsBuilt();
 
             var surveyIds = this.GetSurveyIds();
-            this.UpdateStatus("full capi events");
+            this.UpdateStatus("full capi events", statistics.FullCAPIEventsCount);
             foreach (var surveyId in surveyIds)
             {
                 FillAnswers(surveyId);
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
                 CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
 
             var rand = RandomObject;
-            this.UpdateStatus("partial capi events");
+            this.UpdateStatus("partial capi events", statistics.PartialCAPIEventsCount);
             foreach (var surveyId in surveyIds)
             {
                 if (rand.Next(10) != 5) continue;
@@ -211,7 +390,7 @@ namespace LoadTestDataGenerator
                 this.CompleteSurvey(surveyId, SurveyStatus.Initial, responsible);
                 this.FillAnswers(surveyId, true);
                 this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
         }
 
@@ -320,33 +499,47 @@ namespace LoadTestDataGenerator
         {
             UserDocument hq = this.GenerateHeadquarter();
 
+            this.UpdateStatus("store template", statistics.TemplatesCount);
             this.StoreTemplate(template, hq);
 
-            UpdateStatus("create supervisors");
+            this.UpdateStatus("create supervisors", statistics.SupervisorsCount);
             var supervisors = this.GenerateSupervisors(int.Parse(this.supervisorsCount.Text));
-            UpdateStatus("create interviewers");
+            this.UpdateStatus("create interviewers", statistics.InterviewersCount);
             var interviewers = this.GenerateInterviewers(int.Parse(this.interviewersCount.Text), supervisors);
-            UpdateStatus("create surveys");
+            this.UpdateStatus("create surveys", statistics.SurveysCount);
             var surveyIds = this.GenerateSurveys(int.Parse(this.surveys_amount.Text), template, hq).ToList();
 
-            if (featuredQuestions != null)
+            if (statistics.hasSupervisorEvents)
             {
-                UpdateStatus("create featured questions");    
+                this.UpdateStatus(
+                    "supervisor - interviewer - status", statistics.SupervisorEventsCount);
+                foreach (var surveyId in surveyIds)
+                {
+                    var responsible = this.AssignSurveyToOneOfSupervisors(surveyId, supervisors, hq);
+                    this.UpdateProgress();
+                    var supervisorTeamMembers =
+                        interviewers.Where(x => x.Supervisor.Id == responsible.PublicKey).ToList();
+                    if (supervisorTeamMembers.Count > 0)
+                    {
+                        this.AssignSurveyToOneOfInterviewers(surveyId, supervisorTeamMembers);
+                        this.UpdateProgress();
+                        this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Initial, surveyId, responsible);
+                        this.UpdateProgress();
+                    }
+                    else
+                    {
+                        this.UpdateProgress();
+                        this.UpdateProgress();
+                    }
+                }
             }
-            
-            foreach (var surveyId in surveyIds)
+
+            if (featuredQuestions != null && statistics.hasFeaturedQuestions)
             {
-                if (featuredQuestions != null)
+                this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
+                foreach (var surveyId in surveyIds)
                 {
                     this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
-                }
-
-                var responsible = this.AssignSurveyToOneOfSupervisors(surveyId, supervisors, hq);
-                var supervisorTeamMembers = interviewers.Where(x => x.Supervisor.Id == responsible.PublicKey).ToList();
-                if (supervisorTeamMembers.Count > 0)
-                {
-                    this.AssignSurveyToOneOfInterviewers(surveyId, supervisorTeamMembers);
-                    this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Initial, surveyId, responsible);
                 }
             }
         }
@@ -362,9 +555,9 @@ namespace LoadTestDataGenerator
         {
             UserDocument hq;
 
-            if (chkHeadquarter.Checked)
+            if (statistics.hasHeadQuarter)
             {
-                UpdateStatus("create headquarter");
+                this.UpdateStatus("create headquarter", statistics.HeadquartersCount);
                 var hqView =
                     this.userViewFactory.Load(
                         new UserViewInputModel(txtHQName.Text, txtHQName.Text));
@@ -382,7 +575,7 @@ namespace LoadTestDataGenerator
                 {
                     hq = new UserDocument() { PublicKey = hqView.PublicKey };
                 }
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
             else
             {
@@ -412,7 +605,7 @@ namespace LoadTestDataGenerator
         {
             this.CommandService.Execute(
                 new ImportQuestionnaireCommand(initiator == null ? Guid.Empty : initiator.PublicKey, template));
-            this.IncreaseProgress();
+            this.UpdateProgress();
         }
 
         private List<UserDocument> GenerateSupervisors(int count)
@@ -428,7 +621,7 @@ namespace LoadTestDataGenerator
                 };
                 CommandService.Execute(new CreateUserCommand(supervisor.PublicKey, supervisor.UserName, SimpleHash.ComputeHash(supervisor.UserName), supervisor.UserName + "@worldbank.org", supervisor.Roles.ToArray(), false, null));
                 result.Add(supervisor);
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
             return result;
         }
@@ -450,7 +643,7 @@ namespace LoadTestDataGenerator
                 };
                 CommandService.Execute(new CreateUserCommand(interviewer.PublicKey, interviewer.UserName, SimpleHash.ComputeHash(interviewer.UserName), interviewer.UserName + "@mail.org", interviewer.Roles.ToArray(), false, interviewer.Supervisor));
                 result.Add(interviewer);
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
             return result;
         }
@@ -463,7 +656,7 @@ namespace LoadTestDataGenerator
                 var id = Guid.NewGuid();
                 this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(id, template.PublicKey, initiator.ToUserLight()));
                 result.Add(id);
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
             return result;
         }
@@ -473,7 +666,7 @@ namespace LoadTestDataGenerator
             foreach (var question in featuredQuestions)
             {
                 this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyAnswers(question), GetDummyAnswer(question), null));
-                this.IncreaseProgress();
+                this.UpdateProgress();
             }
         }
 
@@ -572,7 +765,6 @@ namespace LoadTestDataGenerator
             var rand = RandomObject;
             var responsibleSupervisor = supervisors[rand.Next(supervisors.Count)];
             this.CommandService.Execute(new ChangeAssignmentCommand(surveyId, responsibleSupervisor.ToUserLight()));
-            this.IncreaseProgress();
             return responsibleSupervisor;
         }
 
@@ -581,7 +773,6 @@ namespace LoadTestDataGenerator
             var rand = RandomObject;
             var responsibleInterviewer = interviewers[rand.Next(interviewers.Count)];
             this.CommandService.Execute(new ChangeAssignmentCommand(surveyId, responsibleInterviewer.ToUserLight()));
-            this.IncreaseProgress();
         }
 
         private void MarkSurveysAsReadyForSyncWithStatus(
@@ -594,7 +785,6 @@ namespace LoadTestDataGenerator
                         Status = surveyStatus,
                         Responsible = initiator.ToUserLight()
                     });
-            this.IncreaseProgress();
         }
 
         private void templatePath_Enter(object sender, EventArgs e)
