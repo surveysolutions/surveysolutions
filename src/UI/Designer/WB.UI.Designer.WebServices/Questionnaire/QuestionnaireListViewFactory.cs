@@ -57,8 +57,9 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         /// </returns>
         public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
         {
-            var query =
-                this.document.Query()
+            return this.document.Query(queryable =>
+            {
+                var query = queryable
                     .Where(
                         x =>
                         (input.IsAdmin || x.CreatedBy == input.CreatedBy) && (input.IsAdmin || !x.IsDeleted)
@@ -66,24 +67,25 @@ namespace WB.UI.Designer.WebServices.Questionnaire
                     .AsQueryable()
                     .OrderUsingSortExpression(input.Order);
 
-            var documentItems =
-                query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+                var documentItems =
+                    query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
 
-            return new QuestionnaireListView()
-                       {
-                           Page = input.Page,
-                           PageSize = input.PageSize,
-                           TotalCount = query.Count(),
-                           Items =
-                               documentItems.Select(
-                                   x =>
-                                   new QuestionnaireListViewItem
-                                       {
-                                           Id = x.QuestionnaireId,
-                                           Title = x.Title
-                                       }).ToArray(),
-                           Order = input.Order
-                       };
+                return new QuestionnaireListView()
+                {
+                    Page = input.Page,
+                    PageSize = input.PageSize,
+                    TotalCount = query.Count(),
+                    Items =
+                        documentItems.Select(
+                            x =>
+                            new QuestionnaireListViewItem
+                            {
+                                Id = x.QuestionnaireId,
+                                Title = x.Title
+                            }).ToArray(),
+                    Order = input.Order
+                };
+            });
         }
 
         #endregion

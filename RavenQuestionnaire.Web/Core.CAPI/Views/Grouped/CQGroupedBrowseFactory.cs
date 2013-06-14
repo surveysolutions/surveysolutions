@@ -67,7 +67,7 @@ namespace Core.CAPI.Views.Grouped
         public CQGroupedBrowseView Load(CQGroupedBrowseInputModel input)
         {
             var questionnairesGroupedByTemplate =
-                this.documentItemSession.Query().ToList()/*.Where(BuildPredicate(input)).GroupBy(x => x.TemplateId)*/;
+                this.documentItemSession.Query(_ => _.ToList())/*.Where(BuildPredicate(input)).GroupBy(x => x.TemplateId)*/;
 
             var retval = new CQGroupedBrowseView(0, 100, 100, new List<CQGroupItem>());
 

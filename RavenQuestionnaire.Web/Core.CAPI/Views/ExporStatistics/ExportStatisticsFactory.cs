@@ -61,7 +61,7 @@ namespace Core.CAPI.Views.ExporStatistics
         public ExportStatisticsView Load(ExporStatisticsInputModel input)
         {
             IQueryable<CompleteQuestionnaireBrowseItem> cqs =
-                this.store.Query().Where(cq => input.Keys.Contains(cq.CompleteQuestionnaireId));
+                this.store.Query(_ => _.Where(cq => input.Keys.Contains(cq.CompleteQuestionnaireId)).ToList());
 
             return new ExportStatisticsView(cqs.ToList());
         }
