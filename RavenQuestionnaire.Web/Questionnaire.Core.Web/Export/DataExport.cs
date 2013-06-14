@@ -29,7 +29,6 @@ namespace Questionnaire.Core.Web.Export
             this.kernel = kernel;
             this.completeQuestionnaireStatusReportViewFactory = completeQuestionnaireStatusReportViewFactory;
             this.completeQuestionnaireExportViewFactory = completeQuestionnaireExportViewFactory;
-            kernel.Get<IViewRepository>();
             this.supplier = kernel.Get<IEnvironmentSupplier<CompleteQuestionnaireExportView>>();
         }
 

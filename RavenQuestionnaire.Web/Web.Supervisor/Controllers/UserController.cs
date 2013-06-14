@@ -30,12 +30,11 @@ namespace Web.Supervisor.Controllers
 
         public UserController(
             IFormsAuthentication auth,
-            IViewRepository viewRepository,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ILog logger,
             IViewFactory<InterviewersInputModel, InterviewersView> viewFactory)
-            : base(viewRepository, commandService, globalInfo, logger)
+            : base(commandService, globalInfo, logger)
         {
             this.authentication = auth;
             this.viewFactory = viewFactory;

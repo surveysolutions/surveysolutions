@@ -61,11 +61,6 @@ namespace RavenQuestionnaire.Web.Tests
         public Mock<IEventStreamReader> Synchronizer { get; set; }
 
         /// <summary>
-        /// Gets or sets ViewRepository.
-        /// </summary>
-        public Mock<IViewRepository> ViewRepository { get; set; }
-
-        /// <summary>
         /// Gets or sets SyncProcessFactoryMock.
         /// </summary>
         public Mock<ISyncProcessFactory> SyncProcessFactoryMock { get; set; }
@@ -82,7 +77,6 @@ namespace RavenQuestionnaire.Web.Tests
         {
             this.GlobalProvider = new Mock<IGlobalInfoProvider>();
             this.Synchronizer = new Mock<IEventStreamReader>();
-            this.ViewRepository = new Mock<IViewRepository>();
             this.SyncProcessFactoryMock = new Mock<ISyncProcessFactory>();
         }
 

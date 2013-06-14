@@ -47,8 +47,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView> interviewerStatisticsViewFactory;
         private readonly IViewFactory<InterviewerInputModel, InterviewerView> interviewerViewFactory;
 
-        public SurveyController(
-            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider, ILog logger,
+        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILog logger,
             IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticViewFactory,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<IndexInputModel, IndexView> indexViewFactory,
@@ -60,7 +59,7 @@ namespace Web.Supervisor.Controllers
             IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory,
             IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView> interviewerStatisticsViewFactory,
             IViewFactory<InterviewerInputModel, InterviewerView> interviewerViewFactory)
-            : base(viewRepository, commandService, provider, logger)
+            : base(commandService, provider, logger)
         {
             this.completeQuestionnaireStatisticViewFactory = completeQuestionnaireStatisticViewFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;

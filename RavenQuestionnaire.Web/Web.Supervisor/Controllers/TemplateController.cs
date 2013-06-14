@@ -50,7 +50,7 @@ namespace Web.Supervisor.Controllers
         /// The logger.
         /// </param>
         public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
-            : base(null, commandService, globalInfo, logger)
+            : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
 
