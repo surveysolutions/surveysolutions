@@ -7,6 +7,6 @@ namespace WB.Core.Infrastructure
     public interface IFilterableDenormalizerStorage<TView> : IDenormalizerStorage<TView>
         where TView : class, IView
     {
-        IEnumerable<TView> Query(Expression<Func<TView, bool>> predicate);
+        IEnumerable<TView> Filter(Expression<Func<TView, bool>> predicate);
     }
 }
