@@ -517,7 +517,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult ShowComments(Guid id, string template)
         {
             var model = this.surveyScreenViewFactory.Load(
-                new CompleteQuestionnaireViewInputModel(id));
+                new DisplayViewInputModel(id));
             ViewBag.TemplateId = template;
             return this.View("Comments", model);
         }
