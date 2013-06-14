@@ -42,23 +42,11 @@ namespace Web.Supervisor.Controllers
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceController"/> class.
-        /// </summary>
-        /// <param name="register">
-        /// The register.
-        /// </param>
-        /// <param name="viewRepository">
-        /// The view Repository.
-        /// </param>
-        /// <param name="globalInfo">
-        /// The global Info.
-        /// </param>
-        public DeviceController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
-            : base(viewRepository)
+        public DeviceController(IGlobalInfoProvider globalInfo, IViewRepository viewRepository, IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory, IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
+            : base(deviceItemViewFactory, deviceViewFactory)
         {
-            this.viewRepository = viewRepository;
             this.globalInfo = globalInfo;
+            this.viewRepository = viewRepository;
         }
 
         #endregion

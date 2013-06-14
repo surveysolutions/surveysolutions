@@ -10,6 +10,8 @@
 using System;
 using System.Web.Mvc;
 
+using Main.Core.View.Device;
+
 namespace Web.CAPI.Controllers
 {
     using System.Linq;
@@ -33,22 +35,8 @@ namespace Web.CAPI.Controllers
 
         private string registrarUrl = string.Empty;
 
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceController"/> class.
-        /// </summary>
-        /// <param name="deviceRegister">
-        /// The device register.
-        /// </param>
-        public DeviceController(IViewRepository repository)
-            : base(repository)
-        {
-        }
-
-        #endregion
-
-       
+        public DeviceController(IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory, IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
+            : base(deviceItemViewFactory, deviceViewFactory) {}
 
         #region Public Methods and Operators
 

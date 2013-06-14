@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="RegistrationController.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web
+﻿namespace Questionnaire.Core.Web
 {
     using System;
     using System.Collections.Generic;
@@ -19,16 +13,15 @@ namespace Questionnaire.Core.Web
     using Main.Core.Commands.Synchronization;
     using System.Security.Cryptography;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public abstract class RegistrationController : Controller
     {
-        private IViewRepository viewRepository;
+        private readonly IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory;
+        private readonly IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory;
 
-        public RegistrationController(IViewRepository repository)
+        protected RegistrationController(IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory, IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
         {
-            this.viewRepository = repository;
+            this.deviceItemViewFactory = deviceItemViewFactory;
+            this.deviceViewFactory = deviceViewFactory;
         }
 
         /// <summary>
@@ -46,7 +39,7 @@ namespace Questionnaire.Core.Web
             {
                 data.PublicKey = this.GetARPublicKey(data);
 
-                var model = this.viewRepository.Load<DeviceItemViewInputModel, DeviceItemView>(new DeviceItemViewInputModel(data.RegistrationId));
+                var model = this.deviceItemViewFactory.Load(new DeviceItemViewInputModel(data.RegistrationId));
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
 
                 if (model.RegistrationId != Guid.Empty)
@@ -77,7 +70,7 @@ namespace Questionnaire.Core.Web
         /// </returns>
         protected DeviceView GetRegisteredData(Guid registrator)
         {
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(registrator));
+            var model = this.deviceViewFactory.Load(new DeviceViewInputModel(registrator));
             return model;
         }
 
