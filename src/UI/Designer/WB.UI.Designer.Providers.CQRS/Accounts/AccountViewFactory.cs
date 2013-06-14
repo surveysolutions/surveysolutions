@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
@@ -30,7 +31,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         ///     The accounts.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<AccountDocument> accounts;
+        private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
 
         #endregion
 
@@ -42,7 +43,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="accounts">
         /// The accounts.
         /// </param>
-        public AccountViewFactory(IQueryableDenormalizerStorage<AccountDocument> accounts)
+        public AccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
             this.accounts = accounts;
         }

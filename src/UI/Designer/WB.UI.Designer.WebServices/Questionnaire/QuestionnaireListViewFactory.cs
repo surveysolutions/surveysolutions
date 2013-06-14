@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
@@ -25,7 +26,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         /// <summary>
         ///     The document group session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> document;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> document;
 
         #endregion
 
@@ -37,7 +38,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         /// <param name="document">
         /// The document.
         /// </param>
-        public QuestionnaireListViewFactory(IQueryableDenormalizerStorage<QuestionnaireBrowseItem> document)
+        public QuestionnaireListViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> document)
         {
             this.document = document;
         }
