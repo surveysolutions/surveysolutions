@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeviceController.cs" company="WorldBank">
-//   2012
-// </copyright>
-// <summary>
-//   The device controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Controllers
+﻿namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -21,35 +12,15 @@ namespace Web.Supervisor.Controllers
 
     using Web.Supervisor.Models;
 
-    /// <summary>
-    /// The device controller.
-    /// </summary>
     public class DeviceController : RegistrationController
     {
-        #region Fields
-
-        /// <summary>
-        /// Field of deviceRegister
-        /// </summary>
         private readonly IGlobalInfoProvider globalInfo;
 
-        /// <summary>
-        /// View repository
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-        
-        #endregion
-
-        #region Constructor
-
-        public DeviceController(IGlobalInfoProvider globalInfo, IViewRepository viewRepository, IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory, IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
+        public DeviceController(IGlobalInfoProvider globalInfo, IViewFactory<DeviceItemViewInputModel, DeviceItemView> deviceItemViewFactory, IViewFactory<DeviceViewInputModel, DeviceView> deviceViewFactory)
             : base(deviceItemViewFactory, deviceViewFactory)
         {
             this.globalInfo = globalInfo;
-            this.viewRepository = viewRepository;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -63,7 +34,7 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.globalInfo.GetCurrentUser();
             ViewBag.ActivePage = MenuItem.Administration;
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(user.Id));
+            var model = this.deviceViewFactory.Load(new DeviceViewInputModel(user.Id));
             return this.View(model);
         }
 

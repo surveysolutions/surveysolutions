@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
-using DataEntryClient.SycProcessFactory;
+
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Main.Core.Export;
@@ -22,40 +22,16 @@ namespace Web.Supervisor.Controllers
 {
     public class SyncController : AsyncController
     {
-        #region Fields
-
-        /// <summary>
-        /// The syncs process factory
-        /// </summary>
-        private readonly ISyncProcessFactory syncProcessFactory;
-
-        /// <summary>
-        /// View repository
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
         private readonly ILog logger;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
         private readonly WB.Core.Synchronization.SyncManager.ISyncManager syncManager;
+        private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
-        #endregion
-
-        public SyncController(
-            IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, 
-            WB.Core.Synchronization.SyncManager.ISyncManager syncManager, ILog logger)
+        public SyncController(WB.Core.Synchronization.SyncManager.ISyncManager syncManager, ILog logger,
+            IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
-            
-            this.viewRepository = viewRepository;
-            this.syncProcessFactory = syncProcessFactory;
             this.syncManager = syncManager;
-
             this.logger = logger;
+            this.viewFactory = viewFactory;
         }
 
 
@@ -67,7 +43,7 @@ namespace Web.Supervisor.Controllers
                 if (Roles.IsUserInRole(login, UserRoles.Operator.ToString()))
                 {
                     return
-                        this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(login, null));
+                        this.viewFactory.Load(new UserViewInputModel(login, null));
 
                 }
             }

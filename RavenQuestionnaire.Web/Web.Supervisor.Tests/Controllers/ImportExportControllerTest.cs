@@ -19,7 +19,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Export;
-    using Main.Core.View;
 
     using Moq;
 
@@ -79,7 +78,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                     syncProcessMock.Object);
             return new ImportExportController(
                 this.DataExportMock.Object,
-                (new Mock<IViewRepository>()).Object,
                 this.SyncProcessFactoryMock.Object,
                 (new Mock<ISyncManager>()).Object,
                 (new Mock<ILog>()).Object);
