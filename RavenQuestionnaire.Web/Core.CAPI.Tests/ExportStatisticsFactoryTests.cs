@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExportStatisticsFactoryTests.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.Infrastructure;
 
 namespace Core.CAPI.Tests
@@ -26,17 +17,9 @@ namespace Core.CAPI.Tests
 
     using NUnit.Framework;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     [TestFixture]
     public class ExportStatisticsFactoryTests
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load_ key list is empty_ empty list returned.
-        /// </summary>
         [Test]
         public void Load_KeyListIsEmpty_EmptyListReturned()
         {
@@ -53,7 +36,9 @@ namespace Core.CAPI.Tests
                                     Status = SurveyStatus.Initial
                                 })
                     }.AsQueryable();
-            store.Setup(x => x.Query()).Returns(questionnaireList);
+
+            store.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<CompleteQuestionnaireBrowseItem>>>()))
+                .Returns<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<CompleteQuestionnaireBrowseItem>>>(query => query.Invoke(questionnaireList));
 
             var factory = new ExportStatisticsFactory(store.Object);
 
@@ -62,16 +47,15 @@ namespace Core.CAPI.Tests
             Assert.AreEqual(target.Items.Count(), 0);
         }
 
-        /// <summary>
-        /// The load_ key list not empty but storage is empty_ empty list returned.
-        /// </summary>
         [Test]
         public void Load_KeyListNotEmptyButStorageIsEmpty_EmptyListReturned()
         {
             var store = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
                 new CompleteQuestionnaireBrowseItem[0].AsQueryable();
-            store.Setup(x => x.Query()).Returns(questionnaireList);
+
+            store.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<CompleteQuestionnaireBrowseItem>>>()))
+                .Returns<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<CompleteQuestionnaireBrowseItem>>>(query => query.Invoke(questionnaireList));
 
             var factory = new ExportStatisticsFactory(store.Object);
 
@@ -80,9 +64,6 @@ namespace Core.CAPI.Tests
             Assert.AreEqual(target.Items.Count(), 0);
         }
 
-        /// <summary>
-        /// The load_ key list not empty_ not empty list returned.
-        /// </summary>
         [Test]
         public void Load_KeyListNotEmpty_NotEmptyListReturned()
         {
@@ -99,7 +80,9 @@ namespace Core.CAPI.Tests
                                     Status = SurveyStatus.Initial
                                 })
                     }.AsQueryable();
-            store.Setup(x => x.Query()).Returns(questionnaireList);
+
+            store.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<CompleteQuestionnaireBrowseItem>>>()))
+                .Returns<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<CompleteQuestionnaireBrowseItem>>>(query => query.Invoke(questionnaireList));
 
             var factory = new ExportStatisticsFactory(store.Object);
 
@@ -107,7 +90,5 @@ namespace Core.CAPI.Tests
 
             Assert.AreEqual(target.Items.Count(), 1);
         }
-
-        #endregion
     }
 }
