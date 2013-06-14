@@ -6,48 +6,32 @@ using Main.Core.Events;
 using Main.Core.View.CompleteQuestionnaire;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
+using System;
+using WB.Core.Synchronization.SyncProvider;
+
 namespace WB.Core.Synchronization.SyncManager
 {
-    using System;
-    using SyncProvider;
-
-    public class SyncManager  : ISyncManager
+    public class SyncManager : ISyncManager
     {
+        private readonly ISyncProvider syncProvider;
+
         public SyncManager(ISyncProvider syncProvider)
         {
             this.syncProvider = syncProvider;
         }
 
-        private readonly ISyncProvider syncProvider;
-
         public HandshakePackage ItitSync(ClientIdentifier identifier)
         {
-            this.CheckAndCreateNewProcess(identifier);
+            CheckAndCreateNewProcess(identifier);
 
             return new HandshakePackage(identifier.ClientInstanceKey);
-        }
-
-        private void CheckAndCreateNewProcess(ClientIdentifier clientIdentifier)
-        {
-            if (clientIdentifier.ClientInstanceKey == Guid.Empty)
-                throw new ArgumentException("ClientInstanceKey is incorrecct.");
-
-            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
-                throw new ArgumentException("ClientDeviceKey is incorrecct.");
-
-            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
-                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
-            
-            //TODO: create new 
-
-            throw new NotImplementedException();
         }
 
         public bool InitSending(ClientIdentifier identifier)
         {
             throw new NotImplementedException();
         }
-        
+
         public bool SendSyncPackage(SyncPackage package)
         {
             throw new NotImplementedException();
@@ -72,7 +56,7 @@ namespace WB.Core.Synchronization.SyncManager
         {
             var syncPackage = new SyncPackage();
 
-            var item = syncProvider.GetSyncItem(id, itemType);
+            SyncItem item = syncProvider.GetSyncItem(id, itemType);
 
             if (item != null)
             {
@@ -89,5 +73,20 @@ namespace WB.Core.Synchronization.SyncManager
             return syncPackage;
         }
 
+        private void CheckAndCreateNewProcess(ClientIdentifier clientIdentifier)
+        {
+            if (clientIdentifier.ClientInstanceKey == Guid.Empty)
+                throw new ArgumentException("ClientInstanceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
+                throw new ArgumentException("ClientDeviceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
+                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
+
+            //TODO: create new 
+
+            throw new NotImplementedException();
+        }
     }
 }
