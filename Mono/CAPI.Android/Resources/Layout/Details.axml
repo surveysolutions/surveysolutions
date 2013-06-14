@@ -21,7 +21,6 @@
       <TextView android:id="@+id/btnNavigation"
         android:clickable="true"
         android:focusable="true"
-                android:paddingRight="8dp"
         android:layout_width="40dp"
         android:layout_height="fill_parent"
          android:text="..."  android:gravity="center"

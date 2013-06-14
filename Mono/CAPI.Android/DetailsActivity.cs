@@ -58,7 +58,7 @@ namespace CAPI.Android
         }
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
-        private readonly int leftPanelWidth = 30;
+        private readonly int leftPanelWidth = 40;
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -105,7 +105,7 @@ namespace CAPI.Android
             VpContent.PageSelected += VpContent_PageSelected;
 
             llNavigationHolder.SetBackgroundColor(this.Resources.GetColor(global::Android.Resource.Color.DarkerGray));
-            btnNavigation.SetBackgroundColor(Color.ParseColor("#00FF00"));
+            btnNavigation.SetBackgroundResource(Resource.Drawable.errorwarningstyle);
 
             UpdateLayout(leftPanelWidth);
 
