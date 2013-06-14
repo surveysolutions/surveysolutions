@@ -40,7 +40,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public IDictionary<Guid, Guid> GetClosedDraftChunksIds()
         {
-            var records= draftChangeLog.Query(c => c.End != null).ToList();
+            var records= draftChangeLog.Filter(c => c.End != null).ToList();
             return records.ToDictionary(d => Guid.Parse(d.Id), d => Guid.Parse(d.EventSourceId));
         }
 
@@ -116,7 +116,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         private DraftChangesetDTO GetLastDraftRecord(Guid eventSourceId)
         {
             var evtIdAsString = eventSourceId.ToString();
-            var record = draftChangeLog.Query(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
+            var record = draftChangeLog.Filter(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
             return record;
         }
 

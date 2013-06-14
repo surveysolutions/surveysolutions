@@ -48,7 +48,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return ((TableQuery<TView>) _connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
-        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
+        public IEnumerable<TView> Filter(Expression<Func<TView, bool>> predExpr)
         {
             return ((TableQuery<TView>) _connection.Table<TView>()).Where(predExpr);
         }

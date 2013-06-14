@@ -34,7 +34,7 @@ namespace CAPI.Android.Core.Model.Authorization
                 throw new InvalidOperationException("please logoin first");
 
             LoginDTO user =
-                 _documentStorage.Query(
+                 _documentStorage.Filter(
                      u =>
                      u.Login == CurrentUser.Name)
                                  .FirstOrDefault();
@@ -53,7 +53,7 @@ namespace CAPI.Android.Core.Model.Authorization
                 var hash = SimpleHash.ComputeHash(password);
 
                 LoginDTO user =
-                    _documentStorage.Query(
+                    _documentStorage.Filter(
                         u =>
                         u.Login == userName/* && u.Password == hash && !u.IsLocked*/)
                                     .FirstOrDefault();
