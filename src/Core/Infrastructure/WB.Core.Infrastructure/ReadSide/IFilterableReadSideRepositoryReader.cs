@@ -9,7 +9,7 @@ namespace WB.Core.Infrastructure.ReadSide
     /// Also supports filtering.
     /// </summary>
     public interface IFilterableReadSideRepositoryReader<TEntity> : IReadSideRepositoryReader<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity, IView
+        where TEntity : class, IReadSideRepositoryEntity
     {
         IEnumerable<TEntity> Filter(Expression<Func<TEntity, bool>> predicate);
     }
