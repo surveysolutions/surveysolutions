@@ -13,12 +13,15 @@ namespace WB.UI.Designer.Controllers
 
     public class PdfController : BaseController
     {
-         public PdfController(
-             IViewRepository repository,
-             IMembershipUserService userHelper)
-             : base(repository, null, userHelper)
-         {
-         }
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
+
+        public PdfController(
+             IMembershipUserService userHelper,
+             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory)
+             : base(userHelper)
+        {
+            this.viewFactory = viewFactory;
+        }
 
         [Authorize]
         public ActionResult PreviewQuestionnaire(Guid id)
@@ -79,7 +82,7 @@ namespace WB.UI.Designer.Controllers
 
         private QuestionnaireView LoadQuestionnaire(Guid id)
         {
-            return this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            return this.viewFactory.Load(new QuestionnaireViewInputModel(id));
         }
     }
 }
