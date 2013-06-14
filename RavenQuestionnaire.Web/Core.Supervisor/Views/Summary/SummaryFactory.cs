@@ -1,4 +1,5 @@
 ﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.Summary
 {
@@ -18,14 +19,15 @@ namespace Core.Supervisor.Views.Summary
 
     public class SummaryFactory : BaseUserViewFactory, IViewFactory<SummaryInputModel, SummaryView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> survey;
 
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> templates;
 
         public SummaryFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
-            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> survey,
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> templates,
+            IQueryableReadSideRepositoryReader<UserDocument> users)
+            : base(users)
         {
             this.survey = survey;
             this.templates = templates;

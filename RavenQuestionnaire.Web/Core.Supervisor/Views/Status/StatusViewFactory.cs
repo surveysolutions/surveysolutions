@@ -1,4 +1,5 @@
 ﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.Status
 {
@@ -15,11 +16,12 @@ namespace Core.Supervisor.Views.Status
 
     public class StatusViewFactory : BaseUserViewFactory, IViewFactory<StatusViewInputModel, StatusView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys;
 
         public StatusViewFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableReadSideRepositoryReader<UserDocument> users)
+            : base(users)
         {
             this.surveys = surveys;
             this.users = users;

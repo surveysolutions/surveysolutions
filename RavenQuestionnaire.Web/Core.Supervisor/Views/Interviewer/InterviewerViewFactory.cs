@@ -10,6 +10,7 @@
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.Interviewer
 {
@@ -32,12 +33,12 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
         #endregion
 
@@ -53,8 +54,8 @@ namespace Core.Supervisor.Views.Interviewer
         /// The users.
         /// </param>
         public InterviewerViewFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession,
-            IQueryableDenormalizerStorage<UserDocument> users)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentSession,
+            IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.documentItemSession = documentSession;
             this.users = users;

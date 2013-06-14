@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Views.ExporStatistics
 {
@@ -30,7 +31,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> store;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> store;
 
         #endregion
 
@@ -42,7 +43,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <param name="store">
         /// The store.
         /// </param>
-        public ExportStatisticsFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> store)
+        public ExportStatisticsFactory(IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> store)
         {
             this.store = store;
         }

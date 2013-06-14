@@ -1,4 +1,5 @@
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Tests
 {
@@ -23,7 +24,7 @@ namespace Core.CAPI.Tests
         [Test]
         public void Load_KeyListIsEmpty_EmptyListReturned()
         {
-            var store = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var store = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem>>();
             Guid eventSourceId = Guid.NewGuid();
             IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
                 new[]
@@ -50,7 +51,7 @@ namespace Core.CAPI.Tests
         [Test]
         public void Load_KeyListNotEmptyButStorageIsEmpty_EmptyListReturned()
         {
-            var store = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var store = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem>>();
             IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
                 new CompleteQuestionnaireBrowseItem[0].AsQueryable();
 
@@ -67,7 +68,7 @@ namespace Core.CAPI.Tests
         [Test]
         public void Load_KeyListNotEmpty_NotEmptyListReturned()
         {
-            var store = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var store = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem>>();
             Guid eventSourceId = Guid.NewGuid();
             IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
                 new[]

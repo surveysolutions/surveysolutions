@@ -1,4 +1,5 @@
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.Assignment
 {
@@ -17,14 +18,14 @@ namespace Core.Supervisor.Views.Assignment
 
     public class DocumentViewListFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys;
 
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> templates;
 
         public DocumentViewListFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IQueryableDenormalizerStorage<UserDocument> users)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> templates,
+            IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
             this.surveys = surveys;

@@ -4,6 +4,7 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.Assign
 {
@@ -11,7 +12,8 @@ namespace Core.Supervisor.Views.Assign
     {
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys;
 
-        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
+            : base(users)
         {
             this.surveys = surveys;
             this.users = users;

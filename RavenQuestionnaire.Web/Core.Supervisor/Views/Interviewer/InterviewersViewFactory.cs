@@ -1,6 +1,7 @@
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.Interviewer
 {
@@ -9,18 +10,13 @@ namespace Core.Supervisor.Views.Interviewer
     using Main.Core.Entities;
     using Main.Core.Utility;
     using Main.Core.View;
-    using Main.Core.View.CompleteQuestionnaire;
 
     public class InterviewersViewFactory : BaseUserViewFactory, IViewFactory<InterviewersInputModel, InterviewersView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documents;
-
-        public InterviewersViewFactory(
-            IQueryableDenormalizerStorage<UserDocument> users,
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession) : base(users)
+        public InterviewersViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+            : base(users)
         {
             this.users = users;
-            this.documents = documentSession;
         }
         
         public InterviewersView Load(InterviewersInputModel input)
