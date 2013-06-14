@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Events;
-using Main.Synchronization.SycProcessRepository;
+﻿using System.IO;
+using Main.Core.Commands.Sync;
 using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.Infrastructure;
+using Ncqrs.Commanding.ServiceModel;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -14,12 +10,16 @@ namespace WB.Core.Synchronization.SyncProvider
     using Newtonsoft.Json;
     using SynchronizationMessages.Synchronization;
 
+    using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
+    using Infrastructure;
+
     public class SyncProvider : ISyncProvider
     {
         private const bool UseCompression = true;
 
         //compressed content could be larger than uncompressed for small items 
-        private int limitLengtForCompression = 0;
+        //private int limitLengtForCompression = 0;
 
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
 
@@ -49,34 +49,44 @@ namespace WB.Core.Synchronization.SyncProvider
             {
                 case SyncItemType.File:
                     return null; // todo: file support
-                    break;
                 case SyncItemType.Questionnare:
                     return GetItem(CreateQuestionnarieDocument(id), id, type);
-                    break;
                 case SyncItemType.User:
                     return GetItem(this.users.GetById(id), id, type);
-                    break;
                 default:
                     return null;
             }
         }
 
-        public Guid CheckAndCreateNewProcess(ClientIdentifier identifier)
+        public Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+
+            //device verification
             ClientDeviceDocument device = null;
-            if (identifier.ClientKey.HasValue || identifier.ClientKey!=Guid.Empty)
+            if (identifier.ClientKey.HasValue || identifier.ClientKey != Guid.Empty)
             {
                 device = devices.GetById(identifier.ClientKey.Value);
+                if (device == null)
+                {
+                    //keys were provided but we can't find device
+                    throw new InvalidDataException("Unknown device.");
+                }
+            }
+            else //register new device
+            {
+                Guid deviceId = Guid.NewGuid();
+                
+                commandService.Execute(new CreateClientDeviceCommand(deviceId, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
-            if (device == null)
-            {
-                //create new device
-            }
+
+            Guid id = Guid.NewGuid();
+            commandService.Execute(new CreateClientDeviceCommand(id, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
 
             throw new NotImplementedException();
         }
-
+        
         public bool HandleSyncItem(SyncItem item)
         {
             if (string.IsNullOrWhiteSpace(item.Content))
