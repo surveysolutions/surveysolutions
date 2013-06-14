@@ -8,7 +8,7 @@ namespace WB.Core.Infrastructure.ReadSide
     /// Also supports querying.
     /// </summary>
     public interface IQueryableReadSideRepositoryReader<TEntity> : IReadSideRepositoryReader<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity, IView
+        where TEntity : class, IReadSideRepositoryEntity
     {
         TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
     }
