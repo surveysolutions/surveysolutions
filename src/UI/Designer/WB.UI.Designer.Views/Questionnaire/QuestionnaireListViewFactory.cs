@@ -14,6 +14,7 @@ using System.Linq;
 using Main.Core.Utility;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -27,7 +28,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> documentGroupSession;
 
         #endregion
 
@@ -39,7 +40,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireListViewFactory(IQueryableDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession)
+        public QuestionnaireListViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
