@@ -26,10 +26,13 @@ namespace WB.Core.Synchronization.SyncProvider
         //compressed content could be larger than uncompressed for small items 
         private int limitLengtForCompression = 0;
 
+        #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires;
 
+        #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
+        #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
         
