@@ -18,13 +18,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
         public int Count()
         {
-            using (var session = this.OpenSession())
+            using (IDocumentSession session = this.OpenSession())
             {
                 return
                     session
                         .Query<TEntity>()
-                        .Customize(customization
-                            => customization.WaitForNonStaleResultsAsOfNow())
                         .Count();
             }
         }
@@ -33,7 +31,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.OpenSession())
+            using (IDocumentSession session = this.OpenSession())
             {
                 return session.Load<TEntity>(id: ravenId);
             }
@@ -44,10 +42,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             using (IDocumentSession session = this.OpenSession())
             {
                 return query.Invoke(
-                    session
-                        .Query<TEntity>()
-                        .Customize(customization
-                            => customization.WaitForNonStaleResultsAsOfNow()));
+                    session.Query<TEntity>());
             }
         }
     }
