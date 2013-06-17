@@ -13,6 +13,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android
 {
@@ -46,11 +47,11 @@ namespace CAPI.Android
         {
             try
             {
-                var documentStorage = CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>();
+                var documentStorage = CapiApplication.Kernel.Get<IQueryableReadSideRepositoryReader<CompleteQuestionnaireView>>();
                 var result = documentStorage.GetById(publicKey);
                 if (result == null)
                 {
-                    GenerateEvents(publicKey, documentStorage);
+                    GenerateEvents(publicKey);
                 }
                 Intent intent = new Intent(this, typeof(DetailsActivity));
                 intent.PutExtra("publicKey", publicKey.ToString());
@@ -62,12 +63,13 @@ namespace CAPI.Android
             }
         }
 #warning remove after eluminating ncqrs
-        private void GenerateEvents(Guid publicKey, IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+        private void GenerateEvents(Guid publicKey)
         {
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
 
+            var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
             long minVersion = 0;
             var snapshot = snapshotStore.GetSnapshot(publicKey, long.MaxValue);
             if (snapshot != null)

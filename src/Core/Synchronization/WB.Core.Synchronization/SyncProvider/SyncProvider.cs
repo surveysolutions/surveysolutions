@@ -43,9 +43,9 @@ namespace WB.Core.Synchronization.SyncProvider
             this.devices = devices;
         }
 
-        public SyncProvider(IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires,
-                            IQueryableDenormalizerStorage<UserDocument> users,
-                            IQueryableDenormalizerStorage<ClientDeviceDocument> devices,
+        public SyncProvider(IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
+                            IQueryableReadSideRepositoryReader<UserDocument> users,
+                            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
                             ISynchronizationDataStorage storate)
         {
             this.questionnaires = questionnaires;
