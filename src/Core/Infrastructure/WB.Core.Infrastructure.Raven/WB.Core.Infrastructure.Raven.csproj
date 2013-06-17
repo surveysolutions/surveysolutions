@@ -53,7 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\RavenDenormalizerStorage.cs" />
     <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryAccessor.cs" />
     <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryReader.cs" />
