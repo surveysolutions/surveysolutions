@@ -12,16 +12,17 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, IEventHandler<QuestionnaireStatusChanged>, IEventHandler<CompleteQuestionnaireDeleted>
     {
-        private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
-        private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<SurveyDto> _surveyDTOdocumentStorage;
 
-        public DashboardDenormalizer(IDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
+        public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
+            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage
             )
         {
             _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;

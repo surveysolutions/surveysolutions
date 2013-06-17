@@ -4,21 +4,20 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class DashboardFactory : IViewFactory<DashboardInput, DashboardModel>
     {
+        private readonly IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage;
+        private readonly IFilterableReadSideRepositoryReader<SurveyDto> surveyDtoDocumentStorage;
 
-        private readonly IFilterableDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
-        private readonly IFilterableDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
-
-        public DashboardFactory(IFilterableDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IFilterableDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
-            )
+        public DashboardFactory(IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage,
+            IFilterableReadSideRepositoryReader<SurveyDto> surveyDtoDocumentStorage)
         {
-            _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;
-            _surveyDTOdocumentStorage = surveyDTOdocumentStorage;
+            this.questionnaireDtoDocumentStorage = questionnaireDtoDocumentStorage;
+            this.surveyDtoDocumentStorage = surveyDtoDocumentStorage;
         }
 
 
@@ -28,10 +27,10 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             var userId = input.UserId.ToString();
             var questionnairies =
-                _questionnaireDTOdocumentStorage.Filter(q => q.Responsible == userId).ToList();
+                this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
             var result = new DashboardModel(input.UserId);
             var surveysIds = questionnairies.Select(q => q.Survey).Distinct().ToList();
-            var surveys = _surveyDTOdocumentStorage.Filter(s => surveysIds.Contains(s.Id));
+            var surveys = this.surveyDtoDocumentStorage.Filter(s => surveysIds.Contains(s.Id));
 
             foreach (SurveyDto surveyDto in surveys)
             {

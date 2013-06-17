@@ -4,23 +4,24 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
     public class StatisticsViewFactory : IViewFactory<StatisticsInput, StatisticsViewModel>
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireView> documentStorage;
 
-        public StatisticsViewFactory(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+        public StatisticsViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireView> documentStorage)
         {
-            this._documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
         }
 
         #region Implementation of IViewFactory<StatisticsInput,StatisticsViewModel>
 
         public StatisticsViewModel Load(StatisticsInput input)
         {
-            var doc = this._documentStorage.GetById(input.QuestionnaireId);
+            var doc = this.documentStorage.GetById(input.QuestionnaireId);
             var enabledQuestion =
                 doc.FindQuestion(
                     q => q.Status.HasFlag(QuestionStatus.Enabled));

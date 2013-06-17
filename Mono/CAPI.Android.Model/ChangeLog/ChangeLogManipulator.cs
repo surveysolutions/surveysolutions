@@ -16,20 +16,21 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
     public class ChangeLogManipulator : IChangeLogManipulator
     {
-        private readonly IFilterableDenormalizerStorage<PublicChangeSetDTO> publicChangeLog;
-        private readonly IFilterableDenormalizerStorage<DraftChangesetDTO> draftChangeLog;
+        private readonly IReadSideRepositoryWriter<PublicChangeSetDTO> publicChangeLog;
+        private readonly IFilterableReadSideRepositoryWriter<DraftChangesetDTO> draftChangeLog;
         private readonly IEventStore eventStore;
         private readonly IChangeLogStore fileChangeLogStore;
 
         #region public
 
-        public ChangeLogManipulator(IFilterableDenormalizerStorage<PublicChangeSetDTO> publicChangeLog,
-                                    IFilterableDenormalizerStorage<DraftChangesetDTO> draftChangeLog,
+        public ChangeLogManipulator(IReadSideRepositoryWriter<PublicChangeSetDTO> publicChangeLog,
+                                    IFilterableReadSideRepositoryWriter<DraftChangesetDTO> draftChangeLog,
                                     IEventStore eventStore, IChangeLogStore changeLogStore)
         {
             this.publicChangeLog = publicChangeLog;

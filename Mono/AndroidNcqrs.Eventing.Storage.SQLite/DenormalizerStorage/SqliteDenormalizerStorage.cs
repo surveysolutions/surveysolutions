@@ -17,10 +17,12 @@ using Main.DenormalizerStorage;
 using SQLite;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteDenormalizerStorage<TView> : IFilterableDenormalizerStorage<TView>, IMvxServiceConsumer
+    public class SqliteDenormalizerStorage<TView> : IFilterableDenormalizerStorage<TView>, IMvxServiceConsumer,
+        IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
         //        private readonly ISQLiteConnectionFactory _connectionFactory;

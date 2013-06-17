@@ -6,10 +6,11 @@ using System.Linq.Expressions;
 using System.Text;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryDenormalizer<TView> : IQueryableDenormalizerStorage<TView>
+    public class InMemoryDenormalizer<TView> : IQueryableDenormalizerStorage<TView>, IReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
         private readonly ConcurrentDictionary<Guid, TView> _hash;
