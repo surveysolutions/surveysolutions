@@ -29,6 +29,8 @@ using WB.Core.Infrastructure;
 using Raven.Client;
 using Raven.Client.Document;
 
+using WB.Core.Infrastructure.ReadSide;
+
 #endif
 
 namespace Main.Core
@@ -142,8 +144,9 @@ namespace Main.Core
 
                 this.Kernel.Bind(denormalizer).ToSelf().InSingletonScope();
             }
-            this.Kernel.Bind(typeof (IDenormalizerStorage<>)).ToMethod(GetStorage);
-            this.Kernel.Bind(typeof (IQueryableDenormalizerStorage<>)).ToMethod(GetStorage);
+            this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(GetStorage);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(GetStorage);
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetStorage);
         }
 
         private bool DenormalizerStorageImplementation(Type t)
@@ -159,14 +162,7 @@ namespace Main.Core
         {
             var genericParameter = context.GenericArguments[0];
 
-         /*   #if !MONODROID
-
-            if(genericParameter.GetCustomAttributes(typeof(SmartDenormalizerAttribute), true).Length > 0)
-                return Kernel.Get(typeof(PersistentDenormalizer<>).MakeGenericType(genericParameter));
-
-            else
-            #endif*/
-                return this.Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
+            return this.Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
         }
 
         #endregion
