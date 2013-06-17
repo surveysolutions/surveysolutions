@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CoreRegistry.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The core registry.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +15,11 @@ using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
-
-using WB.Core.Infrastructure.ReadSide;
-
 #endif
 
 namespace Main.Core
