@@ -11,9 +11,6 @@ using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Newtonsoft.Json;
-using WB.Core.Infrastructure;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace Core.Supervisor.Denormalizer
