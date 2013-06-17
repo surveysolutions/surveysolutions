@@ -107,8 +107,11 @@ namespace CAPI.Android
         {
             var bigSurveyStore = new InMemoryDenormalizer<CompleteQuestionnaireView>();
 
-            Kernel.Unbind<IDenormalizerStorage<CompleteQuestionnaireView>>();
-            Kernel.Bind<InMemoryDenormalizer<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
+            Kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
+            Kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
+
+            Kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireView>>();
+            Kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
 
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(bigSurveyStore);
@@ -232,7 +235,7 @@ namespace CAPI.Android
             this.ClearAllBackStack<SplashScreenActivity>();
 
             var questionnarieDenormalizer =
-                kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>() as
+                kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as
                 InMemoryDenormalizer<CompleteQuestionnaireView>;
             if (questionnarieDenormalizer != null)
                 questionnarieDenormalizer.Clear();
