@@ -139,7 +139,8 @@ namespace Main.Core
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
+            IEnumerable<IPublishableEvent> events = eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent);
+            eventBus.Publish(events);
 
             isReadLayerBuilt = true;
 

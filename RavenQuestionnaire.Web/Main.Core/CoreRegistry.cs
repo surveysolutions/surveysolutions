@@ -135,6 +135,8 @@ namespace Main.Core
 
         protected virtual void RegisterDenormalizers()
         {
+            this.Kernel.Bind(typeof(InMemoryDenormalizer<>)).ToSelf().InSingletonScope();
+
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(GetStorage);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(GetStorage);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetStorage);
