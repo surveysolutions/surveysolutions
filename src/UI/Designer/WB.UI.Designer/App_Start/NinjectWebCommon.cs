@@ -12,6 +12,7 @@ using Ninject;
 using Ninject.Web.Common;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Questionnaire.ExportServices;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
@@ -83,7 +84,7 @@ namespace WB.UI.Designer.App_Start
             NcqrsInit.Init(kernel);
 
             kernel.Bind<IExportService>()
-                  .ToConstant(new JsonExportService(kernel.Get<IDenormalizerStorage<QuestionnaireDocument>>()));
+                  .ToConstant(new JsonExportService(kernel.Get<IReadSideRepositoryReader<QuestionnaireDocument>>()));
 
             kernel.Load<MembershipModule>();
             kernel.Load<MainModule>();
