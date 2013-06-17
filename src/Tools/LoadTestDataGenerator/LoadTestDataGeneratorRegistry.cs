@@ -5,6 +5,8 @@ using System.Reflection;
 
 using Main.Core;
 
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+
 namespace LoadTestDataGenerator
 {
     using System.Web.Configuration;
@@ -40,13 +42,18 @@ namespace LoadTestDataGenerator
             });
         }
 
-        protected override object GetStorage(IContext context)
+        protected override object GetReadSideRepositoryReader(IContext context)
         {
-            Type storageType = ShouldUsePersistentReadLayer()
-                ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
-                : typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(context.GenericArguments[0]);
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
 
-            return this.Kernel.Get(storageType);
+        protected override object GetReadSideRepositoryWriter(IContext context)
+        {
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
         private static bool ShouldUsePersistentReadLayer()
