@@ -70,11 +70,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             }
         }
 
-        public IQueryable<TView> Query()
-        {
-            throw new NotImplementedException();
-        }
-
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
             using (IDocumentSession session = this.OpenSession())
