@@ -40,7 +40,6 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IDenormalizerStorage.cs" />
     <Compile Include="IReadLayerAdministrationService.cs" />
     <Compile Include="IReadLayerStatusService.cs" />
     <Compile Include="ReadSide\IFilterableReadSideRepositoryReader.cs" />
