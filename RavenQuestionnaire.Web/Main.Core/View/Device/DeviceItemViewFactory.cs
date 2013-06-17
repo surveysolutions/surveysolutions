@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.Device
 {
@@ -25,7 +26,7 @@ using Main.Core.Documents;
         /// <summary>
         /// Devices field devices
         /// </summary>
-        private readonly IDenormalizerStorage<SyncDeviceRegisterDocument> devices;
+        private readonly IReadSideRepositoryReader<SyncDeviceRegisterDocument> devices;
 
         #endregion
 
@@ -37,7 +38,7 @@ using Main.Core.Documents;
         /// <param name="devices">
         /// The devices.
         /// </param>
-        public DeviceItemViewFactory(IDenormalizerStorage<SyncDeviceRegisterDocument> devices)
+        public DeviceItemViewFactory(IReadSideRepositoryReader<SyncDeviceRegisterDocument> devices)
         {
             this.devices = devices;
         }

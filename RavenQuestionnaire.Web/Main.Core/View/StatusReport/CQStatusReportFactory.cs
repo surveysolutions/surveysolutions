@@ -13,6 +13,7 @@ using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.StatusReport
 {
@@ -27,7 +28,7 @@ namespace Main.Core.View.StatusReport
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -39,7 +40,7 @@ namespace Main.Core.View.StatusReport
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public CQStatusReportFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public CQStatusReportFactory(IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }

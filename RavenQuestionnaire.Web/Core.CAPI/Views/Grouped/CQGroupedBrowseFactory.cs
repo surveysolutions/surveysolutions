@@ -17,6 +17,7 @@ using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Views.Grouped
 {
@@ -30,7 +31,7 @@ namespace Core.CAPI.Views.Grouped
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -46,7 +47,7 @@ namespace Core.CAPI.Views.Grouped
         /// The document group session.
         /// </param>
         public CQGroupedBrowseFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
@@ -67,7 +68,7 @@ namespace Core.CAPI.Views.Grouped
         public CQGroupedBrowseView Load(CQGroupedBrowseInputModel input)
         {
             var questionnairesGroupedByTemplate =
-                this.documentItemSession.Query().ToList()/*.Where(BuildPredicate(input)).GroupBy(x => x.TemplateId)*/;
+                this.documentItemSession.Query(_ => _.ToList())/*.Where(BuildPredicate(input)).GroupBy(x => x.TemplateId)*/;
 
             var retval = new CQGroupedBrowseView(0, 100, 100, new List<CQGroupItem>());
 

@@ -9,6 +9,7 @@ using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.EventHandlers
@@ -33,12 +34,12 @@ namespace Main.Core.EventHandlers
         IEventHandler<TemplateImported>
     {
 
-        private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
 
         private readonly ICompleteQuestionFactory questionFactory;
 
         public QuestionnaireDenormalizer(
-            IDenormalizerStorage<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
+            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;

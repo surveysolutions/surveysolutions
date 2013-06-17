@@ -16,6 +16,7 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.EventHandlers
 {
@@ -29,7 +30,7 @@ namespace Main.Core.EventHandlers
         /// <summary>
         /// The attachments.
         /// </summary>
-        private readonly IDenormalizerStorage<FileDescription> attachments;
+        private readonly IReadSideRepositoryWriter<FileDescription> attachments;
 
         /// <summary>
         /// The storage.
@@ -49,7 +50,7 @@ namespace Main.Core.EventHandlers
         /// <param name="storage">
         /// The storage.
         /// </param>
-        public FileStoreDenormalizer(IDenormalizerStorage<FileDescription> attachments, IFileStorageService storage)
+        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage)
         {
             this.attachments = attachments;
             this.storage = storage;

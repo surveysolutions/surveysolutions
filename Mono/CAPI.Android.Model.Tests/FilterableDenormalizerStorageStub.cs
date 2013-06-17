@@ -46,7 +46,7 @@ namespace CAPI.Androids.Core.Model.Tests
             container[id] = view;
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predicate)
+        public IEnumerable<T> Filter(Expression<Func<T, bool>> predicate)
         {
             return container.Select(c => c.Value).Where(predicate.Compile());
         }

@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -32,7 +33,7 @@ namespace Core.Supervisor.Denormalizer
         /// <summary>
         /// The statistics docs.
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> docs;
+        private readonly IReadSideRepositoryWriter<SyncProcessStatisticsDocument> docs;
 
 
         #endregion
@@ -49,7 +50,7 @@ namespace Core.Supervisor.Denormalizer
         /// The document Item Store.
         /// </param>
         public SyncProcessDenormalizer(
-            IDenormalizerStorage<SyncProcessStatisticsDocument> docs)
+            IReadSideRepositoryWriter<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
         }

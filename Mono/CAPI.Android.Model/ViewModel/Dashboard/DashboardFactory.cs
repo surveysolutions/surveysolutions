@@ -28,10 +28,10 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             var userId = input.UserId.ToString();
             var questionnairies =
-                _questionnaireDTOdocumentStorage.Query(q => q.Responsible == userId).ToList();
+                _questionnaireDTOdocumentStorage.Filter(q => q.Responsible == userId).ToList();
             var result = new DashboardModel(input.UserId);
             var surveysIds = questionnairies.Select(q => q.Survey).Distinct().ToList();
-            var surveys = _surveyDTOdocumentStorage.Query(s => surveysIds.Contains(s.Id));
+            var surveys = _surveyDTOdocumentStorage.Filter(s => surveysIds.Contains(s.Id));
 
             foreach (SurveyDto surveyDto in surveys)
             {

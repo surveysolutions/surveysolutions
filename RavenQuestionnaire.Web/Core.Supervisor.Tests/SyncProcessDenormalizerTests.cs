@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Tests
 {
@@ -39,7 +40,7 @@ namespace Core.Supervisor.Tests
         [Test]
         public void HandleNewSynchronizationProcessCreated_EventIsCome_OneNewItemIsAddedToStorage()
         {
-            var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
+            var storage = new Mock<IReadSideRepositoryWriter<SyncProcessStatisticsDocument>>();
 
             var denormalizer = new SyncProcessDenormalizer(storage.Object);
 
@@ -68,7 +69,7 @@ namespace Core.Supervisor.Tests
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };
 
-            var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
+            var storage = new Mock<IReadSideRepositoryWriter<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetById(Guid.Empty)).Returns(statistics);
 
 

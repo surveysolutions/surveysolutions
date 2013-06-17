@@ -41,6 +41,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
@@ -122,7 +123,7 @@ namespace CAPI.Android
 
         private void InitFileStorage(InProcessEventBus bus)
         {
-            var fileSorage = new FileStoreDenormalizer(kernel.Get<IDenormalizerStorage<FileDescription>>(),
+            var fileSorage = new FileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
                                                        new FileStorageService());
             bus.RegisterHandler(fileSorage, typeof (FileUploaded));
             bus.RegisterHandler(fileSorage, typeof (FileDeleted));

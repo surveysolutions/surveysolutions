@@ -13,6 +13,7 @@ using Main.Core.Documents;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.User
 {
@@ -26,7 +27,7 @@ namespace Main.Core.View.User
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
         #endregion
 
@@ -38,7 +39,7 @@ namespace Main.Core.View.User
         /// <param name="users">
         /// The users.
         /// </param>
-        public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }

@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.EventHandlers
 {
@@ -19,37 +20,17 @@ namespace Core.CAPI.EventHandlers
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class SyncProcessDenormalizer : IEventHandler<AggregateRootEventStreamPushed>, 
                                            IEventHandler<AggregateRootStatusChanged>, 
                                            IEventHandler<NewSynchronizationProcessCreated>, 
                                            IEventHandler<ProcessEnded>
     {
-        #region Constants and Fields
+        private readonly IReadSideRepositoryWriter<SyncProcessDocument> denormalizer;
 
-        /// <summary>
-        /// The denormalizer.
-        /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessDocument> denormalizer;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SyncProcessDenormalizer"/> class.
-        /// </summary>
-        /// <param name="denormalizer">
-        /// The denormalizer.
-        /// </param>
-        public SyncProcessDenormalizer(IDenormalizerStorage<SyncProcessDocument> denormalizer)
+        public SyncProcessDenormalizer(IReadSideRepositoryWriter<SyncProcessDocument> denormalizer)
         {
             this.denormalizer = denormalizer;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 

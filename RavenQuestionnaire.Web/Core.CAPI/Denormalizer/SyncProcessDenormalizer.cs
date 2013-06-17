@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Denormalizer
 {
@@ -17,53 +17,21 @@ namespace Core.CAPI.Denormalizer
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
     using Main.Core.Events.User;
-    using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.SyncProcess;
     using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class SyncProcessDenormalizer : IEventHandler<NewSynchronizationProcessCreated>, 
                                            IEventHandler<ProcessEnded>,
                                            IEventHandler<ProcessStatisticsCalculated>
     {
-        #region Constants and Fields
+        private readonly IReadSideRepositoryWriter<SyncProcessStatisticsDocument> docs;
 
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> docs;
-
-        /// <summary>
-        /// The surveys
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SyncProcessDenormalizer"/> class.
-        /// </summary>
-        /// <param name="docs">
-        /// The docs.
-        /// </param>
-        /// <param name="documentItemStore">
-        /// The document Item Store.
-        /// </param>
-        public SyncProcessDenormalizer(
-            IDenormalizerStorage<SyncProcessStatisticsDocument> docs, 
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
+        public SyncProcessDenormalizer(IReadSideRepositoryWriter<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
-            this.documentItemStore = documentItemStore;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 

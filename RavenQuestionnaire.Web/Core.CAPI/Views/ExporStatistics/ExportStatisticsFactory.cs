@@ -7,7 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Views.ExporStatistics
 {
@@ -28,7 +31,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> store;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> store;
 
         #endregion
 
@@ -40,7 +43,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <param name="store">
         /// The store.
         /// </param>
-        public ExportStatisticsFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> store)
+        public ExportStatisticsFactory(IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> store)
         {
             this.store = store;
         }
@@ -60,10 +63,10 @@ namespace Core.CAPI.Views.ExporStatistics
         /// </returns>
         public ExportStatisticsView Load(ExporStatisticsInputModel input)
         {
-            IQueryable<CompleteQuestionnaireBrowseItem> cqs =
-                this.store.Query().Where(cq => input.Keys.Contains(cq.CompleteQuestionnaireId));
+            List<CompleteQuestionnaireBrowseItem> cqs =
+                this.store.Query(_ => _.Where(cq => input.Keys.Contains(cq.CompleteQuestionnaireId)).ToList());
 
-            return new ExportStatisticsView(cqs.ToList());
+            return new ExportStatisticsView(cqs);
         }
 
         #endregion

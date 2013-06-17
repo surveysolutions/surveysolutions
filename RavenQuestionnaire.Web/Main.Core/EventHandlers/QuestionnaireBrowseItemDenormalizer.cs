@@ -11,6 +11,7 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.EventHandlers
 {
@@ -32,9 +33,9 @@ namespace Main.Core.EventHandlers
         /// <summary>
         /// The document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> documentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
-        public QuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<QuestionnaireBrowseItem> documentStorage)
+        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
         {
             this.documentStorage = documentStorage;
         }

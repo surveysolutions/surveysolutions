@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
@@ -22,7 +23,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<AccountDocument> _accounts;
+        private readonly IQueryableReadSideRepositoryReader<AccountDocument> _accounts;
 
         #endregion
 
@@ -34,7 +35,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="accounts">
         /// The users.
         /// </param>
-        public AccountListViewFactory(IQueryableDenormalizerStorage<AccountDocument> accounts)
+        public AccountListViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
             _accounts = accounts;
         }
@@ -87,7 +88,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                 query = (x) => x.Email.Compare(input.Email);
             }
 
-            var queryResult = _accounts.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+            var queryResult = _accounts.Query(_ => _.Where(query).AsQueryable().OrderUsingSortExpression(input.Order).ToList());
 
             retVal = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
                               .Select(x => new AccountListItem()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
 {
@@ -34,10 +35,10 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
         }
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
-            IDenormalizerStorage<QuestionnaireDocument> documentStorage = null, ICompleteQuestionFactory questionFactory = null)
+            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null, ICompleteQuestionFactory questionFactory = null)
         {
             return new QuestionnaireDenormalizer(
-                documentStorage ?? Mock.Of<IDenormalizerStorage<QuestionnaireDocument>>(),
+                documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
                 questionFactory ?? Mock.Of<ICompleteQuestionFactory>());
         }
 

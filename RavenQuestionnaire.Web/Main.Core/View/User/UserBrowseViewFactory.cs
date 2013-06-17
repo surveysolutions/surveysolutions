@@ -13,6 +13,7 @@ using Main.Core.Documents;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.User
 {
@@ -26,7 +27,7 @@ namespace Main.Core.View.User
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<UserDocument> documentItemSession;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> documentItemSession;
 
         #endregion
 
@@ -38,7 +39,7 @@ namespace Main.Core.View.User
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public UserBrowseViewFactory(IQueryableDenormalizerStorage<UserDocument> documentItemSession)
+        public UserBrowseViewFactory(IQueryableReadSideRepositoryReader<UserDocument> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }

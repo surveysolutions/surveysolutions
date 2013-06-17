@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.EventHandlers
 {
@@ -37,7 +38,7 @@ namespace Main.Core.EventHandlers
         /// <summary>
         /// The document item store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
 
         #endregion
 
@@ -49,7 +50,7 @@ namespace Main.Core.EventHandlers
         /// <param name="documentItemStore">
         /// The document item store.
         /// </param>
-        public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore)
         {
             this.documentItemStore = documentItemStore;
         }
