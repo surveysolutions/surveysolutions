@@ -9,6 +9,7 @@ namespace WB.Core.Infrastructure.ReadSide
     /// </summary>
     public interface IReadSideRepositoryWriter<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
+    #warning TLK: make string identifiers here after switch to new storage
     {
         TEntity GetById(Guid id);
 

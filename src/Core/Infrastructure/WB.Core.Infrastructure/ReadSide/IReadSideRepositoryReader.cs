@@ -7,6 +7,7 @@ namespace WB.Core.Infrastructure.ReadSide
     /// </summary>
     public interface IReadSideRepositoryReader<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
+    #warning TLK: make string identifiers here after switch to new storage
     {
         int Count();
 
