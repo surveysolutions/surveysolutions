@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.OpenSession())
+            using (IDocumentSession session = this.OpenSession())
             {
                 return session.Load<TEntity>(id: ravenId);
             }
@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.OpenSession())
+            using (IDocumentSession session = this.OpenSession())
             {
                 var view = session.Load<TEntity>(id: ravenId);
 
@@ -43,7 +43,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.OpenSession())
+            using (IDocumentSession session = this.OpenSession())
             {
                 session.Store(entity: view, id: ravenId);
                 session.SaveChanges();
