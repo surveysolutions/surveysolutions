@@ -6,6 +6,13 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Main.Core.Documents;
+using Ncqrs;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using Ninject;
+using WB.Core.Infrastructure;
 
 namespace CAPI.Android
 {
@@ -39,9 +46,12 @@ namespace CAPI.Android
         {
             try
             {
-                var model = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
-                    new QuestionnaireScreenInput(publicKey));
-                
+                var documentStorage = CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>();
+                var result = documentStorage.GetById(publicKey);
+                if (result == null)
+                {
+                    GenerateEvents(publicKey, documentStorage);
+                }
                 Intent intent = new Intent(this, typeof(DetailsActivity));
                 intent.PutExtra("publicKey", publicKey.ToString());
                 StartActivity(intent);
@@ -49,6 +59,32 @@ namespace CAPI.Android
             catch
             {
                 
+            }
+        }
+#warning remove after eluminating ncqrs
+        private void GenerateEvents(Guid publicKey, IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+        {
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
+
+            long minVersion = 0;
+            var snapshot = snapshotStore.GetSnapshot(publicKey, long.MaxValue);
+            if (snapshot != null)
+            {
+                var originalDoc = snapshot.Payload as CompleteQuestionnaireDocument;
+                if (originalDoc != null)
+                {
+                    documentStorage.Store(
+                        new CompleteQuestionnaireView(originalDoc),
+                        publicKey);
+                    minVersion = snapshot.Version + 1;
+                }
+            }
+            foreach (CommittedEvent committedEvent in
+                eventStore.ReadFrom(publicKey, minVersion, long.MaxValue))
+            {
+                bus.Publish(committedEvent);
             }
         }
     }

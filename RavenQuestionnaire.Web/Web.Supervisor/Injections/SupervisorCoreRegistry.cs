@@ -1,3 +1,4 @@
+using System.IO;
 using System.Web.Configuration;
 using Core.Supervisor.Views.Index;
 using WB.Core.Infrastructure.Raven.Implementation;
@@ -5,6 +6,7 @@ using WB.Core.SharedKernel.Utils.Logging;
 using WB.Core.Synchronization.ImportManager;
 using WB.Core.Synchronization.SyncManager;
 using WB.Core.Synchronization.SyncProvider;
+using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Injections
@@ -96,6 +98,11 @@ namespace Web.Supervisor.Injections
             this.Bind<ISyncManager>().To<SyncManager>();
             this.Bind<ISyncProvider>().To<SyncProvider>();
             this.Bind<IImportManager>().To<DefaultImportManager>();
+           
+            this.Bind<IChunkStorage>()
+                .To<FileChunkStorage>()
+                .WithConstructorArgument("folderPath",  AppDomain.CurrentDomain.GetData("DataDirectory").ToString());
+            this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>();
 
         }
     }

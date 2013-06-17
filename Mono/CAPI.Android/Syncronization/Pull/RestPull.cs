@@ -32,8 +32,7 @@ namespace CAPI.Android.Syncronization.Pull
             var package = webExecutor.ExcecuteRestRequest<SyncPackage>(getChunckPath,
                                                                        new KeyValuePair<string, string>("login", login),
                                                                        new KeyValuePair<string, string>("password",password),
-                                                                       new KeyValuePair<string, string>("aRKey",id.ToString()),
-                                                                       new KeyValuePair<string, string>("rootType",rootType));
+                                                                       new KeyValuePair<string, string>("aRKey",id.ToString()));
 
             if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
                 throw new NullReferenceException("content is absent");

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleSynchronizationDataStorageTests.cs" />
     <Compile Include="SyncManager\SyncManagerTests.cs" />
     <Compile Include="SyncProvider\SyncProviderTests.cs" />
   </ItemGroup>
@@ -53,6 +54,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>

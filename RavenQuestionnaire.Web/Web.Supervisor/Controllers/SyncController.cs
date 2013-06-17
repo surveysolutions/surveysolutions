@@ -64,7 +64,7 @@ namespace Web.Supervisor.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult GetSyncPackage(string aRKey, string rootType, string login, string password)
+        public ActionResult GetSyncPackage(string aRKey,string login, string password)
         {
             var user = GetUser(login, password);
             if (user == null)
@@ -78,7 +78,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var package = this.syncManager.ReceiveSyncPackage(null, key, rootType);
+                var package = this.syncManager.ReceiveSyncPackage(null, key);
                 return Json(package, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

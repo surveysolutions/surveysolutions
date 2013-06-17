@@ -8,6 +8,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Raven.Client.Linq;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -20,17 +21,13 @@ namespace WB.Core.Synchronization.SyncProvider
 
     public class SyncProvider : ISyncProvider
     {
-        private const bool UseCompression = true;
-
-        //compressed content could be larger than uncompressed for small items 
-        //private int limitLengtForCompression = 0;
-
         private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
 
         private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         private IQueryableDenormalizerStorage<ClientDeviceDocument> devices;
-        
+
+        private ISynchronizationDataStorage storate;
 
         public SyncProvider(
             IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys,
@@ -43,19 +40,20 @@ namespace WB.Core.Synchronization.SyncProvider
             this.devices = devices;
         }
 
-        public SyncItem GetSyncItem(Guid id, string type)
+        public SyncProvider(IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires,
+                            IQueryableDenormalizerStorage<UserDocument> users,
+                            IQueryableDenormalizerStorage<ClientDeviceDocument> devices,
+                            ISynchronizationDataStorage storate)
         {
-            switch (type)
-            {
-                case SyncItemType.File:
-                    return null; // todo: file support
-                case SyncItemType.Questionnare:
-                    return GetItem(CreateQuestionnarieDocument(id), id, type);
-                case SyncItemType.User:
-                    return GetItem(this.users.GetById(id), id, type);
-                default:
-                    return null;
-            }
+            this.questionnaires = questionnaires;
+            this.users = users;
+            this.devices = devices;
+            this.storate = storate;
+        }
+
+        public SyncItem GetSyncItem(Guid id)
+        {
+            return storate.GetLatestVersion(id);
         }
 
         public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId)
@@ -67,11 +65,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
             List<Guid> questionnaires = GetQuestionnaires(users);
             result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
-            /*
-                        //temporary disabled due to non support in android app
-                        List<Guid> files = GetFiles();
-                        result.AddRange(files.Select(i => new SyncItemsMeta(i, SyncItemType.File, null)));
-            */
+         
 
             return result;
         }
@@ -149,48 +143,6 @@ namespace WB.Core.Synchronization.SyncProvider
             processor.Commit();
 
             return true;
-        }
-
-        private CompleteQuestionnaireDocument CreateQuestionnarieDocument(Guid id)
-        {
-            var retval = new CompleteQuestionnaireDocument();
-            var data = this.questionnaires.GetById(id);
-
-            retval.CreatedBy = data.CreatedBy;
-            retval.CreationDate = data.CreationDate;
-            retval.Creator = data.Creator;
-            retval.LastEntryDate = data.LastEntryDate;
-            retval.PublicKey = data.PublicKey;
-            retval.Responsible = data.Responsible;
-            retval.Status = data.Status;
-            retval.TemplateId = data.TemplateId;
-            retval.Title = data.Title;
-            
-            retval.Children = data.Children;
-            return retval;
-        }
-
-        private SyncItem GetItem(object item, Guid id, string type)
-        {
-            if (item == null)
-            {
-                return null;
-            }
-
-            var result = new SyncItem {Id = id, 
-                Content = GetItemAsContent(item), 
-                ItemType = type, 
-                IsCompressed = UseCompression};
-
-            return result;
-        }
-
-        private string GetItemAsContent(object item)
-        {
-            var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
-            string itemToSync = JsonConvert.SerializeObject(item, Formatting.None, settings);
-            
-            return UseCompression ? PackageHelper.CompressString(itemToSync) : itemToSync;
         }
 
 
