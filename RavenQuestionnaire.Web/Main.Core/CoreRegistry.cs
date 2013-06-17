@@ -135,27 +135,9 @@ namespace Main.Core
 
         protected virtual void RegisterDenormalizers()
         {
-            foreach (
-                var denormalizer in
-                    GetAssweblysForRegister()
-                                             .SelectMany(a => a.GetTypes())
-                                             .Where(DenormalizerStorageImplementation))
-            {
-
-                this.Kernel.Bind(denormalizer).ToSelf().InSingletonScope();
-            }
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(GetStorage);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(GetStorage);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetStorage);
-        }
-
-        private bool DenormalizerStorageImplementation(Type t)
-        {
-            if (t.IsInterface || t.IsAbstract)
-                return false;
-            return t.GetInterfaces().FirstOrDefault(i => i.IsGenericType &&
-                                                         i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) !=
-                   null;
         }
 
         protected virtual object GetStorage(IContext context)
