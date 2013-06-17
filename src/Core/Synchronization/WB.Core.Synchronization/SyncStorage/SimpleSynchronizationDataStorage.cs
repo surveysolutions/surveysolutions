@@ -8,17 +8,18 @@ using Main.Core;
 using Main.Core.Documents;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
     public class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnarieStorage;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage;
         private readonly IChunkStorage fileChunkStorage;
 
         public SimpleSynchronizationDataStorage(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnarieStorage,
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage,
             IChunkStorage fileChunkStorage)
         {
             this.questionnarieStorage = questionnarieStorage;

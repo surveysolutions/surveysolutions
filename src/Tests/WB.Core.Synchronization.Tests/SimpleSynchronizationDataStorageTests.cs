@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -20,7 +21,7 @@ namespace WB.Core.Synchronization.Tests
         {
             // arrange
             var questionnarieId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            var documentStorageMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireStoreDocument>>();
+            var documentStorageMock = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
             documentStorageMock.Setup(x => x.GetById(questionnarieId)).Returns(new CompleteQuestionnaireStoreDocument());
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorage(documentStorageMock.Object);
 
@@ -54,7 +55,7 @@ namespace WB.Core.Synchronization.Tests
             Assert.That(result.IsCompressed, Is.EqualTo(true));
         }
 
-        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorage(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentStorage)
+        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorage(IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> documentStorage)
         {
             return
                 new SimpleSynchronizationDataStorage(documentStorage,
@@ -64,7 +65,7 @@ namespace WB.Core.Synchronization.Tests
         {
             return
                 CreateSimpleSynchronizationDataStorage(
-                    new Mock<IDenormalizerStorage<CompleteQuestionnaireStoreDocument>>().Object);
+                    new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().Object);
 
         }
     }
