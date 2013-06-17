@@ -12,6 +12,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.EventHandler;
 using WB.UI.Designer.Views.Questionnaire;
@@ -84,7 +85,7 @@ namespace WB.UI.Designer.Views.Tests
             return new QuestionnaireDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object);
         }
 
-        private Mock<IDenormalizerStorage<QuestionnaireListViewItem>> questionnaireStorageMock=new Mock<IDenormalizerStorage<QuestionnaireListViewItem>>();
-        private Mock<IDenormalizerStorage<AccountDocument>> accountStorageMock=new Mock<IDenormalizerStorage<AccountDocument>>();
+        private Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>> questionnaireStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>>();
+        private Mock<IReadSideRepositoryWriter<AccountDocument>> accountStorageMock = new Mock<IReadSideRepositoryWriter<AccountDocument>>();
     }
 }

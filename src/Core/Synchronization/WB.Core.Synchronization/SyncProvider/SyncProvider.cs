@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Raven.Client.Linq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -21,19 +22,21 @@ namespace WB.Core.Synchronization.SyncProvider
 
     public class SyncProvider : ISyncProvider
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
+        #warning ViewFactory should be used here
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires;
 
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        #warning ViewFactory should be used here
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        private IQueryableDenormalizerStorage<ClientDeviceDocument> devices;
+        #warning ViewFactory should be used here
+        private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
         private ISynchronizationDataStorage storate;
 
         public SyncProvider(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys,
-            IQueryableDenormalizerStorage<UserDocument> users,
-            IQueryableDenormalizerStorage<ClientDeviceDocument> devices
-            )
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys,
+            IQueryableReadSideRepositoryReader<UserDocument> users,
+            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices)
         {
             this.questionnaires = surveys;
             this.users = users;
