@@ -40,3 +40,4 @@ App_Data/LocalStorage/*
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/Elmah/*
 
 scaffolding.config
+RavenQuestionnaire.Web/Web.Supervisor/App_Data/SyncData/*
