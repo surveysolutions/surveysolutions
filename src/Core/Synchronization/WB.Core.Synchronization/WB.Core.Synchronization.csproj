@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
@@ -71,6 +71,11 @@
     <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SyncStorage\FileChunkStorage.cs" />
+    <Compile Include="SyncStorage\InMemoryChunkStorage.cs" />
+    <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
+    <Compile Include="SyncStorage\IChunkStorage.cs" />
+    <Compile Include="SyncStorage\ISynchronizationDataStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

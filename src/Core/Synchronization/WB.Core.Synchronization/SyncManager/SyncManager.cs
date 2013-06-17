@@ -52,11 +52,11 @@ namespace WB.Core.Synchronization.SyncManager
             throw new NotImplementedException();
         }
 
-        public SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id, string itemType)
+        public SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id)
         {
             var syncPackage = new SyncPackage();
 
-            SyncItem item = syncProvider.GetSyncItem(id, itemType);
+            SyncItem item = syncProvider.GetSyncItem(id);
 
             if (item != null)
             {
