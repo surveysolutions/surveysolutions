@@ -46,6 +46,7 @@
     <Compile Include="IReadLayerAdministrationService.cs" />
     <Compile Include="IReadLayerStatusService.cs" />
     <Compile Include="ReadSide\IFilterableReadSideRepositoryReader.cs" />
+    <Compile Include="ReadSide\IFilterableReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IQueryableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IReadSideRepositoryEntity.cs" />
     <Compile Include="ReadSide\IReadSideRepositoryReader.cs" />
