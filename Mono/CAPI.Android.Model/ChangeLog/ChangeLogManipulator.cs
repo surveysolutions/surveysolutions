@@ -16,20 +16,21 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
     public class ChangeLogManipulator : IChangeLogManipulator
     {
-        private readonly IFilterableDenormalizerStorage<PublicChangeSetDTO> publicChangeLog;
-        private readonly IFilterableDenormalizerStorage<DraftChangesetDTO> draftChangeLog;
+        private readonly IReadSideRepositoryWriter<PublicChangeSetDTO> publicChangeLog;
+        private readonly IFilterableReadSideRepositoryWriter<DraftChangesetDTO> draftChangeLog;
         private readonly IEventStore eventStore;
         private readonly IChangeLogStore fileChangeLogStore;
 
         #region public
 
-        public ChangeLogManipulator(IFilterableDenormalizerStorage<PublicChangeSetDTO> publicChangeLog,
-                                    IFilterableDenormalizerStorage<DraftChangesetDTO> draftChangeLog,
+        public ChangeLogManipulator(IReadSideRepositoryWriter<PublicChangeSetDTO> publicChangeLog,
+                                    IFilterableReadSideRepositoryWriter<DraftChangesetDTO> draftChangeLog,
                                     IEventStore eventStore, IChangeLogStore changeLogStore)
         {
             this.publicChangeLog = publicChangeLog;
@@ -40,7 +41,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public IDictionary<Guid, Guid> GetClosedDraftChunksIds()
         {
-            var records= draftChangeLog.Query(c => c.End != null).ToList();
+            var records= draftChangeLog.Filter(c => c.End != null).ToList();
             return records.ToDictionary(d => Guid.Parse(d.Id), d => Guid.Parse(d.EventSourceId));
         }
 
@@ -116,7 +117,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         private DraftChangesetDTO GetLastDraftRecord(Guid eventSourceId)
         {
             var evtIdAsString = eventSourceId.ToString();
-            var record = draftChangeLog.Query(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
+            var record = draftChangeLog.Filter(c => c.EventSourceId == evtIdAsString).FirstOrDefault();
             return record;
         }
 

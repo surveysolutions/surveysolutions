@@ -17,17 +17,19 @@ using Main.DenormalizerStorage;
 using SQLite;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteDenormalizerStorage<TView> : IFilterableDenormalizerStorage<TView>, IMvxServiceConsumer
+    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,
+        IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
         //        private readonly ISQLiteConnectionFactory _connectionFactory;
         private readonly ISQLiteConnection _connection;
         private const string _dbName = "Projections";
 
-        public SqliteDenormalizerStorage()
+        public SqliteReadSideRepositoryAccessor()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
@@ -48,7 +50,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return ((TableQuery<TView>) _connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
-        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
+        public IEnumerable<TView> Filter(Expression<Func<TView, bool>> predExpr)
         {
             return ((TableQuery<TView>) _connection.Table<TView>()).Where(predExpr);
         }

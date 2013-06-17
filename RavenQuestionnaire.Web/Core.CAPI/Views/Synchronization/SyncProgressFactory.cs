@@ -12,6 +12,7 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Views.Synchronization
 {
@@ -25,7 +26,7 @@ namespace Core.CAPI.Views.Synchronization
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessDocument> store;
+        private readonly IReadSideRepositoryReader<SyncProcessDocument> store;
 
         #endregion
 
@@ -37,7 +38,7 @@ namespace Core.CAPI.Views.Synchronization
         /// <param name="store">
         /// The store.
         /// </param>
-        public SyncProgressFactory(IDenormalizerStorage<SyncProcessDocument> store)
+        public SyncProgressFactory(IReadSideRepositoryReader<SyncProcessDocument> store)
         {
             this.store = store;
         }

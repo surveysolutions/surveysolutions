@@ -96,17 +96,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InMemoryDenormalizer.cs" />
-    <Compile Include="RavenPersistentStorage.cs" />
+    <Compile Include="InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="SmartDenormalizerAttribute.cs" />
-    <Compile Include="SolidDenormalizer\SolidPersistentDenormalizer.cs" />
-    <Compile Include="StoredObject.cs" />
-    <Compile Include="IPersistentStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PersistentDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WeakReferenceSnapshotStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

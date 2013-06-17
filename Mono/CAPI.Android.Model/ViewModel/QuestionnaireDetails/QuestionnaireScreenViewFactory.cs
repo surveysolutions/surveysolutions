@@ -14,17 +14,16 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
+        #warning Writer should not be used in View Factory
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> _documentStorage;
 
-        public QuestionnaireScreenViewFactory(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+        public QuestionnaireScreenViewFactory(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
         {
             this._documentStorage = documentStorage;
         }

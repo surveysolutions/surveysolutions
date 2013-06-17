@@ -11,6 +11,7 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 {
@@ -29,11 +30,11 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store;
 
         #endregion
 
-        public PropagatedGridViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public PropagatedGridViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }

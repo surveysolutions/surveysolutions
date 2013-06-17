@@ -6,6 +6,7 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
@@ -23,10 +24,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
         /// <summary>
         /// The _document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
-      
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> _documentStorage;
 
-        public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+
+        public CompleteQuestionnaireViewDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
         {
             _documentStorage = documentStorage;
         }

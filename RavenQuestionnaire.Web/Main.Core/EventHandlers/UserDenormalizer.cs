@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.EventHandlers
 {
@@ -33,7 +34,7 @@ namespace Main.Core.EventHandlers
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         #endregion
 
@@ -45,7 +46,7 @@ namespace Main.Core.EventHandlers
         /// <param name="users">
         /// The users.
         /// </param>
-        public UserDenormalizer(IDenormalizerStorage<UserDocument> users)
+        public UserDenormalizer(IReadSideRepositoryWriter<UserDocument> users)
         {
             this.users = users;
         }

@@ -2,6 +2,8 @@ using System.IO;
 using System.Web.Configuration;
 using Core.Supervisor.Views.Index;
 using WB.Core.Infrastructure.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils.Logging;
 using WB.Core.Synchronization.ImportManager;
 using WB.Core.Synchronization.SyncManager;
@@ -54,13 +56,18 @@ namespace Web.Supervisor.Injections
                     });
         }
 
-        protected override object GetStorage(IContext context)
+        protected override object GetReadSideRepositoryReader(IContext context)
         {
-            Type storageType = ShouldUsePersistentReadLayer()
-                ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
-                : typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
 
-            return this.Kernel.Get(storageType);
+        protected override object GetReadSideRepositoryWriter(IContext context)
+        {
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()

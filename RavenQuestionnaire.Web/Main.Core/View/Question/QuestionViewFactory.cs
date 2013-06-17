@@ -12,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.Question
 {
@@ -27,7 +28,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// The _document session.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireDocument> _documentSession;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> _documentSession;
 
         #endregion
 
@@ -39,7 +40,7 @@ namespace Main.Core.View.Question
         /// <param name="documentSession">
         /// The document session.
         /// </param>
-        public QuestionViewFactory(IDenormalizerStorage<QuestionnaireDocument> documentSession)
+        public QuestionViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> documentSession)
         {
             this._documentSession = documentSession;
         }

@@ -12,10 +12,12 @@ using Android.Views;
 using Android.Widget;
 using Main.DenormalizerStorage;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Androids.Core.Model.Tests
 {
-    public class FilterableDenormalizerStorageStub<T> : IFilterableDenormalizerStorage<T> where T : class, IView 
+    public class FilterableDenormalizerStorageStub<T> : IFilterableReadSideRepositoryWriter<T>
+        where T : class, IView 
     {
         private Dictionary<Guid,T> container;
 
@@ -46,7 +48,7 @@ namespace CAPI.Androids.Core.Model.Tests
             container[id] = view;
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predicate)
+        public IEnumerable<T> Filter(Expression<Func<T, bool>> predicate)
         {
             return container.Select(c => c.Value).Where(predicate.Compile());
         }

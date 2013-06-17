@@ -1,4 +1,5 @@
 ﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.User
 {
@@ -14,9 +15,9 @@ namespace Core.Supervisor.Views.User
 
     public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
     {
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public UserListViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }

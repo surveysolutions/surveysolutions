@@ -11,6 +11,7 @@ using Ninject;
 using Ninject.Modules;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Questionnaire.ExportServices;
 
 namespace LoadTestDataGenerator
@@ -34,7 +35,7 @@ namespace LoadTestDataGenerator
 
             NcqrsInit.Init(kernel);
 
-            kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IDenormalizerStorage<QuestionnaireDocument>>()));
+            kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IReadSideRepositoryReader<QuestionnaireDocument>>()));
 
             kernel.Load<MainModule>();
         }

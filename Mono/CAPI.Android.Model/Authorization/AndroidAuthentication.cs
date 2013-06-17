@@ -8,15 +8,18 @@ using Main.Core.View.User;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.Authorization
 {
     public class AndroidAuthentication : IAuthentication
     {
-        private readonly IFilterableDenormalizerStorage<LoginDTO> _documentStorage;
-        public AndroidAuthentication(IFilterableDenormalizerStorage<LoginDTO> documentStorage)
+        #warning ViewFactory should be used here
+        private readonly IFilterableReadSideRepositoryReader<LoginDTO> documentStorage;
+
+        public AndroidAuthentication(IFilterableReadSideRepositoryReader<LoginDTO> documentStorage)
         {
-            _documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
         }
 
         private UserLight currentUser;
@@ -34,7 +37,7 @@ namespace CAPI.Android.Core.Model.Authorization
                 throw new InvalidOperationException("please logoin first");
 
             LoginDTO user =
-                 _documentStorage.Query(
+                 this.documentStorage.Filter(
                      u =>
                      u.Login == CurrentUser.Name)
                                  .FirstOrDefault();
@@ -53,7 +56,7 @@ namespace CAPI.Android.Core.Model.Authorization
                 var hash = SimpleHash.ComputeHash(password);
 
                 LoginDTO user =
-                    _documentStorage.Query(
+                    this.documentStorage.Filter(
                         u =>
                         u.Login == userName/* && u.Password == hash && !u.IsLocked*/)
                                     .FirstOrDefault();

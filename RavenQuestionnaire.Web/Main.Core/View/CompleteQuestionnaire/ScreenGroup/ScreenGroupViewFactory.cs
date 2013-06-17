@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
@@ -30,7 +31,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store;
 
         /// <summary>
         /// The screen view supplier.
@@ -50,7 +51,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="screenViewSupplier">
         /// The screen view supplier.
         /// </param>
-        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier screenViewSupplier)
+        public ScreenGroupViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier screenViewSupplier)
         {
             this.store = store;
             this.screenViewSupplier = screenViewSupplier;

@@ -1,4 +1,5 @@
 ﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.EventHandlers
 {
@@ -10,9 +11,9 @@ namespace Main.Core.EventHandlers
 
     public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>
     {
-        private readonly IDenormalizerStorage<ClientDeviceDocument> devices;
+        private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
-        public ClientDeviceDenormalizer(IDenormalizerStorage<ClientDeviceDocument> devices)
+        public ClientDeviceDenormalizer(IReadSideRepositoryWriter<ClientDeviceDocument> devices)
         {
             this.devices = devices;
         }

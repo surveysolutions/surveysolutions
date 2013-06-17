@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CoreRegistry.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The core registry.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +15,11 @@ using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
-
 #endif
 
 namespace Main.Core
@@ -133,40 +124,29 @@ namespace Main.Core
 
         protected virtual void RegisterDenormalizers()
         {
-            foreach (
-                var denormalizer in
-                    GetAssweblysForRegister()
-                                             .SelectMany(a => a.GetTypes())
-                                             .Where(DenormalizerStorageImplementation))
-            {
+            // currently in-memory repo accessor also contains repository itself as internal dictionary, so we need to create him as singletone
+            this.Kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
-                this.Kernel.Bind(denormalizer).ToSelf().InSingletonScope();
-            }
-            this.Kernel.Bind(typeof (IDenormalizerStorage<>)).ToMethod(GetStorage);
-            this.Kernel.Bind(typeof (IQueryableDenormalizerStorage<>)).ToMethod(GetStorage);
+            this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
         }
 
-        private bool DenormalizerStorageImplementation(Type t)
+        protected virtual object GetReadSideRepositoryReader(IContext context)
         {
-            if (t.IsInterface || t.IsAbstract)
-                return false;
-            return t.GetInterfaces().FirstOrDefault(i => i.IsGenericType &&
-                                                         i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) !=
-                   null;
+            return this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
-        protected virtual object GetStorage(IContext context)
+        protected virtual object GetReadSideRepositoryWriter(IContext context)
+        {
+            return this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
+
+        protected object GetInMemoryReadSideRepositoryAccessor(IContext context)
         {
             var genericParameter = context.GenericArguments[0];
 
-         /*   #if !MONODROID
-
-            if(genericParameter.GetCustomAttributes(typeof(SmartDenormalizerAttribute), true).Length > 0)
-                return Kernel.Get(typeof(PersistentDenormalizer<>).MakeGenericType(genericParameter));
-
-            else
-            #endif*/
-                return this.Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
+            return this.Kernel.Get(typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(genericParameter));
         }
 
         #endregion

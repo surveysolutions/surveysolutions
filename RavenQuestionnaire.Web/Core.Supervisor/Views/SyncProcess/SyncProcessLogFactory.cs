@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Views.SyncProcess
 {
@@ -28,7 +29,7 @@ namespace Core.Supervisor.Views.SyncProcess
         /// <summary>
         /// The docs.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<SyncProcessStatisticsDocument> docs;
+        private readonly IQueryableReadSideRepositoryReader<SyncProcessStatisticsDocument> docs;
 
         #endregion
 
@@ -40,7 +41,7 @@ namespace Core.Supervisor.Views.SyncProcess
         /// <param name="docs">
         /// The docs.
         /// </param>
-        public SyncProcessLogFactory(IQueryableDenormalizerStorage<SyncProcessStatisticsDocument> docs)
+        public SyncProcessLogFactory(IQueryableReadSideRepositoryReader<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
         }

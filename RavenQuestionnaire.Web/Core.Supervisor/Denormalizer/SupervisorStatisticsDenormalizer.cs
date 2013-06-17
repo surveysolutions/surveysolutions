@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -33,60 +34,31 @@ namespace Core.Supervisor.Denormalizer
                                                     IEventHandler<QuestionnaireStatusChanged>, 
                                                     IEventHandler<QuestionnaireAssignmentChanged>
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The document item store.
-        /// </summary>
-        private readonly IDenormalizerStorage<SupervisorStatisticsItem> statistics;
+        private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
 
         /// <summary>
         /// Information, grouped by date
         /// </summary>
-        private readonly IDenormalizerStorage<HistoryStatusStatistics> history;
+        private readonly IReadSideRepositoryWriter<HistoryStatusStatistics> history;
 
         /// <summary>
         /// Hash of statistics key to easier find previous CQ state
         /// </summary>
-        private readonly IDenormalizerStorage<StatisticsItemKeysHash> keysHash;
+        private readonly IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash;
 
-        /// <summary>
-        /// The document item store.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorStatisticsDenormalizer"/> class. 
-        /// </summary>
-        /// <param name="statistics">
-        /// The document item store.
-        /// </param>
-        /// <param name="surveys">
-        /// The surveys.
-        /// </param>
-        /// <param name="keysHash">
-        /// Statistics storage hash
-        /// </param>
-        /// <param name="history">
-        /// The history.
-        /// </param>
         public SupervisorStatisticsDenormalizer(
-            IDenormalizerStorage<SupervisorStatisticsItem> statistics, 
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys, 
-            IDenormalizerStorage<StatisticsItemKeysHash> keysHash, 
-            IDenormalizerStorage<HistoryStatusStatistics> history)
+            IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics,
+            IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys,
+            IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash,
+            IReadSideRepositoryWriter<HistoryStatusStatistics> history)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
             this.history = history;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
