@@ -124,7 +124,8 @@ namespace Main.Core
 
         protected virtual void RegisterDenormalizers()
         {
-            this.Kernel.Bind(typeof(InMemoryDenormalizer<>)).ToSelf().InSingletonScope();
+            // currently in-memory repo accessor also contains repository itself as internal dictionary, so we need to create him as singletone
+            this.Kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(GetStorage);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(GetStorage);
@@ -135,7 +136,7 @@ namespace Main.Core
         {
             var genericParameter = context.GenericArguments[0];
 
-            return this.Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
+            return this.Kernel.Get(typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(genericParameter));
         }
 
         #endregion

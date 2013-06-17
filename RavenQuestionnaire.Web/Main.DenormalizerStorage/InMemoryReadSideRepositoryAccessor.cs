@@ -10,56 +10,56 @@ using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryDenormalizer<TView> : IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
+    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
-        private readonly ConcurrentDictionary<Guid, TView> _hash;
+        private readonly ConcurrentDictionary<Guid, TView> repository;
 
-        public InMemoryDenormalizer()
+        public InMemoryReadSideRepositoryAccessor()
         {
-            this._hash = new ConcurrentDictionary<Guid, TView>();
+            this.repository = new ConcurrentDictionary<Guid, TView>();
         }
 
         public int Count()
         {
-            return this._hash.Count;
+            return this.repository.Count;
         }
 
         public TView GetById(Guid id)
         {
-            if (!this._hash.ContainsKey(id))
+            if (!this.repository.ContainsKey(id))
             {
                 return null;
             }
 
-            return this._hash[id];
+            return this.repository[id];
         }
 
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
-            return query.Invoke(this._hash.Values.AsQueryable());
+            return query.Invoke(this.repository.Values.AsQueryable());
         }
 
         public void Remove(Guid id)
         {
             TView val;
-            this._hash.TryRemove(id, out val);
+            this.repository.TryRemove(id, out val);
         }
 
         public void Store(TView view, Guid id)
         {
-            if (this._hash.ContainsKey(id))
+            if (this.repository.ContainsKey(id))
             {
-                this._hash[id] = view;
+                this.repository[id] = view;
                 return;
             }
 
-            this._hash.TryAdd(id, view);
+            this.repository.TryAdd(id, view);
         }
 
         public void Clear()
         {
-            this._hash.Clear();
+            this.repository.Clear();
         }
     }
 }

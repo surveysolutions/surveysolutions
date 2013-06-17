@@ -105,7 +105,7 @@ namespace CAPI.Android
 
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
-            var bigSurveyStore = new InMemoryDenormalizer<CompleteQuestionnaireView>();
+            var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
 
             Kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
             Kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
@@ -236,7 +236,7 @@ namespace CAPI.Android
 
             var questionnarieDenormalizer =
                 kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as
-                InMemoryDenormalizer<CompleteQuestionnaireView>;
+                InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>;
             if (questionnarieDenormalizer != null)
                 questionnarieDenormalizer.Clear();
         }
