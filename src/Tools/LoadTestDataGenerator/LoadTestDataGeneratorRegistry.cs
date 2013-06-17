@@ -44,7 +44,7 @@ namespace LoadTestDataGenerator
         {
             Type storageType = ShouldUsePersistentReadLayer()
                 ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
-                : typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+                : typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(context.GenericArguments[0]);
 
             return this.Kernel.Get(storageType);
         }
