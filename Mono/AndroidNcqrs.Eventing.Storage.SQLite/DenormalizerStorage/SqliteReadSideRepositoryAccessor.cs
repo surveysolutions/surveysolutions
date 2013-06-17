@@ -21,7 +21,7 @@ using WB.Core.Infrastructure.ReadSide;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteDenormalizerStorage<TView> : IFilterableDenormalizerStorage<TView>, IMvxServiceConsumer,
+    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
@@ -29,7 +29,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         private readonly ISQLiteConnection _connection;
         private const string _dbName = "Projections";
 
-        public SqliteDenormalizerStorage()
+        public SqliteReadSideRepositoryAccessor()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();

@@ -131,7 +131,7 @@ namespace CAPI.Android
 
         private void InitUserStorage(InProcessEventBus bus)
         {
-            var mvvmSqlLiteUserStorage = new SqliteDenormalizerStorage<LoginDTO>();
+            var mvvmSqlLiteUserStorage = new SqliteReadSideRepositoryAccessor<LoginDTO>();
             var membership = new AndroidAuthentication(mvvmSqlLiteUserStorage);
             kernel.Bind<IAuthentication>().ToConstant(membership);
             var usereventHandler =
@@ -141,14 +141,20 @@ namespace CAPI.Android
 
         private void InitDashboard(InProcessEventBus bus)
         {
-            var surveyStore = new SqliteDenormalizerStorage<SurveyDto>();
-            var questionnaireStore = new SqliteDenormalizerStorage<QuestionnaireDTO>();
+            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>();
+            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>();
             
-            Kernel.Unbind<IFilterableDenormalizerStorage<SurveyDto>>();
-            Kernel.Bind<IFilterableDenormalizerStorage<SurveyDto>>().ToConstant(surveyStore);
+            Kernel.Unbind<IReadSideRepositoryWriter<SurveyDto>>();
+            Kernel.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
 
-            Kernel.Unbind<IFilterableDenormalizerStorage<QuestionnaireDTO>>();
-            Kernel.Bind<IFilterableDenormalizerStorage<QuestionnaireDTO>>().ToConstant(questionnaireStore);
+            Kernel.Unbind<IFilterableReadSideRepositoryReader<SurveyDto>>();
+            Kernel.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
+
+            Kernel.Unbind<IReadSideRepositoryWriter<QuestionnaireDTO>>();
+            Kernel.Bind<IReadSideRepositoryWriter<QuestionnaireDTO>>().ToConstant(questionnaireStore);
+
+            Kernel.Unbind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>();
+            Kernel.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             
             var dashboardeventHandler =
                 new DashboardDenormalizer(questionnaireStore, surveyStore);
@@ -159,14 +165,14 @@ namespace CAPI.Android
 
         private void InitChangeLog(InProcessEventBus bus)
         {
-            var publicStore = new SqliteDenormalizerStorage<PublicChangeSetDTO>();
-            var draftStore = new SqliteDenormalizerStorage<DraftChangesetDTO>();
+            var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>();
+            var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>();
 
-            Kernel.Unbind<IFilterableDenormalizerStorage<PublicChangeSetDTO>>();
-            Kernel.Bind<IFilterableDenormalizerStorage<PublicChangeSetDTO>>().ToConstant(publicStore);
+            Kernel.Unbind<IReadSideRepositoryWriter<PublicChangeSetDTO>>();
+            Kernel.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
 
-            Kernel.Unbind<IFilterableDenormalizerStorage<DraftChangesetDTO>>();
-            Kernel.Bind<IFilterableDenormalizerStorage<DraftChangesetDTO>>().ToConstant(draftStore);
+            Kernel.Unbind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>();
+            Kernel.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
 
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
             bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
