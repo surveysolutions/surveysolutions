@@ -5,10 +5,12 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 
+using WB.Core.Infrastructure.ReadSide;
+
 namespace WB.Core.Infrastructure.Raven.Implementation
 {
     #warning TLK: make string identifiers here after switch to new storage
-    public class RavenDenormalizerStorage<TView> : IQueryableDenormalizerStorage<TView>
+    public class RavenDenormalizerStorage<TView> : IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
         private readonly DocumentStore ravenStore;
