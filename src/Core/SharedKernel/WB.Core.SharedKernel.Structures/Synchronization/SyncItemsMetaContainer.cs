@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
@@ -6,10 +7,10 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
     {
         public SyncItemsMetaContainer()
         {
-            ARId = new List<SyncItemsMeta>();
+            ARId = new List<Guid>();
         }
 
-        public List<SyncItemsMeta> ARId { set; get; }
+        public List<Guid> ARId { set; get; }
     }
 
 }

@@ -42,7 +42,7 @@ namespace WB.Core.Synchronization.SyncManager
             return syncProvider.HandleSyncItem(item);
         }
 
-        public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId)
+        public IEnumerable<Guid> GetAllARIds(Guid userId)
         {
            return syncProvider.GetAllARIds(userId);
         }
