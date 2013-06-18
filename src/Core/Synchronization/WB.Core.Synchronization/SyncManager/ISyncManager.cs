@@ -18,7 +18,7 @@ namespace WB.Core.Synchronization.SyncManager
 
         bool SendSyncItem(SyncItem package);
 
-        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId);
+        IEnumerable<Guid> GetAllARIds(Guid userId);
 
         SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id);
     }

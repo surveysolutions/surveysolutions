@@ -31,7 +31,7 @@ namespace WB.Core.Synchronization.SyncProvider
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
-        private ISynchronizationDataStorage storate;
+        private readonly ISynchronizationDataStorage storate;
 
         public SyncProvider(
             IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys,
@@ -59,28 +59,28 @@ namespace WB.Core.Synchronization.SyncProvider
             return storate.GetLatestVersion(id);
         }
 
-        public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId)
+        public IEnumerable<Guid> GetAllARIds(Guid userId)
         {
-            var result = new List<SyncItemsMeta>();
+           /* var result = new List<SyncItemsMeta>();
 
-            List<Guid> users = GetUsers(userId);
-            result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
+            List<Guid> userIds = GetUsers(userId);
+            result.AddRange(userIds.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
 
-            List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
-         
+            IEnumerable<Guid> questionnaireIds = GetQuestionnaires(userIds);
+            result.AddRange(questionnaireIds.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
 
-            return result;
+            return result;*/
+            return storate.GetChunksCreatedAfter(0);
         }
 
 
-        private List<Guid> GetQuestionnaires(List<Guid> users)
+        private IEnumerable<Guid> GetQuestionnaires(IEnumerable<Guid> userId)
         {
             var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
             return this.questionnaires.Query<List<Guid>>(_ => _
                                                                   .Where(q => q.Status.PublicId.In(listOfStatuses)
                                                                               && q.Responsible != null &&
-                                                                              q.Responsible.Id.In(users))
+                                                                              q.Responsible.Id.In(userId))
                                                                   .Select(i => i.PublicKey)
                                                                   .ToList());
         }

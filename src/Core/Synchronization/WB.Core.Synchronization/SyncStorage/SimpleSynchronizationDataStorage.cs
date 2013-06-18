@@ -34,7 +34,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void SaveUser(UserDocument doc)
         {
-
             var syncItem = GetItem(doc, doc.PublicKey, SyncItemType.User);
             fileChunkStorage.StoreChunk(doc.PublicKey, GetItemAsContent(syncItem));
         }
@@ -46,16 +45,24 @@ namespace WB.Core.Synchronization.SyncStorage
                                                                {
                                                                    TypeNameHandling = TypeNameHandling.Objects
                                                                });
+
             if (result.ItemType == SyncItemType.Questionnare)
             {
                 result.Content = GetItemAsContent(CreateQuestionnarieDocument(id));
             }
+
             if (UseCompression)
                 result.Content = PackageHelper.CompressString(result.Content);
+
             return result;
         }
 
-       
+        public IEnumerable<Guid> GetChunksCreatedAfter(long sequence)
+        {
+            return
+                fileChunkStorage.GetChunksCreatedAfter(sequence);
+        }
+
         #region from sync provider
 
 
