@@ -22,16 +22,10 @@ namespace WB.Core.Synchronization.SyncProvider
 
     public class SyncProvider : ISyncProvider
     {
+        private ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
+        
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires;
-        private const bool UseCompression = true;
-
-        private ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
-
-        //compressed content could be larger than uncompressed for small items 
-        //private int limitLengtForCompression = 0;
-
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> questionnaires;
 
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
@@ -39,98 +33,47 @@ namespace WB.Core.Synchronization.SyncProvider
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
-        private ISynchronizationDataStorage storate;
-        private IQueryableDenormalizerStorage<SyncActivityDocument> syncActivities;
+        private ISynchronizationDataStorage storage;
+
+        private IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities;
 
         public SyncProvider(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys,
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
             IQueryableReadSideRepositoryReader<UserDocument> users,
-            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices)
-            IQueryableDenormalizerStorage<SyncActivityDocument> syncActivities
-            )
+            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
+            IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities,
+            ISynchronizationDataStorage storage)
         {
-            this.questionnaires = surveys;
+            this.questionnaires = questionnaires;
             this.users = users;
             this.devices = devices;
             this.syncActivities = syncActivities;
+            this.storage = storage;
         }
 
-        public SyncItem GetSyncItem(Guid syncActivityId, Guid id, string type)
+        public SyncItem GetSyncItem(Guid deviceId, Guid id)
         {
-            SyncItem item = null;
-
-        {
-            this.questionnaires = questionnaires;
-            switch (type)
-            {
-                case SyncItemType.File:
-                    item = null; // todo: file support
-                    break;
-                case SyncItemType.Questionnare:
-                    item = GetQuestionnarieItem(id);
-                    break;
-                case SyncItemType.User:
-                    item = GetUserItem(id);
-                    break;
-                default:
-                    return null;
-            }
-
-            commandService.Execute(new UpdateSyncActivityCommand(syncActivityId, item.LastChangeDate, id));
-
+            var item = storage.GetLatestVersion(id);
+            commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(deviceId, item.ChangeTracker));
+            //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId, item.LastChangeDate, id));
             return item;
-        }
-
-        private SyncItem GetUserItem(Guid id)
-        {
-            var item = this.users.GetById(id);
-            if (item == null)
-            {
-                return null;
-            }
-
-            var result = new SyncItem(id,
-                GetItemAsContent(item),
-                SyncItemType.User,
-                UseCompression,
-                item.LastChangeDate);
-
-            return result;
-        }
-
-        private SyncItem GetQuestionnarieItem(Guid id)
-        {
-
-            var item = CreateQuestionnarieDocument(id);
-            if (item == null)
-            {
-                return null;
-            }
-
-            var result = new SyncItem(id,
-                GetItemAsContent(item),
-                SyncItemType.Questionnare,
-                UseCompression,
-                item.LastEntryDate);
-
-            return result;
         }
 
         public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
             var result = new List<SyncItemsMeta>();
 
-            var activity = syncActivities.GetById(clientRegistrationKey);
+            var device = devices.GetById(clientRegistrationKey);
 
-            if(activity == null)
+            if(device == null)
                 throw new ArgumentException("Syncronization activity was not found.");
 
             //DateTime syncPoint = activity.LastChangeDate;
 
-            List<Guid> users = GetUsers(userId, activity.LastChangeDate);
+            List<Guid> users = GetUsers(userId, device.LastSyncItemIdentifier);
             result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
 
-            List<Guid> questionnaires = GetQuestionnaires(users, activity.LastChangeDate);
+            List<Guid> questionnaires = GetQuestionnaires(users, device.LastSyncItemIdentifier);
             result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
          
 
@@ -138,19 +81,19 @@ namespace WB.Core.Synchronization.SyncProvider
         }
 
 
-        private List<Guid> GetQuestionnaires(List<Guid> users, DateTime lastChangeDate)
+        private List<Guid> GetQuestionnaires(List<Guid> users, long lastSyncItemIdentifier)
         {
             var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
             return this.questionnaires.Query<List<Guid>>(_ => _
                                                                   .Where(q => q.Status.PublicId.In(listOfStatuses)
                                                                               && q.Responsible != null &&
-                                                                              q.Responsible.Id.In(users) && 
-                                                                              q.LastEntryDate > lastChangeDate)
+                                                                              q.Responsible.Id.In(users) /*&& 
+                                                                              q.LastEntryDate > lastChangeDate*/)
                                                                   .Select(i => i.PublicKey)
                                                                   .ToList());
         }
 
-        private List<Guid> GetUsers(Guid userId, DateTime LastChangeDate)
+        private List<Guid> GetUsers(Guid userId, long lastSyncItemIdentifier)
         {
             var supervisor =
                 users.Query<UserLight>(_ => _.Where(u => u.PublicKey == userId).Select(u => u.Supervisor).FirstOrDefault());
@@ -158,7 +101,7 @@ namespace WB.Core.Synchronization.SyncProvider
                 throw new ArgumentException("user is absent");
             return
                  this.users.Query<List<Guid>>(_ => _
-                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisor.Id && t.LastChangeDate > LastChangeDate)
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisor.Id /*&& t.LastChangeDate > LastChangeDate*/)
                      .Select(u => u.PublicKey)
                      .ToList());
         }
