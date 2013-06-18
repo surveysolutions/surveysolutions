@@ -31,6 +31,7 @@ namespace WB.Core.Synchronization.SyncManager
 
             foreach (var syncItem in package.ItemsContainer)
             {
+
                 return syncProvider.HandleSyncItem(syncItem, package.SyncProcessKey);
             }
 
@@ -56,7 +57,7 @@ namespace WB.Core.Synchronization.SyncManager
             return syncProvider.HandleSyncItem(item, Guid.Empty);
         }
 
-        public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid clientRegistrationKey)
+        public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
            return syncProvider.GetAllARIds(userId, clientRegistrationKey);
         }
@@ -73,10 +74,10 @@ namespace WB.Core.Synchronization.SyncManager
             if (identifier == null)
                 throw new ArgumentException("Client Identifier is not set.");
 
-            if(!identifier.CurrentProcessKey.HasValue)
+            if (!identifier.ClientRegistrationKey.HasValue)
                 throw new ArgumentException("Sync identifiier is not set.");
 
-            SyncItem item = syncProvider.GetSyncItem(identifier.CurrentProcessKey.Value, id);
+            SyncItem item = syncProvider.GetSyncItem(identifier.ClientRegistrationKey.Value, id);
             
             if (item != null)
             {

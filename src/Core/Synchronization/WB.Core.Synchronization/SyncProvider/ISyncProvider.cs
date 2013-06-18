@@ -10,7 +10,7 @@ namespace WB.Core.Synchronization.SyncProvider
     {
         SyncItem GetSyncItem(Guid syncId, Guid id);
 
-        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid syncActivityId);
+        IEnumerable<Guid> GetAllARIds(Guid userId, Guid syncActivityId);
 
         HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 
