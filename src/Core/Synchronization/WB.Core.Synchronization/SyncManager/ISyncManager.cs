@@ -20,6 +20,6 @@ namespace WB.Core.Synchronization.SyncManager
 
         IEnumerable<Guid> GetAllARIds(Guid userId);
 
-        SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id);
+        SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id, Guid userId);
     }
 }

@@ -8,7 +8,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
     public interface ISyncProvider
     {
-        SyncItem GetSyncItem(Guid id);
+        SyncItem GetSyncItem(Guid id, Guid userId);
 
         IEnumerable<Guid> GetAllARIds(Guid userId);
 
