@@ -13,7 +13,7 @@ namespace WB.Tests.Integration
     public class FileChunkStorageTests
     {
         private const string FolderPath = ".";
-        private const string FolderName = "SyncData";
+        private const string FolderName= "SyncPath";
 
         [SetUp]
         public void SetUp()
@@ -28,8 +28,9 @@ namespace WB.Tests.Integration
         {
             // arrange
             Guid chunkId = Guid.NewGuid();
+            Guid supervisorId = Guid.NewGuid();
             var someContent = "some content";
-            var dirPath = Path.Combine(FolderPath, FolderName);
+            var dirPath = Path.Combine(FolderPath, FolderName, supervisorId.ToString());
             Directory.CreateDirectory(dirPath);
 
             int count = 5;
@@ -38,7 +39,7 @@ namespace WB.Tests.Integration
                 File.WriteAllText(Path.Combine(dirPath, CreateSyncFileName(i,Guid.NewGuid())), someContent);
             }
 
-            FileChunkStorage target = CreateFileChunkStorage();
+            FileChunkStorage target = CreateFileChunkStorage(supervisorId);
 
             // act
             target.StoreChunk(chunkId, someContent);
@@ -75,9 +76,10 @@ namespace WB.Tests.Integration
         {
             // arrange
             Guid chunkId = Guid.NewGuid();
+            Guid supervisorId = Guid.NewGuid();
             var someContent1 = "some content1";
             var someContent2 = "some content2";
-            FileChunkStorage target = CreateFileChunkStorage();
+            FileChunkStorage target = CreateFileChunkStorage(supervisorId);
             target.StoreChunk(chunkId,someContent1);
 
             // act
@@ -87,7 +89,7 @@ namespace WB.Tests.Integration
             // assert
             var storedChunck = target.ReadChunk(chunkId);
             Assert.That(storedChunck, Is.EqualTo(someContent2));
-            Assert.That(Directory.GetFiles(Path.Combine(FolderPath, FolderName)).Count(), Is.EqualTo(2));
+            Assert.That(Directory.GetFiles(Path.Combine(FolderPath, FolderName,supervisorId.ToString())).Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -193,7 +195,12 @@ namespace WB.Tests.Integration
 
         private FileChunkStorage CreateFileChunkStorage()
         {
-            return new FileChunkStorage(FolderPath);
+            return CreateFileChunkStorage( Guid.NewGuid());
+        }
+
+        private FileChunkStorage CreateFileChunkStorage(Guid supervisorId)
+        {
+            return new FileChunkStorage(Path.Combine(FolderPath, FolderName), supervisorId);
         }
     }
 }

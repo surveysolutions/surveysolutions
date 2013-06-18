@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
@@ -16,31 +17,65 @@ namespace WB.Core.Synchronization.SyncStorage
     public class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
         private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage;
-        private readonly IChunkStorage fileChunkStorage;
+       
+        private readonly IChunkStorageFactory fileChunkStorageFactory;
+        private readonly IDictionary<Guid, List<Guid>> supervisorTeams; 
 
         public SimpleSynchronizationDataStorage(
             IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage,
-            IChunkStorage fileChunkStorage)
+            IChunkStorageFactory fileChunkStorage)
         {
             this.questionnarieStorage = questionnarieStorage;
-            this.fileChunkStorage = fileChunkStorage;
+            this.fileChunkStorageFactory = fileChunkStorage;
+            this.supervisorTeams=new Dictionary<Guid, List<Guid>>();
         }
 
-        public void SaveQuestionnarie(Guid id)
+        public void SaveQuestionnarie(Guid id, Guid responsibleId)
         {
-            var syncItem = GetItem(null, id, SyncItemType.Questionnare);
-            fileChunkStorage.StoreChunk(id, GetItemAsContent(syncItem));
+            var supervisorid = GetSupervisorByUser(responsibleId);
+            if (!supervisorid.HasValue)
+                return;
+            var syncItem = new SyncItem
+            {
+                Id = id,
+                ItemType = SyncItemType.Questionnare,
+                IsCompressed = UseCompression
+            };
+            GetStorage(supervisorid.Value).StoreChunk(id, GetItemAsContent(syncItem));
+        }
+
+        public void DeleteQuestionnarie(Guid id, Guid responsibleId)
+        {
+            var supervisorid = GetSupervisorByUser(responsibleId);
+            if (!supervisorid.HasValue)
+                return;
+
+            var syncItem = new SyncItem
+            {
+                Id = id,
+                ItemType = SyncItemType.DeleteQuestionnare,
+                Content = id.ToString(),
+                IsCompressed = UseCompression
+            };
+            GetStorage(supervisorid.Value).StoreChunk(id, GetItemAsContent(syncItem));
         }
 
         public void SaveUser(UserDocument doc)
         {
-            var syncItem = GetItem(doc, doc.PublicKey, SyncItemType.User);
-            fileChunkStorage.StoreChunk(doc.PublicKey, GetItemAsContent(syncItem));
+            if (doc.Roles.Contains(UserRoles.Operator))
+            {
+                SaveInteviewer(doc);
+            }
+            if (doc.Roles.Contains(UserRoles.Supervisor))
+                SaveSupervisor(doc.PublicKey);
         }
-
-        public SyncItem GetLatestVersion(Guid id)
+       
+        public SyncItem GetLatestVersion(Guid id, Guid userId)
         {
-            var result = JsonConvert.DeserializeObject<SyncItem>(fileChunkStorage.ReadChunk(id),
+            var supervisorid = GetSupervisorByUser(userId);
+            if (!supervisorid.HasValue)
+                return null;
+            var result = JsonConvert.DeserializeObject<SyncItem>(GetStorage(supervisorid.Value).ReadChunk(id),
                                                            new JsonSerializerSettings
                                                                {
                                                                    TypeNameHandling = TypeNameHandling.Objects
@@ -57,16 +92,64 @@ namespace WB.Core.Synchronization.SyncStorage
             return result;
         }
 
-        public IEnumerable<Guid> GetChunksCreatedAfter(long sequence)
+        public IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId)
         {
+            var supervisorid = GetSupervisorByUser(userId);
+            if (!supervisorid.HasValue)
+                return Enumerable.Empty<Guid>();
             return
-                fileChunkStorage.GetChunksCreatedAfter(sequence);
+                GetStorage(supervisorid.Value).GetChunksCreatedAfter(sequence);
+        }
+
+        protected IChunkStorage GetStorage(Guid supervisorId)
+        {
+            return fileChunkStorageFactory.GetStorage(supervisorId);
+        }
+
+        private void SaveSupervisor(Guid supervisorId)
+        {
+            if(supervisorTeams.ContainsKey(supervisorId))
+                return;
+            supervisorTeams.Add(supervisorId, new List<Guid>());
+        }
+
+        private void SaveInteviewer(UserDocument doc)
+        {
+
+            var syncItem = new SyncItem
+            {
+                Id = doc.PublicKey,
+                ItemType = SyncItemType.User,
+                Content = GetItemAsContent(doc),
+                IsCompressed = UseCompression
+            };
+
+
+            GetStorage(doc.Supervisor.Id).StoreChunk(doc.PublicKey, GetItemAsContent(syncItem));
+
+
+            var supervisorId = GetSupervisorByUser(doc.Supervisor.Id);
+            if (!supervisorId.HasValue)
+            {
+                SaveSupervisor(doc.Supervisor.Id);
+            }
+            supervisorTeams[doc.Supervisor.Id].Add(doc.PublicKey);
+        }
+
+        private Guid? GetSupervisorByUser(Guid userId)
+        {
+            foreach (var supervisorTeam in supervisorTeams)
+            {
+                if (supervisorTeam.Value.Contains(userId))
+                    return supervisorTeam.Key;
+            }
+            return null;
         }
 
         #region from sync provider
 
 
-        private SyncItem GetItem(object item, Guid id, string type)
+      /*  private SyncItem GetItem(object item, Guid id, string type)
         {
             var result = new SyncItem
             {
@@ -77,7 +160,7 @@ namespace WB.Core.Synchronization.SyncStorage
             if (item != null)
                 result.Content = GetItemAsContent(item);
             return result;
-        }
+        }*/
 
        
 
