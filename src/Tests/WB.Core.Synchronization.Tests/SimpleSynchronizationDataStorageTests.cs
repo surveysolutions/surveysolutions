@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -25,18 +26,8 @@ namespace WB.Core.Synchronization.Tests
 
             var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-           
 
-            var documentStorageMock = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-            documentStorageMock.Setup(x => x.GetById(questionnarieId)).Returns(new CompleteQuestionnaireStoreDocument() { Responsible = new UserLight(userId,"test") });
-            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisor(supervisorId, documentStorageMock.Object);
-
-            target.SaveUser(new UserDocument()
-            {
-                PublicKey = userId,
-                Roles = new List<UserRoles>() { UserRoles.Operator },
-                Supervisor = new UserLight(supervisorId, "")
-            });
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId, questionnarieId);
 
             // act
             target.SaveQuestionnarie(questionnarieId, userId);
@@ -76,30 +67,59 @@ namespace WB.Core.Synchronization.Tests
             Assert.That(result.IsCompressed, Is.EqualTo(true));
         }
 
-        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisor(Guid supervisorId, IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> documentStorage)
+        [Test]
+        public void DeleteQuestionnarie_When_questionnarie_is_valid_Then_last_stored_chunk_by_questionnarie_is_command_For_delete()
         {
-            var inmemoryChunkStorage = new InMemoryChunkStorage();
-            var chunkFactoryMock = new Mock<IChunkStorageFactory>();
-            chunkFactoryMock.Setup(x => x.GetStorage(It.IsAny<Guid>())).Returns(inmemoryChunkStorage);
-            var retval=
-                new SimpleSynchronizationDataStorage(documentStorage,
-                    chunkFactoryMock.Object);
+            // arrange
+            var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
+            var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId, questionnarieId);
+            
+            // act
+            target.DeleteQuestionnarie(questionnarieId, userId);
 
-            var supervisorName = "supe";
-
-            retval.SaveUser(new UserDocument()
-            {
-                PublicKey = supervisorId,
-                UserName = supervisorName,
-                Roles = new List<UserRoles>() { UserRoles.Supervisor }
-            });
-            return retval;
+            // assert
+            var result = target.GetLatestVersion(questionnarieId, userId);
+            Assert.That(result.ItemType, Is.EqualTo(SyncItemType.DeleteQuestionnare));
+            Assert.That(result.Id, Is.EqualTo(questionnarieId));
+            Assert.That(result.Content, Is.EqualTo(PackageHelper.CompressString(questionnarieId.ToString())));
         }
         private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisor(Guid supervisorId)
         {
             return
-                CreateSimpleSynchronizationDataStorageWithOneSupervisor(supervisorId,
-                    new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().Object);
+                CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, Guid.NewGuid(), Guid.NewGuid());
+
+        }
+        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId, Guid questionnarieId)
+        {
+            var inmemoryChunkStorage = new InMemoryChunkStorage();
+            var chunkFactoryMock = new Mock<IChunkStorageFactory>();
+            chunkFactoryMock.Setup(x => x.GetStorage(It.IsAny<Guid>())).Returns(inmemoryChunkStorage);
+
+            var documentStorageMock = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+            documentStorageMock.Setup(x => x.GetById(questionnarieId))
+                               .Returns(new CompleteQuestionnaireStoreDocument()
+                                   {
+                                       Responsible = new UserLight(userId, "test"),
+                                       PublicKey = questionnarieId
+                                   });
+
+            var retval =
+                new SimpleSynchronizationDataStorage(documentStorageMock.Object, chunkFactoryMock.Object);
+
+            retval.SaveUser(new UserDocument()
+            {
+                PublicKey = userId,
+                Roles = new List<UserRoles>() { UserRoles.Operator },
+                Supervisor = new UserLight(supervisorId, "")
+            });
+            retval.SaveUser(new UserDocument()
+            {
+                PublicKey = supervisorId,
+                Roles = new List<UserRoles>() { UserRoles.Supervisor }
+            });
+            return retval;
 
         }
     }
