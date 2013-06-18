@@ -59,37 +59,25 @@ namespace WB.Core.Synchronization.SyncProvider
             return item;
         }
 
-        public IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid clientRegistrationKey)
+        public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
-           /* var result = new List<SyncItemsMeta>();
-
             var device = devices.GetById(clientRegistrationKey);
 
-            if(device == null)
-                throw new ArgumentException("Syncronization activity was not found.");
-
-            //DateTime syncPoint = activity.LastChangeDate;
-
-            List<Guid> users = GetUsers(userId, device.LastSyncItemIdentifier);
-            result.AddRange(users.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
-
-            List<Guid> questionnaires = GetQuestionnaires(users, device.LastSyncItemIdentifier);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
-         
-
-            return result;*/
-            return storate.GetChunksCreatedAfter(0);
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+           
+            return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier);
         }
 
 
-        private IEnumerable<Guid> GetQuestionnaires(IEnumerable<Guid> users, long lastSyncItemIdentifier)
+        /*private IEnumerable<Guid> GetQuestionnaires(IEnumerable<Guid> users, long lastSyncItemIdentifier)
         {
             var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
             return this.questionnaires.Query<List<Guid>>(_ => _
                                                                   .Where(q => q.Status.PublicId.In(listOfStatuses)
                                                                               && q.Responsible != null &&
                                                                               q.Responsible.Id.In(users) /*&& 
-                                                                              q.LastEntryDate > lastChangeDate*/)
+                                                                              q.LastEntryDate > lastChangeDate#1#)
                                                                   .Select(i => i.PublicKey)
                                                                   .ToList());
         }
@@ -102,10 +90,10 @@ namespace WB.Core.Synchronization.SyncProvider
                 throw new ArgumentException("user is absent");
             return
                  this.users.Query<List<Guid>>(_ => _
-                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisor.Id /*&& t.LastChangeDate > LastChangeDate*/)
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisor.Id /*&& t.LastChangeDate > LastChangeDate#1#)
                      .Select(u => u.PublicKey)
                      .ToList());
-        }
+        }*/
 
         public HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {
