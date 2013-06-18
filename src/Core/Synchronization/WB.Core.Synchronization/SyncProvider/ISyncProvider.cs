@@ -8,12 +8,12 @@ namespace WB.Core.Synchronization.SyncProvider
 
     public interface ISyncProvider
     {
-        SyncItem GetSyncItem(Guid id);
+        SyncItem GetSyncItem(Guid syncId, Guid id, string type);
 
-        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId);
+        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid syncActivityId);
 
-        Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
+        HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 
-        bool HandleSyncItem(SyncItem item);
+        bool HandleSyncItem(SyncItem item, Guid syncActivityId);
     }
 }

@@ -16,8 +16,6 @@ namespace Main.Core.Domain
 
         private DateTime modificationDate;
 
-        private string deviceType;
-
         private Guid clientInstanceKey;
 
         
@@ -30,8 +28,7 @@ namespace Main.Core.Domain
                 {Id = Id, 
                 CreationDate = clock.UtcNow(),
                 DeviceId = deviceId,
-                ClientInstanceKey = clientInstanceKey,
-                DeviceType = deviceType});
+                ClientInstanceKey = clientInstanceKey});
         }
 
         protected void OnNewClientDeviceCreated(NewClientDeviceCreated evt)
@@ -40,7 +37,6 @@ namespace Main.Core.Domain
             deviceId = evt.DeviceId;
             registeredDate = evt.CreationDate;
             modificationDate = evt.CreationDate;
-            deviceType = evt.DeviceType;
             clientInstanceKey = evt.ClientInstanceKey;
         }
 

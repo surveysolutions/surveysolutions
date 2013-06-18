@@ -227,6 +227,7 @@
     <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
+    <Compile Include="Documents\SyncActivityDocument.cs" />
     <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
     <Compile Include="Documents\SynchronizationStatisticType.cs" />
     <Compile Include="Documents\SynchronizationType.cs" />
@@ -583,6 +584,7 @@
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Sync\SyncActivityUpdated.cs" />
     <Compile Include="Events\User\NewUserCreated.cs">
       <SubType>Code</SubType>
     </Compile>
