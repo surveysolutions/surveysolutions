@@ -2,6 +2,8 @@
 using System.Text;
 using System.Threading.Tasks;
 
+using Moq;
+
 using Raven.Client.Document;
 
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
@@ -16,7 +18,8 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new RavenReadSideRepositoryReader<TEntity>(
-                ravenStore ?? new DocumentStore());
+                ravenStore ?? new DocumentStore(),
+                readLayerStatusService ?? Mock.Of<IReadLayerStatusService>());
         }
     }
 }
