@@ -45,7 +45,7 @@ namespace CAPI.Android.Syncronization
         private readonly PullDataProcessor pullDataProcessor;
         private readonly PushDataProcessor pushDataProcessor;
 
-        private IDictionary<SyncItemsMeta,bool> remoteChuncksForDownload;
+        private IDictionary<Guid, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -79,7 +79,7 @@ namespace CAPI.Android.Syncronization
                     int i = 1;
                     foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value))
                     {
-                        pullDataProcessor.Proccess(chunck.Key.AggregateRootId);
+                        pullDataProcessor.Proccess(chunck.Key);
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,
                                                                        (i * 100) / remoteChuncksForDownload.Count));
                         i++;
@@ -112,8 +112,7 @@ namespace CAPI.Android.Syncronization
 
                 try
                 {
-                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.AggregateRootId,
-                                                  chunckId.AggregateRootType, syncId);
+                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId, syncId);
                   
                     pullDataProcessor.Save(data);
                     remoteChuncksForDownload[chunckId] = true;

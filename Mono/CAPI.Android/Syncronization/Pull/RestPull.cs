@@ -27,7 +27,7 @@ namespace CAPI.Android.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id, string rootType, Guid synckId)
+        public SyncItem RequestChunck(string login, string password, Guid id,  Guid synckId)
         {
             var package = webExecutor.ExcecuteRestRequest<SyncPackage>(getChunckPath,
                                                                        new KeyValuePair<string, string>("login", login),
@@ -39,7 +39,7 @@ namespace CAPI.Android.Syncronization.Pull
             return package.ItemsContainer[0];
         }
 
-        public IDictionary<SyncItemsMeta,bool> GetChuncks(string login, string password, Guid synckId)
+        public IDictionary<Guid, bool> GetChuncks(string login, string password, Guid synckId)
         {
             var syncItemsMetaContainer = webExecutor.ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, 
                                                                        new KeyValuePair<string, string>("login", login),

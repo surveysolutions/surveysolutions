@@ -29,5 +29,10 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             return container[id];
         }
+
+        public IEnumerable<Guid> GetChunksCreatedAfter(long sequence)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
