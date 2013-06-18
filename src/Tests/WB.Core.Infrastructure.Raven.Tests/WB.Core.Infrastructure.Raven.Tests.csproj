@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</ProjectGuid>
+    <ProjectGuid>{07E9E182-67EC-4D94-8A19-014C902F691D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.Infrastructure.Raven</RootNamespace>
-    <AssemblyName>WB.Core.Infrastructure.Raven</AssemblyName>
+    <RootNamespace>WB.Core.Infrastructure.Raven.Tests</RootNamespace>
+    <AssemblyName>WB.Core.Infrastructure.Raven.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+    <WarningsNotAsErrors>612,618,1030,649</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,16 +34,20 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject">
-      <HintPath>..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    <Reference Include="Machine.Specifications">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Moq">
+      <HintPath>..\..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -55,28 +59,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryAccessor.cs" />
-    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryWriter.cs" />
-    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryReader.cs" />
-    <Compile Include="RavenInfrastructureModule.cs" />
-    <Compile Include="Implementation\RavenReadLayerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
+    <Compile Include="RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
+    <Compile Include="RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
+    <Compile Include="RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
-      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
-      <Name>Ncqrs</Name>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
-      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
