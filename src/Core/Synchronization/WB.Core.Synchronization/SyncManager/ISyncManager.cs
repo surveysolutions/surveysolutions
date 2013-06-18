@@ -20,7 +20,7 @@ namespace WB.Core.Synchronization.SyncManager
 
         HandshakePackage CheckAndCreateNewProcess(ClientIdentifier clientIdentifier);
         
-        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid clientRegistrationKey);
+        IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey);
 
         SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id);
     }
