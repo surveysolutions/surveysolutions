@@ -6,11 +6,14 @@
     {
         public Guid SyncProcessKey;
         public Guid ClientInstanceKey;
+        public Guid ClientRegistrationKey;
 
-        public HandshakePackage(Guid clientInstanceKey)
+
+        public HandshakePackage(Guid clientInstanceKey, Guid syncProcessKey, Guid clientRegistrationKey)
         {
-            this.SyncProcessKey = Guid.NewGuid();
+            this.SyncProcessKey = syncProcessKey;
             this.ClientInstanceKey = clientInstanceKey;
+            this.ClientInstanceKey = clientRegistrationKey;
         }
     }
 }
