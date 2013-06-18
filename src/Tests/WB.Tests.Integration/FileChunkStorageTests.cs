@@ -33,7 +33,7 @@ namespace WB.Tests.Integration
             int count = 5;
             for (int i = 1; i <= count; i++)
             {
-                File.WriteAllText(Path.Combine(dirPath, string.Format("{0}-{1}.sync", i, Guid.NewGuid())), someContent);
+                File.WriteAllText(Path.Combine(dirPath, CreateSyncFileName(i,Guid.NewGuid())), someContent);
             }
 
             FileChunkStorage target = CreateFileChunkStorage();
@@ -42,8 +42,13 @@ namespace WB.Tests.Integration
             target.StoreChunk(chunkId, someContent);
 
             // assert
-            Assert.IsTrue(File.Exists(Path.Combine(dirPath, string.Format("{0}-{1}.sync", count + 1, chunkId))));
+            Assert.IsTrue(File.Exists(Path.Combine(dirPath, CreateSyncFileName(count + 1, chunkId))));
 
+        }
+
+        private string CreateSyncFileName(int i, Guid id)
+        {
+            return string.Format("{0}-{1}.sync", i, id);
         }
 
         [Test]
