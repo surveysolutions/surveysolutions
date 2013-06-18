@@ -9,9 +9,10 @@ namespace Main.Core.Commands.Sync
     [MapsToAggregateRootConstructor(typeof(SyncActivityAR))]
     public class CreateSyncActivityCommand : CommandBase
     {
-        public Guid Id;
-        public Guid ClientDeviceId;
-        
+        public Guid Id { get; set; }
+
+        public Guid ClientDeviceId { get; set; }
+    
         /*public Guid ClientInstanceKey;*/
         
         public CreateSyncActivityCommand(Guid id, Guid deviceId/*, Guid clientInstanceKey*/)

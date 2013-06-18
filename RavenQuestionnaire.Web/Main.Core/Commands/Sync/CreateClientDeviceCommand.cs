@@ -9,9 +9,12 @@
     [MapsToAggregateRootConstructor(typeof(ClientDeviceAR))]
     public class CreateClientDeviceCommand  : CommandBase
     {
-        public Guid Id;
-        public string DeviceId;
-        public Guid ClientInstanceKey;
+        public Guid Id { get; set; }
+    
+        public string DeviceId { get; set; }
+    
+        public Guid ClientInstanceKey { get; set; }
+    
         //public string DeviceType;
 
         public CreateClientDeviceCommand(Guid id, string deviceId, Guid clientInstanceKey/*, string deviceType*/)

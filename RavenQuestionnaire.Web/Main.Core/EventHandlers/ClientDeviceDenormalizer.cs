@@ -9,7 +9,7 @@ namespace Main.Core.EventHandlers
     using Main.Core.Documents;
     using Main.DenormalizerStorage;
 
-    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>
+    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>, IEventHandler<ClientDeviceLastSyncItemUpdated>
     {
         private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
@@ -30,6 +30,12 @@ namespace Main.Core.EventHandlers
                 };
 
             this.devices.Store( doc, doc.Id);
+        }
+
+        public void Handle(IPublishedEvent<ClientDeviceLastSyncItemUpdated> evnt)
+        {
+            var item = this.devices.GetById(evnt.EventSourceId);
+            item.LastSyncItemIdentifier = evnt.Payload.LastSyncItem;
         }
     }
 }

@@ -12,13 +12,15 @@ namespace WB.Core.Synchronization.SyncManager
 
         bool InitSending(ClientIdentifier identifier);
 
-        bool ItitReceiving(ClientIdentifier identifier);
+        bool InitReceiving(ClientIdentifier identifier);
 
         bool SendSyncPackage(SyncPackage package);
 
         bool SendSyncItem(SyncItem package);
 
-        IEnumerable<Guid> GetAllARIds(Guid userId);
+        HandshakePackage CheckAndCreateNewProcess(ClientIdentifier clientIdentifier);
+        
+        IEnumerable<SyncItemsMeta> GetAllARIds(Guid userId, Guid clientRegistrationKey);
 
         SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id);
     }

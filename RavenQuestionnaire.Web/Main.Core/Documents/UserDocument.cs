@@ -40,6 +40,8 @@ namespace Main.Core.Documents
         public UserLight Supervisor { get; set; }
         public string UserName { get; set; }
 
+        public DateTime LastChangeDate { get; set; }
+
         public UserLight GetUseLight()
         {
             return new UserLight(this.PublicKey, this.UserName);
