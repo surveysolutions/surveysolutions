@@ -150,6 +150,10 @@
       <Project>{DEDC7ECF-21F8-4D39-81C4-5DBE2E8B9D5D}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>

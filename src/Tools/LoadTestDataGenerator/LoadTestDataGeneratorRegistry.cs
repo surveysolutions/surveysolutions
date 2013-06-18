@@ -6,6 +6,8 @@ using System.Reflection;
 using Main.Core;
 
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace LoadTestDataGenerator
 {
@@ -23,6 +25,14 @@ namespace LoadTestDataGenerator
         public LoadTestDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
             : base(repositoryPath, isEmbeded)
         {
+        }
+
+        public override void Load()
+        {
+            base.Load();
+
+            this.Bind<ILog>().ToMethod(
+                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
         }
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
@@ -56,7 +66,7 @@ namespace LoadTestDataGenerator
                 : this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
-        private static bool ShouldUsePersistentReadLayer()
+        public static bool ShouldUsePersistentReadLayer()
         {
             return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }

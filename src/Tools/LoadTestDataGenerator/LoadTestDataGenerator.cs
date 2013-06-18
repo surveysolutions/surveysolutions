@@ -368,8 +368,11 @@ namespace LoadTestDataGenerator
 
         private void GenerateCapiEvents()
         {
-            this.UpdateStatus("reduild read layer");
-            NcqrsInit.EnsureReadLayerIsBuilt();
+            if (!LoadTestDataGeneratorRegistry.ShouldUsePersistentReadLayer())
+            {
+                this.UpdateStatus("reduild read layer");
+                NcqrsInit.EnsureReadLayerIsBuilt();
+            }
 
             var surveyIds = this.GetSurveyIds();
             this.UpdateStatus("full capi events", statistics.FullCAPIEventsCount);
