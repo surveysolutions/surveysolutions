@@ -198,6 +198,7 @@
     <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
     <Compile Include="Commands\Sync\CreateClientDeviceCommand.cs" />
     <Compile Include="Commands\Sync\CreateSyncActivityCommand.cs" />
+    <Compile Include="Commands\Sync\UpdateClientDeviceLastSyncItemCommand.cs" />
     <Compile Include="Commands\Sync\UpdateSyncActivityCommand.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
@@ -581,6 +582,7 @@
     <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs">
       <SubType>Code</SubType>
     </Compile>

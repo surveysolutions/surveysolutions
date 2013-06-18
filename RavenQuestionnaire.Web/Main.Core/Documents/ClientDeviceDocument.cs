@@ -16,5 +16,8 @@ namespace Main.Core.Documents
         public string DeviceType { set; get; }
 
         public Guid ClientInstanceKey { set; get; }
+
+        public long LastSyncItemIdentifier { set; get; }
+        
     }
 }

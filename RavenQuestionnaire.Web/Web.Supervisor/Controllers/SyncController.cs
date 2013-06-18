@@ -91,25 +91,25 @@ namespace Web.Supervisor.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public JsonResult GetARKeys(string login, string password, Guid syncActivityId)
+        public JsonResult GetARKeys(string login, string password, Guid clientRegistrationKey)
         {
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
-            if (syncActivityId == Guid.Empty)
+            if (clientRegistrationKey == Guid.Empty)
                 throw new HttpException("Incorrect parameter set.");
 
-            return Json(this.GetListOfAR(user.PublicKey, syncActivityId));
+            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey));
         }
 
-        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid syncActivityId)
+        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey)
         {
             var result = new SyncItemsMetaContainer();
 
             try
             {
-                var package = this.syncManager.GetAllARIds(userId, syncActivityId);
+                var package = this.syncManager.GetAllARIds(userId, clientRegistrationKey);
                 result.ARId = package.ToList();
             }
             catch (Exception ex)

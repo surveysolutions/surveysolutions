@@ -76,7 +76,7 @@ namespace WB.Core.Synchronization.SyncManager
             if(!identifier.CurrentProcessKey.HasValue)
                 throw new ArgumentException("Sync identifiier is not set.");
 
-            SyncItem item = syncProvider.GetSyncItem(identifier.CurrentProcessKey.Value, id, itemType);
+            SyncItem item = syncProvider.GetSyncItem(identifier.CurrentProcessKey.Value, id);
             
             if (item != null)
             {
