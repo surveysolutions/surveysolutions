@@ -4,6 +4,7 @@ using WB.Core.Infrastructure;
 
 namespace Web.Supervisor.Controllers
 {
+    [AllowAnonymous]
     public class ControlPanelController : Controller
     {
         private readonly IReadLayerAdministrationService readLayerAdministrationService;

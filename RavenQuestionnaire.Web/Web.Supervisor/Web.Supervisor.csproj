@@ -466,6 +466,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
