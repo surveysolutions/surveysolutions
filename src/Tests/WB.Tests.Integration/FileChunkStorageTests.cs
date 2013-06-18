@@ -12,13 +12,15 @@ namespace WB.Tests.Integration
     [TestFixture]
     public class FileChunkStorageTests
     {
-        private const string FolderPath = "/";
+        private const string FolderPath = ".";
         private const string FolderName = "SyncData";
 
         [SetUp]
         public void SetUp()
         {
-            Directory.Delete(Path.Combine(FolderPath, FolderName), true);
+            var dirPath = Path.Combine(FolderPath, FolderName);
+            if (Directory.Exists(dirPath))
+                Directory.Delete(Path.Combine(FolderPath, FolderName), true);
         }
 
         [Test]
