@@ -8,7 +8,6 @@
         //could be unnecessery and could be enough one ClientKey 
         public Guid ClientInstanceKey;
 
-
         // key provided by supervisor on registration on first sync
         public Guid? ClientRegistrationKey;
         
