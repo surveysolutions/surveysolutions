@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -90,23 +91,25 @@ namespace Web.Supervisor.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public JsonResult GetARKeys(string login, string password)
+        public JsonResult GetARKeys(string login, string password, Guid syncActivityId)
         {
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
-            return Json(this.GetListOfAR(user.PublicKey));
+            if (syncActivityId == Guid.Empty)
+                throw new HttpException("Incorrect parameter set.");
+
+            return Json(this.GetListOfAR(user.PublicKey, syncActivityId));
         }
 
-        private SyncItemsMetaContainer GetListOfAR(Guid userId)
+        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid syncActivityId)
         {
-           
             var result = new SyncItemsMetaContainer();
 
             try
             {
-                var package = this.syncManager.GetAllARIds(userId);
+                var package = this.syncManager.GetAllARIds(userId, syncActivityId);
                 result.ARId = package.ToList();
             }
             catch (Exception ex)

@@ -68,7 +68,8 @@ namespace Main.Core.EventHandlers
                         UserName = evnt.Payload.Name, 
                         Password = evnt.Payload.Password, 
                         PublicKey = evnt.Payload.PublicKey, 
-                        CreationDate = DateTime.UtcNow, 
+                        CreationDate = DateTime.UtcNow,
+                        LastChangeDate = DateTime.UtcNow,
                         Email = evnt.Payload.Email, 
                         IsLocked = evnt.Payload.IsLocked, 
                         Supervisor = evnt.Payload.Supervisor, 
@@ -96,6 +97,7 @@ namespace Main.Core.EventHandlers
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = true;
+            item.LastChangeDate = @event.EventTimeStamp;
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> @event)
@@ -103,6 +105,7 @@ namespace Main.Core.EventHandlers
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = false;
+            item.LastChangeDate = @event.EventTimeStamp;
         }
 
         #endregion

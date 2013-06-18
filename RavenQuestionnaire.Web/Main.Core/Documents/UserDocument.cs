@@ -88,6 +88,8 @@ namespace Main.Core.Documents
         /// </summary>
         public string UserName { get; set; }
 
+        public DateTime LastChangeDate { get; set; }
+
         /// <summary>
         /// Gets user's light info
         /// </summary>

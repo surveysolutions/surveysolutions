@@ -5,11 +5,11 @@
     [Serializable]
     public class NewClientDeviceCreated
     {
-        public Guid Id;
-        public DateTime CreationDate;
-        public string DeviceId;
-        public Guid ClientInstanceKey;
+        public Guid Id { set; get; }
+        public DateTime CreationDate { set; get; }
+        public string DeviceId { set; get; }
+        public Guid ClientInstanceKey { set; get; }
 
-        public string DeviceType;
+        //public string DeviceType { set; get; }
     }
 }
