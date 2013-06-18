@@ -105,12 +105,10 @@ namespace Web.Supervisor.Injections
             this.Bind<ISyncManager>().To<SyncManager>();
             this.Bind<ISyncProvider>().To<SyncProvider>();
             this.Bind<IImportManager>().To<DefaultImportManager>();
-           
-            this.Bind<IChunkStorage>()
-                .To<FileChunkStorage>()
-                .WithConstructorArgument("folderPath",  AppDomain.CurrentDomain.GetData("DataDirectory").ToString());
-            this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>();
 
+            
+            this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
+            this.Bind<IChunkStorageFactory>().To<DefaultChunkStorageFactory>().WithConstructorArgument("folderPath", AppDomain.CurrentDomain.GetData("DataDirectory").ToString());
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var package = this.syncManager.ReceiveSyncPackage(null, key);
+                var package = this.syncManager.ReceiveSyncPackage(null, key, user.PublicKey);
                 return Json(package, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

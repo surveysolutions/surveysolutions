@@ -69,12 +69,31 @@ namespace CAPI.Android.Syncronization.Pull
                 case SyncItemType.Questionnare:
                     ExecuteQuestionnarie(content);
                     break;
+                case SyncItemType.DeleteQuestionnare:
+                    ExecuteDeleteQuestionnarie(content);
+                    break;
                 case SyncItemType.User:
                     ExecuteUser(content);
                     break;
                 default: break;
             }
         
+        }
+
+        private void ExecuteDeleteQuestionnarie(string content)
+        {
+            var questionnarieId = Guid.Parse(content);
+
+            try
+            {
+                commandService.Execute(new DeleteCompleteQuestionnaireCommand(questionnarieId));
+            }
+#warning replace catch with propper handler of absent questionnaries
+            catch (Exception)
+            {
+                
+            }
+          
         }
 
         private void ExecuteUser(string content)

@@ -44,12 +44,15 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            storage.SaveQuestionnarie(evnt.EventSourceId);
+            storage.SaveQuestionnarie(evnt.EventSourceId,evnt.Payload.Responsible.Id);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            storage.SaveQuestionnarie(evnt.EventSourceId);
+            if(SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
+                storage.SaveQuestionnarie(evnt.EventSourceId, evnt.Payload.Responsible.Id);
+            else
+                storage.DeleteQuestionnarie(evnt.EventSourceId,evnt.Payload.Responsible.Id);
         }
 
         public void Handle(IPublishedEvent<FileUploaded> evnt)

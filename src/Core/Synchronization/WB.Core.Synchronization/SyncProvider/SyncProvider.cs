@@ -6,7 +6,6 @@ using Main.Core;
 using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -22,11 +21,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
     public class SyncProvider : ISyncProvider
     {
-        #warning ViewFactory should be used here
-        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires;
 
-        #warning ViewFactory should be used here
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
@@ -34,71 +29,31 @@ namespace WB.Core.Synchronization.SyncProvider
         private readonly ISynchronizationDataStorage storate;
 
         public SyncProvider(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys,
-            IQueryableReadSideRepositoryReader<UserDocument> users,
             IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices)
         {
-            this.questionnaires = surveys;
-            this.users = users;
             this.devices = devices;
         }
 
-        public SyncProvider(IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
-                            IQueryableReadSideRepositoryReader<UserDocument> users,
+        public SyncProvider(
                             IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
                             ISynchronizationDataStorage storate)
         {
-            this.questionnaires = questionnaires;
-            this.users = users;
             this.devices = devices;
             this.storate = storate;
         }
 
-        public SyncItem GetSyncItem(Guid id)
+        public SyncItem GetSyncItem(Guid id, Guid userId)
         {
-            return storate.GetLatestVersion(id);
+            return storate.GetLatestVersion(id, userId);
         }
 
         public IEnumerable<Guid> GetAllARIds(Guid userId)
         {
-           /* var result = new List<SyncItemsMeta>();
-
-            List<Guid> userIds = GetUsers(userId);
-            result.AddRange(userIds.Select(i => new SyncItemsMeta(i, SyncItemType.User, null)));
-
-            IEnumerable<Guid> questionnaireIds = GetQuestionnaires(userIds);
-            result.AddRange(questionnaireIds.Select(i => new SyncItemsMeta(i, SyncItemType.Questionnare, null)));
-
-            return result;*/
-            return storate.GetChunksCreatedAfter(0);
+            return storate.GetChunksCreatedAfter(0, userId);
         }
 
 
-        private IEnumerable<Guid> GetQuestionnaires(IEnumerable<Guid> userId)
-        {
-            var listOfStatuses = SurveyStatus.StatusAllowDownSupervisorSync();
-            return this.questionnaires.Query<List<Guid>>(_ => _
-                                                                  .Where(q => q.Status.PublicId.In(listOfStatuses)
-                                                                              && q.Responsible != null &&
-                                                                              q.Responsible.Id.In(userId))
-                                                                  .Select(i => i.PublicKey)
-                                                                  .ToList());
-        }
-
-        private List<Guid> GetUsers(Guid userId)
-        {
-            var supervisor =
-                users.Query<UserLight>(_ => _.Where(u => u.PublicKey == userId).Select(u => u.Supervisor).FirstOrDefault());
-            if (supervisor == null)
-                throw new ArgumentException("user is absent");
-            return
-                 this.users.Query<List<Guid>>(_ => _
-                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisor.Id)
-                     .Select(u => u.PublicKey)
-                     .ToList());
-
-        }
-
+      
 
         public Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {

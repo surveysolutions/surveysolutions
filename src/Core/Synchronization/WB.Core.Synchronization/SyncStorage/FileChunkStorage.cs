@@ -10,14 +10,13 @@ namespace WB.Core.Synchronization.SyncStorage
     public class FileChunkStorage : IChunkStorage
     {
         private readonly string path;
-        private const string folderName = "SyncData";
-        private const string fileExtension = "sync";
+        private const string FileExtension = "sync";
         private long currentSequence = 1;
-        private  object myLock = new object();
+        private readonly object myLock = new object();
 
-        public FileChunkStorage(string folderPath/*, Guid supervisor*/)
+        public FileChunkStorage(string folderPath, Guid supervisor)
         {
-            this.path = Path.Combine(folderPath, folderName/*, supervisor.ToString()*/);
+            this.path = Path.Combine(folderPath, supervisor.ToString());
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var alavibleFiles = GetAllFiles();
@@ -39,7 +38,7 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var syncDir = new DirectoryInfo(path);
             var sequences =
-                syncDir.GetFiles(string.Format("*-{0}.{1}", id, fileExtension))
+                syncDir.GetFiles(string.Format("*-{0}.{1}", id, FileExtension))
                        .Select(ExctractSequence)
                        .OrderByDescending(s => s);
             if (!sequences.Any())
@@ -56,7 +55,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         private string GetFilePath(Guid id, long sequence)
         {
-            return Path.Combine(this.path, string.Format("{0}-{1}.{2}", sequence, id, fileExtension));
+            return Path.Combine(this.path, string.Format("{0}-{1}.{2}", sequence, id, FileExtension));
         }
 
         private IEnumerable<KeyValuePair<long, Guid>> GetAllFiles()
@@ -64,7 +63,7 @@ namespace WB.Core.Synchronization.SyncStorage
             var syncDir = new DirectoryInfo(path);
 
             return
-                syncDir.GetFiles(string.Format("*.{0}", fileExtension))
+                syncDir.GetFiles(string.Format("*.{0}", FileExtension))
                        .ToDictionary(ExctractSequence, ExctractChuncId);
         }
 
