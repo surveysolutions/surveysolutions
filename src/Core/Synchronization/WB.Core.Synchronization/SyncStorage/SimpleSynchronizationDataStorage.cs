@@ -41,7 +41,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 ItemType = SyncItemType.Questionnare,
                 IsCompressed = UseCompression
             };
-            chunkStorage.StoreChunk(id, GetItemAsContent(syncItem),responsibleId);
+            chunkStorage.StoreChunk(syncItem, responsibleId);
         }
 
         public void DeleteQuestionnarie(Guid id, Guid responsibleId)
@@ -53,7 +53,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 Content = id.ToString(),
                 IsCompressed = UseCompression
             };
-            chunkStorage.StoreChunk(id, GetItemAsContent(syncItem), responsibleId);
+            chunkStorage.StoreChunk(syncItem, responsibleId);
         }
 
         public void SaveUser(UserDocument doc)
@@ -66,11 +66,7 @@ namespace WB.Core.Synchronization.SyncStorage
        
         public SyncItem GetLatestVersion(Guid id)
         {
-            var result = JsonConvert.DeserializeObject<SyncItem>(chunkStorage.ReadChunk(id),
-                                                           new JsonSerializerSettings
-                                                               {
-                                                                   TypeNameHandling = TypeNameHandling.Objects
-                                                               });
+            var result = chunkStorage.ReadChunk(id);
 
             if (result.ItemType == SyncItemType.Questionnare)
             {
@@ -117,7 +113,7 @@ namespace WB.Core.Synchronization.SyncStorage
             };
 
 
-            chunkStorage.StoreChunk(doc.PublicKey, GetItemAsContent(syncItem),doc.PublicKey);
+            chunkStorage.StoreChunk(syncItem, doc.PublicKey);
         }
 
        
