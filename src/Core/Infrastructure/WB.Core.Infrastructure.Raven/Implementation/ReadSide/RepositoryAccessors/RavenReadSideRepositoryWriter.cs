@@ -88,7 +88,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             int cachedEntities = this.cache.Count;
             int cachedEntitiesWhichNeedToBeStoredToRepository = this.cache.Count(entity => entity.Value.ShouldBeStoredToRepository);
 
-            return string.Format("cache {0};    cached: {1,3};    not stored: {2,3}",
+            return string.Format("cache {0,8};    cached: {1,3};    not stored: {2,3}",
                 this.isCacheEnabled ? "enabled" : "disabled",
                 cachedEntities,
                 cachedEntitiesWhichNeedToBeStoredToRepository);
