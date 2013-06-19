@@ -1,6 +1,6 @@
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository;
 
-namespace WB.Core.Infrastructure
+namespace WB.Core.Infrastructure.ReadSide
 {
     /// <summary>
     /// Marker interface for read-side views.

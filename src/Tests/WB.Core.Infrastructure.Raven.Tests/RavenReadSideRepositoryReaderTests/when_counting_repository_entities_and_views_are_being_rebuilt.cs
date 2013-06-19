@@ -5,7 +5,9 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository;
 
 using It = Machine.Specifications.It;
 
@@ -15,10 +17,10 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
     {
         Establish context = () =>
         {
-            var readLayerStatusService = Mock.Of<IReadLayerStatusService>(service
+            var readSideStatusService = Mock.Of<IReadSideStatusService>(service
                 => service.AreViewsBeingRebuiltNow() == true);
 
-            reader = CreateRavenReadSideRepositoryReader<IReadSideRepositoryEntity>(readLayerStatusService: readLayerStatusService);
+            reader = CreateRavenReadSideRepositoryReader<IReadSideRepositoryEntity>(readSideStatusService: readSideStatusService);
         };
 
         Because of = () =>

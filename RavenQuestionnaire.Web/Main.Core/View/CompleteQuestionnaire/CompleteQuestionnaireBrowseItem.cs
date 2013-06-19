@@ -15,6 +15,7 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Question;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.View.CompleteQuestionnaire
 {

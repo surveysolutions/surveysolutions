@@ -11,7 +11,9 @@ using Ninject;
 using Ninject.Modules;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Questionnaire.ExportServices;
 
 namespace LoadTestDataGenerator
@@ -22,7 +24,7 @@ namespace LoadTestDataGenerator
 
         public static StandardKernel Wire(INinjectModule module)
         {
-            kernel = new StandardKernel();
+            kernel = new StandardKernel(new RavenInfrastructureModule());
             
             RegisterServices(kernel);
 

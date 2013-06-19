@@ -13,6 +13,7 @@ using Android.Widget;
 using Main.DenormalizerStorage;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Androids.Core.Model.Tests
 {

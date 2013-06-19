@@ -47,10 +47,10 @@
             this.chkHeadquarter = new System.Windows.Forms.CheckBox();
             this.txtHQName = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.lstLog = new System.Windows.Forms.ListBox();
-            this.eventsStatistics = new System.Windows.Forms.ListBox();
             this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lstLog = new System.Windows.Forms.ListBox();
+            this.eventsStatistics = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -150,9 +150,9 @@
             this.clearDatabase.AutoSize = true;
             this.clearDatabase.Location = new System.Drawing.Point(21, 19);
             this.clearDatabase.Name = "clearDatabase";
-            this.clearDatabase.Size = new System.Drawing.Size(97, 17);
+            this.clearDatabase.Size = new System.Drawing.Size(211, 17);
             this.clearDatabase.TabIndex = 10;
-            this.clearDatabase.Text = "Clear database";
+            this.clearDatabase.Text = "Clear database (only events, not views)";
             this.clearDatabase.UseVisualStyleBackColor = true;
             // 
             // chkSetAnswers
@@ -234,10 +234,21 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 340);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.Size = new System.Drawing.Size(781, 22);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // txtStatus
+            // 
+            this.txtStatus.Name = "txtStatus";
+            this.txtStatus.Size = new System.Drawing.Size(157, 17);
+            this.txtStatus.Spring = true;
+            // 
+            // txtElapsedTime
+            // 
+            this.txtElapsedTime.Name = "txtElapsedTime";
+            this.txtElapsedTime.Size = new System.Drawing.Size(157, 17);
+            this.txtElapsedTime.Spring = true;
             // 
             // lstLog
             // 
@@ -256,30 +267,6 @@
             this.eventsStatistics.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.eventsStatistics.Size = new System.Drawing.Size(309, 121);
             this.eventsStatistics.TabIndex = 18;
-            // 
-            // txtStatus
-            // 
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(157, 17);
-            this.txtStatus.Spring = true;
-            // 
-            // txtElapsedTime
-            // 
-            this.txtElapsedTime.Name = "txtElapsedTime";
-            this.txtElapsedTime.Size = new System.Drawing.Size(157, 17);
-            this.txtElapsedTime.Spring = true;
-            // 
-            // txtStatus
-            // 
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(157, 17);
-            this.txtStatus.Spring = true;
-            // 
-            // txtElapsedTime
-            // 
-            this.txtElapsedTime.Name = "txtElapsedTime";
-            this.txtElapsedTime.Size = new System.Drawing.Size(157, 17);
-            this.txtElapsedTime.Spring = true;
             // 
             // LoadTestDataGenerator
             // 

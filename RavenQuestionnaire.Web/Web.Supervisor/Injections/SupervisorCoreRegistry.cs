@@ -3,6 +3,7 @@ using System.Web.Configuration;
 using Core.Supervisor.Views.Index;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils.Logging;
 using WB.Core.Synchronization.ImportManager;

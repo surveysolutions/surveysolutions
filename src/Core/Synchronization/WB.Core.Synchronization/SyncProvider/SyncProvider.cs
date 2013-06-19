@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
