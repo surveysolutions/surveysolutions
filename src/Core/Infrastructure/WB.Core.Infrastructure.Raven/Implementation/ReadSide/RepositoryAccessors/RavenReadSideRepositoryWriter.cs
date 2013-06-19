@@ -77,10 +77,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         public void DisableCache()
         {
-            this.isCacheEnabled = false;
-
             this.StoreAllCachedEntitiesToRepository();
             this.ClearCache();
+
+            this.isCacheEnabled = false;
         }
 
         public string GetReadableStatus()
@@ -204,7 +204,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private void StoreBulkOfCachedEntitiesToRepository(IEnumerable<KeyValuePair<Guid, CachedEntity>> bulkOfCachedEntities)
+        private void StoreBulkOfCachedEntitiesToRepository(List<KeyValuePair<Guid, CachedEntity>> bulkOfCachedEntities)
         {
             using (IDocumentSession session = this.OpenSession())
             {
@@ -213,11 +213,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                     string ravenId = ToRavenId(cachedEntityWithId.Key);
 
                     session.Store(entity: cachedEntityWithId.Value.Entity, id: ravenId);
-
-                    cachedEntityWithId.Value.ShouldBeStoredToRepository = false;
                 }
 
                 session.SaveChanges();
+            }
+
+            foreach (KeyValuePair<Guid, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
+            {
+                cachedEntityWithId.Value.ShouldBeStoredToRepository = false;
             }
         }
 
