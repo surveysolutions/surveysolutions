@@ -72,7 +72,7 @@ namespace WB.Tests.Integration
         }
 
         [Test]
-        public void StoreChunk_When_chunk_with_same_guid_is_present_Then_cunk_is_Stored_with_next_sequence()
+        public void StoreChunk_When_chunk_with_same_guid_is_present_Then_cunk_is_Stored_with_next_sequence_previous_is_deleted()
         {
             // arrange
             Guid chunkId = Guid.NewGuid();
@@ -89,7 +89,7 @@ namespace WB.Tests.Integration
             // assert
             var storedChunck = target.ReadChunk(chunkId);
             Assert.That(storedChunck, Is.EqualTo(someContent2));
-            Assert.That(Directory.GetFiles(Path.Combine(FolderPath, FolderName,supervisorId.ToString())).Count(), Is.EqualTo(2));
+            Assert.That(Directory.GetFiles(Path.Combine(FolderPath, FolderName,supervisorId.ToString())).Count(), Is.EqualTo(1));
         }
 
         [Test]
