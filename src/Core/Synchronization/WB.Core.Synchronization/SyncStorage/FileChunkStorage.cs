@@ -32,6 +32,15 @@ namespace WB.Core.Synchronization.SyncStorage
                 File.WriteAllText(GetFilePath(id, currentSequence), syncItem);
                 currentSequence++;
             }
+            var syncDir = new DirectoryInfo(path);
+
+            var sequences =
+                syncDir.GetFiles(string.Format("*-{0}.{1}", id, FileExtension)).OrderByDescending(f => f.LastWriteTime);
+
+            foreach (var sequenceFile in sequences.Skip(1))
+            {
+                sequenceFile.Delete();
+            }
         }
 
         public string ReadChunk(Guid id)
