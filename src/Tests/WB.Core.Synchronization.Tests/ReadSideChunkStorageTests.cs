@@ -54,11 +54,11 @@ namespace WB.Core.Synchronization.Tests
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
             // act
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent, IsCompressed = false }, userId);
 
             // assert
             var storedChunck = target.ReadChunk(chunkId);
-            Assert.That(storedChunck,Is.EqualTo(someContent));
+            Assert.That(storedChunck.Content,Is.EqualTo(someContent));
 
         }
 
@@ -73,16 +73,16 @@ namespace WB.Core.Synchronization.Tests
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1 }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1, IsCompressed = false }, userId);
 
             // act
 
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2 }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2, IsCompressed = false }, userId);
 
             // assert
             var storedChunck = target.ReadChunk(chunkId);
-            Assert.That(storedChunck, Is.EqualTo(someContent2));
-            Assert.That((object) querableStorageMock.Count(), Is.EqualTo(1));
+            Assert.That(storedChunck.Content, Is.EqualTo(someContent2));
+            Assert.That( querableStorageMock.Count(), Is.EqualTo(1));
         }
         
         [Test]
@@ -107,8 +107,8 @@ namespace WB.Core.Synchronization.Tests
             var someContent2 = "some content2";
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1 }, userId);
-            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2 }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1, IsCompressed = false}, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2, IsCompressed = false }, userId);
 
             // act
 
@@ -116,7 +116,7 @@ namespace WB.Core.Synchronization.Tests
 
             // assert
           
-            Assert.That(storedChunck, Is.EqualTo(someContent2));
+            Assert.That(storedChunck.Content, Is.EqualTo(someContent2));
         }
 
         [Test]

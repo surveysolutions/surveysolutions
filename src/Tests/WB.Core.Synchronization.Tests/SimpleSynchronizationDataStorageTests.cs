@@ -28,10 +28,10 @@ namespace WB.Core.Synchronization.Tests
             var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
 
-            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId, questionnarieId);
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.SaveQuestionnarie(questionnarieId, userId);
+            target.SaveQuestionnarie(new CompleteQuestionnaireStoreDocument(){PublicKey = questionnarieId}, userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -75,7 +75,7 @@ namespace WB.Core.Synchronization.Tests
             var questionnarieId = Guid.Parse("23333333-3333-3333-3333-333333333333");
             var supervisorId = Guid.Parse("22222222-2222-2222-2222-222222222222");
             var userId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId, questionnarieId);
+            SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
             
             // act
             target.DeleteQuestionnarie(questionnarieId, userId);
@@ -84,30 +84,23 @@ namespace WB.Core.Synchronization.Tests
             var result = target.GetLatestVersion(questionnarieId);
             Assert.That(result.ItemType, Is.EqualTo(SyncItemType.DeleteQuestionnare));
             Assert.That(result.Id, Is.EqualTo(questionnarieId));
-            Assert.That(result.Content, Is.EqualTo(PackageHelper.CompressString(questionnarieId.ToString())));
+            Assert.That(result.Content, Is.EqualTo(questionnarieId.ToString()));
         }
         private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisor(Guid supervisorId)
         {
             return
-                CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, Guid.NewGuid(), Guid.NewGuid());
+                CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, Guid.NewGuid());
 
         }
-        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId, Guid questionnarieId)
+        private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId)
         {
             var inmemoryChunkStorage = new InMemoryChunkStorage();
           
-            var questionnarieStorageMock = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-            questionnarieStorageMock.Setup(x => x.GetById(questionnarieId))
-                               .Returns(new CompleteQuestionnaireStoreDocument()
-                                   {
-                                       Responsible = new UserLight(userId, "test"),
-                                       PublicKey = questionnarieId
-                                   });
-
+           
             var userStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
 
             var retval =
-                new SimpleSynchronizationDataStorage(questionnarieStorageMock.Object, userStorageMock.Object, inmemoryChunkStorage);
+                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage);
 
             retval.SaveUser(new UserDocument()
             {
