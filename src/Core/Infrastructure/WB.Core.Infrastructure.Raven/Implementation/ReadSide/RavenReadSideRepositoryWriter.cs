@@ -10,10 +10,10 @@ using WB.Core.Infrastructure.ReadSide;
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {
     #warning TLK: make string identifiers here after switch to new storage
-    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IReadSideRepositoryWriter<TEntity>
+    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
-        public RavenReadSideRepositoryWriter(DocumentStore ravenStore)
+        internal RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
             : base(ravenStore) { }
 
         public TEntity GetById(Guid id)

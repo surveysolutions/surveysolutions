@@ -2,6 +2,8 @@
 using System.Text;
 using System.Threading.Tasks;
 
+using Machine.Specifications;
+
 using Moq;
 
 using Raven.Client.Document;
@@ -11,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
 {
+    [Subject(typeof(RavenReadSideRepositoryReader<>))]
     internal class RavenReadSideRepositoryReaderTestsContext
     {
         internal static RavenReadSideRepositoryReader<TEntity> CreateRavenReadSideRepositoryReader<TEntity>(
