@@ -24,7 +24,9 @@ namespace LoadTestDataGenerator
 
         public static StandardKernel Wire(INinjectModule module)
         {
-            kernel = new StandardKernel(new RavenInfrastructureModule());
+            kernel = new StandardKernel(
+                new NinjectSettings { InjectNonPublic = true },
+                new RavenInfrastructureModule());
             
             RegisterServices(kernel);
 
