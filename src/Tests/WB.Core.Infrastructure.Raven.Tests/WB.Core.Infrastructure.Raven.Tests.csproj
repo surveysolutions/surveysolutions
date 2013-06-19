@@ -61,9 +61,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\RavenReadSideRepositoryReaderTestsContext.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\RavenReadSideRepositoryWriterTestsContext.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_counting_repository_entities_and_views_are_being_rebuilt.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_getting_repository_entity_by_id_and_views_are_being_rebuilt.cs" />
     <Compile Include="RavenReadSideRepositoryReaderTests\when_querying_repository_entities_and_views_are_being_rebuilt.cs" />
+    <Compile Include="RavenReadSideRepositoryWriterTests\when_created.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
