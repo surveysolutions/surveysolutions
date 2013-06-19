@@ -68,7 +68,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 Environment.NewLine,
                 statusMessage,
                 areViewsBeingRebuiltNow ? "Yes" : "No",
-                this.GetReadableListOfWriters(),
+                this.GetReadableListOfRepositoryWriters(),
                 GetReadableErrors());
         }
 
@@ -109,7 +109,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
                 this.DeleteAllViews();
 
-                this.RepublishAllEvents();
+                try
+                {
+                    this.EnableCacheInAllRepositoryWriters();
+
+                    this.RepublishAllEvents();
+                }
+                finally
+                {
+                    this.DisableCacheInAllRepositoryWriters();
+                }
             }
             catch (Exception exception)
             {
@@ -180,6 +189,44 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage(string.Format("{0} views were deleted.", initialViewCount));
         }
 
+        private void EnableCacheInAllRepositoryWriters()
+        {
+            UpdateStatusMessage("Enabling cache in repository writers.");
+
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.EnableCache();
+            }
+
+            UpdateStatusMessage("Cache in repository writers enabled.");
+        }
+
+        private void DisableCacheInAllRepositoryWriters()
+        {
+            UpdateStatusMessage("Disabling cache in repository writers.");
+
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                UpdateStatusMessage(string.Format(
+                    "Disabling cache in repository writer for entity {0}.",
+                    GetRepositoryEntity(writer)));
+
+                try
+                {
+                    writer.DisableCache();
+                }
+                catch (Exception exception)
+                {
+                    this.SaveErrorForStatusReport(
+                        string.Format("Failed to disable cache and store data to repository for writer {0}.",
+                            writer.GetType()),
+                        exception);
+                }
+            }
+
+            UpdateStatusMessage("Cache in repository writers disabled.");
+        }
+
         private void RepublishAllEvents()
         {
             int processedEventsCount = 0;
@@ -245,11 +292,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 ? 0
                 : 60 * processedEventsCount / republishTimeSpent.TotalSeconds);
 
+            TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
+                processedEventsCount == 0
+                ? 0
+                : republishTimeSpent.TotalMilliseconds / processedEventsCount * allEventsCount);
+
             return string.Format(
-                "Processed events: {1}. Total events: {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute.",
+                "Processed events: {1}. Total events: {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute. Estimated time: {6}.",
                 Environment.NewLine,
                 processedEventsCount, allEventsCount, failedEventsCount,
-                republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute);
+                republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute, estimatedTotalRepublishTime.ToString(@"hh\:mm\:ss"));
         }
 
         private static void ThrowIfShouldStopViewsRebuilding()
@@ -266,7 +318,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
         }
 
-        private string GetReadableListOfWriters()
+        private string GetReadableListOfRepositoryWriters()
         {
             List<IRavenReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
 
@@ -281,9 +333,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                     string.Join(
                         Environment.NewLine,
                         writers
-                            .Select(writer => writer.GetType().ToString())
+                            .Select(writer => string.Format("{0,-75} ({1})", GetRepositoryEntity(writer), writer.GetReadableStatus()))
                             .OrderBy(_ => _)
                             .ToArray()));
+        }
+
+        private static string GetRepositoryEntity(IRavenReadSideRepositoryWriter writer)
+        {
+            return writer.GetType().GetGenericArguments().Single().ToString();
         }
 
         #region Error reporting methods
