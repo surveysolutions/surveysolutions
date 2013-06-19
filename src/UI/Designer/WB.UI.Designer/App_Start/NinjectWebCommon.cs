@@ -13,6 +13,7 @@ using Ninject.Web.Common;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Questionnaire.ExportServices;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;

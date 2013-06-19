@@ -55,12 +55,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryAccessor.cs" />
-    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryWriter.cs" />
-    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryReader.cs" />
+    <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryAccessor.cs" />
+    <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriter.cs" />
+    <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryReader.cs" />
+    <Compile Include="Implementation\ReadSide\IRavenReadSideRepositoryWriter.cs" />
+    <Compile Include="Implementation\ReadSide\IRavenReadSideRepositoryWriterRegistry.cs" />
     <Compile Include="RavenInfrastructureModule.cs" />
-    <Compile Include="Implementation\RavenReadLayerService.cs" />
+    <Compile Include="Implementation\ReadSide\RavenReadSideService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Implementation\ReadSide\RavenReadSideRepositoryWriterRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
