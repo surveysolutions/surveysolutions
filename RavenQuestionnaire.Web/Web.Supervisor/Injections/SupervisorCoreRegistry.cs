@@ -109,7 +109,7 @@ namespace Web.Supervisor.Injections
 
             
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
-            this.Bind<IChunkStorageFactory>().To<DefaultChunkStorageFactory>().WithConstructorArgument("folderPath", AppDomain.CurrentDomain.GetData("DataDirectory").ToString());
+            this.Bind<IChunkStorage>().To<ReadSideChunkStorage>().InSingletonScope(); 
         }
     }
 }

@@ -10,7 +10,7 @@ namespace WB.Core.Synchronization.SyncStorage
         void SaveQuestionnarie(Guid id, Guid responsibleId);
         void DeleteQuestionnarie(Guid id, Guid responsibleId);
         void SaveUser(UserDocument doc);
-        SyncItem GetLatestVersion(Guid id, Guid userId);
+        SyncItem GetLatestVersion(Guid id);
         IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId);
     }
 }

@@ -5,8 +5,8 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     public interface IChunkStorage
     {
-        void StoreChunk(Guid id, string syncItem);
+        void StoreChunk(Guid id, string syncItem, Guid userId);
         string ReadChunk(Guid id);
-        IEnumerable<Guid> GetChunksCreatedAfter(long sequence);
+        IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users);
     }
 }
