@@ -13,6 +13,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core;
+using Main.Core.Commands.File;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
@@ -75,9 +76,18 @@ namespace CAPI.Android.Syncronization.Pull
                 case SyncItemType.User:
                     ExecuteUser(content);
                     break;
+                case SyncItemType.File:
+                    ExecuteFile(content);
+                    break;
                 default: break;
             }
         
+        }
+
+        private void ExecuteFile(string content)
+        {
+            var file = JsonUtils.GetObject<FileSyncDescription>(content);
+            commandService.Execute(new UploadFileCommand(file.PublicKey, file.Title, file.Description, file.OriginalFile));
         }
 
         private void ExecuteDeleteQuestionnarie(string content)

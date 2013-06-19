@@ -9,6 +9,7 @@ namespace Main.Core.Synchronization
     {
         void SaveQuestionnarie(CompleteQuestionnaireStoreDocument doc, Guid responsibleId);
         void DeleteQuestionnarie(Guid id, Guid responsibleId);
+        void SaveImage(Guid publicKey, string title, string desc, string origData);
         void SaveUser(UserDocument doc);
         SyncItem GetLatestVersion(Guid id);
         IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId);

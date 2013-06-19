@@ -12,6 +12,7 @@ using System.IO;
 using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Services;
+using Main.Core.Synchronization;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
@@ -28,33 +29,19 @@ namespace Main.Core.EventHandlers
     {
         #region Fields
 
-        /// <summary>
-        /// The attachments.
-        /// </summary>
         private readonly IReadSideRepositoryWriter<FileDescription> attachments;
-
-        /// <summary>
-        /// The storage.
-        /// </summary>
         private readonly IFileStorageService storage;
+        private readonly ISynchronizationDataStorage syncStorage;
 
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileStoreDenormalizer"/> class.
-        /// </summary>
-        /// <param name="attachments">
-        /// The attachments.
-        /// </param>
-        /// <param name="storage">
-        /// The storage.
-        /// </param>
-        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage)
+        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage, ISynchronizationDataStorage syncStorage)
         {
             this.attachments = attachments;
             this.storage = storage;
+            this.syncStorage = syncStorage;
         }
 
         #endregion
@@ -73,7 +60,7 @@ namespace Main.Core.EventHandlers
                 {
                     FileName = evnt.Payload.PublicKey.ToString(),
                     // Content = original,
-                    Description = evnt.Payload.Description, 
+                    Description = evnt.Payload.Description,
                     Title = evnt.Payload.Title
                 };
             this.attachments.Store(fileDescription, evnt.Payload.PublicKey);
@@ -83,6 +70,9 @@ namespace Main.Core.EventHandlers
                 this.storage.StoreFile(fileDescription);
                 fileDescription.Content = null;
             }
+            if (this.syncStorage != null)
+                this.syncStorage.SaveImage(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.Description,
+                                           evnt.Payload.OriginalFile);
         }
 
         /// <summary>
