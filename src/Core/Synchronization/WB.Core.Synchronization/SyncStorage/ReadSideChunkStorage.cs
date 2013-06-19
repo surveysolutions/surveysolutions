@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             try
             {
-                var sequences = queryableStorage.Query(_ => _.Select(d => d.Sequence));
+                var sequences = queryableStorage.Query(_ => _.Select(d => d.Sequence)).ToList();
                 if (sequences.Any())
                     currentSequence = sequences.Max() + 1;
             }
@@ -69,7 +69,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
         {
-            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && d.UserId.In(users)).Select(d => d.PublicKey)).Distinct();
+            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && d.UserId.In(users)).Select(d => d.PublicKey)).Distinct().ToList();
         }
 
         protected long CurrentSequence

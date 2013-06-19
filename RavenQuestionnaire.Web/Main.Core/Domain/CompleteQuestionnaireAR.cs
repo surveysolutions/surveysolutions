@@ -681,7 +681,8 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
         {
-            this.doc = null;
+#warning implement proper way of deleting questionnaries
+            this.doc = new CompleteQuestionnaireDocument();
         }
 
         /// <summary>
