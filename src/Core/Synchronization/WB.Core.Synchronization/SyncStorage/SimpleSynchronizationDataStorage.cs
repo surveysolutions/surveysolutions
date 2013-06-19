@@ -95,7 +95,9 @@ namespace WB.Core.Synchronization.SyncStorage
             var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId).ToList().FirstOrDefault());
             if (user == null)
                 return Enumerable.Empty<Guid>();
-            var supervisorId = user.Supervisor.Id;
+
+            Guid supervisorId = user.Roles.Contains(UserRoles.Supervisor) ? userId : user.Supervisor.Id;
+
             return
                 userStorage.Query(
                     _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey));
