@@ -1,7 +1,4 @@
-﻿using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
-using WB.Core.Infrastructure.ReadSide;
-
-namespace WB.Core.Infrastructure.Raven
+﻿namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {
     /// <summary>
     /// Registry which contains references to all Raven-specific read side repository writers currently instantiated in application.
