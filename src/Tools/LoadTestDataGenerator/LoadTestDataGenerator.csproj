@@ -61,9 +61,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WB.Core.SharedKernel.Utils">
-      <HintPath>..\..\Core\Infrastructure\WB.Core.Infrastructure\bin\Debug\WB.Core.SharedKernel.Utils.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
