@@ -3,6 +3,7 @@ using System.Linq;
 using Main.DenormalizerStorage;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Tests
@@ -33,7 +34,7 @@ namespace WB.Core.Synchronization.Tests
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
             // act
-            target.StoreChunk(chunkId, someContent,userId);
+            target.StoreChunk(new SyncItem(){Id = chunkId,Content = someContent}, userId);
 
             // assert
 
@@ -53,7 +54,7 @@ namespace WB.Core.Synchronization.Tests
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
             // act
-            target.StoreChunk(chunkId, someContent, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent }, userId);
 
             // assert
             var storedChunck = target.ReadChunk(chunkId);
@@ -72,11 +73,11 @@ namespace WB.Core.Synchronization.Tests
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
-            target.StoreChunk(chunkId, someContent1, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1 }, userId);
 
             // act
 
-            target.StoreChunk(chunkId, someContent2, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2 }, userId);
 
             // assert
             var storedChunck = target.ReadChunk(chunkId);
@@ -106,8 +107,8 @@ namespace WB.Core.Synchronization.Tests
             var someContent2 = "some content2";
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
-            target.StoreChunk(chunkId, someContent1, userId);
-            target.StoreChunk(chunkId, someContent2, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1 }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2 }, userId);
 
             // act
 
@@ -131,8 +132,8 @@ namespace WB.Core.Synchronization.Tests
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
-            target.StoreChunk(chunkId1, someContent1, userId);
-            target.StoreChunk(chunkId2, someContent2, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId1, Content = someContent1 }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId2, Content = someContent2 }, userId);
 
             // act
             var result = target.GetChunksCreatedAfterForUsers(0, new Guid[] { userId });
@@ -156,8 +157,8 @@ namespace WB.Core.Synchronization.Tests
             var querableStorageMock = new InMemoryReadSideRepositoryAccessor<SynchronizationDelta>();
             ReadSideChunkStorage target = CreateRavenChunkStorage(querableStorageMock, querableStorageMock);
 
-            target.StoreChunk(chunkId, someContent1, userId);
-            target.StoreChunk(chunkId, someContent2, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent1 }, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent2 }, userId);
 
             // act
             var result = target.GetChunksCreatedAfterForUsers(0, new Guid[] { userId });
@@ -182,10 +183,10 @@ namespace WB.Core.Synchronization.Tests
 
             for (int i = 0; i < ind; i++)
             {
-                target.StoreChunk(Guid.NewGuid(), someContent, userId);
+                target.StoreChunk(new SyncItem() { Id = Guid.NewGuid(), Content = someContent }, userId);
             }
 
-            target.StoreChunk(chunkId, someContent, userId);
+            target.StoreChunk(new SyncItem() { Id = chunkId, Content = someContent }, userId);
             // act
             var result = target.GetChunksCreatedAfterForUsers(5, new Guid[] { userId });
 
