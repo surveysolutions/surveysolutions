@@ -34,7 +34,7 @@ namespace WB.Core.Synchronization.Tests
             target.SaveQuestionnarie(questionnarieId, userId);
 
             // assert
-            var result = target.GetLatestVersion(questionnarieId, userId);
+            var result = target.GetLatestVersion(questionnarieId);
             Assert.That(result.ItemType, Is.EqualTo(SyncItemType.Questionnare));
             Assert.That(result.Id, Is.EqualTo(questionnarieId));
             Assert.That(result.IsCompressed, Is.EqualTo(true));
@@ -62,7 +62,7 @@ namespace WB.Core.Synchronization.Tests
                 });
 
             // assert
-            var result = target.GetLatestVersion(userId, userId);
+            var result = target.GetLatestVersion(userId);
             Assert.That(result.ItemType, Is.EqualTo(SyncItemType.User));
             Assert.That(result.Id, Is.EqualTo(userId));
             Assert.That(result.IsCompressed, Is.EqualTo(true));
@@ -81,7 +81,7 @@ namespace WB.Core.Synchronization.Tests
             target.DeleteQuestionnarie(questionnarieId, userId);
 
             // assert
-            var result = target.GetLatestVersion(questionnarieId, userId);
+            var result = target.GetLatestVersion(questionnarieId);
             Assert.That(result.ItemType, Is.EqualTo(SyncItemType.DeleteQuestionnare));
             Assert.That(result.Id, Is.EqualTo(questionnarieId));
             Assert.That(result.Content, Is.EqualTo(PackageHelper.CompressString(questionnarieId.ToString())));
@@ -95,19 +95,19 @@ namespace WB.Core.Synchronization.Tests
         private SimpleSynchronizationDataStorage CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(Guid supervisorId, Guid userId, Guid questionnarieId)
         {
             var inmemoryChunkStorage = new InMemoryChunkStorage();
-            var chunkFactoryMock = new Mock<IChunkStorageFactory>();
-            chunkFactoryMock.Setup(x => x.GetStorage(It.IsAny<Guid>())).Returns(inmemoryChunkStorage);
-
-            var documentStorageMock = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-            documentStorageMock.Setup(x => x.GetById(questionnarieId))
+          
+            var questionnarieStorageMock = new Mock<IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+            questionnarieStorageMock.Setup(x => x.GetById(questionnarieId))
                                .Returns(new CompleteQuestionnaireStoreDocument()
                                    {
                                        Responsible = new UserLight(userId, "test"),
                                        PublicKey = questionnarieId
                                    });
 
+            var userStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
+
             var retval =
-                new SimpleSynchronizationDataStorage(documentStorageMock.Object, chunkFactoryMock.Object);
+                new SimpleSynchronizationDataStorage(questionnarieStorageMock.Object, userStorageMock.Object, inmemoryChunkStorage);
 
             retval.SaveUser(new UserDocument()
             {
