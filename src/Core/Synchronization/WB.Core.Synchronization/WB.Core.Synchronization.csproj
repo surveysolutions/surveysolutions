@@ -80,7 +80,6 @@
     <Compile Include="SyncStorage\ReadSideChunkStorage.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
     <Compile Include="SyncStorage\IChunkStorage.cs" />
-    <Compile Include="SyncStorage\ISynchronizationDataStorage.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
   </ItemGroup>
   <ItemGroup>

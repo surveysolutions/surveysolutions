@@ -17,6 +17,9 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly object myLock = new object();
         private long? currentSequence;
 
+
+           /* if (UseCompression)
+                result.Content = PackageHelper.CompressString(result.Content);*/
         public ReadSideChunkStorage(IReadSideRepositoryWriter<SynchronizationDelta> storage,
                                  IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
         {
@@ -49,7 +52,7 @@ namespace WB.Core.Synchronization.SyncStorage
             lock (myLock)
             {
                 storage.Store(new SynchronizationDelta(syncItem.Id, syncItem.Content, CurrentSequence, userId, syncItem.IsCompressed,
-                                                    SyncItemType.Questionnare), syncItem.Id);
+                                                    syncItem.ItemType), syncItem.Id);
                 CurrentSequence++;
             }
         }
@@ -59,6 +62,7 @@ namespace WB.Core.Synchronization.SyncStorage
             var item = storage.GetById(id);
             if (item == null)
                 throw new ArgumentException("chunk is absent");
+
             return new SyncItem()
                 {
                     Id = item.PublicKey,

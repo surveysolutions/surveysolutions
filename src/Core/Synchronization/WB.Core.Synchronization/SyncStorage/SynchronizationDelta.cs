@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 
@@ -19,7 +20,7 @@ namespace WB.Core.Synchronization.SyncStorage
         public SynchronizationDelta(Guid publicKey, string content, long sequence, Guid userId, bool isCompressed, string itemType)
         {
             PublicKey = publicKey;
-            Content = content;
+            Content = isCompressed? PackageHelper.CompressString(content):content;
             Sequence = sequence;
             UserId = userId;
             IsCompressed = isCompressed;
