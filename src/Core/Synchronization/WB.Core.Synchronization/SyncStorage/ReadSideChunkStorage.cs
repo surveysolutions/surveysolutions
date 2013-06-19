@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
@@ -43,28 +44,28 @@ namespace WB.Core.Synchronization.SyncStorage
            
         }
 
-        public void StoreChunk(Guid id, string syncItem, Guid userId)
+        public void StoreChunk(SyncItem syncItem, Guid userId)
         {
             lock (myLock)
             {
-                storage.Store(new SynchronizationDelta(id, syncItem, CurrentSequence, userId), id);
+                storage.Store(new SynchronizationDelta(syncItem.Id, syncItem.Content, CurrentSequence, userId, syncItem.IsCompressed,
+                                                    SyncItemType.Questionnare), syncItem.Id);
                 CurrentSequence++;
-            /*    var oldItems =
-                    queryableStorage.Query(
-                        _ => _.Where(d => d.PublicKey == id).OrderByDescending(s => s.Sequence).Select(d => d.PublicKey));
-                foreach (var oldItem in oldItems.Skip(1))
-                {
-                    storage.Remove(oldItem);
-                }*/
             }
         }
 
-        public string ReadChunk(Guid id)
+        public SyncItem ReadChunk(Guid id)
         {
             var item = storage.GetById(id);
-            if(item==null)
+            if (item == null)
                 throw new ArgumentException("chunk is absent");
-            return item.Content;
+            return new SyncItem()
+                {
+                    Id = item.PublicKey,
+                    IsCompressed = item.IsCompressed,
+                    ItemType = item.ItemType,
+                    Content = item.Content
+                };
         }
 
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
