@@ -24,6 +24,7 @@ using System.Windows.Forms;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace LoadTestDataGenerator
 {

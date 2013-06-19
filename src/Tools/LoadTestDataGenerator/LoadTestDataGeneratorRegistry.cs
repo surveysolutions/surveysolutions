@@ -6,6 +6,7 @@ using System.Reflection;
 using Main.Core;
 
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Logger;
 using WB.Core.SharedKernel.Utils.Logging;
 

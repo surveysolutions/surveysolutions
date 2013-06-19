@@ -17,9 +17,12 @@ using Ninject.Modules;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
+
 #endif
 
 namespace Main.Core

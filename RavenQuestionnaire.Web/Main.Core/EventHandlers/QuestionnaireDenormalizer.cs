@@ -10,6 +10,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.EventHandlers
