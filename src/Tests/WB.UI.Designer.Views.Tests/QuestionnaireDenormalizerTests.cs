@@ -13,6 +13,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.EventHandler;
 using WB.UI.Designer.Views.Questionnaire;
