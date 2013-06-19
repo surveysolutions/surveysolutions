@@ -77,10 +77,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         public void DisableCache()
         {
-            this.isCacheEnabled = false;
-
             this.StoreAllCachedEntitiesToRepository();
             this.ClearCache();
+
+            this.isCacheEnabled = false;
         }
 
         public string GetReadableStatus()
@@ -88,7 +88,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             int cachedEntities = this.cache.Count;
             int cachedEntitiesWhichNeedToBeStoredToRepository = this.cache.Count(entity => entity.Value.ShouldBeStoredToRepository);
 
-            return string.Format("cache {0};    cached: {1,3};    not stored: {2,3}",
+            return string.Format("cache {0,8};    cached: {1,3};    not stored: {2,3}",
                 this.isCacheEnabled ? "enabled" : "disabled",
                 cachedEntities,
                 cachedEntitiesWhichNeedToBeStoredToRepository);
@@ -98,11 +98,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             if (!this.cache.ContainsKey(id))
             {
-                if (this.IsCacheLimitReached())
-                {
-                    this.StoreAllCachedEntitiesToRepository();
-                    this.ClearCache();
-                }
+                this.ReduceCacheIfNeeded();
 
                 TEntity entity = this.GetByIdAvoidingCache(id);
 
@@ -130,11 +126,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
             else
             {
-                if (this.IsCacheLimitReached())
-                {
-                    this.StoreAllCachedEntitiesToRepository();
-                    this.ClearCache();
-                }
+                this.ReduceCacheIfNeeded();
 
                 this.cache.Add(id, new CachedEntity(entity, shouldBeStoredToRepository: true));
             }
@@ -174,6 +166,36 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
+        private void ReduceCacheIfNeeded()
+        {
+            if (this.IsCacheLimitReached())
+            {
+                this.ReduceCache();
+            }
+        }
+
+        private void ReduceCache()
+        {
+            List<KeyValuePair<Guid, CachedEntity>> bulk = this.GetBulkOfEntitiesForRemovanceFromCache();
+
+            this.StoreBulkOfCachedEntitiesToRepository(bulk);
+
+            this.RemoveEntitiesFromCache(bulk.Select(cachedEntityWithId => cachedEntityWithId.Key));
+        }
+
+        private List<KeyValuePair<Guid, CachedEntity>> GetBulkOfEntitiesForRemovanceFromCache()
+        {
+            return this.cache.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
+        }
+
+        private void RemoveEntitiesFromCache(IEnumerable<Guid> ids)
+        {
+            foreach (Guid id in ids)
+            {
+                this.cache.Remove(id);
+            }
+        }
+
         private bool IsCacheLimitReached()
         {
             return this.cache.Count >= MaxCountOfCachedEntities;
@@ -204,7 +226,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        private void StoreBulkOfCachedEntitiesToRepository(IEnumerable<KeyValuePair<Guid, CachedEntity>> bulkOfCachedEntities)
+        private void StoreBulkOfCachedEntitiesToRepository(List<KeyValuePair<Guid, CachedEntity>> bulkOfCachedEntities)
         {
             using (IDocumentSession session = this.OpenSession())
             {
@@ -213,11 +235,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                     string ravenId = ToRavenId(cachedEntityWithId.Key);
 
                     session.Store(entity: cachedEntityWithId.Value.Entity, id: ravenId);
-
-                    cachedEntityWithId.Value.ShouldBeStoredToRepository = false;
                 }
 
                 session.SaveChanges();
+            }
+
+            foreach (KeyValuePair<Guid, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
+            {
+                cachedEntityWithId.Value.ShouldBeStoredToRepository = false;
             }
         }
 
