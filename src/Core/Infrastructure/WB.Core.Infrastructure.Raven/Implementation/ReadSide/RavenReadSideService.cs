@@ -35,18 +35,20 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private readonly IEventBus eventBus;
         private readonly DocumentStore ravenStore;
         private readonly ILog logger;
+        private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
 
         static RavenReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger, IRavenReadSideRepositoryWriterRegistry writerRegistry)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.ravenStore = ravenStore;
             this.logger = logger;
+            this.writerRegistry = writerRegistry;
         }
 
         #region IReadLayerStatusService implementation
@@ -62,10 +64,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
         public string GetReadableStatus()
         {
-            return string.Format("{1}{0}{0}Are views being rebuilt now: {2}{0}{0}{3}",
+            return string.Format("{1}{0}{0}Are views being rebuilt now: {2}{0}{0}{3}{0}{0}{4}",
                 Environment.NewLine,
                 statusMessage,
                 areViewsBeingRebuiltNow ? "Yes" : "No",
+                this.GetReadableListOfWriters(),
                 GetReadableErrors());
         }
 
@@ -261,6 +264,26 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private static void UpdateStatusMessage(string newMessage)
         {
             statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
+        }
+
+        private string GetReadableListOfWriters()
+        {
+            List<IRavenReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
+
+            bool areThereNoWriters = writers.Count == 0;
+
+            return areThereNoWriters
+                ? "Registered writers: None"
+                : string.Format(
+                    "Registered writers: {1}{0}{2}",
+                    Environment.NewLine,
+                    writers.Count,
+                    string.Join(
+                        Environment.NewLine,
+                        writers
+                            .Select(writer => writer.GetType().ToString())
+                            .OrderBy(_ => _)
+                            .ToArray()));
         }
 
         #region Error reporting methods
