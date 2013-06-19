@@ -98,11 +98,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             if (!this.cache.ContainsKey(id))
             {
-                if (this.IsCacheLimitReached())
-                {
-                    this.StoreAllCachedEntitiesToRepository();
-                    this.ClearCache();
-                }
+                this.ReduceCacheIfNeeded();
 
                 TEntity entity = this.GetByIdAvoidingCache(id);
 
@@ -130,11 +126,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
             else
             {
-                if (this.IsCacheLimitReached())
-                {
-                    this.StoreAllCachedEntitiesToRepository();
-                    this.ClearCache();
-                }
+                this.ReduceCacheIfNeeded();
 
                 this.cache.Add(id, new CachedEntity(entity, shouldBeStoredToRepository: true));
             }
@@ -171,6 +163,36 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
                 session.Store(entity: entity, id: ravenId);
                 session.SaveChanges();
+            }
+        }
+
+        private void ReduceCacheIfNeeded()
+        {
+            if (this.IsCacheLimitReached())
+            {
+                this.ReduceCache();
+            }
+        }
+
+        private void ReduceCache()
+        {
+            List<KeyValuePair<Guid, CachedEntity>> bulk = this.GetBulkOfEntitiesForRemovanceFromCache();
+
+            this.StoreBulkOfCachedEntitiesToRepository(bulk);
+
+            this.RemoveEntitiesFromCache(bulk.Select(cachedEntityWithId => cachedEntityWithId.Key));
+        }
+
+        private List<KeyValuePair<Guid, CachedEntity>> GetBulkOfEntitiesForRemovanceFromCache()
+        {
+            return this.cache.Take(MaxCountOfEntitiesInOneStoreOperation).ToList();
+        }
+
+        private void RemoveEntitiesFromCache(IEnumerable<Guid> ids)
+        {
+            foreach (Guid id in ids)
+            {
+                this.cache.Remove(id);
             }
         }
 
