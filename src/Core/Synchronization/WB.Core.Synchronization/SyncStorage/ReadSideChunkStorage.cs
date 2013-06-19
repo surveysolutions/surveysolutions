@@ -47,7 +47,7 @@ namespace WB.Core.Synchronization.SyncStorage
            
         }
 
-        public void StoreChunk(SyncItem syncItem, Guid userId)
+        public void StoreChunk(SyncItem syncItem, Guid? userId)
         {
             lock (myLock)
             {
@@ -74,7 +74,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
         {
-            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && d.UserId.In(users)).Select(d => d.PublicKey)).Distinct().ToList();
+            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users)||!d.UserId.HasValue)).Select(d => d.PublicKey)).Distinct().ToList();
         }
 
         protected long CurrentSequence

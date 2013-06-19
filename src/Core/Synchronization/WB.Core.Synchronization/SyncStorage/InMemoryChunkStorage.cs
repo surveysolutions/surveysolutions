@@ -20,7 +20,7 @@ namespace WB.Core.Synchronization.SyncStorage
             : this(new Dictionary<Guid, SyncItem>())
         {
         }
-        public void StoreChunk(SyncItem syncItem, Guid userId)
+        public void StoreChunk(SyncItem syncItem, Guid? userId)
         {
             this.container[syncItem.Id] = syncItem;
         }

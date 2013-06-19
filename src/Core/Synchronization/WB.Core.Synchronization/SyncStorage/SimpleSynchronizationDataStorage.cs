@@ -57,6 +57,25 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorage.StoreChunk(syncItem, responsibleId);
         }
 
+        public void SaveImage(Guid publicKey, string title, string desc, string origData)
+        {
+            var fileDescription = new FileSyncDescription()
+                {
+                    Description = desc,
+                    OriginalFile = origData,
+                    PublicKey = publicKey,
+                    Title = title
+                };
+            var syncItem = new SyncItem
+            {
+                Id = publicKey,
+                ItemType = SyncItemType.File,
+                IsCompressed = UseCompression,
+                Content = GetItemAsContent(fileDescription)
+            };
+            chunkStorage.StoreChunk(syncItem, null);
+        }
+
         public void SaveUser(UserDocument doc)
         {
             if (doc.Roles.Contains(UserRoles.Operator))
