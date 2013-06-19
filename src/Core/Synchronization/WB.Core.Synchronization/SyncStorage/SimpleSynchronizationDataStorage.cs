@@ -18,39 +18,34 @@ namespace WB.Core.Synchronization.SyncStorage
     public class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
         private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage;
-       
-        private readonly IChunkStorageFactory fileChunkStorageFactory;
-        private readonly IDictionary<Guid, List<Guid>> supervisorTeams; 
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
+
+        private readonly IChunkStorage chunkStorage;
 
         public SimpleSynchronizationDataStorage(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage,
-            IChunkStorageFactory fileChunkStorage)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage, 
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            IChunkStorage chunkStorage
+            )
         {
             this.questionnarieStorage = questionnarieStorage;
-            this.fileChunkStorageFactory = fileChunkStorage;
-            this.supervisorTeams=new Dictionary<Guid, List<Guid>>();
+            this.userStorage = userStorage;
+            this.chunkStorage = chunkStorage;
         }
 
         public void SaveQuestionnarie(Guid id, Guid responsibleId)
         {
-            var supervisorid = GetSupervisorByUser(responsibleId);
-            if (!supervisorid.HasValue)
-                return;
             var syncItem = new SyncItem
             {
                 Id = id,
                 ItemType = SyncItemType.Questionnare,
                 IsCompressed = UseCompression
             };
-            GetStorage(supervisorid.Value).StoreChunk(id, GetItemAsContent(syncItem));
+            chunkStorage.StoreChunk(id, GetItemAsContent(syncItem),responsibleId);
         }
 
         public void DeleteQuestionnarie(Guid id, Guid responsibleId)
         {
-            var supervisorid = GetSupervisorByUser(responsibleId);
-            if (!supervisorid.HasValue)
-                return;
-
             var syncItem = new SyncItem
             {
                 Id = id,
@@ -58,7 +53,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 Content = id.ToString(),
                 IsCompressed = UseCompression
             };
-            GetStorage(supervisorid.Value).StoreChunk(id, GetItemAsContent(syncItem));
+            chunkStorage.StoreChunk(id, GetItemAsContent(syncItem), responsibleId);
         }
 
         public void SaveUser(UserDocument doc)
@@ -67,16 +62,11 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 SaveInteviewer(doc);
             }
-            if (doc.Roles.Contains(UserRoles.Supervisor))
-                SaveSupervisor(doc.PublicKey);
         }
        
-        public SyncItem GetLatestVersion(Guid id, Guid userId)
+        public SyncItem GetLatestVersion(Guid id)
         {
-            var supervisorid = GetSupervisorByUser(userId);
-            if (!supervisorid.HasValue)
-                return null;
-            var result = JsonConvert.DeserializeObject<SyncItem>(GetStorage(supervisorid.Value).ReadChunk(id),
+            var result = JsonConvert.DeserializeObject<SyncItem>(chunkStorage.ReadChunk(id),
                                                            new JsonSerializerSettings
                                                                {
                                                                    TypeNameHandling = TypeNameHandling.Objects
@@ -95,28 +85,25 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId)
         {
-            var supervisorid = GetSupervisorByUser(userId);
-            if (!supervisorid.HasValue)
-                return Enumerable.Empty<Guid>();
+            var users = GetUserTeamates(userId);
             return
-                GetStorage(supervisorid.Value).GetChunksCreatedAfter(sequence);
+                chunkStorage.GetChunksCreatedAfterForUsers(sequence, users);
         }
 
-        protected IChunkStorage GetStorage(Guid supervisorId)
+        private IEnumerable<Guid> GetUserTeamates(Guid userId)
         {
-            return fileChunkStorageFactory.GetStorage(supervisorId);
+            var user = userStorage.Query(_ => _.Where(u => u.PublicKey == userId).ToList().FirstOrDefault());
+            if (user == null)
+                return Enumerable.Empty<Guid>();
+            var supervisorId = user.Supervisor.Id;
+            return
+                userStorage.Query(
+                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey));
         }
 
-        private void SaveSupervisor(Guid supervisorId)
-        {
-            if(supervisorTeams.ContainsKey(supervisorId))
-                return;
-            supervisorTeams.Add(supervisorId, new List<Guid>());
-        }
 
         private void SaveInteviewer(UserDocument doc)
         {
-
             var syncItem = new SyncItem
             {
                 Id = doc.PublicKey,
@@ -126,44 +113,13 @@ namespace WB.Core.Synchronization.SyncStorage
             };
 
 
-            GetStorage(doc.Supervisor.Id).StoreChunk(doc.PublicKey, GetItemAsContent(syncItem));
-
-
-            var supervisorId = GetSupervisorByUser(doc.Supervisor.Id);
-            if (!supervisorId.HasValue)
-            {
-                SaveSupervisor(doc.Supervisor.Id);
-            }
-            supervisorTeams[doc.Supervisor.Id].Add(doc.PublicKey);
+            chunkStorage.StoreChunk(doc.PublicKey, GetItemAsContent(syncItem),doc.PublicKey);
         }
 
-        private Guid? GetSupervisorByUser(Guid userId)
-        {
-            foreach (var supervisorTeam in supervisorTeams)
-            {
-                if (supervisorTeam.Value.Contains(userId))
-                    return supervisorTeam.Key;
-            }
-            return null;
-        }
+       
 
         #region from sync provider
 
-
-      /*  private SyncItem GetItem(object item, Guid id, string type)
-        {
-            var result = new SyncItem
-            {
-                Id = id,
-                ItemType = type,
-                IsCompressed = UseCompression
-            };
-            if (item != null)
-                result.Content = GetItemAsContent(item);
-            return result;
-        }*/
-
-       
 
         private CompleteQuestionnaireDocument CreateQuestionnarieDocument(Guid id)
         {

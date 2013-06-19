@@ -48,13 +48,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileChunkStorageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>

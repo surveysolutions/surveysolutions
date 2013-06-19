@@ -43,9 +43,9 @@ namespace WB.Core.Synchronization.SyncProvider
             this.storate = storate;
         }
 
-        public SyncItem GetSyncItem(Guid id, Guid userId)
+        public SyncItem GetSyncItem(Guid id)
         {
-            return storate.GetLatestVersion(id, userId);
+            return storate.GetLatestVersion(id);
         }
 
         public IEnumerable<Guid> GetAllARIds(Guid userId)
