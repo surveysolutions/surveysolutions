@@ -86,6 +86,7 @@ namespace Web.Supervisor.App_Start
             string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
 
             var kernel = new StandardKernel(
+                new NinjectSettings { InjectNonPublic = true },
                 new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
                 new RavenInfrastructureModule());
 
