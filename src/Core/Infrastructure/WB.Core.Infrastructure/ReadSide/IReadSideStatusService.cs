@@ -1,4 +1,4 @@
-﻿namespace WB.Core.Infrastructure
+﻿namespace WB.Core.Infrastructure.ReadSide
 {
     public interface IReadSideStatusService
     {

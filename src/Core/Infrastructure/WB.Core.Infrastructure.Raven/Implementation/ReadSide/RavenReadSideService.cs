@@ -13,9 +13,10 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 
-using ILog = WB.Core.SharedKernel.Logger.ILog;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Logger;
 
-namespace WB.Core.Infrastructure.Raven.Implementation
+namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {
     internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {
