@@ -5,7 +5,9 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository;
 
 using It = Machine.Specifications.It;
 

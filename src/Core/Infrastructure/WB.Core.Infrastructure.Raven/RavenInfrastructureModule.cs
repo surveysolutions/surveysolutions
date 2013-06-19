@@ -1,6 +1,8 @@
 ﻿using Ninject.Modules;
 
 using WB.Core.Infrastructure.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven
 {
