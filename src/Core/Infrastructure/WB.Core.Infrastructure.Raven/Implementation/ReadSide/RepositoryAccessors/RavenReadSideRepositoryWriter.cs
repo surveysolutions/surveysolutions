@@ -14,7 +14,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         where TEntity : class, IReadSideRepositoryEntity
     {
         internal RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
-            : base(ravenStore) { }
+            : base(ravenStore)
+        {
+            writerRegistry.Register(this);
+        }
 
         public TEntity GetById(Guid id)
         {

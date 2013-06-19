@@ -17,12 +17,12 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
     internal class RavenReadSideRepositoryReaderTestsContext
     {
         internal static RavenReadSideRepositoryReader<TEntity> CreateRavenReadSideRepositoryReader<TEntity>(
-            DocumentStore ravenStore = null, IReadLayerStatusService readLayerStatusService = null)
+            DocumentStore ravenStore = null, IReadSideStatusService readSideStatusService = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new RavenReadSideRepositoryReader<TEntity>(
                 ravenStore ?? new DocumentStore(),
-                readLayerStatusService ?? Mock.Of<IReadLayerStatusService>());
+                readSideStatusService ?? Mock.Of<IReadSideStatusService>());
         }
     }
 }

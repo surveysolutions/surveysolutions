@@ -7,11 +7,11 @@ namespace Web.Supervisor.Controllers
     [AllowAnonymous]
     public class ControlPanelController : Controller
     {
-        private readonly IReadLayerAdministrationService readLayerAdministrationService;
+        private readonly IReadSideAdministrationService readSideAdministrationService;
 
-        public ControlPanelController(IReadLayerAdministrationService readLayerAdministrationService)
+        public ControlPanelController(IReadSideAdministrationService readSideAdministrationService)
         {
-            this.readLayerAdministrationService = readLayerAdministrationService;
+            this.readSideAdministrationService = readSideAdministrationService;
         }
 
         public ActionResult ReadLayer()
@@ -22,19 +22,19 @@ namespace Web.Supervisor.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReadLayerStatus()
         {
-            return this.readLayerAdministrationService.GetReadableStatus();
+            return this.readSideAdministrationService.GetReadableStatus();
         }
 
         public ActionResult RebuildReadLayer()
         {
-            this.readLayerAdministrationService.RebuildAllViewsAsync();
+            this.readSideAdministrationService.RebuildAllViewsAsync();
 
             return this.RedirectToAction("ReadLayer");
         }
 
         public ActionResult StopReadLayerRebuilding()
         {
-            this.readLayerAdministrationService.StopAllViewsRebuilding();
+            this.readSideAdministrationService.StopAllViewsRebuilding();
 
             return this.RedirectToAction("ReadLayer");
         }

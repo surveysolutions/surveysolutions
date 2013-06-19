@@ -8,8 +8,8 @@ namespace WB.Core.Infrastructure.Raven
     {
         public override void Load()
         {
-            this.Bind<IReadLayerStatusService>().To<RavenReadLayerService>().InSingletonScope();
-            this.Bind<IReadLayerAdministrationService>().To<RavenReadLayerService>().InSingletonScope();
+            this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
+            this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
         }
     }
 }
