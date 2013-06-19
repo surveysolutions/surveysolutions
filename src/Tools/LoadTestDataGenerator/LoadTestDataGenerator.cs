@@ -23,6 +23,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -40,7 +41,7 @@ namespace LoadTestDataGenerator
         private static readonly Random RandomObject = new Random((int)DateTime.Now.Ticks);
 
         protected readonly ICommandService CommandService;
-        protected readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> SurveyStorage;
+        protected readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> SurveyStorage;
         protected readonly DocumentStore RavenStore;
         private readonly IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory;
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
@@ -49,14 +50,18 @@ namespace LoadTestDataGenerator
 
         private QuestionnaireDocument template;
         private IEnumerable<IQuestion> featuredQuestions;
+        private Statistics statistics;
+        private ProgressOperation currentOperation;
+        private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
 
-        public LoadTestDataGenerator(ICommandService commandService,
-            IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveyStorage,
-            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory)
+        internal LoadTestDataGenerator(ICommandService commandService,
+            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> surveyStorage,
+            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory, IRavenReadSideRepositoryWriterRegistry writerRegistry)
         {
             this.RavenStore = ravenStore;
             this.userBrowseViewFactory = userBrowseViewFactory;
             this.userViewFactory = userViewFactory;
+            this.writerRegistry = writerRegistry;
             this.CommandService = commandService;
             this.SurveyStorage = surveyStorage;
             InitializeComponent();
@@ -83,6 +88,8 @@ namespace LoadTestDataGenerator
 
             Task.Run(() =>
             {
+                this.EnableCacheInAllRepositoryWriters();
+
                 if (this.clearDatabase.Checked)
                 {
                     this.UpdateStatus("clean database");
@@ -97,8 +104,26 @@ namespace LoadTestDataGenerator
                     this.GenerateCapiEvents();
                 }
 
+                this.DisableCacheInAllRepositoryWriters();
+
                 this.Stop();
             });
+        }
+
+        private void EnableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.EnableCache();
+            }
+        }
+
+        private void DisableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.DisableCache();
+            }
         }
 
         private void PrepareToStart()
@@ -183,8 +208,6 @@ namespace LoadTestDataGenerator
 
             public int Count { get; set; }
         }
-
-        private ProgressOperation currentOperation;
 
         internal class Statistics : IDisposable
         {
@@ -286,8 +309,6 @@ namespace LoadTestDataGenerator
             }
             #endregion
         }
-
-        private Statistics statistics;
 
         private void UpdateStatus(string status, int count = 0)
         {
