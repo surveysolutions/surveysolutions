@@ -17,7 +17,7 @@ using ILog = WB.Core.SharedKernel.Logger.ILog;
 
 namespace WB.Core.Infrastructure.Raven.Implementation
 {
-    internal class RavenReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
+    internal class RavenReadSideService : IReadSideStatusService, IReadSideAdministrationService
     {
         private const int MaxAllowedFailedEvents = 100;
 
@@ -35,12 +35,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation
         private readonly DocumentStore ravenStore;
         private readonly ILog logger;
 
-        static RavenReadLayerService()
+        static RavenReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;

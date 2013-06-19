@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.Infrastructure
 {
-    public interface IReadLayerStatusService
+    public interface IReadSideStatusService
     {
         bool AreViewsBeingRebuiltNow();
     }

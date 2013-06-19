@@ -16,10 +16,10 @@ namespace WB.Core.Infrastructure.Raven.Tests.RavenReadSideRepositoryReaderTests
     {
         Establish context = () =>
         {
-            var readLayerStatusService = Mock.Of<IReadLayerStatusService>(service
+            var readSideStatusService = Mock.Of<IReadSideStatusService>(service
                 => service.AreViewsBeingRebuiltNow() == true);
 
-            reader = CreateRavenReadSideRepositoryReader<IReadSideRepositoryEntity>(readLayerStatusService: readLayerStatusService);
+            reader = CreateRavenReadSideRepositoryReader<IReadSideRepositoryEntity>(readSideStatusService: readSideStatusService);
         };
 
         Because of = () =>
