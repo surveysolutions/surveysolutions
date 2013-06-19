@@ -12,6 +12,8 @@ namespace WB.Core.Infrastructure.Raven
         {
             this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
             this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
+
+            this.Bind<IRavenReadSideRepositoryWriterRegistry>().To<RavenReadSideRepositoryWriterRegistry>().InSingletonScope();
         }
     }
 }
