@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Raven.Client.Linq;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -24,13 +25,22 @@ namespace WB.Core.Synchronization.SyncStorage
 
         private void DefineCurrentSequence()
         {
-            var sequences = queryableStorage.Query(_ => _.Select(d => d.Sequence));
-            if (sequences.Any())
-                currentSequence = sequences.Max() + 1;
-            else
+            currentSequence = 1;
+
+            try
             {
-                currentSequence = 1;
+                var sequences = queryableStorage.Query(_ => _.Select(d => d.Sequence));
+                if (sequences.Any())
+                    currentSequence = sequences.Max() + 1;
             }
+            // catch here is in case on rebuild read layer
+            // if execption was throwed this mean we have current Sequence equal to 1
+            catch (MaintenanceException)
+            {
+              
+            }
+            
+           
         }
 
         public void StoreChunk(Guid id, string syncItem, Guid userId)
@@ -39,13 +49,13 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 storage.Store(new SynchronizationDelta(id, syncItem, CurrentSequence, userId), id);
                 CurrentSequence++;
-                var oldItems =
+            /*    var oldItems =
                     queryableStorage.Query(
-                        _ => _.Where(d => d.Id == id).OrderByDescending(s => s.Sequence).Select(d => d.Id));
+                        _ => _.Where(d => d.PublicKey == id).OrderByDescending(s => s.Sequence).Select(d => d.PublicKey));
                 foreach (var oldItem in oldItems.Skip(1))
                 {
                     storage.Remove(oldItem);
-                }
+                }*/
             }
         }
 
@@ -59,7 +69,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
         {
-            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && d.UserId.In(users)).Select(d => d.Id)).Distinct();
+            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && d.UserId.In(users)).Select(d => d.PublicKey)).Distinct();
         }
 
         protected long CurrentSequence
