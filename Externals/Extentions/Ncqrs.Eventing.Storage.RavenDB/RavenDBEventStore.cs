@@ -375,6 +375,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             return this.GetAllEvents(bulkSize, includeShapshots: false);
         }
 
+        [Obsolete("because there are no snapshots in event stream now")]
         public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
         {
             return this.GetAllEvents(bulkSize, includeShapshots: true);
