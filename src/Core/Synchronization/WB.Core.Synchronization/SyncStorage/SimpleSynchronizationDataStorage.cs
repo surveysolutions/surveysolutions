@@ -98,9 +98,11 @@ namespace WB.Core.Synchronization.SyncStorage
 
             Guid supervisorId = user.Roles.Contains(UserRoles.Supervisor) ? userId : user.Supervisor.Id;
 
-            return
+            var team=
                 userStorage.Query(
-                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey));
+                    _ => _.Where(u => u.Supervisor != null && u.Supervisor.Id == supervisorId).Select(u => u.PublicKey)).ToList();
+            team.Add(supervisorId);
+            return team;
         }
 
 
