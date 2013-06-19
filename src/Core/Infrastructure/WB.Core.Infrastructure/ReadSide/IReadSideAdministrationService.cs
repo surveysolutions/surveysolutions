@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WB.Core.Infrastructure
 {
-    public interface IReadLayerAdministrationService
+    public interface IReadSideAdministrationService
     {
         string GetReadableStatus();
 

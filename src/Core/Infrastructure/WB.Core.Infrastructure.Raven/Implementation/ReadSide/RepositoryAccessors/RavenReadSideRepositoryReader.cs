@@ -13,12 +13,12 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
     public class RavenReadSideRepositoryReader<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQueryableReadSideRepositoryReader<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly IReadLayerStatusService readLayerStatusService;
+        private readonly IReadSideStatusService readSideStatusService;
 
-        public RavenReadSideRepositoryReader(DocumentStore ravenStore, IReadLayerStatusService readLayerStatusService)
+        public RavenReadSideRepositoryReader(DocumentStore ravenStore, IReadSideStatusService readSideStatusService)
             : base(ravenStore)
         {
-            this.readLayerStatusService = readLayerStatusService;
+            this.readSideStatusService = readSideStatusService;
         }
 
         public int Count()
@@ -59,7 +59,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
         private void ThrowIfRepositoryIsNotAccessible()
         {
-            if (this.readLayerStatusService.AreViewsBeingRebuiltNow())
+            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
                 throw new MaintenanceException("Views are currently being rebuilt. Therefore your request cannot be complete now.");
         }
     }
