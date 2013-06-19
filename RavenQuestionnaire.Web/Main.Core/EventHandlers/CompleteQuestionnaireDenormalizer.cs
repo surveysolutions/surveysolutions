@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Synchronization;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -43,14 +44,18 @@ namespace Main.Core.EventHandlers
     {
         #region Fields
 
-        /// <summary>
-        /// The _document storage.
-        /// </summary>
-        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> _documentStorage;
+        private readonly ISynchronizationDataStorage syncStorage;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
 
         #endregion
 
         #region Constructors and Destructors
+
+        public CompleteQuestionnaireDenormalizer(ISynchronizationDataStorage syncStorage, IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage)
+        {
+            this.syncStorage = syncStorage;
+            this.documentStorage = documentStorage;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireDenormalizer"/> class.
@@ -61,7 +66,7 @@ namespace Main.Core.EventHandlers
         public CompleteQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage)
         {
-            this._documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
         }
 
         #endregion
@@ -76,7 +81,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            this._documentStorage.Store(
+            this.documentStorage.Store(
                 (CompleteQuestionnaireStoreDocument)evnt.Payload.Questionnaire, evnt.Payload.Questionnaire.PublicKey);
         }
 
@@ -88,7 +93,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<CommentSet> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
                 evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey);
@@ -101,7 +106,7 @@ namespace Main.Core.EventHandlers
             question.SetComments(evnt.Payload.Comments, evnt.EventTimeStamp, evnt.Payload.User);
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
             item.LastEntryDate = evnt.EventTimeStamp;
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>
@@ -112,7 +117,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<FlagSet> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
                 evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey);
@@ -125,7 +130,7 @@ namespace Main.Core.EventHandlers
             question.IsFlaged = evnt.Payload.IsFlaged;
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
             item.LastEntryDate = evnt.EventTimeStamp;
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>
@@ -136,7 +141,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
-            this._documentStorage.Remove(evnt.Payload.CompletedQuestionnaireId);
+            this.documentStorage.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
 
         /// <summary>
@@ -147,7 +152,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
                 evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
@@ -162,7 +167,7 @@ namespace Main.Core.EventHandlers
 
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
             item.LastEntryDate = evnt.EventTimeStamp;
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>
@@ -173,9 +178,9 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<PropagateGroupCreated> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             item.Add(evnt.Payload.Group, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>
@@ -186,7 +191,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             CompleteGroup template =
                 item.Find<CompleteGroup>(g => g.PublicKey == evnt.Payload.PublicKey && g.PropagationPublicKey == null).FirstOrDefault();
@@ -195,7 +200,7 @@ namespace Main.Core.EventHandlers
             item.Add(newGroup, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
 
             item.LastEntryDate = evnt.EventTimeStamp;
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>
@@ -206,11 +211,11 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             item.Remove(evnt.Payload.PublicKey, evnt.Payload.PropagationKey, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
 
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
         }
 
         /// <summary>
@@ -222,11 +227,13 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
             CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
 
             item.Responsible = evnt.Payload.Responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
+
+            syncStorage.SaveQuestionnarie(item, evnt.Payload.Responsible.Id);
         }
 
         /// <summary>
@@ -238,7 +245,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
             item.Status = evnt.Payload.Status;
             item.StatusChangeComments.Add(
                 new ChangeStatusDocument
@@ -248,7 +255,12 @@ namespace Main.Core.EventHandlers
                         ChangeDate = evnt.EventTimeStamp
                     });
             item.LastEntryDate = evnt.EventTimeStamp;
-            this._documentStorage.Store(item, item.PublicKey);
+            this.documentStorage.Store(item, item.PublicKey);
+
+            if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
+                syncStorage.SaveQuestionnarie(item, evnt.Payload.Responsible.Id);
+            else
+                syncStorage.DeleteQuestionnarie(evnt.EventSourceId, evnt.Payload.Responsible.Id);
         }
 
         /// <summary>
@@ -259,7 +271,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
         {
-            CompleteQuestionnaireStoreDocument doc = this._documentStorage.GetById(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument doc = this.documentStorage.GetById(evnt.EventSourceId);
 
             // to do the serching and set status. 
             foreach (var item in evnt.Payload.ResultGroupsStatus)
@@ -282,7 +294,7 @@ namespace Main.Core.EventHandlers
                 }
             }
 
-            this._documentStorage.Store(doc, doc.PublicKey);
+            this.documentStorage.Store(doc, doc.PublicKey);
         }
 
         #endregion

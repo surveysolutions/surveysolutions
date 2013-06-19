@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Synchronization;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
@@ -17,30 +18,30 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     public class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
-        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage;
         private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
 
         private readonly IChunkStorage chunkStorage;
 
+        private const bool UseCompression = true;
+
         public SimpleSynchronizationDataStorage(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnarieStorage, 
             IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
             IChunkStorage chunkStorage
             )
         {
-            this.questionnarieStorage = questionnarieStorage;
             this.userStorage = userStorage;
             this.chunkStorage = chunkStorage;
         }
 
-        public void SaveQuestionnarie(Guid id, Guid responsibleId)
+        public void SaveQuestionnarie(CompleteQuestionnaireStoreDocument doc, Guid responsibleId)
         {
             var syncItem = new SyncItem
-            {
-                Id = id,
-                ItemType = SyncItemType.Questionnare,
-                IsCompressed = UseCompression
-            };
+                {
+                    Id = doc.PublicKey,
+                    ItemType = SyncItemType.Questionnare,
+                    IsCompressed = UseCompression,
+                    Content = GetItemAsContent(CreateQuestionnarieDocument(doc))
+                };
             chunkStorage.StoreChunk(syncItem, responsibleId);
         }
 
@@ -50,8 +51,8 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 Id = id,
                 ItemType = SyncItemType.DeleteQuestionnare,
-                Content = id.ToString(),
-                IsCompressed = UseCompression
+                IsCompressed = UseCompression,
+                Content = id.ToString()
             };
             chunkStorage.StoreChunk(syncItem, responsibleId);
         }
@@ -67,15 +68,6 @@ namespace WB.Core.Synchronization.SyncStorage
         public SyncItem GetLatestVersion(Guid id)
         {
             var result = chunkStorage.ReadChunk(id);
-
-            if (result.ItemType == SyncItemType.Questionnare)
-            {
-                result.Content = GetItemAsContent(CreateQuestionnarieDocument(id));
-            }
-
-            if (UseCompression)
-                result.Content = PackageHelper.CompressString(result.Content);
-
             return result;
         }
 
@@ -108,10 +100,9 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 Id = doc.PublicKey,
                 ItemType = SyncItemType.User,
-                Content = GetItemAsContent(doc),
-                IsCompressed = UseCompression
+                IsCompressed = UseCompression,
+                Content = GetItemAsContent(doc)
             };
-
 
             chunkStorage.StoreChunk(syncItem, doc.PublicKey);
         }
@@ -121,10 +112,9 @@ namespace WB.Core.Synchronization.SyncStorage
         #region from sync provider
 
 
-        private CompleteQuestionnaireDocument CreateQuestionnarieDocument(Guid id)
+        private CompleteQuestionnaireDocument CreateQuestionnarieDocument(CompleteQuestionnaireStoreDocument data)
         {
             var retval = new CompleteQuestionnaireDocument();
-            var data = this.questionnarieStorage.GetById(id);
 
             retval.CreatedBy = data.CreatedBy;
             retval.CreationDate = data.CreationDate;
@@ -145,13 +135,8 @@ namespace WB.Core.Synchronization.SyncStorage
         private string GetItemAsContent(object item)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            string itemToSync = JsonConvert.SerializeObject(item, Formatting.None, settings);
-
-            return itemToSync;
+            return  JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
-
-        private const bool UseCompression = true;
-
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Web.Configuration;
 using Core.Supervisor.Views.Index;
+using Main.Core.Synchronization;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;

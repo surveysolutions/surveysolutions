@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Commands.Sync;
 using Main.Core;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Synchronization;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Infrastructure.ReadSide;

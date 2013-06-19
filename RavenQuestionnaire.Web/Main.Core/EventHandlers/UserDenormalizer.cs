@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Synchronization;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -32,10 +33,8 @@ namespace Main.Core.EventHandlers
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// The users.
-        /// </summary>
         private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly ISynchronizationDataStorage syncStorage;
 
         #endregion
 
@@ -56,6 +55,12 @@ namespace Main.Core.EventHandlers
 
         #region Public Methods and Operators
 
+        public UserDenormalizer(IReadSideRepositoryWriter<UserDocument> users, ISynchronizationDataStorage syncStorage)
+        {
+            this.users = users;
+            this.syncStorage = syncStorage;
+        }
+
         /// <summary>
         /// The handle.
         /// </summary>
@@ -64,19 +69,22 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
-            this.users.Store(
-                new UserDocument
-                    {
-                        UserName = evnt.Payload.Name, 
-                        Password = evnt.Payload.Password, 
-                        PublicKey = evnt.Payload.PublicKey, 
-                        CreationDate = DateTime.UtcNow, 
-                        Email = evnt.Payload.Email, 
-                        IsLocked = evnt.Payload.IsLocked, 
-                        Supervisor = evnt.Payload.Supervisor, 
-                        Roles = new List<UserRoles>(evnt.Payload.Roles)
-                    }, 
+            var doc = new UserDocument
+                {
+                    UserName = evnt.Payload.Name,
+                    Password = evnt.Payload.Password,
+                    PublicKey = evnt.Payload.PublicKey,
+                    CreationDate = DateTime.UtcNow,
+                    Email = evnt.Payload.Email,
+                    IsLocked = evnt.Payload.IsLocked,
+                    Supervisor = evnt.Payload.Supervisor,
+                    Roles = new List<UserRoles>(evnt.Payload.Roles)
+                };
+            this.users.Store(doc
+               , 
                 evnt.Payload.PublicKey);
+
+            syncStorage.SaveUser(doc);
         }
 
         /// <summary>
