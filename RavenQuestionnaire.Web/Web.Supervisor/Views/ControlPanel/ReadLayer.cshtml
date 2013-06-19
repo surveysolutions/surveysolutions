@@ -5,7 +5,7 @@
 
 <h3>Read Layer Control Panel</h3>
 
-<pre id="statusArea" style="height: 400px; overflow-y: scroll;">
+<pre id="statusArea" style="height: 500px; overflow-y: scroll;">
 Requesting status...
 </pre>
 
@@ -20,7 +20,7 @@ Requesting status...
             url: '@Url.Action("GetReadLayerStatus")',
             data: { timestamp: new Date().getMilliseconds() }
         }).done(function (result) {
-            $('#statusArea').text(result + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+            $('#statusArea').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
         }).fail(function (xhr, status, error) {
             $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
         });
@@ -28,7 +28,7 @@ Requesting status...
 
     function updateReadLayerStatusNeverending() {
         $.when(updateReadLayerStatus()).always(function() {
-            setTimeout(updateReadLayerStatusNeverending, 500);
+            setTimeout(updateReadLayerStatusNeverending, 1000);
         });
     }
 
