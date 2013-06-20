@@ -57,10 +57,34 @@ namespace WB.Core.Synchronization.SyncStorage
             return result;
         }
 
+
+        /*public SyncItem GetConcreteVersion(Guid id, long sequence)
+        {
+            var result = JsonConvert.DeserializeObject<SyncItem>(fileChunkStorage.ReadChunk(id),
+                                                           new JsonSerializerSettings
+                                                           {
+                                                               TypeNameHandling = TypeNameHandling.Objects
+                                                           });
+
+            if (result.ItemType == SyncItemType.Questionnare)
+            {
+                result.Content = GetItemAsContent(CreateQuestionnarieDocument(id));
+            }
+
+            if (UseCompression)
+                result.Content = PackageHelper.CompressString(result.Content);
+
+            return result;
+        }*/
+
         public IEnumerable<Guid> GetChunksCreatedAfter(long sequence)
         {
-            return
-                fileChunkStorage.GetChunksCreatedAfter(sequence);
+            return fileChunkStorage.GetChunksCreatedAfter(sequence);
+        }
+
+        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence)
+        {
+            return fileChunkStorage.GetChunkPairsCreatedAfter(sequence);
         }
 
         #region from sync provider
