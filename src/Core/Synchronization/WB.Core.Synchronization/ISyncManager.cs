@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using Main.Core.Events;
+using System;
+using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace WB.Core.Synchronization.SyncManager
+namespace WB.Core.Synchronization
 {
-    using System;
-
     public interface ISyncManager
     {
         HandshakePackage ItitSync(ClientIdentifier identifier);
