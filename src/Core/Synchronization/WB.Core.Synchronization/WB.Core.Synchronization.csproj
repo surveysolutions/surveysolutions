@@ -56,9 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="HandshakePackage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ImportManager\DefaultImportManager.cs" />
     <Compile Include="ImportManager\IImportManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
