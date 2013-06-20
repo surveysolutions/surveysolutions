@@ -43,10 +43,10 @@ namespace CAPI.Android.Syncronization.Pull
             chuncksFroProccess.Add(data);
         }
 
-        public void Proccess(Guid chunkId)
+        public void Proccess(KeyValuePair<long,Guid> chunkId)
         {
 
-            var item = chuncksFroProccess.FirstOrDefault(i => i.Id == chunkId);
+            var item = chuncksFroProccess.FirstOrDefault(i => i.Id == chunkId.Value);
             if (item == null)
                 return;
 

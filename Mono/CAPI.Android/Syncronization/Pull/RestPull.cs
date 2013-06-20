@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading;
 using CAPI.Android.Syncronization.RestUtils;
-using Main.Core.Events;
-using Newtonsoft.Json;
-using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android.Syncronization.Pull
 {
@@ -27,23 +18,27 @@ namespace CAPI.Android.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id,  Guid synckId)
+        public SyncItem RequestChunck(string login, string password, Guid id, long sequence, Guid deviceId)
         {
             var package = webExecutor.ExcecuteRestRequest<SyncPackage>(getChunckPath,
                                                                        new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password",password),
-                                                                       new KeyValuePair<string, string>("aRKey",id.ToString()));
+                                                                       new KeyValuePair<string, string>("password", password),
+                                                                       new KeyValuePair<string, string>("aRKey", id.ToString()),
+                                                                       new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
+                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId.ToString()));
 
-            if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
-                throw new NullReferenceException("content is absent");
+            if (package.IsErrorOccured || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
+                throw new SynchronizationException("Content is absent.");
             return package.ItemsContainer[0];
         }
 
-        public IDictionary<Guid, bool> GetChuncks(string login, string password, Guid synckId)
+        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, Guid deviceId)
         {
-            var syncItemsMetaContainer = webExecutor.ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, 
+            var syncItemsMetaContainer = 
+                webExecutor.ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath,
                                                                        new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password", password));
+                                                                       new KeyValuePair<string, string>("password", password),
+                                                                       new KeyValuePair<string, string>("deviceId", deviceId.ToString()));
 
             return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
         }

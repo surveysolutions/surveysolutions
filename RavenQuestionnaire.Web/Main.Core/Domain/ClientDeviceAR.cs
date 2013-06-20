@@ -50,12 +50,12 @@ namespace Main.Core.Domain
             base.ApplyEvent(new ClientDeviceLastSyncItemUpdated()
                 {Id = id,
                 ChangeDate = clock.UtcNow(),
-                LastSyncItem = newLastSyncItemIdentifier});
+                LastSyncItemSequence = newLastSyncItemIdentifier});
         }
 
         protected void OnClientDeviceLastSyncItemUpdated(ClientDeviceLastSyncItemUpdated evt)
         {
-            lastSyncItemIdentifier = evt.LastSyncItem;
+            lastSyncItemIdentifier = evt.LastSyncItemSequence;
         }
 
     }

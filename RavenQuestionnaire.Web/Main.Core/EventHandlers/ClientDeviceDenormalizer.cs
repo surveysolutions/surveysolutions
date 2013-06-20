@@ -35,7 +35,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<ClientDeviceLastSyncItemUpdated> evnt)
         {
             var item = this.devices.GetById(evnt.EventSourceId);
-            item.LastSyncItemIdentifier = evnt.Payload.LastSyncItem;
+            item.LastSyncItemIdentifier = evnt.Payload.LastSyncItemSequence;
         }
     }
 }

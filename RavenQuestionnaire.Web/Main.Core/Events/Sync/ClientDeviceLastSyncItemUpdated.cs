@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Main.Core.Events.Sync
@@ -15,7 +11,7 @@ namespace Main.Core.Events.Sync
 
         public DateTime ChangeDate { set; get; }
 
-        public long LastSyncItem { set; get; }
+        public long LastSyncItemSequence { set; get; }
 
     }
 }

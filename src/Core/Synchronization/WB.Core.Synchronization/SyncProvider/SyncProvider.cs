@@ -35,7 +35,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
         private ISynchronizationDataStorage storage;
 
-        private IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities;
+        //private IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities;
 
         public SyncProvider(
             IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
@@ -47,14 +47,20 @@ namespace WB.Core.Synchronization.SyncProvider
             this.questionnaires = questionnaires;
             this.users = users;
             this.devices = devices;
-            this.syncActivities = syncActivities;
+            //this.syncActivities = syncActivities;
             this.storage = storage;
         }
 
-        public SyncItem GetSyncItem(Guid deviceId, Guid id)
+        public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
         {
+            var device = devices.GetById(clientRegistrationKey);
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+
             var item = storage.GetLatestVersion(id);
-            commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(deviceId, item.ChangeTracker));
+            //doing tricky thing
+            //we are saving old sequence even if new version was returned
+            commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(clientRegistrationKey, sequence));
             //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId, item.LastChangeDate, id));
             return item;
         }
@@ -67,6 +73,16 @@ namespace WB.Core.Synchronization.SyncProvider
                 throw new ArgumentException("Device was not found.");
            
             return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier);
+        }
+
+        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
+        {
+            var device = devices.GetById(clientRegistrationKey);
+
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+
+            return storage.GetChunkPairsCreatedAfter(device.LastSyncItemIdentifier);
         }
 
 
@@ -97,7 +113,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
         public HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
         {
-            Guid deviceId;
+            Guid ClientRegistrationKey;
             
             //device verification
             ClientDeviceDocument device = null;
@@ -112,19 +128,18 @@ namespace WB.Core.Synchronization.SyncProvider
 
                 //TODO: check device validity
 
-
-                deviceId = identifier.ClientRegistrationKey.Value;
+                ClientRegistrationKey = device.Id;
             }
             else //register new device
             {
-                deviceId = Guid.NewGuid();
-                
-                commandService.Execute(new CreateClientDeviceCommand(deviceId, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+                ClientRegistrationKey = Guid.NewGuid();
+
+                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
-            Guid syncActivityKey = CreateSyncActivity(deviceId);
+            Guid syncActivityKey = CreateSyncActivity(ClientRegistrationKey);
 
-            return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, deviceId);
+            return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }
         /*
         private Guid HandleDevice(ClientIdentifier identifier)

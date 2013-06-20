@@ -176,6 +176,7 @@
     <Compile Include="LoginActivity.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\SettingsNames.cs" />
     <Compile Include="SplashScreenActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
