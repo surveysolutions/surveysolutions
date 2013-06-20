@@ -33,6 +33,21 @@ namespace CAPI.Android
             get { return this.FindViewById<TextView>(Resource.Id.tvSyncResult); }
         }
 
+        protected Button btnSync
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnSync); }
+        }
+
+        protected Button btnBackup
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
+        }
+
+        protected Button btnRestore
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
+        }
+
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
         #endregion
@@ -43,12 +58,12 @@ namespace CAPI.Android
             base.OnCreate(bundle);
             this.SetContentView(Resource.Layout.sync_dialog);
 
-            var buttonSync = this.FindViewById<Button>(Resource.Id.btnSync);
-            if (buttonSync != null)
-            {
-                buttonSync.Click += this.ButtonSyncClick;
-                buttonSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
-            }
+
+            btnSync.Click += this.ButtonSyncClick;
+            btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
+
+            btnBackup.Visibility = btnRestore.Visibility = ViewStates.Gone;
+
         }
 
         protected override void OnStart()
