@@ -24,17 +24,32 @@ namespace CAPI.Android.Syncronization.Push
         }
 
 
-        public void PushChunck(string login, string password, SyncPackage chunck)
+        public void PushChunck(string login, string password, SyncPackage chunck, CancellationToken ct)
         {
             if (chunck.ItemsContainer == null || chunck.ItemsContainer.Count == 0)
                 throw new InvalidOperationException("container is empty");
             var item = chunck.ItemsContainer[0];
-            var result = webExecutor.ExcecuteRestRequest<bool>(getChunckPath,
-                new KeyValuePair<string, string>("syncItemContent", JsonConvert.SerializeObject(item)),
-                                            new KeyValuePair<string, string>("login", login),
-                                            new KeyValuePair<string, string>("password", password));
-            if (!result)
-                throw new SynchronizationException();
+
+            try
+            {
+                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct,
+                                                                        new KeyValuePair<string, string>(
+                                                                            "syncItemContent",
+                                                                            JsonConvert
+                                                                                .SerializeObject
+                                                                                (
+                                                                                    item)),
+                                                                        new KeyValuePair<string, string>("login", login),
+                                                                        new KeyValuePair<string, string>("password",
+                                                                                                         password));
+                if (!result)
+                    throw new SynchronizationException("Data sending was failed");
+            }
+            catch (RestException)
+            {
+                throw new SynchronizationException("Data sending was canceled");
+            }
+           
         }
     }
 }

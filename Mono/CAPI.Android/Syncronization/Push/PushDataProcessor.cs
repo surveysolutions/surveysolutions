@@ -9,9 +9,12 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidNcqrs.Eventing.Storage.SQLite;
 using CAPI.Android.Core.Model.ChangeLog;
 using Main.Core.Commands.Questionnaire.Completed;
+using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.Storage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
@@ -57,6 +60,15 @@ namespace CAPI.Android.Syncronization.Push
         {
             var arId = changelog.MarkDraftChangesetAsPublicAndReturnARId(chunckId);
             commandService.Execute(new DeleteCompleteQuestionnaireCommand(arId));
+            CleanupEventStream(arId);
+        }
+
+        private static void CleanupEventStream(Guid arId)
+        {
+            #warning invent some better way of doing that
+            var eventStore = NcqrsEnvironment.Get<IEventStore>() as MvvmCrossSqliteEventStore;
+            if (eventStore != null)
+                eventStore.CleanStream(arId);
         }
     }
 

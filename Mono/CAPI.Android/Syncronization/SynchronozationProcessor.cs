@@ -98,7 +98,7 @@ namespace CAPI.Android.Syncronization
 
             CancelIfException(() =>
                 {
-                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId);
+                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId, ct);
                 });
 
             int i = 1;
@@ -112,7 +112,7 @@ namespace CAPI.Android.Syncronization
 
                 try
                 {
-                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId, syncId);
+                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId, syncId, ct);
                   
                     pullDataProcessor.Save(data);
                     remoteChuncksForDownload[chunckId] = true;
@@ -143,7 +143,7 @@ namespace CAPI.Android.Syncronization
                     foreach (var chunckDescription in dataByChuncks)
                     {
                         ExitIfCanceled();
-                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription);
+                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription, ct);
                         pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;
@@ -208,7 +208,7 @@ namespace CAPI.Android.Syncronization
             {
                 exceptions = e.InnerExceptions.ToList();
             }
-            exceptions.Add(new Exception("operation was canceled"));
+            exceptions.Add(new Exception("Synchronization wasn't completed"));
             OnProcessCanceled(exceptions);
         }
 

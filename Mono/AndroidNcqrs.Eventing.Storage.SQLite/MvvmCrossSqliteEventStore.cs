@@ -139,7 +139,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public void CleanStream(Guid id)
         {
-            _connection.Execute("delete from StoredEvent where EventSourceId = ?", id);
+            _connection.Execute("delete from StoredEvent where EventSourceId = ?", id.ToString());
         }
     }
 }

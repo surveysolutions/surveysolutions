@@ -191,6 +191,7 @@
     <Compile Include="Syncronization\RestAuthenticator.cs" />
     <Compile Include="Syncronization\RestUtils\AndroidRestUrils.cs" />
     <Compile Include="Syncronization\RestUtils\IRestUrils.cs" />
+    <Compile Include="Syncronization\RestUtils\RestException.cs" />
     <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />

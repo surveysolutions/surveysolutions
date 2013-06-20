@@ -27,25 +27,45 @@ namespace CAPI.Android.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id,  Guid synckId)
+        public SyncItem RequestChunck(string login, string password, Guid id, Guid synckId, CancellationToken ct)
         {
-            var package = webExecutor.ExcecuteRestRequest<SyncPackage>(getChunckPath,
-                                                                       new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password",password),
-                                                                       new KeyValuePair<string, string>("aRKey",id.ToString()));
+            try
+            {
 
-            if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
-                throw new NullReferenceException("content is absent");
-            return package.ItemsContainer[0];
+
+                var package = webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath, ct,
+                                                                                new KeyValuePair<string, string>(
+                                                                                    "login", login),
+                                                                                new KeyValuePair<string, string>(
+                                                                                    "password", password),
+                                                                                new KeyValuePair<string, string>(
+                                                                                    "aRKey", id.ToString()));
+
+                if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
+                    throw new NullReferenceException("content is absent");
+                return package.ItemsContainer[0];
+            }
+            catch (RestException)
+            {
+                throw new SynchronizationException("Data reciving was canceled");
+            }
         }
 
-        public IDictionary<Guid, bool> GetChuncks(string login, string password, Guid synckId)
+        public IDictionary<Guid, bool> GetChuncks(string login, string password, Guid synckId, CancellationToken ct)
         {
-            var syncItemsMetaContainer = webExecutor.ExcecuteRestRequest<SyncItemsMetaContainer>(getARKeysPath, 
-                                                                       new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password", password));
+            try
+            {
+                var syncItemsMetaContainer = webExecutor.ExcecuteRestRequestAsync<SyncItemsMetaContainer>(
+                    getARKeysPath, ct,
+                    new KeyValuePair<string, string>("login", login),
+                    new KeyValuePair<string, string>("password", password));
 
-            return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
+                return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
+            }
+            catch (RestException)
+            {
+                throw new SynchronizationException("Data reciving was canceled");
+            }
         }
 
     }

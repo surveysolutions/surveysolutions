@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Text;
-
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -31,14 +31,8 @@ namespace CAPI.Android.Syncronization.RestUtils
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = new RestRequest(url, Method.POST);
-            request.RequestFormat = DataFormat.Json;
+            var request = BuildRequest(url, additionalParams);
 
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
-            foreach (var additionalParam in additionalParams)
-            {
-                request.AddParameter(additionalParam.Key, additionalParam.Value);
-            }
             var response = restClient.Execute(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -59,16 +53,38 @@ namespace CAPI.Android.Syncronization.RestUtils
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = new RestRequest(url, Method.POST);
-            request.RequestFormat = DataFormat.Json;
+            var request = BuildRequest(url, additionalParams);
 
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
-            foreach (var additionalParam in additionalParams)
-            {
-                request.AddParameter(additionalParam.Key, additionalParam.Value);
-            }
             var response = restClient.Execute(request);
 
+            return HandlerResponce<T>(response);
+        }
+
+        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, params KeyValuePair<string, string>[] additionalParams)
+        {
+            var restClient = new RestClient(this.baseAddress);
+
+            var request = BuildRequest(url, additionalParams);
+
+            IRestResponse response = null;
+
+            var token = restClient.ExecuteAsync(request, (r) => { response = r; });
+
+            while (response==null)
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    token.Abort();
+                    throw new RestException("operation was canceled");
+                }
+                Thread.Sleep(500);
+            }
+
+            return HandlerResponce<T>(response);
+        }
+
+        private T HandlerResponce<T>(IRestResponse response)
+        {
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
                 var exception = new Exception("Target returned unsupported result.");
@@ -89,6 +105,19 @@ namespace CAPI.Android.Syncronization.RestUtils
                 throw new Exception("Elements to be synchronized are not found.");
             }
             return syncItemsMetaContainer;
+        }
+       
+        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams)
+        {
+            var request = new RestRequest(url, Method.POST);
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddHeader("Accept-Encoding", "gzip,deflate");
+            foreach (var additionalParam in additionalParams)
+            {
+                request.AddParameter(additionalParam.Key, additionalParam.Value);
+            }
+            return request;
         }
     }
 }
