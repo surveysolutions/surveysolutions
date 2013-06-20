@@ -95,6 +95,10 @@ namespace WB.Core.Synchronization.SyncStorage
             var users = GetUserTeamates(userId);
             return
                 chunkStorage.GetChunksCreatedAfterForUsers(sequence, users);
+                }
+        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence)
+        {
+            return fileChunkStorage.GetChunkPairsCreatedAfter(sequence);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)
