@@ -124,10 +124,11 @@ function GetProjectsWithTests() {
 
 function GetOutputAssembly($Project, $BuildConfiguration) {
     $projectFileInfo = Get-Item $Project
+    $projectXml = [xml] (Get-Content $Project)
 
     $projectFolder = $projectFileInfo.DirectoryName
     $outputPath = "bin\$BuildConfiguration"
-    $assemblyName = $projectFileInfo.BaseName
+    $assemblyName = $projectXml.Project.PropertyGroup.AssemblyName[0]
 
     $fullPathToAssembly = "$projectFolder\$outputPath\$assemblyName.dll"
 
