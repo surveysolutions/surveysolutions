@@ -15,7 +15,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
+    internal class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
 

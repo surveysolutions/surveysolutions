@@ -10,7 +10,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class ReadSideChunkStorage : IChunkStorage
+    internal class ReadSideChunkStorage : IChunkStorage
     {
         private IReadSideRepositoryWriter<SynchronizationDelta> storage;
         private IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;

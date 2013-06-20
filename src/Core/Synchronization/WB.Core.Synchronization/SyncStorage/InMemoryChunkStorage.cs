@@ -7,7 +7,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class InMemoryChunkStorage : IChunkStorage
+    internal class InMemoryChunkStorage : IChunkStorage
     {
         private readonly IDictionary<Guid, SyncItem> container;
 
