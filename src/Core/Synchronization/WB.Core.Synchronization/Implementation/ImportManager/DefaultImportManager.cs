@@ -1,16 +1,12 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Events;
 using Newtonsoft.Json;
 using SynchronizationMessages.Export;
 using WB.Core.Synchronization.SyncProvider;
 
-namespace WB.Core.Synchronization.ImportManager
+namespace WB.Core.Synchronization.Implementation.ImportManager
 {
-    public class DefaultImportManager:IImportManager
+    internal class DefaultImportManager:IImportManager
     {
         public void Import(List<string> zipData)
         {

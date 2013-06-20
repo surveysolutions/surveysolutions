@@ -12,7 +12,6 @@ using System.IO;
 using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Services;
-using Main.Core.Synchronization;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
@@ -25,23 +24,21 @@ namespace Main.Core.EventHandlers
     /// <summary>
     /// Class handles file changes events.
     /// </summary>
-    public class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
+    public abstract class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
     {
         #region Fields
 
         private readonly IReadSideRepositoryWriter<FileDescription> attachments;
         private readonly IFileStorageService storage;
-        private readonly ISynchronizationDataStorage syncStorage;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage, ISynchronizationDataStorage syncStorage)
+        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage)
         {
             this.attachments = attachments;
             this.storage = storage;
-            this.syncStorage = syncStorage;
         }
 
         #endregion
@@ -70,9 +67,7 @@ namespace Main.Core.EventHandlers
                 this.storage.StoreFile(fileDescription);
                 fileDescription.Content = null;
             }
-            if (this.syncStorage != null)
-                this.syncStorage.SaveImage(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.Description,
-                                           evnt.Payload.OriginalFile);
+            PostSaveHandler(evnt);
         }
 
         /// <summary>
@@ -88,6 +83,8 @@ namespace Main.Core.EventHandlers
         }
 
         #endregion
+
+        public abstract void PostSaveHandler(IPublishedEvent<FileUploaded> evnt);
 
         #region Methods
 

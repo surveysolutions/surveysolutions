@@ -7,26 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Synchronization;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.Extensions;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Events.Questionnaire.Completed;
+using Main.Core.ExpressionExecutors;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Synchronization;
 
-namespace Main.Core.EventHandlers
+namespace Core.Supervisor.Denormalizer
 {
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.Extensions;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.Events.Questionnaire.Completed;
-    using Main.Core.ExpressionExecutors;
-    using Main.DenormalizerStorage;
-
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>

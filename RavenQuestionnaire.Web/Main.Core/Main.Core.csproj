@@ -430,12 +430,10 @@
     <Compile Include="Entities\TemplateLight.cs" />
     <Compile Include="EventHandlers\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AggregateRootEvent.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -621,9 +619,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
-    <Compile Include="Synchronization\ISynchronizationDataStorage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\GroupWithRout.cs" />
@@ -763,7 +758,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Synchronization\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

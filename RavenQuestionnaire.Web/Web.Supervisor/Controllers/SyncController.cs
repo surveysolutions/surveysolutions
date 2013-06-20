@@ -24,10 +24,10 @@ namespace Web.Supervisor.Controllers
     public class SyncController : AsyncController
     {
         private readonly ILog logger;
-        private readonly WB.Core.Synchronization.SyncManager.ISyncManager syncManager;
+        private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
-        public SyncController(WB.Core.Synchronization.SyncManager.ISyncManager syncManager, ILog logger,
+        public SyncController(ISyncManager syncManager, ILog logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
             this.syncManager = syncManager;

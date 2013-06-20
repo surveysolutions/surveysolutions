@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
-namespace Main.Core.Synchronization
+namespace WB.Core.Synchronization
 {
     public interface ISynchronizationDataStorage
     {

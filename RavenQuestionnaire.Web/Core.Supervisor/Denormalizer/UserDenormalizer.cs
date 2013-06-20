@@ -4,25 +4,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Synchronization;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.User;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Synchronization;
 
-namespace Main.Core.EventHandlers
+namespace Core.Supervisor.Denormalizer
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.User;
-    using Main.DenormalizerStorage;
-
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
-    using System.Linq;
-
     /// <summary>
     /// The user denormalizer.
     /// </summary>

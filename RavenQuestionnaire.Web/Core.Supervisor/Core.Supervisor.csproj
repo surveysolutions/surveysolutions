@@ -96,8 +96,11 @@
     <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
+    <Compile Include="Denormalizer\CompleteQuestionnaireDenormalizer.cs" />
+    <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="Denormalizer\UserDenormalizer.cs" />
     <Compile Include="SyncCacher\ISyncCacher.cs" />
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />

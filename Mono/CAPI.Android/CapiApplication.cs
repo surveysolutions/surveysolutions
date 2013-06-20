@@ -127,8 +127,8 @@ namespace CAPI.Android
 
         private void InitFileStorage(InProcessEventBus bus)
         {
-            var fileSorage = new FileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
-                                                       new FileStorageService(),null);
+            var fileSorage = new AndroidFileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
+                                                       new FileStorageService());
             bus.RegisterHandler(fileSorage, typeof (FileUploaded));
             bus.RegisterHandler(fileSorage, typeof (FileDeleted));
         }

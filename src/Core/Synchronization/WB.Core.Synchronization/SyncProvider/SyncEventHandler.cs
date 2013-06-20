@@ -10,7 +10,7 @@ using Ncqrs.Eventing.Storage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
-    public class SyncEventHandler : ISyncEventHandler
+    internal class SyncEventHandler : ISyncEventHandler
     {
         /// <summary>
         /// The event store.

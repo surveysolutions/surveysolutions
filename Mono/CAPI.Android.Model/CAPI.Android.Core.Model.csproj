@@ -65,6 +65,7 @@
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\IChangeLogStore.cs" />
+    <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\CommitDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireViewDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
