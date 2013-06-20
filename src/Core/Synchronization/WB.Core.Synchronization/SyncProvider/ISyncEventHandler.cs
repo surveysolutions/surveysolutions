@@ -7,7 +7,7 @@ using Main.Core.Events;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
-    interface ISyncEventHandler
+    internal interface ISyncEventHandler
     {
         bool Process(IEnumerable<AggregateRootEvent> stream);
     }

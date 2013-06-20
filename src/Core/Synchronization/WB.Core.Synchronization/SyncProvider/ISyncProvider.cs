@@ -6,7 +6,7 @@ namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
 
-    public interface ISyncProvider
+    internal interface ISyncProvider
     {
         SyncItem GetSyncItem(Guid id);
 

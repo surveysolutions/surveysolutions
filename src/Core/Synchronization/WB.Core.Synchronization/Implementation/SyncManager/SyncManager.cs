@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Events;
-using Main.Core.View.CompleteQuestionnaire;
-using WB.Core.SharedKernel.Structures.Synchronization;
-
 using System;
+using System.Collections.Generic;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncProvider;
 
-namespace WB.Core.Synchronization.SyncManager
+namespace WB.Core.Synchronization.Implementation.SyncManager
 {
-    public class SyncManager : ISyncManager
+    internal class SyncManager : ISyncManager
     {
         private readonly ISyncProvider syncProvider;
 

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Synchronization;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
