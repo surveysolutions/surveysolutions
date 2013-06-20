@@ -127,10 +127,15 @@ function GetOutputAssembly($Project, $BuildConfiguration) {
     $projectXml = [xml] (Get-Content $Project)
 
     $projectFolder = $projectFileInfo.DirectoryName
-    $outputPath = "bin\$BuildConfiguration"
+
+    $outputPath = $projectXml.Project.PropertyGroup `
+        | ?{ $_.Condition -like "*'$BuildConfiguration|*" } `
+        | %{ $_.OutputPath } `
+        | select -First 1
+
     $assemblyName = $projectXml.Project.PropertyGroup.AssemblyName[0]
 
-    $fullPathToAssembly = "$projectFolder\$outputPath\$assemblyName.dll"
+    $fullPathToAssembly = Join-Path (Join-Path $projectFolder $outputPath) "$assemblyName.dll"
 
     return GetPathRelativeToCurrectLocation $fullPathToAssembly
 }
