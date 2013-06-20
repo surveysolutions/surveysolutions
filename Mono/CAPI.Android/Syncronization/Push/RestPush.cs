@@ -1,14 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Syncronization.RestUtils;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -34,7 +25,7 @@ namespace CAPI.Android.Syncronization.Push
                                             new KeyValuePair<string, string>("login", login),
                                             new KeyValuePair<string, string>("password", password));
             if (!result)
-                throw new SynchronizationException();
+                throw new SynchronizationException("Push was failed.");
         }
     }
 }

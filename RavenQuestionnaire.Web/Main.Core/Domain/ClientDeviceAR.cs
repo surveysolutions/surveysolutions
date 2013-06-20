@@ -8,7 +8,9 @@ namespace Main.Core.Domain
 
     public class ClientDeviceAR : AggregateRootMappedByConvention
     {
-        private Guid Id;
+        private IClock clock = NcqrsEnvironment.Get<IClock>();
+
+        private Guid id;
 
         private string deviceId;
 
@@ -16,36 +18,44 @@ namespace Main.Core.Domain
 
         private DateTime modificationDate;
 
-        private string deviceType;
-
         private Guid clientInstanceKey;
 
+        private long lastSyncItemIdentifier;
         
         public ClientDeviceAR(Guid Id, string deviceId, Guid clientInstanceKey, string deviceType)
             : base(Id)
         {
-            var clock = NcqrsEnvironment.Get<IClock>();
-
             base.ApplyEvent(new NewClientDeviceCreated()
                 {Id = Id, 
                 CreationDate = clock.UtcNow(),
                 DeviceId = deviceId,
-                ClientInstanceKey = clientInstanceKey,
-                DeviceType = deviceType});
+                ClientInstanceKey = clientInstanceKey});
         }
 
         protected void OnNewClientDeviceCreated(NewClientDeviceCreated evt)
         {
-            Id = evt.Id;
+            id = evt.Id;
             deviceId = evt.DeviceId;
             registeredDate = evt.CreationDate;
             modificationDate = evt.CreationDate;
-            deviceType = evt.DeviceType;
             clientInstanceKey = evt.ClientInstanceKey;
+            lastSyncItemIdentifier = 0;
         }
 
-        public void UpdateClientDevice()
+        public void UpdatelastSyncItemIdentifier(long newLastSyncItemIdentifier)
         {
+            if(newLastSyncItemIdentifier < lastSyncItemIdentifier)
+                throw new ArgumentException("Last update identifier can't be less then current");
+
+            base.ApplyEvent(new ClientDeviceLastSyncItemUpdated()
+                {Id = id,
+                ChangeDate = clock.UtcNow(),
+                LastSyncItemSequence = newLastSyncItemIdentifier});
+        }
+
+        protected void OnClientDeviceLastSyncItemUpdated(ClientDeviceLastSyncItemUpdated evt)
+        {
+            lastSyncItemIdentifier = evt.LastSyncItemSequence;
         }
 
     }

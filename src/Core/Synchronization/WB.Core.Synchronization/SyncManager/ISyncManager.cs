@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Main.Core.Events;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncManager
@@ -12,14 +11,18 @@ namespace WB.Core.Synchronization.SyncManager
 
         bool InitSending(ClientIdentifier identifier);
 
-        bool ItitReceiving(ClientIdentifier identifier);
+        bool InitReceiving(ClientIdentifier identifier);
 
         bool SendSyncPackage(SyncPackage package);
 
         bool SendSyncItem(SyncItem package);
 
-        IEnumerable<Guid> GetAllARIds(Guid userId);
+        HandshakePackage CheckAndCreateNewProcess(ClientIdentifier clientIdentifier);
+        
+        IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey);
 
-        SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id);
+        IEnumerable<KeyValuePair<long,Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey);
+
+        SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence);
     }
 }

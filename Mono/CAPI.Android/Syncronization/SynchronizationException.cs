@@ -14,5 +14,8 @@ namespace CAPI.Android.Syncronization
 {
     public class SynchronizationException : Exception
     {
+        public SynchronizationException(string message) : base(message)
+        {
+        }
     }
 }

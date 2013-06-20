@@ -13,5 +13,8 @@ namespace Main.Core.Synchronization
         void SaveUser(UserDocument doc);
         SyncItem GetLatestVersion(Guid id);
         IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId);
+
+        IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence);
+        
     }
 }
