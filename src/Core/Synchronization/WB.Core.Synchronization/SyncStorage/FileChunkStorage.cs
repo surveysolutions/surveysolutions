@@ -54,6 +54,14 @@ namespace WB.Core.Synchronization.SyncStorage
             return sequences.Select(f => f.Value).Distinct().ToList();
         }
 
+        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence)
+        {
+            var sequences = GetAllFiles().Where(f => f.Key > sequence);
+
+            return sequences.GroupBy(i => i.Value)
+                .Select(pair => pair.First(x => x.Key == pair.Max(y => y.Key)));
+        }
+
         private string GetFilePath(Guid id, long sequence)
         {
             return Path.Combine(this.path, string.Format("{0}-{1}.{2}", sequence, id, fileExtension));

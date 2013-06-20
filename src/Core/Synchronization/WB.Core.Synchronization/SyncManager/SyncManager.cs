@@ -62,33 +62,32 @@ namespace WB.Core.Synchronization.SyncManager
            return syncProvider.GetAllARIds(userId, clientRegistrationKey);
         }
 
+        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
+        {
+            return syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey);
+        }
+
         public bool InitReceiving(ClientIdentifier identifier)
         {
             throw new NotImplementedException();
         }
 
-        public SyncPackage ReceiveSyncPackage(ClientIdentifier identifier, Guid id)
+        public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence)
         {
             var syncPackage = new SyncPackage();
 
-            if (identifier == null)
-                throw new ArgumentException("Client Identifier is not set.");
-
-            if (!identifier.ClientRegistrationKey.HasValue)
-                throw new ArgumentException("Sync identifiier is not set.");
-
-            SyncItem item = syncProvider.GetSyncItem(identifier.ClientRegistrationKey.Value, id);
+            SyncItem item = syncProvider.GetSyncItem(clientRegistrationId, id, sequence);
             
             if (item != null)
             {
                 syncPackage.ItemsContainer.Add(item);
-                syncPackage.Status = true;
-                syncPackage.Message = "OK";
+                syncPackage.IsErrorOccured = false;
+                //syncPackage.ErrorMessage = "OK";
             }
             else
             {
-                syncPackage.Status = false;
-                syncPackage.Message = "Item was not found";
+                syncPackage.IsErrorOccured = true;
+                syncPackage.ErrorMessage = "Item was not found";
             }
             
             return syncPackage;
