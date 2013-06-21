@@ -36,7 +36,7 @@ namespace CAPI.Android.Syncronization.Push
                 retval.Add(new SyncPackage()
                     {
                         Id = chunk.Key,
-                        Status = true,
+                        IsErrorOccured = false,
                         ItemsContainer =
                             new List<SyncItem>()
                                 {

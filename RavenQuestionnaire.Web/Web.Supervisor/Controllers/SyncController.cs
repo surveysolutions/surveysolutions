@@ -1,18 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events;
-using Main.Core.Export;
 using Main.Core.View;
 using Main.Core.View.User;
 using Newtonsoft.Json;
-using SynchronizationMessages.CompleteQuestionnaire;
-using SynchronizationMessages.Synchronization;
 using WB.Core.SharedKernel.Logger;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
@@ -53,60 +48,155 @@ namespace Web.Supervisor.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public bool Handshake(string login, string password, string clientID, string LastSyncID)
+        public ActionResult Handshake(string login, string password, string clientId, string androidId, Guid? clientRegistrationId)
         {
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
-            return true;
-        }
 
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        [HandleUIException]
-        public ActionResult GetSyncPackage(string aRKey,string login, string password)
-        {
-            var user = GetUser(login, password);
-            if (user == null)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
+            var package = new HandshakePackage();
 
             Guid key;
-            if (!Guid.TryParse(aRKey, out key))
+            if (!Guid.TryParse(clientId, out key))
             {
-                return null; //todo: return correct description
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Client Identifier was not provided";
+                
+            }
+            else
+            {
+                ClientIdentifier identifier = new ClientIdentifier();
+                identifier.ClientDeviceKey = androidId;
+                identifier.ClientInstanceKey = key;
+                identifier.ClientVersionIdentifier = "unknown";
+                identifier.ClientRegistrationKey = clientRegistrationId;
+                try
+                {
+                    package = this.syncManager.ItitSync(identifier);
+                }
+                catch (Exception exc)
+                {
+                    this.logger.Fatal("Sync Handshake Error", exc);
+                    package.IsErrorOccured = true;
+                    package.ErrorMessage = "Error occured on sync. Try later.";    
+                }
+            }
+            return Json(package, JsonRequestBehavior.AllowGet);
+        }
+        
+        /*[AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public ActionResult GetLastSyncPackage(string lastSequence, Guid clientRegistrationId, string login, string password)
+        {
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            var package = new SyncPackage();
+            
+            long sequence;
+            if (!long.TryParse(lastSequence, out sequence))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid sequence identifier";
+                return Json(package, JsonRequestBehavior.AllowGet);
             }
 
             try
             {
-                var package = this.syncManager.ReceiveSyncPackage(null, key);
+                package = this.syncManager.ReceiveSyncPackage(clientRegistrationId, key, sequence);
                 return Json(package, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 logger.Fatal("Error on sync", ex);
-                return null;
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Error occured. Try later.";
+                return Json(package, JsonRequestBehavior.AllowGet);
             }
-        }
+        }*/
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public JsonResult GetARKeys(string login, string password)
+        public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId, string login, string password)
         {
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
-            return Json(this.GetListOfAR(user.PublicKey));
+            var package = new SyncPackage();
+
+            Guid key;
+            if (!Guid.TryParse(aRKey, out key))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid object identifier";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+
+            Guid clientRegistrationKey;
+            if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid device identifier";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+
+            long sequence;
+            if (!long.TryParse(aRSequence, out sequence))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid sequence identifier";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+            
+            try
+            {
+                package = this.syncManager.ReceiveSyncPackage(clientRegistrationKey, key, sequence);
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal("Error on sync", ex);
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Error occured. Try later.";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
         }
 
-        private SyncItemsMetaContainer GetListOfAR(Guid userId)
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public JsonResult GetARKeys(string login, string password, string clientRegistrationId)
         {
-           
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            Guid clientRegistrationKey;
+            if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
+            {
+                var result = new SyncItemsMetaContainer(); 
+                result.IsErrorOccured = true;
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+            if (clientRegistrationKey == Guid.Empty)
+            {
+                var result = new SyncItemsMetaContainer();
+                result.IsErrorOccured = true;
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey));
+        }
+
+        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey)
+        {
             var result = new SyncItemsMetaContainer();
 
             try
             {
-                var package = this.syncManager.GetAllARIds(userId);
+                var package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey);
                 result.ARId = package.ToList();
             }
             catch (Exception ex)
@@ -114,6 +204,7 @@ namespace Web.Supervisor.Controllers
                 logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
                 logger.Fatal(ex.Message);
                 logger.Fatal(ex.StackTrace);
+                result.IsErrorOccured = true;
             }
 
             return result;
@@ -142,7 +233,7 @@ namespace Web.Supervisor.Controllers
                 catch (Exception exc)
                 {
                     logger.Fatal("Error on Deserialization received stream. Item: ", exc);
-                    throw;
+                    return Json(false, JsonRequestBehavior.AllowGet);
                 }
 
                 if (syncItem == null)
@@ -150,7 +241,8 @@ namespace Web.Supervisor.Controllers
                     return Json(false, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(this.syncManager.SendSyncItem(syncItem), JsonRequestBehavior.AllowGet);
+                var result = this.syncManager.SendSyncItem(syncItem);
+                return Json(result, JsonRequestBehavior.AllowGet);
                 
             }
             catch (Exception ex)

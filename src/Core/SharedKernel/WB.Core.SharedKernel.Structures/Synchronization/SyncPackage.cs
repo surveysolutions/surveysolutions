@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
+    
     public class SyncPackage
     {
         public Guid Id;
@@ -11,9 +12,8 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public List<SyncItem> ItemsContainer;
 
-        public bool Status;
-
-        public string Message;
+        public bool IsErrorOccured;
+        public string ErrorMessage;
 
         public SyncPackage()
         {
