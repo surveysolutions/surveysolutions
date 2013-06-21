@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using CAPI.Android.Syncronization.RestUtils;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
