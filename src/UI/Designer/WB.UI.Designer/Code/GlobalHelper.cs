@@ -57,7 +57,7 @@ namespace WB.UI.Designer
         {
             var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
-            return url.Action(action, controller, routes, "http");
+            return url.Action(action, controller, routes);
         }
 
         #endregion
