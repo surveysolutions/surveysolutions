@@ -10,6 +10,8 @@ namespace WB.Core.Synchronization.SyncProvider
     {
         SyncItem GetSyncItem(Guid syncId, Guid id, long sequence);
 
+        SyncItem GetNextSyncItem(Guid syncId, long sequence);
+
         IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey);
 
         IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey);

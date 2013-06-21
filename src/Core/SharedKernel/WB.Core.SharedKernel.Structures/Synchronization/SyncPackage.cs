@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
+    
     public class SyncPackage
     {
         public Guid Id;

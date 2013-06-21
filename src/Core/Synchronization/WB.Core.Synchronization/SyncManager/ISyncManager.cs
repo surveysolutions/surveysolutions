@@ -24,5 +24,7 @@ namespace WB.Core.Synchronization.SyncManager
         IEnumerable<KeyValuePair<long,Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey);
 
         SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence);
+
+        /*SyncPackage ReceiveLastSyncPackage(Guid clientRegistrationId, long sequence);*/
     }
 }
