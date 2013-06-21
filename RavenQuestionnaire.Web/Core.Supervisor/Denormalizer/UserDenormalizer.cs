@@ -92,6 +92,7 @@ namespace Core.Supervisor.Denormalizer
 
             item.Email = evnt.Payload.Email;
             item.Roles = evnt.Payload.Roles.ToList();
+            users.Store(item, item.PublicKey);
         }
 
         public void Handle(IPublishedEvent<UserLocked> @event)
@@ -99,6 +100,7 @@ namespace Core.Supervisor.Denormalizer
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = true;
+            users.Store(item,item.PublicKey);
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> @event)
@@ -106,6 +108,7 @@ namespace Core.Supervisor.Denormalizer
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = false;
+            users.Store(item, item.PublicKey);
         }
 
         #endregion
