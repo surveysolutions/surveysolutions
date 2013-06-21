@@ -84,9 +84,10 @@ namespace WB.Core.Synchronization.SyncStorage
                 .ToList()
                 ;
 
-            return elements.GroupBy(i => i.PublicKey)
+            return elements.GroupBy(g => g.PublicKey)
                    .Select(pair => pair.First(x => x.Sequence == pair.Max(y => y.Sequence)))
-                   .Select(t=> new KeyValuePair<long, Guid>(t.Sequence,t.PublicKey))
+                   .Select(s=> new KeyValuePair<long, Guid>(s.Sequence,s.PublicKey))
+                   .OrderBy(o=>o.Key)
                    .ToList();
         }
 
