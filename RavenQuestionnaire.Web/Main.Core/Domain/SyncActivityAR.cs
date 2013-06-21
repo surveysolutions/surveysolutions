@@ -8,7 +8,7 @@ namespace Main.Core.Domain
 
     public class SyncActivityAR : AggregateRootMappedByConvention
     {
-        private Guid Id;
+        private Guid publicKey;
         private Guid deviceId;
         private DateTime CreationDate;
         private DateTime LastChangeDate;
@@ -16,12 +16,12 @@ namespace Main.Core.Domain
         private IClock clock = NcqrsEnvironment.Get<IClock>();
 
 
-        public SyncActivityAR(Guid id, Guid deviceId)
-            : base(id)
+        public SyncActivityAR(Guid publicKey, Guid ClientDeviceId)
+            : base(publicKey)
         {
             base.ApplyEvent(new NewSyncActivityCreated()
                 {
-                    Id = id,
+                    PublicKey = publicKey,
                     CreationDate = clock.UtcNow(),
                     DeviceId = deviceId
                 });
@@ -29,7 +29,7 @@ namespace Main.Core.Domain
 
         protected void OnNewSyncActivityCreated(NewSyncActivityCreated evt)
         {
-            Id = evt.Id;
+            publicKey = evt.PublicKey;
             deviceId = evt.DeviceId;
             CreationDate = evt.CreationDate;
             LastChangeDate = evt.CreationDate;
@@ -48,6 +48,5 @@ namespace Main.Core.Domain
         {
             LastChangeDate = evt.ChangeDate;
         }
-
     }
 }

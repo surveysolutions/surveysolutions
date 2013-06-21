@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         }
 
         public List<KeyValuePair<long,Guid>> ARId { set; get; }
+
+        public bool IsErrorOccured;
     }
 
 }

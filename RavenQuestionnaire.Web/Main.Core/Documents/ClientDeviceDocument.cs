@@ -6,7 +6,7 @@ namespace Main.Core.Documents
 {
     public class ClientDeviceDocument : IView
     {
-        public Guid Id { set; get; }
+        public Guid PublicKey { set; get; }
 
         public string DeviceId { set; get; }
 

@@ -1,17 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Main.Core.Commands.Sync;
 using Main.Core;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Synchronization;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Raven.Client.Linq;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -20,18 +15,11 @@ namespace WB.Core.Synchronization.SyncProvider
     using Newtonsoft.Json;
     
     using Main.Core.Events;
-    using Infrastructure;
 
     public class SyncProvider : ISyncProvider
     {
         private ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
         
-        #warning ViewFactory should be used here
-        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires;
-
-        #warning ViewFactory should be used here
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
-
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
@@ -43,11 +31,8 @@ namespace WB.Core.Synchronization.SyncProvider
             IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
             IQueryableReadSideRepositoryReader<UserDocument> users,
             IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
-            IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities,
             ISynchronizationDataStorage storage)
         {
-            this.questionnaires = questionnaires;
-            this.users = users;
             this.devices = devices;
             //this.syncActivities = syncActivities;
             this.storage = storage;
@@ -67,6 +52,12 @@ namespace WB.Core.Synchronization.SyncProvider
             return item;
         }
 
+        public SyncItem GetNextSyncItem(Guid clientRegistrationKey, long sequence)
+        {
+            throw new NotImplementedException();
+        }
+
+
         public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
             var device = devices.GetById(clientRegistrationKey);
@@ -75,7 +66,7 @@ namespace WB.Core.Synchronization.SyncProvider
             if (device == null)
                 throw new ArgumentException("Device was not found.");
            
-            return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier);
+            return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier, userId);
         }
 
         public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
@@ -85,7 +76,7 @@ namespace WB.Core.Synchronization.SyncProvider
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
-            return storage.GetChunkPairsCreatedAfter(device.LastSyncItemIdentifier);
+            return storage.GetChunkPairsCreatedAfter(device.LastSyncItemIdentifier, userId);
         }
 
 
@@ -95,18 +86,22 @@ namespace WB.Core.Synchronization.SyncProvider
             
             //device verification
             ClientDeviceDocument device = null;
-            if (identifier.ClientRegistrationKey.HasValue || identifier.ClientRegistrationKey != Guid.Empty)
+            if (identifier.ClientRegistrationKey.HasValue)
             {
+                if (identifier.ClientRegistrationKey.Value == Guid.Empty)
+                    throw new ArgumentException("Unknown device.");
+
                 device = devices.GetById(identifier.ClientRegistrationKey.Value);
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    throw new InvalidDataException("Unknown device.");
+                    //probably device was init with other supervisor 
+                    throw new ArgumentException("Unknown device.");
                 }
 
                 //TODO: check device validity
 
-                ClientRegistrationKey = device.Id;
+                ClientRegistrationKey = device.PublicKey;
             }
             else //register new device
             {
@@ -115,7 +110,7 @@ namespace WB.Core.Synchronization.SyncProvider
                 commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
-            Guid syncActivityKey = CreateSyncActivity(ClientRegistrationKey);
+            Guid syncActivityKey = Guid.NewGuid();//CreateSyncActivity(ClientRegistrationKey);
 
             return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }

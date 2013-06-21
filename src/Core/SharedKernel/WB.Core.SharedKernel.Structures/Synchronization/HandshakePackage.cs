@@ -1,6 +1,7 @@
 ﻿namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     using System;
+
     public class HandshakePackage
     {
         public Guid SyncProcessKey;
@@ -18,7 +19,7 @@
         {
             this.SyncProcessKey = syncProcessKey;
             this.ClientInstanceKey = clientInstanceKey;
-            this.ClientInstanceKey = clientRegistrationKey;
+            this.ClientRegistrationKey = clientRegistrationKey;
         }
     }
 }

@@ -83,11 +83,42 @@ namespace Web.Supervisor.Controllers
             }
             return Json(package, JsonRequestBehavior.AllowGet);
         }
+        
+        /*[AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public ActionResult GetLastSyncPackage(string lastSequence, Guid clientRegistrationId, string login, string password)
+        {
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
 
+            var package = new SyncPackage();
+            
+            long sequence;
+            if (!long.TryParse(lastSequence, out sequence))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid sequence identifier";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                package = this.syncManager.ReceiveSyncPackage(clientRegistrationId, key, sequence);
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal("Error on sync", ex);
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Error occured. Try later.";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+        }*/
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult GetSyncPackage(string aRKey, string aRSequence, Guid clientRegistrationId, string login, string password)
+        public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId, string login, string password)
         {
             var user = GetUser(login, password);
             if (user == null)
@@ -103,6 +134,14 @@ namespace Web.Supervisor.Controllers
                 return Json(package, JsonRequestBehavior.AllowGet);
             }
 
+            Guid clientRegistrationKey;
+            if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid device identifier";
+                return Json(package, JsonRequestBehavior.AllowGet);
+            }
+
             long sequence;
             if (!long.TryParse(aRSequence, out sequence))
             {
@@ -113,7 +152,7 @@ namespace Web.Supervisor.Controllers
             
             try
             {
-                package = this.syncManager.ReceiveSyncPackage(clientRegistrationId, key, sequence);
+                package = this.syncManager.ReceiveSyncPackage(clientRegistrationKey, key, sequence);
                 return Json(package, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -127,14 +166,26 @@ namespace Web.Supervisor.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public JsonResult GetARKeys(string login, string password, Guid clientRegistrationKey)
+        public JsonResult GetARKeys(string login, string password, string clientRegistrationId)
         {
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
+            Guid clientRegistrationKey;
+            if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
+            {
+                var result = new SyncItemsMetaContainer(); 
+                result.IsErrorOccured = true;
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
             if (clientRegistrationKey == Guid.Empty)
-                throw new HttpException("Incorrect parameter set.");
+            {
+                var result = new SyncItemsMetaContainer();
+                result.IsErrorOccured = true;
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
 
             return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey));
         }
@@ -153,6 +204,7 @@ namespace Web.Supervisor.Controllers
                 logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
                 logger.Fatal(ex.Message);
                 logger.Fatal(ex.StackTrace);
+                result.IsErrorOccured = true;
             }
 
             return result;
@@ -181,7 +233,7 @@ namespace Web.Supervisor.Controllers
                 catch (Exception exc)
                 {
                     logger.Fatal("Error on Deserialization received stream. Item: ", exc);
-                    throw;
+                    return Json(false, JsonRequestBehavior.AllowGet);
                 }
 
                 if (syncItem == null)
@@ -189,7 +241,8 @@ namespace Web.Supervisor.Controllers
                     return Json(false, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(this.syncManager.SendSyncItem(syncItem), JsonRequestBehavior.AllowGet);
+                var result = this.syncManager.SendSyncItem(syncItem);
+                return Json(result, JsonRequestBehavior.AllowGet);
                 
             }
             catch (Exception ex)

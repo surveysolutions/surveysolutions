@@ -10,19 +10,23 @@ namespace Main.Core.Domain
     {
         private IClock clock = NcqrsEnvironment.Get<IClock>();
 
-        private Guid id;
+        private Guid publicKey;
 
-        private string deviceId;
+        /*private string deviceId;
 
         private DateTime registeredDate;
 
         private DateTime modificationDate;
 
-        private Guid clientInstanceKey;
+        private Guid clientInstanceKey;*/
 
         private long lastSyncItemIdentifier;
-        
-        public ClientDeviceAR(Guid Id, string deviceId, Guid clientInstanceKey, string deviceType)
+
+        public ClientDeviceAR()
+        {
+        }
+
+        public ClientDeviceAR(Guid Id, string deviceId, Guid clientInstanceKey)
             : base(Id)
         {
             base.ApplyEvent(new NewClientDeviceCreated()
@@ -34,11 +38,11 @@ namespace Main.Core.Domain
 
         protected void OnNewClientDeviceCreated(NewClientDeviceCreated evt)
         {
-            id = evt.Id;
-            deviceId = evt.DeviceId;
+            publicKey = evt.Id;
+            /*deviceId = evt.DeviceId;
             registeredDate = evt.CreationDate;
             modificationDate = evt.CreationDate;
-            clientInstanceKey = evt.ClientInstanceKey;
+            clientInstanceKey = evt.ClientInstanceKey;*/
             lastSyncItemIdentifier = 0;
         }
 
@@ -48,7 +52,8 @@ namespace Main.Core.Domain
                 throw new ArgumentException("Last update identifier can't be less then current");
 
             base.ApplyEvent(new ClientDeviceLastSyncItemUpdated()
-                {Id = id,
+            {
+                Id = publicKey,
                 ChangeDate = clock.UtcNow(),
                 LastSyncItemSequence = newLastSyncItemIdentifier});
         }

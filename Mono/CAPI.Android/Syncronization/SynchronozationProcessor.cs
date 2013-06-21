@@ -49,7 +49,12 @@ namespace CAPI.Android.Syncronization
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
-        private Guid clientRegistrationId;
+        private string clientRegistrationId 
+        {
+            set { SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, value);}
+            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName); }
+        }
+    
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
         {
@@ -165,7 +170,7 @@ namespace CAPI.Android.Syncronization
                         new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId), Operation.Handshake, true));
                     Thread.Sleep(1000);
                     var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
-                    clientRegistrationId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
+                    clientRegistrationId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, clientRegistrationId);
                 });
         }
 

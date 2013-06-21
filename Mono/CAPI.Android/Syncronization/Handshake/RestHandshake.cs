@@ -27,13 +27,13 @@ namespace CAPI.Android.Syncronization.Handshake
             this.webExecutor = webExecutor;
         }
 
-        public Guid Execute(string login, string password, string androidId, string appID, Guid? registrationKey)
+        public string Execute(string login, string password, string androidId, string appID, string registrationKey)
         {
             var package = webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath,
                                                                        new KeyValuePair<string, string>("login", login),
                                                                        new KeyValuePair<string, string>("password", password),
                                                                        new KeyValuePair<string, string>("clientId", appID),
-                                                                       new KeyValuePair<string, string>("clientRegistrationId", registrationKey.ToString()),
+                                                                       new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
                                                                        new KeyValuePair<string, string>("androidId", androidId));
 
             if (package.IsErrorOccured)
@@ -41,8 +41,7 @@ namespace CAPI.Android.Syncronization.Handshake
                 throw new SynchronizationException("Error occured during handshake. Message:" + package.ErrorMessage);
             }
 
-            SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, package.ClientRegistrationKey.ToString());
-            return package.ClientRegistrationKey;
+            return package.ClientRegistrationKey.ToString();
         }
     }
 }

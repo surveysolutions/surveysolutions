@@ -1,16 +1,13 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
-    using System;
     using Main.Core.Events.Sync;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Main.Core.Documents;
-    using Main.DenormalizerStorage;
 
-    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>, IEventHandler<ClientDeviceLastSyncItemUpdated>
+    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>, 
+                                            IEventHandler<ClientDeviceLastSyncItemUpdated>
     {
         private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
@@ -27,16 +24,20 @@ namespace Main.Core.EventHandlers
                     CreatedDate = evnt.Payload.CreationDate,
                     ModificationDate = evnt.Payload.CreationDate,
                     ClientInstanceKey = evnt.Payload.ClientInstanceKey,
-                    Id = evnt.Payload.Id
+                    PublicKey = evnt.Payload.Id,
+                    DeviceId = evnt .Payload.DeviceId
                 };
 
-            this.devices.Store( doc, doc.Id);
+            this.devices.Store(doc, doc.PublicKey);
         }
 
         public void Handle(IPublishedEvent<ClientDeviceLastSyncItemUpdated> evnt)
         {
             var item = this.devices.GetById(evnt.EventSourceId);
             item.LastSyncItemIdentifier = evnt.Payload.LastSyncItemSequence;
+            item.ModificationDate = evnt.Payload.ChangeDate;
+
+            this.devices.Store(item, item.PublicKey);
         }
     }
 }
