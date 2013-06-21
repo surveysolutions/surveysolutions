@@ -60,9 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="HandshakePackage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IImportManager.cs" />
     <Compile Include="Implementation\ImportManager\DefaultImportManager.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />

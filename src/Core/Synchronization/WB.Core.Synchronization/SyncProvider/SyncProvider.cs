@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Main.Core.Commands.Sync;
 using Main.Core;
-using Main.Core.Entities.SubEntities;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -18,97 +14,148 @@ namespace WB.Core.Synchronization.SyncProvider
     using Newtonsoft.Json;
     
     using Main.Core.Events;
-    using Infrastructure;
 
     internal class SyncProvider : ISyncProvider
     {
-
-
+        private ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
+        
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
-        private readonly ISynchronizationDataStorage storate;
+        private ISynchronizationDataStorage storage;
+
+        //private IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities;
 
         public SyncProvider(
-            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
+            IQueryableReadSideRepositoryReader<UserDocument> users,
+            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
+            ISynchronizationDataStorage storage)
         {
             this.devices = devices;
+            //this.syncActivities = syncActivities;
+            this.storage = storage;
         }
 
-        public SyncProvider(
-                            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
-                            ISynchronizationDataStorage storate)
+        public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
         {
-            this.devices = devices;
-            this.storate = storate;
+            var device = devices.GetById(clientRegistrationKey);
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+
+            var item = storage.GetLatestVersion(id);
+            //doing tricky thing
+            //we are saving old sequence even if new version was returned
+            commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(clientRegistrationKey, sequence));
+            //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId, item.LastChangeDate, id));
+            return item;
         }
 
-        public SyncItem GetSyncItem(Guid id)
+        public SyncItem GetNextSyncItem(Guid clientRegistrationKey, long sequence)
         {
-            return storate.GetLatestVersion(id);
-        }
-
-        public IEnumerable<Guid> GetAllARIds(Guid userId)
-        {
-            return storate.GetChunksCreatedAfter(0, userId);
+            throw new NotImplementedException();
         }
 
 
-      
-
-        public Guid CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
+        public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
+            var device = devices.GetById(clientRegistrationKey);
+            //return storate.GetChunksCreatedAfter(0, userId);
 
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            Guid deviceId;
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+           
+            return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier, userId);
+        }
+
+        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
+        {
+            var device = devices.GetById(clientRegistrationKey);
+
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+
+            return storage.GetChunkPairsCreatedAfter(device.LastSyncItemIdentifier, userId);
+        }
+
+
+        public HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier)
+        {
+            Guid ClientRegistrationKey;
+            
             //device verification
             ClientDeviceDocument device = null;
-            if (identifier.ClientKey.HasValue || identifier.ClientKey != Guid.Empty)
+            if (identifier.ClientRegistrationKey.HasValue)
             {
-                device = devices.GetById(identifier.ClientKey.Value);
+                if (identifier.ClientRegistrationKey.Value == Guid.Empty)
+                    throw new ArgumentException("Unknown device.");
+
+                device = devices.GetById(identifier.ClientRegistrationKey.Value);
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    throw new InvalidDataException("Unknown device.");
+                    //probably device was init with other supervisor 
+                    throw new ArgumentException("Unknown device.");
                 }
 
-                deviceId = identifier.ClientKey.Value;
+                //TODO: check device validity
+
+                ClientRegistrationKey = device.PublicKey;
             }
             else //register new device
             {
-                deviceId = Guid.NewGuid();
-                
-                commandService.Execute(new CreateClientDeviceCommand(deviceId, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+                ClientRegistrationKey = Guid.NewGuid();
+
+                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
+            Guid syncActivityKey = Guid.NewGuid();//CreateSyncActivity(ClientRegistrationKey);
 
+            return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
+        }
+        /*
+        private Guid HandleDevice(ClientIdentifier identifier)
+        {
+
+        }*/
+
+        private Guid CreateSyncActivity(Guid deviceId)
+        {
             Guid syncActivityId = Guid.NewGuid();
             commandService.Execute(new CreateSyncActivityCommand(syncActivityId, deviceId));
-
-
-
-            throw new NotImplementedException();
+            return syncActivityId;
         }
-        
-        public bool HandleSyncItem(SyncItem item)
+
+        public bool HandleSyncItem(SyncItem item, Guid syncActivityId)
         {
             if (string.IsNullOrWhiteSpace(item.Content))
-                return false;
+                throw new ArgumentException("Sync Item is not set.");
+            if (Guid.Empty == syncActivityId)
+                throw new ArgumentException("Sync Activity Identifier is not set.");
 
-            var items = GetContentAsItem<AggregateRootEvent[]>(item.Content);
+            //check and validate sync activity
+
+            var items = GetContentAsItem<AggregateRootEvent[]>(item);
 
             var processor = new SyncEventHandler();
             processor.Merge(items);
             processor.Commit();
 
+            //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId));
+
             return true;
         }
 
-
-        private T GetContentAsItem<T>(string content)
+        private T GetContentAsItem<T>(SyncItem syncItem)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            return JsonConvert.DeserializeObject<T>(PackageHelper.DecompressString(content), settings);
+            var item = JsonConvert.DeserializeObject<T>(
+                syncItem.IsCompressed ?
+                PackageHelper.DecompressString(syncItem.Content) :
+                syncItem.Content, 
+                settings);
+
+            return item;
         }
 
     }
