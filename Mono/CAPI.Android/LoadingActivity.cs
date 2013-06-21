@@ -48,7 +48,7 @@ namespace CAPI.Android
         {
             try
             {
-                var documentStorage = CapiApplication.Kernel.Get<IQueryableReadSideRepositoryReader<CompleteQuestionnaireView>>();
+                var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
                 var result = documentStorage.GetById(publicKey);
                 if (result == null)
                 {
@@ -84,8 +84,8 @@ namespace CAPI.Android
                     minVersion = snapshot.Version + 1;
                 }
             }
-            foreach (CommittedEvent committedEvent in
-                eventStore.ReadFrom(publicKey, minVersion, long.MaxValue))
+            var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, minVersion, long.MaxValue);
+            foreach (CommittedEvent committedEvent in eventsAfterSnapshot)
             {
                 bus.Publish(committedEvent);
             }
