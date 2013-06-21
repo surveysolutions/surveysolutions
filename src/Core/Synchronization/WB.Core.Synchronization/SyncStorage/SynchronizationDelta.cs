@@ -1,7 +1,6 @@
 ﻿using System;
 using Main.Core;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
