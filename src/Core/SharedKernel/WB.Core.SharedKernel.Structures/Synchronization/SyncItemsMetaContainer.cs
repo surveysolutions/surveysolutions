@@ -7,10 +7,12 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
     {
         public SyncItemsMetaContainer()
         {
-            ARId = new List<Guid>();
+            ARId = new List<KeyValuePair<long, Guid>>();
         }
 
-        public List<Guid> ARId { set; get; }
+        public List<KeyValuePair<long,Guid>> ARId { set; get; }
+
+        public bool IsErrorOccured;
     }
 
 }

@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Android.App;
@@ -22,11 +23,12 @@ namespace CAPI.Android.Settings
     public static class SettingsManager
     {
         #region Constants
+        
+        public static string GetRegistrationKey()
+        {
+            return GetSetting(SettingsNames.RegistrationKeyName);
+        }
 
-        /// <summary>
-        /// The app name.
-        /// </summary>
-        private const string AppName = "CapiApp";
 
         /// <summary>
         /// The remote sync node.
@@ -39,11 +41,7 @@ namespace CAPI.Android.Settings
         // "http://192.168.173.1:9089/";
         // "http://10.0.2.2:8084";
 
-        /// <summary>
-        /// The sync address settings name.
-        /// </summary>
-        private const string SyncAddressSettingsName = "SyncAddress";
-
+        
         #endregion
 
         #region Public Methods and Operators
@@ -66,8 +64,7 @@ namespace CAPI.Android.Settings
         /// </returns>
         public static string GetSyncAddressPoint()
         {
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
-            return prefs.GetString(SyncAddressSettingsName, RemoteSyncNode);
+            return GetSetting(SettingsNames.SyncAddressSettingsName, RemoteSyncNode);
         }
 
         /// <summary>
@@ -86,13 +83,39 @@ namespace CAPI.Android.Settings
                 return false;
             }
 
-            // saving into the settings
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
-            ISharedPreferencesEditor prefEditor = prefs.Edit();
-            prefEditor.PutString(SyncAddressSettingsName, syncPoint);
-            prefEditor.Commit();
+            SetSetting(SettingsNames.SyncAddressSettingsName, syncPoint);
 
             return true;
+        }
+
+        public static string GetSetting(string settingName)
+        {
+            return GetSetting(settingName, string.Empty, false);
+        }
+
+        public static string GetSetting(string settingName, string defaultValue)
+        {
+            return GetSetting(settingName, defaultValue, false);
+        }
+
+        public static string GetSetting(string settingName, bool ignoreCache)
+        {
+            return GetSetting(settingName, string.Empty, ignoreCache);
+        }
+
+        public static string GetSetting(string settingName, string defaultValue, bool ignoreCache)
+        {
+            ISharedPreferences prefs = Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private);
+            return prefs.GetString(settingName, defaultValue);
+        }
+
+        public static void SetSetting(string settingName, string settingValue)
+        {
+            ISharedPreferences prefs = Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private);
+            ISharedPreferencesEditor prefEditor = prefs.Edit();
+            prefEditor.PutString(settingName, settingValue);
+            prefEditor.Commit();
+
         }
 
         public static bool ValidateAddress(string syncPoint)
@@ -124,7 +147,6 @@ namespace CAPI.Android.Settings
         class Installation
         {
             private static String sID = null;
-            private const String INSTALLATION = "INSTALLATION";
 
             public static String ID
             {
@@ -135,7 +157,13 @@ namespace CAPI.Android.Settings
                         {
                             try
                             {
-                                sID = ReadInstallationSetting();
+                                var id = SettingsManager.GetSetting(SettingsNames.INSTALLATION);
+                                if (string.IsNullOrEmpty(id))
+                                {
+                                    id = UUID.RandomUUID().ToString();
+                                    SettingsManager.SetSetting(SettingsNames.INSTALLATION, id);
+                                }
+                                sID = id;
                             }
                             catch (Exception e)
                             {
@@ -146,26 +174,6 @@ namespace CAPI.Android.Settings
                     }
                 }
             }
-
-            private static String ReadInstallationSetting()
-            {
-                ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
-                var retval= prefs.GetString(INSTALLATION, string.Empty);
-                if (string.IsNullOrEmpty(retval))
-                    return WriteInstallationSetting();
-                return retval;
-            }
-
-            private static string WriteInstallationSetting()
-            {
-                ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
-                ISharedPreferencesEditor prefEditor = prefs.Edit();
-                var sid = UUID.RandomUUID().ToString();
-                prefEditor.PutString(sid, INSTALLATION);
-                prefEditor.Commit();
-                return sid;
-            }
-
         }
     }
 }

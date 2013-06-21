@@ -45,11 +45,16 @@ namespace CAPI.Android.Syncronization
         private readonly PullDataProcessor pullDataProcessor;
         private readonly PushDataProcessor pushDataProcessor;
 
-        private IDictionary<Guid, bool> remoteChuncksForDownload;
+        private IDictionary<KeyValuePair<long,Guid>, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
-        private Guid syncId;
+        private string clientRegistrationId 
+        {
+            set { SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, value);}
+            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName); }
+        }
+    
 
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
         {
@@ -98,7 +103,7 @@ namespace CAPI.Android.Syncronization
 
             CancelIfException(() =>
                 {
-                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, syncId, ct);
+                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, clientRegistrationId, ct);
                 });
 
             int i = 1;
@@ -112,7 +117,7 @@ namespace CAPI.Android.Syncronization
 
                 try
                 {
-                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId, syncId, ct);
+                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Value, chunckId.Key, clientRegistrationId,ct);
                   
                     pullDataProcessor.Save(data);
                     remoteChuncksForDownload[chunckId] = true;
@@ -164,7 +169,8 @@ namespace CAPI.Android.Syncronization
                     OnStatusChanged(
                         new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId), Operation.Handshake, true));
                     Thread.Sleep(1000);
-                    syncId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, null);
+                    var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
+                    clientRegistrationId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, clientRegistrationId);
                 });
         }
 

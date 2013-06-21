@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading;
 using CAPI.Android.Syncronization.RestUtils;
-using Main.Core.Events;
-using Newtonsoft.Json;
-using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android.Syncronization.Pull
 {
@@ -27,22 +18,20 @@ namespace CAPI.Android.Syncronization.Pull
             this.webExecutor = webExecutor;
         }
 
-        public SyncItem RequestChunck(string login, string password, Guid id, Guid synckId, CancellationToken ct)
+        public SyncItem RequestChunck(string login, string password, Guid id, long sequence, string deviceId, CancellationToken ct)
         {
             try
             {
+                                                                  var package = webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath,ct,
+                                                                       new KeyValuePair<string, string>("login", login),
+                                                                       new KeyValuePair<string, string>("password", password),
+                                                                       new KeyValuePair<string, string>("aRKey", id.ToString()),
+                                                                       new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
+                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId));
 
 
-                var package = webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath, ct,
-                                                                                new KeyValuePair<string, string>(
-                                                                                    "login", login),
-                                                                                new KeyValuePair<string, string>(
-                                                                                    "password", password),
-                                                                                new KeyValuePair<string, string>(
-                                                                                    "aRKey", id.ToString()));
-
-                if (!package.Status || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
-                    throw new NullReferenceException("content is absent");
+            if (package.IsErrorOccured || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
+                throw new SynchronizationException("Content is absent.");
                 return package.ItemsContainer[0];
             }
             catch (RestException)
@@ -51,14 +40,18 @@ namespace CAPI.Android.Syncronization.Pull
             }
         }
 
-        public IDictionary<Guid, bool> GetChuncks(string login, string password, Guid synckId, CancellationToken ct)
+        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, string deviceId, CancellationToken ct)
         {
             try
             {
                 var syncItemsMetaContainer = webExecutor.ExcecuteRestRequestAsync<SyncItemsMetaContainer>(
                     getARKeysPath, ct,
                     new KeyValuePair<string, string>("login", login),
-                    new KeyValuePair<string, string>("password", password));
+                                                                       new KeyValuePair<string, string>("password", password),
+                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId));
+
+            if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ARId == null)
+                throw new SynchronizationException("Error on item list receiving.");
 
                 return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
             }
