@@ -10,6 +10,6 @@ namespace WB.Core.Synchronization.SyncStorage
         SyncItem ReadChunk(Guid id);
         IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users);
 
-        IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence);
+        IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users);
     }
 }

@@ -35,6 +35,11 @@ namespace WB.Core.Synchronization.SyncStorage
             throw new NotImplementedException();
         }
 
+        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence)
         {
             throw new NotImplementedException();

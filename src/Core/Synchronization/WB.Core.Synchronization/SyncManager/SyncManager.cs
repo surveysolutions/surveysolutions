@@ -93,6 +93,27 @@ namespace WB.Core.Synchronization.SyncManager
             return syncPackage;
         }
 
+        /*public SyncPackage ReceiveLastSyncPackage(Guid clientRegistrationId, long sequence)
+        {
+            var syncPackage = new SyncPackage();
+
+            SyncItem item = syncProvider.GetSyncItem(clientRegistrationId, id, sequence);
+
+            if (item != null)
+            {
+                syncPackage.ItemsContainer.Add(item);
+                syncPackage.IsErrorOccured = false;
+                //syncPackage.ErrorMessage = "OK";
+            }
+            else
+            {
+                syncPackage.IsErrorOccured = true;
+                syncPackage.ErrorMessage = "Item was not found";
+            }
+
+            return syncPackage;
+        }*/
+
         public HandshakePackage CheckAndCreateNewProcess(ClientIdentifier clientIdentifier)
         {
             if (clientIdentifier.ClientInstanceKey == Guid.Empty)

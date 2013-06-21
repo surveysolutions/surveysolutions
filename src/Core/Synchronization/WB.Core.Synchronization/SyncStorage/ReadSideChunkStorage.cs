@@ -17,11 +17,8 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly object myLock = new object();
         private long? currentSequence;
 
-
-           /* if (UseCompression)
-                result.Content = PackageHelper.CompressString(result.Content);*/
         public ReadSideChunkStorage(IReadSideRepositoryWriter<SynchronizationDelta> storage,
-                                 IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
+                                    IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
         {
             this.storage = storage;
             this.queryableStorage = queryableStorage;
@@ -41,10 +38,7 @@ namespace WB.Core.Synchronization.SyncStorage
             // if execption was throwed this mean we have current Sequence equal to 1
             catch (MaintenanceException)
             {
-              
             }
-            
-           
         }
 
         public void StoreChunk(SyncItem syncItem, Guid? userId)
@@ -74,7 +68,26 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
         {
-            return queryableStorage.Query(_ => _.Where(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users)||!d.UserId.HasValue)).Select(d => d.PublicKey)).Distinct().ToList();
+            return queryableStorage.Query(_ => _
+                .Where(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+                .Select(d => d.PublicKey))
+                .Distinct()
+                .ToList();
+        }
+
+        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users)
+        {
+            //todo: quesry is not optimal but will be removed shortly
+            var elements = queryableStorage.Query(_ => _
+                .Where(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+                .Select(d => d))
+                .ToList()
+                ;
+
+            return elements.GroupBy(i => i.PublicKey)
+                   .Select(pair => pair.First(x => x.Sequence == pair.Max(y => y.Sequence)))
+                   .Select(t=> new KeyValuePair<long, Guid>(t.Sequence,t.PublicKey))
+                   .ToList();
         }
 
         protected long CurrentSequence
