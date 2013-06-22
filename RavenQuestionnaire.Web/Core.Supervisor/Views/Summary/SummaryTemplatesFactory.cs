@@ -1,11 +1,11 @@
-﻿using WB.Core.Infrastructure.ReadSide;
-
-namespace Core.Supervisor.Views.Summary
+﻿namespace Core.Supervisor.Views.Summary
 {
     using System.Linq;
 
     using Main.Core.View;
     using Main.Core.View.Questionnaire;
+
+    using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
     public class SummaryTemplatesFactory : IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView>
     {

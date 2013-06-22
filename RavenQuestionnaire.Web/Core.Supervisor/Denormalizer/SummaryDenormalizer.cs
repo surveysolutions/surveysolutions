@@ -19,8 +19,9 @@ namespace Core.Supervisor.Denormalizer
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-    using WB.Core.Infrastructure.ReadSide;
     using Main.Core.Utility;
+
+    using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
     public class SummaryDenormalizer : IEventHandler<QuestionnaireStatusChanged>, 
                                        IEventHandler<QuestionnaireAssignmentChanged>

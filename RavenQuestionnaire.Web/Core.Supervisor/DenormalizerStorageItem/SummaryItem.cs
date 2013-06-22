@@ -8,7 +8,7 @@ namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
 
-    using WB.Core.Infrastructure;
+    using WB.Core.Infrastructure.ReadSide;
 
     public class SummaryItem : IView
     {
