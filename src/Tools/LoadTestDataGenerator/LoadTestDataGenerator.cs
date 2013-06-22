@@ -143,8 +143,8 @@ namespace LoadTestDataGenerator
                 hasSupervisorEvents: chkGenerateSupervisorEvents.Checked)
                              {
                                  SurveysCount = surveys_count,
-                                 SupervisorEventsCount = surveys_count * 3
-                                 /*change status+assignment to supervisor+assignment to interviewer*/,
+                                 SupervisorEventsCount = surveys_count * 4
+                                 /*assign to supervisor+unussigned status+assign to interviewer+initial status*/,
                                  InterviewersCount =
                                      int.Parse(interviewersCount.Text),
                                  SupervisorsCount =
@@ -543,13 +543,16 @@ namespace LoadTestDataGenerator
                 {
                     var responsible = this.AssignSurveyToOneOfSupervisors(surveyId, supervisors, hq);
                     this.UpdateProgress();
+                    this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Unassign, surveyId, responsible);
+                    this.UpdateProgress();
+
                     var supervisorTeamMembers =
                         interviewers.Where(x => x.Supervisor.Id == responsible.PublicKey).ToList();
                     if (supervisorTeamMembers.Count > 0)
                     {
-                        this.AssignSurveyToOneOfInterviewers(surveyId, supervisorTeamMembers);
+                        var interviwer = this.AssignSurveyToOneOfInterviewers(surveyId, supervisorTeamMembers);
                         this.UpdateProgress();
-                        this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Initial, surveyId, responsible);
+                        this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Initial, surveyId, interviwer);
                         this.UpdateProgress();
                     }
                     else
@@ -794,11 +797,12 @@ namespace LoadTestDataGenerator
             return responsibleSupervisor;
         }
 
-        private void AssignSurveyToOneOfInterviewers(Guid surveyId, List<UserDocument> interviewers)
+        private UserDocument AssignSurveyToOneOfInterviewers(Guid surveyId, List<UserDocument> interviewers)
         {
             var rand = RandomObject;
             var responsibleInterviewer = interviewers[rand.Next(interviewers.Count)];
             this.CommandService.Execute(new ChangeAssignmentCommand(surveyId, responsibleInterviewer.ToUserLight()));
+            return responsibleInterviewer;
         }
 
         private void MarkSurveysAsReadyForSyncWithStatus(

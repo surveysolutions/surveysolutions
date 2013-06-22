@@ -40,6 +40,20 @@ namespace Questionnaire.Core.Web.Helpers
             return GlobalInfo.IsAnyUserExist();
         }
 
+        public bool IsHeadquarter {
+            get
+            {
+                return GlobalInfo.IsHeadquarter;
+            }
+        }
+
+        public bool IsSurepvisor {
+            get
+            {
+                return GlobalInfo.IsSupervisor;
+            }
+        }
+
         #endregion
     }
 }

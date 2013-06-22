@@ -1,0 +1,28 @@
+--- SummaryFactory.cs
++++ SummaryFactory.cs
+@@ -20,3 +15,3 @@
+     {
+-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
++        private readonly IQueryableDenormalizerStorage<SummaryItem> summary;
+ 
+@@ -22,3 +17,6 @@
+ 
+-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
++        public SummaryFactory(IQueryableDenormalizerStorage<SummaryItem> summary)
++        {
++            this.summary = summary;
++        }
+ 
+@@ -24,12 +22,3 @@
+ 
+-        public SummaryFactory(
+-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
+-            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
+-            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+-        {
+-            this.survey = survey;
+-            this.templates = templates;
+-        }
+-        
+         public SummaryView Load(SummaryInputModel input)
+         {

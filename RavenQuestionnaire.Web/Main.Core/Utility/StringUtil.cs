@@ -32,6 +32,21 @@ namespace Main.Core.Utility
         /// <returns>
         /// The System.String.
         /// </returns>
+        public static string GetOrderRequestString(IEnumerable<OrderRequestItem> orders)
+        {
+            return orders == null ? string.Empty : string.Join(
+                ",", orders.Select(o => o.Field + (o.Direction == OrderDirection.Asc ? string.Empty : " Desc")));
+        }
+
+        /// <summary>
+        /// The get order request string.
+        /// </summary>
+        /// <param name="orders">
+        /// The orders.
+        /// </param>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
         public static string GetOrderRequestString(List<OrderRequestItem> orders)
         {
             return string.Join(

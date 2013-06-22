@@ -56,7 +56,8 @@ namespace Core.Supervisor.Views.Summary
             int error,
             int completed,
             int approve,
-            int redo)
+            int redo,
+            int unassigned)
             : this()
         {
             this.User = user;
@@ -66,12 +67,14 @@ namespace Core.Supervisor.Views.Summary
             this.Completed = completed;
             this.Approved = approve;
             this.Redo = redo;
+            this.Unassigned = unassigned;
         }
 
         #endregion
 
         #region Public Properties
 
+        public int Unassigned { get; set; }
         /// <summary>
         /// Gets or sets Approve.
         /// </summary>
@@ -101,11 +104,6 @@ namespace Core.Supervisor.Views.Summary
         /// Gets or sets Redo.
         /// </summary>
         public int Redo { get; set; }
-
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        public string Title { get; set; }
 
         /// <summary>
         /// Gets or sets the total.

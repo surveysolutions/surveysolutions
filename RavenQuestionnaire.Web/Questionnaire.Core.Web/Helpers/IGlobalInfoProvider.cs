@@ -34,6 +34,10 @@ namespace Questionnaire.Core.Web.Helpers
         /// </returns>
         bool IsAnyUserExist();
 
+        bool IsHeadquarter { get; }
+
+        bool IsSurepvisor { get; }
+
         #endregion
     }
 }

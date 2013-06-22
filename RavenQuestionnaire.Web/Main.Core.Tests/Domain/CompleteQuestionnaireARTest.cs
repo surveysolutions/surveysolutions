@@ -226,7 +226,7 @@ namespace Main.Core.Tests.Domain
                     if (evnt != null)
                     {
                         Assert.AreEqual(evnt.Questionnaire.PublicKey, key);
-                        Assert.AreEqual(evnt.Questionnaire.Status, SurveyStatus.Unassign);
+                        Assert.AreEqual(evnt.Questionnaire.Status, SurveyStatus.Unknown);
                         Assert.AreEqual(evnt.Questionnaire.Creator.Id, userId);
                         Assert.AreEqual(evnt.Questionnaire.Creator.Name, userName);
 

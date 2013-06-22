@@ -1,0 +1,25 @@
+﻿namespace Web.Supervisor.Controllers
+{
+    using System.Web.Http;
+
+    using Ncqrs.Commanding.ServiceModel;
+
+    using Questionnaire.Core.Web.Helpers;
+
+    using WB.Core.SharedKernel.Logger;
+
+    public abstract class BaseApiController : ApiController
+    {
+        protected readonly ICommandService CommandService;
+        protected readonly IGlobalInfoProvider GlobalInfo;
+
+        protected readonly ILog Logger;
+
+        protected BaseApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+        {
+            this.CommandService = commandService;
+            this.GlobalInfo = globalInfo;
+            this.Logger = logger;
+        }
+    }
+}

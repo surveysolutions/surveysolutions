@@ -93,11 +93,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DenormalizerStorageItem\SummaryItem.cs" />
     <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
+    <Compile Include="Denormalizer\SummaryDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
     <Compile Include="Denormalizer\UserDenormalizer.cs" />
@@ -105,6 +107,10 @@
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
+    <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />
+    <Compile Include="Views\Summary\SummaryTemplatesFactory.cs" />
+    <Compile Include="Views\Summary\TemplateViewItem.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />
     <Compile Include="Views\Survey\SurveyQuestion.cs" />

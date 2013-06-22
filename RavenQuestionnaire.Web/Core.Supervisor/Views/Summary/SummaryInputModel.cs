@@ -8,11 +8,8 @@ namespace Core.Supervisor.Views.Summary
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     using Main.Core.Entities;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
 
     /// <summary>
@@ -23,7 +20,7 @@ namespace Core.Supervisor.Views.Summary
         /// <summary>
         /// The _orders.
         /// </summary>
-        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
+        private IEnumerable<OrderRequestItem> _orders = new List<OrderRequestItem>();
 
         /// <summary>
         /// The _page.
@@ -35,10 +32,13 @@ namespace Core.Supervisor.Views.Summary
         /// </summary>
         private int _pageSize = 20;
         
-        public SummaryInputModel(UserLight viewer)
+        public SummaryInputModel(Guid viewerId, SummaryViewerStatus viewerStatus)
         {
-            this.ViewerId = viewer.Id;
+            this.ViewerId = viewerId;
+            this.ViewerStatus = viewerStatus;
         }
+
+        public SummaryViewerStatus ViewerStatus { get; set; }
 
         /// <summary>
         /// Gets or sets ViewerId.
@@ -69,7 +69,7 @@ namespace Core.Supervisor.Views.Summary
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders
+        public IEnumerable<OrderRequestItem> Orders
         {
             get
             {
@@ -113,5 +113,11 @@ namespace Core.Supervisor.Views.Summary
                 this._pageSize = value;
             }
         }
+    }
+
+    public enum SummaryViewerStatus
+    {
+        Headquarter = 0,
+        Supervisor = 1
     }
 }
