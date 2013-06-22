@@ -60,14 +60,10 @@
                 <td style="width: 190px">
                     <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
                         <i class="icon-list"></i>Details</a>
-                    @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId || fitem.Status.PublicId == SurveyStatus.Unassign.PublicId)
-                    {
+                    
                         <a class="btn btn-small @(fitem.Responsible == null ? "btn-danger" : "btn-info")" 
                            id="ref-@fitem.Id" 
                            href="#" ><i class="icon-random icon-white"></i>Assign</a>
-
-                    }
-                  
                 </td>
             </tr>
         }

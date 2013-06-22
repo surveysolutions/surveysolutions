@@ -39,6 +39,22 @@ namespace Questionnaire.Core.Web.Helpers
             return new UserLight((Guid)currentUser.ProviderUserKey, currentUser.UserName);
         }
 
+        public static bool IsHeadquarter
+        {
+            get
+            {
+                return Roles.IsUserInRole("Headquarter");
+            }
+        }
+
+        public static bool IsSupervisor
+        {
+            get
+            {
+                return Roles.IsUserInRole("Supervisor");
+            }
+        }
+
         /// <summary>
         /// The is any user exist.
         /// </summary>

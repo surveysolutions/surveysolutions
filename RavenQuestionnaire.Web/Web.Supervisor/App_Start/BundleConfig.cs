@@ -29,11 +29,21 @@ namespace Web.Supervisor.App_Start
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
+            bundles.Add(new StyleBundle("~/css/main").Include("~/Content/bootstrap.css", "~/Content/bootstrap-responsive.css"));
+            bundles.Add(new ScriptBundle("~/js/main").Include("~/Scripts/jquery-{version}.js", "~/Scripts/bootstrap.js"));
+
             bundles.Add(
                 new ScriptBundle("~/validate").Include(
                     "~/Scripts/jquery.validate.js", 
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"));
-            
+
+            bundles.Add(
+                new ScriptBundle("~/js/list").Include(
+                    "~/Scripts/knockout-2.2.1.js", 
+                    "~/Scripts/ko.pager.js",
+                    "~/Scripts/vm/listviewmaster.js",
+                    "~/Scripts/vm/listview.js",
+                    "~/Scripts/vm/summarylistview.js"));
         }
 
         #endregion

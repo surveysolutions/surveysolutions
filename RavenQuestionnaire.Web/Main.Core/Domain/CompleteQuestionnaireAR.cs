@@ -101,7 +101,7 @@ namespace Main.Core.Domain
 
             document.PublicKey = completeQuestionnaireId;
             document.Creator = creator;
-            document.Status = SurveyStatus.Unassign;
+            document.Status = SurveyStatus.Unknown;
             document.Responsible = null;
 
             ////document.ConnectChildsWithParent();
@@ -655,10 +655,6 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnChangeAssignment(QuestionnaireAssignmentChanged e)
         {
-            if (this.doc.Status.PublicId == SurveyStatus.Unassign.PublicId)
-            {
-                this.doc.Status = SurveyStatus.Initial;
-            }
             this.doc.Responsible = e.Responsible;
         }
 

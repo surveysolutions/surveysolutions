@@ -242,6 +242,13 @@ namespace Web.Supervisor.Controllers
                 }
 
                 this.CommandService.Execute(new ChangeAssignmentCommand(data.QuestionnaireId, data.Responsible));
+                this.CommandService.Execute(
+                    new ChangeStatusCommand()
+                        {
+                            CompleteQuestionnaireId = data.QuestionnaireId,
+                            Status = SurveyStatus.Unassign,
+                            Responsible = data.Responsible
+                        });
             }
             catch (Exception e)
             {
@@ -382,19 +389,17 @@ namespace Web.Supervisor.Controllers
             var user = this.userViewFactory.Load(new UserViewInputModel(value));
             stat = this.completeQuestionnaireStatisticViewFactory.Load(new CompleteQuestionnaireStatisticViewInputModel(cqId) { Scope = QuestionScope.Supervisor });
             responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
-            if (stat.Status.PublicId == SurveyStatus.Unassign.PublicId)
-            {
-                stat.Status = SurveyStatus.Initial;
-                this.CommandService.Execute(
-                    new ChangeStatusCommand()
-                        {
-                            CompleteQuestionnaireId = cqId,
-                            Status = SurveyStatus.Initial,
-                            Responsible = this.GlobalInfo.GetCurrentUser()
-                        });
-            }
 
             this.CommandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
+
+            this.CommandService.Execute(
+                new ChangeStatusCommand()
+                    {
+                        CompleteQuestionnaireId = cqId,
+                        Status = SurveyStatus.Unassign,
+                        Responsible = responsible
+                    });
+            
 
             if (Request.IsAjaxRequest())
             {
@@ -565,32 +570,11 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
-        [Authorize]
         public ActionResult Summary()
         {
             ViewBag.ActivePage = MenuItem.Interviewers;
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.summaryViewFactory.Load(new SummaryInputModel(user));
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.View(model);
+            return this.View();
         }
-
-        [Authorize]
-        public ActionResult _SummaryData(GridDataRequestModel data)
-        {
-            var user = this.GlobalInfo.GetCurrentUser();
-            var input = new SummaryInputModel(user)
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                TemplateId = data.TemplateId
-            };
-            var model = this.summaryViewFactory.Load(input);
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.PartialView("_SummaryTable", model);
-        }
-
 
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
         {
