@@ -7,7 +7,7 @@
         public Guid SyncProcessKey;
         public Guid ClientInstanceKey;
         public Guid ClientRegistrationKey;
-
+        
         public bool IsErrorOccured;
         public string ErrorMessage ;
 
