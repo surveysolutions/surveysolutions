@@ -242,6 +242,7 @@ namespace Web.Supervisor.Controllers
                 }
 
                 var result = this.syncManager.SendSyncItem(syncItem);
+
                 return Json(result, JsonRequestBehavior.AllowGet);
                 
             }
