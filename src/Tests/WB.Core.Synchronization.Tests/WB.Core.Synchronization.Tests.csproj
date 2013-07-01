@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultBackupManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSideChunkStorageTests.cs" />
     <Compile Include="SimpleSynchronizationDataStorageTests.cs" />
@@ -55,6 +56,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
@@ -62,6 +67,10 @@
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
+      <Name>SynchronizationMessages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
