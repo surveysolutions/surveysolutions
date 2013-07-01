@@ -77,18 +77,27 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users)
         {
-            //todo: quesry is not optimal but will be removed shortly
+            //todo: quesry is not optimal but will be replaced shortly
             var elements = queryableStorage.Query(_ => _
                 .Where(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
                 .Select(d => d))
                 .ToList()
+                .Select(s => new KeyValuePair<long, Guid>(s.Sequence, s.PublicKey))
                 ;
 
-            return elements.GroupBy(g => g.PublicKey)
-                   .Select(pair => pair.First(x => x.Sequence == pair.Max(y => y.Sequence)))
-                   .Select(s=> new KeyValuePair<long, Guid>(s.Sequence,s.PublicKey))
+            return elements.GroupBy(g => g.Value)
+                   .Select(pair => pair.First(x => x.Key == pair.Max(y => y.Key)))
                    .OrderBy(o=>o.Key)
                    .ToList();
+        }
+
+        public IEnumerable<SyncItem> GetChunks(long sequence, IEnumerable<Guid> users)
+        {
+            return queryableStorage.Query(_ => _
+                .Where(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+                .Select(d => new SyncItem()))
+                .Distinct()
+                .ToList();
         }
 
         protected long CurrentSequence
