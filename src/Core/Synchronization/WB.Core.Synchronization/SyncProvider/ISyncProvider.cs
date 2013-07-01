@@ -9,8 +9,8 @@ namespace WB.Core.Synchronization.SyncProvider
     internal interface ISyncProvider
     {
         SyncItem GetSyncItem(Guid syncId, Guid id, long sequence);
-
-        SyncItem GetNextSyncItem(Guid syncId, long sequence);
+        
+        IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, long sequence);
 
         IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey);
 

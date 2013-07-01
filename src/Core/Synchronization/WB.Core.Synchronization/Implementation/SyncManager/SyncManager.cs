@@ -14,15 +14,24 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.syncProvider = syncProvider;
         }
 
-        public HandshakePackage ItitSync(ClientIdentifier identifier)
+        public HandshakePackage ItitSync(ClientIdentifier clientIdentifier)
         {
-            return CheckAndCreateNewProcess(identifier);
+            if (clientIdentifier.ClientInstanceKey == Guid.Empty)
+                throw new ArgumentException("ClientInstanceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
+                throw new ArgumentException("ClientDeviceKey is incorrecct.");
+
+            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
+                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
+
+            return syncProvider.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
-        public bool InitSending(ClientIdentifier identifier)
+        /*public bool InitSending(ClientIdentifier identifier)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         public bool SendSyncPackage(SyncPackage package)
         {
@@ -47,7 +56,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             if (package.SyncProcessKey == Guid.Empty)
             {
-                throw  new ArgumentException("Package doesn't contan valid sync process info.");
+                throw  new ArgumentException("Package doesn't contain valid sync process info.");
             }
         }
 
@@ -56,6 +65,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncProvider.HandleSyncItem(item, Guid.Empty);
         }
 
+        
         public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
            return syncProvider.GetAllARIds(userId, clientRegistrationKey);
@@ -66,11 +76,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey);
         }
 
-        public bool InitReceiving(ClientIdentifier identifier)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public SyncPackage ReceiveSyncPackage(Guid clientRegistrationId, Guid id, long sequence)
         {
             var syncPackage = new SyncPackage();
@@ -81,7 +87,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             {
                 syncPackage.ItemsContainer.Add(item);
                 syncPackage.IsErrorOccured = false;
-                //syncPackage.ErrorMessage = "OK";
             }
             else
             {
@@ -92,15 +97,15 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncPackage;
         }
 
-        /*public SyncPackage ReceiveLastSyncPackage(Guid clientRegistrationId, long sequence)
+        public SyncPackage ReceiveLastSyncPackage(Guid userId, Guid clientRegistrationId, long sequence)
         {
             var syncPackage = new SyncPackage();
 
-            SyncItem item = syncProvider.GetSyncItem(clientRegistrationId, id, sequence);
+            var items = syncProvider.GetSyncItemBulk(userId, clientRegistrationId, sequence);
 
-            if (item != null)
+            if (items != null)
             {
-                syncPackage.ItemsContainer.Add(item);
+                syncPackage.ItemsContainer.AddRange(items);
                 syncPackage.IsErrorOccured = false;
                 //syncPackage.ErrorMessage = "OK";
             }
@@ -111,20 +116,11 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             }
 
             return syncPackage;
-        }*/
+        }
 
-        public HandshakePackage CheckAndCreateNewProcess(ClientIdentifier clientIdentifier)
+        public int GetNumberToGet(Guid userId, Guid clientRegistrationId, long sequence)
         {
-            if (clientIdentifier.ClientInstanceKey == Guid.Empty)
-                throw new ArgumentException("ClientInstanceKey is incorrecct.");
-
-            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientDeviceKey))
-                throw new ArgumentException("ClientDeviceKey is incorrecct.");
-
-            if (string.IsNullOrWhiteSpace(clientIdentifier.ClientVersionIdentifier))
-                throw new ArgumentException("ClientVersionIdentifier is incorrecct.");
-
-            return syncProvider.CheckAndCreateNewSyncActivity(clientIdentifier);
+            return 0;
         }
     }
 }

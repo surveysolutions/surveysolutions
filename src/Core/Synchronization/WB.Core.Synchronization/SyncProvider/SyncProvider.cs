@@ -47,16 +47,21 @@ namespace WB.Core.Synchronization.SyncProvider
             //doing tricky thing
             //we are saving old sequence even if new version was returned
             commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(clientRegistrationKey, sequence));
-            //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId, item.LastChangeDate, id));
+            
             return item;
         }
 
-        public SyncItem GetNextSyncItem(Guid clientRegistrationKey, long sequence)
+        public IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, long sequence)
         {
+            var device = devices.GetById(clientRegistrationKey);
+            if (device == null)
+                throw new ArgumentException("Device was not found.");
+
+
+
             throw new NotImplementedException();
         }
-
-
+        
         public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
         {
             var device = devices.GetById(clientRegistrationKey);
@@ -109,32 +114,21 @@ namespace WB.Core.Synchronization.SyncProvider
                 commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
             }
 
-            Guid syncActivityKey = Guid.NewGuid();//CreateSyncActivity(ClientRegistrationKey);
+            Guid syncActivityKey = Guid.NewGuid();
 
             return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }
-        /*
-        private Guid HandleDevice(ClientIdentifier identifier)
-        {
-
-        }*/
-
-        private Guid CreateSyncActivity(Guid deviceId)
-        {
-            Guid syncActivityId = Guid.NewGuid();
-            commandService.Execute(new CreateSyncActivityCommand(syncActivityId, deviceId));
-            return syncActivityId;
-        }
-
+        
         public bool HandleSyncItem(SyncItem item, Guid syncActivityId)
         {
             if (string.IsNullOrWhiteSpace(item.Content))
                 throw new ArgumentException("Sync Item is not set.");
+
+            /*//check and validate sync activity
             if (Guid.Empty == syncActivityId)
-                throw new ArgumentException("Sync Activity Identifier is not set.");
+                throw new ArgumentException("Sync Activity Identifier is not set.");*/
 
-            //check and validate sync activity
-
+            
             var items = GetContentAsItem<AggregateRootEvent[]>(item);
 
             var processor = new SyncEventHandler();
