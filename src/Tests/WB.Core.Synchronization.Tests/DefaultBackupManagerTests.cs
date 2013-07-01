@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;
+using Ncqrs.Config;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Synchronization.Implementation.ImportManager;
@@ -16,13 +17,25 @@ namespace WB.Core.Synchronization.Tests
     public class DefaultBackupManagerTests
     {
         [Test]
-        public void Backup_When_eventstore_is_null_Then_null_is_returned()
+        public void Backup_When_eventstore_is_null_Then_InstanceNotFoundInEnvironmentConfigurationException()
         {
             // arrange
+            NcqrsEnvironment.RemoveDefault<IEventStore>();
+
+            // act and assert
+            Assert.Throws<InstanceNotFoundInEnvironmentConfigurationException>(() => CreateDefaultBackupManager());
+        }
+
+        [Test]
+        public void Backup_When_eventstore_is_not_streamable_Then_null_is_returned()
+        {
+            // arrange
+            var eventStore = new Mock<IEventStore>();
+            NcqrsEnvironment.SetDefault(eventStore.Object);
             DefaultBackupManager target = CreateDefaultBackupManager();
 
             // act
-            var result =target.Backup();
+            var result = target.Backup();
 
             // assert
             Assert.That(result, Is.EqualTo(null));
