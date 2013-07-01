@@ -83,38 +83,6 @@ namespace Web.Supervisor.Controllers
             }
             return Json(package, JsonRequestBehavior.AllowGet);
         }
-        
-        /*[AcceptVerbs(HttpVerbs.Post)]
-        [HandleUIException]
-        public ActionResult GetLastSyncPackage(string lastSequence, Guid clientRegistrationId, string login, string password)
-        {
-            var user = GetUser(login, password);
-            if (user == null)
-                throw new HttpStatusException(HttpStatusCode.Forbidden);
-
-            var package = new SyncPackage();
-            
-            long sequence;
-            if (!long.TryParse(lastSequence, out sequence))
-            {
-                package.IsErrorOccured = true;
-                package.ErrorMessage = "Invalid sequence identifier";
-                return Json(package, JsonRequestBehavior.AllowGet);
-            }
-
-            try
-            {
-                package = this.syncManager.ReceiveSyncPackage(clientRegistrationId, key, sequence);
-                return Json(package, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                logger.Fatal("Error on sync", ex);
-                package.IsErrorOccured = true;
-                package.ErrorMessage = "Error occured. Try later.";
-                return Json(package, JsonRequestBehavior.AllowGet);
-            }
-        }*/
 
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
