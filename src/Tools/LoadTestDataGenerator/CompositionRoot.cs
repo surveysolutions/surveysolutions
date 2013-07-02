@@ -18,6 +18,7 @@ using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Questionnaire.ExportServices;
+using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
 {
@@ -29,7 +30,8 @@ namespace LoadTestDataGenerator
         {
             kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
-                new RavenInfrastructureModule());
+                new RavenInfrastructureModule(),
+                new SynchronizationModule());
             
             RegisterServices(kernel);
 
@@ -46,6 +48,7 @@ namespace LoadTestDataGenerator
 
             kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IReadSideRepositoryReader<QuestionnaireDocument>>()));
 
+            
             kernel.Load<MainModule>();
         }
     }

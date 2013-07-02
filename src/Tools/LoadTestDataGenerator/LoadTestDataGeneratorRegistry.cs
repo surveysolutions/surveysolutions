@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
+using Core.Supervisor.Denormalizer;
 using Main.Core;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Logger;
 using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
 {
@@ -42,7 +43,8 @@ namespace LoadTestDataGenerator
                 base.GetAssweblysForRegister()
                     .Concat(new[]
                     {
-                        typeof(LoadTestDataGeneratorRegistry).Assembly
+                        typeof(LoadTestDataGeneratorRegistry).Assembly,
+                        typeof(CompleteQuestionnaireDenormalizer).Assembly
                     });
         }
 
