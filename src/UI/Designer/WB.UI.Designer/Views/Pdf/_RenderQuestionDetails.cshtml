@@ -2,12 +2,11 @@
 @using Main.Core.View.Answer
 @model Main.Core.View.Question.QuestionView
 
-<p>
+<p class="question">
     @Model.Title
 </p>
 
-@if (this.Model.Answers != null && this.Model.Answers.Length > 0)
-{
+@if (this.Model.Answers != null && this.Model.Answers.Length > 0) {
     <ul class="answer-options">
         @foreach (AnswerView answer in this.Model.Answers)
         {
@@ -23,4 +22,19 @@
         }
         
     </ul>
+}
+else {
+    switch (Model.QuestionType)
+    {
+        case QuestionType.Numeric: {
+            <div class="answer-placeholder">&nbsp;</div>
+                break;
+            }
+        case QuestionType.Text: {
+            <div class="answer-placeholder">&nbsp;</div>
+                break;
+            }
+        default:
+            break;
+    }
 }
