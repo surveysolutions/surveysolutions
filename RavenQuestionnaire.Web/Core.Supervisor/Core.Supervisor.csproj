@@ -107,6 +107,7 @@
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />

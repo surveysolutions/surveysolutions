@@ -17,6 +17,11 @@
     </div>
     <div class="span9">
         <div id="list">
+            <!-- ko ifnot:ListView.IsPageLoaded()  -->
+            <p class="text-center">
+                Loading. Please wait...
+            </p>
+            <!-- /ko -->
             <!-- ko if:ListView.IsPageLoaded()  -->
             <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
             <p class="text-center">
