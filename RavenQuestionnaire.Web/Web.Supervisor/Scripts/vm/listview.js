@@ -10,6 +10,7 @@
     };
 
     self.Items = ko.observableArray([]);
+    self.ItemsSummary = ko.observable(null);
 
     self.Filter = function () {
         return self.GetFilterMethod ? self.GetFilterMethod.apply() : null;
@@ -69,6 +70,7 @@
             success: function (data) {
                 self.Items(data.Items);
                 self.TotalResults(data.TotalCount);
+                self.ItemsSummary(data.ItemsSummary);
                 self.IsPageLoaded(true);
             },
             dataType: 'json'

@@ -69,6 +69,17 @@
                 <td data-bind="text: Total"></td>
             </tr>
             <!-- /ko -->
+            <!-- ko if:ListView.ItemsSummary != null -->
+            <tr data-bind="with: ListView.ItemsSummary">
+                <th data-bind="text: User.Name"></th>
+                <th data-bind="text: Initial"></th>
+                <th data-bind="text: Redo"></th>
+                <th data-bind="text: Completed"></th>
+                <th data-bind="text: Error"></th>
+                <th data-bind="text: Approved"></th>
+                <th data-bind="text: Total"></th>
+            </tr>
+            <!-- /ko -->
         </tbody>
     </table>
 }

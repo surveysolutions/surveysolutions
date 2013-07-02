@@ -11,12 +11,7 @@ namespace Core.Supervisor.Views.Summary
 {
     using System.Collections.Generic;
 
-    using Main.Core.Entities;
-
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class SummaryView
+    public class SummaryView : IListView<SummaryViewItem>
     {
         #region Public Properties
         
@@ -29,6 +24,8 @@ namespace Core.Supervisor.Views.Summary
         /// Gets or sets Items.
         /// </summary>
         public IEnumerable<SummaryViewItem> Items { get; set; }
+
+        public SummaryViewItem ItemsSummary { get; set; }
 
         #endregion
     }
