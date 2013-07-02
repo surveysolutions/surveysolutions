@@ -37,3 +37,14 @@ h3, h4, h5, h6 {
 .answer-value {
     font-weight: bold;
 }
+.answer-placeholder {
+    line-height: 100%;
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    border-bottom-color: #000000;
+}
+.question {
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+}
