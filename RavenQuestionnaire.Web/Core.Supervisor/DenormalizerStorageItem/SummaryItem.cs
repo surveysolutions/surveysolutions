@@ -41,6 +41,8 @@ namespace Core.Supervisor.DenormalizerStorageItem
 
         public Guid TemplateId { get; set; }
 
+        public string TemplateName { get; set; }
+
         public Guid ResponsibleId { get; set; }
 
         public Guid? ResponsibleSupervisorId { get; set; }

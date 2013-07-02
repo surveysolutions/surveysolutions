@@ -107,11 +107,19 @@
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesFactory.cs" />
     <Compile Include="Views\Summary\TemplateViewItem.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
+    <Compile Include="Views\Survey\SurveysViewItem.cs" />
+    <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
+    <Compile Include="Views\Survey\SurveyUsersView.cs" />
+    <Compile Include="Views\Survey\SurverysViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveysInputModel.cs" />
+    <Compile Include="Views\Survey\SurveysView.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />
     <Compile Include="Views\Survey\SurveyQuestion.cs" />
     <Compile Include="Views\Survey\SurveyScreen.cs" />
@@ -164,6 +172,7 @@
     <Compile Include="Views\Summary\SummaryInputModel.cs" />
     <Compile Include="Views\Summary\SummaryView.cs" />
     <Compile Include="Views\Summary\SummaryViewItem.cs" />
+    <Compile Include="Views\Survey\SurveyUsersViewItem.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
@@ -176,6 +185,7 @@
     <Compile Include="Views\User\UserView.cs" />
     <Compile Include="Views\User\UserViewFactory.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />
+    <Compile Include="Views\ViewerStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

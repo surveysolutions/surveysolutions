@@ -1,9 +1,12 @@
-﻿@{
+﻿@using System.Web.Optimization
+@{
     Layout = "~/Views/Shared/_ListViewLayout.cshtml";
 }
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/vm/summarylistview.js")
+
     <script type="text/javascript">
         $(function () {
 
