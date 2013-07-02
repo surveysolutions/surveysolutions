@@ -149,6 +149,9 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04003b
 			public const int btnBackup = 2130968635;
 			
+			// aapt resource value: 0x7f04003e
+			public const int btnCancel = 2130968638;
+			
 			// aapt resource value: 0x7f040031
 			public const int btnCollect = 2130968625;
 			
