@@ -26,50 +26,48 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
-        //        private readonly ISQLiteConnectionFactory _connectionFactory;
-        private readonly ISQLiteConnection _connection;
-        private const string _dbName = "Projections";
+        private readonly ISQLiteConnection connection;
 
-        public SqliteReadSideRepositoryAccessor()
+        public SqliteReadSideRepositoryAccessor(string dbName)
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
-            _connection = connectionFactory.Create(_dbName);
+            connection = connectionFactory.Create(dbName);
 
-            _connection.CreateTable<TView>();
+            connection.CreateTable<TView>();
         }
 
         public int Count()
         {
-            return _connection.Table<TView>().Count();
+            return connection.Table<TView>().Count();
         }
 
         public TView GetById(Guid id    )
         {
             var idString = id.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
-            return ((TableQuery<TView>) _connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
+            return ((TableQuery<TView>) connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
         public IEnumerable<TView> Filter(Expression<Func<TView, bool>> predExpr)
         {
-            return ((TableQuery<TView>) _connection.Table<TView>()).Where(predExpr);
+            return ((TableQuery<TView>) connection.Table<TView>()).Where(predExpr);
         }
 
         public void Remove(Guid id)
         {
-            _connection.Delete<TView>(id.ToString());
+            connection.Delete<TView>(id.ToString());
         }
 
         public void Store(TView view, Guid id)
         {
             try
             {
-                _connection.Insert(view);
+                connection.Insert(view);
             }
             catch
             {
-                _connection.Update(view);
+                connection.Update(view);
             }
         }
     }

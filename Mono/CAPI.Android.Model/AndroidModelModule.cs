@@ -9,8 +9,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.Backup;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
@@ -21,6 +23,7 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Services;
 using Main.Core.View;
 using Main.DenormalizerStorage;
+using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -28,9 +31,15 @@ namespace CAPI.Android.Core.Model
 {
     public class AndroidModelModule : NinjectModule
     {
+        private const string ProjectionStoreName = "Projections";
+        private const string EventStoreDatabaseName = "EventStore";
+
+
         public override void Load()
         {
-            var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>();
+            this.Bind<IEventStore>().ToConstant(new MvvmCrossSqliteEventStore(EventStoreDatabaseName));
+
+            var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(ProjectionStoreName);
             Kernel.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             Kernel.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
 
@@ -39,23 +48,23 @@ namespace CAPI.Android.Core.Model
             Kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
             Kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
 
-            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>();
+            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(ProjectionStoreName);
            
             Kernel.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
 
             Kernel.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
 
-            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>();
+            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(ProjectionStoreName);
 
             Kernel.Bind<IReadSideRepositoryWriter<QuestionnaireDTO>>().ToConstant(questionnaireStore);
 
             Kernel.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
 
-            var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>();
+            var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(ProjectionStoreName);
 
             Kernel.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
 
-            var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>();
+            var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(ProjectionStoreName);
 
             Kernel.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
 
@@ -72,6 +81,9 @@ namespace CAPI.Android.Core.Model
             Kernel.Bind<IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>>()
                   .To<QuestionnaireScreenViewFactory>();
             Kernel.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
+
+
+            this.Bind<IBackup>().ToConstant(new SqliteBackup(EventStoreDatabaseName, ProjectionStoreName));
         }
     }
 }

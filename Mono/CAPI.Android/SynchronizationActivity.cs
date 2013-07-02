@@ -59,11 +59,16 @@ namespace CAPI.Android
             base.OnCreate(bundle);
             this.SetContentView(Resource.Layout.sync_dialog);
 
-
+            backupManager = CapiApplication.Kernel.Get<IBackup>();
             btnSync.Click += this.ButtonSyncClick;
 
             btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
+            btnBackup.Click += btnBackup_Click;
+        }
 
+        void btnBackup_Click(object sender, EventArgs e)
+        {
+            backupManager.Backup();
         }
 
         protected override void OnStart()
@@ -207,6 +212,7 @@ namespace CAPI.Android
         }
 
         private Operation? currentOperation;
+        private IBackup backupManager;
 
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {

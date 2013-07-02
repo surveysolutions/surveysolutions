@@ -60,6 +60,7 @@
     <Compile Include="AndroidModelModule.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\SyncCredentials.cs" />
+    <Compile Include="Backup\SqliteBackup.cs" />
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
@@ -147,9 +148,7 @@
       <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Backup\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
