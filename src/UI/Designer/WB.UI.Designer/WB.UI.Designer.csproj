@@ -393,7 +393,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common.js" />
-    <Content Include="Scripts\compatibility.js" />
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\bootstrapper.js" />
     <Content Include="Scripts\details\config.js" />
@@ -471,7 +470,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\pdf.js" />
     <Content Include="Scripts\r.js" />
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
@@ -523,7 +521,6 @@
     <Content Include="Views\Questionnaire\Clone.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
-    <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />

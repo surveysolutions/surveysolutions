@@ -1,4 +1,11 @@
-﻿.pdf-preview .content {
+﻿body {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.pdf-preview .content {
     width: 1000px;
     margin: 0 auto;
 
@@ -38,7 +45,6 @@ h3, h4, h5, h6 {
     font-weight: bold;
 }
 .answer-placeholder {
-    line-height: 100%;
     border-bottom-style: dotted;
     border-bottom-width: 1px;
     border-bottom-color: #000000;
@@ -46,5 +52,5 @@ h3, h4, h5, h6 {
 .question {
     margin: 0;
     padding: 0;
-    margin-top: 10px;
+    margin-top: 15px;
 }

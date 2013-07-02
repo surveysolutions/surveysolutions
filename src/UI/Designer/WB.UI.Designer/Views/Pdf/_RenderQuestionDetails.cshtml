@@ -1,6 +1,6 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@model Main.Core.View.Question.QuestionView
+@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Answer
-@model Main.Core.View.Question.QuestionView
 
 <p class="question">
     @Model.Title
@@ -31,6 +31,8 @@ else {
                 break;
             }
         case QuestionType.Text: {
+            <div class="answer-placeholder">&nbsp;</div>
+            <div class="answer-placeholder">&nbsp;</div>
             <div class="answer-placeholder">&nbsp;</div>
                 break;
             }
