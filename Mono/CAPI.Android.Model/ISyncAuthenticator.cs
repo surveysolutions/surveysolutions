@@ -4,7 +4,7 @@ namespace CAPI.Android.Core.Model
 {
     public interface ISyncAuthenticator
     {
-        SyncCredentials RequestCredentials();
+        SyncCredentials? RequestCredentials();
 
         event RequestCredentialsCallBack RequestCredentialsCallback;
     }

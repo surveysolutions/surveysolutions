@@ -1,15 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ModelUtils;
@@ -18,10 +9,7 @@ using Main.Core.Commands.File;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
-using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
