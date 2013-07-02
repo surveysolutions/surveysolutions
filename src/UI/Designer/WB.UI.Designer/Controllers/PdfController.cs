@@ -1,30 +1,23 @@
-﻿
+﻿using Main.Core.View;
+using System;
+using System.Configuration;
 using System.Globalization;
-using System.Linq;
-using Main.Core.View.User;
+using System.IO;
+using System.Web.Mvc;
 using WB.UI.Designer.Pdf;
 using WB.UI.Designer.Providers.CQRS.Accounts.View;
+using WB.UI.Designer.Views.Questionnaire;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
-    using Main.Core.View;
-    using System;
-    using System.Configuration;
-    using System.IO;
-    using System.Web.Mvc;
-
-    using WB.UI.Designer.Views.Questionnaire;
-    using WB.UI.Shared.Web.Membership;
-
     public class PdfController : BaseController
     {
         private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
 
-        public PdfController(
-            IViewRepository repository,
-            IMembershipUserService userHelper,
+        public PdfController(IMembershipUserService userHelper,
             IViewFactory<AccountViewInputModel, AccountView> userViewFactory)
-            : base(repository, null, userHelper)
+            : base(userHelper)
         {
             this.userViewFactory = userViewFactory;
         }
