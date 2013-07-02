@@ -1,4 +1,5 @@
 
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.Infrastructure;
 using System;
@@ -60,6 +61,7 @@ namespace CAPI.Android
 
 
             btnSync.Click += this.ButtonSyncClick;
+
             btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
 
         }

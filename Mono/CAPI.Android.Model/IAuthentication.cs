@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
+using CAPI.Android.Core.Model.Authorization;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View.User;
 
-namespace CAPI.Android.Core.Model.Authorization
+namespace CAPI.Android.Core.Model
 {
     public interface IAuthentication
     {

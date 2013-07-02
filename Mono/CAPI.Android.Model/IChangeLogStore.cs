@@ -1,7 +1,7 @@
 using System;
 using Main.Core.Events;
 
-namespace CAPI.Android.Core.Model.ChangeLog
+namespace CAPI.Android.Core.Model
 {
     public interface IChangeLogStore
     {

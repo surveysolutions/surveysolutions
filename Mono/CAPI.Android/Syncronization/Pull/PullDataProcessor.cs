@@ -10,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core;
