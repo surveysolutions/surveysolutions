@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Core.Supervisor.DenormalizerStorageItem;
 
-namespace Core.Supervisor.Views.Summary
+namespace Core.Supervisor.Views.Survey
 {
     using System.Linq;
 
@@ -10,16 +10,16 @@ namespace Core.Supervisor.Views.Summary
 
     using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-    public class SummaryTemplatesFactory : IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView>
+    public class SurveyUsersViewFactory : IViewFactory<SurveyUsersViewInputModel, SurveyUsersView>
     {
         private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
 
-        public SummaryTemplatesFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SurveyUsersViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
         {
             this.summary = summary;
         }
 
-        public SummaryTemplatesView Load(SummaryTemplatesInputModel input)
+        public SurveyUsersView Load(SurveyUsersViewInputModel input)
         {
             return this.summary.Query(
                 _ =>
@@ -32,25 +32,27 @@ namespace Core.Supervisor.Views.Summary
                     {
                         _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
-                    return new SummaryTemplatesView()
+
+                    return new SurveyUsersView()
                     {
                         Items =
-                            _.ToList().Distinct(new SummaryItemByTemplateNameComparer())
+                            _.ToList().Distinct(new SurveyItemByUserNameComparer())
                                 .Select(
                                     x =>
-                                        new SummaryTemplateViewItem()
+                                        new SurveyUsersViewItem()
                                         {
-                                            TemplateId =
-                                                x.TemplateId,
-                                            TemplateName =
-                                                x.TemplateName
+                                            UserId =
+                                                x.ResponsibleId,
+                                            UserName =
+                                                x.ResponsibleName
                                         })
                     };
                 });
+
         }
     }
 
-    public class SummaryItemByTemplateNameComparer : IEqualityComparer<SummaryItem>
+    public class SurveyItemByUserNameComparer : IEqualityComparer<SummaryItem>
     {
         public bool Equals(SummaryItem x, SummaryItem y)
         {
@@ -58,12 +60,12 @@ namespace Core.Supervisor.Views.Summary
 
             if (Object.ReferenceEquals(x, y)) return true;
 
-            return x.TemplateName.Equals(y.TemplateName);
+            return x.ResponsibleName.Equals(y.ResponsibleName);
         }
 
         public int GetHashCode(SummaryItem obj)
         {
-            return obj.TemplateName.GetHashCode();
+            return obj.ResponsibleName.GetHashCode();
         }
     }
 }
