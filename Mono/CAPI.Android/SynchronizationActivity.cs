@@ -62,8 +62,6 @@ namespace CAPI.Android
             btnSync.Click += this.ButtonSyncClick;
             btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
 
-            btnBackup.Visibility = btnRestore.Visibility = ViewStates.Gone;
-
         }
 
         protected override void OnStart()

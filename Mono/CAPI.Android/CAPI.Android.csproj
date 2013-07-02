@@ -349,9 +349,7 @@
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
     <AndroidResource Include="Resources\Drawable\navigateLeftIcon.png" />
-    <EmbeddedResource Include="researchDeptSurvey.txt" />
-    <EmbeddedResource Include="userEvent.txt" />
-    <EmbeddedResource Include="initEvent.txt" />
+    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
