@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Main.Core.View.User;
-using Main.DenormalizerStorage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.Authorization
@@ -35,7 +29,7 @@ namespace CAPI.Android.Core.Model.Authorization
         public SyncCredentials? RequestSyncCredentials()
         {
             if(!IsLoggedIn)
-                throw new InvalidOperationException("please logoin first");
+                throw new InvalidOperationException("Please login first.");
 
             LoginDTO user =
                  this.documentStorage.Filter(
@@ -51,7 +45,7 @@ namespace CAPI.Android.Core.Model.Authorization
         public bool LogOn(string userName, string password)
         {
             if (currentUser != null)
-                throw new InvalidOperationException("please logoff first");
+                throw new InvalidOperationException("Please logoff first.");
             try
             {
                 var hash = SimpleHash.ComputeHash(password);

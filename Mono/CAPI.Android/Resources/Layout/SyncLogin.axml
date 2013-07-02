@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     android:orientation="vertical"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:padding="10dip"
-     android:layout_below="@id/header">
-  <!--  Email Label -->
-  <TextView android:layout_width="fill_parent"
-               
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dip"
+    android:layout_below="@id/header">
+<!--  Email Label -->
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Login"/>
-  <EditText android:layout_width="fill_parent"
-              android:id="@+id/teLogin"
+        android:text="Login" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:id="@+id/teLogin"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip"
         android:layout_marginBottom="20dip"
-        android:singleLine="true"/>
-  <!--  Password Label -->
-  <TextView android:layout_width="fill_parent"
+        android:singleLine="true" />
+<!--  Password Label -->
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Password"/>
-  <EditText android:layout_width="fill_parent"
-             android:id="@+id/tePassword"
+        android:text="Password" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:id="@+id/tePassword"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip"
         android:singleLine="true"
-        android:password="true"/>
-  <!-- Login button -->
-  <Button android:id="@+id/btnLogin"
-        android:layout_width="fill_parent"
+        android:password="true" />
+<!-- Login button -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="Login"/>
-  <!-- Link to Registration Screen -->
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnLogin"
+            android:text="Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btnCancel"
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+<!-- Link to Registration Screen -->
 </LinearLayout>
