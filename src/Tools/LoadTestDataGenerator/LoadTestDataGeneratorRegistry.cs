@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using Main.Core;
-
+using Raven.Client.Document;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Logger;

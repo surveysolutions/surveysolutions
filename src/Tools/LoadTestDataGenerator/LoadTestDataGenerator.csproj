@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BatchedRavenDBEventStore.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="EventStatisticItem.cs" />
     <Compile Include="LoadTestDataGeneratorRegistry.cs" />

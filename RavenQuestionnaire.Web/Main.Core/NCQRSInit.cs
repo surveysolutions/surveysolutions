@@ -54,6 +54,8 @@ namespace Main.Core
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
 
+        
+
         public static bool IsReadLayerBuilt
         {
             get { return isReadLayerBuilt; }
@@ -176,19 +178,8 @@ namespace Main.Core
         }
 
 #if !MONODROID
-        /// <summary>
-        /// The initialize event store.
-        /// </summary>
-        /// <param name="store">
-        /// The store.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IStreamableEventStore"/>.
-        /// </returns>
-        private static IStreamableEventStore InitializeEventStore(DocumentStore store, int pageSize)
-        {
-            return new RavenDBEventStore(store, pageSize);
-        }
+        
+        public static Func<DocumentStore, int, IStreamableEventStore> InitializeEventStore = (store, pageSize) => new RavenDBEventStore(store, pageSize);
 
 #endif
 

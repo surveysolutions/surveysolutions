@@ -8,11 +8,14 @@ using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Extensions;
 using Raven.Imports.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -53,15 +56,19 @@ namespace LoadTestDataGenerator
         private Statistics statistics;
         private ProgressOperation currentOperation;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
+        private readonly BatchedRavenDBEventStore eventStore;
 
         internal LoadTestDataGenerator(ICommandService commandService,
             IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> surveyStorage,
-            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory,
+            IRavenReadSideRepositoryWriterRegistry writerRegistry
+            , IStreamableEventStore eventStore)
         {
             this.RavenStore = ravenStore;
             this.userBrowseViewFactory = userBrowseViewFactory;
             this.userViewFactory = userViewFactory;
             this.writerRegistry = writerRegistry;
+            this.eventStore = (BatchedRavenDBEventStore)eventStore;
             this.CommandService = commandService;
             this.SurveyStorage = surveyStorage;
             InitializeComponent();
@@ -92,17 +99,26 @@ namespace LoadTestDataGenerator
 
                 if (this.clearDatabase.Checked)
                 {
-                    this.UpdateStatus("clean database");
+                    this.UpdateStatus("clean events database");
                     this.ClearDatabase();
+                }
+                if (this.clearViews.Checked)
+                {
+                    this.UpdateStatus("clean views database");
+                    this.ClearAllViews();
                 }
 
                 this.GenerateSupervisorsEvents();
-                
+
+                this.eventStore.StoreCache();
+
                 if (statistics.hasCAPIevents)
                 {
                     this.UpdateStatus("create CAPI's events");
                     this.GenerateCapiEvents();
                 }
+
+                this.eventStore.StoreCache();
 
                 this.DisableCacheInAllRepositoryWriters();
 
@@ -519,6 +535,50 @@ namespace LoadTestDataGenerator
                     "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
                     initialViewCount, resultViewCount));
 
+        }
+
+        private void ClearAllViews()
+        {
+            this.RavenStore
+                .DatabaseCommands
+                .EnsureDatabaseExists("Views");
+
+            this.RavenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .PutIndex(
+                    "AllViews",
+                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
+                    overwrite: true);
+
+            int initialViewCount;
+            using (IDocumentSession session = this.RavenStore.OpenSession("Views"))
+            {
+                // this will also materialize index if it is out of date or was just created
+                initialViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            this.RavenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .DeleteByIndex("AllViews", new IndexQuery());
+
+            int resultViewCount;
+            using (IDocumentSession session = this.RavenStore.OpenSession("Views"))
+            {
+                resultViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            if (resultViewCount > 0)
+                throw new Exception(string.Format(
+                    "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
+                    initialViewCount, resultViewCount));
         }
 
         private void GenerateSupervisorsEvents()

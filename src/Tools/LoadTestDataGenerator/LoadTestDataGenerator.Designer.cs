@@ -51,6 +51,7 @@
             this.txtElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.eventsStatistics = new System.Windows.Forms.ListBox();
+            this.clearViews = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,7 +68,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 139);
+            this.label1.Location = new System.Drawing.Point(21, 161);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 1;
@@ -75,7 +76,7 @@
             // 
             // surveys_amount
             // 
-            this.surveys_amount.Location = new System.Drawing.Point(179, 132);
+            this.surveys_amount.Location = new System.Drawing.Point(179, 154);
             this.surveys_amount.Name = "surveys_amount";
             this.surveys_amount.Size = new System.Drawing.Size(257, 20);
             this.surveys_amount.TabIndex = 2;
@@ -84,7 +85,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 109);
+            this.label2.Location = new System.Drawing.Point(21, 131);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(131, 13);
             this.label2.TabIndex = 3;
@@ -92,7 +93,7 @@
             // 
             // templatePath
             // 
-            this.templatePath.Location = new System.Drawing.Point(179, 102);
+            this.templatePath.Location = new System.Drawing.Point(179, 124);
             this.templatePath.Name = "templatePath";
             this.templatePath.Size = new System.Drawing.Size(257, 20);
             this.templatePath.TabIndex = 4;
@@ -101,7 +102,7 @@
             // 
             // supervisorsCount
             // 
-            this.supervisorsCount.Location = new System.Drawing.Point(179, 162);
+            this.supervisorsCount.Location = new System.Drawing.Point(179, 184);
             this.supervisorsCount.Name = "supervisorsCount";
             this.supervisorsCount.Size = new System.Drawing.Size(257, 20);
             this.supervisorsCount.TabIndex = 6;
@@ -110,7 +111,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 169);
+            this.label3.Location = new System.Drawing.Point(21, 191);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 5;
@@ -118,7 +119,7 @@
             // 
             // interviewersCount
             // 
-            this.interviewersCount.Location = new System.Drawing.Point(179, 192);
+            this.interviewersCount.Location = new System.Drawing.Point(179, 214);
             this.interviewersCount.Name = "interviewersCount";
             this.interviewersCount.Size = new System.Drawing.Size(257, 20);
             this.interviewersCount.TabIndex = 8;
@@ -127,7 +128,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 199);
+            this.label4.Location = new System.Drawing.Point(21, 221);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 7;
@@ -138,7 +139,7 @@
             this.chkGenerateSupervisorEvents.AutoSize = true;
             this.chkGenerateSupervisorEvents.Checked = true;
             this.chkGenerateSupervisorEvents.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkGenerateSupervisorEvents.Location = new System.Drawing.Point(21, 42);
+            this.chkGenerateSupervisorEvents.Location = new System.Drawing.Point(21, 64);
             this.chkGenerateSupervisorEvents.Name = "chkGenerateSupervisorEvents";
             this.chkGenerateSupervisorEvents.Size = new System.Drawing.Size(163, 17);
             this.chkGenerateSupervisorEvents.TabIndex = 9;
@@ -160,7 +161,7 @@
             this.chkSetAnswers.AutoSize = true;
             this.chkSetAnswers.Checked = true;
             this.chkSetAnswers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSetAnswers.Location = new System.Drawing.Point(232, 42);
+            this.chkSetAnswers.Location = new System.Drawing.Point(232, 64);
             this.chkSetAnswers.Name = "chkSetAnswers";
             this.chkSetAnswers.Size = new System.Drawing.Size(160, 17);
             this.chkSetAnswers.TabIndex = 11;
@@ -209,7 +210,7 @@
             this.chkHeadquarter.AutoSize = true;
             this.chkHeadquarter.Checked = true;
             this.chkHeadquarter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkHeadquarter.Location = new System.Drawing.Point(21, 75);
+            this.chkHeadquarter.Location = new System.Drawing.Point(21, 97);
             this.chkHeadquarter.Name = "chkHeadquarter";
             this.chkHeadquarter.Size = new System.Drawing.Size(130, 17);
             this.chkHeadquarter.TabIndex = 14;
@@ -219,7 +220,7 @@
             // 
             // txtHQName
             // 
-            this.txtHQName.Location = new System.Drawing.Point(179, 72);
+            this.txtHQName.Location = new System.Drawing.Point(179, 94);
             this.txtHQName.Name = "txtHQName";
             this.txtHQName.Size = new System.Drawing.Size(257, 20);
             this.txtHQName.TabIndex = 15;
@@ -268,11 +269,22 @@
             this.eventsStatistics.Size = new System.Drawing.Size(309, 121);
             this.eventsStatistics.TabIndex = 18;
             // 
+            // clearViews
+            // 
+            this.clearViews.AutoSize = true;
+            this.clearViews.Location = new System.Drawing.Point(21, 39);
+            this.clearViews.Name = "clearViews";
+            this.clearViews.Size = new System.Drawing.Size(194, 17);
+            this.clearViews.TabIndex = 19;
+            this.clearViews.Text = "Clear views (not events, only views)";
+            this.clearViews.UseVisualStyleBackColor = true;
+            // 
             // LoadTestDataGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(781, 362);
+            this.Controls.Add(this.clearViews);
             this.Controls.Add(this.eventsStatistics);
             this.Controls.Add(this.lstLog);
             this.Controls.Add(this.label5);
@@ -331,6 +343,7 @@
         private System.Windows.Forms.ListBox eventsStatistics;
         private System.Windows.Forms.ToolStripStatusLabel txtStatus;
         private System.Windows.Forms.ToolStripStatusLabel txtElapsedTime;
+        private System.Windows.Forms.CheckBox clearViews;
     }
 }
 
