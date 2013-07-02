@@ -1,11 +1,10 @@
 ﻿using Core.Supervisor.Views;
+using Core.Supervisor.Views.Survey;
 
 namespace Web.Supervisor.Controllers
 {
     using System.Collections.Generic;
     using System.Web.Http;
-
-    using Core.Supervisor.Views.Summary;
 
     using Main.Core.View;
 
@@ -18,25 +17,25 @@ namespace Web.Supervisor.Controllers
     using Web.Supervisor.Models;
 
     [Authorize(Roles = "Headquarter, Supervisor")]
-    public class SummaryApiController : BaseApiController
+    public class SurveysApiController : BaseApiController
     {
-        private readonly IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory;
-        private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
+        private readonly IViewFactory<SurveysInputModel, SurveysView> surveysViewFactory;
+        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
 
-        public SummaryApiController(
+        public SurveysApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILog logger,
-            IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory, IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
+            IViewFactory<SurveysInputModel, SurveysView> surveysViewFactory, IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory)
             : base(commandService, provider, logger)
         {
-            this.summaryViewFactory = summaryViewFactory;
-            this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
+            this.surveysViewFactory = surveysViewFactory;
+            this.surveyUsersViewFactory = surveyUsersViewFactory;
         }
 
-        public SummaryView Summary(SummaryListViewModel data)
+        public SurveysView Surveys(SurveyListViewModel data)
         {
-            var input = new SummaryInputModel(
+            var input = new SurveysInputModel(
                 this.GlobalInfo.GetCurrentUser().Id,
                 this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)
                             {
@@ -53,16 +52,15 @@ namespace Web.Supervisor.Controllers
 
             if (data.Request != null)
             {
-                input.TemplateId = data.Request.TemplateId;
+                input.UserId = data.Request.UserId;
             }
 
-            return this.summaryViewFactory.Load(input);
+            return this.surveysViewFactory.Load(input);
         }
 
-        public IEnumerable<SummaryTemplateViewItem> Templates()
+        public IEnumerable<SurveyUsersViewItem> Users()
         {
-            return this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
-                this.GlobalInfo.GetCurrentUser().Id,
+            return this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
                 this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)).Items;
         }
     }

@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernel.Utils.Logging;
+﻿using Core.Supervisor.Views;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -437,7 +438,7 @@ namespace Web.Supervisor.Controllers
         {
             ViewBag.ActivePage = MenuItem.Interviewers;
             var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.summaryViewFactory.Load(new SummaryInputModel(user.Id, SummaryViewerStatus.Supervisor));
+            var model = this.summaryViewFactory.Load(new SummaryInputModel(user.Id, ViewerStatus.Supervisor));
             ViewBag.GraphData = new SurveyChartModel(model);
             return this.View(model);
         }
