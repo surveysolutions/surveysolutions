@@ -56,7 +56,14 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void RestoreFromBakupFolder(string path)
         {
-            throw new NotImplementedException();
+            var dirWithCahngelog = Path.Combine(path, ChangelogFolder);
+            foreach (var file in Directory.EnumerateFiles(changelogPath))
+            {
+                File.Delete(file);
+            }
+
+            foreach (var file in Directory.GetFiles(dirWithCahngelog))
+                File.Copy(file, Path.Combine(changelogPath, Path.GetFileName(file)));
         }
     }
 }

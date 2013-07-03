@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -27,7 +28,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
-        private readonly ISQLiteConnection connection;
+        private ISQLiteConnection connection;
         private readonly string dbName;
         public SqliteReadSideRepositoryAccessor(string dbName)
         {
@@ -81,7 +82,13 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 
         public void RestoreFromBakupFolder(string path)
         {
-            throw new NotImplementedException();
+            connection.Close();
+
+            File.Copy(Path.Combine(path, dbName),
+                      System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                          this.dbName), true);
+            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            connection = connectionFactory.Create(dbName);
         }
     }
 

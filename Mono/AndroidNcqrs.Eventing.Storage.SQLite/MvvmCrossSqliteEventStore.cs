@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -24,7 +25,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
     public class MvvmCrossSqliteEventStore : IStreamableEventStore, IMvxServiceConsumer,IBackupable
     {
-        private readonly ISQLiteConnection _connection;
+        private  ISQLiteConnection _connection;
         private readonly string databaseName;
         public MvvmCrossSqliteEventStore(string databaseName)
         {
@@ -152,7 +153,14 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public void RestoreFromBakupFolder(string path)
         {
-            throw new NotImplementedException();
+            _connection.Close();
+
+            File.Copy(Path.Combine(path, databaseName),
+                      System.IO.Path.Combine(
+                          System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                          this.databaseName), true);
+            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            _connection = connectionFactory.Create(databaseName);
         }
     }
 }

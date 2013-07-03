@@ -99,7 +99,7 @@ namespace CAPI.Android
         {
             try
             {
-                backupManager.Restore("string empty");
+                backupManager.Restore("/storage/sdcard0/CAPI/restore");
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Success");
