@@ -19,12 +19,11 @@ namespace CAPI.Android.Syncronization
             return handler(this);
         }
 
-        public SyncCredentials RequestCredentials()
+        public SyncCredentials? RequestCredentials()
         {
             var credentials = OnRequestCredentials();
-            if (!credentials.HasValue)
-                throw new AuthenticationException("User wasn't authenticated");
-            return credentials.Value;
+
+            return credentials;
         }
 
     }

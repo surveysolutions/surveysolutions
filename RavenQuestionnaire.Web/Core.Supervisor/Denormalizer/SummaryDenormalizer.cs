@@ -120,6 +120,7 @@ namespace Core.Supervisor.Denormalizer
                 summaryUser = new SummaryItem()
                 {
                     TemplateId = questionnaire.TemplateId,
+                    TemplateName = questionnaire.Title,
                     ResponsibleSupervisorId =
                         user.Supervisor == null ? (Guid?) null : user.Supervisor.Id,
                     ResponsibleId = user.PublicKey,

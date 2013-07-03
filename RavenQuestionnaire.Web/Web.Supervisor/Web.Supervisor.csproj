@@ -296,6 +296,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\SurveysApiController.cs" />
     <Compile Include="Controllers\SummaryApiController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
@@ -329,6 +330,8 @@
     <Compile Include="Models\Chart\ChartModelBase.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\SurveyRequestModel.cs" />
+    <Compile Include="Models\SurveyListViewModel.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\IGridRequest.cs" />
@@ -503,6 +506,7 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\vm\surveylistview.js" />
     <Content Include="Scripts\vm\listviewmaster.js" />
     <Content Include="Scripts\vm\summarylistview.js" />
     <Content Include="Scripts\vm\listview.js" />

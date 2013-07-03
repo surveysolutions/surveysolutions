@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -164,10 +165,17 @@ namespace CAPI.Android.Syncronization
                 {
                     var androidId = SettingsManager.AndroidId;
                     var appId = SettingsManager.InstallationId;
-                    credentials = authentificator.RequestCredentials();
+                    var userCredentials = authentificator.RequestCredentials();
+                    ExitIfCanceled();
 
+                    if (!userCredentials.HasValue)
+                        throw new AuthenticationException("User wasn't authenticated.");
+                    credentials = userCredentials.Value;
+
+                    //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
+                    string message = "connecting...";
                     OnStatusChanged(
-                        new SynchronizationEventArgs(string.Format("handshake app {0}, device {1}", appId, androidId), Operation.Handshake, true));
+                        new SynchronizationEventArgs(message, Operation.Handshake, true));
                     Thread.Sleep(1000);
                     var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
                     clientRegistrationId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, clientRegistrationId);

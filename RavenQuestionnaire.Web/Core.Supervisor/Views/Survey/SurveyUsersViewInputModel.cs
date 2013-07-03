@@ -1,16 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SummaryTemplatesInputModel.cs" company="">
+// <copyright file="SurveyUsersViewInputModel.cs" company="">
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
 
-namespace Core.Supervisor.Views.Summary
+namespace Core.Supervisor.Views.Survey
 {
-    public class SummaryTemplatesInputModel
+    public class SurveyUsersViewInputModel
     {
-        public SummaryTemplatesInputModel(Guid viewerId, ViewerStatus viewerStatus)
+        public SurveyUsersViewInputModel(Guid viewerId, ViewerStatus viewerStatus)
         {
             this.ViewerId = viewerId;
             this.ViewerStatus = viewerStatus;

@@ -1,18 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model.ModelUtils;
-using Newtonsoft.Json;
 using RestSharp;
 using WB.Core.SharedKernel.Utils.Logging;
 
@@ -75,7 +66,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                 if (ct.IsCancellationRequested)
                 {
                     token.Abort();
-                    throw new RestException("operation was canceled");
+                    throw new RestException("Operation was canceled.");
                 }
                 Thread.Sleep(500);
             }
@@ -85,12 +76,20 @@ namespace CAPI.Android.Syncronization.RestUtils
 
         private T HandlerResponce<T>(IRestResponse response)
         {
+            if (response.ErrorException != null)
+            {
+                LogManager.GetLogger(GetType())
+                          .Error("Sync error, response contains exception. Message:" + response.ErrorMessage, 
+                                 response.ErrorException);
+                throw new Exception("Error occured on communication with target. Please, check settings.");
+            }
+
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
                 var exception = new Exception("Target returned unsupported result.");
 
                 if (response.StatusCode == HttpStatusCode.Forbidden)
-                    exception = new AuthenticationException("user wasn't authorized");
+                    exception = new AuthenticationException("User is not authorized.");
 
                 LogManager.GetLogger(GetType())
                           .Error("Sync error. Responce status:" + response.StatusCode, exception);
@@ -104,6 +103,7 @@ namespace CAPI.Android.Syncronization.RestUtils
             {
                 throw new Exception("Elements to be synchronized are not found.");
             }
+
             return syncItemsMetaContainer;
         }
        

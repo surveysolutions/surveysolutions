@@ -1,28 +1,27 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using Core.Supervisor.DenormalizerStorageItem;
+using Main.Core.Entities;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Core.Supervisor.Views.Summary
+namespace Core.Supervisor.Views.Survey
 {
     using System;
     using System.Linq;
 
-    using Core.Supervisor.DenormalizerStorageItem;
-
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
     using Main.Core.View;
 
-    public class SummaryFactory : IViewFactory<SummaryInputModel, SummaryView>
+    public class SurveysViewFactory : IViewFactory<SurveysInputModel, SurveysView>
     {
-        private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
+        private readonly IQueryableReadSideRepositoryReader<SummaryItem> _summary;
 
-        public SummaryFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SurveysViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
         {
-            this.summary = summary;
+            this._summary = summary;
         }
 
-        public SummaryView Load(SummaryInputModel input)
+        public SurveysView Load(SurveysInputModel input)
         {
-            return this.summary.Query(
+            return this._summary.Query(
                 _ =>
                 {
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
@@ -34,18 +33,18 @@ namespace Core.Supervisor.Views.Summary
                         _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
 
-                    if (input.TemplateId.HasValue)
+                    if (input.UserId.HasValue)
                     {
-                        _ = _.Where(x => x.TemplateId == input.TemplateId);
+                        _ = _.Where(x => x.ResponsibleId == input.UserId);
                     }
 
                     var all = _.ToList().GroupBy(
-                        x => x.ResponsibleId,
+                        x => x.TemplateId,
                         y => y,
                         (x, y) =>
-                            new SummaryViewItem()
+                            new SurveysViewItem()
                             {
-                                User = new UserLight(x, y.FirstOrDefault().ResponsibleName),
+                                Template = new TemplateLight(x, y.FirstOrDefault().TemplateName),
                                 Approved = y.Sum(z => z.ApprovedCount),
                                 Completed = y.Sum(z => z.CompletedCount),
                                 Error = y.Sum(z => z.CompletedWithErrorsCount),
@@ -55,14 +54,13 @@ namespace Core.Supervisor.Views.Summary
                                 Total = y.Sum(z => z.TotalCount)
                             }).AsQueryable().OrderUsingSortExpression(input.Order);
 
-                    return new SummaryView()
+                    return new SurveysView()
                     {
                         TotalCount = all.Count(),
                         Items =
-                            all.Skip((input.Page - 1)*input.PageSize)
-                                .Take(input.PageSize),
-                        ItemsSummary = new SummaryViewItem(
-                            new UserLight(Guid.Empty, "Summary"),
+                            all.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize),
+                        ItemsSummary = new SurveysViewItem(
+                            new TemplateLight(Guid.Empty, "Summary"),
                             all.Sum(x => x.Total),
                             all.Sum(x => x.Initial),
                             all.Sum(x => x.Error),
