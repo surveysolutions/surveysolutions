@@ -17,7 +17,7 @@ namespace WB.Core.Synchronization
         {
             this.Bind<ISyncManager>().To<SyncManager>();
             this.Bind<ISyncProvider>().To<WB.Core.Synchronization.SyncProvider.SyncProvider>();
-            this.Bind<IImportManager>().To<DefaultImportManager>();
+            this.Bind<IBackupManager>().To<DefaultBackupManager>();
 
 
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
