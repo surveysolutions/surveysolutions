@@ -17,16 +17,18 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 
 using SQLite;
+using WB.Core.Infrastructure.Backup;
 using SQLiteException = Android.Database.Sqlite.SQLiteException;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
-    public class MvvmCrossSqliteEventStore : IStreamableEventStore, IMvxServiceConsumer
+    public class MvvmCrossSqliteEventStore : IStreamableEventStore, IMvxServiceConsumer,IBackupable
     {
         private readonly ISQLiteConnection _connection;
-
+        private readonly string databaseName;
         public MvvmCrossSqliteEventStore(string databaseName)
         {
+            this.databaseName = databaseName;
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
             _connection = connectionFactory.Create(databaseName);
@@ -140,6 +142,17 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         public void CleanStream(Guid id)
         {
             _connection.Execute("delete from StoredEvent where EventSourceId = ?", id.ToString());
+        }
+
+        public string GetPathToBakupFile()
+        {
+            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                          this.databaseName);
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }

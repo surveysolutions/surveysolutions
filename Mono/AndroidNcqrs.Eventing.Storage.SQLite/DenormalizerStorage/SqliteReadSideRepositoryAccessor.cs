@@ -17,19 +17,21 @@ using Main.DenormalizerStorage;
 using SQLite;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,
+    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,IBackupable,
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
         private readonly ISQLiteConnection connection;
-
+        private readonly string dbName;
         public SqliteReadSideRepositoryAccessor(string dbName)
         {
+            this.dbName=dbName;
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
             connection = connectionFactory.Create(dbName);
@@ -69,6 +71,17 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             {
                 connection.Update(view);
             }
+        }
+
+        public string GetPathToBakupFile()
+        {
+            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                          this.dbName);
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 

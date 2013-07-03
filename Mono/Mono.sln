@@ -115,6 +115,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernel", "SharedKerne
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Τests", "Τests", "{BB8E8409-ADEC-49D2-BC5D-D7F9519DEA5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Backup", "WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj", "{A134F8E7-42C7-4804-8177-D11178600CAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -381,6 +383,12 @@ Global
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A134F8E7-42C7-4804-8177-D11178600CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A134F8E7-42C7-4804-8177-D11178600CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A134F8E7-42C7-4804-8177-D11178600CAA}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{A134F8E7-42C7-4804-8177-D11178600CAA}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

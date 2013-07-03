@@ -1,4 +1,4 @@
-namespace CAPI.Android.Core.Model
+namespace WB.Core.Infrastructure.Backup
 {
     public interface IBackup
     {

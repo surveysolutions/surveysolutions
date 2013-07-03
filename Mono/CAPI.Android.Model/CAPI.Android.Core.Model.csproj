@@ -60,7 +60,7 @@
     <Compile Include="AndroidModelModule.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\SyncCredentials.cs" />
-    <Compile Include="Backup\SqliteBackup.cs" />
+    <Compile Include="Backup\DefaultBackup.cs" />
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
@@ -70,7 +70,6 @@
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="IAuthentication.cs" />
-    <Compile Include="IBackup.cs" />
     <Compile Include="IChangeLogManipulator.cs" />
     <Compile Include="IChangeLogStore.cs" />
     <Compile Include="ISyncAuthenticator.cs" />
@@ -146,6 +145,10 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

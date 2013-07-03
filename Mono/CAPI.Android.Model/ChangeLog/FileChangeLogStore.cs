@@ -9,8 +9,16 @@ namespace CAPI.Android.Core.Model.ChangeLog
 {
     public class FileChangeLogStore : IChangeLogStore
     {
+        private const string ChangelogFolder = "Changelog";
+        private readonly string changelogPath;
+
         public FileChangeLogStore()
         {
+            changelogPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), ChangelogFolder);
+            if (!Directory.Exists(changelogPath))
+            {
+                Directory.CreateDirectory(changelogPath);
+            }
         }
 
         public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId)
@@ -36,10 +44,19 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         private string GetFileName(Guid publicKey)
         {
-            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+            return System.IO.Path.Combine(changelogPath,
                                           publicKey.ToString());
         }
 
 
+        public string GetPathToBakupFile()
+        {
+            return changelogPath;
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

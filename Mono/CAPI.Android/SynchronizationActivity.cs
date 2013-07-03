@@ -20,6 +20,7 @@ using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
 using Main.Core.Utility;
 using Ninject;
+using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android
 {
