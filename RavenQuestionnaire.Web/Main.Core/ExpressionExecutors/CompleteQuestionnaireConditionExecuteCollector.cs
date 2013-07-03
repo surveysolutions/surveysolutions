@@ -23,7 +23,7 @@ namespace Main.Core.ExpressionExecutors
     /// <summary>
     /// The complete questionnaire condition execute collector.
     /// </summary>
-    public class CompleteQuestionnaireConditionExecuteCollector
+    public class CompleteQuestionnaireConditionExecuteCollector : ICompleteQuestionnaireConditionExecuteCollector
     {
         #region Constants
 

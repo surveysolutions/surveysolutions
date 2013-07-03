@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
+using Main.Core.ExpressionExecutors;
 using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
@@ -40,6 +41,8 @@ namespace LoadTestDataGenerator
 
         private static void RegisterServices(IKernel kernel)
         {
+            ConditionExecuterFactory.Creator = doc => new FakeCompleteQuestionnaireConditionExecuteCollector();
+
             kernel.Load(new LoadTestDataGeneratorRegistry(repositoryPath: ConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
 
             NcqrsInit.InitializeEventStore = (store, pageSize) => new BatchedRavenDBEventStore(store, pageSize);

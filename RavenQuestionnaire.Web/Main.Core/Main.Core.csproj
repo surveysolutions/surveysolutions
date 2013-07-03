@@ -238,6 +238,7 @@
     <Compile Include="Domain\ClientDeviceAR.cs" />
     <Compile Include="Domain\CollectionAR.cs" />
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
+    <Compile Include="ExpressionExecutors\ConditionExecuterFactory.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
@@ -612,6 +613,7 @@
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollector.cs" />
     <Compile Include="ExpressionExecutors\ExpressionDependencyBuilder.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
+    <Compile Include="ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ICommandListSupplier.cs" />
