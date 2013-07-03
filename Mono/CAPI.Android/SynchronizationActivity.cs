@@ -22,6 +22,7 @@ using CAPI.Android.Utils;
 using Main.Core.Utility;
 using Ninject;
 using WB.Core.Infrastructure.Backup;
+using Environment = Android.OS.Environment;
 
 namespace CAPI.Android
 {
@@ -95,11 +96,15 @@ namespace CAPI.Android
             }
         }
 
-        void btnRestore_Click(object sender, EventArgs e)
+        protected string RestorePath {
+            get { return Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, "CAPI", "restore"); }
+        }
+
+        private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             try
             {
-                backupManager.Restore("/storage/sdcard0/CAPI/restore");
+                backupManager.Restore(RestorePath);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Success");
@@ -109,10 +114,32 @@ namespace CAPI.Android
             catch (Exception ex)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.SetTitle("Restor Error");
+                alert.SetTitle("Restore Error");
                 alert.SetMessage(ex.Message + " " + ex.StackTrace);
                 alert.Show();
             }
+        }
+
+        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        {
+            
+        }
+
+        private void btnRestore_Click(object sender, EventArgs e)
+        {
+
+            AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
+            alertWarningAboutRestore.SetTitle("Warning");
+            alertWarningAboutRestore.SetMessage(
+                string.Format(
+                    "All current data will be erased. Are you sure you want proceed to restore. If Yes, please make sure restore data is presented at {0}",
+                    RestorePath));
+            alertWarningAboutRestore.SetPositiveButton("Yes", btnRestoreConfirmed_Click);
+            alertWarningAboutRestore.SetNegativeButton("No", btnRestoreDeclined_Click);
+            alertWarningAboutRestore.Show();
+
+
+
         }
 
         void btnBackup_Click(object sender, EventArgs e)

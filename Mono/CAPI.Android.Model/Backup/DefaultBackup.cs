@@ -80,6 +80,8 @@ namespace CAPI.Android.Core.Model.Backup
 
         public void Restore(string path)
         {
+            if (!Directory.Exists(path))
+                throw new ArgumentException("Retore Directory is absent");
             foreach (var backupable in backupables)
             {
                 backupable.RestoreFromBakupFolder(path);
