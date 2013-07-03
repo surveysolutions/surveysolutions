@@ -1,10 +1,6 @@
-using System.Net;
-using System.Web.Security;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View.User;
+
+using SynchronizationMessages.Export;
 using WB.Core.Synchronization;
-using WB.UI.Shared.Web.Exceptions;
-using WB.UI.Shared.Web.Filters;
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -13,66 +9,33 @@ namespace Web.Supervisor.Controllers
     using System.Threading;
     using System.Web;
     using System.Web.Mvc;
-
-    using Core.Supervisor.Views.SyncProcess;
-
     using Main.Core.Export;
-    using Main.Core.View;
-
-    using SynchronizationMessages.Synchronization;
-
-
-    using Newtonsoft.Json;
-
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
-
-    using SynchronizationMessages.CompleteQuestionnaire;
-
     using WB.Core.SharedKernel.Logger;
 
-    using Web.Supervisor.Models;
-    using Web.Supervisor.Utils.Attributes;
 
     [NoAsyncTimeout]
     public class ImportExportController : AsyncController
     {
         private readonly IDataExport exporter;
-        private readonly IImportManager importManager;
+        private readonly IBackupManager backupManager;
         private readonly ILog logger;
 
         public ImportExportController(
-            IImportManager importManager,
-            ILog logger, IDataExport exporter)
+            ILog logger, IDataExport exporter, IBackupManager backupManager)
         {
             this.exporter = exporter;
-            this.importManager = importManager;
             this.logger = logger;
+            this.backupManager = backupManager;
         }
 
-  
-
-        /// <summary>
-        /// Import action
-        /// </summary>
-        /// <returns>
-        /// View with input to upload file
-        /// </returns>
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
             return this.View("ViewTestUploadFile");
         }
 
-        /// <summary>
-        /// The import async.
-        /// </summary>
-        /// <param name="uploadFile">
-        /// The upload File.
-        /// </param>
-        /// <returns>
-        /// The sync process guid on null if error
-        /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public Guid? Import(HttpPostedFileBase uploadFile)
         {
@@ -89,7 +52,7 @@ namespace Web.Supervisor.Controllers
             {
                 try
                 {
-                    importManager.Import(zipData);
+                    backupManager.Restore(zipData);
                 }
                 catch (Exception e)
                 {
@@ -101,29 +64,11 @@ namespace Web.Supervisor.Controllers
             return syncProcess;
         }
 
-        /// <summary>
-        /// The import completed 
-        /// </summary>
-        /// <returns>
-        /// Redirects on main page after import complete
-        /// </returns>
         public ActionResult ImportCompleted()
         {
             return this.RedirectToAction("Index", "Survey");
         }
-
-        /// <summary>
-        /// Gets exported data
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <exception cref="HttpException">
-        /// Not found exception
-        /// </exception>
+         
         [Authorize(Roles = "Headquarter")]
         public void GetExportedDataAsync(Guid id, string type)
         {
@@ -147,18 +92,40 @@ namespace Web.Supervisor.Controllers
                 });
         }
 
-        /// <summary>
-        /// Gets exported data
-        /// </summary>
-        /// <param name="result">
-        /// The result.
-        /// </param>
-        /// <returns>
-        /// Zipped data file
-        /// </returns>
         public ActionResult GetExportedDataCompleted(byte[] result)
         {
             return this.File(result, "application/zip", "data.zip");
+        }
+
+
+        public void BackupAsync(Guid syncKey)
+        {
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                    {
+                        try
+                        {
+                            var data = backupManager.Backup();
+                            this.AsyncManager.Parameters["result"] = ZipHelper.Compress(data);
+                        }
+                        catch (Exception e)
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                            logger.Fatal("Error on export " + e.Message, e);
+                            if (e.InnerException != null)
+                            {
+                                logger.Fatal("Error on export (Inner Exception)", e.InnerException);
+                            }
+                        }
+                    });
+
+        }
+
+        public ActionResult BackupCompleted(byte[] result)
+        {
+            return this.File(result, "application/zip",
+                             string.Format("backup_{0}.zip", DateTime.UtcNow.ToString("yyyyMMddhhnnss")));
         }
 
     }

@@ -6,6 +6,14 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
+using Ionic.Zip;
+using Ionic.Zlib;
+using Newtonsoft.Json;
+
 namespace Questionnaire.Core.Web.Helpers
 {
     using System.Collections.Generic;
@@ -48,5 +56,24 @@ namespace Questionnaire.Core.Web.Helpers
         }
 
         #endregion
+
+        public static byte[] Compress(object data)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            var dataAsString= JsonConvert.SerializeObject(data, Formatting.Indented, settings);
+
+            var outputStream = new MemoryStream();
+            using (var zip = new ZipFile())
+            {
+                // var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                zip.CompressionLevel = CompressionLevel.BestCompression;
+                zip.AddEntry("data.txt", dataAsString);
+                zip.Save(outputStream);
+            }
+
+            outputStream.Seek(0, SeekOrigin.Begin);
+            return outputStream.ToArray();
+        }
+
     }
 }

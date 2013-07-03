@@ -60,8 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientIdentifier.cs" />
-    <Compile Include="IImportManager.cs" />
-    <Compile Include="Implementation\ImportManager\DefaultImportManager.cs" />
+    <Compile Include="IBackupManager.cs" />
+    <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />

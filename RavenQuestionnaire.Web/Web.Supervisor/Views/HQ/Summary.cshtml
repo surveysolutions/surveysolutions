@@ -1,19 +1,22 @@
-﻿@{
+﻿@using System.Web.Optimization
+@{
     Layout = "~/Views/Shared/_ListViewLayout.cshtml";
 }
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/vm/summarylistview.js")
+
     <script type="text/javascript">
         $(function () {
-            
-            var model = new ListViewMasterModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SummaryApi", action = "Summary" })');            
+
+            var model = new ListViewMasterModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SummaryApi", action = "Summary" })');
             model['Summary'] = new SummaryListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SummaryApi", action = "Templates" })');
 
             model.Summary.SelectedTemplate.subscribe(function () {
                 model.ListView.search();
             });
-            model.ListView.GetFilterMethod = function() {
+            model.ListView.GetFilterMethod = function () {
                 return { TemplateId: model.Summary.SelectedTemplate };
             };
 
@@ -29,15 +32,13 @@
 
 @section filters
 {
-    <div class="well" style="max-width: 340px; padding: 8px 0;">
-        <ul class="nav nav-list">
-            <li class="nav-header">FILTER</li>
-            <li class="divider"></li>
-            <li>Template:
+    <ul class="nav nav-list">
+        <li class="nav-header">FILTER</li>
+        <li class="divider"></li>
+        <li>Template:
                 <select data-bind="options: Summary.Templates, optionsText: 'TemplateName', optionsValue: 'TemplateId', optionsCaption: 'Any', value: Summary.SelectedTemplate"></select>
-            </li>
-        </ul>
-    </div>
+        </li>
+    </ul>
 }
 
 @section grid
@@ -66,6 +67,18 @@
                 <td data-bind="text: Error"></td>
                 <td data-bind="text: Approved"></td>
                 <td data-bind="text: Total"></td>
+            </tr>
+            <!-- /ko -->
+            <!-- ko if:ListView.ItemsSummary != null -->
+            <tr data-bind="with: ListView.ItemsSummary">
+                <th data-bind="text: User.Name"></th>
+                <th data-bind="text: Unassigned"></th>
+                <th data-bind="text: Initial"></th>
+                <th data-bind="text: Redo"></th>
+                <th data-bind="text: Completed"></th>
+                <th data-bind="text: Error"></th>
+                <th data-bind="text: Approved"></th>
+                <th data-bind="text: Total"></th>
             </tr>
             <!-- /ko -->
         </tbody>

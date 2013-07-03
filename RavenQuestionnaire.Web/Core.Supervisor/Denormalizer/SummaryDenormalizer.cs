@@ -110,55 +110,57 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            var user = this.users.GetById(evnt.Payload.Responsible.Id);
-
-            var questionnaire = this.questionnaires.GetById(evnt.Payload.CompletedQuestionnaireId);
-
-            var summaryUserId = user.PublicKey.Combine(evnt.Payload.CompletedQuestionnaireId);
-
+            var summaryUserId = evnt.Payload.Responsible.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
             var summaryUser = this.summary.GetById(summaryUserId);
-            if (summaryUser != null)
+            if (summaryUser == null)
             {
-                if (evnt.Payload.PreviousResponsible != null)
+                var user = this.users.GetById(evnt.Payload.Responsible.Id);
+                var questionnaire = this.questionnaires.GetById(evnt.Payload.CompletedQuestionnaireId);
+
+                summaryUser = new SummaryItem()
                 {
-                    var prevUser = this.users.GetById(evnt.Payload.PreviousResponsible.Id);
+                    TemplateId = questionnaire.TemplateId,
+                    TemplateName = questionnaire.Title,
+                    ResponsibleSupervisorId =
+                        user.Supervisor == null ? (Guid?) null : user.Supervisor.Id,
+                    ResponsibleId = user.PublicKey,
+                    ResponsibleName = user.UserName,
+                    QuestionnaireStatus = questionnaire.Status.PublicId
+                };
 
-                    if (user.Roles.Contains(UserRoles.Operator) && prevUser.Roles.Contains(UserRoles.Operator) && (user.PublicKey != prevUser.PublicKey))
-                    {
-                        var summaryPrevUserId = prevUser.PublicKey.Combine(evnt.Payload.CompletedQuestionnaireId);
-                        var summarySupervisorId = user.Supervisor.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
-                        var summaryPrevSupervisorId =
-                            prevUser.Supervisor.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
-
-                        var summaryPrevUser = this.summary.GetById(summaryPrevUserId);
-                        var summarySupervisor = this.summary.GetById(summarySupervisorId);
-                        var summaryPrevSupervisor = this.summary.GetById(summaryPrevSupervisorId);
-
-                        this.DecreaseByStatus(summaryPrevUser, summaryUser.QuestionnaireStatus);
-                        this.DecreaseByStatus(summaryPrevSupervisor, summaryUser.QuestionnaireStatus);
-
-                        this.IncreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
-                        this.IncreaseByStatus(summarySupervisor, summaryUser.QuestionnaireStatus);
-                        
-                        this.summary.Store(summaryPrevUser, summaryPrevUserId);
-                        this.summary.Store(summaryPrevSupervisor, summaryPrevSupervisorId);
-                        this.summary.Store(summaryUser, summaryUserId);
-                        this.summary.Store(summarySupervisor, summarySupervisorId);
-                    }
-                }
+                this.summary.Store(summaryUser, summaryUserId);
             }
-            else
+
+
+            if (evnt.Payload.PreviousResponsible != null)
             {
-                this.summary.Store(
-                    new SummaryItem()
-                        {
-                            TemplateId = questionnaire.TemplateId,
-                            ResponsibleSupervisorId =
-                                user.Supervisor == null ? (Guid?)null : user.Supervisor.Id,
-                            ResponsibleId = user.PublicKey,
-                            ResponsibleName = user.UserName
-                        },
-                    summaryUserId);
+                var summaryPrevUserId =
+                    evnt.Payload.PreviousResponsible.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
+                var summaryPrevUser = this.summary.GetById(summaryPrevUserId);
+
+                if ((summaryUserId != summaryPrevUserId) &&
+                    summaryUser.ResponsibleSupervisorId.HasValue && summaryPrevUser.ResponsibleSupervisorId.HasValue)
+                {
+                    var summarySupervisorId =
+                        summaryUser.ResponsibleSupervisorId.Value.Combine(evnt.Payload.CompletedQuestionnaireId);
+                    var summaryPrevSupervisorId =
+                        summaryPrevUser.ResponsibleSupervisorId.Value.Combine(evnt.Payload.CompletedQuestionnaireId);
+
+
+                    var summarySupervisor = this.summary.GetById(summarySupervisorId);
+                    var summaryPrevSupervisor = this.summary.GetById(summaryPrevSupervisorId);
+
+                    this.DecreaseByStatus(summaryPrevUser, summaryUser.QuestionnaireStatus);
+                    this.DecreaseByStatus(summaryPrevSupervisor, summaryUser.QuestionnaireStatus);
+
+                    this.IncreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+                    this.IncreaseByStatus(summarySupervisor, summaryUser.QuestionnaireStatus);
+
+                    this.summary.Store(summaryPrevUser, summaryPrevUserId);
+                    this.summary.Store(summaryPrevSupervisor, summaryPrevSupervisorId);
+                    this.summary.Store(summaryUser, summaryUserId);
+                    this.summary.Store(summarySupervisor, summarySupervisorId);
+                }
             }
         }
 

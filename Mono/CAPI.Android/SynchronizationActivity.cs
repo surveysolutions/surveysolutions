@@ -115,6 +115,7 @@ namespace CAPI.Android
             }
 
             SyncCredentials? result = null;
+            bool actionCompleted = false;
             this.RunOnUiThread(
                 () =>
                 {
@@ -126,18 +127,28 @@ namespace CAPI.Android
                     var teLogin = view.FindViewById<EditText>(Resource.Id.teLogin);
                     var tePassword = view.FindViewById<EditText>(Resource.Id.tePassword);
                     var btnLogin = view.FindViewById<Button>(Resource.Id.btnLogin);
+                    var btnCancel = view.FindViewById<Button>(Resource.Id.btnCancel);
                     alert.SetView(view);
                     var loginDialog = alert.Show();
                     loginDialog.SetCancelable(false);
+
                     btnLogin.Click += (s, e) =>
                     {
                         loginDialog.Hide();
                         if (progressDialog != null)
                             progressDialog.Show();
                         result = new SyncCredentials(teLogin.Text, SimpleHash.ComputeHash(tePassword.Text));
+                        actionCompleted = true;
+                    };
+
+                    btnCancel.Click += (s, e) =>
+                    {
+                        loginDialog.Hide();
+                        actionCompleted = true;
+                        synchronizer.Cancel();
                     };
                 });
-            while (!result.HasValue)
+            while (!actionCompleted)
             {
                 Thread.Sleep(200);
             }

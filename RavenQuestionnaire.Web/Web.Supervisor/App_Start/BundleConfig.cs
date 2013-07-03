@@ -42,8 +42,7 @@ namespace Web.Supervisor.App_Start
                     "~/Scripts/knockout-2.2.1.js", 
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/vm/listviewmaster.js",
-                    "~/Scripts/vm/listview.js",
-                    "~/Scripts/vm/summarylistview.js"));
+                    "~/Scripts/vm/listview.js"));
         }
 
         #endregion
