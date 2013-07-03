@@ -43,7 +43,11 @@ namespace CAPI.Android.Core.Model.Backup
 
             foreach (var backupable in backupables)
             {
-                CopyFileOrDirectory(backupable.GetPathToBakupFile(), backupFolderPath);
+                var path = backupable.GetPathToBakupFile();
+                if(string.IsNullOrEmpty(path))
+                    continue;
+                
+                CopyFileOrDirectory(path, backupFolderPath);
             }
             return backupFolderPath;
         }

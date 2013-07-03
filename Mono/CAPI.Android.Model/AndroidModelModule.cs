@@ -15,6 +15,7 @@ using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.Backup;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.FileStorage;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -39,6 +40,7 @@ namespace CAPI.Android.Core.Model
         public override void Load()
         {
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
+            var snapshotStore = new AndroidSnapshotStore();
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(ProjectionStoreName);
             var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(ProjectionStoreName);
@@ -49,6 +51,7 @@ namespace CAPI.Android.Core.Model
             var changeLogStore = new FileChangeLogStore();
 
             this.Bind<IEventStore>().ToConstant(evenStore);
+            this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
@@ -68,7 +71,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
 #warning bad idea to pass loginStore in backuper
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, loginStore));
+            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, loginStore, snapshotStore));
         }
     }
 }

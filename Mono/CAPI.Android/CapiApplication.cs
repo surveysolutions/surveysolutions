@@ -169,7 +169,7 @@ namespace CAPI.Android
             kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule());
             kernel.Bind<Context>().ToConstant(this);
             NcqrsInit.Init(kernel);
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
 
             #region register handlers
