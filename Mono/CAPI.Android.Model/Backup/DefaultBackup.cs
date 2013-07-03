@@ -35,7 +35,7 @@ namespace CAPI.Android.Core.Model.Backup
             }
         }
 
-        public void Backup()
+        public string Backup()
         {
             var backupFolderName = string.Format("backup-{0}", DateTime.Now.Ticks);
             var backupFolderPath = Path.Combine(backupPath, backupFolderName);
@@ -45,6 +45,7 @@ namespace CAPI.Android.Core.Model.Backup
             {
                 CopyFileOrDirectory(backupable.GetPathToBakupFile(), backupFolderPath);
             }
+            return backupFolderPath;
         }
 
         private void CopyDb(string sourcePath, string backupFolderPath)
@@ -77,9 +78,12 @@ namespace CAPI.Android.Core.Model.Backup
             }
         }
 
-        public void Restore()
+        public void Restore(string path)
         {
-            throw new NotImplementedException();
+            foreach (var backupable in backupables)
+            {
+                backupable.RestoreFromBakupFolder(path);
+            }
         }
     }
 }

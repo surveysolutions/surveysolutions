@@ -3,8 +3,8 @@ namespace WB.Core.Infrastructure.Backup
     public interface IBackup
     {
 
-        void Backup();
-        void Restore();
+        string Backup();
+        void Restore(string path);
 
     }
 }

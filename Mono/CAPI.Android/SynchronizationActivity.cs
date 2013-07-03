@@ -1,4 +1,5 @@
 
+using System.IO;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.Infrastructure;
@@ -50,10 +51,18 @@ namespace CAPI.Android
             get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
         }
 
+        protected LinearLayout llContainer
+        {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
+        }
+
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
         #endregion
 
+        private int clickCount = 0;
+
+        const int NUMBER_CLICK = 10;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -64,12 +73,56 @@ namespace CAPI.Android
             btnSync.Click += this.ButtonSyncClick;
 
             btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
+
+
             btnBackup.Click += btnBackup_Click;
+            btnRestore.Click += btnRestore_Click;
+            tvSyncResult.Click += tvSyncResult_Click;
+            llContainer.Click += llContainer_Click;
+        }
+
+        void llContainer_Click(object sender, EventArgs e)
+        {
+            clickCount = 0;
+        }
+
+        private void tvSyncResult_Click(object sender, EventArgs e)
+        {
+            clickCount++;
+            if (clickCount >= NUMBER_CLICK)
+            {
+                btnRestore.Visibility = ViewStates.Visible;
+            }
+        }
+
+        void btnRestore_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                backupManager.Restore("string empty");
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle("Success");
+                alert.SetMessage("Tablet was successefully restored");
+                alert.Show();
+            }
+            catch (Exception ex)
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle("Restor Error");
+                alert.SetMessage(ex.Message + " " + ex.StackTrace);
+                alert.Show();
+            }
         }
 
         void btnBackup_Click(object sender, EventArgs e)
         {
-            backupManager.Backup();
+
+            var path = backupManager.Backup();
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("Success");
+            alert.SetMessage(string.Format("Backup was saved to {0}", path));
+            alert.Show();
         }
 
         protected override void OnStart()
