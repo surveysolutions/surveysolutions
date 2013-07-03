@@ -49,6 +49,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timeForecast = new System.Windows.Forms.ToolStripStatusLabel();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.eventsStatistics = new System.Windows.Forms.ListBox();
             this.clearViews = new System.Windows.Forms.CheckBox();
@@ -61,7 +62,7 @@
             this.generate.Name = "generate";
             this.generate.Size = new System.Drawing.Size(160, 51);
             this.generate.TabIndex = 0;
-            this.generate.Text = "Generate";
+            this.generate.Text = "Start";
             this.generate.UseVisualStyleBackColor = true;
             this.generate.Click += new System.EventHandler(this.generate_Click);
             // 
@@ -172,7 +173,7 @@
             // 
             this.ctrlProgress.AutoSize = false;
             this.ctrlProgress.Name = "ctrlProgress";
-            this.ctrlProgress.Size = new System.Drawing.Size(450, 16);
+            this.ctrlProgress.Size = new System.Drawing.Size(300, 16);
             this.ctrlProgress.Step = 1;
             this.ctrlProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
@@ -231,8 +232,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrlProgress,
             this.txtStatus,
-            this.txtElapsedTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 340);
+            this.txtElapsedTime,
+            this.timeForecast});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 390);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.Size = new System.Drawing.Size(781, 22);
@@ -242,14 +244,20 @@
             // txtStatus
             // 
             this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(157, 17);
+            this.txtStatus.Size = new System.Drawing.Size(154, 17);
             this.txtStatus.Spring = true;
             // 
             // txtElapsedTime
             // 
             this.txtElapsedTime.Name = "txtElapsedTime";
-            this.txtElapsedTime.Size = new System.Drawing.Size(157, 17);
+            this.txtElapsedTime.Size = new System.Drawing.Size(154, 17);
             this.txtElapsedTime.Spring = true;
+            // 
+            // timeForecast
+            // 
+            this.timeForecast.Name = "timeForecast";
+            this.timeForecast.Size = new System.Drawing.Size(154, 17);
+            this.timeForecast.Spring = true;
             // 
             // lstLog
             // 
@@ -257,7 +265,7 @@
             this.lstLog.Location = new System.Drawing.Point(451, 166);
             this.lstLog.Name = "lstLog";
             this.lstLog.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.lstLog.Size = new System.Drawing.Size(309, 160);
+            this.lstLog.Size = new System.Drawing.Size(309, 212);
             this.lstLog.TabIndex = 17;
             // 
             // eventsStatistics
@@ -283,7 +291,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(781, 362);
+            this.ClientSize = new System.Drawing.Size(781, 412);
             this.Controls.Add(this.clearViews);
             this.Controls.Add(this.eventsStatistics);
             this.Controls.Add(this.lstLog);
@@ -306,9 +314,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.generate);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(797, 401);
-            this.MinimumSize = new System.Drawing.Size(797, 401);
+            this.MaximumSize = new System.Drawing.Size(797, 451);
+            this.MinimumSize = new System.Drawing.Size(797, 451);
             this.Name = "LoadTestDataGenerator";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Load Test Data Generator";
             this.Load += new System.EventHandler(this.LoadTestDataGenerator_Load);
             this.statusStrip1.ResumeLayout(false);
@@ -344,6 +353,7 @@
         private System.Windows.Forms.ToolStripStatusLabel txtStatus;
         private System.Windows.Forms.ToolStripStatusLabel txtElapsedTime;
         private System.Windows.Forms.CheckBox clearViews;
+        private System.Windows.Forms.ToolStripStatusLabel timeForecast;
     }
 }
 

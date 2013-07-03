@@ -216,6 +216,11 @@ namespace LoadTestDataGenerator
             this.UpdateLastStatement();
         }
 
+        private void UpdateForecast(TimeSpan timeSpan)
+        {
+            statusStrip1.InvokeIfRequired(x => { timeForecast.Text = string.Format("Estimated time: {0}", timeSpan.ToString(@"hh\:mm\:ss")); });
+        }
+
         internal class ProgressOperation
         {
             public string Text { get; set; }
@@ -414,14 +419,18 @@ namespace LoadTestDataGenerator
 
             var surveyIds = this.GetSurveyIds();
             this.UpdateStatus("full capi events", statistics.FullCAPIEventsCount);
+            var surveysCount = (int) (surveyIds.Count * 1.1);
+            var startTime = DateTime.Now;
+            var processedSurveys = 1;
             foreach (var surveyId in surveyIds)
             {
                 FillAnswers(surveyId);
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
                 CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
                 this.UpdateProgress();
+                this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processedSurveys, surveysCount));
+                processedSurveys++;
             }
-
             var rand = RandomObject;
             this.UpdateStatus("partial capi events", statistics.PartialCAPIEventsCount);
             foreach (var surveyId in surveyIds)
@@ -434,6 +443,14 @@ namespace LoadTestDataGenerator
                 this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
                 this.UpdateProgress();
             }
+        }
+        private TimeSpan MakeTotalTimeForecast(DateTime startTime, int processedItems, int itemsCount)
+        {
+            var applicationWorkingTime = (DateTime.Now - this.statistics.StartTime).Ticks;
+            var capiEventsSpentTime = (DateTime.Now - startTime).Ticks;
+            var averageFillingSpeed = capiEventsSpentTime/processedItems;
+            var result = TimeSpan.FromTicks(applicationWorkingTime + averageFillingSpeed*(itemsCount - processedItems));
+            return result;
         }
 
         private void FillAnswers(Guid surveyId, bool partially = false)
@@ -597,6 +614,9 @@ namespace LoadTestDataGenerator
 
             if (statistics.hasSupervisorEvents)
             {
+                var startTime = DateTime.Now;
+                var total = surveyIds.Count;
+                var processed = 1;
                 this.UpdateStatus(
                     "supervisor - interviewer - status", statistics.SupervisorEventsCount);
                 foreach (var surveyId in surveyIds)
@@ -620,15 +640,22 @@ namespace LoadTestDataGenerator
                         this.UpdateProgress();
                         this.UpdateProgress();
                     }
+                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
+                    processed++;
                 }
             }
 
             if (featuredQuestions != null && statistics.hasFeaturedQuestions)
             {
+                var startTime = DateTime.Now;
+                var total = surveyIds.Count;
+                var processed = 1;
                 this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
                 foreach (var surveyId in surveyIds)
                 {
                     this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
+                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
+                    processed++;
                 }
             }
         }
@@ -739,6 +766,7 @@ namespace LoadTestDataGenerator
 
         private IEnumerable<Guid> GenerateSurveys(int count, QuestionnaireDocument template, UserDocument initiator)
         {
+            var startTime = DateTime.Now;
             var result = new List<Guid>();
             for (int i = 0; i < count; i++)
             {
@@ -746,6 +774,7 @@ namespace LoadTestDataGenerator
                 this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(id, template.PublicKey, initiator.ToUserLight()));
                 result.Add(id);
                 this.UpdateProgress();
+                this.UpdateForecast(this.MakeTotalTimeForecast(startTime, i+1, count+1));
             }
             return result;
         }
