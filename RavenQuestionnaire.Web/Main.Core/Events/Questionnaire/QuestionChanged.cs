@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionChanged.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The question changed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire
+﻿namespace Main.Core.Events.Questionnaire
 {
     using System;
     using System.Collections.Generic;

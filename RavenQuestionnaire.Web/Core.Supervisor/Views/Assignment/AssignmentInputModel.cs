@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignmentInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey group input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Assignment
 {
     using System;

@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="PropagatedGridViewFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View;

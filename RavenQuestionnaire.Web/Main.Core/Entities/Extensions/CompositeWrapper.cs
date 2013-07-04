@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeWrapper.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The composite wrapper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.Extensions
+﻿namespace Main.Core.Entities.Extensions
 {
     using System;
 

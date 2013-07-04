@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringUtil.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The string util.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility
+﻿namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;

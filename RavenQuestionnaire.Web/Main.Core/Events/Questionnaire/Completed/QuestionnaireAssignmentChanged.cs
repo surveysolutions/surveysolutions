@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireAssignmentChanged.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire assignment changed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire.Completed
+﻿namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
 

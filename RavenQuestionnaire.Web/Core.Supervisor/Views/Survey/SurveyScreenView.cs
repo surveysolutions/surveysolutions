@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="SurveyScreenView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Survey
 {
     using System;

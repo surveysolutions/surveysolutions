@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DateTimeQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The date time question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities.Question
+﻿namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
     using System.Collections.Generic;

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MinMaxStrategy.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The min max strategy.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility.OrderStrategy
+﻿namespace Main.Core.Utility.OrderStrategy
 {
     using System.Collections.Generic;
     using System.Linq;

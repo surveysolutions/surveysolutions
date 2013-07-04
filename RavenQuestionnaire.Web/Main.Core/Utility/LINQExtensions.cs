@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright company="" file="LINQExtensions.cs">
-//   
-// </copyright>
-// <summary>
-//   The string field name sorting support.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility
+﻿namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;

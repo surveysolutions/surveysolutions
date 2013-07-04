@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenericBinderResolver.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The generic binder resolver.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Binding
+﻿namespace Questionnaire.Core.Web.Binding
 {
     using System;
     using System.Web.Mvc;

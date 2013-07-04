@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateFileMetaCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The update file meta command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.File
+﻿namespace Main.Core.Commands.File
 {
     using System;
 

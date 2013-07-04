@@ -1,14 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceDiscover.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The service discover.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-using WB.Core.SharedKernel.Utils.Logging;
+﻿using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Questionnaire.Core.Web.WCF
 {

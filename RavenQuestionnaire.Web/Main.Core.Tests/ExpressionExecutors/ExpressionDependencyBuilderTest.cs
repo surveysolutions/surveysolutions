@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionDependencyBuilderTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The expression dependency builder test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Tests.ExpressionExecutors
+﻿namespace Main.Core.Tests.ExpressionExecutors
 {
     using System;
     using System.Collections.Generic;

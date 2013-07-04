@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerChartModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The interviewer chart model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Web.Supervisor.Models.Chart
+﻿namespace Web.Supervisor.Models.Chart
 {
     using System.Collections.Generic;
     using System.Linq;

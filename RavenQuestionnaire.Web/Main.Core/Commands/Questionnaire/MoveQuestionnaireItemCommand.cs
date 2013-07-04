@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MoveQuestionnaireItemCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The move questionnaire item command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire
+﻿namespace Main.Core.Commands.Questionnaire
 {
     using System;
 

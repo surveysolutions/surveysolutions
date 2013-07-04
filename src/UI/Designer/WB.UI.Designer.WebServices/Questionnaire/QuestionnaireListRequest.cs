@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireListRequest.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.WebServices.Questionnaire
+﻿namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System.ServiceModel;
 

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The Question interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities
 {
     using System;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DesignerPermissionException.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The designer permission exception.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Code.Exceptions
+﻿namespace WB.UI.Designer.Code.Exceptions
 {
     using System;
 

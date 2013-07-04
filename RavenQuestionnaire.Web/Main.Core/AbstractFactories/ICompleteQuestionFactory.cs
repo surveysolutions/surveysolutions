@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestionFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ICompleteQuestionFactory type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.AbstractFactories
+﻿namespace Main.Core.AbstractFactories
 {
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;

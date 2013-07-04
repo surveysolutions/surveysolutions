@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SummaryInputModel.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Summary
+﻿namespace Core.Supervisor.Views.Summary
 {
     using System;
 

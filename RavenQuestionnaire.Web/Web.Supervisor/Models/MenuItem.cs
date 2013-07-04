@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MenuItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The menu item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     /// <summary>
     /// The menu item.

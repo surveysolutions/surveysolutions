@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TemplateController.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Commands.Questionnaire;
+﻿using Main.Core.Commands.Questionnaire;
 
 namespace Web.Supervisor.Controllers
 {

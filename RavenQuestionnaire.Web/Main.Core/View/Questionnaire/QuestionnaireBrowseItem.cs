@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 

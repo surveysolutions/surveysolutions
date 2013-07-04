@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireAR.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   CompleteQuestionnaire Aggregate Root.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Ncqrs.Domain;
+﻿using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Main.Core.Domain

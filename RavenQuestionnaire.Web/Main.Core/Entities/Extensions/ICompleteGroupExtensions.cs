@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteGroupExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The i complete group extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.Extensions
+﻿namespace Main.Core.Entities.Extensions
 {
     using System;
     using System.Collections.Generic;

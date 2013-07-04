@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnswerView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The answer view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;

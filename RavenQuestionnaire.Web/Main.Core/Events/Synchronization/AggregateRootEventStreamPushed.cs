@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AggregateRootEventStreamPushed.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The aggregate root event stream pushed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Synchronization
+﻿namespace Main.Core.Events.Synchronization
 {
     using System;
     using System.Collections.Generic;

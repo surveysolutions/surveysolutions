@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountController.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the AccountController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Controllers
+﻿namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Linq;

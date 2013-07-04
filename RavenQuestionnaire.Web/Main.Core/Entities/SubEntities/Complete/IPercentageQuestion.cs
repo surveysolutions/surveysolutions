@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPercentageQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The PercentageQuestion interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities.Complete
 {
     /// <summary>

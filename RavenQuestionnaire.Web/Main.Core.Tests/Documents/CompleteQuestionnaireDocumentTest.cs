@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDocumentTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire document test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Tests.Documents
+﻿namespace Main.Core.Tests.Documents
 {
     using System;
     using System.Collections.Generic;

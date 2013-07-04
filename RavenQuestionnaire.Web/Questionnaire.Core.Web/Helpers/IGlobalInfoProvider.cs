@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IGlobalInfoProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The GlobalInfoProvider interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Helpers
+﻿namespace Questionnaire.Core.Web.Helpers
 {
     using Main.Core.Entities.SubEntities;
 

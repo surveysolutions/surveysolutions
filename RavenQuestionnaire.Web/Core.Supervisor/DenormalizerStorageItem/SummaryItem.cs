@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SummaryItem.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.DenormalizerStorageItem
+﻿namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
 

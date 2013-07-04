@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessLogViewItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.SyncProcess
+﻿namespace Core.Supervisor.Views.SyncProcess
 {
     using System;
 

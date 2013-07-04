@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeleteCompleteQuestionnaireCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The delete complete questionnaire command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire.Completed
+﻿namespace Main.Core.Commands.Questionnaire.Completed
 {
     using System;
 

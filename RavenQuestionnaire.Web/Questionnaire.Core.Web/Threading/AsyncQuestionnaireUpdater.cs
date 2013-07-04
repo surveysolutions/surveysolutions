@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AsyncQuestionnaireUpdater.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The async questionnaire updater.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Questionnaire.Core.Web.Threading

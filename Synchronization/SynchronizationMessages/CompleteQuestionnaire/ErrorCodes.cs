@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ErrorCodes.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The error codes.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.CompleteQuestionnaire
+﻿namespace SynchronizationMessages.CompleteQuestionnaire
 {
     /// <summary>
     /// The error codes.

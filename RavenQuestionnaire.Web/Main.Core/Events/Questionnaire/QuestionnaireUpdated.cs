@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireUpdated.cs" company="The World Bank">
-//   The World Bank
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire
+﻿namespace Main.Core.Events.Questionnaire
 {
     using System;
 

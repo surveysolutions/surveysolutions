@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The abstract question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The QuestionnaireDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete;
+﻿using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
 
 using WB.Core.Infrastructure;

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireViewInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Main.Core.View.CompleteQuestionnaire

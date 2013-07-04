@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultyOptionsCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The multy options complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Complete.Question
+﻿namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;

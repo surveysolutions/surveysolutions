@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The abstract question view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

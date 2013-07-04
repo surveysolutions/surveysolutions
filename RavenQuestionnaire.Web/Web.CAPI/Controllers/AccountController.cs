@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountController.cs" company="">
-//   2012
-// </copyright>
-// <summary>
-//   The account controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.CAPI.Controllers
+﻿namespace Web.CAPI.Controllers
 {
     using System;
     using System.Collections.Generic;

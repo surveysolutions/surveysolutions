@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQGroupItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The cq group item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.View.CompleteQuestionnaire;

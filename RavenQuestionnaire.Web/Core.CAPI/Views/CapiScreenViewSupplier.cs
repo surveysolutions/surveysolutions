@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CapiScreenViewSupplier.cs" company="">
-//   TODO: Update copyright text.
-// </copyright>
-// <summary>
-//   
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.CAPI.Views
+﻿namespace Core.CAPI.Views
 {
     using System.Linq;
 

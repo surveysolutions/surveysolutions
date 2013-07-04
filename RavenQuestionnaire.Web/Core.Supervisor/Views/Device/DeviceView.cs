@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceView.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Device
+﻿namespace Core.Supervisor.Views.Device
 {
     using System.Collections.Generic;
 

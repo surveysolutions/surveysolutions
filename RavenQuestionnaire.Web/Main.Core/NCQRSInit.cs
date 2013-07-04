@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NCQRSInit.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The ncqrs init.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core

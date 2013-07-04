@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="QuestionCellItem.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete;
+﻿using Main.Core.Entities.SubEntities.Complete;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 {

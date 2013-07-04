@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyUsersViewItem.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Survey
+﻿namespace Core.Supervisor.Views.Survey
 {
     using System;
 

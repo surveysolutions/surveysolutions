@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProgressView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The sync progress view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Linq;
 using Main.Core.Documents;

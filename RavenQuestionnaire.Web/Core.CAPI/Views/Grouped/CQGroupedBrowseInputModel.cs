@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQGroupedBrowseInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The cq grouped browse input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Main.Core.Utility;
 

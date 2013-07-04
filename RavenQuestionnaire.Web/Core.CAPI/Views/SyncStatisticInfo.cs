@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncStatisticInfo.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.CAPI.Views
+﻿namespace Core.CAPI.Views
 {
     /// <summary>
     /// TODO: Update summary.
