@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireView.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Views.Questionnaire
+﻿namespace WB.UI.Designer.Views.Questionnaire
 {
     using System;
     using System.Collections.Generic;
