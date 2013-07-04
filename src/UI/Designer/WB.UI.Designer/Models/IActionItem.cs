@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IActionItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The ActionItem interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     /// <summary>
     /// The ActionItem interface.

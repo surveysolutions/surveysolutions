@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipModule.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the MembershipModule type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;

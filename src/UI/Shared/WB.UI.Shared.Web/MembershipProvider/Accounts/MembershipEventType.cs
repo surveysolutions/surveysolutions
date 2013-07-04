@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipEventType.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The membership event type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
+﻿namespace WB.UI.Shared.Web.MembershipProvider.Accounts
 {
     /// <summary>
     /// The membership event type.

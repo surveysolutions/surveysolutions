@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountPasswordResetTokenChanged.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account password reset token changed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
+﻿namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
 {
     using System;
 
