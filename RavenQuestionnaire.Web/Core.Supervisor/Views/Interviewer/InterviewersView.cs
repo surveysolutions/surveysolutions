@@ -1,93 +1,31 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewersView.cs" company="The World Bank">
-//   2012
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SummaryView.cs" company="">
+//   
 // </copyright>
 // <summary>
-//   The interviewers view.
+//   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Core.Supervisor.Views.Interviewer
 {
-    /// <summary>
-    /// The interviewers view.
-    /// </summary>
-    public class InterviewersView
+    using System.Collections.Generic;
+
+    public class InterviewersView : IListView<InterviewersItem>
     {
-        #region Fields
-
-        /// <summary>
-        /// The _order.
-        /// </summary>
-        private string order = string.Empty;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        
-        public InterviewersView(
-            int page, 
-            int pageSize, 
-            IEnumerable<InterviewersItem> items, 
-            Guid supervisorId)
-        {
-            this.Page = page;
-            this.PageSize = pageSize;
-            this.Items = items.ToList();
-            this.ViewerId = supervisorId;
-        }
-
-        #endregion
-
         #region Public Properties
+        
+        /// <summary>
+        /// Gets or sets the total count.
+        /// </summary>
+        public int TotalCount { get; set; }
 
         /// <summary>
-        /// Gets the items.
+        /// Gets or sets Items.
         /// </summary>
-        public IList<InterviewersItem> Items { get; private set; }
+        public IEnumerable<InterviewersItem> Items { get; set; }
 
-        /// <summary>
-        /// Gets or sets the order.
-        /// </summary>
-        public string Order
-        {
-            get
-            {
-                return this.order;
-            }
-
-            set
-            {
-                this.order = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the page.
-        /// </summary>
-        public int Page { get; private set; }
-
-        /// <summary>
-        /// Gets the page size.
-        /// </summary>
-        public int PageSize { get; private set; }
-
-        /// <summary>
-        /// Gets the supervisor id.
-        /// </summary>
-        public Guid ViewerId { get; private set; }
-
-        /// <summary>
-        /// Gets the total count.
-        /// </summary>
-        public int TotalCount {
-            get { return Items.Count; }
-        }
+        public InterviewersItem ItemsSummary { get; set; }
 
         #endregion
     }

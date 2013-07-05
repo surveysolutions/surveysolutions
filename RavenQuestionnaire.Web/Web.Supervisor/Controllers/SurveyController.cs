@@ -371,7 +371,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignmentViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.interviewersViewFactory.Load(new InterviewersInputModel { ViewerId = user.Id });
+            var users = this.interviewersViewFactory.Load(new InterviewersInputModel(user.Id));
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             var input = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                 data.TemplateId,
@@ -491,9 +491,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult UsersJson()
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var input = new InterviewersInputModel { PageSize = int.MaxValue, ViewerId = user.Id };
+            var input = new InterviewersInputModel(user.Id) {PageSize = int.MaxValue};
             var model = this.interviewersViewFactory.Load(input);
-            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
+            return this.Json(model.Items.ToDictionary(item => item.UserId.ToString(), item => item.UserName), JsonRequestBehavior.AllowGet);
         }
     }
 }

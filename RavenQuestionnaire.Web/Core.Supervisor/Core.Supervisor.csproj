@@ -108,6 +108,7 @@
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\IListView.cs" />
+    <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />
@@ -153,7 +154,6 @@
     <Compile Include="Views\Interviewer\InterviewerStatisticsItem.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatisticsView.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatisticsViewItem.cs" />
-    <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\Interviewer\InterviewerView.cs" />
     <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />

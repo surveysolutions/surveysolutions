@@ -1,5 +1,4 @@
-﻿using System.Web.Http;
-using System.Web.Security;
+﻿using System.Web.Security;
 using Core.Supervisor.Views.Interviewer;
 using Main.Core.Utility;
 using Main.Core.View;
@@ -26,18 +25,15 @@ namespace Web.Supervisor.Controllers
     public class UserController : BaseController
     {
         private readonly IFormsAuthentication authentication;
-        private IViewFactory<InterviewersInputModel, InterviewersView> viewFactory;
 
         public UserController(
             IFormsAuthentication auth,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
-            ILog logger,
-            IViewFactory<InterviewersInputModel, InterviewersView> viewFactory)
+            ILog logger)
             : base(commandService, globalInfo, logger)
         {
             this.authentication = auth;
-            this.viewFactory = viewFactory;
         }
 
         [AllowAnonymous]
@@ -78,75 +74,15 @@ namespace Web.Supervisor.Controllers
         }
 
         /// <summary>
-        /// Unlock user
-        /// </summary>
-        /// <param name="id">
-        /// Use public key
-        /// </param>
-        /// <returns>
-        /// Redirects to index view if everything is ok
-        /// </returns>
-        public ActionResult UnlockUser(Guid id)
-        {
-            CommandService.Execute(new UnlockUserCommand(id));
-
-            return this.Redirect(GlobalHelper.PreviousPage);
-        }
-
-        /// <summary>
-        /// Lock user
-        /// </summary>
-        /// <param name="id">
-        /// Use public key
-        /// </param>
-        /// <returns>
-        /// Redirects to index view if everything is ok
-        /// </returns>
-        public ActionResult LockUser(Guid id)
-        {
-            CommandService.Execute(new LockUserCommand(id));
-
-            return this.Redirect(GlobalHelper.PreviousPage);
-        }
-
-        /// <summary>
         /// User index page. Shows grid with supervisor's statistics grouped by interviewers
         /// </summary>
-        /// <param name="input">
-        /// The input model
-        /// </param>
         /// <returns>
         /// Index view
         /// </returns>
-        public ActionResult Index(InterviewersInputModel input)
+        public ActionResult Index()
         {
             ViewBag.ActivePage = MenuItem.Administration;
-            var user = this.GlobalInfo.GetCurrentUser();
-            input.ViewerId = user.Id;
-            var model = this.viewFactory.Load(input);
-            return this.View(model);
-        }
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        public ActionResult _TableData(GridDataRequestModel data)
-        {
-            var input = new InterviewersInputModel
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                ViewerId = this.GlobalInfo.GetCurrentUser().Id
-            };
-            var model = this.viewFactory.Load(input);
-            return this.PartialView("_PartialUsersGridTemplate", model);
+            return this.View();
         }
     }
 }

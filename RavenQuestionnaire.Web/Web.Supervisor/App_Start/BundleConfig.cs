@@ -29,7 +29,7 @@ namespace Web.Supervisor.App_Start
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new StyleBundle("~/css/main").Include("~/Content/bootstrap.css", "~/Content/bootstrap-responsive.css"));
+            bundles.Add(new StyleBundle("~/css/main").Include("~/Content/bootstrap.css", "~/Content/bootstrap.icon-large.min.css", "~/Content/bootstrap-responsive.css"));
             bundles.Add(new ScriptBundle("~/js/main").Include("~/Scripts/jquery-{version}.js", "~/Scripts/bootstrap.js"));
 
             bundles.Add(
@@ -39,7 +39,8 @@ namespace Web.Supervisor.App_Start
 
             bundles.Add(
                 new ScriptBundle("~/js/list").Include(
-                    "~/Scripts/knockout-2.2.1.js", 
+                    "~/Scripts/knockout-2.2.1.js",
+                    "~/Scripts/knockout.mapping-latest.js",
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/vm/listviewmaster.js",
                     "~/Scripts/vm/listview.js"));

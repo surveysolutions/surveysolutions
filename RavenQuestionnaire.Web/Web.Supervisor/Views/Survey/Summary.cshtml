@@ -46,13 +46,13 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th data-bind='click: function (data, event) { ListView.sort("User.Name") }'><span class="btn-link">Interviewers</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Initial") }'><span class="btn-link">Initial</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Redo") }'><span class="btn-link">Redo</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Completed") }'><span class="btn-link">Completed</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Error") }'><span class="btn-link">Completed with Errors</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Approved") }'><span class="btn-link">Approved</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Total") }'><span class="btn-link">Total</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "User.Name")'><span class="btn-link">Interviewers</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Initial")'><span class="btn-link">Initial</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Redo")'><span class="btn-link">Redo</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Completed")'><span class="btn-link">Completed</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Error")'><span class="btn-link">Completed with Errors</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Approved")'><span class="btn-link">Approved</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Total")'><span class="btn-link">Total</span></th>
             </tr>
         </thead>
         <tbody>

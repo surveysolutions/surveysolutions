@@ -255,6 +255,7 @@
     <Compile Include="Controllers\TestUnhandledExceptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -269,13 +270,13 @@
     <Compile Include="Models\Chart\ChartModelBase.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\SurveyRequestModel.cs" />
     <Compile Include="Models\SurveyListViewModel.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
-    <Compile Include="Models\InterviewersViewInputModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\Chart\SurveyChartModel.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="Models\SummaryRequestModel.cs" />
     <Compile Include="Models\SupervisorModel.cs" />
     <Compile Include="Models\SupervisorViewModel.cs" />
+    <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
@@ -301,6 +303,8 @@
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap.icon-large.css" />
+    <Content Include="Content\bootstrap.icon-large.min.css" />
     <Content Include="Content\bootstrap\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
@@ -317,6 +321,7 @@
     <Content Include="Content\favicon.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\glyphicons.png" />
     <Content Include="Content\img\clear.png" />
     <Content Include="Content\img\details_bg.jpg" />
     <Content Include="Content\img\divider.png" />
@@ -433,6 +438,8 @@
     <Content Include="Scripts\assign\app\model.js" />
     <Content Include="Scripts\assign\app\viewmodel.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\ko.pager.js" />
     <Content Include="Scripts\lib\amplify.js" />
     <Content Include="Scripts\lib\jquery.js" />
@@ -445,6 +452,7 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\vm\userlistview.js" />
     <Content Include="Scripts\vm\surveylistview.js" />
     <Content Include="Scripts\vm\listviewmaster.js" />
     <Content Include="Scripts\vm\summarylistview.js" />
@@ -650,7 +658,6 @@
     <Content Include="Views\Shared\_StatusHistory.cshtml" />
     <Content Include="Views\Shared\_StatusTable.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
-    <Content Include="Views\Shared\_PartialUsersGridTemplate.cshtml" />
     <Content Include="Views\Survey\_TableGroup.cshtml" />
     <Content Include="Views\Shared\Approve.cshtml" />
     <Content Include="Views\Shared\AssignPerson.cshtml" />

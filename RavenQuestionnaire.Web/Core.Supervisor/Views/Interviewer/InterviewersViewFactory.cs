@@ -1,14 +1,9 @@
-using Main.DenormalizerStorage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Interviewer
 {
     using System.Linq;
     using Main.Core.Documents;
-    using Main.Core.Entities;
     using Main.Core.Utility;
     using Main.Core.View;
 
@@ -31,8 +26,7 @@ namespace Core.Supervisor.Views.Interviewer
                             .Take(input.PageSize)
                             .Select(
                                 x => new InterviewersItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked));
-            return new InterviewersView(
-                input.Page, input.PageSize, items, input.ViewerId);
+            return new InterviewersView() {Items = items, TotalCount = interviewers.Count()};
         }
     }
 }
