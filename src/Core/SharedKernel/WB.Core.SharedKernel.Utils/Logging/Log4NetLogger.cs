@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             _log.Debug(message);  
         }
 
-        public void Debug(object message, Exception exception)
+        public void Debug(string message, Exception exception = null)
         {
             _log.Debug(message, exception);
         }
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             _log.Info(message);
         }
 
-        public void Info(object message, Exception exception)
+        public void Info(string message, Exception exception = null)
         {
             _log.Info(message, exception);
         }
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             _log.Warn(message);
         }
 
-        public void Warn(object message, Exception exception)
+        public void Warn(string message, Exception exception = null)
         {
             _log.Warn(message, exception);
         }
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             _log.Error(message);
         }
 
-        public void Error(object message, Exception exception)
+        public void Error(string message, Exception exception = null)
         {
             _log.Error(message, exception);
         }
@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             _log.Fatal(message);
         }
 
-        public void Fatal(object message, Exception exception)
+        public void Fatal(string message, Exception exception = null)
         {
             _log.Fatal(message,exception);
         }
