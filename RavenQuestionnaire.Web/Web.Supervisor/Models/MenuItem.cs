@@ -48,6 +48,8 @@
         /// <summary>
         /// The teams
         /// </summary>
-        Teams
+        Teams = 9,
+
+        Summary = 10
     }
 }

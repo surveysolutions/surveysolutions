@@ -173,17 +173,10 @@ namespace Web.Supervisor.Controllers
             return this.Json(new { status = "ok" });
         }
 
-        public ActionResult Surveys(Guid? interviewerId)
+        public ActionResult Surveys()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            var model =
-                this.indexViewFactory.Load(new IndexInputModel()
-                    {
-                        InterviewerId = interviewerId,
-                        ViewerId = GlobalInfo.GetCurrentUser().Id
-                    });
-            ViewBag.GraphData = new InterviewerChartModel(model);
-            return this.View(model);
+            return this.View();
         }
 
         public ActionResult Status(Guid? statusId)
@@ -572,7 +565,7 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Summary()
         {
-            ViewBag.ActivePage = MenuItem.Interviewers;
+            ViewBag.ActivePage = MenuItem.Summary;
             return this.View();
         }
 

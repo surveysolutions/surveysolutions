@@ -1,7 +1,5 @@
 ﻿using System.Web.Security;
-using Core.Supervisor.Views.Interviewer;
 using Main.Core.Utility;
-using Main.Core.View;
 using Questionnaire.Core.Web.Security;
 
 namespace Web.Supervisor.Controllers
@@ -81,7 +79,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.ActivePage = MenuItem.Administration;
+            ViewBag.ActivePage = MenuItem.Interviewers;
             return this.View();
         }
     }
