@@ -15,7 +15,7 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
-    using WB.Core.SharedKernel.Logger;
+    using WB.Core.GenericSubdomains.Logging;
 
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class UsersApiController : BaseApiController
@@ -26,7 +26,7 @@ namespace Web.Supervisor.Controllers
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
-            ILog logger,
+            ILogger logger,
             IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory)
             : base(commandService, provider, logger)
