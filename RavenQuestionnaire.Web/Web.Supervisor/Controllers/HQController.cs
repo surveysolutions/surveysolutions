@@ -51,7 +51,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView> interviewerStatisticsViewFactory;
         private readonly IViewFactory<InterviewerInputModel, InterviewerView> interviewerViewFactory;
 
-        public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILog logger,
+        public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticViewFactory,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,

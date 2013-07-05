@@ -20,10 +20,10 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IDataExport exporter;
         private readonly IBackupManager backupManager;
-        private readonly ILog logger;
+        private readonly ILogger logger;
 
         public ImportExportController(
-            ILog logger, IDataExport exporter, IBackupManager backupManager)
+            ILogger logger, IDataExport exporter, IBackupManager backupManager)
         {
             this.exporter = exporter;
             this.logger = logger;

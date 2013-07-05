@@ -22,7 +22,7 @@ namespace Web.Supervisor.Controllers
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
-            ILog logger,
+            ILogger logger,
             IViewFactory<InterviewersInputModel, InterviewersView> users)
             : base(commandService, provider, logger)
         {

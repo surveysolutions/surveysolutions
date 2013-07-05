@@ -10,7 +10,7 @@ namespace Ncqrs.Domain
 {
     internal static class AggregateRootExtensions
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static Type GetSnapshotInterfaceType(this Type aggregateType)
         {

@@ -93,7 +93,7 @@ namespace Web.Supervisor.Injections
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
 
-            this.Bind<ILog>().ToMethod(
+            this.Bind<ILogger>().ToMethod(
                 context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
 
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();

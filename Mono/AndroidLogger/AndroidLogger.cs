@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
         }
     }
 
-    public class AndroidLogger : ILog
+    public class AndroidLogger : ILogger
     {
         private const string Tag = "Android.WBCapi";
 

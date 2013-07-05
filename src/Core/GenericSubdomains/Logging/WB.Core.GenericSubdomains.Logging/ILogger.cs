@@ -2,7 +2,7 @@
 
 namespace WB.Core.GenericSubdomains.Logging
 {
-    public interface ILog
+    public interface ILogger
     {
         bool IsDebugEnabled { get; }
 

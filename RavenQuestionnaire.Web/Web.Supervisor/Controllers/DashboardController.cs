@@ -19,7 +19,7 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory;
 
-        public DashboardController(ICommandService commandService, IGlobalInfoProvider globalProvider, ILog logger, IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory)
+        public DashboardController(ICommandService commandService, IGlobalInfoProvider globalProvider, ILogger logger, IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory)
             : base(commandService, globalProvider, logger)
         {
             this.viewFactory = viewFactory;

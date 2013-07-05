@@ -42,7 +42,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;

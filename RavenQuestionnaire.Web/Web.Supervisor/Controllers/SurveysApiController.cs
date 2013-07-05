@@ -23,7 +23,7 @@ namespace Web.Supervisor.Controllers
         public SurveysApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
-            ILog logger,
+            ILogger logger,
             IViewFactory<SurveysInputModel, SurveysView> surveysViewFactory, IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory)
             : base(commandService, provider, logger)
         {

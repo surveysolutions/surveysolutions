@@ -32,7 +32,7 @@ namespace Web.Supervisor
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly ILog logger = LogManager.GetLogger(typeof(MvcApplication));
+        private readonly ILogger logger = LogManager.GetLogger(typeof(MvcApplication));
 
         /// <summary>
         /// The correctly initialized.

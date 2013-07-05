@@ -12,7 +12,7 @@ namespace Ncqrs.Domain.Storage
 {
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 

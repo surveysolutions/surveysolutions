@@ -34,7 +34,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     /// </summary>
     public class ConventionBasedEventHandlerMappingStrategy : IEventHandlerMappingStrategy
     {
-        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public Type EventBaseType { get; set; }
         public String MethodNameRegexPattern { get; set; }

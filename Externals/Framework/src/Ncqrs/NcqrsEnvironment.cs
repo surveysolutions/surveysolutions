@@ -22,7 +22,7 @@ namespace Ncqrs
     /// </remarks></summary>
     public static class NcqrsEnvironment
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         static NcqrsEnvironment()
         {

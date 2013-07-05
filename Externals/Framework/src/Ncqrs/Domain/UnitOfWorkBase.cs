@@ -12,7 +12,7 @@ namespace Ncqrs.Domain
     public abstract class UnitOfWorkBase : IUnitOfWorkContext
     {
         private readonly Guid _commandId;
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly Action<AggregateRoot, UncommittedEvent> _eventAppliedCallback;
 

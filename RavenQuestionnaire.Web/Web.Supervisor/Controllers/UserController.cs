@@ -26,7 +26,7 @@ namespace Web.Supervisor.Controllers
             IFormsAuthentication auth,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
-            ILog logger)
+            ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.authentication = auth;

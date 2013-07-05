@@ -33,7 +33,7 @@ namespace LoadTestDataGenerator
         {
             base.Load();
 
-            this.Bind<ILog>().ToMethod(
+            this.Bind<ILogger>().ToMethod(
                 context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
         }
 

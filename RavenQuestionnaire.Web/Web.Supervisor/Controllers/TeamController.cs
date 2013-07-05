@@ -25,7 +25,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory;
 
-        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger,
+        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserListViewInputModel, UserListView> userListViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
             : base(commandService, globalInfo, logger)
         {

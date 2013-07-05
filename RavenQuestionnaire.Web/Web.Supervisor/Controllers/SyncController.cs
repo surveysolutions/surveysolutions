@@ -18,11 +18,11 @@ namespace Web.Supervisor.Controllers
 {
     public class SyncController : AsyncController
     {
-        private readonly ILog logger;
+        private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
-        public SyncController(ISyncManager syncManager, ILog logger,
+        public SyncController(ISyncManager syncManager, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
             this.syncManager = syncManager;

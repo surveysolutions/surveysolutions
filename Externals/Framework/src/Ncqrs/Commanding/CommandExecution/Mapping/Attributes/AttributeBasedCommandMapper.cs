@@ -10,7 +10,7 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public class AttributeBasedCommandMapper : ICommandMapper
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly Dictionary<Type, object> _handlers = new Dictionary<Type, object>();
 
         public AttributeBasedCommandMapper()

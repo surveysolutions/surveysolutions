@@ -12,7 +12,7 @@ namespace Ncqrs.Eventing.Sourcing
 {
     public abstract class EventSource : IEventSource
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         [NonSerialized]
         private Guid _eventSourceId;

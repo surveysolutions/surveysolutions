@@ -24,7 +24,7 @@ namespace Web.Supervisor.Controllers
         public SummaryApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
-            ILog logger,
+            ILogger logger,
             IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory, IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
             : base(commandService, provider, logger)
         {

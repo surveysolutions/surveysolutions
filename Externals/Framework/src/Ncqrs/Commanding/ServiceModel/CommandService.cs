@@ -10,7 +10,7 @@ namespace Ncqrs.Commanding.ServiceModel
 {
     public class CommandService : ICommandService
     {
-        protected readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly Dictionary<Type, Action<ICommand>> _executors = new Dictionary<Type, Action<ICommand>>();
         private readonly List<ICommandServiceInterceptor> _interceptors = new List<ICommandServiceInterceptor>(0);

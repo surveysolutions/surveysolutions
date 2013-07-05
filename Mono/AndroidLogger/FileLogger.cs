@@ -8,7 +8,7 @@ using Exception = System.Exception;
 namespace WB.Core.SharedKernel.Utils.Logging
 {
 
-    public class FileLogger : ILog
+    public class FileLogger : ILogger
     {
 
         private static readonly string LogFilename = System.IO.Path.Combine(GetLogDirectory(), "WBCapi.log.txt");

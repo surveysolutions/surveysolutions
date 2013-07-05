@@ -11,7 +11,7 @@ namespace Ncqrs.Domain.Storage
 {
     public class DomainRepository : IDomainRepository
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 

@@ -14,9 +14,9 @@ namespace Web.Supervisor.Controllers
         protected readonly ICommandService CommandService;
         protected readonly IGlobalInfoProvider GlobalInfo;
 
-        protected readonly ILog Logger;
+        protected readonly ILogger Logger;
 
-        protected BaseController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+        protected BaseController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
         {
             this.CommandService = commandService;
             this.GlobalInfo = globalInfo;
