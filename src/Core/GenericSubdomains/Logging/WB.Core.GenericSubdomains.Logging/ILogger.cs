@@ -4,16 +4,6 @@ namespace WB.Core.GenericSubdomains.Logging
 {
     public interface ILogger
     {
-        bool IsDebugEnabled { get; }
-
-        bool IsErrorEnabled { get; }
-
-        bool IsFatalEnabled { get; }
-
-        bool IsInfoEnabled { get; }
-
-        bool IsWarnEnabled { get; }
-
         void Debug(object message);
 
         void Debug(object message, Exception exception);
