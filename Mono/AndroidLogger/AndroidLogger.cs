@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 Log.Debug(Tag, message.ToString());
         }
 
-        public void Debug(object message, Exception exception)
+        public void Debug(string message, Exception exception = null)
         {
             if (IsDebugEnabled)
                 Log.Debug(Tag, exception.ToThrowable(), message.ToString());
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             Log.Info(Tag, message.ToString());
         }
 
-        public void Info(object message, Exception exception)
+        public void Info(string message, Exception exception = null)
         {
             Log.Info(Tag, exception.ToThrowable(), message.ToString());
         }
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             Log.Warn(Tag, message.ToString());
         }
 
-        public void Warn(object message, Exception exception)
+        public void Warn(string message, Exception exception = null)
         {
             Log.Warn(Tag, exception.ToThrowable(), message.ToString());
         }
@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             Log.Error(Tag, message.ToString());
         }
 
-        public void Error(object message, Exception exception)
+        public void Error(string message, Exception exception = null)
         {
             Log.Error(Tag, exception.ToThrowable(), message.ToString());
         }
@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             Log.Wtf(Tag, message.ToString());
         }
 
-        public void Fatal(object message, Exception exception)
+        public void Fatal(string message, Exception exception = null)
         {
             Log.Wtf(Tag, exception.ToThrowable(), message.ToString());
         }

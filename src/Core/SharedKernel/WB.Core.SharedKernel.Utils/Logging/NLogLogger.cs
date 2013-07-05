@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
 
         }
 
-        public void Debug(object message, Exception exception)
+        public void Debug(string message, Exception exception = null)
         {
             if (IsDebugEnabled)
                 WriteInternal(LogLevel.Debug, message, exception);
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteInternal(LogLevel.Info, message, null);
         }
 
-        public void Info(object message, Exception exception)
+        public void Info(string message, Exception exception = null)
         {
             if (IsInfoEnabled)
                 WriteInternal(LogLevel.Info, message, exception);
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteInternal(LogLevel.Warn, message, null);
         }
 
-        public void Warn(object message, Exception exception)
+        public void Warn(string message, Exception exception = null)
         {
             if (IsWarnEnabled)
                 WriteInternal(LogLevel.Warn, message, exception);
@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteInternal(LogLevel.Error, message, null);
         }
 
-        public void Error(object message, Exception exception)
+        public void Error(string message, Exception exception = null)
         {
             if (IsErrorEnabled)
                 WriteInternal(LogLevel.Error, message, exception);
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteInternal(LogLevel.Fatal, message, null);
         }
 
-        public void Fatal(object message, Exception exception)
+        public void Fatal(string message, Exception exception = null)
         {
             if (IsFatalEnabled)
                 WriteInternal(LogLevel.Fatal, message, exception);

@@ -120,7 +120,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -143,7 +143,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -164,7 +164,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -243,7 +243,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
@@ -452,7 +452,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message },
                             JsonRequestBehavior.AllowGet);
             }

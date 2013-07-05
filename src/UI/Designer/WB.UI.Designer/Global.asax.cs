@@ -44,7 +44,7 @@ namespace WB.UI.Designer
 
             var ex = Server.GetLastError();
 
-            LogManager.GetLogger(this.GetType()).Error(ex);
+            LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", ex);
 
             var controller = new ErrorController();
             var routeData = new RouteData();

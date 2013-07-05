@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteLogMessage(Tag, LogMessageType.Debug, message.ToString());
         }
 
-        public void Debug(object message, Exception exception)
+        public void Debug(string message, Exception exception = null)
         {
             if (IsDebugEnabled)
                 WriteLogMessage(Tag, LogMessageType.Debug, exception.ToThrowable(), message.ToString());
@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteLogMessage(Tag, LogMessageType.Info, message.ToString());
         }
 
-        public void Info(object message, Exception exception)
+        public void Info(string message, Exception exception = null)
         {
             if (IsInfoEnabled)
                 WriteLogMessage(Tag, LogMessageType.Info, exception.ToThrowable(), message.ToString());
@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteLogMessage(Tag, LogMessageType.Warning, message.ToString());
         }
 
-        public void Warn(object message, Exception exception)
+        public void Warn(string message, Exception exception = null)
         {
             if (IsWarnEnabled)
                 WriteLogMessage(Tag, LogMessageType.Warning, exception.ToThrowable(), message.ToString());
@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             WriteLogMessage(Tag, LogMessageType.Error, message.ToString());
         }
 
-        public void Error(object message, Exception exception)
+        public void Error(string message, Exception exception = null)
         {
             if (IsErrorEnabled)
                 WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message.ToString());
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteLogMessage(Tag, LogMessageType.Fatal, message.ToString());
         }
 
-        public void Fatal(object message, Exception exception)
+        public void Fatal(string message, Exception exception = null)
         {
             if (IsFatalEnabled)
                 WriteLogMessage(Tag, LogMessageType.Fatal, exception.ToThrowable(), message.ToString());

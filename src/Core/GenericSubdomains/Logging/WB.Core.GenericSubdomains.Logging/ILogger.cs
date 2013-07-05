@@ -4,14 +4,14 @@ namespace WB.Core.GenericSubdomains.Logging
 {
     public interface ILogger
     {
-        void Debug(object message, Exception exception = null);
+        void Debug(string message, Exception exception = null);
 
-        void Error(object message, Exception exception = null);
+        void Error(string message, Exception exception = null);
 
-        void Fatal(object message, Exception exception = null);
+        void Fatal(string message, Exception exception = null);
 
-        void Info(object message, Exception exception = null);
+        void Info(string message, Exception exception = null);
 
-        void Warn(object message, Exception exception = null);
+        void Warn(string message, Exception exception = null);
     }
 }
