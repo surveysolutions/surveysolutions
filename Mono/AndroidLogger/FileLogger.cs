@@ -1,14 +1,14 @@
 using System;
 using System.IO;
 using Java.Lang;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 
 namespace WB.Core.SharedKernel.Utils.Logging
 {
 
-    public class FileLogger : ILog
+    public class FileLogger : ILogger
     {
 
         private static readonly string LogFilename = System.IO.Path.Combine(GetLogDirectory(), "WBCapi.log.txt");

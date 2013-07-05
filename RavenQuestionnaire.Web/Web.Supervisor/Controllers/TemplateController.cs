@@ -1,4 +1,5 @@
 ﻿using Main.Core.Commands.Questionnaire;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -15,8 +16,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
 
     using Web.Supervisor.DesignerPublicService;
@@ -43,7 +42,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;

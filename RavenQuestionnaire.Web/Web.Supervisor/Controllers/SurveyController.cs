@@ -1,4 +1,5 @@
 ﻿using Core.Supervisor.Views;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Web.Supervisor.Controllers
@@ -25,9 +26,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
@@ -48,7 +46,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView> interviewerStatisticsViewFactory;
         private readonly IViewFactory<InterviewerInputModel, InterviewerView> interviewerViewFactory;
 
-        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILog logger,
+        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticViewFactory,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<IndexInputModel, IndexView> indexViewFactory,

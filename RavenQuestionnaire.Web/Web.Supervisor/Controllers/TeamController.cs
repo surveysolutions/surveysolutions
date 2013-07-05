@@ -1,4 +1,5 @@
 ﻿using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -15,16 +16,13 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
 
     public class TeamController : BaseController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
 
-        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger,
+        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserListViewInputModel, UserListView> userListViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
             : base(commandService, globalInfo, logger)
         {

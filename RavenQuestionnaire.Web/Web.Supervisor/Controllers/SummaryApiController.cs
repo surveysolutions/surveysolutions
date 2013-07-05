@@ -1,4 +1,5 @@
 ﻿using Core.Supervisor.Views;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -12,9 +13,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
 
     [Authorize(Roles = "Headquarter, Supervisor")]
@@ -26,7 +24,7 @@ namespace Web.Supervisor.Controllers
         public SummaryApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
-            ILog logger,
+            ILogger logger,
             IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory, IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
             : base(commandService, provider, logger)
         {

@@ -5,14 +5,14 @@ using System.Reflection;
 
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Eventing.Sourcing
 {
     public abstract class EventSource : IEventSource
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         [NonSerialized]
         private Guid _eventSourceId;

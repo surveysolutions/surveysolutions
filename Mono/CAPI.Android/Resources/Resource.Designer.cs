@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: Android.Runtime.ResourceDesignerAttribute("CAPI.Android.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("CAPI.Android.Resource", IsApplication=true)]
 
 namespace CAPI.Android
 {
@@ -19,9 +19,9 @@ namespace CAPI.Android
 	public partial class Resource
 	{
 		
-		Resource()
+		static Resource()
 		{
-			global::Android.Runtime.ResourceIdManager.UpdateIdValues ();
+			global::Android.Runtime.ResourceIdManager.UpdateIdValues();
 		}
 		
 		public static void UpdateIdValues()
@@ -42,6 +42,11 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0x7f010001
 			public const int MvxItemTemplate = 2130771969;
+			
+			static Attribute()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
 			
 			private Attribute()
 			{
@@ -104,6 +109,11 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0x7f020011
 			public const int SurveyTableHeader = 2130837521;
+			
+			static Drawable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
 			
 			private Drawable()
 			{
@@ -302,6 +312,11 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04001d
 			public const int vpContent = 2130968605;
 			
+			static Id()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
 			private Id()
 			{
 			}
@@ -367,6 +382,11 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f030012
 			public const int SyncLogin = 2130903058;
 			
+			static Layout()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
 			private Layout()
 			{
 			}
@@ -377,6 +397,11 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0x7f050000
 			public const int ApplicationName = 2131034112;
+			
+			static String()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
 			
 			private String()
 			{
@@ -407,6 +432,11 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0
 			public const int MvxHttpImageView_MvxHttpSource = 0;
+			
+			static Styleable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
 			
 			private Styleable()
 			{

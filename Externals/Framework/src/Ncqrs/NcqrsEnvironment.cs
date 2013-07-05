@@ -11,7 +11,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Domain.Storage;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs
@@ -22,7 +22,7 @@ namespace Ncqrs
     /// </remarks></summary>
     public static class NcqrsEnvironment
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         static NcqrsEnvironment()
         {

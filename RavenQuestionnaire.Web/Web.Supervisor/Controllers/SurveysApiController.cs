@@ -1,5 +1,6 @@
 ﻿using Core.Supervisor.Views;
 using Core.Supervisor.Views.Survey;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -11,9 +12,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
 
     [Authorize(Roles = "Headquarter, Supervisor")]
@@ -25,7 +23,7 @@ namespace Web.Supervisor.Controllers
         public SurveysApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
-            ILog logger,
+            ILogger logger,
             IViewFactory<SurveysInputModel, SurveysView> surveysViewFactory, IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory)
             : base(commandService, provider, logger)
         {

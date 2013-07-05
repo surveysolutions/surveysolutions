@@ -1,4 +1,6 @@
-﻿namespace Web.Supervisor.Controllers
+﻿using WB.Core.GenericSubdomains.Logging;
+
+namespace Web.Supervisor.Controllers
 {
     using System.Web.Http;
 
@@ -6,16 +8,14 @@
 
     using Questionnaire.Core.Web.Helpers;
 
-    using WB.Core.SharedKernel.Logger;
-
     public abstract class BaseApiController : ApiController
     {
         protected readonly ICommandService CommandService;
         protected readonly IGlobalInfoProvider GlobalInfo;
 
-        protected readonly ILog Logger;
+        protected readonly ILogger Logger;
 
-        protected BaseApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+        protected BaseApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
         {
             this.CommandService = commandService;
             this.GlobalInfo = globalInfo;

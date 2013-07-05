@@ -1,7 +1,7 @@
 ﻿using Android.Util;
 
 using Java.Lang;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using Exception = System.Exception;
 
 namespace WB.Core.SharedKernel.Utils.Logging
@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
         }
     }
 
-    public class AndroidLogger : ILog
+    public class AndroidLogger : ILogger
     {
         private const string Tag = "Android.WBCapi";
 

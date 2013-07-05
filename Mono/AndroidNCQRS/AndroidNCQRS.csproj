@@ -493,6 +493,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\IUniqueIdentifierGenerator.cs">
       <Link>IUniqueIdentifierGenerator.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\LoggerExtensions.cs">
+      <Link>LoggerExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\NamespaceDoc.cs">
       <Link>NamespaceDoc.cs</Link>
     </Compile>
@@ -509,9 +512,9 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
       <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
