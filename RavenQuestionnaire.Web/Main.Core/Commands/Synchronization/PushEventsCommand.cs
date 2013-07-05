@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PushEventsCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The push events command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Synchronization
+﻿namespace Main.Core.Commands.Synchronization
 {
     using System;
     using System.Collections.Generic;

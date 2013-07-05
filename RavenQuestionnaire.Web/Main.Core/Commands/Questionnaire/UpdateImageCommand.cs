@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateImageCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The update image command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire
+﻿namespace Main.Core.Commands.Questionnaire
 {
     using System;
 

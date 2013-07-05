@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerStatisticsFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewers factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

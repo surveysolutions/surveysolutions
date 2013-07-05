@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileStoreDenormalizer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Class handles file changes events.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.IO;
 using Main.Core.Documents;

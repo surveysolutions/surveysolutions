@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireAR.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   CompleteQuestionnaire Aggregate Root.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Ncqrs.Domain;
+﻿using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Main.Core.Domain
@@ -86,7 +77,8 @@ namespace Main.Core.Domain
         ///   The questionnaire.
         /// </param>
         /// <param name="creator"></param>
-        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire, UserLight creator)
+        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
+            QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -359,7 +351,7 @@ namespace Main.Core.Domain
             var resultQuestionsStatus = new Dictionary<string, bool?>();
             var resultGroupsStatus = new Dictionary<string, bool?>();
 
-            var collector = new CompleteQuestionnaireConditionExecuteCollector(this.doc);
+            var collector = ConditionExecuterFactory.GetConditionExecuter(this.doc);
 
             collector.ExecuteConditionAfterAnswer(question, resultQuestionsStatus, resultGroupsStatus);
 
@@ -374,7 +366,7 @@ namespace Main.Core.Domain
                         });
             }
         }
-        
+
         #endregion
 
         #region Methods
@@ -463,7 +455,7 @@ namespace Main.Core.Domain
                     var resultQuestionsStatus = new Dictionary<string, bool?>();
                     var resultGroupsStatus = new Dictionary<string, bool?>();
 
-                    var collector = new CompleteQuestionnaireConditionExecuteCollector(this.doc);
+                    var collector = ConditionExecuterFactory.GetConditionExecuter(this.doc);
                     
                     ////iterate over all triggers for question
                     foreach (var trigger in triggers)

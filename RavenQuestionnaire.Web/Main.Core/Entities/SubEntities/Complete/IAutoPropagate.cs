@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAutoPropagate.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The AutoPropagate interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.Entities.Observers;
 
 namespace Main.Core.Entities.SubEntities.Complete

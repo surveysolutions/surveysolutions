@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerStatisticsInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewers input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities;

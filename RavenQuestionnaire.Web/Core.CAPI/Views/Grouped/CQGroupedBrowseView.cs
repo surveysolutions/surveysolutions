@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQGroupedBrowseView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The cq grouped browse view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Collections.Generic;
 
 namespace Core.CAPI.Views.Grouped

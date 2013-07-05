@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GroupWithRoutTests.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete;
+﻿using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
 using NUnit.Framework;
 

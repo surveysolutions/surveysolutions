@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Global.asax.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The mvc application.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.CAPI
+﻿namespace Web.CAPI
 {
     using System;
     using System.Web;

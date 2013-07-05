@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BundleConfig.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.App_Start
+﻿namespace Web.Supervisor.App_Start
 {
     using System.Web.Optimization;
 

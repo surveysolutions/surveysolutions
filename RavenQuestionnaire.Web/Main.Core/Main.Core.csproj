@@ -610,8 +610,14 @@
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollector.cs" />
+    <Compile Include="ExpressionExecutors\ConditionExecuterFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExpressionExecutors\ExpressionDependencyBuilder.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
+    <Compile Include="ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ICommandListSupplier.cs" />

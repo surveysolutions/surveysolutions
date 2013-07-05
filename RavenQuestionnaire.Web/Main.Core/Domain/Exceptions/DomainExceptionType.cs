@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DomainExceptionType.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The domain exception type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     /// <summary>
     /// The domain exception type.

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumericQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The numeric question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Question
+﻿namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
     using System.Collections.Generic;

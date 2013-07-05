@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewHelpers.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ViewHelpers type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Utils
+﻿namespace Web.Supervisor.Utils
 {
     using System;
     using System.Collections.Generic;

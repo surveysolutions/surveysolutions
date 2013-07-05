@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireConditionExecuteCollectorTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire condition execute collector test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Tests.ExpressionExecutors
+﻿namespace Main.Core.Tests.ExpressionExecutors
 {
     using System;
     using System.Collections.Generic;

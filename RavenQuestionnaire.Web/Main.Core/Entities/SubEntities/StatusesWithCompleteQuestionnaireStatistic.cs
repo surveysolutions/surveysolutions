@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusesWithCompleteQuestionnaireStatistic.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The statuses with complete questionnaire statistic.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Entities.SubEntities
 {
     /// <summary>

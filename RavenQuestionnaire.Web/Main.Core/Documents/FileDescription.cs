@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileDescription.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The file description.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents

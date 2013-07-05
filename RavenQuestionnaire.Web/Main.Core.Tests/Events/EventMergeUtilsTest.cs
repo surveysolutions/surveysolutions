@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventMergeUtilsTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The event merge utils test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.Events
+﻿namespace RavenQuestionnaire.Core.Tests.Events
 {
     using System;
     using System.Collections.Generic;

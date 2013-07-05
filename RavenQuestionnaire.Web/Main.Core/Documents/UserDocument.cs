@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the UserDocument type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;

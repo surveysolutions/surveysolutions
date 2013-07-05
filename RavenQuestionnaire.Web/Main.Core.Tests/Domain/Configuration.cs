@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Configuration.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Don't do this! Instead, use an IoC container and one of the extension projects to configure your environment
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Tests.Domain
+﻿namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Linq;

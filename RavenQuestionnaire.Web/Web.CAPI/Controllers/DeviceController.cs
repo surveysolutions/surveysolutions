@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeviceController.cs" company="WorldBank">
-//   2012
-// </copyright>
-// <summary>
-//   The device controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Web.Mvc;
 
 using Main.Core.View.Device;

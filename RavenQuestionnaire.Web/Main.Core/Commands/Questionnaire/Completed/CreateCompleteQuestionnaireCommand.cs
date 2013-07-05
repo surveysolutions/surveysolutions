@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateCompleteQuestionnaireCommand.cs" company="">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the CreateCompleteQuestionnaireCommand type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Commands.Questionnaire.Completed
+﻿namespace Main.Core.Commands.Questionnaire.Completed
 {
     using System;
 

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewersInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewers input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Interviewer
 {
     using System;

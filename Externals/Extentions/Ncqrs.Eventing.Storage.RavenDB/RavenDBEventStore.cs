@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RavenDBEventStore.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The raven db event store.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Net;
+﻿using System.Net;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 
 using Raven.Client.Indexes;

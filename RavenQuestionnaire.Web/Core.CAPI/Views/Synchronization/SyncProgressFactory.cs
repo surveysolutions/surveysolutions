@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProgressFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The sync progress factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;

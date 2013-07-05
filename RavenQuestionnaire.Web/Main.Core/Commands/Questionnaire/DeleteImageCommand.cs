@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeleteImageCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The delete image command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire
+﻿namespace Main.Core.Commands.Questionnaire
 {
     using System;
 

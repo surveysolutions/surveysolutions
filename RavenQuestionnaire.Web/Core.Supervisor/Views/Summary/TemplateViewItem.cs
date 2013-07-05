@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TemplateViewItem.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Summary
+﻿namespace Core.Supervisor.Views.Summary
 {
     using System;
 

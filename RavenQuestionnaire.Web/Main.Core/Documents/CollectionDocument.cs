@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CollectionDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents

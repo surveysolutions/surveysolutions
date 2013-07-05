@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireValidationExecutorTests.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire validation executor tests.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
+﻿namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
     using System.Collections.Generic;
 

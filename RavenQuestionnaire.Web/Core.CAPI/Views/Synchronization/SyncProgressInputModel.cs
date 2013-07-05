@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProgressInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The sync progress input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Core.CAPI.Views.Synchronization

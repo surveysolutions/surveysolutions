@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICustomSerializable.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CustomSerializable interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.Synchronization
+﻿namespace SynchronizationMessages.Synchronization
 {
     using System.IO;
 

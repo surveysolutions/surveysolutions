@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RavenFileStorageService.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The raven file storage service.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.IO;
 using Kaliko.ImageLibrary;
 using Kaliko.ImageLibrary.Filters;

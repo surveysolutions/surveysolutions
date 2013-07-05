@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScreenNavigation.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The screen navigation.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 

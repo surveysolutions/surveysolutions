@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DateTimeCompleteQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The date time complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Threading;
+﻿using System.Threading;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {

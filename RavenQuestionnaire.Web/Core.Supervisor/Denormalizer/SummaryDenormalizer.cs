@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SupervisorStatisticsDenormalizer.cs" company="The World Bank">
-//   Complete Questionnaire Browse Item Denormalizer
-// </copyright>
-// <summary>
-//   The complete questionnaire browse item denormalizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Denormalizer
 {
     using System;

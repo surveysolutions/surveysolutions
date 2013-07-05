@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompositeView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The CompositeView interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 

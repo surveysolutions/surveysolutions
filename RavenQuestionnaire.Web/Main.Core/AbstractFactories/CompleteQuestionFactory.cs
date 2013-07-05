@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.AbstractFactories
+﻿namespace Main.Core.AbstractFactories
 {
     using System;
     using System.Collections.Generic;

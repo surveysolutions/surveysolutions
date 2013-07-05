@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserListViewInputModel.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.User
+﻿namespace Core.Supervisor.Views.User
 {
     using System.Collections.Generic;
 

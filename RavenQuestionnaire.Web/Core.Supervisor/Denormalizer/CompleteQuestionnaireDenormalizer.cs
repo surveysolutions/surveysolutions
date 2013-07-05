@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDenormalizer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire denormalizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Extensions;

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the AbstractDocument type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Documents
+﻿namespace Main.Core.Documents
 {
     /// <summary>
     /// The abstract document.

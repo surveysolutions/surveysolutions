@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ErrorController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the ErrorController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.CAPI.Controllers
+﻿namespace Web.CAPI.Controllers
 {
     using System.Net;
     using System.Web.Mvc;

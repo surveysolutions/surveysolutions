@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="PropagatedGroupHeaderItem.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 using System;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
