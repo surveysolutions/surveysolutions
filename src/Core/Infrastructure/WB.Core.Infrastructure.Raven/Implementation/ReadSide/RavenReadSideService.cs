@@ -12,9 +12,8 @@ using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
-
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Logger;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {
@@ -34,7 +33,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventBus eventBus;
         private readonly DocumentStore ravenStore;
-        private readonly ILog logger;
+        private readonly ILogger logger;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
 
         static RavenReadSideService()
@@ -42,7 +41,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;

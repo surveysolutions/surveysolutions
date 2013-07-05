@@ -75,9 +75,9 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
