@@ -493,6 +493,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\IUniqueIdentifierGenerator.cs">
       <Link>IUniqueIdentifierGenerator.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs\LoggerExtensions.cs">
+      <Link>LoggerExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs\NamespaceDoc.cs">
       <Link>NamespaceDoc.cs</Link>
     </Compile>

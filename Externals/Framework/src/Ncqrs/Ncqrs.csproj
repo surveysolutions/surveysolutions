@@ -238,6 +238,7 @@
     <Compile Include="Eventing\Storage\StoredEvent.cs" />
     <Compile Include="IClock.cs" />
     <Compile Include="InternalExtensions.cs" />
+    <Compile Include="LoggerExtensions.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="NcqrsEnvironment.cs" />
     <Compile Include="Config\IEnvironmentConfiguration.cs" />
