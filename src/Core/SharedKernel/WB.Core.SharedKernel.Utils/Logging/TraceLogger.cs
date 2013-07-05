@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernel.Utils.Logging
 {
-    public class TraceLogger : ILog
+    public class TraceLogger : ILogger
     {
         private TraceSwitch _switch = new TraceSwitch("WBCapi", "WB Capi trace switch");
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernel.Utils.Logging
 {
@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
         private static readonly ReaderWriterLockSlim _cacheLocker = new ReaderWriterLockSlim();
 
         //private static bool _isLog4NetAvailable = false;
-        private static Dictionary<Type, ILog> _loggerCache = new Dictionary<Type, ILog>();
+        private static Dictionary<Type, ILogger> _loggerCache = new Dictionary<Type, ILogger>();
 
         static LogManager()
         {
@@ -28,9 +28,9 @@ namespace WB.Core.SharedKernel.Utils.Logging
             }*/
         }
 
-        public static ILog GetLogger(Type type)
+        public static ILogger GetLogger(Type type)
         {
-            ILog logger;
+            ILogger logger;
             _cacheLocker.EnterReadLock();
 
             try
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             }
         }
 
-        private static ILog CreateLoggerForType(Type type)
+        private static ILogger CreateLoggerForType(Type type)
         {
             return new NLogLogger(global::NLog.LogManager.GetLogger(type.FullName));
 
