@@ -66,7 +66,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Shared.Web", "UI\Shar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Supervisor.Tests", "..\RavenQuestionnaire.Web\Core.Supervisor.Tests\Core.Supervisor.Tests.csproj", "{D9B00954-F40B-4B86-A0A7-8CAA7B69F211}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Logger", "Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj", "{AE5B9E45-0758-47AA-AFB4-E2795F09F850}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Logging", "Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj", "{AE5B9E45-0758-47AA-AFB4-E2795F09F850}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Utils", "Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj", "{39AEBC09-5A81-47C8-B68D-4984199AE1FE}"
 EndProject
