@@ -1,6 +1,8 @@
 ﻿using System;
 using Core.Supervisor.Views.Interviewer;
+using Core.Supervisor.Views.User;
 using Main.Core.Commands.User;
+using Main.Core.Entities.SubEntities;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -18,45 +20,72 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class UsersApiController : BaseApiController
     {
-        private readonly IViewFactory<InterviewersInputModel, InterviewersView> users;
+        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
+        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
 
         public UsersApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILog logger,
-            IViewFactory<InterviewersInputModel, InterviewersView> users)
+            IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
+            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory)
             : base(commandService, provider, logger)
         {
-            this.users = users;
+            this.interviewersFactory = interviewersFactory;
+            this.supervisorsFactory = supervisorsFactory;
         }
 
         public InterviewersView Interviewers(UsersListViewModel data)
         {
-            var input = new InterviewersInputModel(this.GlobalInfo.GetCurrentUser().Id)
-                            {
-                                Orders
-                                    =
-                                    data
-                                    .SortOrder
-                            };
+            // Headquarter can view interviewers by any supervisor
+            // Supervisor can view only their interviewers
+            Guid? viewerId = this.GlobalInfo.IsHeadquarter
+                ? data.Request.SupervisorId
+                : this.GlobalInfo.GetCurrentUser().Id;
+            if (viewerId != null)
+            {
+                var input = new InterviewersInputModel(viewerId.Value)
+                {
+                    Orders
+                        =
+                        data
+                            .SortOrder
+                };
+                if (data.Pager != null)
+                {
+                    input.Page = data.Pager.Page;
+                    input.PageSize = data.Pager.PageSize;
+                }
+
+                return this.interviewersFactory.Load(input);
+            }
+
+            return null;
+        }
+
+        public UserListView Supervisors(UsersListViewModel data)
+        {
+            var input = new UserListViewInputModel
+            {
+                Role = UserRoles.Supervisor,
+                Orders
+                    =
+                    data
+                        .SortOrder
+            };
+
             if (data.Pager != null)
             {
                 input.Page = data.Pager.Page;
                 input.PageSize = data.Pager.PageSize;
             }
 
-            return this.users.Load(input);
+            return this.supervisorsFactory.Load(input);
         }
 
         /// <summary>
         /// Lock user
         /// </summary>
-        /// <param name="id">
-        /// Use public key
-        /// </param>
-        /// <returns>
-        /// Redirects to index view if everything is ok
-        /// </returns>
         public LockResult Lock(LockRequest request)
         {
             if (request.IsLocked)

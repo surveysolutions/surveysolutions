@@ -14,13 +14,14 @@
             model['Summary'] = new SurveyListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SurveysApi", action = "Users" })');
 
             model.Summary.SelectedUser.subscribe(function () {
-                model.ListView.search();
+                model.load();
             });
             model.ListView.GetFilterMethod = function () {
                 return { UserId: model.Summary.SelectedUser };
             };
 
             ko.applyBindings(model);
+            model.load();
         });
     </script>
 }

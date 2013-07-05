@@ -38,7 +38,7 @@
                                 <li class="@(page == MenuItem.Docs ? "active" : "")">
                                     @Html.ActionLink("Documents", "Documents", "HQ")</li>
                             <li class="@(page == MenuItem.Teams ? "active" : "")">
-                                @Html.ActionLink("Teams", "Index", "Team")
+                                @Html.ActionLink("Supervisors", "Index", "Team")
                             </li>
                         </ul>
                         }
@@ -57,7 +57,7 @@
                                     <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
                                         <i class="icon-filter"></i>by Statuses</a> </li>
                                 </ul>
-                                <li class="@(page == MenuItem.Interviewers ? "active" : "")">@Html.ActionLink("Interviewers", "Index", "User")</li>
+                                <li class="@(page == MenuItem.Teams ? "active" : "")">@Html.ActionLink("Interviewers", "Interviewers", "Team")</li>
                             <li class="@(page == MenuItem.Docs ? "active" : "")">
                                 @Html.ActionLink("Documents", "Documents", "Survey")</li>
                         </ul>
