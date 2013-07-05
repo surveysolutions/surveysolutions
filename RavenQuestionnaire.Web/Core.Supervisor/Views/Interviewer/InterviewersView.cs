@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SummaryView.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Interviewer
+﻿namespace Core.Supervisor.Views.Interviewer
 {
     using System.Collections.Generic;
 
