@@ -5,8 +5,6 @@
     using Ncqrs.Commanding.ServiceModel;
     using Ninject.Modules;
     using Ninject.Web.Mvc.FilterBindingSyntax;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
     
     using WB.UI.Designer.Exceptions;

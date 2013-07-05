@@ -5,14 +5,13 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Code.Helpers;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests
 {
-    using WB.Core.SharedKernel.Logger;
-
     [TestFixture]
     public class CommandControllerTests
     {
