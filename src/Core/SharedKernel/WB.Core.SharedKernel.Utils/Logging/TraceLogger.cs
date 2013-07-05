@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 Trace.TraceInformation(message.ToString());
         }
 
-        public void Debug(object message, Exception exception)
+        public void Debug(string message, Exception exception = null)
         {
             if(_switch.TraceVerbose)
                 Trace.TraceInformation(message.ToString());
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 Trace.TraceInformation(message.ToString());
         }
 
-        public void Info(object message, Exception exception)
+        public void Info(string message, Exception exception = null)
         {
             if(_switch.TraceInfo)
                 Trace.TraceInformation(message.ToString());  
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 Trace.TraceWarning(message.ToString());   
         }
 
-        public void Warn(object message, Exception exception)
+        public void Warn(string message, Exception exception = null)
         {
             if(_switch.TraceWarning)
                 Trace.TraceWarning(message.ToString());  
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 Trace.TraceError(message.ToString());
         }
 
-        public void Error(object message, Exception exception)
+        public void Error(string message, Exception exception = null)
         {
             if(_switch.TraceError)
                 Trace.TraceError(message.ToString());
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             Error(message);
         }
 
-        public void Fatal(object message, Exception exception)
+        public void Fatal(string message, Exception exception = null)
         {
             Error(message, exception);
         }

@@ -44,7 +44,7 @@
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    LogManager.GetLogger(this.GetType()).Error(e);
+                    LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", e);
                     error =
                         string.Format(
                             "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",
