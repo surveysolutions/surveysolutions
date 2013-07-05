@@ -142,17 +142,10 @@ namespace Web.Supervisor.Controllers
             return this.Json(new { status = "ok" });
         }
         
-        public ActionResult Index(Guid? interviewerId)
+        public ActionResult Index()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            var model =
-                this.indexViewFactory.Load(new IndexInputModel()
-                    {
-                        InterviewerId = interviewerId,
-                        ViewerId = GlobalInfo.GetCurrentUser().Id
-                    });
-            ViewBag.GraphData = new InterviewerChartModel(model);
-            return this.View(model);
+            return this.View();
         }
 
         public ActionResult GotoBrowser()
@@ -433,14 +426,10 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
-        [Authorize]
         public ActionResult Summary()
         {
-            ViewBag.ActivePage = MenuItem.Interviewers;
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.summaryViewFactory.Load(new SummaryInputModel(user.Id, ViewerStatus.Supervisor));
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.View(model);
+            ViewBag.ActivePage = MenuItem.Summary;
+            return this.View();
         }
 
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
