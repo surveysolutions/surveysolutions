@@ -4,7 +4,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernel.Utils.Logging
 {
-    public class NLogLogger : ILog
+    public class NLogLogger : ILogger
     {
         private readonly global::NLog.Logger _log;
 

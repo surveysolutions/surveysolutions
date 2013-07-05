@@ -81,7 +81,7 @@ namespace WB.UI.Designer.Tests
         }
 
         private CommandController CreateCommandController(ICommandService commandService = null, ICommandDeserializer commandDeserializer = null, 
-            IExpressionReplacer expressionReplacer = null, ILog logReplacer = null)
+            IExpressionReplacer expressionReplacer = null, ILogger logReplacer = null)
         {
             return new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
