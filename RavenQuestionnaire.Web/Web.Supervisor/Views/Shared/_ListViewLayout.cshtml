@@ -8,10 +8,10 @@
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
 }
-
-@RenderSection("header", false)
-
 <div class="container-fluid">
+    <div class="row-fluid">
+        @RenderSection("header", false)        
+    </div>
     <div class="row-fluid">
         <div class="span3">
             <div class="well">
@@ -19,6 +19,7 @@
             </div>
         </div>
         <div class="span9">
+            @RenderSection("gridnavigation", false)
             <div id="list">
                 <!-- ko ifnot:ListView.IsPageLoaded()  -->
                 <p class="text-center">

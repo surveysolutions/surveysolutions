@@ -1,6 +1,8 @@
-﻿namespace Core.Supervisor.Views.User
+﻿using System;
+using Core.Supervisor.Views.Interviewer;
+
+namespace Core.Supervisor.Views.User
 {
-    using System;
     using System.Collections.Generic;
 
     using Main.Core.Entities.SubEntities;
@@ -8,39 +10,42 @@
     /// <summary>
     ///     The user list item.
     /// </summary>
-    public class UserListItem
+    public class UserListItem : InterviewersItem
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserListItem"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="email">
+        /// The email.
+        /// </param>
+        /// <param name="creationDate">
+        /// The creation date.
+        /// </param>
+        /// <param name="isLocked">
+        /// The is locked.
+        /// </param>
+        public UserListItem(Guid id, string name, string email, DateTime creationDate, bool isLocked, List<UserRoles> roles)
+            :base(id, name, email, creationDate, isLocked)
+        {
+            this.Roles = roles;
+        }
+
+        #endregion
+
         #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
-        public Guid PublicKey { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the creation date.
-        /// </summary>
-        public DateTime CreationDate { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the email.
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether is locked.
-        /// </summary>
-        public bool IsLocked { get; set; }
 
         /// <summary>
         ///     Gets or sets the roles.
         /// </summary>
         public List<UserRoles> Roles { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the user name.
-        /// </summary>
-        public string UserName { get; set; }
 
         #endregion
     }

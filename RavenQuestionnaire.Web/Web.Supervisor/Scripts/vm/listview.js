@@ -71,6 +71,4 @@
 
     self.onBeforeRequest = function () {
     };
-
-    self.search();
 };

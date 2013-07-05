@@ -68,17 +68,5 @@ namespace Web.Supervisor.Controllers
 
             return this.View(user);
         }
-
-        /// <summary>
-        /// User index page. Shows grid with supervisor's statistics grouped by interviewers
-        /// </summary>
-        /// <returns>
-        /// Index view
-        /// </returns>
-        public ActionResult Index()
-        {
-            ViewBag.ActivePage = MenuItem.Interviewers;
-            return this.View();
-        }
     }
 }

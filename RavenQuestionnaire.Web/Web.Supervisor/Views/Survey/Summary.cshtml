@@ -14,13 +14,14 @@
             model['Summary'] = new SummaryListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SummaryApi", action = "Templates" })');
 
             model.Summary.SelectedTemplate.subscribe(function () {
-                model.ListView.search();
+                model.load();
             });
             model.ListView.GetFilterMethod = function () {
                 return { TemplateId: model.Summary.SelectedTemplate };
             };
 
             ko.applyBindings(model);
+            model.load();
         });
     </script>
 }
