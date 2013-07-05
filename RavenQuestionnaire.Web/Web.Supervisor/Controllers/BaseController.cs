@@ -1,13 +1,12 @@
-﻿namespace Web.Supervisor.Controllers
+﻿using WB.Core.GenericSubdomains.Logging;
+
+namespace Web.Supervisor.Controllers
 {
     using System.Web.Mvc;
 
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Utils;
 
     public abstract class BaseController : Controller

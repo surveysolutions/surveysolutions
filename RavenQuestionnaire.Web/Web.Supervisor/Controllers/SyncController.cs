@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.User;
 using Newtonsoft.Json;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Exceptions;

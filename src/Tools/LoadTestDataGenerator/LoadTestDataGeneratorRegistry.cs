@@ -5,9 +5,9 @@ using System.Reflection;
 using Core.Supervisor.Denormalizer;
 using Main.Core;
 using Raven.Client.Document;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.SharedKernel.Logger;
 using WB.Core.SharedKernel.Utils.Logging;
 using WB.Core.Synchronization;
 

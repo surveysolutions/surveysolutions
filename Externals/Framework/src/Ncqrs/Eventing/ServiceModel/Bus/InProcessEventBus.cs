@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -7,8 +7,7 @@ using System.Reflection;
 #if !MONODROID
 using System.Transactions;
 #endif
-
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus

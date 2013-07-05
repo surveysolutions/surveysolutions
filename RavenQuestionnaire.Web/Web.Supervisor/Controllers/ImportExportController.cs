@@ -1,5 +1,6 @@
 
 using SynchronizationMessages.Export;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Synchronization;
 namespace Web.Supervisor.Controllers
 {
@@ -12,7 +13,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Export;
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
-    using WB.Core.SharedKernel.Logger;
 
 
     [NoAsyncTimeout]

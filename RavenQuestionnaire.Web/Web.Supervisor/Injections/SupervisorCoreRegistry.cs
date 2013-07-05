@@ -1,6 +1,7 @@
 using System.IO;
 using System.Web.Configuration;
 using Core.Supervisor.Views.Index;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
@@ -27,8 +28,6 @@ namespace Web.Supervisor.Injections
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
     
     using Web.Supervisor.Filters;

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Java.Lang;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 

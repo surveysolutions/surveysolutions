@@ -1,4 +1,5 @@
 ﻿using Core.Supervisor.Views;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Web.Supervisor.Controllers
@@ -25,9 +26,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 

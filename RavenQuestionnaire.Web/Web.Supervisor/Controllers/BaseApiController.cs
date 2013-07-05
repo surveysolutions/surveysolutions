@@ -1,12 +1,12 @@
-﻿namespace Web.Supervisor.Controllers
+﻿using WB.Core.GenericSubdomains.Logging;
+
+namespace Web.Supervisor.Controllers
 {
     using System.Web.Http;
 
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
 
     public abstract class BaseApiController : ApiController
     {

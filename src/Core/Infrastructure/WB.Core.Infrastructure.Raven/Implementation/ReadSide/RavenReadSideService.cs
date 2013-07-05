@@ -12,9 +12,8 @@ using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
-
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Logger;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {

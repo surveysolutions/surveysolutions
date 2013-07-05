@@ -1,7 +1,7 @@
 ﻿using Android.Util;
 
 using Java.Lang;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using Exception = System.Exception;
 
 namespace WB.Core.SharedKernel.Utils.Logging

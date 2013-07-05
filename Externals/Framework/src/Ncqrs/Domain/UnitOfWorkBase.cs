@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading;
 
 using Ncqrs.Eventing;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Domain

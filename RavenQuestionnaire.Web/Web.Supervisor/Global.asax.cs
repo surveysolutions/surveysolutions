@@ -1,4 +1,5 @@
 ﻿using NConfig;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor
 {
@@ -8,8 +9,6 @@ namespace Web.Supervisor
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Logging;
 
     using Web.Supervisor.App_Start;

@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.Supervisor.Views.Interviewer;
 using Main.Core.Commands.User;
+using WB.Core.GenericSubdomains.Logging;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -12,8 +13,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
 
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class UsersApiController : BaseApiController

@@ -1,6 +1,7 @@
 ﻿using System.Web.Security;
 using Main.Core.Utility;
 using Questionnaire.Core.Web.Security;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -11,9 +12,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Entities.SubEntities;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
 
     /// <summary>

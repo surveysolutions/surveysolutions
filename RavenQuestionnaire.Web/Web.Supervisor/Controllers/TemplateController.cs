@@ -1,4 +1,5 @@
 ﻿using Main.Core.Commands.Questionnaire;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -15,8 +16,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
 
     using Web.Supervisor.DesignerPublicService;

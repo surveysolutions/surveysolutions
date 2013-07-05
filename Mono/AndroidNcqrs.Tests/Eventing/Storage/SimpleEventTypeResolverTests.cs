@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 
 
 namespace Ncqrs.Tests.Eventing.Storage

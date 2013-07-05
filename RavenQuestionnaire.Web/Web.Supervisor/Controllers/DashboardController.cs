@@ -1,5 +1,6 @@
 ﻿using Main.Core.View;
 using Main.Core.View.Questionnaire;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -11,9 +12,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
 
     [Authorize(Roles = "Headquarter")]
