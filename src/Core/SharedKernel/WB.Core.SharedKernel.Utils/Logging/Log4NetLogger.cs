@@ -3,7 +3,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernel.Utils.Logging
 {
-    public class Log4NetLogger : ILog
+    public class Log4NetLogger : ILogger
     {
         private readonly log4net.ILog _log;
 
