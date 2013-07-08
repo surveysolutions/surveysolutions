@@ -5,20 +5,6 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.pdf-preview .content {
-    width: 1000px;
-    margin: 0 auto;
-
-    border: 1px solid black;
-    box-shadow: 5px 5px 3px #888;
-	overflow: visible;
-}
-
-.pdf-preview .buttons {
-    padding: 15px;
-    text-align: center;
-}
-
 header {
     font-weight: bold; 
     font-size: 140%; 
@@ -52,5 +38,20 @@ h3, h4, h5, h6 {
 .question {
     margin: 0;
     padding: 0;
-    margin-top: 15px;
+    padding-top: 15px;
+}
+.no-page-break {
+    page-break-inside: avoid;
+}
+.no-line-break{
+    white-space: nowrap;
+}
+.date-answer-day, .date-answer-month, .date-answer-year {
+    display: inline-block
+}
+.date-answer-day, .date-answer-month {
+    width: 50px;
+}
+.date-answer-year {
+    width: 100px;
 }

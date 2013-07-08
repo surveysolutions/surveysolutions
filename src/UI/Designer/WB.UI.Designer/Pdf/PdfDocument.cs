@@ -6,7 +6,7 @@ namespace WB.UI.Designer.Pdf
     {
         public PdfDocument()
         {
-            this.PageNumbersFormat = "Page [page] of [toPage]";
+            this.PageNumbersFormat = "Page [page]";
         }
 
         public String Url { get; set; }
