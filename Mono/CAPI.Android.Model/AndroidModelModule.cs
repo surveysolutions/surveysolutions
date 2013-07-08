@@ -71,7 +71,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
 #warning bad idea to pass loginStore in backuper
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, loginStore, snapshotStore, bigSurveyStore));
+            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore,fileSystem, loginStore, snapshotStore, bigSurveyStore));
         }
     }
 }

@@ -49,6 +49,8 @@ namespace CAPI.Android.Core.Model.Backup
                 
                 CopyFileOrDirectory(path, backupFolderPath);
             }
+            AndroidZipUtility.ZipDirectory(backupFolderPath, Path.Combine(backupPath, backupFolderName + ".zip"));
+            Directory.Delete(backupFolderPath, true);
             return backupFolderPath;
         }
 
@@ -85,11 +87,19 @@ namespace CAPI.Android.Core.Model.Backup
         public void Restore(string path)
         {
             if (!Directory.Exists(path))
-                throw new ArgumentException("Retore Directory is absent");
+                throw new ArgumentException("Restore Directory is absent");
+            var files = Directory.GetFiles(path);
+            if(files.Length==0)
+                throw new ArgumentException("Restore archive is absent");
+
+            var firstFile = files[0];
+            var unziperFolder = Path.Combine(path, Path.GetFileNameWithoutExtension(firstFile));
+            AndroidZipUtility.Unzip(firstFile, path);
             foreach (var backupable in backupables)
             {
-                backupable.RestoreFromBakupFolder(path);
+                backupable.RestoreFromBakupFolder(unziperFolder);
             }
+            Directory.Delete(unziperFolder, true);
         }
     }
 }

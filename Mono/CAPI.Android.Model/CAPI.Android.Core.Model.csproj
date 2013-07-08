@@ -39,6 +39,9 @@
     <Reference Include="Cirrious.MvvmCross.Binding">
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Binding.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
@@ -60,6 +63,7 @@
     <Compile Include="AndroidModelModule.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\SyncCredentials.cs" />
+    <Compile Include="Backup\AndroidZipUtility.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="Backup\DefaultBackup.cs" />
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
