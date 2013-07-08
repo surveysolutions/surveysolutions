@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ZipManager.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The zip manager.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.Export
+﻿namespace SynchronizationMessages.Export
 {
     using System;
     using System.Collections.Generic;

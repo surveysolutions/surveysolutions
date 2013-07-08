@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RemoteFileInfo.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.WebServices
+﻿namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.IO;
