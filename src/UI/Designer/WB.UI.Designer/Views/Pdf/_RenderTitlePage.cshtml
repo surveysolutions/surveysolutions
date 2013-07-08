@@ -1,0 +1,15 @@
+﻿@model WB.UI.Designer.Pdf.TitlePageDto
+
+
+<header>
+    @Model.SurveyName
+</header>
+<div class="create-date">
+    Created by: @Model.AuthorName, @Model.CreationDate
+</div>
+<div class="statistics">
+    Chapters: @Model.ChaptersCount <br/>
+    Groups: @Model.GroupsCount<br/>
+    Questions with conditions: @Model.QuestionsWithConditionsCount <br/>
+    Questions: @Model.QuestionsCount <br/>
+</div>
