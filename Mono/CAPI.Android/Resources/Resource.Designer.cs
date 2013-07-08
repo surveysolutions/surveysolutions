@@ -118,11 +118,6 @@ namespace CAPI.Android
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
 			}
 			
-			static Drawable()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
 			private Drawable()
 			{
 			}
