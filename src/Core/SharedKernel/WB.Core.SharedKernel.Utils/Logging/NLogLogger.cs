@@ -95,7 +95,6 @@ namespace WB.Core.SharedKernel.Utils.Logging
         protected void WriteInternal(LogLevel logLevel, object message, Exception exception)
         {
             var logEvent = new LogEventInfo(logLevel, _log.Name, null, "{0}", new object[] { message }, exception);
-
             _log.Log(declaringType, logEvent);
         }
 
