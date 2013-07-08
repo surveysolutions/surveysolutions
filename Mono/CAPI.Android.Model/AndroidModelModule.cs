@@ -42,7 +42,7 @@ namespace CAPI.Android.Core.Model
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var snapshotStore = new AndroidSnapshotStore();
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(ProjectionStoreName);
-            var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
+            var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(ProjectionStoreName);
             var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(ProjectionStoreName);
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(ProjectionStoreName);
@@ -71,7 +71,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
 #warning bad idea to pass loginStore in backuper
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, loginStore, snapshotStore));
+            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, loginStore, snapshotStore, bigSurveyStore));
         }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="AndroidModelModule.cs" />
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\SyncCredentials.cs" />
+    <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="Backup\DefaultBackup.cs" />
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />

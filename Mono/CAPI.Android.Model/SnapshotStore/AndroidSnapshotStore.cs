@@ -28,7 +28,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
                 Directory.CreateDirectory(SnapshotStoreDirPath);
         }
 
-        private readonly ISnapshotStore internalStorage;
+        private  ISnapshotStore internalStorage;
         private const string snapshotTemp = "snapshotTemp";
         protected string SnapshotStoreDirPath {
             get
@@ -86,6 +86,8 @@ namespace CAPI.Android.Core.Model.SnapshotStore
             {
                 File.Delete(file);
             }
+
+            internalStorage = new InMemoryEventStore();
         }
     }
 }
