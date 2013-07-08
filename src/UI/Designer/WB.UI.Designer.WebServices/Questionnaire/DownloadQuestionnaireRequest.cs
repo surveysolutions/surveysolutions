@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DownloadQuestionnaireRequest.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.WebServices.Questionnaire
+﻿namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System;
     using System.ServiceModel;

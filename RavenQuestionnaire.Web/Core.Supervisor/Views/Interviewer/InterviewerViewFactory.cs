@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewer view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;

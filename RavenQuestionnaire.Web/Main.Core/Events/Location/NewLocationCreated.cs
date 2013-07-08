@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewLocationCreated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The new location created.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Location
+﻿namespace Main.Core.Events.Location
 {
     using System;
 

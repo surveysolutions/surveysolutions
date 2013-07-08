@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionWrapper.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the CompleteQuestionWrapper type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.Extensions
+﻿namespace Main.Core.Entities.Extensions
 {
     using System;
 

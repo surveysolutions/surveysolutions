@@ -1,10 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TemplateController.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Commands.Questionnaire;
+﻿using Main.Core.Commands.Questionnaire;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -21,8 +16,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
 
     using Web.Supervisor.DesignerPublicService;
@@ -49,7 +42,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
@@ -142,7 +135,7 @@ namespace Web.Supervisor.Controllers
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
                             GlobalHelper.GenerateUrl("Import", "Template", null)));
-                    Logger.Error(ex);
+                    Logger.Error("Could not connect to designer.", ex);
                 }
             }
 
@@ -184,7 +177,7 @@ namespace Web.Supervisor.Controllers
             catch (Exception ex)
             {
                 this.Error("Error when downloading questionnaire from designer. Please try again");
-                Logger.Error(ex);
+                Logger.Error("Unexpected error occurred", ex);
             }
 
             if (document == null)

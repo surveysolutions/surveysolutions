@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractGroupMobileView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The abstract group mobile view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.View.Group
 {
     using System;
@@ -88,6 +79,8 @@ namespace Main.Core.View.Group
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
+
+        public ICompositeView ParentView { get; private set; }
 
         /// <summary>
         /// Gets or sets the unique key.

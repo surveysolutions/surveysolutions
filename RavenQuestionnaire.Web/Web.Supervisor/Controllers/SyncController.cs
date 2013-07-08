@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.User;
 using Newtonsoft.Json;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Exceptions;
@@ -18,11 +18,11 @@ namespace Web.Supervisor.Controllers
 {
     public class SyncController : AsyncController
     {
-        private readonly ILog logger;
+        private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
-        public SyncController(ISyncManager syncManager, ILog logger,
+        public SyncController(ISyncManager syncManager, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
             this.syncManager = syncManager;

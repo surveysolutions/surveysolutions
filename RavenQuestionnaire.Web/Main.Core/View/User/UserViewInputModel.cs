@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserViewInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The user view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Main.Core.View.User

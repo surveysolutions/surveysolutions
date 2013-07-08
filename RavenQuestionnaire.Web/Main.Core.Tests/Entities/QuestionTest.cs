@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The question test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.Entities
+﻿namespace RavenQuestionnaire.Core.Tests.Entities
 {
     using System;
     using System.Collections.Generic;

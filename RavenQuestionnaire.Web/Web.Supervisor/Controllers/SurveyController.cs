@@ -1,4 +1,5 @@
 ﻿using Core.Supervisor.Views;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Web.Supervisor.Controllers
@@ -25,9 +26,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
@@ -48,7 +46,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView> interviewerStatisticsViewFactory;
         private readonly IViewFactory<InterviewerInputModel, InterviewerView> interviewerViewFactory;
 
-        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILog logger,
+        public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticViewFactory,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<IndexInputModel, IndexView> indexViewFactory,
@@ -91,7 +89,7 @@ namespace Web.Supervisor.Controllers
             catch (Exception e)
             {
                 var logger = LogManager.GetLogger(this.GetType());
-                logger.Fatal(e);
+                logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -114,7 +112,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -135,24 +133,17 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
             return this.Json(new { status = "ok" });
         }
         
-        public ActionResult Index(Guid? interviewerId)
+        public ActionResult Index()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            var model =
-                this.indexViewFactory.Load(new IndexInputModel()
-                    {
-                        InterviewerId = interviewerId,
-                        ViewerId = GlobalInfo.GetCurrentUser().Id
-                    });
-            ViewBag.GraphData = new InterviewerChartModel(model);
-            return this.View(model);
+            return this.View();
         }
 
         public ActionResult GotoBrowser()
@@ -371,7 +362,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignmentViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.interviewersViewFactory.Load(new InterviewersInputModel { ViewerId = user.Id });
+            var users = this.interviewersViewFactory.Load(new InterviewersInputModel(user.Id));
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             var input = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                 data.TemplateId,
@@ -433,14 +424,10 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
-        [Authorize]
         public ActionResult Summary()
         {
-            ViewBag.ActivePage = MenuItem.Interviewers;
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.summaryViewFactory.Load(new SummaryInputModel(user.Id, ViewerStatus.Supervisor));
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.View(model);
+            ViewBag.ActivePage = MenuItem.Summary;
+            return this.View();
         }
 
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
@@ -491,9 +478,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult UsersJson()
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var input = new InterviewersInputModel { PageSize = int.MaxValue, ViewerId = user.Id };
+            var input = new InterviewersInputModel(user.Id) {PageSize = int.MaxValue};
             var model = this.interviewersViewFactory.Load(input);
-            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
+            return this.Json(model.Items.ToDictionary(item => item.UserId.ToString(), item => item.UserName), JsonRequestBehavior.AllowGet);
         }
     }
 }

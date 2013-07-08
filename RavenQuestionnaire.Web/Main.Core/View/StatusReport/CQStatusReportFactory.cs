@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQStatusReportFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The cq status report factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;

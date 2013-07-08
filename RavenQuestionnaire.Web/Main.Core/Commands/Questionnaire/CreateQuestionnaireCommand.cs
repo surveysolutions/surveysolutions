@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateQuestionnaireCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The create questionnaire command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire
+﻿namespace Main.Core.Commands.Questionnaire
 {
     using System;
 

@@ -4,7 +4,7 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 namespace Ncqrs.Domain
 {
@@ -13,7 +13,7 @@ namespace Ncqrs.Domain
     /// </summary>
     public abstract class AggregateRoot : EventSource
     {
-         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+         private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     
         // 628426 13 Feb 2011
         // Previous ThreadStatic was null referencing at random times under load 

@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="PropagatedGroupRowItem.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete;
+﻿using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View;
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
@@ -38,6 +32,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 
         public Guid PropagationKey { get; set; }
         public string Title { get; set; }
+        public ICompositeView ParentView { get; private set; }
         public bool Enabled { get; set; }
         public Dictionary<string, QuestionCellItem> Answers { get; set; }
     }

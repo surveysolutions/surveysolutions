@@ -6,15 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core;
 using Main.Core.Documents;
+using Main.Core.ExpressionExecutors;
 using Main.DenormalizerStorage;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Ninject.Modules;
-
+using Raven.Client.Document;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Questionnaire.ExportServices;
+using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
 {
@@ -26,7 +31,8 @@ namespace LoadTestDataGenerator
         {
             kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
-                new RavenInfrastructureModule());
+                new RavenInfrastructureModule(),
+                new SynchronizationModule());
             
             RegisterServices(kernel);
 
@@ -35,12 +41,17 @@ namespace LoadTestDataGenerator
 
         private static void RegisterServices(IKernel kernel)
         {
+            ConditionExecuterFactory.Creator = doc => new FakeCompleteQuestionnaireConditionExecuteCollector();
+
             kernel.Load(new LoadTestDataGeneratorRegistry(repositoryPath: ConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
+
+            NcqrsInit.InitializeEventStore = (store, pageSize) => new BatchedRavenDBEventStore(store, pageSize);
 
             NcqrsInit.Init(kernel);
 
             kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IReadSideRepositoryReader<QuestionnaireDocument>>()));
 
+            
             kernel.Load<MainModule>();
         }
     }

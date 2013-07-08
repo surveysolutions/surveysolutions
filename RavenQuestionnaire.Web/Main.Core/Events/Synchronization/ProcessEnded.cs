@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProcessEnded.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the ProcessEnded type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Synchronization
+﻿namespace Main.Core.Events.Synchronization
 {
     using System;
 

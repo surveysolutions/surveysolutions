@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SyncProcessLogInputModel.cs" company="The World Bank">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.SyncProcess
+﻿namespace Core.Supervisor.Views.SyncProcess
 {
     using System;
     using System.Collections.Generic;

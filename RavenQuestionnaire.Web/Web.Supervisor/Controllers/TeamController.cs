@@ -1,4 +1,5 @@
 ﻿using Main.Core.Utility;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -15,25 +16,17 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
 
-    [Authorize(Roles = "Headquarter")]
     public class TeamController : BaseController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
-        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory;
 
-        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger,
+        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserListViewInputModel, UserListView> userListViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.userViewFactory = userViewFactory;
-            this.userListViewFactory = userListViewFactory;
-            this.interviewersViewFactory = interviewersViewFactory;
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
@@ -49,6 +42,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(Guid id)
         {
             return this.View(new InterviewerViewModel { Id = id });
@@ -64,6 +58,7 @@ namespace Web.Supervisor.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(InterviewerViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -99,6 +94,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         ///     The <see cref="ActionResult" />.
         /// </returns>
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor()
         {
             return this.View(new SupervisorViewModel());
@@ -114,6 +110,7 @@ namespace Web.Supervisor.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor(SupervisorViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -144,139 +141,19 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        public ActionResult GetSupervisors(GridDataRequestModel data)
+        [Authorize(Roles = "Headquarter")]
+        public ActionResult Index()
         {
-            var model =
-                this.userListViewFactory.Load(
-                    new UserListViewInputModel
-                        {
-                            Role = UserRoles.Supervisor, 
-                            Orders = data.SortOrder, 
-                            Page = data.Pager.Page, 
-                            PageSize = data.Pager.PageSize
-                        });
-            return this.PartialView("_PartialGrid_Supervisors", model);
+            return this.View();
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Index(UserListViewInputModel data)
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult Interviewers(Guid? id)
         {
-            var model =
-                this.userListViewFactory.Load(
-                    new UserListViewInputModel
-                        {
-                            Role = UserRoles.Supervisor,
-                            Page = data.Page,
-                            PageSize = data.PageSize,
-                            Orders = data.Orders
-                        });
-            return this.View(model);
-        }
+            if (this.GlobalInfo.IsHeadquarter && !id.HasValue)
+                return this.RedirectToAction("Index");
 
-        /// <summary>
-        /// The interviewers.
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// The<see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Interviewers(InterviewersViewInputModel data)
-        {
-            UserView user = this.GetUser(data.Id);
-            var interviewers =
-                this.interviewersViewFactory.Load(
-                    new InterviewersInputModel
-                        {
-                            ViewerId = data.Id,
-                            Page = data.Page,
-                            PageSize = data.PageSize,
-                            Order = data.Order
-                        });
-            return
-                this.View(
-                    new InterviewerListViewModel
-                        {
-                            View = interviewers,
-                            Id = user.PublicKey,
-                            SupervisorName = user.UserName
-                        });
-        }
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        public ActionResult GetInterviewers(InterviewersViewInputModel data)
-        {
-            UserView user = this.GetUser(data.Id);
-            var interviewers =
-                this.interviewersViewFactory.Load(
-                    new InterviewersInputModel
-                    {
-                        ViewerId = data.Id,
-                        Page = data.Page,
-                        PageSize = data.PageSize,
-                        Order = data.Order
-                    });
-            return this.PartialView("_PartialGridInterviewers", interviewers);
-        }
-
-        /// <summary>
-        /// Unlock user
-        /// </summary>
-        /// <param name="id">
-        /// Use public key
-        /// </param>
-        /// <returns>
-        /// Redirects to index view if everything is ok
-        /// </returns>
-        [Authorize]
-        public ActionResult UnlockUser(Guid id)
-        {
-            CommandService.Execute(new UnlockUserCommand(id));
-
-            return this.Redirect(GlobalHelper.PreviousPage);
-        }
-
-        /// <summary>
-        /// Lock user
-        /// </summary>
-        /// <param name="id">
-        /// Use public key
-        /// </param>
-        /// <returns>
-        /// Redirects to index view if everything is ok
-        /// </returns>
-        [Authorize]
-        public ActionResult LockUser(Guid id)
-        {
-            CommandService.Execute(new LockUserCommand(id));
-
-            return this.Redirect(GlobalHelper.PreviousPage);
+            return this.View(id);
         }
 
         #endregion

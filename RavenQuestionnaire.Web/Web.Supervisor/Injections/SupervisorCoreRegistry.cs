@@ -1,6 +1,7 @@
 using System.IO;
 using System.Web.Configuration;
 using Core.Supervisor.Views.Index;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
@@ -27,8 +28,6 @@ namespace Web.Supervisor.Injections
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
     
     using Web.Supervisor.Filters;
@@ -94,7 +93,7 @@ namespace Web.Supervisor.Injections
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
 
-            this.Bind<ILog>().ToMethod(
+            this.Bind<ILogger>().ToMethod(
                 context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
 
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();

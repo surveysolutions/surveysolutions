@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SummaryItem.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.DenormalizerStorageItem
+﻿namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
 
@@ -40,6 +34,8 @@ namespace Core.Supervisor.DenormalizerStorageItem
         public int TotalCount { get; set; }
 
         public Guid TemplateId { get; set; }
+
+        public string TemplateName { get; set; }
 
         public string TemplateName { get; set; }
 

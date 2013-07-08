@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionDependencyBuilder.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ExpressionDependencyBuilder type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.ExpressionExecutors
+﻿namespace Main.Core.ExpressionExecutors
 {
     using System;
     using System.Collections.Generic;

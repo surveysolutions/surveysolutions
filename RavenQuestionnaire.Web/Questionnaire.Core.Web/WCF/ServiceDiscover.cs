@@ -1,14 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceDiscover.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The service discover.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-using WB.Core.SharedKernel.Utils.Logging;
+﻿using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Questionnaire.Core.Web.WCF
 {
@@ -78,7 +68,7 @@ namespace Questionnaire.Core.Web.WCF
                 }
                 catch (Exception e)
                 {
-                    LogManager.GetLogger(this.GetType()).Fatal(e);
+                    LogManager.GetLogger(this.GetType()).Fatal("Unexpected error occurred", e);
                 }
                 finally
                 {

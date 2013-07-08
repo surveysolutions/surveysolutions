@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseItemDenormalizer.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View.Questionnaire;
 using Main.DenormalizerStorage;

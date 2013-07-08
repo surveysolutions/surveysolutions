@@ -8,11 +8,14 @@ using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Extensions;
 using Raven.Imports.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -53,15 +56,19 @@ namespace LoadTestDataGenerator
         private Statistics statistics;
         private ProgressOperation currentOperation;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
+        private readonly BatchedRavenDBEventStore eventStore;
 
         internal LoadTestDataGenerator(ICommandService commandService,
             IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> surveyStorage,
-            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+            DocumentStore ravenStore, IViewFactory<UserBrowseInputModel, UserBrowseView> userBrowseViewFactory, IViewFactory<UserViewInputModel, UserView> userViewFactory,
+            IRavenReadSideRepositoryWriterRegistry writerRegistry
+            , IStreamableEventStore eventStore)
         {
             this.RavenStore = ravenStore;
             this.userBrowseViewFactory = userBrowseViewFactory;
             this.userViewFactory = userViewFactory;
             this.writerRegistry = writerRegistry;
+            this.eventStore = (BatchedRavenDBEventStore)eventStore;
             this.CommandService = commandService;
             this.SurveyStorage = surveyStorage;
             InitializeComponent();
@@ -92,17 +99,26 @@ namespace LoadTestDataGenerator
 
                 if (this.clearDatabase.Checked)
                 {
-                    this.UpdateStatus("clean database");
+                    this.UpdateStatus("clean events database");
                     this.ClearDatabase();
+                }
+                if (this.clearViews.Checked)
+                {
+                    this.UpdateStatus("clean views database");
+                    this.ClearAllViews();
                 }
 
                 this.GenerateSupervisorsEvents();
-                
+
+                this.eventStore.StoreCache();
+
                 if (statistics.hasCAPIevents)
                 {
                     this.UpdateStatus("create CAPI's events");
                     this.GenerateCapiEvents();
                 }
+
+                this.eventStore.StoreCache();
 
                 this.DisableCacheInAllRepositoryWriters();
 
@@ -198,6 +214,11 @@ namespace LoadTestDataGenerator
                     });
 
             this.UpdateLastStatement();
+        }
+
+        private void UpdateForecast(TimeSpan timeSpan)
+        {
+            statusStrip1.InvokeIfRequired(x => { timeForecast.Text = string.Format("Estimated time: {0}", timeSpan.ToString(@"hh\:mm\:ss")); });
         }
 
         internal class ProgressOperation
@@ -398,14 +419,18 @@ namespace LoadTestDataGenerator
 
             var surveyIds = this.GetSurveyIds();
             this.UpdateStatus("full capi events", statistics.FullCAPIEventsCount);
+            var surveysCount = (int) (surveyIds.Count * 1.1);
+            var startTime = DateTime.Now;
+            var processedSurveys = 1;
             foreach (var surveyId in surveyIds)
             {
                 FillAnswers(surveyId);
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
                 CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
                 this.UpdateProgress();
+                this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processedSurveys, surveysCount));
+                processedSurveys++;
             }
-
             var rand = RandomObject;
             this.UpdateStatus("partial capi events", statistics.PartialCAPIEventsCount);
             foreach (var surveyId in surveyIds)
@@ -418,6 +443,14 @@ namespace LoadTestDataGenerator
                 this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
                 this.UpdateProgress();
             }
+        }
+        private TimeSpan MakeTotalTimeForecast(DateTime startTime, int processedItems, int itemsCount)
+        {
+            var applicationWorkingTime = (DateTime.Now - this.statistics.StartTime).Ticks;
+            var capiEventsSpentTime = (DateTime.Now - startTime).Ticks;
+            var averageFillingSpeed = capiEventsSpentTime/processedItems;
+            var result = TimeSpan.FromTicks(applicationWorkingTime + averageFillingSpeed*(itemsCount - processedItems));
+            return result;
         }
 
         private void FillAnswers(Guid surveyId, bool partially = false)
@@ -521,6 +554,50 @@ namespace LoadTestDataGenerator
 
         }
 
+        private void ClearAllViews()
+        {
+            this.RavenStore
+                .DatabaseCommands
+                .EnsureDatabaseExists("Views");
+
+            this.RavenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .PutIndex(
+                    "AllViews",
+                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
+                    overwrite: true);
+
+            int initialViewCount;
+            using (IDocumentSession session = this.RavenStore.OpenSession("Views"))
+            {
+                // this will also materialize index if it is out of date or was just created
+                initialViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            this.RavenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .DeleteByIndex("AllViews", new IndexQuery());
+
+            int resultViewCount;
+            using (IDocumentSession session = this.RavenStore.OpenSession("Views"))
+            {
+                resultViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            if (resultViewCount > 0)
+                throw new Exception(string.Format(
+                    "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
+                    initialViewCount, resultViewCount));
+        }
+
         private void GenerateSupervisorsEvents()
         {
             UserDocument hq = this.GenerateHeadquarter();
@@ -537,6 +614,9 @@ namespace LoadTestDataGenerator
 
             if (statistics.hasSupervisorEvents)
             {
+                var startTime = DateTime.Now;
+                var total = surveyIds.Count;
+                var processed = 1;
                 this.UpdateStatus(
                     "supervisor - interviewer - status", statistics.SupervisorEventsCount);
                 foreach (var surveyId in surveyIds)
@@ -560,15 +640,22 @@ namespace LoadTestDataGenerator
                         this.UpdateProgress();
                         this.UpdateProgress();
                     }
+                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
+                    processed++;
                 }
             }
 
             if (featuredQuestions != null && statistics.hasFeaturedQuestions)
             {
+                var startTime = DateTime.Now;
+                var total = surveyIds.Count;
+                var processed = 1;
                 this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
                 foreach (var surveyId in surveyIds)
                 {
                     this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
+                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
+                    processed++;
                 }
             }
         }
@@ -679,6 +766,7 @@ namespace LoadTestDataGenerator
 
         private IEnumerable<Guid> GenerateSurveys(int count, QuestionnaireDocument template, UserDocument initiator)
         {
+            var startTime = DateTime.Now;
             var result = new List<Guid>();
             for (int i = 0; i < count; i++)
             {
@@ -686,6 +774,7 @@ namespace LoadTestDataGenerator
                 this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(id, template.PublicKey, initiator.ToUserLight()));
                 result.Add(id);
                 this.UpdateProgress();
+                this.UpdateForecast(this.MakeTotalTimeForecast(startTime, i+1, count+1));
             }
             return result;
         }

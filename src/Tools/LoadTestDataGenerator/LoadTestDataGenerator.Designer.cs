@@ -49,8 +49,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timeForecast = new System.Windows.Forms.ToolStripStatusLabel();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.eventsStatistics = new System.Windows.Forms.ListBox();
+            this.clearViews = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,14 +62,14 @@
             this.generate.Name = "generate";
             this.generate.Size = new System.Drawing.Size(160, 51);
             this.generate.TabIndex = 0;
-            this.generate.Text = "Generate";
+            this.generate.Text = "Start";
             this.generate.UseVisualStyleBackColor = true;
             this.generate.Click += new System.EventHandler(this.generate_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 139);
+            this.label1.Location = new System.Drawing.Point(21, 161);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 1;
@@ -75,7 +77,7 @@
             // 
             // surveys_amount
             // 
-            this.surveys_amount.Location = new System.Drawing.Point(179, 132);
+            this.surveys_amount.Location = new System.Drawing.Point(179, 154);
             this.surveys_amount.Name = "surveys_amount";
             this.surveys_amount.Size = new System.Drawing.Size(257, 20);
             this.surveys_amount.TabIndex = 2;
@@ -84,7 +86,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 109);
+            this.label2.Location = new System.Drawing.Point(21, 131);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(131, 13);
             this.label2.TabIndex = 3;
@@ -92,7 +94,7 @@
             // 
             // templatePath
             // 
-            this.templatePath.Location = new System.Drawing.Point(179, 102);
+            this.templatePath.Location = new System.Drawing.Point(179, 124);
             this.templatePath.Name = "templatePath";
             this.templatePath.Size = new System.Drawing.Size(257, 20);
             this.templatePath.TabIndex = 4;
@@ -101,7 +103,7 @@
             // 
             // supervisorsCount
             // 
-            this.supervisorsCount.Location = new System.Drawing.Point(179, 162);
+            this.supervisorsCount.Location = new System.Drawing.Point(179, 184);
             this.supervisorsCount.Name = "supervisorsCount";
             this.supervisorsCount.Size = new System.Drawing.Size(257, 20);
             this.supervisorsCount.TabIndex = 6;
@@ -110,7 +112,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 169);
+            this.label3.Location = new System.Drawing.Point(21, 191);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 5;
@@ -118,7 +120,7 @@
             // 
             // interviewersCount
             // 
-            this.interviewersCount.Location = new System.Drawing.Point(179, 192);
+            this.interviewersCount.Location = new System.Drawing.Point(179, 214);
             this.interviewersCount.Name = "interviewersCount";
             this.interviewersCount.Size = new System.Drawing.Size(257, 20);
             this.interviewersCount.TabIndex = 8;
@@ -127,7 +129,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 199);
+            this.label4.Location = new System.Drawing.Point(21, 221);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 7;
@@ -138,7 +140,7 @@
             this.chkGenerateSupervisorEvents.AutoSize = true;
             this.chkGenerateSupervisorEvents.Checked = true;
             this.chkGenerateSupervisorEvents.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkGenerateSupervisorEvents.Location = new System.Drawing.Point(21, 42);
+            this.chkGenerateSupervisorEvents.Location = new System.Drawing.Point(21, 64);
             this.chkGenerateSupervisorEvents.Name = "chkGenerateSupervisorEvents";
             this.chkGenerateSupervisorEvents.Size = new System.Drawing.Size(163, 17);
             this.chkGenerateSupervisorEvents.TabIndex = 9;
@@ -160,7 +162,7 @@
             this.chkSetAnswers.AutoSize = true;
             this.chkSetAnswers.Checked = true;
             this.chkSetAnswers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSetAnswers.Location = new System.Drawing.Point(232, 42);
+            this.chkSetAnswers.Location = new System.Drawing.Point(232, 64);
             this.chkSetAnswers.Name = "chkSetAnswers";
             this.chkSetAnswers.Size = new System.Drawing.Size(160, 17);
             this.chkSetAnswers.TabIndex = 11;
@@ -171,7 +173,7 @@
             // 
             this.ctrlProgress.AutoSize = false;
             this.ctrlProgress.Name = "ctrlProgress";
-            this.ctrlProgress.Size = new System.Drawing.Size(450, 16);
+            this.ctrlProgress.Size = new System.Drawing.Size(300, 16);
             this.ctrlProgress.Step = 1;
             this.ctrlProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
@@ -209,7 +211,7 @@
             this.chkHeadquarter.AutoSize = true;
             this.chkHeadquarter.Checked = true;
             this.chkHeadquarter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkHeadquarter.Location = new System.Drawing.Point(21, 75);
+            this.chkHeadquarter.Location = new System.Drawing.Point(21, 97);
             this.chkHeadquarter.Name = "chkHeadquarter";
             this.chkHeadquarter.Size = new System.Drawing.Size(130, 17);
             this.chkHeadquarter.TabIndex = 14;
@@ -219,7 +221,7 @@
             // 
             // txtHQName
             // 
-            this.txtHQName.Location = new System.Drawing.Point(179, 72);
+            this.txtHQName.Location = new System.Drawing.Point(179, 94);
             this.txtHQName.Name = "txtHQName";
             this.txtHQName.Size = new System.Drawing.Size(257, 20);
             this.txtHQName.TabIndex = 15;
@@ -230,8 +232,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrlProgress,
             this.txtStatus,
-            this.txtElapsedTime});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 340);
+            this.txtElapsedTime,
+            this.timeForecast});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 390);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.Size = new System.Drawing.Size(781, 22);
@@ -241,14 +244,20 @@
             // txtStatus
             // 
             this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(157, 17);
+            this.txtStatus.Size = new System.Drawing.Size(154, 17);
             this.txtStatus.Spring = true;
             // 
             // txtElapsedTime
             // 
             this.txtElapsedTime.Name = "txtElapsedTime";
-            this.txtElapsedTime.Size = new System.Drawing.Size(157, 17);
+            this.txtElapsedTime.Size = new System.Drawing.Size(154, 17);
             this.txtElapsedTime.Spring = true;
+            // 
+            // timeForecast
+            // 
+            this.timeForecast.Name = "timeForecast";
+            this.timeForecast.Size = new System.Drawing.Size(154, 17);
+            this.timeForecast.Spring = true;
             // 
             // lstLog
             // 
@@ -256,7 +265,7 @@
             this.lstLog.Location = new System.Drawing.Point(451, 166);
             this.lstLog.Name = "lstLog";
             this.lstLog.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.lstLog.Size = new System.Drawing.Size(309, 160);
+            this.lstLog.Size = new System.Drawing.Size(309, 212);
             this.lstLog.TabIndex = 17;
             // 
             // eventsStatistics
@@ -268,11 +277,22 @@
             this.eventsStatistics.Size = new System.Drawing.Size(309, 121);
             this.eventsStatistics.TabIndex = 18;
             // 
+            // clearViews
+            // 
+            this.clearViews.AutoSize = true;
+            this.clearViews.Location = new System.Drawing.Point(21, 39);
+            this.clearViews.Name = "clearViews";
+            this.clearViews.Size = new System.Drawing.Size(194, 17);
+            this.clearViews.TabIndex = 19;
+            this.clearViews.Text = "Clear views (not events, only views)";
+            this.clearViews.UseVisualStyleBackColor = true;
+            // 
             // LoadTestDataGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(781, 362);
+            this.ClientSize = new System.Drawing.Size(781, 412);
+            this.Controls.Add(this.clearViews);
             this.Controls.Add(this.eventsStatistics);
             this.Controls.Add(this.lstLog);
             this.Controls.Add(this.label5);
@@ -294,9 +314,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.generate);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(797, 401);
-            this.MinimumSize = new System.Drawing.Size(797, 401);
+            this.MaximumSize = new System.Drawing.Size(797, 451);
+            this.MinimumSize = new System.Drawing.Size(797, 451);
             this.Name = "LoadTestDataGenerator";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Load Test Data Generator";
             this.Load += new System.EventHandler(this.LoadTestDataGenerator_Load);
             this.statusStrip1.ResumeLayout(false);
@@ -331,6 +352,8 @@
         private System.Windows.Forms.ListBox eventsStatistics;
         private System.Windows.Forms.ToolStripStatusLabel txtStatus;
         private System.Windows.Forms.ToolStripStatusLabel txtElapsedTime;
+        private System.Windows.Forms.CheckBox clearViews;
+        private System.Windows.Forms.ToolStripStatusLabel timeForecast;
     }
 }
 

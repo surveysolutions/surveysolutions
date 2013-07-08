@@ -173,6 +173,7 @@ namespace CAPI.Android.Syncronization
                         throw new AuthenticationException("User wasn't authenticated.");
                     credentials = userCredentials.Value;
 
+
                     //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
                     string message = "connecting...";
                     OnStatusChanged(

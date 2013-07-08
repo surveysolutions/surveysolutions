@@ -1,13 +1,12 @@
-﻿namespace Web.Supervisor.Controllers
+﻿using WB.Core.GenericSubdomains.Logging;
+
+namespace Web.Supervisor.Controllers
 {
     using System.Web.Mvc;
 
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Utils;
 
     public abstract class BaseController : Controller
@@ -15,9 +14,9 @@
         protected readonly ICommandService CommandService;
         protected readonly IGlobalInfoProvider GlobalInfo;
 
-        protected readonly ILog Logger;
+        protected readonly ILogger Logger;
 
-        protected BaseController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+        protected BaseController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
         {
             this.CommandService = commandService;
             this.GlobalInfo = globalInfo;

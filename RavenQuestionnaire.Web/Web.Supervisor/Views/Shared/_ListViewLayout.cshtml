@@ -8,33 +8,38 @@
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
 }
-
-@RenderSection("header", false)
-
-<div class="row-fluid">
-    <div class="span3">
-        @RenderSection("filters", false)
+<div class="container-fluid">
+    <div class="row-fluid">
+        @RenderSection("header", false)        
     </div>
-    <div class="span9">
-        <div id="list">
-            <!-- ko ifnot:ListView.IsPageLoaded()  -->
-            <p class="text-center">
-                Loading. Please wait...
-            </p>
-            <!-- /ko -->
-            <!-- ko if:ListView.IsPageLoaded()  -->
-            <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
-            <p class="text-center">
-                No results found
-            </p>
-            <!-- /ko -->
-            <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
-            @RenderSection("grid", true)
-            <div class="pagination" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
-            <!-- /ko -->
-            <!-- /ko -->
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well">
+                @RenderSection("filters", false)
+            </div>
         </div>
-        @this.RenderBody()
+        <div class="span9">
+            @RenderSection("gridnavigation", false)
+            <div id="list">
+                <!-- ko ifnot:ListView.IsPageLoaded()  -->
+                <p class="text-center">
+                    Loading. Please wait...
+                </p>
+                <!-- /ko -->
+                <!-- ko if:ListView.IsPageLoaded()  -->
+                <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
+                <p class="text-center">
+                    No results found
+                </p>
+                <!-- /ko -->
+                <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
+                @RenderSection("grid", true)
+                <div class="pagination" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+            @this.RenderBody()
+        </div>
     </div>
 </div>
 

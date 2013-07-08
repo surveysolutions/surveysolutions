@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusChartModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Chart model for status page
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Web.Supervisor.Models.Chart
+﻿namespace Web.Supervisor.Models.Chart
 {
     using System.Collections.Generic;
     using System.Linq;

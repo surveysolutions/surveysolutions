@@ -17,12 +17,12 @@
     };
 
     // holds the total item count
-    self.TotalResults = ko.observable();
+    self.TotalCount = ko.observable();
 
     // actual pager, used to bind to the pager's template
     // first parameter must be an observable or function which returns the current 'total item count'.
     // it is wrapped in a ko.computed inside the pager.
-    self.Pager = ko.pager(self.TotalResults);
+    self.Pager = ko.pager(self.TotalCount);
 
     self.Pager().PageSize(20);
 
@@ -62,23 +62,14 @@
             Request: self.Filter()
         };
 
-        $.ajax({
-            type: 'POST',
-            url: self.ServiceUrl,
-            data: params,
-            context: this,
-            success: function (data) {
-                self.Items(data.Items);
-                self.TotalResults(data.TotalCount);
+        $.post(self.ServiceUrl, params, null, "json")
+            .done(function (data) {
+                ko.mapping.fromJS(data, {}, self);
                 self.ItemsSummary(data.ItemsSummary);
                 self.IsPageLoaded(true);
-            },
-            dataType: 'json'
-        });
+            });
     };
 
     self.onBeforeRequest = function () {
     };
-
-    self.search();
 };

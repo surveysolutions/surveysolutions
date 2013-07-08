@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="CapiScreenGroupView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.CAPI.Views
+﻿namespace Core.CAPI.Views
 {
     using System;
     using System.Linq;

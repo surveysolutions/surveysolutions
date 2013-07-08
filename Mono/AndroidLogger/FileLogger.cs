@@ -1,17 +1,15 @@
 using System;
 using System.IO;
 using Java.Lang;
-using WB.Core.SharedKernel.Logger;
+using WB.Core.GenericSubdomains.Logging;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 
 namespace WB.Core.SharedKernel.Utils.Logging
 {
-
-    public class FileLogger : ILog
+    public class FileLogger : ILogger
     {
-
-        private static readonly string LogFilename = System.IO.Path.Combine(GetLogDirectory(), "WBCapi.log.txt");
+        private static readonly string LogFilename = Path.Combine(GetLogDirectory(), "WBCapi.log.txt");
         
         private const string Tag = "Android.WBCapi";
 
@@ -35,9 +33,6 @@ namespace WB.Core.SharedKernel.Utils.Logging
             return extStorage;
         }
 
-
-
-
         public FileLogger()
         {
 #if DEBUG
@@ -51,52 +46,46 @@ namespace WB.Core.SharedKernel.Utils.Logging
             IsWarnEnabled = true;
         }
 
-        public void Debug(object message)
+        public void Debug(string message, Exception exception = null)
         {
-            if (IsDebugEnabled)
-                WriteLogMessage(Tag, LogMessageType.Debug, message.ToString());
+            if (!this.IsDebugEnabled) return;
+            if (exception == null)
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Debug, message);
+            }
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Debug, exception.ToThrowable(), message);    
+            }
+            
         }
-
-        public void Debug(object message, Exception exception)
+       
+        public void Info(string message, Exception exception = null)
         {
-            if (IsDebugEnabled)
-                WriteLogMessage(Tag, LogMessageType.Debug, exception.ToThrowable(), message.ToString());
+            if (!this.IsInfoEnabled) return;
+            if (exception == null)
+            {
+                WriteLogMessage(Tag, LogMessageType.Info, message);
+            }
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Info, exception.ToThrowable(), message);    
+            }
+            
         }
-
-        public void DebugFormat(string format, params object[] args)
+        
+        public void Warn(string message, Exception exception = null)
         {
-            if (IsDebugEnabled)
-                WriteLogMessage(Tag, LogMessageType.Debug, format, args);
-        }
-
-        public void Info(object message)
-        {
-            if (IsInfoEnabled)
-                WriteLogMessage(Tag, LogMessageType.Info, message.ToString());
-        }
-
-        public void Info(object message, Exception exception)
-        {
-            if (IsInfoEnabled)
-                WriteLogMessage(Tag, LogMessageType.Info, exception.ToThrowable(), message.ToString());
-        }
-
-        public void InfoFormat(string format, params object[] args)
-        {
-            if (IsInfoEnabled)
-                WriteLogMessage(Tag, LogMessageType.Info, format, args);
-        }
-
-        public void Warn(object message)
-        {
-            if (IsWarnEnabled)
-                WriteLogMessage(Tag, LogMessageType.Warning, message.ToString());
-        }
-
-        public void Warn(object message, Exception exception)
-        {
-            if (IsWarnEnabled)
-                WriteLogMessage(Tag, LogMessageType.Warning, exception.ToThrowable(), message.ToString());
+            if (!this.IsWarnEnabled) return;
+            if (exception == null)
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Warning, message);
+            }
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Warning, exception.ToThrowable(), message);    
+            }
+            
         }
 
         public void WarnFormat(string format, params object[] args)
@@ -105,39 +94,29 @@ namespace WB.Core.SharedKernel.Utils.Logging
                 WriteLogMessage(Tag, LogMessageType.Warning, format, args);
         }
 
-        public void Error(object message)
+        public void Error(string message, Exception exception = null)
         {
-            WriteLogMessage(Tag, LogMessageType.Error, message.ToString());
+            if (exception==null)
+            {
+                WriteLogMessage(Tag, LogMessageType.Error, message);
+            }
+            else
+            {
+                WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message);    
+            }
         }
 
-        public void Error(object message, Exception exception)
+        public void Fatal(string message, Exception exception = null)
         {
-            if (IsErrorEnabled)
-                WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message.ToString());
-        }
-
-        public void ErrorFormat(string format, params object[] args)
-        {
-            if (IsErrorEnabled)
-                WriteLogMessage(Tag, LogMessageType.Error, format, args);
-        }
-
-        public void Fatal(object message)
-        {
-            if (IsFatalEnabled)
-                WriteLogMessage(Tag, LogMessageType.Fatal, message.ToString());
-        }
-
-        public void Fatal(object message, Exception exception)
-        {
-            if (IsFatalEnabled)
-                WriteLogMessage(Tag, LogMessageType.Fatal, exception.ToThrowable(), message.ToString());
-        }
-
-        public void FatalFormat(string format, params object[] args)
-        {
-            if (IsFatalEnabled)
-                WriteLogMessage(Tag, LogMessageType.Fatal, format, args);
+            if (!this.IsFatalEnabled) return;
+            if (exception == null)
+            {
+                WriteLogMessage(Tag, LogMessageType.Fatal, message);
+            }
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Fatal, exception.ToThrowable(), message);    
+            }
         }
 
         public bool IsDebugEnabled { get; private set; }
@@ -148,7 +127,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
 
         private void WriteLogMessage(string tag, string type,  string message)
         {
-            using (System.IO.StreamWriter s = System.IO.File.AppendText(LogFilename))
+            using (var s = File.AppendText(LogFilename))
             {
                 s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type, tag, message));
             }
@@ -156,15 +135,15 @@ namespace WB.Core.SharedKernel.Utils.Logging
 
         private void WriteLogMessage(string tag, string type, Throwable exc, string message)
         {
-            using (System.IO.StreamWriter s = System.IO.File.AppendText(LogFilename))
+            using (var s = File.AppendText(LogFilename))
             {
-                s.WriteLine(string.Format("{0} {1} {2} {3} {4}", DateTime.UtcNow, type, tag, message, exc.ToString()));
+                s.WriteLine(string.Format("{0} {1} {2} {3} {4}", DateTime.UtcNow, type, tag, message, exc));
             }
         }
 
         private void WriteLogMessage(string tag, string type ,string format, params object[] args)
         {
-            using (System.IO.StreamWriter s = System.IO.File.AppendText(LogFilename))
+            using (var s = File.AppendText(LogFilename))
             {
                 s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type , tag, string.Format(format, args)));    
             }

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireConditionExecutor.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire condition executor.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.ExpressionExecutors
+﻿namespace Main.Core.ExpressionExecutors
 {
     using System;
 

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionAR.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the CollectionAR type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     using System;
     using System.Collections.Generic;

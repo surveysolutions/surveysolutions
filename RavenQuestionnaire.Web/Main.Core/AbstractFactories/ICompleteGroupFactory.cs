@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteGroupFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CompleteGroupFactory interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.AbstractFactories
 {
     using Main.Core.Entities.SubEntities;

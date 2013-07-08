@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="HeaderItemTests.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.View.Export;
+﻿using Main.Core.View.Export;
 using NUnit.Framework;
 
 namespace Main.Core.Tests.Export

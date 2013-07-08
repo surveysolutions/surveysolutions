@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MaxMinStrategy.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The max min strategy.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Utility.OrderStrategy
+﻿namespace Main.Core.Utility.OrderStrategy
 {
     using System.Collections.Generic;
     using System.Linq;

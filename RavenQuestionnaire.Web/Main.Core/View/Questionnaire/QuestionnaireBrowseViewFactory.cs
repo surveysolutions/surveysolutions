@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Linq.Expressions;
 
 using Main.DenormalizerStorage;

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChartModelBase.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Base chart model
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor.Models.Chart
 {
     using System.Collections.Generic;

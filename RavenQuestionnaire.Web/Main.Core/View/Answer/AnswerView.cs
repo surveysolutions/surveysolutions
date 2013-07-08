@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnswerView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The answer view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
@@ -112,6 +103,8 @@ namespace Main.Core.View.Answer
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
+
+        public ICompositeView ParentView { get; private set; }
 
         #endregion
     }

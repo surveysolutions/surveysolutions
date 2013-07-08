@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserBrowseViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The user browse view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;

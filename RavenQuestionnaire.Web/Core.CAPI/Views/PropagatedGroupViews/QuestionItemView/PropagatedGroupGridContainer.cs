@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="PropagatedGroupView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems;
+﻿using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;

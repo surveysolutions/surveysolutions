@@ -14,13 +14,14 @@
             model['Summary'] = new SurveyListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SurveysApi", action = "Users" })');
 
             model.Summary.SelectedUser.subscribe(function () {
-                model.ListView.search();
+                model.load();
             });
             model.ListView.GetFilterMethod = function () {
                 return { UserId: model.Summary.SelectedUser };
             };
 
             ko.applyBindings(model);
+            model.load();
         });
     </script>
 }
@@ -32,13 +33,13 @@
 
 @section filters
 {
-    <div class="well" style="max-width: 340px; padding: 8px 0;">
-        <ul class="nav nav-list">
-            <li class="nav-header">FILTER</li>
-            <li class="divider"></li>
-            <li>Interviewers:
+    <ul class="nav nav-list">
+        <li class="nav-header">FILTER</li>
+        <li class="divider"></li>
+        <li>Interviewers:
                 <select data-bind="options: Summary.Users, optionsText: 'UserName', optionsValue: 'UserId', optionsCaption: 'Any', value: Summary.SelectedUser"></select>
-            </li>
+        </li>
+    </ul>
         </ul>
     </div>
 }
@@ -48,14 +49,14 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th data-bind='click: function (data, event) { ListView.sort("Template.Title") }'><span class="btn-link">Survey Name</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Unassigned") }'><span class="btn-link">Unassigned</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Initial") }'><span class="btn-link">Initial</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Redo") }'><span class="btn-link">Redo</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Completed") }'><span class="btn-link">Completed</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Error") }'><span class="btn-link">Completed with Errors</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Approved") }'><span class="btn-link">Approved</span></th>
-                <th data-bind='click: function (data, event) { ListView.sort("Total") }'><span class="btn-link">Total</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Template.Title")'><span class="btn-link">Survey Name</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Unassigned")'><span class="btn-link">Unassigned</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Initial")'><span class="btn-link">Initial</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Redo")'><span class="btn-link">Redo</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Completed")'><span class="btn-link">Completed</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Error")'><span class="btn-link">Completed with Errors</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Approved")'><span class="btn-link">Approved</span></th>
+                <th data-bind='click: ListView.sort.bind($data, "Total")'><span class="btn-link">Total</span></th>
             </tr>
         </thead>
         <tbody>

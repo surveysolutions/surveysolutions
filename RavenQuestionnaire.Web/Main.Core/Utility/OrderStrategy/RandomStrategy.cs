@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomStrategy.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The random strategy.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.Utility.OrderStrategy
 {

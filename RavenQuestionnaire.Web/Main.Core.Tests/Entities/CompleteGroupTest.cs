@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroupTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete group test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.Entities
+﻿namespace RavenQuestionnaire.Core.Tests.Entities
 {
     using System;
 

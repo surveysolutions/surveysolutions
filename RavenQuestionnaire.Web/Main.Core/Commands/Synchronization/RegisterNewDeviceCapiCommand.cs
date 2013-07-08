@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterNewDeviceCommand.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Commands.Synchronization
+﻿namespace Main.Core.Commands.Synchronization
 {
     using System;
     using Main.Core.Domain;

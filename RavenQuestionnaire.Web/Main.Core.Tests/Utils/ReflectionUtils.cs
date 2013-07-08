@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ReflectionUtils.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The reflection utils.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.Utils
+﻿namespace RavenQuestionnaire.Core.Tests.Utils
 {
     using System;
     using System.Collections.Generic;

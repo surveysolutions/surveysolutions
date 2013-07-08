@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ExporStatisticsInputModel.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.CAPI.Views.ExporStatistics
+﻿namespace Core.CAPI.Views.ExporStatistics
 {
     using System;
     using System.Collections.Generic;

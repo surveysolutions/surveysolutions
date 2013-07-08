@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConcurrencyResolveCommandService.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Repeates command execution until success.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.SharedKernel.Utils.Logging;
+﻿using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.Commands
 {

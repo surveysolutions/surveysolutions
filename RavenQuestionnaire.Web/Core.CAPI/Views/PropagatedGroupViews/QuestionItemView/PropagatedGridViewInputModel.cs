@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="PropagatedGridViewInputModel.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
+﻿namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 {
     using System;
     using System.Collections.Generic;

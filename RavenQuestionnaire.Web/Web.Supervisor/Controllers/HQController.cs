@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using Core.Supervisor.Views.User;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -27,9 +28,6 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using WB.Core.SharedKernel.Logger;
-
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
@@ -53,7 +51,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<InterviewerStatisticsInputModel, InterviewerStatisticsView> interviewerStatisticsViewFactory;
         private readonly IViewFactory<InterviewerInputModel, InterviewerView> interviewerViewFactory;
 
-        public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILog logger,
+        public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticViewFactory,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
@@ -122,7 +120,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -145,7 +143,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -166,24 +164,17 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
             return this.Json(new { status = "ok" });
         }
 
-        public ActionResult Surveys(Guid? interviewerId)
+        public ActionResult Surveys()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            var model =
-                this.indexViewFactory.Load(new IndexInputModel()
-                    {
-                        InterviewerId = interviewerId,
-                        ViewerId = GlobalInfo.GetCurrentUser().Id
-                    });
-            ViewBag.GraphData = new InterviewerChartModel(model);
-            return this.View(model);
+            return this.View();
         }
 
         public ActionResult Status(Guid? statusId)
@@ -252,7 +243,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
@@ -319,14 +310,14 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignPerson(Guid id, Guid tmptId)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.interviewersViewFactory.Load(new InterviewersInputModel { ViewerId = user.Id });
+            var users = this.interviewersViewFactory.Load(new InterviewersInputModel(user.Id));
             var model = this.assignSurveyViewFactory.Load(new AssignSurveyInputModel(id, user.Id));
             var r = users.Items.ToList();
             var options = r.Select(item => new SelectListItem
             {
-                Value = item.QuestionnaireId.ToString(),
-                Text = item.Login,
-                Selected = (model.Responsible != null && model.Responsible.Id == item.QuestionnaireId) || (model.Responsible == null && item.QuestionnaireId == Guid.Empty)
+                Value = item.UserId.ToString(),
+                Text = item.UserName,
+                Selected = (model.Responsible != null && model.Responsible.Id == item.UserId) || (model.Responsible == null && item.UserId == Guid.Empty)
             }).ToList();
             ViewBag.value = options;
             return this.View(model);
@@ -461,7 +452,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message },
                             JsonRequestBehavior.AllowGet);
             }
@@ -503,7 +494,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignmentViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.interviewersViewFactory.Load(new InterviewersInputModel { ViewerId = user.Id });
+            var users = this.interviewersViewFactory.Load(new InterviewersInputModel(user.Id));
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             var input = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                 data.TemplateId,
@@ -572,7 +563,7 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Summary()
         {
-            ViewBag.ActivePage = MenuItem.Interviewers;
+            ViewBag.ActivePage = MenuItem.Summary;
             return this.View();
         }
 
@@ -624,9 +615,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult UsersJson()
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var input = new InterviewersInputModel { PageSize = int.MaxValue, ViewerId = user.Id };
+            var input = new InterviewersInputModel(user.Id) {PageSize = int.MaxValue};
             var model = this.interviewersViewFactory.Load(input);
-            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
+            return this.Json(model.Items.ToDictionary(item => item.UserId.ToString(), item => item.UserName), JsonRequestBehavior.AllowGet);
         }
     }
 }

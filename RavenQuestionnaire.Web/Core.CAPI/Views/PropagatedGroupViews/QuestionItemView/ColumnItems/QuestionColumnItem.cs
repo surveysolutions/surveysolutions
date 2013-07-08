@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionColumnItem.cs" company="">
-//   TODO: Update copyright text.
-// </copyright>
-// <summary>
-//   
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
+﻿namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
 {
     using System;
     using System.Collections.Generic;
