@@ -1,42 +1,52 @@
 ﻿@model Main.Core.View.Question.QuestionView
 @using Main.Core.Entities.SubEntities
 @using Main.Core.View.Answer
+<div class="question no-page-break">
+    <span>
+        @Model.Title 
+    </span>
 
-<p class="question">
-    @Model.Title
-</p>
-
-@if (this.Model.Answers != null && this.Model.Answers.Length > 0) {
-    <ul class="answer-options">
-        @foreach (AnswerView answer in this.Model.Answers)
-        {
-            <li>
-                <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
-                <span class="answer-value">
-                    @answer.AnswerValue
-                </span>
-                <span>
-                    @answer.Title
-                </span>
-            </li>
-        }
+    @if (this.Model.Answers != null && this.Model.Answers.Length > 0) {
+        <ul class="answer-options">
+            @foreach (AnswerView answer in this.Model.Answers)
+            {
+                <li>
+                    <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
+                    <span class="answer-value">
+                        @answer.AnswerValue
+                    </span>
+                    <span>
+                        @answer.Title
+                    </span>
+                </li>
+            }
         
-    </ul>
-}
-else {
-    switch (Model.QuestionType)
-    {
-        case QuestionType.Numeric: {
-            <div class="answer-placeholder">&nbsp;</div>
-                break;
-            }
-        case QuestionType.Text: {
-            <div class="answer-placeholder">&nbsp;</div>
-            <div class="answer-placeholder">&nbsp;</div>
-            <div class="answer-placeholder">&nbsp;</div>
-                break;
-            }
-        default:
-            break;
+        </ul>
     }
-}
+    else {
+        switch (Model.QuestionType)
+        {
+            case QuestionType.Numeric: {
+                <div class="answer-placeholder">&nbsp;</div>
+                    break;
+                }
+            case QuestionType.Text: {
+                <div class="answer-placeholder">&nbsp;</div>
+                <div class="answer-placeholder">&nbsp;</div>
+                <div class="answer-placeholder">&nbsp;</div>
+                    break;
+                }
+            case QuestionType.DateTime:
+                {
+                    <span class="no-line-break">
+                        <span class="answer-placeholder date-answer-day"></span>/
+                        <span class="answer-placeholder date-answer-month"></span>/
+                        <span class="answer-placeholder date-answer-year" ></span>
+                    </span>
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+</div>
