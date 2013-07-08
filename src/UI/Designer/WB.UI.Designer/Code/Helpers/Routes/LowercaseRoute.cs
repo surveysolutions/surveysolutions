@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LowercaseRoute.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The lowercase route.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Code.Helpers.Routes
+﻿namespace WB.UI.Designer.Code.Helpers.Routes
 {
     using System.Web.Routing;
 

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountViewFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 

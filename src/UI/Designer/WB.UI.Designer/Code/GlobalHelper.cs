@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GlobalHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The global helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using System.Web;
     using System.Web.Mvc;
