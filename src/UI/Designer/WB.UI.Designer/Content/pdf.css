@@ -1,13 +1,56 @@
-﻿.pdf-preview .content {
-    width: 855px;
+﻿body {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.pdf-preview .content {
+    width: 1000px;
     margin: 0 auto;
-    padding: 60px 55px 60px 50px;
 
     border: 1px solid black;
     box-shadow: 5px 5px 3px #888;
+	overflow: visible;
 }
 
 .pdf-preview .buttons {
     padding: 15px;
     text-align: center;
+}
+
+header {
+    font-weight: bold; 
+    font-size: 140%; 
+    text-align: center; 
+    padding-bottom: 10px;
+}
+h1 {
+    font-weight: bold;
+    font-size: 120%;
+}
+h2 {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 100%;
+}
+h3, h4, h5, h6 {
+    font-weight: normal;
+    font-size: 100%;
+}
+.answer-options {
+    list-style-type: none;
+}
+.answer-value {
+    font-weight: bold;
+}
+.answer-placeholder {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    border-bottom-color: #000000;
+}
+.question {
+    margin: 0;
+    padding: 0;
+    margin-top: 15px;
 }

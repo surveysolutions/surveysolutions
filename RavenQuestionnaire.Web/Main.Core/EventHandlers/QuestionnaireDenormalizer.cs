@@ -70,7 +70,29 @@ namespace Main.Core.EventHandlers
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
-            item.Add(group, evnt.Payload.ParentGroupPublicKey, null);
+
+            Guid? parentGroupPublicKey = evnt.Payload.ParentGroupPublicKey;
+            if (parentGroupPublicKey.HasValue)
+            {
+                var parentGroup = item.Find<Group>(parentGroupPublicKey.Value);
+                if (parentGroup != null)
+                {
+                    group.SetParent(parentGroup);
+                }
+                else
+                {
+                    string errorMessage = string.Format("Event {0} attempted to add group {1} into group {2}. But group {2} doesnt exist in document {3}",
+                        evnt.EventIdentifier, 
+                        evnt.Payload.PublicKey, 
+                        evnt.Payload.ParentGroupPublicKey, 
+                        item.PublicKey);
+
+                    LogManager.GetLogger(this.GetType()).Error(errorMessage);
+                }
+            }
+
+
+            item.Add(group, parentGroupPublicKey, null);
             this.UpdateQuestionnaire(evnt, item);
         }
 
