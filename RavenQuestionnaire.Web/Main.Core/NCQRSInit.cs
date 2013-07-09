@@ -1,3 +1,5 @@
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core
@@ -114,7 +116,8 @@ namespace Main.Core
         /// </exception>
         public static void RebuildReadLayer()
         {
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding started.");
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Info("Read layer rebuilding started.");
 
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
@@ -137,7 +140,7 @@ namespace Main.Core
 
             isReadLayerBuilt = true;
 
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding finished.");
+            logger.Info("Read layer rebuilding finished.");
         }
 
 
