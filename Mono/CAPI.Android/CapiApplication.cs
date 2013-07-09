@@ -19,6 +19,7 @@ using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
+using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.EventHandlers;
@@ -29,6 +30,7 @@ using Main.Core.Services;
 using Main.Core.View;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
 using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
@@ -203,7 +205,8 @@ namespace CAPI.Android
             NcqrsInit.Init(kernel);
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
+            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
