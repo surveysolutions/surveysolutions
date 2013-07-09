@@ -4,7 +4,8 @@ namespace WB.Core.Infrastructure.Backup
     {
 
         string Backup();
-        void Restore(string path);
+        void Restore();
 
+        string RestorePath { get; }
     }
 }

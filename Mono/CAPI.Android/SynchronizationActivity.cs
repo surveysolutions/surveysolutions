@@ -96,15 +96,12 @@ namespace CAPI.Android
             }
         }
 
-        protected string RestorePath {
-            get { return Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, "CAPI", "restore"); }
-        }
-
+       
         private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             try
             {
-                backupManager.Restore(RestorePath);
+                backupManager.Restore();
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Success");
@@ -133,7 +130,7 @@ namespace CAPI.Android
             alertWarningAboutRestore.SetMessage(
                 string.Format(
                     "All current data will be erased. Are you sure you want proceed to restore. If Yes, please make sure restore data is presented at {0}",
-                    RestorePath));
+                    backupManager.RestorePath));
             alertWarningAboutRestore.SetPositiveButton("Yes", btnRestoreConfirmed_Click);
             alertWarningAboutRestore.SetNegativeButton("No", btnRestoreDeclined_Click);
             alertWarningAboutRestore.Show();

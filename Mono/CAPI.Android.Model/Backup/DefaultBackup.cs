@@ -11,28 +11,36 @@ namespace CAPI.Android.Core.Model.Backup
     {
         private const string Capi = "CAPI";
         private const string BackupFolder = "Backup";
+        private const string RestoreFolder = "Restore";
+
         private readonly string backupPath;
+        private readonly string restorePath;
+        private readonly string rootPath;
+        public string RestorePath {
+            get { return restorePath; }
+        }
         private readonly IEnumerable<IBackupable> backupables;
+
         public DefaultBackup(params IBackupable[] backupables)
         {
             this.backupables = backupables;
-            backupPath = Environment.ExternalStorageDirectory.AbsolutePath;
-            if (Directory.Exists(backupPath))
-            {
-                backupPath = System.IO.Path.Combine(backupPath, Capi);
-                if (!Directory.Exists(backupPath))
-                {
-                    Directory.CreateDirectory(backupPath);
-                }
-                backupPath = System.IO.Path.Combine(backupPath, BackupFolder);
-                if (!Directory.Exists(backupPath))
-                    Directory.CreateDirectory(backupPath);
 
-            }
-            else
+            rootPath = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
+                             ? Environment.ExternalStorageDirectory.AbsolutePath
+                             : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
+            rootPath = System.IO.Path.Combine(rootPath, Capi);
+            if (!Directory.Exists(rootPath))
             {
-                backupPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                Directory.CreateDirectory(rootPath);
             }
+            backupPath = System.IO.Path.Combine(rootPath, BackupFolder);
+            if (!Directory.Exists(backupPath))
+                Directory.CreateDirectory(backupPath);
+            restorePath = System.IO.Path.Combine(rootPath, RestoreFolder);
+            if (!Directory.Exists(restorePath))
+                Directory.CreateDirectory(restorePath);
+
         }
 
         public string Backup()
@@ -84,17 +92,15 @@ namespace CAPI.Android.Core.Model.Backup
             }
         }
 
-        public void Restore(string path)
+        public void Restore()
         {
-            if (!Directory.Exists(path))
-                throw new ArgumentException("Restore Directory is absent");
-            var files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(restorePath);
             if(files.Length==0)
                 throw new ArgumentException("Restore archive is absent");
 
             var firstFile = files[0];
-            var unziperFolder = Path.Combine(path, Path.GetFileNameWithoutExtension(firstFile));
-            AndroidZipUtility.Unzip(firstFile, path);
+            var unziperFolder = Path.Combine(restorePath, Path.GetFileNameWithoutExtension(firstFile));
+            AndroidZipUtility.Unzip(firstFile, restorePath);
             foreach (var backupable in backupables)
             {
                 backupable.RestoreFromBakupFolder(unziperFolder);
