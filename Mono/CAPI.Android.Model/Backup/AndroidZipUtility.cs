@@ -13,7 +13,7 @@ namespace CAPI.Android.Core.Model.Backup
         {
             if (File.Exists(zip))
                 throw new InvalidOperationException("zip file exists");
-            using (var zipFile = new Ionic.Zip.ZipFile())
+            using (var zipFile = new Ionic.Zip.ZipFile(Encoding.UTF8))
             {
                 zipFile.AddDirectory(directory, Path.GetFileName(directory));
                 zipFile.Save(zip);
