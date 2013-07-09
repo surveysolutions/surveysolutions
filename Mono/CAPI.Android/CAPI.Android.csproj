@@ -276,10 +276,6 @@
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
-      <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
-      <Name>AndroidCore.Capi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
       <Project>{2da6c60d-cb06-40b4-91af-a903451e3db4}</Project>
       <Name>AndroidCommon</Name>
