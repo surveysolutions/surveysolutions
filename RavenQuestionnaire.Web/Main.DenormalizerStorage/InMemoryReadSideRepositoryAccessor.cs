@@ -50,18 +50,15 @@ namespace Main.DenormalizerStorage
 
         public void Store(TView view, Guid id)
         {
-            if (!this.repository.ContainsKey(id))
-            { 
-                lock (locker)
+            lock (locker)
+            {
+                if (!this.repository.ContainsKey(id))
                 {
-                    if (!this.repository.ContainsKey(id))
-                    {
-                        this.repository.Add(id, view);
-                    }
-                    else
-                    {
-                        this.repository[id] = view;
-                    }
+                    this.repository.Add(id, view);
+                }
+                else
+                {
+                    this.repository[id] = view;
                 }
             }
         }
