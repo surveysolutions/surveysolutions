@@ -53,7 +53,11 @@ namespace WB.Core.SharedKernel.Utils.Logging
             {
                 this.WriteLogMessage(Tag, LogMessageType.Debug, message);
             }
-            this.WriteLogMessage(Tag, LogMessageType.Debug, exception.ToThrowable(), message);
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Debug, exception.ToThrowable(), message);    
+            }
+            
         }
        
         public void Info(string message, Exception exception = null)
@@ -63,7 +67,11 @@ namespace WB.Core.SharedKernel.Utils.Logging
             {
                 WriteLogMessage(Tag, LogMessageType.Info, message);
             }
-            this.WriteLogMessage(Tag, LogMessageType.Info, exception.ToThrowable(), message);
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Info, exception.ToThrowable(), message);    
+            }
+            
         }
         
         public void Warn(string message, Exception exception = null)
@@ -73,7 +81,11 @@ namespace WB.Core.SharedKernel.Utils.Logging
             {
                 this.WriteLogMessage(Tag, LogMessageType.Warning, message);
             }
-            this.WriteLogMessage(Tag, LogMessageType.Warning, exception.ToThrowable(), message);
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Warning, exception.ToThrowable(), message);    
+            }
+            
         }
 
         public void WarnFormat(string format, params object[] args)
@@ -88,7 +100,10 @@ namespace WB.Core.SharedKernel.Utils.Logging
             {
                 WriteLogMessage(Tag, LogMessageType.Error, message);
             }
-            WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message);
+            else
+            {
+                WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message);    
+            }
         }
 
         public void Fatal(string message, Exception exception = null)
@@ -98,7 +113,10 @@ namespace WB.Core.SharedKernel.Utils.Logging
             {
                 WriteLogMessage(Tag, LogMessageType.Fatal, message);
             }
-            this.WriteLogMessage(Tag, LogMessageType.Fatal, exception.ToThrowable(), message);
+            else
+            {
+                this.WriteLogMessage(Tag, LogMessageType.Fatal, exception.ToThrowable(), message);    
+            }
         }
 
         public bool IsDebugEnabled { get; private set; }

@@ -35,14 +35,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/btnLogin"
-            android:text="Login"
+            android:id="@+id/btnCancel"
+            android:text="Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
-        <Button
-            android:id="@+id/btnCancel"
-            android:text="Cancel"
+		<Button
+            android:id="@+id/btnLogin"
+            android:text="Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
