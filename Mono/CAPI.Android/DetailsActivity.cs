@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.View;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
@@ -40,9 +41,10 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<LinearLayout>(Resource.Id.llNavigationHolder); }
         }
-        protected LinearLayout llNavigationButton
+
+        protected FrameLayout flSpaceFiller
         {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llNavigationButton); }
+            get { return this.FindViewById<FrameLayout>(Resource.Id.flSpaceFiller); }
         }
         protected RelativeLayout lNavigationContainer
         {
@@ -58,7 +60,7 @@ namespace CAPI.Android
         }
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
-        private readonly int leftPanelWidth = 40;
+
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -86,7 +88,7 @@ namespace CAPI.Android
             }
 
             this.Title = ViewModel.Title;
-            
+
             if (bundle == null)
             {
                 NavList = QuestionnaireNavigationFragment.NewInstance(ViewModel.PublicKey);
@@ -104,64 +106,84 @@ namespace CAPI.Android
             VpContent.Adapter = Adapter;
             VpContent.PageSelected += VpContent_PageSelected;
 
-            llNavigationHolder.SetBackgroundColor(this.Resources.GetColor(global::Android.Resource.Color.DarkerGray));
-            btnNavigation.SetBackgroundResource(Resource.Drawable.errorwarningstyle);
-
-            UpdateLayout(leftPanelWidth);
-
-            btnNavigation.BringToFront();
         }
 
+        protected override void OnResume()
+        {
+            base.OnResume();
+            UpdateLayout(false);
+        }
         public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
         {
             base.OnConfigurationChanged(newConfig);
-
             isChaptersVisible = false;
-            UpdateLayout(leftPanelWidth);
+            UpdateLayout(false);
         }
 
-        private void UpdateLayout(int leftSize)
+        private void UpdateLayout(bool isNavigationVisible)
         {
+
+            var  point = GetScreenSizePoint();
+            var vpContentParams =
+                new RelativeLayout.LayoutParams(
+                    isNavigationVisible
+                        ? (point.X / 2 + btnNavigation.LayoutParameters.Width)
+                        : point.X,
+                    ViewGroup.LayoutParams.FillParent);
+
+            vpContentParams.LeftMargin = point.X - vpContentParams.Width;
+            VpContent.LayoutParameters = vpContentParams;
+
             var lNavigationContainerParams =
-                new RelativeLayout.LayoutParams(this.WindowManager.DefaultDisplay.Width/2,
-                                                ViewGroup
-                                                    .LayoutParams
-                                                    .FillParent);
-            lNavigationContainerParams.LeftMargin = leftSize - lNavigationContainerParams.Width;
+               new RelativeLayout.LayoutParams(point.X / 2,
+                                               ViewGroup.LayoutParams.FillParent);
+
+            lNavigationContainerParams.LeftMargin = isNavigationVisible
+                                                        ? 0 : btnNavigation.LayoutParameters.Width - lNavigationContainerParams.Width;
+
             lNavigationContainer.LayoutParameters = lNavigationContainerParams;
 
+            flSpaceFiller.LayoutParameters = new LinearLayout.LayoutParams(40, point.Y - 100);
+        }
 
-            var VpContentParams =
-                new RelativeLayout.LayoutParams(
-                    this.WindowManager.DefaultDisplay.Width - leftSize,
-                    ViewGroup
-                        .LayoutParams
-                        .FillParent);
-            VpContentParams.LeftMargin = leftSize;
-            VpContent.LayoutParameters = VpContentParams;
+        protected Point GetScreenSizePoint()
+        {
+            var rectSize = new Rect();
+            this.WindowManager.DefaultDisplay.GetRectSize(rectSize);
+
+            TypedValue tv = new TypedValue();
+            int actionBarHeight = 0;
+
+            if (this.Theme.ResolveAttribute(global::Android.Resource.Attribute.ActionBarSize, tv, true))
+            {
+                actionBarHeight = TypedValue.ComplexToDimensionPixelSize(tv.Data, this.Resources.DisplayMetrics);
+                
+            }
+            return new Point(rectSize.Width(), rectSize.Height() - actionBarHeight);
         }
 
         private bool isChaptersVisible = false;
 
         private void llNavigationHolder_Click(object sender, EventArgs e)
         {
+            var point = GetScreenSizePoint();
             int right, left;
             if (isChaptersVisible)
             {
-                right = leftPanelWidth;
-                left = leftPanelWidth - this.WindowManager.DefaultDisplay.Width / 2;
+                right = btnNavigation.LayoutParameters.Width;
+                left = btnNavigation.LayoutParameters.Width - point.X / 2;
              
                 isChaptersVisible = false;
             }
             else
             {
-                right = this.WindowManager.DefaultDisplay.Width/2;
+                right = point.X / 2;
                 left = 0;
 
                 isChaptersVisible = true;
             }
 
-            UpdateLayout(right);
+            UpdateLayout(isChaptersVisible);
 
             lNavigationContainer.Layout(left, lNavigationContainer.Top, right, lNavigationContainer.Bottom);
 
