@@ -6,8 +6,6 @@
     using System.Web.Mvc;
     using System.Web.Security;
 
-    using Core.CAPI.Views.Grouped;
-    using Core.CAPI.Views.Json;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Commands.Questionnaire.Group;
@@ -37,14 +35,13 @@
         private readonly IGlobalInfoProvider globalProvider;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticsViewFactory;
-        private readonly IViewFactory<CQGroupedBrowseInputModel, CQGroupedBrowseView> completeQuestionnaireGroupedBrowseViewFactory;
         private readonly IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView> screenGroupViewFactory;
 
-        public SurveyController(IGlobalInfoProvider globalProvider, IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticsViewFactory, IViewFactory<CQGroupedBrowseInputModel, CQGroupedBrowseView> completeQuestionnaireGroupedBrowseViewFactory, IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView> screenGroupViewFactory)
+        public SurveyController(IGlobalInfoProvider globalProvider, IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticsViewFactory,
+             IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView> screenGroupViewFactory)
         {
             this.globalProvider = globalProvider;
             this.completeQuestionnaireStatisticsViewFactory = completeQuestionnaireStatisticsViewFactory;
-            this.completeQuestionnaireGroupedBrowseViewFactory = completeQuestionnaireGroupedBrowseViewFactory;
             this.screenGroupViewFactory = screenGroupViewFactory;
         }
 
@@ -74,7 +71,7 @@
             return this.PartialView("Complete/_Answered", stat);
         }
 
-        /// <summary>
+      /*  /// <summary>
         /// The complete.
         /// </summary>
         /// <param name="id">
@@ -125,7 +122,7 @@
                         Responsible = this.globalProvider.GetCurrentUser()
                     });
             return this.RedirectToAction("Dashboard");
-        }
+        }*/
 
         /// <summary>
         /// The complete summary.
@@ -151,7 +148,7 @@
             return this.PartialView("Complete/_Main", stat);
         }
 
-        /// <summary>
+     /*   /// <summary>
         /// The dashboard.
         /// </summary>
         /// <returns>
@@ -169,9 +166,9 @@
             CQGroupedBrowseView model =
                 this.completeQuestionnaireGroupedBrowseViewFactory.Load(inputModel);
             return View(model);
-        }
+        }*/
 
-        /// <summary>
+       /* /// <summary>
         /// The delete.
         /// </summary>
         /// <param name="id">
@@ -185,7 +182,7 @@
             var service = NcqrsEnvironment.Get<ICommandService>();
             service.Execute(new DeleteCompleteQuestionnaireCommand(Guid.Parse(id)));
             return this.RedirectToAction("Dashboard", "Survey");
-        }
+        }*/
 
         /// <summary>
         /// The delete propagated group.

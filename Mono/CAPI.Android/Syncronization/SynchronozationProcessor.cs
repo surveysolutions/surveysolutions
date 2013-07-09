@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Settings;
@@ -171,6 +172,7 @@ namespace CAPI.Android.Syncronization
                     if (!userCredentials.HasValue)
                         throw new AuthenticationException("User wasn't authenticated.");
                     credentials = userCredentials.Value;
+
 
                     //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
                     string message = "connecting...";

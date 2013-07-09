@@ -276,10 +276,6 @@
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
-      <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
-      <Name>AndroidCore.Capi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
       <Project>{2da6c60d-cb06-40b4-91af-a903451e3db4}</Project>
       <Name>AndroidCommon</Name>
@@ -320,6 +316,10 @@
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>
       <Name>Mono.Android.Crasher</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Details.axml">
@@ -349,9 +349,7 @@
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
     <AndroidResource Include="Resources\Drawable\navigateLeftIcon.png" />
-    <EmbeddedResource Include="researchDeptSurvey.txt" />
-    <EmbeddedResource Include="userEvent.txt" />
-    <EmbeddedResource Include="initEvent.txt" />
+    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />

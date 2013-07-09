@@ -4,7 +4,6 @@ namespace Web.CAPI.Injections
     using System.Linq;
     using System.Reflection;
 
-    using Core.CAPI.Views;
 
 
     using Main.Core;
@@ -51,17 +50,6 @@ namespace Web.CAPI.Injections
                     new[] { typeof(QuestionnaireMembershipProvider).Assembly });
         }
 
-        /// <summary>
-        /// The load.
-        /// </summary>
-        public override void Load()
-        {
-            base.Load();
-
-            this.Unbind<IScreenViewSupplier>();
-            this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
-
-        }
 
         #endregion
     }

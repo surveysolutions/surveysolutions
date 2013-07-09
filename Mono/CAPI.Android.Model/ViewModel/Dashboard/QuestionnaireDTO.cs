@@ -11,7 +11,6 @@ using Android.Views;
 using Android.Widget;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.ModelUtils;
-using CAPI.Android.Core.Model.ProjectionStorage;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 

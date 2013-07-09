@@ -1,4 +1,6 @@
 
+using System.IO;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using WB.Core.Infrastructure;
 using System;
@@ -19,6 +21,8 @@ using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
 using Main.Core.Utility;
 using Ninject;
+using WB.Core.Infrastructure.Backup;
+using Environment = Android.OS.Environment;
 
 namespace CAPI.Android
 {
@@ -48,22 +52,101 @@ namespace CAPI.Android
             get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
         }
 
+        protected LinearLayout llContainer
+        {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
+        }
+
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
         #endregion
 
+        private int clickCount = 0;
+
+        const int NUMBER_CLICK = 10;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             this.SetContentView(Resource.Layout.sync_dialog);
 
-
+            backupManager = CapiApplication.Kernel.Get<IBackup>();
             btnSync.Click += this.ButtonSyncClick;
+
             btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
 
-            btnBackup.Visibility = btnRestore.Visibility = ViewStates.Gone;
 
+            btnBackup.Click += btnBackup_Click;
+            btnRestore.Click += btnRestore_Click;
+            tvSyncResult.Click += tvSyncResult_Click;
+            llContainer.Click += llContainer_Click;
+        }
+
+        void llContainer_Click(object sender, EventArgs e)
+        {
+            clickCount = 0;
+        }
+
+        private void tvSyncResult_Click(object sender, EventArgs e)
+        {
+            clickCount++;
+            if (clickCount >= NUMBER_CLICK)
+            {
+                btnRestore.Visibility = ViewStates.Visible;
+            }
+        }
+
+       
+        private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
+        {
+            try
+            {
+                backupManager.Restore();
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle("Success");
+                alert.SetMessage("Tablet was successefully restored");
+                alert.Show();
+            }
+            catch (Exception ex)
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle("Restore Error");
+                alert.SetMessage(ex.Message + " " + ex.StackTrace);
+                alert.Show();
+            }
+        }
+
+        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        {
+            
+        }
+
+        private void btnRestore_Click(object sender, EventArgs e)
+        {
+
+            AlertDialog.Builder alertWarningAboutRestore = new AlertDialog.Builder(this);
+            alertWarningAboutRestore.SetTitle("Warning");
+            alertWarningAboutRestore.SetMessage(
+                string.Format(
+                    "All current data will be erased. Are you sure you want proceed to restore. If Yes, please make sure restore data is presented at {0}",
+                    backupManager.RestorePath));
+            alertWarningAboutRestore.SetPositiveButton("Yes", btnRestoreConfirmed_Click);
+            alertWarningAboutRestore.SetNegativeButton("No", btnRestoreDeclined_Click);
+            alertWarningAboutRestore.Show();
+
+
+
+        }
+
+        void btnBackup_Click(object sender, EventArgs e)
+        {
+
+            var path = backupManager.Backup();
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle("Success");
+            alert.SetMessage(string.Format("Backup was saved to {0}", path));
+            alert.Show();
         }
 
         protected override void OnStart()
@@ -207,6 +290,7 @@ namespace CAPI.Android
         }
 
         private Operation? currentOperation;
+        private IBackup backupManager;
 
         private void synchronizer_StatusChanged(object sender, SynchronizationEventArgs e)
         {

@@ -1,7 +1,6 @@
 ﻿namespace Core.Supervisor.Views.Summary
 {
     using System;
-
     public class SummaryInputModel : ListViewModelBase
     {
         public SummaryInputModel(Guid viewerId, ViewerStatus viewerStatus)
