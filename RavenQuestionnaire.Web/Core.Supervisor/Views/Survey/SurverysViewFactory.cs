@@ -29,12 +29,17 @@ namespace Core.Supervisor.Views.Survey
             }
             else if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
-                predicate = predicate.AndCondition(s => s.ResponsibleSupervisorId == input.ViewerId);
-            }
 
-            if (input.UserId.HasValue)
-            {
-                predicate = predicate.AndCondition(s => s.ResponsibleId == input.UserId);
+                if (input.UserId.HasValue)
+                {
+                    predicate = predicate.AndCondition(s => s.ResponsibleId == input.UserId.Value);
+                }
+                else
+                {
+                    predicate =
+                        predicate.AndCondition(
+                            s => s.ResponsibleSupervisorId.HasValue && s.ResponsibleSupervisorId.Value == input.ViewerId);
+                }
             }
 
             var all = _summary.QueryEnumerable(predicate).ToList().GroupBy(
