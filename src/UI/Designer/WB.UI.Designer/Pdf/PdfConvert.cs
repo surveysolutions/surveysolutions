@@ -2,43 +2,9 @@
 using System.Diagnostics;
 using System.Text;
 using System.IO;
-using System.Web;
 
-namespace Codaxy.WkHtmlToPdf
+namespace WB.UI.Designer.Pdf
 {
-    public class PdfConvertException : Exception
-    {
-        public PdfConvertException(String msg) : base(msg) { }
-    }
-
-    public class PdfConvertTimeoutException : PdfConvertException
-    {
-        public PdfConvertTimeoutException() : base("HTML to PDF conversion process has not finished in the given period.") { }
-    }
-
-	public class PdfOutput
-	{
-		public String OutputFilePath { get; set; }
-		public Stream OutputStream { get; set; }
-		public Action<PdfDocument, byte[]> OutputCallback { get; set; }
-	}
-
-	public class PdfDocument
-	{
-		public String Url { get; set; }
-		public String HeaderUrl { get; set; }
-		public String FooterUrl { get; set; }
-		public object State { get; set; }
-	}
-
-	public class PdfConvertEnvironment
-	{
-		public String TempFolderPath { get; set; }
-		public String WkHtmlToPdfPath { get; set; }
-		public int Timeout { get; set; }
-		public bool Debug { get; set; }
-	}
-
     public class PdfConvert
     {
 		static PdfConvertEnvironment _e;
@@ -101,7 +67,17 @@ namespace Codaxy.WkHtmlToPdf
                 paramsBuilder.Append("--margin-bottom 25 ");
                 paramsBuilder.Append("--footer-spacing 5 ");
             }
-            
+
+            if (!string.IsNullOrEmpty(document.PageNumbersFormat))
+            {
+                paramsBuilder.AppendFormat("--header-right \"{0}\" ", document.PageNumbersFormat);
+            }
+
+            if (!string.IsNullOrEmpty(document.CoverUrl))
+            {
+                paramsBuilder.AppendFormat("cover \"{0}\" ", document.CoverUrl);
+            }
+
 			paramsBuilder.AppendFormat("\"{0}\" \"{1}\"", document.Url, outputPdfFilePath);
            
 
@@ -159,19 +135,7 @@ namespace Codaxy.WkHtmlToPdf
         }
     }
 
-	class OSUtil
-	{
-		public static string GetProgramFilesx86Path()
-		{
-			if (8 == IntPtr.Size || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
-			{
-				return Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-			}
-			return Environment.GetEnvironmentVariable("ProgramFiles");
-		}
-	}
-
-	//public static class HttpResponseExtensions
+    //public static class HttpResponseExtensions
 	//{
 	//    public static void SendFileForDownload(this HttpResponse response, String filename, byte[] content)
 	//    {

@@ -1,41 +1,70 @@
-﻿
+﻿using Main.Core.View;
+using System;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Web.Mvc;
+using WB.UI.Designer.Pdf;
+using WB.UI.Designer.Providers.CQRS.Accounts.View;
+using WB.UI.Designer.Views.Questionnaire;
+using WB.UI.Shared.Web.Membership;
+
 namespace WB.UI.Designer.Controllers
 {
-    using Codaxy.WkHtmlToPdf;
-    using Main.Core.View;
-    using System;
-    using System.Configuration;
-    using System.IO;
-    using System.Web.Mvc;
-    
-    using WB.UI.Designer.Views.Questionnaire;
-    using WB.UI.Shared.Web.Membership;
-
     public class PdfController : BaseController
     {
+        private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
+ 
 
         public PdfController(
-             IMembershipUserService userHelper,
-             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory)
-             : base(userHelper)
+            IMembershipUserService userHelper,
+            IViewFactory<AccountViewInputModel, AccountView> userViewFactory,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory)
+            : base(userHelper)
         {
+            this.userViewFactory = userViewFactory;
             this.viewFactory = viewFactory;
-        }
-
-        [Authorize]
-        public ActionResult PreviewQuestionnaire(Guid id)
-        {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
-
-            return this.View(questionnaire);
         }
 
         public ActionResult RenderQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            ViewBag.QuestionnaireGuid = questionnaire.PublicKey;
 
             return this.View(questionnaire);
+        }
+
+        public ActionResult RenderTitlePage(Guid id)
+        {
+            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+
+            var model = new TitlePageDto();
+            model.SurveyName = questionnaire.Title;
+            model.CreationDate = questionnaire.CreationDate.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern);
+            model.ChaptersCount = questionnaire.GetChaptersCount();
+            model.QuestionsCount = questionnaire.GetQuestionsCount();
+            model.QuestionsWithConditionsCount = questionnaire.GetQuestionsWithConditionsCount();
+            model.GroupsCount = questionnaire.GetGroupsCount();
+
+            if (questionnaire.CreatedBy.HasValue)
+            {
+                AccountView accountView = userViewFactory.Load(new AccountViewInputModel(questionnaire.CreatedBy.Value));
+                if (accountView != null)
+                {
+                    model.AuthorName = accountView.UserName;
+                }
+                else
+                {
+                    model.AuthorName = "No Author";
+                }
+            }
+            else
+            {
+                model.AuthorName = "No Author";
+            }
+
+            return this.View(model);
         }
 
         [Authorize]
@@ -58,7 +87,8 @@ namespace WB.UI.Designer.Controllers
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
                     {
-                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new {id = id}),
+                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id }),
+                        CoverUrl = GlobalHelper.GenerateUrl("RenderTitlePage", "Pdf", new {id = id})
                     },
                 new PdfOutput
                     {
@@ -79,6 +109,7 @@ namespace WB.UI.Designer.Controllers
 
             return path;
         }
+
 
         private QuestionnaireView LoadQuestionnaire(Guid id)
         {

@@ -138,7 +138,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             {
                 string ravenId = ToRavenId(id);
 
-                return session.Load<TEntity>(id: ravenId);
+                var result = session.Load<TEntity>(id: ravenId);
+
+                return result;
+
             }
         }
 
@@ -232,9 +235,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             {
                 foreach (KeyValuePair<Guid, CachedEntity> cachedEntityWithId in bulkOfCachedEntities)
                 {
-                    string ravenId = ToRavenId(cachedEntityWithId.Key);
-
-                    session.Store(entity: cachedEntityWithId.Value.Entity, id: ravenId);
+                    if (cachedEntityWithId.Value.ShouldBeStoredToRepository)
+                    {
+                        string ravenId = ToRavenId(cachedEntityWithId.Key);
+                        session.Store(entity: cachedEntityWithId.Value.Entity, id: ravenId);
+                    }
                 }
 
                 session.SaveChanges();
