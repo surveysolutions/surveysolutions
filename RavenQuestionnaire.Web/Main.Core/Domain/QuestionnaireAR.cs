@@ -1,8 +1,9 @@
 ﻿using System.Linq;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core.Domain
 {
@@ -27,6 +28,8 @@ namespace Main.Core.Domain
 
         private readonly ICompleteQuestionFactory questionFactory;
 
+        private ILogger logger;
+
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.SingleOption,
@@ -41,6 +44,7 @@ namespace Main.Core.Domain
             : base()
         {
             this.questionFactory = new CompleteQuestionFactory();
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
       
@@ -618,7 +622,7 @@ namespace Main.Core.Domain
 
             if (isLegacyEvent)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
                 return;
             }
 
