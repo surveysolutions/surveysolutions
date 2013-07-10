@@ -32,13 +32,17 @@ namespace Core.Supervisor.Views.Summary
             }
             else if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
-                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
+                if (input.TemplateId.HasValue)
+                {
+                    predicate = predicate.AndCondition(x => x.TemplateId == input.TemplateId);
+                }
+                else
+                {
+                    predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
+                }
             }
 
-            if (input.TemplateId.HasValue)
-            {
-                predicate = predicate.AndCondition(x => x.TemplateId == input.TemplateId);
-            }
+            
 
             var all = summary.QueryEnumerable(predicate).GroupBy(
                 x => x.ResponsibleId,
