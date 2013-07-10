@@ -17,6 +17,7 @@ namespace CAPI.Android.Core.Model.Backup
             using (
                 var zipFile = new Ionic.Zip.ZipFile()
                     {
+                        ParallelDeflateThreshold = -1;
                         AlternateEncoding = System.Text.Encoding.UTF8,
                         AlternateEncodingUsage = ZipOption.Always
                     })
