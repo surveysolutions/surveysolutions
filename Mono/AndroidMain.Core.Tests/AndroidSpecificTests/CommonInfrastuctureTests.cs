@@ -117,9 +117,6 @@ namespace AndroidMain.Core.Tests.CommonTests
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(command);
 
-            IEnumerable<CommittedEvent> allEvents = store.GetEventStream();
-
-            Assert.That(allEvents.Count(), Is.EqualTo(2));
 
             CommittedEventStream newStoredEvents = store.ReadFrom(newTemplateGuid, long.MinValue, long.MaxValue);
             Assert.That(newStoredEvents.Count(), Is.EqualTo(1));

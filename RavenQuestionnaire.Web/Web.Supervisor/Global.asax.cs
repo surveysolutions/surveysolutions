@@ -73,10 +73,10 @@ namespace Web.Supervisor
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
-            this.logger.Fatal(lastError);
+            this.logger.Fatal("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
-                this.logger.Fatal(lastError.InnerException);
+                this.logger.Fatal("Unexpected error occurred", lastError.InnerException);
             }
         }
 

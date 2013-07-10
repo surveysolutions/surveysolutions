@@ -68,7 +68,7 @@ namespace Questionnaire.Core.Web.WCF
                 }
                 catch (Exception e)
                 {
-                    LogManager.GetLogger(this.GetType()).Fatal(e);
+                    LogManager.GetLogger(this.GetType()).Fatal("Unexpected error occurred", e);
                 }
                 finally
                 {

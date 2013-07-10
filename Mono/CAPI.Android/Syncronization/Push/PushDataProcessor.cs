@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidNcqrs.Eventing.Storage.SQLite;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs;

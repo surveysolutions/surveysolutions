@@ -464,10 +464,6 @@
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Core.CAPI\Core.CAPI.csproj">
-      <Project>{C71E88E7-10A1-40FB-A789-E1FF2F0687D4}</Project>
-      <Name>Core.CAPI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>

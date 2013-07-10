@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core;

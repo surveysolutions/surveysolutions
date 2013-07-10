@@ -224,7 +224,7 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        LogManager.GetLogger(typeof(AccountController)).Error(e);
+                        LogManager.GetLogger(typeof(AccountController)).Error("Unexpected error occurred", e);
                     }
                 }
             }

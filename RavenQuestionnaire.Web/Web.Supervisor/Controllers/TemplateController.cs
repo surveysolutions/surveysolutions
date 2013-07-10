@@ -135,7 +135,7 @@ namespace Web.Supervisor.Controllers
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
                             GlobalHelper.GenerateUrl("Import", "Template", null)));
-                    Logger.Error(ex);
+                    Logger.Error("Could not connect to designer.", ex);
                 }
             }
 
@@ -177,7 +177,7 @@ namespace Web.Supervisor.Controllers
             catch (Exception ex)
             {
                 this.Error("Error when downloading questionnaire from designer. Please try again");
-                Logger.Error(ex);
+                Logger.Error("Unexpected error occurred", ex);
             }
 
             if (document == null)

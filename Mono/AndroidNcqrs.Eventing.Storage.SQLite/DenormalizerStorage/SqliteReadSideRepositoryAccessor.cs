@@ -1,76 +1,83 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Cirrious.MvvmCross.ExtensionMethods;
 using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Cirrious.MvvmCross.Plugins.Sqlite;
-using Main.DenormalizerStorage;
 using SQLite;
-
-using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,
+    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,IBackupable,
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
-        //        private readonly ISQLiteConnectionFactory _connectionFactory;
-        private readonly ISQLiteConnection _connection;
-        private const string _dbName = "Projections";
-
-        public SqliteReadSideRepositoryAccessor()
+        private ISQLiteConnection connection;
+        private readonly string dbName;
+        public SqliteReadSideRepositoryAccessor(string dbName)
         {
+            this.dbName=dbName;
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
-            _connection = connectionFactory.Create(_dbName);
+            connection = connectionFactory.Create(dbName);
 
-            _connection.CreateTable<TView>();
+            connection.CreateTable<TView>();
         }
 
         public int Count()
         {
-            return _connection.Table<TView>().Count();
+            return connection.Table<TView>().Count();
         }
 
         public TView GetById(Guid id    )
         {
             var idString = id.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
-            return ((TableQuery<TView>) _connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
+            return ((TableQuery<TView>) connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
         public IEnumerable<TView> Filter(Expression<Func<TView, bool>> predExpr)
         {
-            return ((TableQuery<TView>) _connection.Table<TView>()).Where(predExpr);
+            return ((TableQuery<TView>) connection.Table<TView>()).Where(predExpr);
         }
 
         public void Remove(Guid id)
         {
-            _connection.Delete<TView>(id.ToString());
+            connection.Delete<TView>(id.ToString());
         }
 
         public void Store(TView view, Guid id)
         {
             try
             {
-                _connection.Insert(view);
+                connection.Insert(view);
             }
             catch
             {
-                _connection.Update(view);
+                connection.Update(view);
             }
+        }
+
+        public string GetPathToBakupFile()
+        {
+            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                          this.dbName);
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            connection.Close();
+
+            File.Copy(Path.Combine(path, dbName),
+                      System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                          this.dbName), true);
+            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            connection = connectionFactory.Create(dbName);
         }
     }
 

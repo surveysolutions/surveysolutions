@@ -65,6 +65,7 @@
         $.post(self.ServiceUrl, params, null, "json")
             .done(function (data) {
                 ko.mapping.fromJS(data, {}, self);
+                self.ItemsSummary(data.ItemsSummary);
                 self.IsPageLoaded(true);
             });
     };

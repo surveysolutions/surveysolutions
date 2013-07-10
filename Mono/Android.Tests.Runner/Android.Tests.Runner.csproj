@@ -76,10 +76,6 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidCore.CAPI.Tests\AndroidCore.CAPI.Tests.csproj">
-      <Project>{18843DE6-BA3F-4964-BB63-99635C3CAEDA}</Project>
-      <Name>AndroidCore.CAPI.Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core.Tests\AndroidMain.Core.Tests.csproj">
       <Project>{9268D360-154C-46C9-9B56-924DE80306A6}</Project>
       <Name>AndroidMain.Core.Tests</Name>

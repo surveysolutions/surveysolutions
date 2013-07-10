@@ -89,7 +89,7 @@ namespace Web.Supervisor.Controllers
             catch (Exception e)
             {
                 var logger = LogManager.GetLogger(this.GetType());
-                logger.Fatal(e);
+                logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -112,7 +112,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -133,7 +133,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
