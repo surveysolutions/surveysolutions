@@ -26,10 +26,6 @@
     else {
         switch (Model.QuestionType)
         {
-            case QuestionType.Numeric: {
-                <div class="answer-placeholder">&nbsp;</div>
-                    break;
-                }
             case QuestionType.Text: {
                 <div class="answer-placeholder">&nbsp;</div>
                 <div class="answer-placeholder">&nbsp;</div>
@@ -46,6 +42,7 @@
                     break;
                 }
             default:
+                <div class="answer-placeholder">&nbsp;</div>
                 break;
         }
     }
