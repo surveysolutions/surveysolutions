@@ -16,12 +16,13 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
-    public class ChangeLogManipulator : IChangeLogManipulator
+    public class ChangeLogManipulator : IChangeLogManipulator, IBackupable
     {
         private readonly IReadSideRepositoryWriter<PublicChangeSetDTO> publicChangeLog;
         private readonly IFilterableReadSideRepositoryWriter<DraftChangesetDTO> draftChangeLog;
@@ -122,5 +123,14 @@ namespace CAPI.Android.Core.Model.ChangeLog
             return record;
         }
 
+        public string GetPathToBakupFile()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

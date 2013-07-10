@@ -179,12 +179,6 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 			var thirdId = Guid.NewGuid();
 			var thirdStream = GetUncommiteEventStream(thirdId);
 			_store.Store(thirdStream);
-
-		    var allEvents = _store.GetEventStream();
-			allEvents.Count().Should().Be(9);
-
-			allEvents.GroupBy(e => e.EventSourceId)
-				.Count().Should().Be(3);
 		}
 
 		[Test]

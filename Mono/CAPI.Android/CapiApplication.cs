@@ -6,10 +6,10 @@ using Android.Content;
 using Android.Runtime;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
-using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
@@ -108,16 +108,8 @@ namespace CAPI.Android
 
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
-            var bigSurveyStore = new InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
-
-            Kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
-            Kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
-
-            Kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireView>>();
-            Kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
-
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(bigSurveyStore);
+                new CompleteQuestionnaireViewDenormalizer(kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
             bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(eventHandler, typeof (AnswerSet));
             bus.RegisterHandler(eventHandler, typeof (CommentSet));
@@ -130,40 +122,23 @@ namespace CAPI.Android
         private void InitFileStorage(InProcessEventBus bus)
         {
             var fileSorage = new AndroidFileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
-                                                       new FileStorageService());
+                                                       kernel.Get<IFileStorageService>());
             bus.RegisterHandler(fileSorage, typeof (FileUploaded));
             bus.RegisterHandler(fileSorage, typeof (FileDeleted));
         }
 
         private void InitUserStorage(InProcessEventBus bus)
         {
-            var mvvmSqlLiteUserStorage = new SqliteReadSideRepositoryAccessor<LoginDTO>();
-            var membership = new AndroidAuthentication(mvvmSqlLiteUserStorage);
-            kernel.Bind<IAuthentication>().ToConstant(membership);
             var usereventHandler =
-                new UserDenormalizer(mvvmSqlLiteUserStorage);
+                new UserDenormalizer(kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
             bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
         }
 
         private void InitDashboard(InProcessEventBus bus)
         {
-            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>();
-            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>();
-            
-            Kernel.Unbind<IReadSideRepositoryWriter<SurveyDto>>();
-            Kernel.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
-
-            Kernel.Unbind<IFilterableReadSideRepositoryReader<SurveyDto>>();
-            Kernel.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
-
-            Kernel.Unbind<IReadSideRepositoryWriter<QuestionnaireDTO>>();
-            Kernel.Bind<IReadSideRepositoryWriter<QuestionnaireDTO>>().ToConstant(questionnaireStore);
-
-            Kernel.Unbind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>();
-            Kernel.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
-            
             var dashboardeventHandler =
-                new DashboardDenormalizer(questionnaireStore, surveyStore);
+                new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
+                                          kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
             bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
@@ -171,19 +146,12 @@ namespace CAPI.Android
 
         private void InitChangeLog(InProcessEventBus bus)
         {
-            var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>();
-            var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>();
-
-            Kernel.Unbind<IReadSideRepositoryWriter<PublicChangeSetDTO>>();
-            Kernel.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
-
-            Kernel.Unbind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>();
-            Kernel.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
-
+           
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
             bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
         }
+
         public override void OnCreate()
         {
             base.OnCreate();
@@ -200,13 +168,13 @@ namespace CAPI.Android
                 _setup.Initialize();
             }
 
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidLoggingModule());
+            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule(), new AndroidLoggingModule());
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
             NcqrsInit.Init(kernel);
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
+            NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
 
             #region register handlers
 
