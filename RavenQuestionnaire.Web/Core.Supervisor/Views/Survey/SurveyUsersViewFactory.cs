@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Core.Supervisor.DenormalizerStorageItem;
 
 namespace Core.Supervisor.Views.Survey
@@ -21,33 +22,33 @@ namespace Core.Supervisor.Views.Survey
 
         public SurveyUsersView Load(SurveyUsersViewInputModel input)
         {
-            return this.summary.Query(
-                _ =>
-                {
-                    if (input.ViewerStatus == ViewerStatus.Headquarter)
-                    {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
-                    }
-                    else if (input.ViewerStatus == ViewerStatus.Supervisor)
-                    {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
-                    }
 
-                    return new SurveyUsersView()
-                    {
-                        Items =
-                            _.ToList().Distinct(new SurveyItemByUserNameComparer())
-                                .Select(
-                                    x =>
-                                        new SurveyUsersViewItem()
-                                        {
-                                            UserId =
-                                                x.ResponsibleId,
-                                            UserName =
-                                                x.ResponsibleName
-                                        })
-                    };
-                });
+            Expression<Func<SummaryItem, bool>> predicate = (s) => true;
+            if (input.ViewerStatus == ViewerStatus.Headquarter)
+            {
+                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == null);
+            }
+            else if (input.ViewerStatus == ViewerStatus.Supervisor)
+            {
+                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
+            }
+
+            return new SurveyUsersView()
+                {
+                    Items =
+                        summary.QueryEnumerable(predicate).ToList().Distinct(new SurveyItemByUserNameComparer())
+                               .Select(
+                                   x =>
+                                   new SurveyUsersViewItem()
+                                       {
+                                           UserId =
+                                               x.ResponsibleId,
+                                           UserName =
+                                               x.ResponsibleName
+                                       })
+                };
+
+
 
         }
     }

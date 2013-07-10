@@ -1,4 +1,5 @@
 ﻿using Core.Supervisor.Views;
+using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Logging;
 
@@ -173,7 +174,7 @@ namespace Web.Supervisor.Controllers
             return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)
+        public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned, int? page)
         {
             ViewBag.ActivePage = MenuItem.Docs;
             var user = this.GlobalInfo.GetCurrentUser();
@@ -182,6 +183,8 @@ namespace Web.Supervisor.Controllers
                 interviewerId, null, null, null,
                 status,
                 isNotAssigned ?? false);
+            if (page.HasValue)
+                inputModel.Page = page.Value;
             var model = this.assignmentViewFactory.Load(inputModel);
             ViewBag.Users = new SelectList(model.AssignableUsers, "PublicKey", "UserName");
             return this.View(model);
@@ -363,7 +366,7 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.GlobalInfo.GetCurrentUser();
             var users = this.interviewersViewFactory.Load(new InterviewersInputModel(user.Id));
-            ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
+            ViewBag.Users = new SelectList(users.Items.Select(i=>new UserDocument(){PublicKey = i.UserId,UserName = i.UserName}), "PublicKey", "UserName");
             var input = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                 data.TemplateId,
                 data.InterviwerId,
