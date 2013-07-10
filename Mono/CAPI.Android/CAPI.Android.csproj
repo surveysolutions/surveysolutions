@@ -265,6 +265,10 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
+      <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -284,10 +288,6 @@
     <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
       <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
       <Name>AndroidCore.Capi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
-      <Project>{2da6c60d-cb06-40b4-91af-a903451e3db4}</Project>
-      <Name>AndroidCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>

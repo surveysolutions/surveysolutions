@@ -41,7 +41,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-
+using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -200,13 +200,14 @@ namespace CAPI.Android
                 _setup.Initialize();
             }
 
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
+            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidLoggingModule());
             kernel.Bind<Context>().ToConstant(this);
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
+            this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
             NcqrsInit.Init(kernel);
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new AndroidSnapshotStore());
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
-            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
