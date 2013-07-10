@@ -5,7 +5,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Main.Core;
-using WB.Core.SharedKernel.Utils.Logging;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer
@@ -44,7 +45,8 @@ namespace WB.UI.Designer
 
             var ex = Server.GetLastError();
 
-            LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", ex);
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Error("Unexpected error occurred", ex);
 
             var controller = new ErrorController();
             var routeData = new RouteData();
