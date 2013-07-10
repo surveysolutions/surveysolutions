@@ -8,7 +8,6 @@ using Raven.Client.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.SharedKernel.Utils.Logging;
 using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
@@ -32,9 +31,6 @@ namespace LoadTestDataGenerator
         public override void Load()
         {
             base.Load();
-
-            this.Bind<ILogger>().ToMethod(
-                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
         }
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
