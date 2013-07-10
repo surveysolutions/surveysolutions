@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Injections
@@ -92,12 +91,8 @@ namespace Web.Supervisor.Injections
 
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
-
-            this.Bind<ILogger>().ToMethod(
-                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
-
+            
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
-
         }
     }
 }
