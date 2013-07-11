@@ -153,12 +153,16 @@
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

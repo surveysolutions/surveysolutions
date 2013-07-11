@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,11 +13,11 @@ namespace Main.DenormalizerStorage
     public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
-        private readonly ConcurrentDictionary<Guid, TView> repository;
-
+        private readonly Dictionary<Guid, TView> repository;
+        private object locker = new object();
         public InMemoryReadSideRepositoryAccessor()
         {
-            this.repository = new ConcurrentDictionary<Guid, TView>();
+            this.repository = new Dictionary<Guid, TView>();
         }
 
         public int Count()
@@ -43,19 +42,25 @@ namespace Main.DenormalizerStorage
 
         public void Remove(Guid id)
         {
-            TView val;
-            this.repository.TryRemove(id, out val);
+            lock (locker)
+            {
+                this.repository.Remove(id);
+            }
         }
 
         public void Store(TView view, Guid id)
         {
-            if (this.repository.ContainsKey(id))
+            lock (locker)
             {
-                this.repository[id] = view;
-                return;
+                if (!this.repository.ContainsKey(id))
+                {
+                    this.repository.Add(id, view);
+                }
+                else
+                {
+                    this.repository[id] = view;
+                }
             }
-
-            this.repository.TryAdd(id, view);
         }
 
         public void Clear()

@@ -12,21 +12,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
     {
         private static readonly ReaderWriterLockSlim _cacheLocker = new ReaderWriterLockSlim();
 
-        //private static bool _isLog4NetAvailable = false;
         private static Dictionary<Type, ILogger> _loggerCache = new Dictionary<Type, ILogger>();
-
-        static LogManager()
-        {
-            /*try
-            {
-                Assembly.Load("log4net");
-                _isLog4NetAvailable = true;
-            }
-            catch (FileNotFoundException)
-            {
-                _isLog4NetAvailable = false;
-            }*/
-        }
 
         public static ILogger GetLogger(Type type)
         {
@@ -67,15 +53,6 @@ namespace WB.Core.SharedKernel.Utils.Logging
         private static ILogger CreateLoggerForType(Type type)
         {
             return new NLogLogger(global::NLog.LogManager.GetLogger(type.FullName));
-
-            /*if (_isLog4NetAvailable)
-            {
-                return (ILog)Activator.CreateInstance(typeof(Log4NetLogger), new object[] { type });
-            }
-            else
-            {
-                return new TraceLogger();
-            }*/
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Android.Tests.Runner
 		protected override IEnumerable<TestAssemblyInfo> GetAssembliesForTest()
 		{
 			yield return NcqrsTests();
-			yield return CapiTests();
 			yield return NcalcTests();
 			yield return MainCoreTests();
 			yield return SQliteEventStoreTests();
@@ -31,12 +30,6 @@ namespace Android.Tests.Runner
 			return new TestAssemblyInfo(assembly);
 		}
 
-		private TestAssemblyInfo CapiTests()
-		{
-            var assembly = typeof(Core.CAPI.Tests.ExportStatisticsFactoryTests).Assembly;
-
-			return new TestAssemblyInfo(assembly);
-		}
 
 		private TestAssemblyInfo SQliteEventStoreTests()
 		{
