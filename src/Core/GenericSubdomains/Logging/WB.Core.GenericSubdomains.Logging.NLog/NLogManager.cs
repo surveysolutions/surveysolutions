@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using WB.Core.GenericSubdomains.Logging;
 
-namespace WB.Core.SharedKernel.Utils.Logging
+namespace WB.Core.GenericSubdomains.Logging.NLog
 {
     /// <summary>
     /// A manager class to use to get a logger for a certain type.
     /// </summary>
-    public static class LogManager
+    internal static class LogManager
     {
         private static readonly ReaderWriterLockSlim _cacheLocker = new ReaderWriterLockSlim();
 
