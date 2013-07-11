@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Commands.Questionnaire
+﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
-    using System;
-
-    using Main.Core.Domain;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     [Serializable]
     [MapsToAggregateRootConstructor(typeof(QuestionnaireAR))]
     public class CreateQuestionnaireCommand : CommandBase

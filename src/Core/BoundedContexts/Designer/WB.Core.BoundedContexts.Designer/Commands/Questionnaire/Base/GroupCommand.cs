@@ -1,6 +1,6 @@
 using System;
 
-namespace Main.Core.Commands.Questionnaire.Base
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
     public abstract class GroupCommand : QuestionnaireCommand
     {

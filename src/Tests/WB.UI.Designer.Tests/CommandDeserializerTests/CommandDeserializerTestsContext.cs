@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 namespace WB.UI.Designer.Tests.CommandDeserializerTests
 {
     using Machine.Specifications;
-
-    using Main.Core.Commands.Questionnaire.Group;
-
     using Ncqrs.Commanding;
 
     using WB.UI.Designer.Code.Helpers;

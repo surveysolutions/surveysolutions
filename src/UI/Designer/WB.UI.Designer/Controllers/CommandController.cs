@@ -1,9 +1,9 @@
-﻿namespace WB.UI.Designer.Controllers
+﻿using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+
+namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Web.Mvc;
-
-    using Main.Core.Commands.Questionnaire.Base;
     using Main.Core.Domain;
 
     using Ncqrs.Commanding;
