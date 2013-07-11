@@ -210,7 +210,28 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var itemToMove = questionnaire.Groups.TreeToEnumerable().FirstOrDefault(x => x.Id == @event.PublicKey);
+                if (itemToMove != null && itemToMove.Parent != null)
+                {
+
+                    if (@event.TargetIndex < 0)
+                    {
+                        itemToMove.Parent.Children.Insert(0, itemToMove);
+                    }
+                    else if (@event.TargetIndex >= itemToMove.Parent.Children.Count)
+                    {
+                        itemToMove.Parent.Children.Add(itemToMove);
+                    }
+                    else
+                    {
+                        itemToMove.Parent.Children.Insert(@event.TargetIndex, itemToMove);
+                    }
+                }
+
+                return questionnaire;
+            });
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
