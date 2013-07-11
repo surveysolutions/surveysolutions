@@ -18,6 +18,7 @@
         }
 
         public string Title { get; set; }
+
         public bool IsPublic { get; set; }
     }
 }
