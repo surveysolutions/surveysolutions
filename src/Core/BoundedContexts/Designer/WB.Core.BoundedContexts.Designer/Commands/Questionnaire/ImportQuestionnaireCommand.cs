@@ -17,13 +17,8 @@ namespace Main.Core.Commands.Questionnaire
             QuestionnaireId = source.PublicKey;
         }
 
-        /// <summary>
-        ///     Gets or sets the created by.
-        /// </summary>
         public Guid CreatedBy { get; private set; }
-        /// <summary>
-        /// Gets or sets the source.
-        /// </summary>
+
         public IQuestionnaireDocument Source { get; private set; }
 
         [AggregateRootId]
