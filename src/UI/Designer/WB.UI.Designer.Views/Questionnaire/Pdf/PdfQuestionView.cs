@@ -13,5 +13,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         public QuestionType QuestionType { get; set; }
 
         public List<PdfAnswerView> Answers { get; set; }
+
+        public bool HasCodition { get; set; }
     }
 }
