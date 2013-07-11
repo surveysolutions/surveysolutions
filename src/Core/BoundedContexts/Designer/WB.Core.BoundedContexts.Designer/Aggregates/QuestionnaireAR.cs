@@ -1,26 +1,22 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.AbstractFactories;
+using Main.Core.Documents;
+using Main.Core.Domain;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.Extensions;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
+using Ncqrs;
 using Ncqrs.Domain;
-
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.SharedKernel.Utils.Logging;
 
-namespace Main.Core.Domain
+namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.AbstractFactories;
-    using Main.Core.Documents;
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.Extensions;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.Events.Questionnaire;
-    using Main.Core.Utility;
-
-    
-    using Ncqrs;
-
     public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();

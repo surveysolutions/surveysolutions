@@ -1,12 +1,11 @@
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+
 namespace WB.UI.Designer.Code.Helpers
 {
     using System;
     using System.Collections.Generic;
-
-    using Main.Core.Commands.Questionnaire.Group;
-    using Main.Core.Commands.Questionnaire.Question;
-    using Main.Core.Commands.Questionnaire;
-
     using Ncqrs.Commanding;
 
     using Newtonsoft.Json;
