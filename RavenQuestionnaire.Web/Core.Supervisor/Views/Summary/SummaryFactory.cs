@@ -42,9 +42,9 @@ namespace Core.Supervisor.Views.Summary
                 }
             }
 
-            
 
-            var all = summary.QueryEnumerable(predicate).GroupBy(
+
+            var all = summary.QueryAll(predicate).GroupBy(
                 x => x.ResponsibleId,
                 y => y,
                 (x, y) =>

@@ -23,6 +23,7 @@ namespace Core.Supervisor.Views.Survey
         public SurveysView Load(SurveysInputModel input)
         {
             Expression<Func<SummaryItem, bool>> predicate = (s) => true;
+
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
                 predicate = predicate.AndCondition(s => s.ResponsibleSupervisorId == null);
@@ -42,7 +43,7 @@ namespace Core.Supervisor.Views.Survey
                 }
             }
 
-            var all = _summary.QueryEnumerable(predicate).ToList().GroupBy(
+            var all = _summary.QueryAll(predicate).ToList().GroupBy(
                 x => x.TemplateId,
                 y => y,
                 (x, y) =>

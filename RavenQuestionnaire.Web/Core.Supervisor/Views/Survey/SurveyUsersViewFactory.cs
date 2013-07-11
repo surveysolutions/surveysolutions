@@ -36,7 +36,7 @@ namespace Core.Supervisor.Views.Survey
             return new SurveyUsersView()
                 {
                     Items =
-                        summary.QueryEnumerable(predicate).ToList().Distinct(new SurveyItemByUserNameComparer())
+                        summary.QueryAll(predicate).ToList().Distinct(new SurveyItemByUserNameComparer())
                                .Select(
                                    x =>
                                    new SurveyUsersViewItem()

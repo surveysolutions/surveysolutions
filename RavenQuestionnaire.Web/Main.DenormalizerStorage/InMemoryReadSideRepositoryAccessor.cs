@@ -46,16 +46,16 @@ namespace Main.DenormalizerStorage
            repository.Values.Where(query.Compile()).Count();
         }
 
-        public IEnumerable<TView> QueryEnumerable(Expression<Func<TView, bool>> query)
+        public IEnumerable<TView> QueryAll(Expression<Func<TView, bool>> query)
         {
             return 
             repository.Values.Where(query.Compile());
         }
 
-        public IEnumerable<TView> QueryEnumerable(Expression<Func<TView, bool>> query, int start, int pageSize)
+        public IQueryable<TView> QueryEnumerable(Expression<Func<TView, bool>> query)
         {
             return
-           repository.Values.Where(query.Compile()).Skip(start).Take(pageSize);
+           repository.Values.Where(query.Compile()).AsQueryable();
         }
 
         public void Remove(Guid id)

@@ -89,15 +89,14 @@ namespace Core.Supervisor.Views.Assignment
                 predicate = AndCondition(predicate, s => s.CompleteQuestionnaireId == input.QuestionnaireId);
             }
 
-            IQueryable<CompleteQuestionnaireBrowseItem> items = this.surveys.QueryEnumerable(predicate, (input.Page - 1) * input.PageSize, input.PageSize)
-                                                                    .ToList()
-                                                                    .AsQueryable()
-                                                                    .OrderByDescending(t => t.CreationDate);
-
+            IQueryable<CompleteQuestionnaireBrowseItem> items =
+                this.surveys.QueryEnumerable(predicate).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
+                    .OrderByDescending(t => t.CreationDate).ToList().AsQueryable();
 
 
             view.TotalCount = this.surveys.Count(predicate);
 
+#warning this order by is wrong. It is doing sorting awith paged results
             if (input.Orders.Count > 0)
             {
                 items = this.DefineOrderBy(items, input);
@@ -112,6 +111,7 @@ namespace Core.Supervisor.Views.Assignment
 
         private Expression<Func<CompleteQuestionnaireBrowseItem, bool>> AndCondition(Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate, Expression<Func<CompleteQuestionnaireBrowseItem, bool>> condition)
         {
+          //  return predicate.AndAlso(condition);
             return Expression.Lambda<Func<CompleteQuestionnaireBrowseItem, bool>>(
                 Expression.AndAlso(predicate.Body, condition.Body), predicate.Parameters);
         }

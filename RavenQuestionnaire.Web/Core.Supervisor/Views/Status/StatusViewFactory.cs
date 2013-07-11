@@ -40,31 +40,24 @@ namespace Core.Supervisor.Views.Status
 
 #warning ReadLayer: Select is not supported on Raven side (fails with NRE)
 
-            List<TemplateLight> headers = this.surveys.Query(_ => _
-                                                                      .ToList()
-                                                                      .Select(
-                                                                          s =>
-                                                                          new TemplateLight(s.TemplateId,
-                                                                                            s.QuestionnaireTitle))
-                                                                      .Distinct()
-                                                                      .ToList());
-
-            /*   this.surveys.Query(queryable =>
-               {*/
+            List<TemplateLight> headers = this.surveys.QueryAll(q => true).Select(
+                s =>
+                new TemplateLight(s.TemplateId,
+                                  s.QuestionnaireTitle)).Distinct()
+                                              .ToList();
+            
             Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate = (x) => x.Responsible != null && x.Responsible.Id.In(interviewers);
+
             if (status.PublicId != SurveyStatus.Unknown.PublicId)
             {
                 predicate = predicate.AndCondition(x => x.Status.PublicId == status.PublicId);
             }
 
-            var query = this.surveys.QueryEnumerable(predicate);
-
-
+            var query = this.surveys.QueryAll(predicate);
 
             List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = query
                 .GroupBy(x => x.Responsible)
                 .ToList();
-            //  });
 
             var items = BuildItems(groupedSurveys).AsQueryable();
 
@@ -97,12 +90,6 @@ namespace Core.Supervisor.Views.Status
 
             if (Guid.TryParse(field, out templateId))
             {
-               /* var key = item.Items.Keys.SingleOrDefault(k => k.TemplateId == templateId);
-                if (key == null)
-                {
-                    return 0;
-                }*/
-
                 return item.GetCount(templateId);
             }
 
