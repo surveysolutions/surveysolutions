@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DesignerMembershipProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The designer membership provider.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using WB.UI.Shared.Web.MembershipProvider.Accounts;
 

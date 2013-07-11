@@ -12,13 +12,15 @@ namespace WB.UI.Designer.Providers.CQRS
 
     public class CQRSRoleRepository : IRoleRepository
     {
-        private readonly IViewRepository _viewRepository;
-        private readonly ICommandService _commandService;
+        private readonly ICommandService commandService;
+        private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
+        private readonly IViewFactory<AccountViewInputModel, AccountView> accountViewFactory;
 
-        public CQRSRoleRepository(IViewRepository viewRepository, ICommandService commandService)
+        public CQRSRoleRepository(ICommandService commandService, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory, IViewFactory<AccountViewInputModel, AccountView> accountViewFactory)
         {
-            _viewRepository = viewRepository;
-            _commandService = commandService;
+            this.commandService = commandService;
+            this.accountListViewFactory = accountListViewFactory;
+            this.accountViewFactory = accountViewFactory;
         }
 
         public IUserWithRoles GetUser(string applicationName, string username)
@@ -39,14 +41,14 @@ namespace WB.UI.Designer.Providers.CQRS
         public void AddUserToRole(string applicationName, string roleName, string username)
         {
             var user = GetUser(username);
-            _commandService.Execute(new AddRoleToAccountCommnad(accountPublicKey: user.PublicKey,
+            this.commandService.Execute(new AddRoleToAccountCommnad(accountPublicKey: user.PublicKey,
                                                                 role: GetRoleByRoleName(roleName)));
         }
 
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
             var user = GetUser(username);
-            _commandService.Execute(new RemoveRoleFromAccountCommnad(accountPublicKey: user.PublicKey,
+            this.commandService.Execute(new RemoveRoleFromAccountCommnad(accountPublicKey: user.PublicKey,
                                                                      role: GetRoleByRoleName(roleName)));
         }
 
@@ -69,7 +71,7 @@ namespace WB.UI.Designer.Providers.CQRS
         public IEnumerable<string> FindUsersInRole(string applicationName, string roleName, string userNameToMatch)
         {
             var accounts =
-                _viewRepository.Load<AccountListViewInputModel, AccountListView>(new AccountListViewInputModel()
+                this.accountListViewFactory.Load(new AccountListViewInputModel()
                 {
                     Role = GetRoleByRoleName(roleName),
                     Name = userNameToMatch
@@ -80,7 +82,7 @@ namespace WB.UI.Designer.Providers.CQRS
         public IEnumerable<string> GetUsersInRole(string applicationName, string roleName)
         {
             var accounts =
-                _viewRepository.Load<AccountListViewInputModel, AccountListView>(new AccountListViewInputModel()
+                this.accountListViewFactory.Load(new AccountListViewInputModel()
                     {
                         Role = GetRoleByRoleName(roleName)
                     });
@@ -89,11 +91,11 @@ namespace WB.UI.Designer.Providers.CQRS
 
         private AccountView GetUser(string username)
         {
-            return _viewRepository.Load<AccountViewInputModel, AccountView>(new AccountViewInputModel(
-                                                                                accountName: username,
-                                                                                accountEmail: null,
-                                                                                confirmationToken: null,
-                                                                                resetPasswordToken:null));
+            return this.accountViewFactory.Load(new AccountViewInputModel(
+                accountName: username,
+                accountEmail: null,
+                confirmationToken: null,
+                resetPasswordToken:null));
         }
 
         private SimpleRoleEnum GetRoleByRoleName(string roleName)

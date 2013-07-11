@@ -15,16 +15,16 @@ namespace WB.UI.Headquarter.Controllers
 
     public class DashboardController : Controller
     {
-        private readonly IViewRepository viewRepository;
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory;
 
-        public DashboardController(IViewRepository viewRepository)
+        public DashboardController(IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory)
         {
-            this.viewRepository = viewRepository;
+            this.viewFactory = viewFactory;
         }
 
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
-             var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+             var model = this.viewFactory.Load(input);
              return this.View(model);
         }
 

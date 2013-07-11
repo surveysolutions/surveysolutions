@@ -2,14 +2,17 @@
 @using Main.Core.View.Question
 @model Main.Core.View.ICompositeView
 
-<p>
-
-    @this.Model.Title
-    <br/>
-
+<div>
+    
     @if (this.Model is QuestionView)
     {
         Html.RenderPartial("_RenderQuestionDetails", (QuestionView) this.Model);
+    }
+    else
+    {
+        <text>
+            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, Model.GetDepth() + 1), Html.Encode(Model.Title)))
+        </text>
     }
 
     @if (this.Model.Children != null && this.Model.Children.Count > 0)
@@ -22,4 +25,4 @@
         </div>
     }
 
-</p>
+</div>
