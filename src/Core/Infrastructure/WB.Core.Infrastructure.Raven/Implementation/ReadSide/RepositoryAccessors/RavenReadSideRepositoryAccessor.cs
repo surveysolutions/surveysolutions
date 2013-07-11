@@ -30,6 +30,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             return this.ravenStore.OpenSession("Views");
         }
 
+        protected int MaxNumberOfRequestsPerSession
+        {
+            get { return this.ravenStore.Conventions.MaxNumberOfRequestsPerSession; }
+        }
+
         protected static string ToRavenId(Guid id)
         {
             return string.Format("{0}${1}", ViewName, id.ToString());

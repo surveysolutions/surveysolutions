@@ -18,8 +18,9 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         #region aditional query functions
 
         int Count(Expression<Func<TEntity, bool>> query);
-        IEnumerable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query);
-        IEnumerable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query, int start, int pageSize);
+        IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query);
+        
+        IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query);
 
         #endregion
 
