@@ -50,25 +50,21 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
-    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
