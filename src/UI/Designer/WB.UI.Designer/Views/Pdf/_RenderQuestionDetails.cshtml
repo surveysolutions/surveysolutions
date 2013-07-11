@@ -1,14 +1,15 @@
-﻿@model Main.Core.View.Question.QuestionView
+﻿@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionView
 @using Main.Core.Entities.SubEntities
 @using Main.Core.View.Answer
+@using WB.UI.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
         @Model.Title 
     </span>
 
-    @if (this.Model.Answers != null && this.Model.Answers.Length > 0) {
+    @if (Model.Answers.Count > 0) {
         <ul class="answer-options">
-            @foreach (AnswerView answer in this.Model.Answers)
+            @foreach (PdfAnswerView answer in this.Model.Answers)
             {
                 <li>
                     <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
