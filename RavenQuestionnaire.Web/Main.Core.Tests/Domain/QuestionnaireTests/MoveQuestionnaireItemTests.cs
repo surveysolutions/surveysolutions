@@ -1,6 +1,8 @@
 ﻿using System;
 using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using Ncqrs.Spec;
 
@@ -9,6 +11,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class MoveQuestionnaireItemTests : QuestionnaireARTestContext
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [Test]
         public void MoveQuestionnaireItem_When_public_key_specified_Then_raised_QuestionnaireItemMoved_event_with_same_public_key()
