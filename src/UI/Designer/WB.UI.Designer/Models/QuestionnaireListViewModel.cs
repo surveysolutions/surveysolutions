@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireListViewModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire list view model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System;
     using System.ComponentModel;
@@ -56,11 +48,18 @@ namespace WB.UI.Designer.Models
         public DateTime LastEntryDate { get; set; }
 
         /// <summary>
-        ///     Gets or sets the last entry date.
+        ///     Questionnaire status in system(deleted/not deleted).
         /// </summary>
         [Display(Name = "Deleted?", Order = 4)]
         [OnlyForAdmin]
         public bool IsDeleted { get; set; }
+
+        /// <summary>
+        ///    Questionnaire status by availability for other users(public/private).
+        /// </summary>
+        [Display(Name = "Public?", Order = 5)]
+        [OnlyForAdmin]
+        public bool IsPublic { get; set; }
 
         #endregion
     }

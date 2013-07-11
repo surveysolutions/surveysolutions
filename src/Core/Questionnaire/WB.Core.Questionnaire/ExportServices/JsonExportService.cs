@@ -3,17 +3,22 @@ using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Restoring.EventStapshoot;
 using Newtonsoft.Json;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 using Formatting = System.Xml.Formatting;
 
 namespace WB.Core.Questionnaire.ExportServices
 {
     public class JsonExportService : IExportService
     {
-        private readonly IDenormalizerStorage<QuestionnaireDocument> questionnaireStorage;
+        #warning ViewFactory should be used here
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage;
 
-        public JsonExportService(IDenormalizerStorage<QuestionnaireDocument> questionnaireStorage)
+        public JsonExportService(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
         }

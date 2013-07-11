@@ -51,7 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultImportServiceTests.cs" />
     <Compile Include="EventBusStub.cs" />
     <Compile Include="EventStoreStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,10 +67,6 @@
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>

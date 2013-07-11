@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
+using Main.Core.View.Group;
 using Main.Core.View.Question;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -12,7 +13,12 @@ namespace WB.UI.Designer.Views.Questionnaire
 {
     public class GroupView : ICompositeView
     {
-        public GroupView(IQuestionnaireDocument doc, IGroup group)
+        public GroupView(IQuestionnaireDocument doc, IGroup group): this (doc, group, null)
+        {
+     
+        }
+
+        public GroupView(IQuestionnaireDocument doc, IGroup group, ICompositeView parentView)
         {
             this.PublicKey = group.PublicKey;
             this.Title = group.Title;
@@ -21,9 +27,10 @@ namespace WB.UI.Designer.Views.Questionnaire
             this.Description = group.Description;
 
             var parent = group.GetParent();
-            this.Parent = parent == null ? (Guid?) null : parent.PublicKey;
+            this.Parent = parent == null ? (Guid?)null : parent.PublicKey;
 
             this.Children = this.ConvertChildrenFromGroupDocument(doc, @group);
+            this.ParentView = parentView;
         }
 
         public string ConditionExpression { get; set; }
@@ -34,6 +41,8 @@ namespace WB.UI.Designer.Views.Questionnaire
         public string Description { get; set; }
 
         public Guid PublicKey { get; set; }
+
+        public ICompositeView ParentView { get; private set; }
 
         public string Title { get; set; }
 
@@ -54,7 +63,7 @@ namespace WB.UI.Designer.Views.Questionnaire
                 else
                 {
                     var g = composite as IGroup;
-                    compositeViews.Add(new GroupView(doc, g));
+                    compositeViews.Add(new GroupView(doc, g, this));
                 }
             }
             return compositeViews;

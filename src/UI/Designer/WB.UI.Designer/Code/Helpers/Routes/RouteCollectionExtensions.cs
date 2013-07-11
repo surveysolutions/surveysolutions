@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RouteCollectionExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Contains extension methods to map routes to lowercase URLs.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Code.Helpers.Routes
+﻿namespace WB.UI.Designer.Code.Helpers.Routes
 {
     using System;
     using System.Web.Mvc;

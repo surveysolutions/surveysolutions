@@ -1,56 +1,23 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireView.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.View;
+using Main.Core.View.Question;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.View;
-
-    /// <summary>
-    /// The questionnaire view.
-    /// </summary>
     public class QuestionnaireView
     {
-        #region Fields
-
-        /// <summary>
-        /// The children.
-        /// </summary>
         private IEnumerable<ICompositeView> children;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireView"/> class.
-        /// </summary>
-        /// <param name="doc">
-        /// The doc.
-        /// </param>
         public QuestionnaireView(IQuestionnaireDocument doc)
         {
             this.Source = doc;
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets the children.
-        /// </summary>
         public IEnumerable<ICompositeView> Children
         {
             get
@@ -61,9 +28,6 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        /// <summary>
-        /// Gets the created by.
-        /// </summary>
         public Guid? CreatedBy
         {
             get
@@ -72,9 +36,6 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        /// <summary>
-        /// Gets the creation date.
-        /// </summary>
         public DateTime CreationDate
         {
             get
@@ -83,9 +44,6 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        /// <summary>
-        /// Gets the last entry date.
-        /// </summary>
         public DateTime LastEntryDate
         {
             get
@@ -94,14 +52,8 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
         public Guid? Parent { get; set; }
 
-        /// <summary>
-        /// Gets the public key.
-        /// </summary>
         public Guid PublicKey
         {
             get
@@ -110,14 +62,8 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        /// <summary>
-        /// Gets the source.
-        /// </summary>
         public IQuestionnaireDocument Source { get; private set; }
 
-        /// <summary>
-        /// Gets the title.
-        /// </summary>
         public string Title
         {
             get
@@ -126,6 +72,34 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        #endregion
+        public bool IsPublic
+        {
+            get
+            {
+                return this.Source.IsPublic;
+            }
+        }
+
+        public int GetChaptersCount()
+        {
+            return Children.Count();
+        }
+
+        public int GetQuestionsCount()
+        {
+            return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count());
+        }
+
+        public int GetQuestionsWithConditionsCount()
+        {
+            return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count(x => !string.IsNullOrEmpty(x.ConditionExpression)));
+        }
+
+        public int GetGroupsCount()
+        {
+            int result = Children.Sum(child => child.Descendants().OfType<GroupView>().Count());
+            return result;
+        }
     }
 }
+

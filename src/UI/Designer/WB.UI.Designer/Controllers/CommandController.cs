@@ -1,34 +1,31 @@
-﻿using Main.Core.Commands.Questionnaire.Base;
-using WB.UI.Designer.Utils;
-
-namespace WB.UI.Designer.Controllers
+﻿namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Web.Mvc;
 
+    using Main.Core.Commands.Questionnaire.Base;
     using Main.Core.Domain;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
-    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Logging;
     using WB.UI.Designer.Code.Helpers;
     using WB.UI.Designer.Exceptions;
+    using WB.UI.Designer.Utils;
 
     [CustomAuthorize]
     public class CommandController : Controller
     {
-        private readonly ILog logger;
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer, ILog logger)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.expressionReplacer = expressionReplacer;
-            this.logger = logger;
         }
 
         [HttpPost]
@@ -47,7 +44,7 @@ namespace WB.UI.Designer.Controllers
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    this.logger.Error(e);
+                    LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", e);
                     error =
                         string.Format(
                             "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",

@@ -3,5 +3,14 @@
 @{ Layout = null; }
 
 <!DOCTYPE html>
+<html>
+    <head>
+        <title>@Model.Title</title>
+        @Styles.Render("~/Content/pdf.css")
+    </head>
+    <body>
+        @{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
+    </body>
+</html>
 
-@{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
+
