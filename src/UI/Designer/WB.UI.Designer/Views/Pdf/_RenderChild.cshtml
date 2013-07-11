@@ -10,7 +10,7 @@
     else
     {
         <text>
-            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, Model.Depth + 1), Html.Encode(Model.Title)))
+            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, Model.Depth), Html.Encode(Model.Title)))
         </text>
     }
 

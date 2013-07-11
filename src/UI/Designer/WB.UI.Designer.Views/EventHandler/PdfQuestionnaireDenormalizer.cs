@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Logging;
@@ -33,24 +36,34 @@ namespace WB.UI.Designer.Views.EventHandler
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
         {
-            try
+            Guid questionnaireId = evnt.EventSourceId;
+            PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
+
+            PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
+            if (updatedQuestionnaire == null)
             {
-                Guid questionnaireId = evnt.EventSourceId;
-                PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
-
-                PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
-
-                this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
+                this.repositoryWriter.Remove(questionnaireId);
             }
-            catch (Exception e)
+            else
             {
-                this.logger.Error("", e); // TODO 
+                this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
             }
         }
 
         public void Handle(IPublishedEvent<GroupCloned> evnt)
         {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) => 
+            {
+                var newGroup = new PdfGroupView
+                {
+                    Title = @event.GroupText,
+                    Id = @event.PublicKey,
+                    Depth = questionnaire.GetEntityDepth(@event.ParentGroupPublicKey) + 1
+                };
+
+                questionnaire.AddGroup(newGroup, @event.ParentGroupPublicKey);
+                return questionnaire;
+            });
         }
 
         public void Handle(IPublishedEvent<GroupDeleted> evnt)
@@ -83,6 +96,7 @@ namespace WB.UI.Designer.Views.EventHandler
                         Id = @event.PublicKey,
                         Depth = questionnaire.GetEntityDepth(@event.ParentGroupPublicKey) + 1
                     };
+
                 questionnaire.AddGroup(newGroup, @event.ParentGroupPublicKey);
 
                 return questionnaire;
@@ -91,40 +105,110 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            
-        }
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                    {
+                        Id = @event.PublicKey,
+                        Title = @event.QuestionText,
+                        QuestionType = @event.QuestionType,
+                        Depth = questionnaire.GetEntityDepth(@event.GroupPublicKey),
+                        Answers = (@event.Answers ?? Enumerable.Empty<Answer>())
+                                    .Select(x => new PdfAnswerView
+                                        {
+                                            Title = x.AnswerText,
+                                            AnswerType = x.AnswerType,
+                                            AnswerValue = x.AnswerValue
+                                        }).ToList(),
+                       HasCodition = !string.IsNullOrEmpty(@event.ConditionExpression)
+                    };
 
-        public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
-        {
-            
+                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
         }
 
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                existingQuestion.HasCodition = !string.IsNullOrEmpty(@event.ConditionExpression);
+
+                existingQuestion.Title = @event.QuestionText;
+                existingQuestion.QuestionType = @event.QuestionType;
+                existingQuestion.Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
+                    {
+                        Title = x.AnswerText,
+                        AnswerType = x.AnswerType,
+                        AnswerValue = x.AnswerValue
+                    }).ToList();
+
+                return questionnaire;
+            });
         }
 
         public void Handle(IPublishedEvent<QuestionCloned> evnt)
         {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) => 
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    Id = @event.PublicKey,
+                    Title = @event.QuestionText,
+                    QuestionType = @event.QuestionType,
+                    Depth = questionnaire.GetEntityDepth(@event.GroupPublicKey),
+                    Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
+                    {
+                        Title = x.AnswerText,
+                        AnswerType = x.AnswerType,
+                        AnswerValue = x.AnswerValue
+                    }).ToList(),
+                    HasCodition = !string.IsNullOrEmpty(@event.ConditionExpression)
+                };
+
+                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
         }
 
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) => 
+            {
+                questionnaire.RemoveQuestion(@event.QuestionId);
+                return questionnaire;
+            });
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            
-        }
-
-        public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
-        {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) => null);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                questionnaire.Title = @event.Title;
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestionnaire = new PdfQuestionnaireView {
+                    Title = @event.Title,
+                    CreationDate = @event.CreationDate
+                };
+
+                return newQuestionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
             
         }
