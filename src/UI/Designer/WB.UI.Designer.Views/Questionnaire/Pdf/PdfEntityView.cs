@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace WB.UI.Designer.Views.Questionnaire.Pdf
 {
+    [DebuggerDisplay("Id = {Id}, Title = {Title}")]
     public abstract class PdfEntityView
     {
         protected PdfEntityView()
@@ -15,6 +17,8 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         public Guid Id { get; set; }
 
         public int Depth { get; set; }
+
+        public PdfEntityView Parent { get; set; } 
 
         public List<PdfEntityView> Children { get; set; }
     }

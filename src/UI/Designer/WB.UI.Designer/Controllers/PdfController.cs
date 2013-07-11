@@ -4,8 +4,8 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Web.Mvc;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Pdf;
-using WB.UI.Designer.Providers.CQRS.Accounts.View;
 using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Shared.Web.Membership;
@@ -14,12 +14,11 @@ namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
     {
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
+        private readonly IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory;
 
         public PdfController(
             IMembershipUserService userHelper,
-            IViewFactory<AccountViewInputModel, AccountView> userViewFactory,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory)
+            IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory)
             : base(userHelper)
         {
             this.viewFactory = viewFactory;
@@ -85,7 +84,7 @@ namespace WB.UI.Designer.Controllers
 
         private PdfQuestionnaireView LoadQuestionnaire(Guid id)
         {
-            return new PdfQuestionnaireView();
+            return this.viewFactory.GetById(id);
         }
     }
 }
