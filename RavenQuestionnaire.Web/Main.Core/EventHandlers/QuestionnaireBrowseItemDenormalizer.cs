@@ -1,15 +1,12 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseItemDenormalizer.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View.Questionnaire;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
@@ -22,7 +19,7 @@ namespace Main.Core.EventHandlers
     /// TODO: Update summary.
     /// </summary>
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                                       IEventHandler<SnapshootLoaded>,
+        IEventHandler<TemplateImported>,
                                                        IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>
     {
@@ -31,9 +28,9 @@ namespace Main.Core.EventHandlers
         /// <summary>
         /// The document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> documentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
-        public QuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<QuestionnaireBrowseItem> documentStorage)
+        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
         {
             this.documentStorage = documentStorage;
         }
@@ -50,38 +47,13 @@ namespace Main.Core.EventHandlers
                     evnt.Payload.Title,
                     evnt.Payload.CreationDate,
                     DateTime.Now,
-                    evnt.Payload.CreatedBy),
+                    evnt.Payload.CreatedBy,
+                    evnt.Payload.IsPublic),
                 evnt.EventSourceId);
         }
 
         #endregion
 
-        #region Implementation of IEventHandler<in SnapshootLoaded>
-
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-          /*  // getting all featured questions
-            QuestionnaireBrowseItem browseItem = this.documentStorage.GetByGuid(document.PublicKey);
-            if (browseItem == null)
-            {*/
-               var browseItem = new QuestionnaireBrowseItem(
-                    document.PublicKey,
-                    document.Title,
-                    document.CreationDate,
-                    document.LastEntryDate,
-                    document.CreatedBy);
-              
-            //}
-            this.documentStorage.Store(browseItem, document.PublicKey);
-        }
-
-        #endregion
 
         #region Implementation of IEventHandler<in QuestionnaireUpdated>
 
@@ -91,6 +63,7 @@ namespace Main.Core.EventHandlers
             if (browseItem != null)
             {
                 browseItem.Title = evnt.Payload.Title;
+                browseItem.IsPublic = evnt.Payload.IsPublic;
             }
         }
 
@@ -103,6 +76,21 @@ namespace Main.Core.EventHandlers
             {
                 browseItem.IsDeleted = true;
             }
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            var browseItem = new QuestionnaireBrowseItem(
+                document.PublicKey,
+                document.Title,
+                document.CreationDate,
+                document.LastEntryDate,
+                document.CreatedBy,
+                document.IsPublic);
+
+            //}
+            this.documentStorage.Store(browseItem, document.PublicKey);
         }
     }
 }

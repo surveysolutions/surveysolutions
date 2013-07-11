@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerChartModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The interviewer chart model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Web.Supervisor.Models.Chart
+﻿namespace Web.Supervisor.Models.Chart
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -93,7 +85,7 @@ namespace Web.Supervisor.Models.Chart
                         new
                             {
                                 name = t.Title, 
-                                color = this.GetColor(index), 
+                                color = GetColor(index), 
                                 data = new[] { new[] { t.Initial + t.Redo, t.Completed + t.Approved } }
                             }).ToArray());
         }
@@ -119,7 +111,7 @@ namespace Web.Supervisor.Models.Chart
                     new PieData
                         {
                             y = t.Total, 
-                            color = this.GetColor(index), 
+                            color = GetColor(index), 
                             name = t.Title, 
                             title = t.Title.Acronim(), 
                             categories =

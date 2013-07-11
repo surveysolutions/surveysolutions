@@ -37,7 +37,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
@@ -71,6 +71,9 @@
     <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsSQLServerOption />
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -80,11 +83,69 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-dev|AnyCPU'">
     <OutputPath>bin\</OutputPath>
     <PackageAsSingleFile>true</PackageAsSingleFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -136,30 +197,39 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Web.WebApi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Ninject.Web.WebApi-RC.3.0.0.22\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Embedded, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Embedded, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2261\lib\net40\Raven.Client.Embedded.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2375\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Database, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Database, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Database.2.0.2261\lib\net40\Raven.Database.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2375\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
@@ -171,7 +241,15 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Tracing">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Tracing.4.0.30506\lib\net40\System.Web.Http.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
@@ -216,15 +294,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\SurveysApiController.cs" />
+    <Compile Include="Controllers\SummaryApiController.cs" />
+    <Compile Include="Controllers\ImportExportController.cs" />
+    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HQController.cs" />
-    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -232,6 +316,7 @@
     <Compile Include="Controllers\TestUnhandledExceptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -246,10 +331,13 @@
     <Compile Include="Models\Chart\ChartModelBase.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\UsersListViewModel.cs" />
+    <Compile Include="Models\SurveyRequestModel.cs" />
+    <Compile Include="Models\SurveyListViewModel.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
+    <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
-    <Compile Include="Models\InterviewersViewInputModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\Chart\SurveyChartModel.cs" />
@@ -258,8 +346,11 @@
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
+    <Compile Include="Models\SummaryListViewModel.cs" />
+    <Compile Include="Models\SummaryRequestModel.cs" />
     <Compile Include="Models\SupervisorModel.cs" />
     <Compile Include="Models\SupervisorViewModel.cs" />
+    <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\DesignerPublicService\Reference.cs">
@@ -271,23 +362,10 @@
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
-    <Compile Include="WCF\EventPipeService.svc.cs">
-      <DependentUpon>EventPipeService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\GetAggragateRootListService.svc.cs">
-      <DependentUpon>GetAggragateRootListService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\GetEventStreamService.svc.cs">
-      <DependentUpon>GetEventStreamService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\SpotSyncService.svc.cs">
-      <DependentUpon>SpotSyncService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WCF\AuthorizationService.svc.cs">
-      <DependentUpon>AuthorizationService.svc</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap.icon-large.css" />
+    <Content Include="Content\bootstrap.icon-large.min.css" />
     <Content Include="Content\bootstrap\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
@@ -304,6 +382,7 @@
     <Content Include="Content\favicon.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\images\glyphicons.png" />
     <Content Include="Content\img\clear.png" />
     <Content Include="Content\img\details_bg.jpg" />
     <Content Include="Content\img\divider.png" />
@@ -420,6 +499,9 @@
     <Content Include="Scripts\assign\app\model.js" />
     <Content Include="Scripts\assign\app\viewmodel.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\ko.pager.js" />
     <Content Include="Scripts\lib\amplify.js" />
     <Content Include="Scripts\lib\jquery.js" />
     <Content Include="Scripts\lib\knockout.js" />
@@ -431,6 +513,11 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\vm\userlistview.js" />
+    <Content Include="Scripts\vm\surveylistview.js" />
+    <Content Include="Scripts\vm\listviewmaster.js" />
+    <Content Include="Scripts\vm\summarylistview.js" />
+    <Content Include="Scripts\vm\listview.js" />
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
@@ -441,11 +528,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </Content>
-    <Content Include="WCF\EventPipeService.svc" />
-    <Content Include="WCF\GetAggragateRootListService.svc" />
-    <Content Include="WCF\GetEventStreamService.svc" />
-    <Content Include="WCF\SpotSyncService.svc" />
-    <Content Include="WCF\AuthorizationService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -460,7 +542,13 @@
     <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
-    <Content Include="Views\Team\_PartialGridInterviewers.cshtml" />
+    <Content Include="Configuration\Vitalii.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\Stacy.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -476,8 +564,14 @@
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
+    <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
+    <Content Include="Views\Shared\_ListViewLayout.cshtml" />
+    <Content Include="Views\Shared\_LayoutNew.cshtml" />
+    <Content Include="Views\HQ\_TableGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="API\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
@@ -490,13 +584,21 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -510,10 +612,6 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Synchronization\DataEntryClient\DataEntryClient.csproj">
-      <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
-      <Name>DataEntryClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
       <Name>SynchronizationMessages</Name>
@@ -526,17 +624,17 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
-      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
-      <Name>Main.Synchronization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
+      <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -556,9 +654,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
@@ -583,7 +678,6 @@
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Stacy.Supervisor.Web.config" />
     <Content Include="Configuration\Dev.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -614,16 +708,13 @@
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Interviewers.cshtml" />
-    <Content Include="Views\Team\_PartialGrid_Supervisors.cshtml" />
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Shared\_StatusHistory.cshtml" />
     <Content Include="Views\Shared\_StatusTable.cshtml" />
-    <Content Include="Views\Shared\_SummaryTable.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
-    <Content Include="Views\Shared\_PartialUsersGridTemplate.cshtml" />
-    <Content Include="Views\Shared\_TableGroup.cshtml" />
+    <Content Include="Views\Survey\_TableGroup.cshtml" />
     <Content Include="Views\Shared\Approve.cshtml" />
     <Content Include="Views\Shared\AssignPerson.cshtml" />
     <Content Include="Views\Shared\ChangeState.cshtml" />
@@ -645,9 +736,6 @@
     </Content>
     <Content Include="Views\Shared\StatusChart.cshtml" />
     <Content Include="Views\Shared\SummaryChart.cshtml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Views\Shared\_SummaryTable.cshtml">
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Shared\_Table.cshtml" />

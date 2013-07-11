@@ -6,13 +6,16 @@ using Android.Content;
 using Android.Runtime;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
-using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.FileStorage;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
@@ -35,10 +38,12 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
 using Ninject;
-using Main.Synchronization.SycProcessRepository;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
@@ -55,7 +60,9 @@ namespace CAPI.Android
 
         public static TOutput LoadView<TInput, TOutput>(TInput input)
         {
-            return Kernel.Get<IViewRepository>().Load<TInput, TOutput>(input);
+            var factory = Kernel.TryGet<IViewFactory<TInput, TOutput>>();
+
+            return factory == null ? default(TOutput) : factory.Load(input);
         }
 
         public static ICommandService CommandService
@@ -92,6 +99,65 @@ namespace CAPI.Android
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
+           
+           
+
+        }
+
+        private void InitQuestionnariesStorage(InProcessEventBus bus)
+        {
+            var eventHandler =
+                new CompleteQuestionnaireViewDenormalizer(kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
+            bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
+            bus.RegisterHandler(eventHandler, typeof (AnswerSet));
+            bus.RegisterHandler(eventHandler, typeof (CommentSet));
+            bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
+            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
+            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
+            bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
+        }
+
+        private void InitFileStorage(InProcessEventBus bus)
+        {
+            var fileSorage = new AndroidFileStoreDenormalizer(kernel.Get<IReadSideRepositoryWriter<FileDescription>>(),
+                                                       kernel.Get<IFileStorageService>());
+            bus.RegisterHandler(fileSorage, typeof (FileUploaded));
+            bus.RegisterHandler(fileSorage, typeof (FileDeleted));
+        }
+
+        private void InitUserStorage(InProcessEventBus bus)
+        {
+            var usereventHandler =
+                new UserDenormalizer(kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
+            bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
+        }
+
+        private void InitDashboard(InProcessEventBus bus)
+        {
+            var dashboardeventHandler =
+                new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
+                                          kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
+            bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
+            bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
+            bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
+        }
+
+        private void InitChangeLog(InProcessEventBus bus)
+        {
+           
+            var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
+            bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
+            bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
+        }
+
+        public override void OnCreate()
+        {
+            base.OnCreate();
+
+            CrashManager.Initialize(this);
+            CrashManager.AttachSender(() => new FileReportSender("CAPI"));
+            RestoreAppState();
+
             var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
 
             // initialize app if necessary
@@ -100,12 +166,11 @@ namespace CAPI.Android
                 _setup.Initialize();
             }
 
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
+            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule());
             kernel.Bind<Context>().ToConstant(this);
-            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             NcqrsInit.Init(kernel);
-     
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
+            NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
 
             #region register handlers
 
@@ -119,66 +184,9 @@ namespace CAPI.Android
 
             InitDashboard(bus);
 
+            InitChangeLog(bus);
+
             #endregion
-
-           
-        }
-
-        private void InitQuestionnariesStorage(InProcessEventBus bus)
-        {
-            var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(
-                    kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
-            bus.RegisterHandler(eventHandler, typeof (SnapshootLoaded));
-            bus.RegisterHandler(eventHandler, typeof (AnswerSet));
-            bus.RegisterHandler(eventHandler, typeof (CommentSet));
-            bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
-            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
-            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
-            bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
-        }
-
-        private void InitFileStorage(InProcessEventBus bus)
-        {
-            var fileSorage = new FileStoreDenormalizer(kernel.Get<IDenormalizerStorage<FileDescription>>(),
-                                                       new FileStorageService());
-            bus.RegisterHandler(fileSorage, typeof (FileUploaded));
-            bus.RegisterHandler(fileSorage, typeof (FileDeleted));
-        }
-
-        private void InitUserStorage(InProcessEventBus bus)
-        {
-            var mvvmSqlLiteUserStorage = new SqliteDenormalizerStorage<LoginDTO>();
-            var membership = new AndroidAuthentication(mvvmSqlLiteUserStorage);
-            kernel.Bind<IAuthentication>().ToConstant(membership);
-            var usereventHandler =
-                new UserDenormalizer(mvvmSqlLiteUserStorage);
-            bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
-        }
-
-        private void InitDashboard(InProcessEventBus bus)
-        {
-            var surveyStore = new SqliteDenormalizerStorage<SurveyDto>();
-            var questionnaireStore = new SqliteDenormalizerStorage<QuestionnaireDTO>();
-            
-            Kernel.Unbind<IFilterableDenormalizerStorage<SurveyDto>>();
-            Kernel.Bind<IFilterableDenormalizerStorage<SurveyDto>>().ToConstant(surveyStore);
-
-            Kernel.Unbind<IFilterableDenormalizerStorage<QuestionnaireDTO>>();
-            Kernel.Bind<IFilterableDenormalizerStorage<QuestionnaireDTO>>().ToConstant(questionnaireStore);
-            
-            var dashboardeventHandler =
-                new DashboardDenormalizer(questionnaireStore, surveyStore);
-            bus.RegisterHandler(dashboardeventHandler, typeof (SnapshootLoaded));
-            bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
-        }
-
-        public override void OnCreate()
-        {
-            base.OnCreate();
-            CrashManager.Initialize(this);
-            CrashManager.AttachSender(() => new FileReportSender("CAPI"));
-            RestoreAppState();
         }
 
         private void RestoreAppState()
@@ -186,13 +194,18 @@ namespace CAPI.Android
             AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironmentUnhandledExceptionRaiser;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            AndroidEnvironment.UnhandledExceptionRaiser -= AndroidEnvironmentUnhandledExceptionRaiser;
+        }
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
             this.ClearAllBackStack<SplashScreenActivity>();
 
             var questionnarieDenormalizer =
-                kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>() as
-                InMemoryDenormalizer<CompleteQuestionnaireView>;
+                kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as
+                InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>;
             if (questionnarieDenormalizer != null)
                 questionnarieDenormalizer.Clear();
         }

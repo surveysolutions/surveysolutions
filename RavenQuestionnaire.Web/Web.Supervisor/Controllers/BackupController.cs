@@ -1,15 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BackupController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the BackupController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-namespace Web.Supervisor.Controllers
+﻿namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Web.Mvc;

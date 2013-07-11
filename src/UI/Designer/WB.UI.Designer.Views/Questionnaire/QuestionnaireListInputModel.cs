@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities;
@@ -69,7 +60,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <summary>
         /// Gets or sets the is admin mode.
         /// </summary>
-        public bool? IsAdminMode { get; set; }
+        public bool IsAdminMode { get; set; }
 
         /// <summary>
         /// Gets or sets the created by.
@@ -77,9 +68,9 @@ namespace WB.UI.Designer.Views.Questionnaire
         public Guid CreatedBy { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is only owner items.
+        /// Gets or sets a value indicating whether we need to select only public qustionnaires.
         /// </summary>
-        public bool IsOnlyOwnerItems { get; set; }
+        public bool IsPublic { get; set; }
 
         /// <summary>
         /// Gets or sets the filter.

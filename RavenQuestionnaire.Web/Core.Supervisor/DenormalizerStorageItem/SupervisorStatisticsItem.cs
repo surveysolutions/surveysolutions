@@ -1,8 +1,5 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SupervisorStatisticsItem.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.DenormalizerStorageItem
 {
@@ -18,7 +15,7 @@ namespace Core.Supervisor.DenormalizerStorageItem
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SupervisorStatisticsItem
+    public class SupervisorStatisticsItem : IView
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SupervisorStatisticsItem"/> class.

@@ -1,4 +1,11 @@
-﻿namespace Core.Supervisor.Views.Status
+﻿using System.Linq.Expressions;
+using Core.Supervisor.Views.Survey;
+using Raven.Client.Linq;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
+namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
@@ -13,11 +20,12 @@
 
     public class StatusViewFactory : BaseUserViewFactory, IViewFactory<StatusViewInputModel, StatusView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys;
 
         public StatusViewFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableReadSideRepositoryReader<UserDocument> users)
+            : base(users)
         {
             this.surveys = surveys;
             this.users = users;
@@ -25,47 +33,52 @@
 
         public StatusView Load(StatusViewInputModel input)
         {
+#warning here we need to create mapreduce index in oreder to avoid in memory group by
             var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
-            List<TemplateLight> headers = this.surveys.Query(_ => _.Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList());
+#warning ReadLayer: Select is not supported on Raven side (fails with NRE)
 
-            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
-                this.surveys.Query(_ => _
-                    .Where(x => 
-                        status.PublicId == SurveyStatus.Unknown.PublicId
-                        ? (
-                            x.Responsible != null 
-                            && interviewers.Contains(x.Responsible.Id)
-                        )
-                        : (
-                            x.Responsible != null 
-                            && interviewers.Contains(x.Responsible.Id) 
-                            && x.Status.PublicId == status.PublicId
-                        ))
-                    .GroupBy(x => x.Responsible)
-                    .ToList());
+            List<TemplateLight> headers = this.surveys.Query(_ => _
+                                                                      .ToList()
+                                                                      .Select(
+                                                                          s =>
+                                                                          new TemplateLight(s.TemplateId,
+                                                                                            s.QuestionnaireTitle))
+                                                                      .Distinct()
+                                                                      .ToList());
 
-            var items = this.BuildItems(groupedSurveys, headers).AsQueryable();
+            /*   this.surveys.Query(queryable =>
+               {*/
+            Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate = (x) => x.Responsible != null && x.Responsible.Id.In(interviewers);
+            if (status.PublicId != SurveyStatus.Unknown.PublicId)
+            {
+                predicate = predicate.AndCondition(x => x.Status.PublicId == status.PublicId);
+            }
 
-            var retval = new StatusView(input.Page, input.PageSize, 0, status, headers);
+            var query = this.surveys.QueryEnumerable(predicate);
+
+
+
+            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = query
+                .GroupBy(x => x.Responsible)
+                .ToList();
+            //  });
+
+            var items = BuildItems(groupedSurveys).AsQueryable();
+
+
             if (input.Orders.Count == 0)
             {
-                input.Orders.Add(new OrderRequestItem() { Direction = OrderDirection.Asc, Field = "Title" });
+                input.Orders.Add(new OrderRequestItem() {Direction = OrderDirection.Asc, Field = "Title"});
             }
 
             items = input.Orders[0].Direction == OrderDirection.Asc
-                                                  ? items.OrderBy(i => this.GetOrderValue(i, input.Orders[0].Field))
-                                                  : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
+                        ? items.OrderBy(i => this.GetOrderValue(i, input.Orders[0].Field))
+                        : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
 
-
-            retval.BuildSummary(items, headers);
-
-            retval.TotalCount = items.Count();
-
-            retval.Items = items.ToList();
-            return retval;
+            return new StatusView(input.Page, input.PageSize, status, headers, items);
         }
 
         private object GetOrderValue(StatusViewItem item, string field)
@@ -81,25 +94,26 @@
             }
 
             Guid templateId;
+
             if (Guid.TryParse(field, out templateId))
             {
-                var key = item.Items.Keys.SingleOrDefault(k => k.TemplateId == templateId);
+               /* var key = item.Items.Keys.SingleOrDefault(k => k.TemplateId == templateId);
                 if (key == null)
                 {
                     return 0;
-                }
+                }*/
 
-                return item.Items[key];
+                return item.GetCount(templateId);
             }
 
             return item.User.Name;
         }
 
-        protected IEnumerable<StatusViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
+        protected IEnumerable<StatusViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
         {
             return from templateGroup in grouped
                    let tgroup = templateGroup.GroupBy(g => g.TemplateId).ToDictionary(k => k.Key, v => v.Count())
-                   select new StatusViewItem(templateGroup.Key, tgroup, headers);
+                   select new StatusViewItem(templateGroup.Key, tgroup);
         }
     }
 }

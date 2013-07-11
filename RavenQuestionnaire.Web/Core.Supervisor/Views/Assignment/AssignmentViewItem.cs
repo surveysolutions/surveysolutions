@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignmentViewItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey group item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Assignment
 {
     using System;

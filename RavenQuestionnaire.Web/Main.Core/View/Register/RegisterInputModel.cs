@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterInputModel.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.View.Register
+﻿namespace Main.Core.View.Register
 {
     using System;
 

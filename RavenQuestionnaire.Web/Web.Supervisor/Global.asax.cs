@@ -1,24 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Global.asax.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The mvc application.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using NConfig;
+﻿using NConfig;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor
 {
     using System;
     using System.Web;
+    using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
-
-    using WB.Core.SharedKernel.Logger;
-    using WB.Core.SharedKernel.Utils.NLog;
+    using WB.Core.SharedKernel.Utils.Logging;
 
     using Web.Supervisor.App_Start;
 
@@ -41,7 +32,7 @@ namespace Web.Supervisor
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly ILog logger = LogManager.Logger;
+        private readonly ILogger logger = LogManager.GetLogger(typeof(MvcApplication));
 
         /// <summary>
         /// The correctly initialized.
@@ -82,10 +73,10 @@ namespace Web.Supervisor
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
-            this.logger.Fatal(lastError);
+            this.logger.Fatal("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
-                this.logger.Fatal(lastError.InnerException);
+                this.logger.Fatal("Unexpected error occurred", lastError.InnerException);
             }
         }
 
@@ -94,9 +85,12 @@ namespace Web.Supervisor
         /// </summary>
         protected void Application_Start()
         {
+            this.logger.Info("Starting application.");
+
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
-            
+
+            WebApiConfig.Register(GlobalConfiguration.Configuration);
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
@@ -129,7 +123,6 @@ namespace Web.Supervisor
             }
             catch (Exception)
             {
-                
                 //throw;
             }
             

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusChartModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Chart model for status page
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Web.Supervisor.Models.Chart
+﻿namespace Web.Supervisor.Models.Chart
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -34,7 +26,7 @@ namespace Web.Supervisor.Models.Chart
                 new
                     {
                         name = "Total", 
-                        data = view.Items.Select(t => t.Items.Sum(kvp => kvp.Value)).ToArray(), 
+                        data = view.Items.Select(t => t.Total).ToArray(), 
                         stack = "total"
                     });
             foreach (TemplateLight header in view.Headers)
@@ -44,7 +36,7 @@ namespace Web.Supervisor.Models.Chart
                         {
                             name = header.Title.Acronim(), 
                             title = header.Title, 
-                            data = view.Items.Select(t => t.Items[header]).ToArray(), 
+                            data = view.Items.Select(t => t.GetCount(header.TemplateId)).ToArray(), 
                             stack = "parts"
                         });
             }
@@ -74,12 +66,12 @@ namespace Web.Supervisor.Models.Chart
                     (t, index) =>
                     new PieData
                         {
-                            y = t.Items.Values.Sum(), 
-                            color = this.GetColor(index), 
-                            name = t.User.Name, 
-                            title = t.User.Name, 
-                            categories = t.Items.Keys.Select(k => k.Title.Acronim()).ToArray(), 
-                            data = t.Items.Values.ToArray()
+                            y = t.Total,
+                            color = GetColor(index), 
+                            name = t.User.Name,
+                            title = t.User.Name,
+                            categories = model.Headers.Select(k => k.Title.Acronim()).ToArray(),
+                            data = model.Headers.Select(h => t.GetCount(h.TemplateId)).ToArray()
                         }).ToArray();
             return piePreData;
         }

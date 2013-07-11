@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
-#if MONODROID
-using AndroidLogger;
-#endif
 
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Eventing.Sourcing
 {
     public abstract class EventSource : IEventSource
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         [NonSerialized]
         private Guid _eventSourceId;
@@ -111,9 +110,11 @@ namespace Ncqrs.Eventing.Sourcing
         /// <param name="history">The history.</param>
         public virtual void InitializeFromHistory(CommittedEventStream history)
         {
-                #if USE_CONTRACTS
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(history != null, "The history cannot be null.");
             #endif
+            if (history == null)
+                throw new ArgumentNullException("The history cannot be null.");
                 if (_initialVersion != Version)
             {
                 throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");

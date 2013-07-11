@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="SuccessMarker.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 using System.IO;
 using System.Web.Hosting;
 using Main.Core;

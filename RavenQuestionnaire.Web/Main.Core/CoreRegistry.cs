@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CoreRegistry.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The core registry.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +9,20 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 #if !MONODROID
 using Raven.Client;
 using Raven.Client.Document;
+
 #endif
 
 namespace Main.Core
@@ -38,47 +34,30 @@ namespace Main.Core
     /// </summary>
     public abstract class CoreRegistry : NinjectModule
     {
-        #region Fields
-
-        /// <summary>
-        /// The _is embeded.
-        /// </summary>
         private readonly bool isEmbeded;
-
-        /// <summary>
-        /// The _repository path.
-        /// </summary>
         private readonly string repositoryPath;
-
-        #endregion
+        private readonly string username;
+        private readonly string password;
+        private readonly string defaultDatabase;
 
         // private bool _isWeb;
-        #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoreRegistry"/> class.
-        /// </summary>
-        /// <param name="repositoryPath">
-        /// The repository path.
-        /// </param>
-        /// <param name="isEmbeded">
-        /// The is embeded.
-        /// </param>
-        public CoreRegistry(string repositoryPath, bool isEmbeded)
+        public CoreRegistry(string repositoryPath, bool isEmbeded, string username = null, string password = null, string defaultDatabase = null)
         {
             this.repositoryPath = repositoryPath;
             this.isEmbeded = isEmbeded;
+            this.username = username;
+            this.password = password;
+            this.defaultDatabase = defaultDatabase;
 
             // _isWeb = isWeb;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
         public virtual IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return new[] {(typeof (CoreRegistry)).Assembly, typeof(IDenormalizer).Assembly};
+            return new[] {(typeof (CoreRegistry)).Assembly};
 
         }
 
@@ -116,7 +95,7 @@ namespace Main.Core
         protected virtual void RegisterAdditionalElements()
         {
 #if !MONODROID
-            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
+            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.defaultDatabase, this.isEmbeded, this.username, this.password);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
 #endif
@@ -143,45 +122,34 @@ namespace Main.Core
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(GetAssweblysForRegister().Union(new Assembly[]{typeof(SnapshootLoaded).Assembly}), typeof(IEventHandler<>), (c) => this.Kernel);
+            BindInterface(GetAssweblysForRegister(), typeof(IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()
         {
-            foreach (
-                var denormalizer in
-                    GetAssweblysForRegister()
-                                             .SelectMany(a => a.GetTypes())
-                                             .Where(DenormalizerStorageImplementation))
-            {
+            // currently in-memory repo accessor also contains repository itself as internal dictionary, so we need to create him as singletone
+            this.Kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
-                this.Kernel.Bind(denormalizer).ToSelf().InSingletonScope();
-            }
-            this.Kernel.Bind(typeof (IDenormalizerStorage<>)).ToMethod(GetStorage);
-            this.Kernel.Bind(typeof (IQueryableDenormalizerStorage<>)).ToMethod(GetStorage);
+            this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
         }
 
-        private bool DenormalizerStorageImplementation(Type t)
+        protected virtual object GetReadSideRepositoryReader(IContext context)
         {
-            if (t.IsInterface || t.IsAbstract)
-                return false;
-            return t.GetInterfaces().FirstOrDefault(i => i.IsGenericType &&
-                                                         i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) !=
-                   null;
+            return this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
-        protected object GetStorage(IContext context)
+        protected virtual object GetReadSideRepositoryWriter(IContext context)
+        {
+            return this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
+
+        protected object GetInMemoryReadSideRepositoryAccessor(IContext context)
         {
             var genericParameter = context.GenericArguments[0];
 
-         /*   #if !MONODROID
-
-            if(genericParameter.GetCustomAttributes(typeof(SmartDenormalizerAttribute), true).Length > 0)
-                return Kernel.Get(typeof(PersistentDenormalizer<>).MakeGenericType(genericParameter));
-
-            else
-            #endif*/
-                return Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
+            return this.Kernel.Get(typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(genericParameter));
         }
 
         #endregion

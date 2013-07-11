@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireParametersParserTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire parameters parser test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
+﻿namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
     using System;
 

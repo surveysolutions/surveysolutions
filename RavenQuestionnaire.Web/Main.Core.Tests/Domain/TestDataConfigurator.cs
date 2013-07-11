@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestDataConfigurator.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The test data configurator.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Tests.Domain
+﻿namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections.Generic;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnswerSet.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The answer set.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Events.Questionnaire.Completed
+﻿namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
     using System.Collections.Generic;

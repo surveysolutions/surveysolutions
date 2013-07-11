@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumericCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The numeric complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Complete.Question
+﻿namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +6,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     /// <summary>
     /// The numeric complete question.
     /// </summary>
-    public sealed class NumericCompleteQuestion : AbstractCompleteQuestion, INumericQuestion, ICompelteValueQuestion<int?>
+    public sealed class NumericCompleteQuestion : AbstractCompleteQuestion, INumericQuestion, ICompelteValueQuestion<double?>
     {
 
         #region Constructors and Destructors
@@ -138,8 +129,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
             else
             {
-                int value;
-                if (int.TryParse(answerValue.Trim(), out value))
+                double value;
+                if (double.TryParse(answerValue.Trim(), out value))
                 {
                     this.Answer = value;
                 }
@@ -150,7 +141,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
         #region Implementation of ICompelteValueQuestion<int>
 
-        public int? Answer { get; set; }
+        public double? Answer { get; set; }
 
         #endregion
     }

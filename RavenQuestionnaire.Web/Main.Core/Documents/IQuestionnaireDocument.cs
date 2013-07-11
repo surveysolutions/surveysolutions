@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IQuestionnaireDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The QuestionnaireDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Documents
 {
     using System;
@@ -47,6 +38,11 @@ namespace Main.Core.Documents
         /// Gets or sets the created by.
         /// </summary>
         Guid? CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether questionnaire owner wants to share questionnaire document with other teams
+        /// </summary>
+        bool IsPublic { get; set; }
 
         /// <summary>
         /// The add.

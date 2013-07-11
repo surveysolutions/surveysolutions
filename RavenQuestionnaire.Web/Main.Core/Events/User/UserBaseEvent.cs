@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="UserBaseEvent.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Events.User
+﻿namespace Main.Core.Events.User
 {
     using System;
     using System.Collections.Generic;

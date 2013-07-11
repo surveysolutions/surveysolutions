@@ -1,14 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SimpleObjectExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The simple object extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Utility
+﻿namespace Main.Core.Utility
 {
+    using System;
+    using System.Linq;
+
     /// <summary>
     /// The simple object extensions.
     /// </summary>
@@ -28,7 +22,16 @@ namespace Main.Core.Utility
         public static bool IsInteger(this string source)
         {
             int iSource;
-            return int.TryParse(source, out iSource);
+            return Int32.TryParse(source, out iSource);
+        }
+
+        public static Guid Combine(this Guid x, Guid y)
+        {
+            byte[] a = x.ToByteArray();
+            byte[] b = y.ToByteArray();
+
+            return new Guid(BitConverter.GetBytes(BitConverter.ToUInt64(a, 0) ^ BitConverter.ToUInt64(b, 8))
+                                        .Concat(BitConverter.GetBytes(BitConverter.ToUInt64(a, 8) ^ BitConverter.ToUInt64(b, 0))).ToArray());
         }
 
         #endregion

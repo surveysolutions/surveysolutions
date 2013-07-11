@@ -1,4 +1,10 @@
-﻿namespace Core.Supervisor.Views.User
+﻿using System.Linq.Expressions;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
+namespace Core.Supervisor.Views.User
 {
     using System;
     using System.Linq;
@@ -10,48 +16,50 @@
 
     internal class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
-        
-        public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+
+        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }
         
         public UserView Load(UserViewInputModel input)
         {
-            Func<UserDocument, bool> query = (x) => false;
+            Expression<Func<UserDocument, bool>> query = (x) => false;
             if (input.PublicKey != null)
             {
-                query = (x) => x.PublicKey.Equals(input.PublicKey);
+                query = x => x.PublicKey == input.PublicKey;
             }
             else if (!string.IsNullOrEmpty(input.UserName))
             {
-                query = (x) => x.UserName.Compare(input.UserName);
+                query = x => x.UserName == input.UserName;
             }
             else if (!string.IsNullOrEmpty(input.UserEmail))
             {
-                query = (x) => x.Email.Compare(input.UserEmail);
+                query = x => x.Email == input.UserEmail;
             }
 
             return
-                this.users.Query(_ => _
-                    .Where(query)
-                    .Select(
-                        x =>
-                        new UserView
-                            {
-                                CreationDate = x.CreationDate, 
-                                UserName = x.UserName, 
-                                Email = x.Email, 
-                                IsDeleted = x.IsDeleted, 
-                                IsLocked = x.IsLocked, 
-                                PublicKey = x.PublicKey, 
-                                Roles = x.Roles, 
-                                Location = x.Location, 
-                                Password = x.Password, 
-                                Supervisor = x.Supervisor
-                            })
-                    .FirstOrDefault());
+                this.users.Query(queryable =>
+                {
+                    UserDocument userDocument = queryable.Where(query).FirstOrDefault();
+
+                    return userDocument != null
+                        ? new UserView
+                        {
+                            CreationDate = userDocument.CreationDate,
+                            UserName = userDocument.UserName,
+                            Email = userDocument.Email,
+                            IsDeleted = userDocument.IsDeleted,
+                            IsLocked = userDocument.IsLocked,
+                            PublicKey = userDocument.PublicKey,
+                            Roles = userDocument.Roles,
+                            Location = userDocument.Location,
+                            Password = userDocument.Password,
+                            Supervisor = userDocument.Supervisor,
+                        }
+                        : null;
+                });
         }
     }
 }

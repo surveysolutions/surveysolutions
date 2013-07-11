@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceDiscover.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The service discover.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Questionnaire.Core.Web.WCF
 {
@@ -16,7 +9,6 @@ namespace Questionnaire.Core.Web.WCF
     using System.ServiceModel.Channels;
     using System.ServiceModel.Discovery;
 
-    using NLog;
 
     using SynchronizationMessages.Discover;
 
@@ -27,11 +19,7 @@ namespace Questionnaire.Core.Web.WCF
     {
         #region Fields
 
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
+    
         #endregion
 
         #region Public Methods and Operators
@@ -80,7 +68,7 @@ namespace Questionnaire.Core.Web.WCF
                 }
                 catch (Exception e)
                 {
-                    this.logger.Fatal(e);
+                    LogManager.GetLogger(this.GetType()).Fatal("Unexpected error occurred", e);
                 }
                 finally
                 {

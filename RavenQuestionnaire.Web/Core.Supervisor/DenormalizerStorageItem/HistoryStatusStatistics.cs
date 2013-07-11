@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HistoryStatusStatistics.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.DenormalizerStorageItem
 {
@@ -14,10 +8,9 @@ namespace Core.Supervisor.DenormalizerStorageItem
 
     using Main.Core.Entities.SubEntities;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class HistoryStatusStatistics
+    #warning TLK: delete as no longer needed
+    [Obsolete]
+    public class HistoryStatusStatistics : IView
     {
         #region Constructors and Destructors
 

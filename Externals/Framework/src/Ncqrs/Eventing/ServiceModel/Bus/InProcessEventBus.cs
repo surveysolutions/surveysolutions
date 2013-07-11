@@ -1,20 +1,21 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+
 #if !MONODROID
 using System.Transactions;
 #endif
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public class InProcessEventBus : IEventBus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly bool _useTransactionScope;
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
 #endif
             PublishToHandlers(eventMessage, eventMessageType, handlers);
-            #if !MONODROID
+#if !MONODROID
                 transaction.Complete();
             }
 #endif

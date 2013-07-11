@@ -17,4 +17,6 @@
   <UseBuildPlatform></UseBuildPlatform>
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
+  <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
+  <BuildProcessArchitecture>x86</BuildProcessArchitecture>
 </ProjectConfiguration>

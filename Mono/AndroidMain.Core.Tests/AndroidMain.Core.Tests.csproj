@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,9 +92,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Events\EventMergeUtilsTest.cs">
       <Link>Events\EventMergeUtilsTest.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Events\EventSyncExtensionsTests.cs">
-      <Link>Events\EventSyncExtensionsTests.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs">
       <Link>ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs</Link>
     </Compile>
@@ -120,6 +113,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
       <Name>WB.Core.Questionnaire.Events</Name>
@@ -140,10 +137,6 @@
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
-      <Project>{30BE60C9-980F-40E1-A8FD-C2A5959827D3}</Project>
-      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Spec\AndroidNcqrs.Spec.csproj">
       <Project>{C500A144-E8B6-41C1-8776-DC468E1D4889}</Project>
       <Name>AndroidNcqrs.Spec</Name>
@@ -159,6 +152,10 @@
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

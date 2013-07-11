@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireConditionExecuteCollector.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire condition executor.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.ExpressionExecutors
+﻿namespace Main.Core.ExpressionExecutors
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +15,7 @@ namespace Main.Core.ExpressionExecutors
     /// <summary>
     /// The complete questionnaire condition execute collector.
     /// </summary>
-    public class CompleteQuestionnaireConditionExecuteCollector
+    public class CompleteQuestionnaireConditionExecuteCollector : ICompleteQuestionnaireConditionExecuteCollector
     {
         #region Constants
 

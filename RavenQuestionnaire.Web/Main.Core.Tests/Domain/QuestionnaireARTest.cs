@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireARTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire ar test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Tests.Domain
+﻿namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections.Generic;

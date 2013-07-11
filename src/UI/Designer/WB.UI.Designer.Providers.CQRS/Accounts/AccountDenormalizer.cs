@@ -1,11 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountDenormalizer.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The user denormalizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
@@ -43,7 +38,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         ///     The accounts.
         /// </summary>
-        private readonly IDenormalizerStorage<AccountDocument> _accounts;
+        private readonly IReadSideRepositoryWriter<AccountDocument> _accounts;
 
         #endregion
 
@@ -55,7 +50,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="accounts">
         /// The users.
         /// </param>
-        public AccountDenormalizer(IDenormalizerStorage<AccountDocument> accounts)
+        public AccountDenormalizer(IReadSideRepositoryWriter<AccountDocument> accounts)
         {
             this._accounts = accounts;
         }

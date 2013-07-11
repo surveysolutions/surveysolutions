@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="HeaderItem.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;

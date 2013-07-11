@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionStatisticView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The question statistic view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Survey
 {
     using System;

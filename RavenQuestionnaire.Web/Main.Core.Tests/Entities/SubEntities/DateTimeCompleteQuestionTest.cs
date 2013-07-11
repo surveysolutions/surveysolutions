@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DateTimeCompleteQuestionTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The date time complete question test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
+﻿namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;

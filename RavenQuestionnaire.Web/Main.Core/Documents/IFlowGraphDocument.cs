@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFlowGraphDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The FlowGraphDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Documents
 {
     using System;

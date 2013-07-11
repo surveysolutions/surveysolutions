@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C29EBFC8-DD61-4048-A2A9-97FE7D636F70}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LoadTestDataGenerator</RootNamespace>
+    <AssemblyName>LoadTestDataGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NConfig">
+      <HintPath>..\..\..\packages\NConfig.1.0.15\lib\Net40\NConfig.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BatchedRavenDBEventStore.cs" />
+    <Compile Include="ConditionExecuterFactory.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="EventStatisticItem.cs" />
+    <Compile Include="LoadTestDataGeneratorRegistry.cs" />
+    <Compile Include="MainModule.cs" />
+    <Compile Include="CompositionRoot.cs" />
+    <Compile Include="LoadTestDataGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadTestDataGenerator.Designer.cs">
+      <DependentUpon>LoadTestDataGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireHelper.cs" />
+    <Compile Include="UserHelper.cs" />
+    <EmbeddedResource Include="LoadTestDataGenerator.resx">
+      <DependentUpon>LoadTestDataGenerator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Configuration\Stacy.LoadTestDataGenerator.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\TLK.LoadTestDataGenerator.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\Roma.LoadTestDataGenerator.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Configuration\LoadTestDataGenerator.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="HostMap.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
+      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
+      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Core.Supervisor\Core.Supervisor.csproj">
+      <Project>{072c1754-adf8-4f41-8d96-9c2e1083e6a7}</Project>
+      <Name>Core.Supervisor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
+      <Project>{DEDC7ECF-21F8-4D39-81C4-5DBE2E8B9D5D}</Project>
+      <Name>WB.Core.Questionnaire</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
+      <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

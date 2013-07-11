@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ValueCollectionTests.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.View.Export;

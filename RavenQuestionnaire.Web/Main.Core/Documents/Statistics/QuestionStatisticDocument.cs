@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionStatisticDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The question statistic document.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Documents.Statistics
+﻿namespace Main.Core.Documents.Statistics
 {
     using System;
 

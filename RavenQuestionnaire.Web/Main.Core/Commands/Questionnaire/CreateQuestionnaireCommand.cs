@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateQuestionnaireCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The create questionnaire command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire
+﻿namespace Main.Core.Commands.Questionnaire
 {
     using System;
 
@@ -43,12 +35,16 @@ namespace Main.Core.Commands.Questionnaire
         /// <param name="createdBy">
         /// The created by.
         /// </param>
-        public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy = null)
+        /// <param name="isPublic">
+        /// The is public.
+        /// </param>
+        public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy = null, bool isPublic = false)
             : base(questionnaireId)
         {
             this.PublicKey = questionnaireId;
             this.Title = text;
             this.CreatedBy = createdBy;
+            this.IsPublic = isPublic;
         }
 
         #endregion
@@ -69,6 +65,11 @@ namespace Main.Core.Commands.Questionnaire
         /// Gets or sets the created by.
         /// </summary>
         public Guid? CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
 
         #endregion
     }

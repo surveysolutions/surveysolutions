@@ -1,10 +1,7 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessStatisticsDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.View.SyncProcess;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
@@ -15,7 +12,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// Collect user statistics
     /// </summary>
-    public class SyncProcessStatisticsDocument
+    public class SyncProcessStatisticsDocument : IView
     {
         #region Constructors and Destructors
 

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.SharedKernel.Utils</RootNamespace>
     <AssemblyName>WB.Core.SharedKernel.Utils</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -45,17 +49,17 @@
   <ItemGroup>
     <Compile Include="Compression\IStringCompressor.cs" />
     <Compile Include="Compression\GZipJsonCompressor.cs" />
-    <Compile Include="NLog\LogManager.cs" />
-    <Compile Include="NLog\NLog.cs" />
+    <Compile Include="Logging\LogManager.cs" />
+    <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

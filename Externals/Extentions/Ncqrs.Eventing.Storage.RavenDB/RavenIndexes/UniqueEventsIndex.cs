@@ -13,7 +13,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
                           select new
                               {
                                   EventSourceId = doc.EventSourceId,
-                                  LastSnapshot = doc.IsSnapshot ? doc.EventSequence : 1
+                                  LastSnapshot = 1,
+                                  EventTimeStamp = doc.EventTimeStamp
                               };
             Reduce = results => from result in results
                                 group result by result.EventSourceId
@@ -21,7 +22,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
                                 select new
                                     {
                                         EventSourceId = g.Key,
-                                        LastSnapshot = g.Max(e => e.LastSnapshot)
+                                        LastSnapshot = g.Max(e => e.LastSnapshot),
+                                        EventTimeStamp = g.Min(e => e.EventTimeStamp)
                                     };
         }
     }
@@ -29,6 +31,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
     {
         public Guid EventSourceId { get; set; }
         public int LastSnapshot { get; set; }
+        public DateTime EventTimeStamp { get; set; }
     }
     
 }

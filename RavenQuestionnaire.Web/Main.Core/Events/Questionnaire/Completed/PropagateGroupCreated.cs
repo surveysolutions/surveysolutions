@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropagateGroupCreated.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the PropagateGroupCreated type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Events.Questionnaire.Completed
+﻿namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
 

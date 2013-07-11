@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SetAnswerCommand.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the SetAnswerCommand type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire.Completed
+﻿namespace Main.Core.Commands.Questionnaire.Completed
 {
     using System;
     using System.Collections.Generic;

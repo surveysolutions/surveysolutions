@@ -1,11 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireBrowseItemDenormalizer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire browse item denormalizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
@@ -20,7 +15,6 @@ namespace Main.Core.EventHandlers
     using Main.Core.View.Question;
     using Main.DenormalizerStorage;
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
@@ -29,15 +23,14 @@ namespace Main.Core.EventHandlers
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<SnapshootLoaded>
+                                                               IEventHandler<QuestionnaireAssignmentChanged>
     {
         #region Fields
 
         /// <summary>
         /// The document item store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
 
         #endregion
 
@@ -49,7 +42,7 @@ namespace Main.Core.EventHandlers
         /// <param name="documentItemStore">
         /// The document item store.
         /// </param>
-        public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore)
         {
             this.documentItemStore = documentItemStore;
         }
@@ -67,23 +60,6 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             this.HandleNewSurvey(evnt.Payload.Questionnaire);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this.HandleNewSurvey(document.Clone() as CompleteQuestionnaireDocument);
         }
 
         /// <summary>

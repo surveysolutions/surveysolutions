@@ -41,33 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IDenormalizer.cs">
-      <Link>IDenormalizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IDenormalizerStorage.cs">
-      <Link>IDenormalizerStorage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IFilterableDenormalizerStorage.cs">
-      <Link>IFilterableDenormalizerStorage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\InMemoryDenormalizer.cs">
-      <Link>InMemoryDenormalizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IPersistentStorage.cs">
-      <Link>IPersistentStorage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IQueryableDenormalizerStorage.cs">
-      <Link>IQueryableDenormalizerStorage.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs">
+      <Link>InMemoryReadSideRepositoryAccessor.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\SmartDenormalizerAttribute.cs">
       <Link>SmartDenormalizerAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\StoredObject.cs">
-      <Link>StoredObject.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Domain
 {
     internal static class AggregateRootExtensions
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static Type GetSnapshotInterfaceType(this Type aggregateType)
         {

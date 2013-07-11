@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileAR.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the FileAR type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     using System;
 

@@ -1,10 +1,8 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.DenormalizerStorage;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.SyncProcess
 {
@@ -23,7 +21,7 @@ namespace Main.Core.View.SyncProcess
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> docs;
+        private readonly IReadSideRepositoryReader<SyncProcessStatisticsDocument> docs;
 
         #endregion
 
@@ -35,7 +33,7 @@ namespace Main.Core.View.SyncProcess
         /// <param name="docs">
         /// The docs.
         /// </param>
-        public SyncProcessViewFactory(IDenormalizerStorage<SyncProcessStatisticsDocument> docs)
+        public SyncProcessViewFactory(IReadSideRepositoryReader<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
         }

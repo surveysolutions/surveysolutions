@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="when_creating_a_new_questionnaire.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The when_creating_a_new_questionnaire.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Tests.Domain
+﻿namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections.Generic;

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CardViewInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The card view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Main.Core.View.Card

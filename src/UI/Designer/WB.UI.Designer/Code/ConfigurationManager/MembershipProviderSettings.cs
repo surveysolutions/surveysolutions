@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipProviderSettings.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using System.Collections.Specialized;
     using System.Web.Configuration;

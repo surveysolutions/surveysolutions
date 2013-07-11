@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+
 using Ncqrs.Commanding;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -11,14 +12,14 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Domain
 {
     public class UnitOfWork : UnitOfWorkBase
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// A queue that holds a reference to all instances that have themself registered as a dirty instance during the lifespan of this unit of work instance.

@@ -2,14 +2,15 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
+
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public static class RegisterAllHandlersInAssemblyExtension
     {
-        private static ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILogger _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void RegisterAllHandlersInAssembly(this InProcessEventBus target, Assembly asm)
         {
@@ -32,7 +33,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         private static object CreateInstance(Type type)
         {
-            #if USE_CONTRACTS
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(type != null);
 #endif
             return Activator.CreateInstance(type);

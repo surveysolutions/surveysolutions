@@ -36,7 +36,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             etAnswer=new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             etAnswer.Text = Model.AnswerString;
-            etAnswer.InputType = InputTypes.ClassNumber;
+            etAnswer.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal;
             
             etAnswer.SetSelectAllOnFocus(true);
             etAnswer.ImeOptions=ImeAction.Done;

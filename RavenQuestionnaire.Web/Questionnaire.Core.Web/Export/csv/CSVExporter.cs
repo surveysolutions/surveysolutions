@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CSVExporter.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Implements comma-separated values export format.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Text;
 
 namespace Questionnaire.Core.Web.Export.csv

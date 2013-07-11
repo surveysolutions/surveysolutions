@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The CompleteItem interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Complete
+﻿namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
 

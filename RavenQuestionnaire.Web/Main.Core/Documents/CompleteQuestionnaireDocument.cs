@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ICompleteQuestionnaireDocument type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Documents
+﻿namespace Main.Core.Documents
 {
     using System;
     using System.Collections.Generic;
@@ -115,6 +107,11 @@ namespace Main.Core.Documents
         /// Gets or sets the created by.
         /// </summary>
         public Guid? CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
 
         /// <summary>
         /// Gets or sets the parent.

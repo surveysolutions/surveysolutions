@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory"  Service="Web.Supervisor.WCF.GetEventStreamService" CodeBehind="GetEventStreamService.svc.cs" %>

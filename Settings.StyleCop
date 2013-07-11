@@ -4,7 +4,7 @@
       <Rules>
         <Rule Name="ElementsMustBeDocumented">
           <RuleSettings>
-            <BooleanProperty Name="Enabled">True</BooleanProperty>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
         <Rule Name="PartialElementsMustBeDocumented">
@@ -179,7 +179,7 @@
         </Rule>
         <Rule Name="FileMustHaveHeader">
           <RuleSettings>
-            <BooleanProperty Name="Enabled">True</BooleanProperty>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
         <Rule Name="FileHeaderMustShowCopyright">
@@ -229,7 +229,7 @@
         </Rule>
         <Rule Name="ElementMustNotBeOnSingleLine">
           <RuleSettings>
-            <BooleanProperty Name="Enabled">True</BooleanProperty>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
         <Rule Name="CurlyBracketsMustNotBeOmitted">
@@ -454,7 +454,7 @@
       <Rules>
         <Rule Name="UsingDirectivesMustBePlacedWithinNamespace">
           <RuleSettings>
-            <BooleanProperty Name="Enabled">True</BooleanProperty>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
         <Rule Name="ElementsMustAppearInTheCorrectOrder">

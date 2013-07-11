@@ -1,15 +1,12 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using System.Linq.Expressions;
 
 using Main.DenormalizerStorage;
 using System;
 using System.Linq;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Questionnaire
 {
@@ -25,7 +22,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession;
 
         #endregion
 
@@ -37,7 +34,7 @@ namespace Main.Core.View.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireBrowseViewFactory(IQueryableDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession)
+        public QuestionnaireBrowseViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
@@ -65,20 +62,31 @@ namespace Main.Core.View.Questionnaire
                     input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
-            return this.documentGroupSession.Query(query =>
+            return this.documentGroupSession.Query(queryable =>
             {
-                Func<QuestionnaireBrowseItem, bool> q = (ret) => true;
+                IQueryable<QuestionnaireBrowseItem> query = queryable;
 
                 if (input.IsAdminMode.HasValue)
                 {
-                    q =
-                        x =>
-                        (!input.IsOnlyOwnerItems || x.CreatedBy == input.CreatedBy)
-                        && (input.IsAdminMode.Value || !x.IsDeleted)
-                        && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+                    if (input.IsOnlyOwnerItems)
+                    {
+                        query = query.Where(x => x.CreatedBy == input.CreatedBy);
+                    }
+
+                    if (!input.IsAdminMode.Value)
+                    {
+                        query = query.Where(x => !x.IsDeleted);
+                    }
+
+                    if (!string.IsNullOrEmpty(input.Filter))
+                    {
+                        #warning ReadLayer: ToList materialization because not supported by Raven
+                        query = query.ToList().AsQueryable().Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+                    }
                 }
 
-                var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
+                #warning ReadLayer: ToList materialization because not supported by Raven
+                var queryResult = query.ToList().AsQueryable().OrderUsingSortExpression(input.Order);
 
                 var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -9,16 +8,21 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
+
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>{
-        private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
-        private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
+    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, IEventHandler<QuestionnaireStatusChanged>, IEventHandler<CompleteQuestionnaireDeleted>
+    {
+        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<SurveyDto> _surveyDTOdocumentStorage;
 
-        public DashboardDenormalizer(IDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
+        public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
+            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage
             )
         {
             _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;
@@ -27,12 +31,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-                return;
-          
+            var document = evnt.Payload.Source;
             PropeedCompleteQuestionnaire(document);
         }
 
@@ -80,7 +81,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
         protected bool IsVisible(SurveyStatus status)
         {
             return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Error;
+                   status == SurveyStatus.Reinit || status == SurveyStatus.Error;
+        }
+
+        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
+        {
+            _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
         }
     }
 }

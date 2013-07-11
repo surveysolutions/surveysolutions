@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="StatusView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Status
+﻿namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
@@ -21,49 +15,36 @@ namespace Core.Supervisor.Views.Status
     /// </summary>
     public class StatusView
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusView"/> class.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalCount">
-        /// The total count.
-        /// </param>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        public StatusView(int page, int pageSize, int totalCount, SurveyStatus status, List<TemplateLight> headers)
+        public StatusView(int page, int pageSize,  SurveyStatus status, List<TemplateLight> headers, IEnumerable<StatusViewItem> items)
         {
             this.Page = page;
             this.PageSize = pageSize;
-            this.TotalCount = totalCount;
             this.Status = status;
-            this.Headers = headers;
+            this.Items = items.ToList();
+
+            this.BuildSummary(headers);
+
         }
 
         /// <summary>
         /// Gets or sets the headers.
         /// </summary>
-        public List<TemplateLight> Headers { get; set; }
+        public List<TemplateLight> Headers { get; private set; }
 
         /// <summary>
         /// Gets or sets Template.
         /// </summary>
-        public SurveyStatus Status { get; set; }
+        public SurveyStatus Status { get; private set; }
 
         /// <summary>
         /// Gets or sets the order.
         /// </summary>
-        public string Order { get; set; }
+        public string Order { get; private set; }
 
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders { get; set; }
+        public List<OrderRequestItem> Orders { get; private set; }
 
         /// <summary>
         /// Gets the page.
@@ -78,44 +59,36 @@ namespace Core.Supervisor.Views.Status
         /// <summary>
         /// Gets or sets Summary.
         /// </summary>
-        public StatusViewItem Summary { get; set; }
+        public StatusViewItem Summary { get; private set; }
 
         /// <summary>
         /// Gets or sets the total count.
         /// </summary>
-        public int TotalCount { get; set; }
+        public int TotalCount {
+            get { return Items.Count; }
+        }
 
         /// <summary>
         /// Gets or sets Items.
         /// </summary>
-        public List<StatusViewItem> Items { get; set; }
+        public List<StatusViewItem> Items { get;private set; }
 
-        /// <summary>
-        /// Builds summary row
-        /// </summary>
-        /// <param name="items">
-        /// The items.
-        /// </param>
-        /// <param name="headers">
-        /// The headers.
-        /// </param>
-        public void BuildSummary(IQueryable<StatusViewItem> items, List<TemplateLight> headers)
+        private void BuildSummary(List<TemplateLight> headers)
         {
             var dict = new Dictionary<Guid, int>();
+            var newHeader = new List<TemplateLight>();
             foreach (var header in headers)
             {
                 if (!dict.ContainsKey(header.TemplateId))
                 {
-                    dict.Add(header.TemplateId, 0);
+                    var totalSum = Items.Select(i => i.GetCount(header.TemplateId)).Sum();
+                    dict.Add(header.TemplateId, totalSum);
+                    if (totalSum > 0)
+                        newHeader.Add(header);
                 }
             }
-
-            foreach (var i in items.SelectMany(item => item.Items))
-            {
-                dict[i.Key.TemplateId] += i.Value;
-            }
-
-            this.Summary = new StatusViewItem(new UserLight(Guid.Empty, "Summary"), dict, headers);
+            this.Headers = newHeader;
+            this.Summary = new StatusViewItem(new UserLight(Guid.Empty, "Summary"), dict);
         }
     }
 }

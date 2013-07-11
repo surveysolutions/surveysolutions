@@ -1,11 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The sync process document.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -16,7 +11,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The sync process document.
     /// </summary>
-    public class SyncProcessDocument
+    public class SyncProcessDocument : IView
     {
         #region Fields
 

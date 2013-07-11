@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireConditionExecutorTests.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire condition executor tests.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
+﻿namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
     using Main.Core.Documents;
     using Main.Core.Entities.Extensions;

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewQuestionnaireCreated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The new questionnaire created.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire
+﻿namespace Main.Core.Events.Questionnaire
 {
     using System;
 
@@ -39,6 +31,11 @@ namespace Main.Core.Events.Questionnaire
         /// Gets or sets the created by.
         /// </summary>
         public Guid? CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
 
         #endregion
     }

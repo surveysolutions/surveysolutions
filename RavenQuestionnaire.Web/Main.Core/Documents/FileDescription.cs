@@ -1,11 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileDescription.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The file description.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -14,7 +9,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The file description.
     /// </summary>
-    public class FileDescription
+    public class FileDescription : IView
     {
         #region Public Properties
 

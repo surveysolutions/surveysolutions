@@ -29,18 +29,27 @@ namespace CAPI.Android
             base.OnCreate(bundle);
             if (this.FinishIfNotLoggedIn())
                 return;
-            sureveyHolders=new Dictionary<Guid, View>();
+            
             SetContentView(Resource.Layout.Main);
-             llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
+            InitDashboard();
+        }
+
+        private void InitDashboard()
+        {
             currentDashboard =
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
-            foreach (var dashboardSurveyItem in currentDashboard.Surveys)
-            {
-                AddSurveyItem(dashboardSurveyItem);
-            }
+            sureveyHolders = new Dictionary<Guid, View>();
+            llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
+            this.RunOnUiThread(() =>
+                {
+                    llSurveyHolder.RemoveAllViews();
 
-
+                    foreach (var dashboardSurveyItem in currentDashboard.Surveys)
+                    {
+                        AddSurveyItem(dashboardSurveyItem);
+                    }
+                });
         }
 
         private void AddSurveyItem(DashboardSurveyItem dashboardSurveyItem)
@@ -83,7 +92,7 @@ namespace CAPI.Android
         {
             base.OnRestart();
 
-            RequestData(UpdateDashboard);
+            RequestData(InitDashboard);
         }
 
         protected void UpdateDashboard()

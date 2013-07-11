@@ -1,4 +1,8 @@
-﻿namespace Core.Supervisor.Views.Device
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
+namespace Core.Supervisor.Views.Device
 {
     using System;
     using System.Collections.Generic;
@@ -11,9 +15,9 @@
 
     public class DeviceViewFactory : IViewFactory<DeviceViewInputModel, DeviceView>
     {
-        private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices;
+        private readonly IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> devices;
 
-        public DeviceViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices)
+        public DeviceViewFactory(IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> devices)
         {
             this.devices = devices;
         }

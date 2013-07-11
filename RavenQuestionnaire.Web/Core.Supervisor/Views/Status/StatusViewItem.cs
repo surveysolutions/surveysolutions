@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusViewItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Status
+﻿namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
@@ -23,40 +14,36 @@ namespace Core.Supervisor.Views.Status
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusViewItem"/> class.
-        /// </summary>
-        /// <param name="userLight">
-        /// The user light.
-        /// </param>
-        /// <param name="templateGroup">
-        /// The template group.
-        /// </param>
-        /// <param name="headers">
-        /// The headers.
-        /// </param>
         public StatusViewItem(
-            UserLight userLight, Dictionary<Guid, int> templateGroup, IEnumerable<TemplateLight> headers)
+            UserLight userLight, Dictionary<Guid, int> templateGroup)
         {
+            this.templateGroup = templateGroup;
             this.User = userLight;
-            this.Items = new Dictionary<TemplateLight, int>();
+         /*   this.Items = new Dictionary<Guid, int>();
+
             foreach (TemplateLight header in headers)
             {
                 this.Items.Add(
-                    header, templateGroup.ContainsKey(header.TemplateId) ? templateGroup[header.TemplateId] : 0);
-            }
+                    header.TemplateId, templateGroup.ContainsKey(header.TemplateId) ? templateGroup[header.TemplateId] : 0);
+            }*/
 
-            this.Total = this.Items.Values.Sum();
+            this.Total = this.templateGroup.Values.Sum();
         }
 
+        private Dictionary<Guid, int> templateGroup;
         #endregion
+
+        public int GetCount(Guid templateId)
+        {
+            return templateGroup.ContainsKey(templateId) ? templateGroup[templateId] : 0;
+        }
 
         #region Public Properties
 
-        /// <summary>
+      /*  /// <summary>
         /// Gets or sets Items.
         /// </summary>
-        public Dictionary<TemplateLight, int> Items { get; set; }
+        public Dictionary<Guid, int> Items { get; set; }*/
 
         /// <summary>
         /// Gets or sets Total.

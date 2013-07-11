@@ -1,11 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessDenormalizer.cs" company="The World Bank">
-//   Sync Process Denormalizer
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -30,7 +25,7 @@ namespace Core.Supervisor.Denormalizer
         /// <summary>
         /// The statistics docs.
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> docs;
+        private readonly IReadSideRepositoryWriter<SyncProcessStatisticsDocument> docs;
 
 
         #endregion
@@ -47,7 +42,7 @@ namespace Core.Supervisor.Denormalizer
         /// The document Item Store.
         /// </param>
         public SyncProcessDenormalizer(
-            IDenormalizerStorage<SyncProcessStatisticsDocument> docs)
+            IReadSideRepositoryWriter<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
         }

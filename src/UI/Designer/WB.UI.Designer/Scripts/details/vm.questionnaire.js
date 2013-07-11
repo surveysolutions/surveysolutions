@@ -328,7 +328,10 @@
                         }
                     });
             },
-            saveQuestionnaire = function(questionnaire) {
+            saveQuestionnaire = function (questionnaire) {
+                
+                questionnaire.canUpdate(false);
+                
                 datacontext.sendCommand(
                     config.commands.updateQuestionnaire,
                     questionnaire,

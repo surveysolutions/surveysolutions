@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GlobalInfo.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The global info.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Helpers
+﻿namespace Questionnaire.Core.Web.Helpers
 {
     using System;
     using System.Web.Security;
@@ -37,6 +28,22 @@ namespace Questionnaire.Core.Web.Helpers
 
             // byte[] key = (byte[])currentUser.ProviderUserKey;
             return new UserLight((Guid)currentUser.ProviderUserKey, currentUser.UserName);
+        }
+
+        public static bool IsHeadquarter
+        {
+            get
+            {
+                return Roles.IsUserInRole("Headquarter");
+            }
+        }
+
+        public static bool IsSupervisor
+        {
+            get
+            {
+                return Roles.IsUserInRole("Supervisor");
+            }
         }
 
         /// <summary>

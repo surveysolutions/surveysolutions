@@ -11,10 +11,12 @@
                     return config.hashes.detailsQuestionnaire + "/" + self.id();
                 };
 
+                self.canUpdate = ko.observable(true);
+                self.isPublic = ko.observable(false);
                 self.isSelected = ko.observable();
                 self.isNullo = false;
                 self.canUpdate = ko.observable(true);
-                self.dirtyFlag = new ko.DirtyFlag([self.title]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.isPublic]);
                 self.dirtyFlag().reset();
 
                 self.errors = ko.validation.group(self);
@@ -22,7 +24,7 @@
                 return self;
             };
 
-        Questionnaire.Nullo = new Questionnaire().id(0).title('');
+        Questionnaire.Nullo = new Questionnaire().id(0).title('').isPublic(false);
         Questionnaire.Nullo.isNullo = true;
         Questionnaire.Nullo.dirtyFlag().reset();
 

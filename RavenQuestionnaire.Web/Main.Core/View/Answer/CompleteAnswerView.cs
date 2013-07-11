@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteAnswerView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete answer view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;

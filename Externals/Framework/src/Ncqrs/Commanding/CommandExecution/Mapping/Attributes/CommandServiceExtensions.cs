@@ -2,14 +2,13 @@
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.ServiceModel;
-#if MONODROID
-using AndroidLogger;
-#endif
+
+
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public static class RegisterExecutorForAllMappedCommandsInAssemblyExtension
     {
-        private static ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static ILogger logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void RegisterExecutorsInAssembly(this CommandService target, Assembly asm)
         {

@@ -116,6 +116,7 @@
     <Compile Include="Integration\ZipUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SynchronizationControllerTests.cs" />
+    <Compile Include="Views\Questonnaire\QuestionnaireViewSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -134,13 +135,17 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -149,6 +154,10 @@
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
+      <Project>{4489F996-D379-43D1-8932-3C48D59D9AB5}</Project>
+      <Name>WB.UI.Designer.Views</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>

@@ -1,4 +1,8 @@
-﻿namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
+namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
 {
     using System;
 
@@ -34,7 +38,7 @@
                 secondGroup = CreateGroup(groupId: groupId, title: initialGroupTitle),
             });
 
-            var documentStorage = Mock.Of<IDenormalizerStorage<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(storage
                 => storage.GetById(it.IsAny<Guid>()) == questionnaire);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);

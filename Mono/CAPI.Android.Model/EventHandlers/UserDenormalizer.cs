@@ -2,23 +2,26 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Events.User;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class UserDenormalizer : IEventHandler<NewUserCreated>
     {
-        private readonly IDenormalizerStorage<LoginDTO> _documentStorage;
+        private readonly IReadSideRepositoryWriter<LoginDTO> documentStorage;
 
-        public UserDenormalizer(IDenormalizerStorage<LoginDTO> documentStorage)
+        public UserDenormalizer(IReadSideRepositoryWriter<LoginDTO> documentStorage)
         {
 
-            _documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
          /*   var fromStore = persistanceStore.RestoreProjection<List<UserView>>(Guid.Empty);
             var userList = fromStore??
                            new List<UserView>();
@@ -32,7 +35,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
-            _documentStorage.Store(new LoginDTO(evnt.EventSourceId, evnt.Payload.Name, evnt.Payload.Password, evnt.Payload.IsLocked),
+            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, evnt.Payload.Name, evnt.Payload.Password, evnt.Payload.IsLocked),
                                    evnt.EventSourceId);
             /*    _documentStorage.Store(
                     new UserView(evnt.Payload.PublicKey, evnt.Payload.Name, evnt.Payload.Password,

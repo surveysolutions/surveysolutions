@@ -14,9 +14,10 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
+using Main.Core.Events.Questionnaire;
+using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Spec;
 using Newtonsoft.Json;
 using SynchronizationMessages.Export;
@@ -76,9 +77,9 @@ namespace AssigmentGeneration
             var result = new List<AggregateRootEvent>();
             result.Add(
                 new AggregateRootEvent(new CommittedEvent(commitid, Guid.NewGuid(), template.PublicKey, 1, DateTime.Now,
-                                                          new SnapshootLoaded()
+                                                          new TemplateImported()
                                                               {
-                                                                  Template = new Snapshot(template.PublicKey, 1, template)
+                                                                  Source = template
                                                               },
                                                           new Version(1, 1, 1, 1))));
             foreach (var assigmentValue in assigmentValues.Skip(1))
@@ -94,11 +95,10 @@ namespace AssigmentGeneration
         {
             return
                 new AggregateRootEvent(new CommittedEvent(commitid, Guid.NewGuid(), publicKey, 1, DateTime.Now,
-                                                          new SnapshootLoaded()
+                                                          new NewCompleteQuestionnaireCreated()
                                                               {
-                                                                  Template = new Snapshot(publicKey, 1, BuiltSnapshoot( publicKey, values))
+                                                                  Questionnaire = BuiltSnapshoot(publicKey, values)
                                                               }, new Version(1, 1, 1, 1)));
-
         }
 
         private CompleteQuestionnaireDocument BuiltSnapshoot(Guid publicKey, string[] values)

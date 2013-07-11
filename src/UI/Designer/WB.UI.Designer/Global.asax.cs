@@ -5,13 +5,14 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Main.Core;
+using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer
 {
     using NConfig;
 
-    using WB.Core.SharedKernel.Utils.NLog;
+    //using WB.Core.SharedKernel.Utils.NLog;
 
     public class MvcApplication : HttpApplication
     {
@@ -43,7 +44,7 @@ namespace WB.UI.Designer
 
             var ex = Server.GetLastError();
 
-            LogManager.Logger.Error(ex);
+            LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", ex);
 
             var controller = new ErrorController();
             var routeData = new RouteData();

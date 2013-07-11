@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Domain.Storage
 {
     public class DomainRepository : IDomainRepository
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 

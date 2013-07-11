@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtentionFunctionsTests.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the ExtentionFunctionsTests type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
+﻿namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
 {
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;

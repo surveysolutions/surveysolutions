@@ -3,13 +3,18 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 namespace Core.Supervisor.Views.Assign
 {
     public class AssignSurveyViewFactory : BaseUserViewFactory, IViewFactory<AssignSurveyInputModel, AssignSurveyView> 
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys;
 
-        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+        public AssignSurveyViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
+            : base(users)
         {
             this.surveys = surveys;
             this.users = users;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountViewModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account view model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System;
     using System.Collections.Generic;

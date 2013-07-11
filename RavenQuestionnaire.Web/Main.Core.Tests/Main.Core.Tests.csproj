@@ -10,9 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Main.Core.Tests</RootNamespace>
     <AssemblyName>Main.Core.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +56,7 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -95,6 +97,7 @@
     <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Machine.Specifications">
@@ -115,21 +118,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Embedded, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Embedded, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2261\lib\net40\Raven.Client.Embedded.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2375\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Database, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Database, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Database.2.0.2261\lib\net40\Raven.Database.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2375\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -149,6 +152,7 @@
     <Compile Include="Domain\QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\DeleteImageTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\DeleteQuestionTests.cs" />
+    <Compile Include="Domain\QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\MoveGroupTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\MoveQuestionnaireItemTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\NewAddGroupTests.cs" />
@@ -178,7 +182,6 @@
     <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
-    <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="Export\HeaderCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
     <Compile Include="Export\HeaderItemTests.cs" />
@@ -208,6 +211,10 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
       <Name>WB.Core.Questionnaire.Events</Name>
@@ -223,10 +230,6 @@
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
       <Name>Main.DenormalizerStorage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

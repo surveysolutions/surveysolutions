@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateQuestionnaireFlowCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The update questionnaire flow command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire.Flow
+﻿namespace Main.Core.Commands.Questionnaire.Flow
 {
     using System.Collections.Generic;
 

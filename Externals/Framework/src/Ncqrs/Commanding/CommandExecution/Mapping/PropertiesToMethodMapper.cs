@@ -4,14 +4,14 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Commanding.CommandExecution.Mapping
 {
     public class PropertiesToMethodMapper
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static BindingFlags All = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
         public static Tuple<ConstructorInfo, PropertyInfo[]> GetConstructor(PropertyToParameterMappingInfo[] sources, Type targetType)
@@ -57,9 +57,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
             var mappedProps = new PropertyInfo[propertiesToMap.Count];
 #if MONODROID
  var targets = new List<MethodBase>();
-			targets.AddRange(potentialTargets
-				.Select(t => (MethodBase)t)
-				.ToList());
+            targets.AddRange(potentialTargets
+                .Select(t => (MethodBase)t)
+                .ToList());
 #else
             var targets = new List<MethodBase>(potentialTargets);
 #endif

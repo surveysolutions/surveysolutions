@@ -2,16 +2,17 @@ using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
+
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Domain.Storage
 {
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 

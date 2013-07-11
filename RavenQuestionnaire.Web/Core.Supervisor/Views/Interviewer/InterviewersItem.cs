@@ -1,16 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewersItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewers item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Interviewer
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// The interviewers item.
@@ -39,8 +29,8 @@ namespace Core.Supervisor.Views.Interviewer
         /// </param>
         public InterviewersItem(Guid id, string name, string email, DateTime creationDate, bool isLocked)
         {
-            this.QuestionnaireId = id;
-            this.Login = name;
+            this.UserId = id;
+            this.UserName = name;
             this.Email = email;
             this.CreationDate = creationDate;
             this.IsLocked = isLocked;
@@ -73,12 +63,12 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid QuestionnaireId { get; private set; }
+        public Guid UserId { get; private set; }
 
         /// <summary>
         /// Gets the login.
         /// </summary>
-        public string Login { get; private set; }
+        public string UserName { get; private set; }
 
         #endregion
     }

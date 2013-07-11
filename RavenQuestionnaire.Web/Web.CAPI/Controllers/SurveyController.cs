@@ -1,14 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The survey controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Web.CAPI.Controllers
+﻿namespace Web.CAPI.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -16,8 +6,6 @@ namespace Web.CAPI.Controllers
     using System.Web.Mvc;
     using System.Web.Security;
 
-    using Core.CAPI.Views.Grouped;
-    using Core.CAPI.Views.Json;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Commands.Questionnaire.Group;
@@ -41,49 +29,21 @@ namespace Web.CAPI.Controllers
 
     using LogManager = NLog.LogManager;
 
-    /// <summary>
-    /// The survey controller.
-    /// </summary>
     [Authorize]
     public class SurveyController : Controller
     {
-        #region Fields
-
-        /// <summary>
-        /// The _global provider.
-        /// </summary>
-        private readonly IGlobalInfoProvider _globalProvider;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
+        private readonly IGlobalInfoProvider globalProvider;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticsViewFactory;
+        private readonly IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView> screenGroupViewFactory;
 
-        /// <summary>
-        /// The view repository.
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyController"/> class.
-        /// </summary>
-        /// <param name="viewRepository">
-        /// The view repository.
-        /// </param>
-        /// <param name="globalProvider">
-        /// The global provider.
-        /// </param>
-        public SurveyController(IViewRepository viewRepository, IGlobalInfoProvider globalProvider)
+        public SurveyController(IGlobalInfoProvider globalProvider, IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView> completeQuestionnaireStatisticsViewFactory,
+             IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView> screenGroupViewFactory)
         {
-            this.viewRepository = viewRepository;
-            this._globalProvider = globalProvider;
+            this.globalProvider = globalProvider;
+            this.completeQuestionnaireStatisticsViewFactory = completeQuestionnaireStatisticsViewFactory;
+            this.screenGroupViewFactory = screenGroupViewFactory;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -106,13 +66,12 @@ namespace Web.CAPI.Controllers
             }
 
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load
-                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.completeQuestionnaireStatisticsViewFactory.Load(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Answered", stat);
         }
 
-        /// <summary>
+      /*  /// <summary>
         /// The complete.
         /// </summary>
         /// <param name="id">
@@ -140,8 +99,7 @@ namespace Web.CAPI.Controllers
             }
 
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load
-                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.completeQuestionnaireStatisticsViewFactory.Load(
                         new CompleteQuestionnaireStatisticViewInputModel(key) { Scope = QuestionScope.Interviewer });
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -161,10 +119,10 @@ namespace Web.CAPI.Controllers
                     {
                         CompleteQuestionnaireId = key,
                         Status = status,
-                        Responsible = this._globalProvider.GetCurrentUser()
+                        Responsible = this.globalProvider.GetCurrentUser()
                     });
             return this.RedirectToAction("Dashboard");
-        }
+        }*/
 
         /// <summary>
         /// The complete summary.
@@ -185,13 +143,12 @@ namespace Web.CAPI.Controllers
             }
 
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load
-                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.completeQuestionnaireStatisticsViewFactory.Load(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Main", stat);
         }
 
-        /// <summary>
+     /*   /// <summary>
         /// The dashboard.
         /// </summary>
         /// <returns>
@@ -199,7 +156,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public ViewResult Dashboard()
         {
-            var user = this._globalProvider.GetCurrentUser();
+            var user = this.globalProvider.GetCurrentUser();
             var inputModel = new CQGroupedBrowseInputModel();
             if (user != null)
             {
@@ -207,11 +164,11 @@ namespace Web.CAPI.Controllers
             }
 
             CQGroupedBrowseView model =
-                this.viewRepository.Load<CQGroupedBrowseInputModel, CQGroupedBrowseView>(inputModel);
+                this.completeQuestionnaireGroupedBrowseViewFactory.Load(inputModel);
             return View(model);
-        }
+        }*/
 
-        /// <summary>
+       /* /// <summary>
         /// The delete.
         /// </summary>
         /// <param name="id">
@@ -225,7 +182,7 @@ namespace Web.CAPI.Controllers
             var service = NcqrsEnvironment.Get<ICommandService>();
             service.Execute(new DeleteCompleteQuestionnaireCommand(Guid.Parse(id)));
             return this.RedirectToAction("Dashboard", "Survey");
-        }
+        }*/
 
         /// <summary>
         /// The delete propagated group.
@@ -271,7 +228,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         protected ScreenGroupView GetGroup(Guid questionnaireId, Guid? groupid, Guid? propagationKey)
         {
-            var user = this._globalProvider.GetCurrentUser();
+            var user = this.globalProvider.GetCurrentUser();
             QuestionScope scope;
             if (Roles.IsUserInRole(user.Name, UserRoles.Administrator.ToString()))
             {
@@ -287,7 +244,7 @@ namespace Web.CAPI.Controllers
             }
 
             return
-                this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
+                this.screenGroupViewFactory.Load(
                     new CompleteQuestionnaireViewInputModel(questionnaireId)
                         {
                             CurrentGroupPublicKey = groupid,
@@ -348,8 +305,7 @@ namespace Web.CAPI.Controllers
             }
 
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load
-                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.completeQuestionnaireStatisticsViewFactory.Load(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Invalid", stat);
         }
@@ -377,11 +333,11 @@ namespace Web.CAPI.Controllers
 
             Guid newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this._globalProvider.GetCurrentUser()));
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this.globalProvider.GetCurrentUser()));
 
             ////asssign to executor
             commandService.Execute(
-                new ChangeAssignmentCommand(newQuestionnairePublicKey, this._globalProvider.GetCurrentUser()));
+                new ChangeAssignmentCommand(newQuestionnairePublicKey, this.globalProvider.GetCurrentUser()));
             
             return this.RedirectToAction("Index", new { id = newQuestionnairePublicKey });
         }
@@ -443,7 +399,7 @@ namespace Web.CAPI.Controllers
                     {
                         CompleteQuestionnaireId = Guid.Parse(id),
                         Status = SurveyStatus.Initial,
-                        Responsible = this._globalProvider.GetCurrentUser()
+                        Responsible = this.globalProvider.GetCurrentUser()
                     });
             return this.RedirectToAction("Index", "Survey", new { id });
         }
@@ -616,7 +572,7 @@ namespace Web.CAPI.Controllers
         {
             try
             {
-                var user = this._globalProvider.GetCurrentUser();
+                var user = this.globalProvider.GetCurrentUser();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 Guid questionnaireKey = questionnaireId;
                 commandService.Execute(
@@ -662,7 +618,7 @@ namespace Web.CAPI.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                var user = this._globalProvider.GetCurrentUser();
+                var user = this.globalProvider.GetCurrentUser();
                 Guid questionnaireKey = settings[0].QuestionnaireId;
                 commandService.Execute(
                     new SetCommentCommand(
@@ -728,7 +684,7 @@ namespace Web.CAPI.Controllers
         public ActionResult Statistic(Guid id)
         {
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.completeQuestionnaireStatisticsViewFactory.Load(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return View(stat);
         }
@@ -752,7 +708,7 @@ namespace Web.CAPI.Controllers
             }
 
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.completeQuestionnaireStatisticsViewFactory.Load(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Unanswered", stat);
         }
