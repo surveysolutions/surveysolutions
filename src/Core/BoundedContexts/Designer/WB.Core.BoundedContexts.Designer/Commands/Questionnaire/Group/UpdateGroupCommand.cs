@@ -1,14 +1,11 @@
-﻿using Main.Core.Commands.Questionnaire.Base;
+﻿using System;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
-namespace Main.Core.Commands.Questionnaire.Group
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
 {
-    using System;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "NewUpdateGroup")]
     public class UpdateGroupCommand : FullGroupDataCommand

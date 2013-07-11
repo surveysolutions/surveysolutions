@@ -1,10 +1,10 @@
 using System;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Commands.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [MapsToAggregateRootMethodOrConstructor(typeof(QuestionnaireAR), "ImportQuestionnaire")]
     public class ImportQuestionnaireCommand : CommandBase

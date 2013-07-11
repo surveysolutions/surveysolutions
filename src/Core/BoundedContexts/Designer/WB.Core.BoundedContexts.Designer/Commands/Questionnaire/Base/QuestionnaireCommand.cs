@@ -1,10 +1,9 @@
-﻿namespace Main.Core.Commands.Questionnaire
+﻿using System;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
-    using System;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     public abstract class QuestionnaireCommand : CommandBase
     {
         protected QuestionnaireCommand(Guid questionnaireId)

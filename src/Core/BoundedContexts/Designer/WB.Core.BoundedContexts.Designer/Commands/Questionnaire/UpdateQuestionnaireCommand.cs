@@ -1,11 +1,10 @@
-﻿namespace Main.Core.Commands.Questionnaire
+﻿using System;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
-    using System;
-
-    using Main.Core.Domain;
-
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UpdateQuestionnaire")]
     public class UpdateQuestionnaireCommand : QuestionnaireCommand
