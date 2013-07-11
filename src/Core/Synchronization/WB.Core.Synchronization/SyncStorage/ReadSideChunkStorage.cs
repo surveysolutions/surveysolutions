@@ -30,7 +30,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             try
             {
-                var sequences = queryableStorage.QueryEnumerable(q=>true).Select(d=>d.Sequence)/*Query(_ => _.Select(d => d.Sequence))*/.ToList();
+                var sequences = queryableStorage.QueryAll(q => true).Select(d => d.Sequence)/*Query(_ => _.Select(d => d.Sequence))*/.ToList();
                 if (sequences.Any())
                     currentSequence = sequences.Max() + 1;
             }
@@ -68,7 +68,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
         {
-            return queryableStorage.QueryEnumerable(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+            return queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
                 .Select(d => d.PublicKey)
                 .Distinct()
                 .ToList();
@@ -77,7 +77,7 @@ namespace WB.Core.Synchronization.SyncStorage
         public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users)
         {
             //todo: quesry is not optimal but will be replaced shortly
-            var elements = queryableStorage.QueryEnumerable(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+            var elements = queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
                 .Select(d => d)
                 .ToList()
                 .Select(s => new KeyValuePair<long, Guid>(s.Sequence, s.PublicKey))
@@ -91,7 +91,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<SyncItem> GetChunks(long sequence, IEnumerable<Guid> users)
         {
-            return queryableStorage.QueryEnumerable(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+            return queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
                 .Select(d => new SyncItem())
                 .Distinct()
                 .ToList();
