@@ -42,7 +42,7 @@ namespace Core.Supervisor.Views.Summary
                         items = summary.QueryAll(x => x.TemplateId == input.TemplateId);
                     }
 
-                    var all = items.ToList().GroupBy(
+                    var all = items.GroupBy(
                         x => x.ResponsibleId,
                         y => y,
                         (x, y) =>

@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
+using Core.Supervisor.DenormalizerStorageItem;
 using Core.Supervisor.Views.Survey;
+using Main.Core.View.Questionnaire;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
@@ -20,48 +22,51 @@ namespace Core.Supervisor.Views.Status
 
     public class StatusViewFactory : BaseUserViewFactory, IViewFactory<StatusViewInputModel, StatusView>
     {
-        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys;
-
+        private readonly IQueryableReadSideRepositoryReader<SummaryItem> interviews;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> template;
         public StatusViewFactory(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableReadSideRepositoryReader<SummaryItem> interviews, IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> template,
             IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
-            this.surveys = surveys;
+            this.interviews = interviews;
+            this.template = template;
             this.users = users;
         }
 
         public StatusView Load(StatusViewInputModel input)
         {
 #warning here we need to create mapreduce index in oreder to avoid in memory group by
-            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
 
+            var viewer = users.GetById(input.ViewerId);
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
 #warning ReadLayer: Select is not supported on Raven side (fails with NRE)
 
-            List<TemplateLight> headers = this.surveys.QueryAll(q => true).Select(
+            List<TemplateLight> headers = this.template.QueryAll(q => true).Select(
                 s =>
-                new TemplateLight(s.TemplateId,
-                                  s.QuestionnaireTitle)).Distinct()
-                                              .ToList();
-            
-            Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate = (x) => x.Responsible != null && x.Responsible.Id.In(interviewers);
+                new TemplateLight(s.QuestionnaireId,
+                                  s.Title)).ToList();
 
-            if (status.PublicId != SurveyStatus.Unknown.PublicId)
+            Expression<Func<SummaryItem, bool>> predicate = (x) => true;
+
+            if (viewer.Roles.Contains(UserRoles.Headquarter))
             {
-                predicate = predicate.AndCondition(x => x.Status.PublicId == status.PublicId);
+                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == null);
+            }
+            else if (viewer.Roles.Contains(UserRoles.Supervisor))
+            {
+                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
             }
 
-            var query = this.surveys.QueryAll(predicate);
+            var query = this.interviews.QueryAll(predicate);
 
-            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = query
-                .GroupBy(x => x.Responsible)
-                .ToList();
-
-            var items = BuildItems(groupedSurveys).AsQueryable();
-
-
+            var items = query
+                .GroupBy(x => x.ResponsibleId, y => y,
+                         (x, y) =>
+                         new StatusViewItem(new UserLight(x, y.FirstOrDefault().ResponsibleName),
+                                            headers.ToDictionary(k => k.TemplateId,
+                                                                 k => SumByTemplate(y, k.TemplateId, status))));
             if (input.Orders.Count == 0)
             {
                 input.Orders.Add(new OrderRequestItem() {Direction = OrderDirection.Asc, Field = "Title"});
@@ -72,6 +77,36 @@ namespace Core.Supervisor.Views.Status
                         : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
 
             return new StatusView(input.Page, input.PageSize, status, headers, items);
+        }
+
+        private bool IsStatusDefined(SurveyStatus status)
+        {
+            return status.PublicId != SurveyStatus.Unknown.PublicId;
+        }
+
+        private int SumByTemplate(IEnumerable<SummaryItem> items, Guid templateId, SurveyStatus status)
+        {
+            return items.Where(i => i.TemplateId == templateId).Sum(i => GetCountByStatus(i, status));
+        }
+
+        private int GetCountByStatus(SummaryItem item, SurveyStatus status)
+        {
+            if (!IsStatusDefined(status))
+                return item.TotalCount;
+            if (status.PublicId == SurveyStatus.Approve.PublicId)
+                return item.ApprovedCount;
+            if (status.PublicId == SurveyStatus.Complete.PublicId)
+                return item.CompletedCount;
+            if (status.PublicId == SurveyStatus.Error.PublicId)
+                return item.CompletedWithErrorsCount;
+            if (status.PublicId == SurveyStatus.Initial.PublicId)
+                return item.InitialCount;
+            if (status.PublicId == SurveyStatus.Redo.PublicId)
+                return item.RedoCount;
+            if (status.PublicId == SurveyStatus.Unassign.PublicId)
+                return item.UnassignedCount;
+
+            throw new ArgumentException("undefined status");
         }
 
         private object GetOrderValue(StatusViewItem item, string field)
@@ -94,13 +129,6 @@ namespace Core.Supervisor.Views.Status
             }
 
             return item.User.Name;
-        }
-
-        protected IEnumerable<StatusViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
-        {
-            return from templateGroup in grouped
-                   let tgroup = templateGroup.GroupBy(g => g.TemplateId).ToDictionary(k => k.Key, v => v.Count())
-                   select new StatusViewItem(templateGroup.Key, tgroup);
         }
     }
 }
