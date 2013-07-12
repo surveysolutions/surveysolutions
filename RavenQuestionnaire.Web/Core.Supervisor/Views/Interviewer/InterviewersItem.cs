@@ -32,7 +32,7 @@ namespace Core.Supervisor.Views.Interviewer
             this.UserId = id;
             this.UserName = name;
             this.Email = email;
-            this.CreationDate = creationDate;
+            this.CreationDate = creationDate.ToShortDateString();
             this.IsLocked = isLocked;
         }
 
@@ -53,7 +53,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets the creation date.
         /// </summary>
-        public DateTime CreationDate { get; private set; }
+        public string CreationDate { get; private set; }
 
         /// <summary>
         /// Gets the email.

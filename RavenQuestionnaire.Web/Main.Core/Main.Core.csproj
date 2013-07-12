@@ -339,6 +339,7 @@
     <Compile Include="Entities\SubEntities\Complete\Question\TextCompleteQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\SurveyStatusLight.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs">
       <SubType>Code</SubType>
     </Compile>

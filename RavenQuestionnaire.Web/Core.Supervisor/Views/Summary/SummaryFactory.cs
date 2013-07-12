@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Core.Supervisor.Views.Survey;
+﻿using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Summary
@@ -24,59 +23,59 @@ namespace Core.Supervisor.Views.Summary
 
         public SummaryView Load(SummaryInputModel input)
         {
-            Expression<Func<SummaryItem, bool>> predicate = (x) => true;
-
-            if (input.ViewerStatus == ViewerStatus.Headquarter)
-            {
-                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == null);
-            }
-            else if (input.ViewerStatus == ViewerStatus.Supervisor)
-            {
-                if (input.TemplateId.HasValue)
+            return this.summary.Query(
+                _ =>
                 {
-                    predicate = predicate.AndCondition(x => x.TemplateId == input.TemplateId);
-                }
-                else
-                {
-                    predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
-                }
-            }
-
-
-
-            var all = summary.QueryAll(predicate).GroupBy(
-                x => x.ResponsibleId,
-                y => y,
-                (x, y) =>
-                new SummaryViewItem()
+                    if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        User = new UserLight(x, y.FirstOrDefault().ResponsibleName),
-                        Approved = y.Sum(z => z.ApprovedCount),
-                        Completed = y.Sum(z => z.CompletedCount),
-                        Error = y.Sum(z => z.CompletedWithErrorsCount),
-                        Initial = y.Sum(z => z.InitialCount),
-                        Redo = y.Sum(z => z.RedoCount),
-                        Unassigned = y.Sum(z => z.UnassignedCount),
-                        Total = y.Sum(z => z.TotalCount)
-                    }).AsQueryable().OrderUsingSortExpression(input.Order);
+                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
+                    }
+                    else if (input.ViewerStatus == ViewerStatus.Supervisor)
+                    {
+                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                    }
 
-            return new SummaryView()
-                {
-                    TotalCount = all.Count(),
-                    Items =
-                        all.Skip((input.Page - 1)*input.PageSize)
-                           .Take(input.PageSize),
-                    ItemsSummary = new SummaryViewItem(
-                        new UserLight(Guid.Empty, "Summary"),
-                        all.Sum(x => x.Total),
-                        all.Sum(x => x.Initial),
-                        all.Sum(x => x.Error),
-                        all.Sum(x => x.Completed),
-                        all.Sum(x => x.Approved),
-                        all.Sum(x => x.Redo),
-                        all.Sum(x => x.Unassigned))
-                };
+                    if (input.TemplateId.HasValue)
+                    {
+                        _ = _.Where(x => x.TemplateId == input.TemplateId);
+                    }
 
+                    var all = _.ToList().GroupBy(
+                        x => x.ResponsibleId,
+                        y => y,
+                        (x, y) =>
+                            new SummaryViewItem()
+                            {
+                                User = new UserLight(x, y.FirstOrDefault().ResponsibleName),
+                                Template = new TemplateLight(y.FirstOrDefault().TemplateId, string.Empty),
+                                Approved = y.Sum(z => z.ApprovedCount),
+                                Completed = y.Sum(z => z.CompletedCount),
+                                Error = y.Sum(z => z.CompletedWithErrorsCount),
+                                Initial = y.Sum(z => z.InitialCount),
+                                Redo = y.Sum(z => z.RedoCount),
+                                Unassigned = y.Sum(z => z.UnassignedCount),
+                                Total = y.Sum(z => z.TotalCount)
+                            }).AsQueryable().OrderUsingSortExpression(input.Order);
+
+                    return new SummaryView()
+                    {
+                        TotalCount = all.Count(),
+                        Items =
+                            all.Skip((input.Page - 1)*input.PageSize)
+                                .Take(input.PageSize),
+                        ItemsSummary = new SummaryViewItem()
+                        {
+                            User = new UserLight(Guid.Empty, "Summary"),
+                            Total = all.Sum(x => x.Total),
+                            Initial = all.Sum(x => x.Initial),
+                            Error = all.Sum(x => x.Error),
+                            Completed = all.Sum(x => x.Completed),
+                            Approved = all.Sum(x => x.Approved),
+                            Redo = all.Sum(x => x.Redo),
+                            Unassigned = all.Sum(x => x.Unassigned)
+                        }
+                    };
+                });
         }
     }
 }
