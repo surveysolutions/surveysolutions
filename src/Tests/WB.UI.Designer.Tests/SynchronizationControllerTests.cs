@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Main.Core.Commands.Questionnaire;
 using Main.Core.Documents;
 using Main.Core.View;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
@@ -34,6 +35,7 @@ namespace WB.UI.Designer.Tests
             ZipUtilsMock = new Mock<IStringCompressor>();
             ExportServiceMock = new Mock<IExportService>();
             UserHelperMock=new Mock<IMembershipUserService>();
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         [Test]

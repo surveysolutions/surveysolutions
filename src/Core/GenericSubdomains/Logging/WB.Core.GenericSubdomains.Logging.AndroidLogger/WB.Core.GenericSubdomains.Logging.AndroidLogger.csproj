@@ -1,16 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Core.GenericSubdomains.Logging.NLog</RootNamespace>
-    <AssemblyName>WB.Core.GenericSubdomains.Logging.NLog</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>WB.Core.GenericSubdomains.Logging.AndroidLogger</RootNamespace>
+    <AssemblyName>WB.Core.GenericSubdomains.Logging.AndroidLogger</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,35 +33,45 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject">
-      <HintPath>..\..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\..\..\..\packages\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
-    </Reference>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NLogLogger.cs" />
-    <Compile Include="NLogLoggingModule.cs" />
+    <Compile Include="AndroidLoggingModule.cs" />
+    <Compile Include="ExceptionExtension.cs" />
+    <Compile Include="FileLogger.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="Resources\AboutResources.txt" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
+      <Project>{e21bc003-84b5-41be-928c-75874418acd2}</Project>
+      <Name>AndroidNinject.Extensions.Conventions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject.Extensions.Factory\AndroidNinject.Extensions.Factory.csproj">
+      <Project>{1a39ea94-3a3c-4c3c-8dc5-af21268a3c1b}</Project>
+      <Name>AndroidNinject.Extensions.Factory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
+      <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

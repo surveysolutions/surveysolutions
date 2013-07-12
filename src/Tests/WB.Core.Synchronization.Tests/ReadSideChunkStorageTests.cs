@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -11,7 +13,12 @@ namespace WB.Core.Synchronization.Tests
     [TestFixture]
     public class ReadSideChunkStorageTests
     {
-       
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void ctor_When_chunks_are_presented_in_storage_Then_new_chunck_is_created_with_sequence_after_stored()
         {
