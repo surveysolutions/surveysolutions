@@ -7,7 +7,7 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
-    using Web.Supervisor.Utils;
+    using Utils;
 
     public abstract class BaseController : Controller
     {

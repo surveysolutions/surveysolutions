@@ -41,18 +41,20 @@ namespace CAPI.Android.Syncronization.Pull
             }
         }
 
-        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, string deviceId, CancellationToken ct)
+        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, string deviceId, string sequence, CancellationToken ct)
         {
             try
             {
                 var syncItemsMetaContainer = webExecutor.ExcecuteRestRequestAsync<SyncItemsMetaContainer>(
-                    getARKeysPath, ct,
-                    new KeyValuePair<string, string>("login", login),
+                                                                       getARKeysPath, ct,
+                                                                       new KeyValuePair<string, string>("login", login),
                                                                        new KeyValuePair<string, string>("password", password),
-                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId));
+                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId),
+                                                                       new KeyValuePair<string, string>("sequence", sequence)
+                                                                       );
 
-            if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ARId == null)
-                throw new SynchronizationException("Error on item list receiving.");
+                if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ARId == null)
+                    throw new SynchronizationException("Error on item list receiving.");
 
                 return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
             }
