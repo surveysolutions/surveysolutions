@@ -140,6 +140,10 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NetTopologySuite, Version=1.13.4693.18484, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2375\lib\net40\NetTopologySuite.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -150,6 +154,14 @@
     </Reference>
     <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2375\lib\net40\Raven.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
@@ -157,6 +169,7 @@
       <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -169,6 +182,7 @@
     <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
+    <Compile Include="Denormalizer\InterviewDenormalizer.cs" />
     <Compile Include="Denormalizer\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
     <Compile Include="Denormalizer\SummaryDenormalizer.cs" />
@@ -181,17 +195,24 @@
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
+    <Compile Include="Views\Interview\InterviewViewItem.cs" />
+    <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
+    <Compile Include="Views\Interview\InterviewInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewView.cs" />
+    <Compile Include="Views\Interview\InterviewItem.cs" />
+    <Compile Include="Views\Interview\InterviewFactory.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesFactory.cs" />
     <Compile Include="Views\Summary\TemplateViewItem.cs" />
+    <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
     <Compile Include="Views\Survey\SurveysViewItem.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
     <Compile Include="Views\Survey\SurveyUsersView.cs" />
-    <Compile Include="Views\Survey\SurverysViewFactory.cs" />
+    <Compile Include="Views\Survey\SurveysViewFactory.cs" />
     <Compile Include="Views\Survey\SurveysInputModel.cs" />
     <Compile Include="Views\Survey\SurveysView.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />

@@ -296,6 +296,8 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\InterviewController.cs" />
+    <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\SurveysApiController.cs" />
     <Compile Include="Controllers\SummaryApiController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -331,6 +333,9 @@
     <Compile Include="Models\Chart\ChartModelBase.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\DocumentFilter.cs" />
+    <Compile Include="Models\DocumentRequestModel.cs" />
+    <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\SurveyRequestModel.cs" />
     <Compile Include="Models\SurveyListViewModel.cs" />
@@ -506,9 +511,10 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\query-string.js" />
+    <Content Include="Scripts\vm\documentlistview.js" />
     <Content Include="Scripts\vm\userlistview.js" />
     <Content Include="Scripts\vm\surveylistview.js" />
-    <Content Include="Scripts\vm\listviewmaster.js" />
     <Content Include="Scripts\vm\summarylistview.js" />
     <Content Include="Scripts\vm\listview.js" />
     <Content Include="Scripts\plotSettings.js" />
@@ -561,7 +567,10 @@
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_ListViewLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutNew.cshtml" />
-    <Content Include="Views\HQ\_TableGroup.cshtml" />
+    <Content Include="Views\HQ\Interviews.cshtml" />
+    <Content Include="Views\Interview\Details.cshtml" />
+    <Content Include="Views\Survey\Interviews.cshtml" />
+    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -647,16 +656,10 @@
     <Content Include="Views\Survey\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Survey\Documents.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">
@@ -708,41 +711,28 @@
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
-    <Content Include="Views\Shared\_StatusHistory.cshtml" />
+    <Content Include="Views\Interview\_StatusHistory.cshtml" />
     <Content Include="Views\Shared\_StatusTable.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
-    <Content Include="Views\Survey\_TableGroup.cshtml" />
-    <Content Include="Views\Shared\Approve.cshtml" />
+    <Content Include="Views\Interview\Approve.cshtml" />
     <Content Include="Views\Shared\AssignPerson.cshtml" />
-    <Content Include="Views\Shared\ChangeState.cshtml" />
-    <Content Include="Views\Shared\Comments.cshtml" />
-    <Content Include="Views\HQ\Details.cshtml" />
-    <Content Include="Views\HQ\Documents.cshtml" />
+    <Content Include="Views\Interview\ChangeState.cshtml" />
+    <Content Include="Views\Interview\Comments.cshtml" />
     <Content Include="Views\HQ\Surveys.cshtml">
       <SubType>
       </SubType>
     </Content>
     <Content Include="Views\Shared\IndexChart.cshtml" />
-    <Content Include="Views\Shared\Redo.cshtml" />
+    <Content Include="Views\Interview\Redo.cshtml" />
     <Content Include="Views\HQ\Status.cshtml" />
     <Content Include="Views\Shared\StatusChart.cshtml" />
     <Content Include="Views\HQ\Summary.cshtml" />
     <Content Include="Views\Shared\SummaryChart.cshtml" />
-    <Content Include="Views\Shared\IndexChart.cshtml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Views\Shared\StatusChart.cshtml" />
-    <Content Include="Views\Shared\SummaryChart.cshtml">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
     <None Include="Service References\DesignerPublicService\PublicService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

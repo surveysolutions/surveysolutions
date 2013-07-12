@@ -1,7 +1,8 @@
-﻿UserListViewModel = function (lockUrl) {
+﻿UserListViewModel = function (lockUrl, listViewUrl) {
     var self = this;
 
     self.LockUrl = lockUrl;
+    self.ListView = new ListViewModel(listViewUrl);
 
     self.lock = function () {
         var user = this;
@@ -9,5 +10,9 @@
             .done(function(o) {
                 user.IsLocked(!user.IsLocked());
             });
+    };
+
+    self.load = function() {
+        self.ListView.search();
     };
 };

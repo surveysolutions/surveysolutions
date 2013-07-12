@@ -6,7 +6,7 @@
     ViewBag.Title = "Redo survey";
 }
 <h1>Redo survey</h1>
-<p><a href="@Url.Action("Documents", new { id = Model.TemplateId })">Back to list</a></p>
+<p><a href="@Url.Action("Index", new { id = Model.TemplateId })">Back to list</a></p>
 <div class="row-fluid">
     <div class="span6">
         @using (Html.BeginForm("Redo", GlobalHelper.CurrentController, new { id = Model.Id, templateId = Model.TemplateId,  }, FormMethod.Post, new { @class = "form-horizontal" }))
