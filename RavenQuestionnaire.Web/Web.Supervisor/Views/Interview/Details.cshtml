@@ -1,62 +1,133 @@
-﻿@using System.Web.Script.Serialization
+﻿@using System.Web.Optimization
+@using System.Web.Script.Serialization
 @using Main.Core.Entities.SubEntities
-@using Main.Core.View.Group
 @using Core.Supervisor.Views.Survey
-@using ClientDependency.Core.Mvc
 @model SurveyScreenView
 @{
-    Html.RequiresCss("details.css", "Content", 50);
-
-    JavaScriptSerializer serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
+    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    
+    var serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
 }
-<script type="text/javascript">
-    var dataHelper = null;
-    var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
-    $(document).ready(function() {
-        dataHelper = new DataHelper('@Url.Action("Index", "Survey", new { }, "http")');
-    });
-    var DataHelper = function (host) {
-        var self = this;
-        self.host = host;
+@section scripts
+{
+    @Styles.Render("~/css/interview");
+    @Scripts.Render("~/js/interview");
+    <script type="text/javascript">
+        var dataHelper = null;
+        var questionnaire = @Html.Raw(serializer.Serialize(Model));
+        $(document).ready(function() {
+            $('[rel=tooltip]').tooltip();
+            $('.dropdown-toggle').dropdown();
+            $("a[rel=popover]")
+                .popover()
+                .click(function(e) {
+                    e.preventDefault();
+                });
 
-        self.createAddCommentRequest = function () {
-            var request = {
-                url: self.host + "survey/addcomment",
-                type: "POST",
-                data: {},
-                dataType: "json",
-                contentType: 'application/json; charset=utf-8'
+            dataHelper = new DataHelper('@Url.Action("Index", "Interview", new {}, Request.Url.Scheme)');
+        });
+        
+        var DataHelper = function(host) {
+            var self = this;
+            self.host = host;
+
+            self.createAddCommentRequest = function() {
+                var request = {
+                    url: self.host + "/addcomment",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8'
+                };
+                return request;
             };
-            return request;
-        };
 
-        self.createFlagQuestionRequest = function () {
-            var request = {
-                url: self.host + "survey/FlagQuestion",
-                type: "POST",
-                data: {},
-                dataType: "json",
-                contentType: 'application/json; charset=utf-8'
+            self.createFlagQuestionRequest = function() {
+                var request = {
+                    url: self.host + "/FlagQuestion",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8'
+                };
+                return request;
             };
-            return request;
-        };
 
-        self.getImageUrl = function(id) {
-            return host + "Resource/Thumb/" + id;
-        };
-
-        self.createAnswerQuestionRequest = function () {
-            var request = {
-                url: self.host + "survey/AnswerQuestion",
-                type: "POST",
-                data: {},
-                dataType: "json",
-                contentType: 'application/json; charset=utf-8'
+            self.getImageUrl = function(id) {
+                return host + "Resource/Thumb/" + id;
             };
-            return request;
-        };
-    }
-</script>
+
+            self.createAnswerQuestionRequest = function() {
+                var request = {
+                    url: self.host + "/AnswerQuestion",
+                    type: "POST",
+                    data: {},
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8'
+                };
+                return request;
+            };
+        }
+    </script>
+    <script type="text/html" id="SingleOption">
+        <ul data-bind="foreach: answerOptions" class="answer-list">
+            <li>
+                <label data-bind='attr: { "for": optionFor }'>
+                    <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                    <span data-bind="text: title"></span>
+                </label>
+            </li>
+        </ul>
+    </script>
+    <script type="text/html" id="MultyOption">
+        <ul data-bind="foreach: answerOptions" class="answer-list">
+            <li>
+                <label data-bind='attr: { "for": optionFor }'>
+                    <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                    <span data-bind="text: title"></span>
+                </label>
+            </li>
+        </ul>
+    </script>
+    <script type="text/html" id="SingleImage">
+        <ul data-bind="foreach: answerOptions" class="thumbnails">
+            <li class="span1_5">
+                <label class="thumbnail" data-bind='attr: { "for": optionFor }'>
+                    <img data-bind="attr: {src : image, alt: title}" />
+                    <div class="caption">
+                        <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                        <span data-bind="text: title"></span>
+                    </div>
+                </label>
+            </li>
+        </ul>
+    </script>
+    <script type="text/html" id="MultyImage">
+        <ul data-bind="foreach: answerOptions" class="thumbnails">
+            <li class="span1_5">
+                <label class="thumbnail" data-bind="attr: { 'for': optionFor }">
+                    <img data-bind="attr: {src : image, alt: title}" />
+                    <div class="caption">
+                        <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                        <span data-bind="text: title"></span>
+                    </div>
+                </label>
+            </li>
+        </ul>
+    </script>
+    <script type="text/html" id="Numeric">
+        <input type="number"  data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+    <script type="text/html" id="DateTime">
+        <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
+    </script>
+    <script type="text/html" id="AutoPropagate">
+        <input data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+    <script type="text/html" id="Text">
+        <input data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+}
 <div id="stacks">
     <div id="groups" class="stack">
         <div class="inner">
@@ -68,7 +139,7 @@
                 <ul class="nav nav-list" data-bind="foreach: menu">
                     <li data-bind="css: { active: isCurrent, level1: $data.level == 1, level2: $data.level == 2 }">
                         <a data-bind="attr: {'href': getHref() }" href="#/group"><span class="count"
-                            data-bind="    text: totals.counters"></span><span class="link-text" data-bind="    text: title"></span></a></li>
+                            data-bind="    text: totals.counters"></span><span class="link-text" data-bind="text: title"></span></a></li>
                 </ul>
             </div>
             <div class="bottom">
@@ -230,76 +301,11 @@
                 </div>
             </div>
             <div class="bottom">
-                <div class="inner">
+                <div class="bottom">
+                    <div class="inner">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/html" id="SingleOption">
-    <ul data-bind="foreach: answerOptions" class="answer-list">
-        <li>
-            <label data-bind='attr: { "for": optionFor }'>
-                <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
-                <span data-bind="text: title"></span>
-            </label>
-        </li>
-    </ul>
-</script>
-<script type="text/html" id="MultyOption">
-    <ul data-bind="foreach: answerOptions" class="answer-list">
-        <li>
-            <label data-bind='attr: { "for": optionFor }'>
-                <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
-                <span data-bind="text: title"></span>
-            </label>
-        </li>
-    </ul>
-
-</script>
-<script type="text/html" id="SingleImage">
-    <ul data-bind="foreach: answerOptions" class="thumbnails">
-        <li class="span1_5">
-            <label class="thumbnail" data-bind='attr: { "for": optionFor }'>
-                <img data-bind="attr: {src : image, alt: title}" />
-                <div class="caption">
-                    <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
-                    <span data-bind="text: title"></span>
-                </div>
-            </label>
-        </li>
-    </ul>
-</script>
-<script type="text/html" id="MultyImage">
-    <ul data-bind="foreach: answerOptions" class="thumbnails">
-        <li class="span1_5">
-            <label class="thumbnail" data-bind="attr: { 'for': optionFor }">
-                <img data-bind="attr: {src : image, alt: title}" />
-                <div class="caption">
-                    <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
-                    <span data-bind="text: title"></span>
-                </div>
-            </label>
-        </li>
-    </ul>
-
-</script>
-<script type="text/html" id="Numeric">
-    <input type="number"  data-bind="value: selectedOption, disable: isReadonly" />
-</script>
-<script type="text/html" id="DateTime">
-    <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
-</script>
-<script type="text/html" id="AutoPropagate">
-    <input data-bind="value: selectedOption, disable: isReadonly" />
-</script>
-<script type="text/html" id="Text">
-    <input data-bind="value: selectedOption, disable: isReadonly" />
-</script>
-@{
-    Html.RequiresJs("director.min.js", "Scripts", 50);
-    Html.RequiresJs("knockout-2.2.1.js", "Scripts", 80);
-    Html.RequiresJs("date.js", "Scripts", 85);
-    Html.RequiresJs("knockout.validation.js", "Scripts", 90);
-    Html.RequiresJs("details.js", "Scripts", 100);
-}
