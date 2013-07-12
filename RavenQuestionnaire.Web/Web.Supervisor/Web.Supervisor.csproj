@@ -457,13 +457,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Content\TimelineJS\css\loading.gif" />
-    <Content Include="Content\TimelineJS\css\timeline.css" />
-    <Content Include="Content\TimelineJS\css\timeline.png" />
-    <Content Include="Content\TimelineJS\js\locale\en.js" />
-    <Content Include="Content\TimelineJS\js\storyjs-embed.js" />
-    <Content Include="Content\TimelineJS\js\timeline-min.js" />
-    <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.file-input.js" />
