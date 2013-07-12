@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Linq.Expressions;
 using Raven.Client;
 using Raven.Client.Document;
 
@@ -51,10 +52,46 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             this.ThrowIfRepositoryIsNotAccessible();
 
+              using (IDocumentSession session = this.OpenSession())
+              {
+                  return query.Invoke(
+                      session.Query<TEntity>());
+              }
+        }
+
+        public int Count(Expression<Func<TEntity, bool>> query)
+        {
+            this.ThrowIfRepositoryIsNotAccessible();
+
             using (IDocumentSession session = this.OpenSession())
             {
-                return query.Invoke(
-                    session.Query<TEntity>());
+                return
+                    session
+                        .Query<TEntity>()
+                        .Count(query);
+            }
+        }
+
+        public IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query)
+        {
+            this.ThrowIfRepositoryIsNotAccessible();
+
+            var retval = new List<TEntity>();
+            foreach (var docBulk in GetAllDocuments(query))
+            {
+                retval.AddRange(docBulk);
+
+            }
+            return retval;
+        }
+
+        public IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query)
+        {
+           // return GetPagedDocuments(query, start, pageSize);
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return session.Query<TEntity>()
+                              .Where(query);
             }
         }
 
@@ -62,6 +99,32 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             if (this.readSideStatusService.AreViewsBeingRebuiltNow())
                 throw new MaintenanceException("Views are currently being rebuilt. Therefore your request cannot be complete now.");
+        }
+
+
+        protected IEnumerable<IQueryable<TEntity>> GetAllDocuments(Expression<Func<TEntity, bool>> whereClause)
+        {
+            int skipResults = 0;
+
+            while (true)
+            {
+                var nextGroupOfPoints = GetPagedDocuments(whereClause, skipResults, MaxNumberOfRequestsPerSession);
+                if (!nextGroupOfPoints.Any())
+                    yield break;
+                skipResults += MaxNumberOfRequestsPerSession;
+                yield return nextGroupOfPoints;
+            }
+        }
+
+        protected IQueryable<TEntity> GetPagedDocuments(Expression<Func<TEntity, bool>> whereClause, int start, int pageSize)
+        {
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return session.Query<TEntity>()
+                              .Where(whereClause)
+                              .Skip(start)
+                              .Take(pageSize);
+            }
         }
     }
 }
