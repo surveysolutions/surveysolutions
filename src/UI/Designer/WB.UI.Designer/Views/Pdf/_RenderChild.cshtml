@@ -1,5 +1,5 @@
 ﻿@using WB.UI.Designer.Views.Questionnaire.Pdf
-@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfEntityView
+@model PdfEntityView
 
 <div>
     
@@ -10,7 +10,7 @@
     else
     {
         <text>
-            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, Model.Depth), Html.Encode(Model.Title)))
+            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, ((PdfGroupView)Model).Depth), Html.Encode(Model.Title)))
         </text>
     }
 

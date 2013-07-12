@@ -79,27 +79,6 @@ namespace WB.UI.Designer.Views.Questionnaire
                 return this.Source.IsPublic;
             }
         }
-
-        public int GetChaptersCount()
-        {
-            return Children.Count();
-        }
-
-        public int GetQuestionsCount()
-        {
-            return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count());
-        }
-
-        public int GetQuestionsWithConditionsCount()
-        {
-            return Children.Sum(child => child.Descendants().OfType<QuestionView>().Count(x => !string.IsNullOrEmpty(x.ConditionExpression)));
-        }
-
-        public int GetGroupsCount()
-        {
-            int result = Children.Sum(child => child.Descendants().OfType<GroupView>().Count());
-            return result;
-        }
     }
 }
 
