@@ -36,17 +36,24 @@ namespace WB.UI.Designer.Views.EventHandler
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
         {
-            Guid questionnaireId = evnt.EventSourceId;
-            PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
+            try
+            {
+                Guid questionnaireId = evnt.EventSourceId;
+                PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
 
-            PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
-            if (updatedQuestionnaire == null)
-            {
-                this.repositoryWriter.Remove(questionnaireId);
+                PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
+                if (updatedQuestionnaire == null)
+                {
+                    this.repositoryWriter.Remove(questionnaireId);
+                }
+                else
+                {
+                    this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
+                }
             }
-            else
+            catch (Exception e)
             {
-                this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
+                logger.Error(e.Message, e);
             }
         }
 
@@ -112,7 +119,6 @@ namespace WB.UI.Designer.Views.EventHandler
                         Id = @event.PublicKey,
                         Title = @event.QuestionText,
                         QuestionType = @event.QuestionType,
-                        Depth = questionnaire.GetEntityDepth(@event.GroupPublicKey),
                         Answers = (@event.Answers ?? Enumerable.Empty<Answer>())
                                     .Select(x => new PdfAnswerView
                                         {
@@ -157,7 +163,6 @@ namespace WB.UI.Designer.Views.EventHandler
                     Id = @event.PublicKey,
                     Title = @event.QuestionText,
                     QuestionType = @event.QuestionType,
-                    Depth = questionnaire.GetEntityDepth(@event.GroupPublicKey),
                     Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
                     {
                         Title = x.AnswerText,
@@ -236,7 +241,14 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var pdf = new PdfQuestionnaireView();
+                pdf.Title = @event.Source.Title;
+                pdf.FillFrom(@event.Source);
+
+                return pdf;
+            });
         }
     }
 }

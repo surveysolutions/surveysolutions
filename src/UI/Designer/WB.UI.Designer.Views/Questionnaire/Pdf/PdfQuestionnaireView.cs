@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 using System.Linq;
 
@@ -87,6 +90,8 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         internal void AddGroup(PdfGroupView newGroup, Guid? parentId)
         {
+            if (newGroup == null) throw new ArgumentNullException("newGroup");
+
             if (parentId.HasValue)
             {
                 var pdfGroupView = this.GetGroup(parentId.Value);
@@ -101,7 +106,12 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         internal void AddQuestion(PdfQuestionView newQuestion, Guid? groupPublicKey)
         {
-            if (!groupPublicKey.HasValue) throw new ArgumentNullException("groupPublicKey", "Question cant be created not inside group");
+            if (newQuestion == null) throw new ArgumentNullException("newQuestion");
+
+            if (!groupPublicKey.HasValue)
+            {
+                throw new ArgumentNullException("groupPublicKey", string.Format("Question {0} cant be created not inside group", newQuestion.Id));
+            }
 
             var group = this.GetGroup(groupPublicKey.Value);
             group.Children.Add(newQuestion);
@@ -121,11 +131,61 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                 item.Parent.Children.Remove(item);
             }
         }
+
+        public void FillFrom(QuestionnaireDocument source)
+        {
+            var treeToEnumerable1 = source.Children.TreeToEnumerable1();
+            foreach (IComposite composite in treeToEnumerable1)
+            {
+                if (composite is IQuestion)
+                {
+                    var item = composite as IQuestion;
+                    Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?)null;
+                    this.AddQuestion(new PdfQuestionView 
+                    {
+                        Id = item.PublicKey,
+                        Title = item.QuestionText,
+                        Answers = (item.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
+                                    {
+                                        Title = x.AnswerText,
+                                        AnswerType = x.AnswerType,
+                                        AnswerValue = x.AnswerValue
+                                    }).ToList()
+                    }, parentId);
+                }
+                if (composite is IGroup)
+                {
+                    var item = composite as IGroup;
+                    Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?) null;
+                    this.AddGroup(new PdfGroupView {
+                        Id = item.PublicKey,
+                        Title = item.Title,
+                        Depth = this.GetEntityDepth(parentId) + 1
+                    }, parentId);
+                }
+            }
+        }
     }
 
     public static class Extensions
     {
         public static IEnumerable<T> TreeToEnumerable<T>(this IEnumerable<T> tree) where T : PdfEntityView
+        {
+            var groups = new Stack<T>(tree);
+
+            while (groups.Count > 0)
+            {
+                var group = groups.Pop();
+
+                yield return group;
+                foreach (T childGroup in group.Children.OfType<T>())
+                {
+                    groups.Push(childGroup);
+                }
+            }
+        }
+
+        public static IEnumerable<T> TreeToEnumerable1<T>(this IEnumerable<T> tree) where T : IComposite
         {
             var groups = new Stack<T>(tree);
 
