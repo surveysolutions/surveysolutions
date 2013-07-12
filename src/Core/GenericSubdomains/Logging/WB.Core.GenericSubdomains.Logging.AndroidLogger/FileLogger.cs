@@ -1,13 +1,12 @@
 using System;
 using System.IO;
 using Java.Lang;
-using WB.Core.GenericSubdomains.Logging;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 
-namespace WB.Core.SharedKernel.Utils.Logging
+namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
 {
-    public class FileLogger : ILogger
+    internal class FileLogger : ILogger
     {
         private static readonly string LogFilename = Path.Combine(GetLogDirectory(), "WBCapi.log.txt");
         
@@ -36,14 +35,14 @@ namespace WB.Core.SharedKernel.Utils.Logging
         public FileLogger()
         {
 #if DEBUG
-            IsDebugEnabled = true;
+            this.IsDebugEnabled = true;
 #else
             IsDebugEnabled = false;
 #endif
-            IsErrorEnabled = true;
-            IsFatalEnabled = true;
-            IsInfoEnabled = true;
-            IsWarnEnabled = true;
+            this.IsErrorEnabled = true;
+            this.IsFatalEnabled = true;
+            this.IsInfoEnabled = true;
+            this.IsWarnEnabled = true;
         }
 
         public void Debug(string message, Exception exception = null)
@@ -65,7 +64,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             if (!this.IsInfoEnabled) return;
             if (exception == null)
             {
-                WriteLogMessage(Tag, LogMessageType.Info, message);
+                this.WriteLogMessage(Tag, LogMessageType.Info, message);
             }
             else
             {
@@ -90,19 +89,19 @@ namespace WB.Core.SharedKernel.Utils.Logging
 
         public void WarnFormat(string format, params object[] args)
         {
-            if (IsWarnEnabled)
-                WriteLogMessage(Tag, LogMessageType.Warning, format, args);
+            if (this.IsWarnEnabled)
+                this.WriteLogMessage(Tag, LogMessageType.Warning, format, args);
         }
 
         public void Error(string message, Exception exception = null)
         {
             if (exception==null)
             {
-                WriteLogMessage(Tag, LogMessageType.Error, message);
+                this.WriteLogMessage(Tag, LogMessageType.Error, message);
             }
             else
             {
-                WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message);    
+                this.WriteLogMessage(Tag, LogMessageType.Error, exception.ToThrowable(), message);    
             }
         }
 
@@ -111,7 +110,7 @@ namespace WB.Core.SharedKernel.Utils.Logging
             if (!this.IsFatalEnabled) return;
             if (exception == null)
             {
-                WriteLogMessage(Tag, LogMessageType.Fatal, message);
+                this.WriteLogMessage(Tag, LogMessageType.Fatal, message);
             }
             else
             {

@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Transactions;
 #endif
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {

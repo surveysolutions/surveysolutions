@@ -4,6 +4,8 @@ using System.Linq;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using Ncqrs.Spec;
 
@@ -12,6 +14,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class NewUpdateQuestionTests : QuestionnaireARTestContext
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [Test]
         public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption()

@@ -4,8 +4,9 @@ using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using CAPI.Android.Core.Model.ModelUtils;
+using Microsoft.Practices.ServiceLocation;
 using RestSharp;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace CAPI.Android.Syncronization.RestUtils
 {
@@ -13,9 +14,12 @@ namespace CAPI.Android.Syncronization.RestUtils
     {
         private readonly string baseAddress;
 
+        private readonly ILogger logger;
+
         public AndroidRestUrils(string baseAddress)
         {
             this.baseAddress = baseAddress;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public void ExcecuteRestRequest(string url, params KeyValuePair<string, string>[] additionalParams)
@@ -33,8 +37,9 @@ namespace CAPI.Android.Syncronization.RestUtils
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("user wasn't authorized");
 
-                LogManager.GetLogger(GetType())
-                          .Error("Sync error. Response status:" + response.StatusCode, exception);
+                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+
+                logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
             }
@@ -77,7 +82,7 @@ namespace CAPI.Android.Syncronization.RestUtils
         {
             if (response.ErrorException != null)
             {
-                LogManager.GetLogger(GetType())
+                this.logger
                           .Error("Sync error, response contains exception. Message:" + response.ErrorMessage, 
                                  response.ErrorException);
                 throw new Exception("Error occured on communication with target. Please, check settings.");
@@ -90,7 +95,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("User is not authorized.");
 
-                LogManager.GetLogger(GetType())
+                this.logger
                           .Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;

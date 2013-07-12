@@ -1,9 +1,9 @@
 using Java.Lang;
 using Exception = System.Exception;
 
-namespace WB.Core.SharedKernel.Utils.Logging
+namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
 {
-    public static class ExceptionExtension
+    internal static class ExceptionExtension
     {
         public static Throwable ToThrowable(this Exception exception)
         {

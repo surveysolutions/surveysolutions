@@ -97,6 +97,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ExternalsMonodroid\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="Mono.Android.Support.v4" />
@@ -174,6 +178,7 @@
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
+    <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\SettingsNames.cs" />
@@ -260,6 +265,10 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
+      <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -275,10 +284,6 @@
     <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
-      <Project>{2da6c60d-cb06-40b4-91af-a903451e3db4}</Project>
-      <Name>AndroidCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>

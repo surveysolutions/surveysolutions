@@ -1,7 +1,6 @@
 ﻿using Core.Supervisor.Views;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Web.Supervisor.Controllers
 {
@@ -89,8 +88,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                var logger = LogManager.GetLogger(this.GetType());
-                logger.Fatal("Unexpected error occurred", e);
+                Logger.Fatal("Unexpected error occurred", e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 

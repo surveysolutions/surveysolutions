@@ -3,8 +3,6 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Logging;
-
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {

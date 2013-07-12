@@ -1,6 +1,8 @@
 ﻿using System;
 using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using Ncqrs.Spec;
 
@@ -9,6 +11,12 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class DeleteQuestionTests : QuestionnaireARTestContext
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void DeleteQuestion_When_question_id_specified_Then_raised_QuestionDeleted_event_with_same_question_id()
         {

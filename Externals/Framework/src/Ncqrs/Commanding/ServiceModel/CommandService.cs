@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Ncqrs.Commanding.CommandExecution;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Commanding.ServiceModel
 {

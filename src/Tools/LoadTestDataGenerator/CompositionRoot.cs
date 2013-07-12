@@ -14,6 +14,7 @@ using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Ninject.Modules;
 using Raven.Client.Document;
+using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.ReadSide;
@@ -32,7 +33,9 @@ namespace LoadTestDataGenerator
             kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new RavenInfrastructureModule(),
-                new SynchronizationModule());
+                new SynchronizationModule(),
+                new NLogLoggingModule()
+            );
             
             RegisterServices(kernel);
 
