@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Reflection;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using NUnit.Framework;
-using Rhino.Mocks;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Domain
 {
@@ -60,6 +62,12 @@ namespace Ncqrs.Tests.Domain
             {
                 OnEventForNoEventHandlerMethodInvokeCount++;
             }
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         [Test]

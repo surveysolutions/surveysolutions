@@ -34,7 +34,7 @@
                 <!-- /ko -->
                 <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
                 @RenderSection("grid", true)
-                <div class="pagination" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+                <div class="pagination pull-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
                 <!-- /ko -->
                 <!-- /ko -->
             </div>
@@ -44,7 +44,7 @@
 </div>
 
 <script type="text/html" id="tpl-pager">
-    <div class="pagexofx">
+    @*<div class="pagexofx">
         <span data-bind="text: FirstItemIndex"></span>
         -
         <span data-bind="text: LastItemIndex"></span>
@@ -53,7 +53,7 @@
             <span data-bind="text: TotalItemCount"></span>
         </strong>
         results
-    </div>
+    </div>*@
     <ul>
         <!-- ko if:CurrentPage() === 1 -->
         <li class="disabled">

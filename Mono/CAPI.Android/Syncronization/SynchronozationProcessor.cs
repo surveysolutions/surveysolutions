@@ -2,28 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using CAPI.Android.Core;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
-using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Handshake;
 using CAPI.Android.Syncronization.Pull;
 using CAPI.Android.Syncronization.Push;
 using CAPI.Android.Syncronization.RestUtils;
 using CAPI.Android.Utils;
-using Main.Core.Events;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization
 {
@@ -50,13 +41,19 @@ namespace CAPI.Android.Syncronization
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
+
         private string clientRegistrationId 
         {
             set { SettingsManager.SetSetting(SettingsNames.RegistrationKeyName, value);}
-            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName); }
+            get { return SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);}
         }
-    
 
+        private string lastSequence
+        {
+            set { SettingsManager.SetSetting(SettingsNames.LastHandledSequence, value); }
+            get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
+        }
+        
         public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
         {
             this.context = context;
@@ -78,7 +75,7 @@ namespace CAPI.Android.Syncronization
 
         private void Validate()
         {
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,0));
+            OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true, 0));
 
             CancelIfException(() =>
                 {
@@ -86,15 +83,16 @@ namespace CAPI.Android.Syncronization
                     foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value))
                     {
                         pullDataProcessor.Proccess(chunck.Key);
+                        //save last handled item
+                        lastSequence = chunck.Key.Key.ToString();
+
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,
                                                                        (i * 100) / remoteChuncksForDownload.Count));
                         i++;
                     }
-
                 /*    if (remoteChuncksForDownload.Any(i => !i.Value))
                         throw new OperationCanceledException("pull wasn't completed");*/
                 });
-
         }
 
         private void Pull()
@@ -104,7 +102,7 @@ namespace CAPI.Android.Syncronization
 
             CancelIfException(() =>
                 {
-                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, clientRegistrationId, ct);
+                    remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, clientRegistrationId, lastSequence, ct);
                 });
 
             int i = 1;
@@ -127,9 +125,10 @@ namespace CAPI.Android.Syncronization
                 {
                     //in case of exception we stop pulling but without exception 
                     //in order to move forward and proccess uploaded data
-                    
-
+                    //but in case of fault we do not request next item
+                    break;
                 }
+
                 OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
                                                                         (i*100)/remoteChuncksForDownload.Count));
                 i++;
@@ -171,6 +170,7 @@ namespace CAPI.Android.Syncronization
                     if (!userCredentials.HasValue)
                         throw new AuthenticationException("User wasn't authenticated.");
                     credentials = userCredentials.Value;
+
 
                     //string message = string.Format("handshake app {0}, device {1}", appId, androidId);
                     string message = "connecting...";

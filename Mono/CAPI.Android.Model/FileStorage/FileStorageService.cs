@@ -1,12 +1,24 @@
 using System.IO;
 using Main.Core.Documents;
 using Main.Core.Services;
+using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.FileStorage
 {
-    public class FileStorageService : IFileStorageService
+    public class FileStorageService : IFileStorageService,IBackupable
     {
-        private readonly string basePath=System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+        private const string ImageFolder = "IMAGES";
+        private readonly string _basePath;
+
+        public FileStorageService()
+        {
+            _basePath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), ImageFolder);
+            if (!Directory.Exists(_basePath))
+            {
+                Directory.CreateDirectory(_basePath);
+            }
+        }
+        
 
         public void DeleteFile(string filename)
         {
@@ -51,7 +63,24 @@ namespace CAPI.Android.Core.Model.FileStorage
 
         private string BuildFileName(string fileName)
         {
-            return Path.Combine(basePath, fileName);
+            return Path.Combine(_basePath, fileName);
+        }
+
+        public string GetPathToBakupFile()
+        {
+            return _basePath;
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+             var dirWithImeges = Path.Combine(path, ImageFolder);
+            foreach (var file in Directory.EnumerateFiles(_basePath))
+            {
+                File.Delete(file);
+            }
+
+            foreach (var file in Directory.GetFiles(dirWithImeges))
+                File.Copy(file, Path.Combine(_basePath, Path.GetFileName(file)));
         }
     }
 }

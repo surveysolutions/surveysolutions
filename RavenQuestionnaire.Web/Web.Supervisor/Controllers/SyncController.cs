@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -46,6 +45,7 @@ namespace Web.Supervisor.Controllers
             return null;
         }
 
+        //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult Handshake(string login, string password, string clientId, string androidId, Guid? clientRegistrationId)
@@ -60,8 +60,7 @@ namespace Web.Supervisor.Controllers
             if (!Guid.TryParse(clientId, out key))
             {
                 package.IsErrorOccured = true;
-                package.ErrorMessage = "Client Identifier was not provided";
-                
+                package.ErrorMessage = "Client Identifier was not provided.";
             }
             else
             {
@@ -84,6 +83,32 @@ namespace Web.Supervisor.Controllers
             return Json(package, JsonRequestBehavior.AllowGet);
         }
 
+        //In case of error of type missing or casting error we send correct response.
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        public ActionResult InitPulling(string login, string password, string clientRegistrationId)
+        {
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
+
+            var package = new PullInitPackage();
+
+            Guid clientRegistrationKey;
+            if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
+            {
+                package.IsErrorOccured = true;
+                package.ErrorMessage = "Invalid client identifier";
+            }
+            else
+            {
+                package.ItemsInQueue = 0;
+            }
+            
+            return Json(package, JsonRequestBehavior.AllowGet);
+        }
+
+        //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId, string login, string password)
@@ -132,9 +157,10 @@ namespace Web.Supervisor.Controllers
             }
         }
 
+        //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public JsonResult GetARKeys(string login, string password, string clientRegistrationId)
+        public JsonResult GetARKeys(string login, string password, string clientRegistrationId, string sequence)
         {
             var user = GetUser(login, password);
             if (user == null)
@@ -155,16 +181,26 @@ namespace Web.Supervisor.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey));
+            if (string.IsNullOrWhiteSpace(sequence))
+                sequence = "0";
+
+            long clientSequence;
+            if (!long.TryParse(sequence, out clientSequence))
+            {
+                var result = new SyncItemsMetaContainer(); 
+                result.IsErrorOccured = true;
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence));
         }
 
-        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey)
+        private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
             var result = new SyncItemsMetaContainer();
 
             try
             {
-                var package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey);
+                var package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
                 result.ARId = package.ToList();
             }
             catch (Exception ex)
@@ -177,6 +213,8 @@ namespace Web.Supervisor.Controllers
 
             return result;
         }
+
+        //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult PostPackage(string login, string password, string syncItemContent)
@@ -196,7 +234,6 @@ namespace Web.Supervisor.Controllers
                                                                                    TypeNameHandling =
                                                                                        TypeNameHandling.Objects
                                                                                });
-                    
                 }
                 catch (Exception exc)
                 {
@@ -223,7 +260,5 @@ namespace Web.Supervisor.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
-
-
     }
 }

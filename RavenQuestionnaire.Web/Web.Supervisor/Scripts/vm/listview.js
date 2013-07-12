@@ -48,6 +48,13 @@
         }
     };
 
+    self.filter = function () {
+        if (self.Pager().CurrentPage() == 1) {
+            self.search();
+        } else {
+            self.Pager().CurrentPage(1);
+        }
+    };
 
     self.search = function () {
 
@@ -65,6 +72,7 @@
         $.post(self.ServiceUrl, params, null, "json")
             .done(function (data) {
                 ko.mapping.fromJS(data, {}, self);
+                self.ItemsSummary(data.ItemsSummary);
                 self.IsPageLoaded(true);
             });
     };

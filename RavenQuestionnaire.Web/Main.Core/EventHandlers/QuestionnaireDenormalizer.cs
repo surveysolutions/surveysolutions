@@ -5,13 +5,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.EventHandlers
 {
@@ -39,11 +39,14 @@ namespace Main.Core.EventHandlers
 
         private readonly ICompleteQuestionFactory questionFactory;
 
+        private readonly ILogger logger;
+
         public QuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -87,7 +90,7 @@ namespace Main.Core.EventHandlers
                         evnt.Payload.ParentGroupPublicKey, 
                         item.PublicKey);
 
-                    LogManager.GetLogger(this.GetType()).Error(errorMessage);
+                    logger.Error(errorMessage);
                 }
             }
 
@@ -120,7 +123,7 @@ namespace Main.Core.EventHandlers
 
             if (isLegacyEvent)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
+                logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
                 return;
             }
 

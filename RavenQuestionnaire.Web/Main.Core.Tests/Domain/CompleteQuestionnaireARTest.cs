@@ -1,4 +1,7 @@
-﻿namespace Main.Core.Tests.Domain
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections.Generic;
@@ -29,6 +32,12 @@
         #endregion
 
         #region Public Methods and Operators
+
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         /// <summary>
         /// The ar event raising on answer set.

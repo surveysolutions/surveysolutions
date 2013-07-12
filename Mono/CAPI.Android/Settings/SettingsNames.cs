@@ -21,5 +21,7 @@ namespace CAPI.Android.Settings
         public const string SyncAddressSettingsName = "SyncAddress";
         public const string RegistrationKeyName = "RegistrationKey";
         public const string INSTALLATION = "INSTALLATION";
+
+        public const string LastHandledSequence = "LastHandledSequence";
     }
 }

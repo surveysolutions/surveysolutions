@@ -109,6 +109,8 @@
         /// </returns>
         public static bool ContainsIgnoreCaseSensitive(this string source, string dest)
         {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(dest)) return false;
+
             return source.ToLower().Contains(dest.ToLower());
         }
 

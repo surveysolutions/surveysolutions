@@ -1,5 +1,7 @@
 ﻿using System;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using Ncqrs.Spec;
 
@@ -8,6 +10,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class DeleteImageTests : QuestionnaireARTestContext
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [Test]
         public void DeleteImage_When_specified_keys_of_existing_question_and_image_Then_raised_ImageDeleted_event_with_specified_question_key()

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using System;
+
 namespace Core.Supervisor.Views.Summary
 {
     public class SummaryTemplatesInputModel

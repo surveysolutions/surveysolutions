@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using Main.Core.Entities;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Summary
 {
@@ -46,6 +47,7 @@ namespace Core.Supervisor.Views.Summary
                             new SummaryViewItem()
                             {
                                 User = new UserLight(x, y.FirstOrDefault().ResponsibleName),
+                                Template = new TemplateLight(y.FirstOrDefault().TemplateId, string.Empty),
                                 Approved = y.Sum(z => z.ApprovedCount),
                                 Completed = y.Sum(z => z.CompletedCount),
                                 Error = y.Sum(z => z.CompletedWithErrorsCount),
@@ -61,15 +63,17 @@ namespace Core.Supervisor.Views.Summary
                         Items =
                             all.Skip((input.Page - 1)*input.PageSize)
                                 .Take(input.PageSize),
-                        ItemsSummary = new SummaryViewItem(
-                            new UserLight(Guid.Empty, "Summary"),
-                            all.Sum(x => x.Total),
-                            all.Sum(x => x.Initial),
-                            all.Sum(x => x.Error),
-                            all.Sum(x => x.Completed),
-                            all.Sum(x => x.Approved),
-                            all.Sum(x => x.Redo),
-                            all.Sum(x => x.Unassigned))
+                        ItemsSummary = new SummaryViewItem()
+                        {
+                            User = new UserLight(Guid.Empty, "Summary"),
+                            Total = all.Sum(x => x.Total),
+                            Initial = all.Sum(x => x.Initial),
+                            Error = all.Sum(x => x.Error),
+                            Completed = all.Sum(x => x.Completed),
+                            Approved = all.Sum(x => x.Approved),
+                            Redo = all.Sum(x => x.Redo),
+                            Unassigned = all.Sum(x => x.Unassigned)
+                        }
                     };
                 });
         }

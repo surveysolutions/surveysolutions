@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Security.Authentication;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using Main.Core.Utility;
 using RestSharp;

@@ -2,43 +2,47 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
               android:id="@+id/llContainer"
+                android:focusable="true"
+android:focusableInTouchMode="true"
       android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-  <RelativeLayout  android:layout_alignParentLeft="true"
+
+  <android.support.v4.view.ViewPager
+          android:id="@+id/vpContent"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent">
+  </android.support.v4.view.ViewPager>
+  <RelativeLayout
                 android:id="@+id/lNavigationContainer"
         android:orientation="horizontal"
-          android:layout_width="wrap_content"
+          android:layout_width="fill_parent"
           android:layout_height="fill_parent">
 
 
-    <LinearLayout android:id="@+id/llNavigationButton"
+    <LinearLayout  android:id="@+id/llNavigationButton"
       android:orientation="vertical"
       android:layout_alignParentRight="true"
       android:layout_width="40dp"
       android:layout_height="fill_parent">
-
+      <FrameLayout android:id="@+id/flSpaceFiller" android:layout_width="40dp" android:layout_height="fill_parent">
+      </FrameLayout>
       <TextView android:id="@+id/btnNavigation"
         android:clickable="true"
         android:focusable="true"
         android:layout_width="40dp"
-        android:layout_height="fill_parent"
-         android:text="..."  android:gravity="center"
-                   />
-    </LinearLayout>
+        android:layout_height="40dp"
+        android:background="@drawable/bookmarkStyle"
+        android:text="..."  android:gravity="center"/>
+    </LinearLayout >
 
     <LinearLayout android:id="@+id/llNavigationHolder"
       android:orientation="vertical"
-                      android:padding="0dp"
+      android:padding="0dp"
+      android:background="@drawable/bookmarkStyle"
       android:layout_toLeftOf="@id/llNavigationButton"
       android:layout_width="wrap_content"
       android:layout_height="fill_parent"/>
 
   </RelativeLayout>
-  <android.support.v4.view.ViewPager    
-          android:id="@+id/vpContent" android:layout_toRightOf="@id/lNavigationContainer"
-          android:layout_width="wrap_content"
-          android:layout_height="fill_parent">
-  </android.support.v4.view.ViewPager>
-
 </RelativeLayout>

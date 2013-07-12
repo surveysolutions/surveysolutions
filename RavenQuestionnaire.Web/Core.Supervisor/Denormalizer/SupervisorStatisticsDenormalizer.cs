@@ -244,6 +244,13 @@ namespace Core.Supervisor.Denormalizer
             }
 
             var old = this.statistics.GetById(oldKey.StorageKey);
+            // temporary fix
+            // in some cases old is null
+            if (old == null)
+            {
+                return;
+            }
+
             old.Surveys.Remove(completedQuestionnaireId);
             this.statistics.Store(old, oldKey.StorageKey);
         }

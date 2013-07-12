@@ -59,20 +59,28 @@ namespace CAPI.Android
             txtSurveyName.Text = dashboardSurveyItem.SurveyTitle;
             var txtSurveyCount = view.FindViewById<TextView>(Resource.Id.txtSurveyCount);
             txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString();
-            var llQuestionnarieHolder = view.FindViewById<ListView>(Resource.Id.llQuestionnarieHolder);
+            var llQuestionnarieHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
 
-            llQuestionnarieHolder.Adapter = new DashboardAdapter(this, dashboardSurveyItem.ActiveItems);
-            llQuestionnarieHolder.ItemClick += llQuestionnarieHolder_ItemClick;
+            var adapter = new DashboardAdapter(this, dashboardSurveyItem.ActiveItems);
+            for (int i = 0; i < adapter.Count; i++)
+            {
+                View item = adapter.GetView(i, null, null);
+                llQuestionnarieHolder.AddView(item);
+                item.Click += llQuestionnarieHolder_ItemClick;
+            }
 
             llQuestionnarieHolder.Clickable = true;
             llSurveyHolder.AddView(view);
             sureveyHolders.Add(dashboardSurveyItem.PublicKey, view);
         }
 
-        void llQuestionnarieHolder_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
         {
+            var target = sender as View;
+            if(target==null)
+                return;
             var intent = new Intent(this, typeof(LoadingActivity));
-            intent.PutExtra("publicKey", e.View.GetTag(Resource.Id.QuestionnaireId).ToString());
+            intent.PutExtra("publicKey", target.GetTag(Resource.Id.QuestionnaireId).ToString());
             this.StartActivity(intent);
         }
         

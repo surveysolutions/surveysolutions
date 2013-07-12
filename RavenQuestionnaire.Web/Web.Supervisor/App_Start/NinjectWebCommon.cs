@@ -10,7 +10,7 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
-
+using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Synchronization;
@@ -88,7 +88,8 @@ namespace Web.Supervisor.App_Start
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
-                new RavenInfrastructureModule(), new SynchronizationModule());
+                new RavenInfrastructureModule(), new SynchronizationModule(),
+                new NLogLoggingModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

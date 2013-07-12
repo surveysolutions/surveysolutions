@@ -14,21 +14,30 @@ using CAPI.Android.Core.Model.ModelUtils;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.SnapshotStore
 {
-    public class AndroidSnapshotStore : ISnapshotStore
+    public class AndroidSnapshotStore : ISnapshotStore, IBackupable
     {
         public AndroidSnapshotStore()
         {
             internalStorage = new InMemoryEventStore();
-            var dirPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), snapshotTemp);
-            if (!Directory.Exists(dirPath))
-                Directory.CreateDirectory(dirPath);
+
+            if (!Directory.Exists(SnapshotStoreDirPath))
+                Directory.CreateDirectory(SnapshotStoreDirPath);
         }
 
-        private readonly ISnapshotStore internalStorage;
+        private  ISnapshotStore internalStorage;
         private const string snapshotTemp = "snapshotTemp";
+        protected string SnapshotStoreDirPath {
+            get
+            {
+                return
+                    System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                           snapshotTemp);
+            }
+        }
 
         public void SaveShapshot(Snapshot snapshot)
         {
@@ -62,9 +71,23 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         private string GetFileName(Guid id)
         {
-            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), snapshotTemp,
+            return System.IO.Path.Combine(SnapshotStoreDirPath,
                                           id.ToString());
         }
 
+        public string GetPathToBakupFile()
+        {
+            return null;
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            foreach (var file in Directory.EnumerateFiles(SnapshotStoreDirPath))
+            {
+                File.Delete(file);
+            }
+
+            internalStorage = new InMemoryEventStore();
+        }
     }
 }
