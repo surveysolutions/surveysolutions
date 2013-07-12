@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Main.Core.Commands.Sync;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
@@ -22,19 +22,18 @@ namespace WB.Core.Synchronization.SyncProvider
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
-        private ISynchronizationDataStorage storage;
+        private readonly ISynchronizationDataStorage storage;
 
-        //private IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities;
+        private readonly ILogger logger;
 
-        public SyncProvider(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
-            IQueryableReadSideRepositoryReader<UserDocument> users,
-            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
-            ISynchronizationDataStorage storage)
+        public SyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
+            ISynchronizationDataStorage storage,
+            ILogger logger)
         {
             this.devices = devices;
             //this.syncActivities = syncActivities;
             this.storage = storage;
+            this.logger = logger;
         }
 
         public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
@@ -73,14 +72,17 @@ namespace WB.Core.Synchronization.SyncProvider
             return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier, userId);
         }
 
-        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
+        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
             var device = devices.GetById(clientRegistrationKey);
 
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
-            return storage.GetChunkPairsCreatedAfter(device.LastSyncItemIdentifier, userId);
+            if (clientSequence != device.LastSyncItemIdentifier)
+                logger.Info(string.Format("Local [{0}] and remote [{1}] sequence number mismatch.", device.LastSyncItemIdentifier, clientSequence));
+
+            return storage.GetChunkPairsCreatedAfter(clientSequence, userId);
         }
 
 
@@ -123,20 +125,13 @@ namespace WB.Core.Synchronization.SyncProvider
         {
             if (string.IsNullOrWhiteSpace(item.Content))
                 throw new ArgumentException("Sync Item is not set.");
-
-            /*//check and validate sync activity
-            if (Guid.Empty == syncActivityId)
-                throw new ArgumentException("Sync Activity Identifier is not set.");*/
-
             
             var items = GetContentAsItem<AggregateRootEvent[]>(item);
 
             var processor = new SyncEventHandler();
             processor.Merge(items);
             processor.Commit();
-
-            //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId));
-
+            
             return true;
         }
 
