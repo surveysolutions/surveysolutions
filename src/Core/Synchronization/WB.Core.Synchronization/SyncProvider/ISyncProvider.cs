@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Main.Core.Events;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncProvider
@@ -14,7 +13,7 @@ namespace WB.Core.Synchronization.SyncProvider
 
         IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey);
 
-        IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey);
+        IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence);
 
         HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 

@@ -1,4 +1,7 @@
-﻿namespace WB.UI.Designer.Controllers
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
+
+namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -9,7 +12,6 @@
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
-    using WB.Core.SharedKernel.Utils.Logging;
     using WB.UI.Designer.Code.Helpers;
     using WB.UI.Designer.Exceptions;
     using WB.UI.Designer.Utils;
@@ -20,12 +22,14 @@
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
+        private readonly ILogger logger;
 
         public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.expressionReplacer = expressionReplacer;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         [HttpPost]
@@ -44,7 +48,7 @@
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", e);
+                    this.logger.Error("Unexpected error occurred", e);
                     error =
                         string.Format(
                             "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",

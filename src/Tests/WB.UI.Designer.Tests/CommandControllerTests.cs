@@ -2,6 +2,7 @@
 using Main.Core.Commands.Questionnaire.Group;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
@@ -19,6 +20,8 @@ namespace WB.UI.Designer.Tests
         public void Execute_When_CommandService_throws_exception_with_inner_DomainExcetion_Then_()
         {
             // Arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var commandType = "UpdateGroup";
             var commandJSON = "some command";
             var updateGroupCommand = CreateInvalidUpdateGroupCommand();
@@ -42,6 +45,8 @@ namespace WB.UI.Designer.Tests
         public void Execute_When_CommandService_throws_exception_with_inner_not_DomainExcetion_Then_exception_should_be_thrown()
         {
             // Arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var commandType = "UpdateGroup";
             var commandJSON = "some command";
             var updateGroupCommand = CreateInvalidUpdateGroupCommand();
