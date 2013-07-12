@@ -4,10 +4,12 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.ExpressionExecutors;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
@@ -44,6 +46,10 @@ namespace LoadTestDataGenerator
 
         private static void RegisterServices(IKernel kernel)
         {
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
+
+            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
             ConditionExecuterFactory.Creator = doc => new FakeCompleteQuestionnaireConditionExecuteCollector();
 
             kernel.Load(new LoadTestDataGeneratorRegistry(repositoryPath: ConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
@@ -53,7 +59,6 @@ namespace LoadTestDataGenerator
             NcqrsInit.Init(kernel);
 
             kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IReadSideRepositoryReader<QuestionnaireDocument>>()));
-
             
             kernel.Load<MainModule>();
         }
