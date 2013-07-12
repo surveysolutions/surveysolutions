@@ -189,10 +189,14 @@
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
     <Compile Include="Denormalizer\UserDenormalizer.cs" />
+    <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="SyncCacher\ISyncCacher.cs" />
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
+    <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
+    <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
     <Compile Include="Views\Interview\InterviewViewItem.cs" />

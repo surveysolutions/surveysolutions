@@ -571,6 +571,7 @@
     <Content Include="Views\Interview\Details.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
