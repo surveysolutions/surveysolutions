@@ -5,13 +5,11 @@ namespace WB.Core.GenericSubdomains.Logging.NLog
 {
     internal class NLogLogger : ILogger
     {
-        private readonly global::NLog.Logger logger;
+        private readonly Logger logger;
 
-        public NLogLogger(global::NLog.Logger logger)
+        public NLogLogger(string type)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-
-            this.logger = logger;
+            this.logger = LogManager.GetLogger(type);
         }
 
         public void Debug(string message, Exception exception = null)

@@ -1,4 +1,4 @@
-﻿using WB.Core.SharedKernel.Utils.Logging;
+﻿using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
@@ -25,10 +25,12 @@ namespace WB.UI.Designer.Controllers
     public class AccountController : BaseController
     {
         private readonly ISystemMailer mailer;
+        private readonly ILogger logger;
 
-        public AccountController(IMembershipUserService userHelper, ISystemMailer mailer) : base(userHelper)
+        public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger) : base(userHelper)
         {
             this.mailer = mailer;
+            this.logger = logger;
         }
 
         [AllowAnonymous]
@@ -224,7 +226,7 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        LogManager.GetLogger(typeof(AccountController)).Error("Unexpected error occurred", e);
+                        logger.Error("Unexpected error occurred", e);
                     }
                 }
             }
