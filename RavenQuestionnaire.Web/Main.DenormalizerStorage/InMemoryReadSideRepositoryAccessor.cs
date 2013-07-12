@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -38,6 +35,24 @@ namespace Main.DenormalizerStorage
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
             return query.Invoke(this.repository.Values.AsQueryable());
+        }
+
+        public int Count(Expression<Func<TView, bool>> query)
+        {
+            return
+           repository.Values.Where(query.Compile()).Count();
+        }
+
+        public IEnumerable<TView> QueryAll(Expression<Func<TView, bool>> query)
+        {
+            return 
+            repository.Values.Where(query.Compile());
+        }
+
+        public IQueryable<TView> QueryEnumerable(Expression<Func<TView, bool>> query)
+        {
+            return
+           repository.Values.Where(query.Compile()).AsQueryable();
         }
 
         public void Remove(Guid id)

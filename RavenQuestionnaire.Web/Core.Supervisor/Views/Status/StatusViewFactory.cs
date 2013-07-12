@@ -1,4 +1,7 @@
-﻿using WB.Core.Infrastructure;
+﻿using System.Linq.Expressions;
+using Core.Supervisor.Views.Survey;
+using Raven.Client.Linq;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -30,49 +33,45 @@ namespace Core.Supervisor.Views.Status
 
         public StatusView Load(StatusViewInputModel input)
         {
+#warning here we need to create mapreduce index in oreder to avoid in memory group by
             var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
-            #warning ReadLayer: Select is not supported on Raven side (fails with NRE)
+#warning ReadLayer: Select is not supported on Raven side (fails with NRE)
 
-            List<TemplateLight> headers = this.surveys.Query(_ => _
-                .ToList()
-                .Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle))
-                .Distinct()
-                .ToList());
+            List<TemplateLight> headers = this.surveys.QueryAll(q => true).Select(
+                s =>
+                new TemplateLight(s.TemplateId,
+                                  s.QuestionnaireTitle)).Distinct()
+                                              .ToList();
+            
+            Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate = (x) => x.Responsible != null && x.Responsible.Id.In(interviewers);
 
-            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys =
-                this.surveys.Query(queryable =>
-                {
-                    IQueryable<CompleteQuestionnaireBrowseItem> query = queryable
-                        .Where(x => x.Responsible != null);
+            if (status.PublicId != SurveyStatus.Unknown.PublicId)
+            {
+                predicate = predicate.AndCondition(x => x.Status.PublicId == status.PublicId);
+            }
 
-                    if (status.PublicId != SurveyStatus.Unknown.PublicId)
-                    {
-                        query = query.Where(x => x.Status.PublicId == status.PublicId);
-                    }
+            var query = this.surveys.QueryAll(predicate);
 
-                    return query
-                        .ToList()
-                        .Where(x => interviewers.Contains(x.Responsible.Id))
-                        .GroupBy(x => x.Responsible)
-                        .ToList();
-                });
+            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = query
+                .GroupBy(x => x.Responsible)
+                .ToList();
 
             var items = BuildItems(groupedSurveys).AsQueryable();
 
-          
+
             if (input.Orders.Count == 0)
             {
-                input.Orders.Add(new OrderRequestItem() { Direction = OrderDirection.Asc, Field = "Title" });
+                input.Orders.Add(new OrderRequestItem() {Direction = OrderDirection.Asc, Field = "Title"});
             }
 
             items = input.Orders[0].Direction == OrderDirection.Asc
-                                                  ? items.OrderBy(i => this.GetOrderValue(i, input.Orders[0].Field))
-                                                  : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
+                        ? items.OrderBy(i => this.GetOrderValue(i, input.Orders[0].Field))
+                        : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
 
-            return new StatusView(input.Page, input.PageSize,status, headers, items);
+            return new StatusView(input.Page, input.PageSize, status, headers, items);
         }
 
         private object GetOrderValue(StatusViewItem item, string field)
@@ -91,12 +90,6 @@ namespace Core.Supervisor.Views.Status
 
             if (Guid.TryParse(field, out templateId))
             {
-               /* var key = item.Items.Keys.SingleOrDefault(k => k.TemplateId == templateId);
-                if (key == null)
-                {
-                    return 0;
-                }*/
-
                 return item.GetCount(templateId);
             }
 

@@ -39,7 +39,7 @@ namespace CAPI.Android.Syncronization.RestUtils
 
                 var logger = ServiceLocator.Current.GetInstance<ILogger>();
 
-                logger.Error("Sync error. Responce status:" + response.StatusCode, exception);
+                logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
             }
@@ -53,7 +53,7 @@ namespace CAPI.Android.Syncronization.RestUtils
 
             var response = restClient.Execute(request);
 
-            return HandlerResponce<T>(response);
+            return HandlerResponse<T>(response);
         }
 
         public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, params KeyValuePair<string, string>[] additionalParams)
@@ -73,13 +73,12 @@ namespace CAPI.Android.Syncronization.RestUtils
                     token.Abort();
                     throw new RestException("Operation was canceled.");
                 }
-                Thread.Sleep(500);
             }
 
-            return HandlerResponce<T>(response);
+            return HandlerResponse<T>(response);
         }
 
-        private T HandlerResponce<T>(IRestResponse response)
+        private T HandlerResponse<T>(IRestResponse response)
         {
             if (response.ErrorException != null)
             {
@@ -97,7 +96,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                     exception = new AuthenticationException("User is not authorized.");
 
                 this.logger
-                          .Error("Sync error. Responce status:" + response.StatusCode, exception);
+                          .Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
             }
