@@ -1,7 +1,7 @@
-﻿namespace WB.UI.Designer.Code.Helpers
-{
-    using Ncqrs.Commanding;
+using Ncqrs.Commanding;
 
+namespace WB.UI.Shared.Web.CommandDeserialization
+{
     public interface ICommandDeserializer
     {
         ICommand Deserialize(string commandType, string serializedCommand);
