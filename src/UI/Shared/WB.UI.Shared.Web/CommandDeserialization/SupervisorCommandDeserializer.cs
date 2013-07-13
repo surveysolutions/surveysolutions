@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Commands.Questionnaire;
-using Main.Core.Commands.Questionnaire.Group;
-using Main.Core.Commands.Questionnaire.Question;
+using Main.Core.Commands.Questionnaire.Completed;
 
 namespace WB.UI.Shared.Web.CommandDeserialization
 {
@@ -17,7 +12,7 @@ namespace WB.UI.Shared.Web.CommandDeserialization
             {
                 return new Dictionary<string, Type>
                     {
-                        {"UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand)}
+                        {"CreateInterviewWithFeaturedQuestionsCommand", typeof (CreateInterviewWithFeaturedQuestionsCommand)}
                     };
             }
         }

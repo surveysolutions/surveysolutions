@@ -170,8 +170,16 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
+
+        public void CreateInterviewWithFeaturedQuestions(Guid completeQuestionnaireId, UserLight creator)
+        #warning probably a factory should be used here
+        {
+            // TODO: check is it good to create new AR form another?
+            new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
+        }
+
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
-#warning probably a factory should be used here
+        #warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
