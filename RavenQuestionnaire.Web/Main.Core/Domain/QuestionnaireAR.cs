@@ -171,11 +171,11 @@ namespace Main.Core.Domain
         }
 
 
-        public void CreateInterviewWithFeaturedQuestions(Guid completeQuestionnaireId, UserLight creator)
+        public void CreateInterviewWithFeaturedQuestions(Guid interviewId, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
         #warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
-            new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
+            new CompleteQuestionnaireAR(interviewId, this.innerDocument, creator, responsible, featuredAnswers);
         }
 
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)

@@ -23,12 +23,14 @@
                         })) ;
         return {
             questionnaire: q,
-            url: '@Url.Action("Assign", "HQ", new { }, Request.Url.Scheme)'
+            url: '@Url.Action("Assign", "HQ", new { }, Request.Url.Scheme)',
+            commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
+            backUrl: '@Url.Action("Interviews", "HQ", new { }, Request.Url.Scheme)',
         };
     });
 </script>
 <h3 data-bind="text: questionnaire().title"></h3>
-<div class="row-fluid">
+<div class="row-fluid" id="featured-questions-region">
     <div class="span12">
         <div id="featured-questions" class="form-horizontal">
             <!-- ko foreach: questions -->
@@ -44,7 +46,7 @@
             </div>
         </div>
         <p id="assignmentButton">
-            <button class="btn btn-success btn-large" data-bind="click: save, enable: isSaveEnable"><i class="icon-white icon-ok"></i>&nbsp;Save</button>
+            <button class="btn btn-success btn-large" data-bind="click: saveCommand, enable: isSaveEnable"><i class="icon-white icon-ok"></i>&nbsp;Save</button>
         </p>
     </div>
 </div>
@@ -57,7 +59,7 @@
         <div class="body">
             <ul data-bind="foreach: errors" class="error-list">
                 <li class="error">
-                    <span data-bind="text: error"></span>
+                    <span data-bind="html: error"></span>
                 </li>
             </ul>
         </div>

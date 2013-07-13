@@ -30,5 +30,7 @@ namespace Core.Supervisor.Views.TakeNew
         public Guid QuestionnaireId { get; set; }
 
         public List<UserDocument> Supervisors { get; set; }
+
+        public UserLight CurrentUser { get; set; }
     }
 }

@@ -135,6 +135,7 @@ namespace Web.Supervisor.Controllers
             Guid key = id;
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, user.Id));
+            model.CurrentUser = user;
             return this.View(model);
         }
 

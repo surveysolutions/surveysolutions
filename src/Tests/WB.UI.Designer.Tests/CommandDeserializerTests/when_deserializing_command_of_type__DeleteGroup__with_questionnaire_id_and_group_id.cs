@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
             ((DeleteGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         private static ICommand result;
-        private static CommandDeserializer deserializer;
+        private static DesignerCommandDeserializer deserializer;
         private static string questionnaireId;
         private static string groupId;
         private static string type;
