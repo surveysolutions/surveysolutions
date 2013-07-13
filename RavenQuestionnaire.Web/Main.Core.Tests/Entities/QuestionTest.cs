@@ -1,4 +1,7 @@
-﻿namespace RavenQuestionnaire.Core.Tests.Entities
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace RavenQuestionnaire.Core.Tests.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +22,12 @@
     [TestFixture]
     public class QuestionTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

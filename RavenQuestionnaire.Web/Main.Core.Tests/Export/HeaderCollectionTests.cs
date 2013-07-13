@@ -1,6 +1,8 @@
 ﻿using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.View.Export;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Main.Core.Tests.Export
@@ -16,6 +18,12 @@ namespace Main.Core.Tests.Export
     [TestFixture]
     public class HeaderCollectionTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void GetEnumerator_DictionaryContans1ItemWith2Values_EnumeratorWith2ItesIsReturned()
         {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using Ncqrs.Spec;
@@ -11,6 +13,12 @@ namespace Ncqrs.Tests.Eventing
     [TestFixture]
     public class CommittedEventStreamTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Init_with_source_id_only_should_set_source_id_and_have_no_events()
         {

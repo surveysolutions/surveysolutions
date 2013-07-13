@@ -14,6 +14,7 @@ using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing;
@@ -24,6 +25,12 @@ namespace CAPI.Androids.Core.Model.Tests
     [TestFixture]
     public class ChangeLogManipulatorTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void OpenDraftRecord_When_if_and_event_start_are_not_empty_Then_new_record_was_create_in_draft_storage()
         {

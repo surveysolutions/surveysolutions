@@ -1,4 +1,6 @@
 ﻿using Main.Core.View.Export;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Main.Core.Tests.Export
@@ -14,6 +16,12 @@ namespace Main.Core.Tests.Export
     [TestFixture]
     public class HeaderItemTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void GetIndexLeter_IndexIs0CountIs2_LetterA()
         {
