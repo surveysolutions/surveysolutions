@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Controllers
