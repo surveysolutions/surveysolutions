@@ -15,12 +15,12 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
 
     using WB.UI.Designer.Code.Helpers;
 
-    [Subject(typeof(CommandDeserializer))]
+    [Subject(typeof(DesignerCommandDeserializer))]
     internal class CommandDeserializerTestsContext
     {
-        public static CommandDeserializer CreateCommandDeserializer()
+        public static DesignerCommandDeserializer CreateCommandDeserializer()
         {
-            return new CommandDeserializer();
+            return new DesignerCommandDeserializer();
         }
     }
 }
