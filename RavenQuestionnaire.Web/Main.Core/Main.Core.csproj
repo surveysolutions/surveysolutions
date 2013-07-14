@@ -158,6 +158,7 @@
     <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\PushStatisticsCommand.cs" />
