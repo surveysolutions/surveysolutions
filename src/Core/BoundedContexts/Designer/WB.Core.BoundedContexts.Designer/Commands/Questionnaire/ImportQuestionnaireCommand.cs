@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
-    [MapsToAggregateRootMethodOrConstructor(typeof(QuestionnaireAR), "ImportQuestionnaire")]
+    [MapsToAggregateRootMethodOrConstructor(typeof(Aggregates.Questionnaire), "ImportQuestionnaire")]
     public class ImportQuestionnaireCommand : CommandBase
     {
         public ImportQuestionnaireCommand(Guid createdBy, IQuestionnaireDocument source)

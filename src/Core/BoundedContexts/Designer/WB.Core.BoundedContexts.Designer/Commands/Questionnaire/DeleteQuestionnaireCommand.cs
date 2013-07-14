@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteQuestionnaire")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "DeleteQuestionnaire")]
     public class DeleteQuestionnaireCommand : CommandBase
     {
         public DeleteQuestionnaireCommand(Guid questionnaireId)
