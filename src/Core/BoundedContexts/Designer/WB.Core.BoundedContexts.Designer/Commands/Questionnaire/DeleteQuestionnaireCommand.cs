@@ -15,6 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         }
 
         [AggregateRootId]
-        public Guid QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; private set; }
     }
 }

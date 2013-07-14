@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.Condition = condition;
         }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
-        public Propagate PropagationKind { get; set; }
+        public Propagate PropagationKind { get; private set; }
 
-        public string Description { get; set; }
+        public string Description { get; private set; }
 
         public string Condition { get; set; }
     }
