@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer
+﻿using WB.UI.Shared.Web;
+
+namespace WB.UI.Designer
 {
     using System.Collections.Specialized;
     using System.Web.Configuration;
