@@ -9,10 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [MapsToAggregateRootConstructor(typeof(Aggregates.Questionnaire))]
     public class CreateQuestionnaireCommand : CommandBase
     {
-        public CreateQuestionnaireCommand()
-        {
-        }
-
         public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy = null, bool isPublic = false)
             : base(questionnaireId)
         {
