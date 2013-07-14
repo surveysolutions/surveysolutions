@@ -2,14 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using Main.Core;
-using Main.Core.Documents;
-using Main.DenormalizerStorage;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using Ninject;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Questionnaire.ExportServices;
-using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -42,8 +36,6 @@ namespace WB.UI.Designer.Code
         public override void Load()
         {
             base.Load();
-            this.Bind<ILogger>().ToMethod(
-                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
