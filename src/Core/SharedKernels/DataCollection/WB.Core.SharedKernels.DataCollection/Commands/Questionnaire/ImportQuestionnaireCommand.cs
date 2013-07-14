@@ -4,7 +4,7 @@ using Main.Core.Domain;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
-namespace Main.Core.Commands.Questionnaire
+namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
     [MapsToAggregateRootMethodOrConstructor(typeof(QuestionnaireAR), "ImportQuestionnaire")]
     public class ImportQuestionnaireCommand : CommandBase

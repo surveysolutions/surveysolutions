@@ -1,5 +1,6 @@
 ﻿using Main.Core.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace Web.Supervisor.Controllers
 {
