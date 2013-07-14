@@ -18,12 +18,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
             this.IsPublic = isPublic;
         }
 
-        public Guid PublicKey { get; set; }
+        public Guid PublicKey { get; private set; }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
-        public Guid? CreatedBy { get; set; }
+        public Guid? CreatedBy { get; private set; }
 
-        public bool IsPublic { get; set; }
+        public bool IsPublic { get; private set; }
     }
 }

@@ -19,8 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
             this.TargetIndex = targetIndex;
         }
 
-        public Guid? ParentGroupId { get; set; }
-        public Guid SourceGroupId { get; set; }
-        public int TargetIndex { get; set; }
+        public Guid? ParentGroupId { get; private set; }
+        public Guid SourceGroupId { get; private set; }
+        public int TargetIndex { get; private set; }
     }
 }

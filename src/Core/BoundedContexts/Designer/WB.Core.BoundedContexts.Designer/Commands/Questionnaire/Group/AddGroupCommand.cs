@@ -16,6 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
             this.ParentGroupId = parentGroupId;
         }
 
-        public Guid? ParentGroupId { get; set; }
+        public Guid? ParentGroupId { get; private set; }
     }
 }
