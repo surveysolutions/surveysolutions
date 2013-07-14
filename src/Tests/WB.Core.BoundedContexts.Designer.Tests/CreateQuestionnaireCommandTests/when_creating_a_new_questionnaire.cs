@@ -1,17 +1,14 @@
-﻿namespace Main.Core.Tests.Domain
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Events.Questionnaire;
+using Ncqrs;
+using Ncqrs.Spec;
+using Ncqrs.Spec.Fakes;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+
+namespace WB.Core.BoundedContexts.Designer.Tests.CreateQuestionnaireCommandTests
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Commands.Questionnaire;
-    using Main.Core.Events.Questionnaire;
-
-    using Ncqrs;
-    using Ncqrs.Spec;
-    using Ncqrs.Spec.Fakes;
-
-    using NUnit.Framework;
-
     [Specification]
     public class when_creating_a_new_questionnaire :
         OneEventTestFixture<CreateQuestionnaireCommand, NewQuestionnaireCreated>
@@ -21,7 +18,7 @@
 
         public when_creating_a_new_questionnaire()
         {
-            Configuration.Configure();
+            NcqrsEnvironmentConfiguration.Configure();
         }
 
         [Then]
