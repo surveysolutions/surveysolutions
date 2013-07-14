@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "MoveQuestion")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "MoveQuestion")]
     public class MoveQuestionCommand : QuestionCommand
     {
         public MoveQuestionCommand(Guid questionnaireId, Guid questionId, Guid targetGroupId, int targetIndex)
