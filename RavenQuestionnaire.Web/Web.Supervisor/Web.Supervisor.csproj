@@ -295,7 +295,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Code\AppSettings.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\SurveysApiController.cs" />
@@ -464,6 +466,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
@@ -571,6 +574,7 @@
     <Content Include="Views\Interview\Details.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

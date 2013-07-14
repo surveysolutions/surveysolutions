@@ -257,6 +257,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CommentDocument.cs">
       <Link>Documents\CommentDocument.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\QuestionAnswer.cs">
+      <Link>Documents\QuestionAnswer.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CompleteQuestionnaireDocument.cs">
       <Link>Documents\CompleteQuestionnaireDocument.cs</Link>
     </Compile>

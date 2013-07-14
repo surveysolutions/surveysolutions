@@ -21,22 +21,23 @@ namespace Core.Supervisor.Views.Survey
 
         public SurveyUsersView Load(SurveyUsersViewInputModel input)
         {
-            return this.summary.Query(
+           /* return this.summary.Query(
                 _ =>
-                {
+                {*/
+            IEnumerable<SummaryItem> items=Enumerable.Empty<SummaryItem>();
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
+                        items = this.summary.QueryAll(x => x.ResponsibleSupervisorId == null);
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        items = this.summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
 
                     return new SurveyUsersView()
                     {
                         Items =
-                            _.ToList().Distinct(new SurveyItemByUserNameComparer())
+                            items.ToList().Distinct(new SurveyItemByUserNameComparer())
                                 .Select(
                                     x =>
                                         new SurveyUsersViewItem()
@@ -47,7 +48,7 @@ namespace Core.Supervisor.Views.Survey
                                                 x.ResponsibleName
                                         })
                     };
-                });
+              //  });
 
         }
     }

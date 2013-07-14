@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.EventHandlers;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing;
@@ -23,6 +24,12 @@ namespace Main.DenormalizerStorage.Tests
     // ReSharper disable RedundantArgumentName
     public class QuestionnaireDenormalizerTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void HandleGroupUpdated_When_group_propagation_kind_is_AutoPropagate_and_new_kind_is_None_Then_all_triggers_in_autoptopagate_questions_should_not_contains_this_group_id()
         {

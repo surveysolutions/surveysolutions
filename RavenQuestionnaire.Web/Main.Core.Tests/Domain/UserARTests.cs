@@ -1,4 +1,7 @@
-﻿namespace Main.Core.Tests.Domain
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections;
@@ -21,6 +24,7 @@
         [SetUp]
         public void Init()
         {
+	        ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             this.eventContext = new EventContext();
         }
 

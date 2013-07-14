@@ -111,6 +111,19 @@ namespace Main.Core.Domain
                     });
         }
 
+        public CompleteQuestionnaireAR(Guid interviewId, QuestionnaireDocument questionnaire, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
+            : this(interviewId, questionnaire, creator)
+        {
+            var clock = NcqrsEnvironment.Get<IClock>();
+
+            this.ChangeAssignment(responsible);
+            foreach (var featuredAnswer in featuredAnswers)
+            {
+                this.SetAnswer(featuredAnswer.Id, null, featuredAnswer.Answer, featuredAnswer.Answers.ToList(),
+                               clock.UtcNow());
+            }
+        }
+
         #endregion
 
         #region Public Methods and Operators
@@ -194,32 +207,6 @@ namespace Main.Core.Domain
         public void DeletePropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported.");
-
-            /*var group = this.doc.Find<CompleteGroup>(publicKey);
-            
-            this.ApplyEvent(
-                new PropagatableGroupDeleted
-                    {
-                        CompletedQuestionnaireId = this.doc.PublicKey, 
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (group.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in group.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupDeleted
-                        {
-                            CompletedQuestionnaireId = this.doc.PublicKey, 
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
         /// <summary>

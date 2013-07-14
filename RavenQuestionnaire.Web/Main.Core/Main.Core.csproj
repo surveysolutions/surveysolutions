@@ -159,6 +159,7 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\ProcessedEventChunk.cs" />
+    <Compile Include="Documents\QuestionAnswer.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />

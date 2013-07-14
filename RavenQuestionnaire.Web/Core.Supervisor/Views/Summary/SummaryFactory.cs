@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities;
+﻿using System.Collections.Generic;
+using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Summary
@@ -23,24 +24,25 @@ namespace Core.Supervisor.Views.Summary
 
         public SummaryView Load(SummaryInputModel input)
         {
-            return this.summary.Query(
+            IEnumerable<SummaryItem> items = Enumerable.Empty<SummaryItem>();
+           /* return this.summary.Query(
                 _ =>
-                {
+                {*/
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
+                        items = summary.QueryAll(x => x.ResponsibleSupervisorId == null);
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        items = summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
 
                     if (input.TemplateId.HasValue)
                     {
-                        _ = _.Where(x => x.TemplateId == input.TemplateId);
+                        items = summary.QueryAll(x => x.TemplateId == input.TemplateId);
                     }
 
-                    var all = _.ToList().GroupBy(
+                    var all = items.ToList().GroupBy(
                         x => x.ResponsibleId,
                         y => y,
                         (x, y) =>
@@ -75,7 +77,7 @@ namespace Core.Supervisor.Views.Summary
                             Unassigned = all.Sum(x => x.Unassigned)
                         }
                     };
-                });
+               // });
         }
     }
 }

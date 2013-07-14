@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Questionnaire.ExportServices;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
+using WB.UI.Shared.Web.CommandDeserialization;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -56,7 +57,7 @@ namespace WB.UI.Designer.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new NLogLoggingModule());
+            var kernel = new StandardKernel(new NLogLoggingModule(), new DesignerCommandDeserializationModule());
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

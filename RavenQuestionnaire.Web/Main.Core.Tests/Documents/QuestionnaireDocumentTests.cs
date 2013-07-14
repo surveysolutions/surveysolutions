@@ -6,6 +6,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Main.Core.Tests.Documents
@@ -13,6 +15,12 @@ namespace Main.Core.Tests.Documents
     [TestFixture]
     public class QuestionnaireDocumentTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void RemoveGroup_when_AutoPropagate_group_that_was_trigged_by_AuotoPropagate_question_was_removed_then_list_of_triggers_should_be_one_less()
         {
