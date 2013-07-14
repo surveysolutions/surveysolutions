@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace WB.UI.Designer
+namespace WB.UI.Shared.Web
 {
     public static class ObjectExtensions
     {

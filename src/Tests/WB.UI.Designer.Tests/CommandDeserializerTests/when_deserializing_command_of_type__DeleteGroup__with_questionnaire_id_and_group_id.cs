@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.Tests.CommandDeserializerTests
+﻿using WB.UI.Shared.Web.CommandDeserialization;
+
+namespace WB.UI.Designer.Tests.CommandDeserializerTests
 {
     using System;
 
@@ -40,7 +42,7 @@
             ((DeleteGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         private static ICommand result;
-        private static CommandDeserializer deserializer;
+        private static DesignerCommandDeserializer deserializer;
         private static string questionnaireId;
         private static string groupId;
         private static string type;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Tests.CommandDeserializerTests
 {
@@ -14,12 +15,12 @@ namespace WB.UI.Designer.Tests.CommandDeserializerTests
 
     using WB.UI.Designer.Code.Helpers;
 
-    [Subject(typeof(CommandDeserializer))]
+    [Subject(typeof(DesignerCommandDeserializer))]
     internal class CommandDeserializerTestsContext
     {
-        public static CommandDeserializer CreateCommandDeserializer()
+        public static DesignerCommandDeserializer CreateCommandDeserializer()
         {
-            return new CommandDeserializer();
+            return new DesignerCommandDeserializer();
         }
     }
 }
