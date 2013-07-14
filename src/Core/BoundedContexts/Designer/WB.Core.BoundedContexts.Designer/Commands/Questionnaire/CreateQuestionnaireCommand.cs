@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(QuestionnaireAR))]
+    [MapsToAggregateRootConstructor(typeof(Aggregates.Questionnaire))]
     public class CreateQuestionnaireCommand : CommandBase
     {
         public CreateQuestionnaireCommand()

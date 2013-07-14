@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "CloneGroup")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneGroup")]
     public class CloneGroupCommand : FullGroupDataCommand
     {
         public CloneGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, Guid sourceGroupId, int targetIndex,

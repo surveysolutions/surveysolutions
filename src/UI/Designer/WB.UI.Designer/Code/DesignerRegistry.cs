@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Code
                         typeof(DesignerRegistry).Assembly,
                         typeof(AccountAR).Assembly,
                         typeof(PublicService).Assembly,
-                        typeof(QuestionnaireAR).Assembly,
+                        typeof(Questionnaire).Assembly,
                     });
         }
 
