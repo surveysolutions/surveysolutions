@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.TargetIndex = targetIndex;
         }
 
-        public Guid TargetGroupId { get; set; }
-        public int TargetIndex { get; set; }
+        public Guid TargetGroupId { get; private set; }
+        public int TargetIndex { get; private set; }
     }
 }

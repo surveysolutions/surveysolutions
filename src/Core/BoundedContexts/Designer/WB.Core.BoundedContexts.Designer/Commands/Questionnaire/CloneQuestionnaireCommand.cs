@@ -10,10 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [MapsToAggregateRootConstructor(typeof(Aggregates.Questionnaire))]
     public class CloneQuestionnaireCommand : CommandBase
     {
-        public CloneQuestionnaireCommand()
-        {
-        }
-
         public CloneQuestionnaireCommand(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument doc)
             : base(publicKey)
         {
@@ -23,12 +19,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
             this.Source = doc;
         }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
-        public Guid CreatedBy { get; set; }
+        public Guid CreatedBy { get; private set; }
 
-        public Guid PublicKey { get; set; }
+        public Guid PublicKey { get; private set; }
 
-        public IQuestionnaireDocument Source { get; set; }
+        public IQuestionnaireDocument Source { get; private set; }
     }
 }

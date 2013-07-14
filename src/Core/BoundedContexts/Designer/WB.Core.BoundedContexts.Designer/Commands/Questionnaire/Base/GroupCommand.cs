@@ -10,6 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.GroupId = groupId;
         }
 
-        public Guid GroupId { get; set; }
+        public Guid GroupId { get; private set; }
     }
 }

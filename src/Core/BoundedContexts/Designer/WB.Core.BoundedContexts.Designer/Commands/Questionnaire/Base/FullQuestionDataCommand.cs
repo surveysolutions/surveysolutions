@@ -28,34 +28,34 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.TriggedGroupIds = triggedGroupIds;
         }
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
-        public QuestionType Type { get; set; }
+        public QuestionType Type { get; private set; }
 
-        public string Alias { get; set; }
+        public string Alias { get; private set; }
 
-        public bool IsMandatory { get; set; }
+        public bool IsMandatory { get; private set; }
 
-        public bool IsFeatured { get; set; }
+        public bool IsFeatured { get; private set; }
 
-        public bool IsHeaderOfPropagatableGroup { get; set; }
+        public bool IsHeaderOfPropagatableGroup { get; private set; }
 
-        public QuestionScope Scope { get; set; }
+        public QuestionScope Scope { get; private set; }
 
         public string Condition { get; set; }
 
         public string ValidationExpression { get; set; }
 
-        public string ValidationMessage { get; set; }
+        public string ValidationMessage { get; private set; }
 
-        public string Instructions { get; set; }
+        public string Instructions { get; private set; }
 
-        public Option[] Options { get; set; }
+        public Option[] Options { get; private set; }
 
-        public Order OptionsOrder { get; set; }
+        public Order OptionsOrder { get; private set; }
 
-        public int? MaxValue { get; set; }
+        public int? MaxValue { get; private set; }
 
-        public Guid[] TriggedGroupIds { get; set; }
+        public Guid[] TriggedGroupIds { get; private set; }
     }
 }
