@@ -4,6 +4,7 @@ using System.Reflection;
 using Main.Core;
 using Ncqrs;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -29,7 +30,8 @@ namespace WB.UI.Designer.Code
                         typeof(QuestionnaireView).Assembly, 
                         typeof(DesignerRegistry).Assembly,
                         typeof(AccountAR).Assembly,
-                        typeof(PublicService).Assembly
+                        typeof(PublicService).Assembly,
+                        typeof(Questionnaire).Assembly,
                     });
         }
         

@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Main.Core.Commands.Questionnaire;
-using Main.Core.Commands.Questionnaire.Group;
-using Main.Core.Commands.Questionnaire.Question;
 using Ncqrs.Commanding;
 using Newtonsoft.Json;
 
 namespace WB.UI.Shared.Web.CommandDeserialization
 {
-    internal abstract class CommandDeserializer : ICommandDeserializer
+    public abstract class CommandDeserializer : ICommandDeserializer
     {
         protected abstract Dictionary<string, Type> KnownCommandTypes { get; }
         
