@@ -89,10 +89,6 @@
   <ItemGroup>
     <Compile Include="CommandDeserialization\CommandDeserializationException.cs" />
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
-    <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
-    <Compile Include="CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
-    <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
-    <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
     <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Filters\AbstractRequiresReadLayerFilterProvider.cs" />
