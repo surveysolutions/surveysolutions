@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -7,12 +9,19 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using Rhino.Mocks;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
     public class UnitOfWorkTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Accepting_unit_of_work_stores_and_publishes_the_events()
         {

@@ -3,6 +3,7 @@ using System.Web;
 using Core.Supervisor.Views;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
+using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -33,7 +34,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
         private readonly IViewFactory<StatusViewInputModel, StatusView> statusViewFactory;
         private readonly IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory;
-
+        private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
 
@@ -43,16 +44,17 @@ namespace Web.Supervisor.Controllers
             IViewFactory<StatusViewInputModel, StatusView> statusViewFactory,
             IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
+            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.userListViewFactory = userListViewFactory;
             this.statusViewFactory = statusViewFactory;
             this.assignSurveyViewFactory = assignSurveyViewFactory;
-
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
+            this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
         }
 
         public ActionResult Index()
@@ -128,14 +130,13 @@ namespace Web.Supervisor.Controllers
             };
         }
 
-        public ActionResult TakeNew(string id)
+        public ActionResult TakeNew(Guid id)
         {
-            Guid key;
-            if (!Guid.TryParse(id, out key))
-                throw new HttpException("404");
-            var newQuestionnairePublicKey = Guid.NewGuid();
-            this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this.GlobalInfo.GetCurrentUser()));
-            return this.RedirectToAction("Assign", "HQ", new { Id = newQuestionnairePublicKey});
+            Guid key = id;
+            var user = this.GlobalInfo.GetCurrentUser();
+            var model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, user.Id));
+            model.CurrentUser = user;
+            return this.View(model);
         }
 
         public ActionResult Surveys()

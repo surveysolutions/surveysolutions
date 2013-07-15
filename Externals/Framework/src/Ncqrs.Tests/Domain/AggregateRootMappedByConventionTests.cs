@@ -14,6 +14,7 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     public class AggregateRootMappedByConventionTests
     {
+  
         public class EventForPublicMethod
         {}
 

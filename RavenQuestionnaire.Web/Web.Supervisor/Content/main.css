@@ -446,3 +446,6 @@ h1.inline
 .table.table-break-words td{
     word-break: break-all;
 }
+#featured-questions .help-inline {
+    display: block;
+}

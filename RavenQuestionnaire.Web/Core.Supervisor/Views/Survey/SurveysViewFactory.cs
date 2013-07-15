@@ -1,4 +1,5 @@
-﻿using Core.Supervisor.DenormalizerStorageItem;
+﻿using System.Collections.Generic;
+using Core.Supervisor.DenormalizerStorageItem;
 using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -21,24 +22,25 @@ namespace Core.Supervisor.Views.Survey
 
         public SurveysView Load(SurveysInputModel input)
         {
-            return this._summary.Query(
+            IEnumerable<SummaryItem> items = Enumerable.Empty<SummaryItem>();
+        /*    return this._summary.Query(
                 _ =>
-                {
+                {*/
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
+                        items = _summary.QueryAll(x => x.ResponsibleSupervisorId == null);
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        items = _summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
 
                     if (input.UserId.HasValue)
                     {
-                        _ = _.Where(x => x.ResponsibleId == input.UserId);
+                        items = _summary.QueryAll(x => x.ResponsibleId == input.UserId);
                     }
 
-                    var all = _.ToList().GroupBy(
+                    var all = items.ToList().GroupBy(
                         x => x.TemplateId,
                         y => y,
                         (x, y) =>
@@ -69,7 +71,7 @@ namespace Core.Supervisor.Views.Survey
                             all.Sum(x => x.Redo),
                             all.Sum(x => x.Unassigned))
                     };
-                });
+               // });
         }
     }
 }

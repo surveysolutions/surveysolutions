@@ -1,5 +1,9 @@
+using System;
+using System.Linq.Expressions;
+using Core.Supervisor.Views.Survey;
 using Main.Core.Entities;
 using Main.Core.Utility;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Interview
@@ -21,61 +25,73 @@ namespace Core.Supervisor.Views.Interview
 
         public InterviewView Load(InterviewInputModel input)
         {
-            return this.interviews.Query(_ =>
+            /*  return this.interviews.Query(_ =>
+              {*/
+            Expression<Func<InterviewItem, bool>> predicate = (s) => true;
+
+            if (input.StatusId.HasValue)
             {
-                if (input.StatusId.HasValue)
-                {
-                    _ = _.Where(x => (x.Status.Id == input.StatusId));
-                }
+                predicate = predicate.AndCondition(x => (x.Status.Id == input.StatusId));
+            }
 
-                if (input.TemplateId.HasValue)
-                {
-                    _ = _.Where(x => (x.TemplateId == input.TemplateId));
-                }
+            if (input.TemplateId.HasValue)
+            {
+                predicate = predicate.AndCondition(x => (x.TemplateId == input.TemplateId));
+            }
 
-                if (input.ViewerStatus == ViewerStatus.Headquarter)
+            if (input.ViewerStatus == ViewerStatus.Headquarter)
+            {
+                if (input.OnlyNotAssigned)
                 {
-                    if (input.OnlyNotAssigned)
-                    {
-                        _ = _.Where(t => t.ResponsibleSupervisorId == null);
-                    }
-                    else if (input.ResponsibleId.HasValue)
-                    {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ResponsibleId);
-                    }    
+                    predicate = predicate.AndCondition(t => t.ResponsibleSupervisorId == null);
+                }
+                else if (input.ResponsibleId.HasValue)
+                {
+                    predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ResponsibleId);
+                }
+            }
+            else
+            {
+                if (input.OnlyNotAssigned)
+                {
+                    predicate = predicate.AndCondition(x => x.Responsible.Id == input.ViewerId);
+                }
+                else if (input.ResponsibleId.HasValue)
+                {
+                    predicate = predicate.AndCondition(x => x.Responsible.Id == input.ResponsibleId);
                 }
                 else
                 {
-                    _ = _.Where(x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
 
-                    if (input.OnlyNotAssigned)
-                    {
-                        _ = _.Where(x=>x.Responsible.Id == input.ViewerId);
-                    }
-                    else if (input.ResponsibleId.HasValue)
-                    {
-                        _ = _.Where(x => x.Responsible.Id == input.ResponsibleId);
-                    }    
+                    predicate =
+                        predicate.AndCondition(
+                            x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
                 }
+            }
 
-                var items = DefineOrderBy(_.ToList().AsQueryable(), input)
-                    .Skip((input.Page - 1)*input.PageSize)
-                    .Take(input.PageSize);
+            //var items = DefineOrderBy(_.ToList().AsQueryable(), input)
+            //    .Skip((input.Page - 1)*input.PageSize)
+            //    .Take(input.PageSize);
 
-                return new InterviewView()
+            var items = this.interviews.QueryEnumerable(predicate)
+                            .Skip((input.Page - 1)*input.PageSize)
+                            .Take(input.PageSize).ToList().AsQueryable();
+
+            items = DefineOrderBy(items, input);
+            return new InterviewView()
                 {
-                    TotalCount = _.Count(),
+                    TotalCount = this.interviews.Count(predicate),
                     Items = items.Select(x => new InterviewViewItem()
-                    {
-                        FeaturedQuestions = x.FeaturedQuestions,
-                        InterviewId = x.InterviewId,
-                        LastEntryDate = x.LastEntryDate.ToShortDateString(),
-                        Responsible = x.Responsible,
-                        Status = x.Status.Name,
-                        Title = x.Title
-                    })
+                        {
+                            FeaturedQuestions = x.FeaturedQuestions,
+                            InterviewId = x.InterviewId,
+                            LastEntryDate = x.LastEntryDate.ToShortDateString(),
+                            Responsible = x.Responsible,
+                            Status = x.Status.Name,
+                            Title = x.Title
+                        })
                 };
-            });
+            //  });
         }
 
         private IQueryable<InterviewItem> DefineOrderBy(IQueryable<InterviewItem> query,

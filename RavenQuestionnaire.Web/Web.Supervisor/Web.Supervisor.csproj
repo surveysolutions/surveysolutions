@@ -295,7 +295,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
+    <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\SurveysApiController.cs" />
@@ -465,6 +469,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
@@ -572,6 +577,7 @@
     <Content Include="Views\Interview\Details.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -606,6 +612,10 @@
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>

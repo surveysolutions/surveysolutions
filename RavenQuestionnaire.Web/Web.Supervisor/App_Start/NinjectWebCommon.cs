@@ -14,7 +14,9 @@ using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Synchronization;
+using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
+using Web.Supervisor.CommandDeserialization;
 using Web.Supervisor.Injections;
 using WebActivator;
 
@@ -89,7 +91,8 @@ namespace Web.Supervisor.App_Start
                 new NinjectSettings { InjectNonPublic = true },
                 new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
                 new RavenInfrastructureModule(), new SynchronizationModule(),
-                new NLogLoggingModule());
+                new NLogLoggingModule(),
+                new SupervisorCommandDeserializationModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

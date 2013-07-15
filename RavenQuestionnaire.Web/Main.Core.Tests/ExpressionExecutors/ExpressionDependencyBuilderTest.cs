@@ -1,4 +1,7 @@
-﻿namespace Main.Core.Tests.ExpressionExecutors
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace Main.Core.Tests.ExpressionExecutors
 {
     using System;
     using System.Collections.Generic;
@@ -24,6 +27,7 @@
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         /// <summary>

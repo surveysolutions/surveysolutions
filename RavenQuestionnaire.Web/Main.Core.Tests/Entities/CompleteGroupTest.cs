@@ -1,4 +1,7 @@
-﻿namespace RavenQuestionnaire.Core.Tests.Entities
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace RavenQuestionnaire.Core.Tests.Entities
 {
     using System;
 
@@ -23,6 +26,7 @@
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             IKernel kernel = new StandardKernel();
         }
 

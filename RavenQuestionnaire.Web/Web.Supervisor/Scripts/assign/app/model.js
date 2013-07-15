@@ -26,7 +26,6 @@ function (ko) {
             self.hasOptions = ko.computed(function () {
                 return self.isSingleOption() || self.isMultyOption();
             });
-
             self.errors = ko.validation.group(self);
 
             return self;

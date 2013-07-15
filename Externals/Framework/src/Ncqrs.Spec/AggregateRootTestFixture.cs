@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -34,6 +36,8 @@ namespace Ncqrs.Spec
         [SetUp] // TODO: Testdriven.net debug runner doesn't recognize inhiret attributes. Use native for now.
         public void Setup()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             Guid commitId = Guid.NewGuid();
             Guid sourceId = Guid.NewGuid();
             CreationStrategy = new SimpleAggregateRootCreationStrategy();

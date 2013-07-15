@@ -1,4 +1,6 @@
 using System;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 
@@ -7,6 +9,12 @@ namespace Ncqrs.Tests.Eventing
     [TestFixture]
     public class UncommittedEventStreamTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void When_empty_should_indicate_a_single_source()
         {

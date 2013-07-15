@@ -32,22 +32,21 @@ namespace Web.Supervisor.Controllers
         {
             var input = new SurveysInputModel(
                 this.GlobalInfo.GetCurrentUser().Id,
-                this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)
-                            {
-                                Orders
-                                    =
-                                    data
-                                    .SortOrder
-                            };
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
+                this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor);
 
-            if (data.Request != null)
+            if (data != null)
             {
-                input.UserId = data.Request.UserId;
+                input.Orders = data.SortOrder;
+                if (data.Pager != null)
+                {
+                    input.Page = data.Pager.Page;
+                    input.PageSize = data.Pager.PageSize;
+                }
+
+                if (data.Request != null)
+                {
+                    input.UserId = data.Request.UserId;
+                }
             }
 
             return this.surveysViewFactory.Load(input);
