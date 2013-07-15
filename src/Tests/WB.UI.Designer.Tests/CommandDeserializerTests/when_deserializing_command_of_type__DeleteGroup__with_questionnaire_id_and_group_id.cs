@@ -1,4 +1,5 @@
-﻿using WB.UI.Shared.Web.CommandDeserialization;
+﻿using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Shared.Web.CommandDeserialization;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 
 namespace WB.UI.Designer.Tests.CommandDeserializerTests

@@ -15,7 +15,6 @@ using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
