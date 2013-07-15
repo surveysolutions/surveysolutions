@@ -47,9 +47,9 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th data-bind='click: ListView.sort.bind($data, "UserName")'>Name</th>
-                <th data-bind='click: ListView.sort.bind($data, "CreationDate")'>Creation date</th>
-                <th data-bind='click: ListView.sort.bind($data, "Email")'>Email</th>
+                <th data-bind='sortby : "UserName"'>Name</th>
+                <th data-bind='sortby : "CreationDate"'>Creation date</th>
+                <th data-bind='sortby : "Email"'>Email</th>
                 <th></th>
                 <th></th>
             </tr>

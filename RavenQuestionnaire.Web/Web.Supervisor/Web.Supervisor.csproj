@@ -400,6 +400,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\jquery.dataTables.css" />
+    <Content Include="Content\listview.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
