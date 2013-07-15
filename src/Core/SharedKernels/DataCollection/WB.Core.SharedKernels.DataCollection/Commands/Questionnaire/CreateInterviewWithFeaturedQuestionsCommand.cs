@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "CreateInterviewWithFeaturedQuestions")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CreateInterviewWithFeaturedQuestions")]
     public class CreateInterviewWithFeaturedQuestionsCommand : CommandBase
     {
         public CreateInterviewWithFeaturedQuestionsCommand(Guid interviewId, Guid questionnaireId, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
