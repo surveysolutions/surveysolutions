@@ -28,11 +28,6 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncProvider.CheckAndCreateNewSyncActivity(clientIdentifier);
         }
 
-        /*public bool InitSending(ClientIdentifier identifier)
-        {
-            throw new NotImplementedException();
-        }*/
-
         public bool SendSyncPackage(SyncPackage package)
         {
             ValidatePackage(package);
@@ -71,9 +66,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
            return syncProvider.GetAllARIds(userId, clientRegistrationKey);
         }
 
-        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
+        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
-            return syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey);
+            return syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
         }
 
         
