@@ -196,6 +196,8 @@
     <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
+    <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
+    <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -558,6 +560,10 @@
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
+      <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
+      <Name>WB.Core.BoundedContexts.Designer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
