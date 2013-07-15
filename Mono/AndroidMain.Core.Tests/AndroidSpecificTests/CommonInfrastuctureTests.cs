@@ -7,8 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Commands.User;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs.Commanding;
 
 namespace AndroidMain.Core.Tests.CommonTests
 {
@@ -98,7 +100,7 @@ namespace AndroidMain.Core.Tests.CommonTests
             Assert.That(storedEvents.Count(), Is.EqualTo(1));
 
             Guid newTemplateGuid = Guid.NewGuid();
-            var command = new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId, new UserLight());
+            ICommand command = null; // TODO: use another command here instead of new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId, new UserLight());
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(command);
