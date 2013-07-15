@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
