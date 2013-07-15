@@ -1,4 +1,4 @@
-﻿using Main.Core.Commands.Questionnaire;
+﻿using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 
 namespace WB.UI.Designer.Controllers
 {
