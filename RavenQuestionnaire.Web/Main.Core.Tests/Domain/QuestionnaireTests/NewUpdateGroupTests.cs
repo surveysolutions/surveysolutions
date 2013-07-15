@@ -2,6 +2,8 @@
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using Ncqrs.Spec;
 
@@ -10,6 +12,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class NewUpdateGroupTests : QuestionnaireARTestContext
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [Test]
         public void NewUpdateGroup_When_new_propagation_kind_is_None_Then_raised_GroupUpdated_event_with_propagation_kind_None()

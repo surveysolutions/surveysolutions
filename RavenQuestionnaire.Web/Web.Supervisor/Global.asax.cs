@@ -1,4 +1,5 @@
-﻿using NConfig;
+﻿using Microsoft.Practices.ServiceLocation;
+using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor
@@ -9,7 +10,6 @@ namespace Web.Supervisor
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
-    using WB.Core.SharedKernel.Utils.Logging;
 
     using Web.Supervisor.App_Start;
 
@@ -32,7 +32,7 @@ namespace Web.Supervisor
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly ILogger logger = LogManager.GetLogger(typeof(MvcApplication));
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
         /// <summary>
         /// The correctly initialized.

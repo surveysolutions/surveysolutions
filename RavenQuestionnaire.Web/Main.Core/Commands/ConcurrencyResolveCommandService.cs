@@ -1,4 +1,4 @@
-﻿using WB.Core.SharedKernel.Utils.Logging;
+﻿using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core.Commands
 {
@@ -13,6 +13,12 @@ namespace Main.Core.Commands
     /// </summary>
     public class ConcurrencyResolveCommandService : CommandService
     {
+        private readonly ILogger logger;
+
+        public ConcurrencyResolveCommandService(ILogger logger)
+        {
+            this.logger = logger;
+        }
         #region Fields
 
         /// <summary>
@@ -39,7 +45,7 @@ namespace Main.Core.Commands
             bool inProgress = true;
             int currentTry = 1;
 
-            while (inProgress && (currentTry < ConcurrencyResolveCommandService.RepeatTryCount))
+            while (inProgress && (currentTry<ConcurrencyResolveCommandService.RepeatTryCount))
             {
                 try
                 {
@@ -48,7 +54,7 @@ namespace Main.Core.Commands
                 }
                 catch (ConcurrencyException exc)
                 {
-                    LogManager.GetLogger(this.GetType()).Info(string.Format("Concurrency execution retry ({0})! ({1})", currentTry, exc.Message));
+                    logger.Info(string.Format("Concurrency execution retry ({0})! ({1})", currentTry, exc.Message));
                     currentTry++;
                 }
             }

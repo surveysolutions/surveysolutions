@@ -1,4 +1,7 @@
-﻿namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
     using System;
 
@@ -14,6 +17,12 @@
     [TestFixture]
     public class QuestionnaireParametersParserTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

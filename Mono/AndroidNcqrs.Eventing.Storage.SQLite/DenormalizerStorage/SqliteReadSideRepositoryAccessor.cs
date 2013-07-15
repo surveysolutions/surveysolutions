@@ -34,7 +34,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             return connection.Table<TView>().Count();
         }
 
-        public TView GetById(Guid id    )
+        public TView GetById(Guid id)
         {
             var idString = id.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();

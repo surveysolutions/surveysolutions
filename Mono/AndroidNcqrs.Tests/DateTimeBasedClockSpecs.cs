@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Ncqrs.Tests
@@ -7,6 +9,12 @@ namespace Ncqrs.Tests
     [TestFixture]
     public class DateTimeBasedClockSpecs
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
 	    private TimeSpan _epsilon = TimeSpan.FromMilliseconds(100);
 
         [Test]

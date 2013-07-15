@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Microsoft.Practices.ServiceLocation;
+using Moq;
+
 namespace AndroidMain.Core.Tests.CommonTests
 {
     using System;
@@ -65,6 +68,7 @@ namespace AndroidMain.Core.Tests.CommonTests
             var registry = new TestsRegistry();
 
             this._kernel = new StandardKernel();
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
             Context appContext = TestsContext.CurrentContext;
 

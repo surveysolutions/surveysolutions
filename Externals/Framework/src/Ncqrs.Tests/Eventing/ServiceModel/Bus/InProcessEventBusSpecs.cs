@@ -1,16 +1,25 @@
 ﻿using System;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Rhino.Mocks;
 using Ncqrs.Domain;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 {
     [TestFixture]
     public class InProcessEventBusSpecs
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class ADomainEvent
         {
 

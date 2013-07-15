@@ -48,6 +48,13 @@
         }
     };
 
+    self.filter = function () {
+        if (self.Pager().CurrentPage() == 1) {
+            self.search();
+        } else {
+            self.Pager().CurrentPage(1);
+        }
+    };
 
     self.search = function () {
 

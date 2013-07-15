@@ -5,6 +5,7 @@ using System.Text;
 using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Spec;
@@ -13,6 +14,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
     public class ImportQuestionnaireTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [Test]
         public void CreateNewSnapshot_When_ArgumentIsNotNull_Then_TemplateImportedEventIsRised()

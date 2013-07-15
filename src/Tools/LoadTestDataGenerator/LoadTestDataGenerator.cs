@@ -736,7 +736,7 @@ namespace LoadTestDataGenerator
                     UserName = string.Format("supervisor_{0}_{1}", i, DateTime.Now.Ticks),
                     Roles = new List<UserRoles> { UserRoles.Supervisor }
                 };
-                CommandService.Execute(new CreateUserCommand(supervisor.PublicKey, supervisor.UserName, SimpleHash.ComputeHash(supervisor.UserName), supervisor.UserName + "@worldbank.org", supervisor.Roles.ToArray(), false, null));
+                CommandService.Execute(new CreateUserCommand(supervisor.PublicKey, supervisor.UserName, SimpleHash.ComputeHash(supervisor.UserName), supervisor.UserName + "@example.com", supervisor.Roles.ToArray(), false, null));
                 result.Add(supervisor);
                 this.UpdateProgress();
             }

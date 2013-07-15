@@ -1,4 +1,7 @@
-﻿namespace Main.Core.Tests.Domain
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections.Generic;
@@ -68,6 +71,8 @@
         /// </summary>
         public TestDataConfigurator()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            
             this.Document = this.GenerateQuestionnaireDocument();
         }
 

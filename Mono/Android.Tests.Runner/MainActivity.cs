@@ -14,8 +14,8 @@ namespace Android.Tests.Runner
 	{
 		protected override IEnumerable<TestAssemblyInfo> GetAssembliesForTest()
 		{
-			yield return NcqrsTests();
-			yield return NcalcTests();
+            yield return NcqrsTests();
+            yield return NcalcTests();
 			yield return MainCoreTests();
 			yield return SQliteEventStoreTests();
             yield return AndroidAppTests();

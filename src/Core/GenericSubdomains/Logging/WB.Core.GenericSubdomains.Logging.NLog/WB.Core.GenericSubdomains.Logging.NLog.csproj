@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NLogManager.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="NLogLoggingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

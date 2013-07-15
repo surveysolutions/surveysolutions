@@ -1,5 +1,7 @@
 ﻿using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Main.Core.Tests
@@ -17,6 +19,12 @@ namespace Main.Core.Tests
     [TestFixture]
     public class GroupWithRoutTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void CreateGroupWithRout_GroupGuidsAreEmpty_FirstGroupSelected()
         {

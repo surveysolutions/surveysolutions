@@ -16,7 +16,7 @@
         }
     }
 });
-requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext'],
+requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid'],
 function ($, ko, amplify, _, viewmodel, input, datacontext) {
     ko.validation.configure({
         insertMessages: false,

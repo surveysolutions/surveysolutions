@@ -3,6 +3,7 @@ using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Tests.Utils;
+using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using Ncqrs.Spec;
 using Moq;
@@ -13,6 +14,12 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class QuestionnaireARTests : QuestionnaireARTestContext
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         [TestCase("")]
         [TestCase("   ")]

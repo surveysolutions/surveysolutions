@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.AbstractFactories;
@@ -23,6 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly ICompleteQuestionFactory questionFactory;
 
+        private ILogger logger;
+
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.SingleOption,
@@ -37,6 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             : base()
         {
             this.questionFactory = new CompleteQuestionFactory();
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
       
@@ -162,8 +167,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
+
+        public void CreateInterviewWithFeaturedQuestions(Guid interviewId, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
+        #warning probably a factory should be used here
+        {
+            // TODO: check is it good to create new AR form another?
+            new CompleteQuestionnaireAR(interviewId, this.innerDocument, creator, responsible, featuredAnswers);
+        }
+
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
-#warning probably a factory should be used here
+        #warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
@@ -614,7 +627,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isLegacyEvent)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
                 return;
             }
 

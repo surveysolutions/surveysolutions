@@ -3,7 +3,6 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Collections.Generic;
     using System.Web.Http;
 
     using Core.Supervisor.Views.Summary;
@@ -19,17 +18,15 @@ namespace Web.Supervisor.Controllers
     public class SummaryApiController : BaseApiController
     {
         private readonly IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory;
-        private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
 
         public SummaryApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory, IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
+            IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory)
             : base(commandService, provider, logger)
         {
             this.summaryViewFactory = summaryViewFactory;
-            this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
         }
 
         public SummaryView Summary(SummaryListViewModel data)
@@ -55,13 +52,6 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.summaryViewFactory.Load(input);
-        }
-
-        public IEnumerable<SummaryTemplateViewItem> Templates()
-        {
-            return this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
-                this.GlobalInfo.GetCurrentUser().Id,
-                this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)).Items;
         }
     }
 }

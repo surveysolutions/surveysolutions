@@ -1,8 +1,9 @@
 ﻿using System.Linq;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core.Domain
 {
@@ -27,6 +28,8 @@ namespace Main.Core.Domain
 
         private readonly ICompleteQuestionFactory questionFactory;
 
+        private ILogger logger;
+
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
             QuestionType.SingleOption,
@@ -41,6 +44,7 @@ namespace Main.Core.Domain
             : base()
         {
             this.questionFactory = new CompleteQuestionFactory();
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
       
@@ -166,8 +170,16 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
+
+        public void CreateInterviewWithFeaturedQuestions(Guid interviewId, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
+        #warning probably a factory should be used here
+        {
+            // TODO: check is it good to create new AR form another?
+            new CompleteQuestionnaireAR(interviewId, this.innerDocument, creator, responsible, featuredAnswers);
+        }
+
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
-#warning probably a factory should be used here
+        #warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
@@ -618,7 +630,7 @@ namespace Main.Core.Domain
 
             if (isLegacyEvent)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
                 return;
             }
 

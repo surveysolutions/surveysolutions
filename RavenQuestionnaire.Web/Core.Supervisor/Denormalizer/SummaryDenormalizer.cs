@@ -43,7 +43,9 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var summmaryUserId = evnt.Payload.Responsible.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
+            var questionnaire = this.questionnaires.GetById(evnt.Payload.CompletedQuestionnaireId);
+
+            var summmaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
             var summaryUser = this.summary.GetById(summmaryUserId);
             if (summaryUser != null)
             {
@@ -52,7 +54,7 @@ namespace Core.Supervisor.Denormalizer
                 if (summaryUser.ResponsibleSupervisorId.HasValue)
                 {
                     var summarySupervisorId =
-                        summaryUser.ResponsibleSupervisorId.Value.Combine(evnt.Payload.CompletedQuestionnaireId);
+                        summaryUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
                     var summarySupervisor = this.summary.GetById(summarySupervisorId);
                     summarySupervisor.QuestionnaireStatus = evnt.Payload.Status.PublicId;
 
@@ -101,12 +103,13 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            var summaryUserId = evnt.Payload.Responsible.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
+            var questionnaire = this.questionnaires.GetById(evnt.Payload.CompletedQuestionnaireId);
+
+            var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
             var summaryUser = this.summary.GetById(summaryUserId);
             if (summaryUser == null)
             {
                 var user = this.users.GetById(evnt.Payload.Responsible.Id);
-                var questionnaire = this.questionnaires.GetById(evnt.Payload.CompletedQuestionnaireId);
 
                 summaryUser = new SummaryItem()
                 {
@@ -126,16 +129,16 @@ namespace Core.Supervisor.Denormalizer
             if (evnt.Payload.PreviousResponsible != null)
             {
                 var summaryPrevUserId =
-                    evnt.Payload.PreviousResponsible.Id.Combine(evnt.Payload.CompletedQuestionnaireId);
+                    evnt.Payload.PreviousResponsible.Id.Combine(questionnaire.TemplateId);
                 var summaryPrevUser = this.summary.GetById(summaryPrevUserId);
 
                 if ((summaryUserId != summaryPrevUserId) &&
                     summaryUser.ResponsibleSupervisorId.HasValue && summaryPrevUser.ResponsibleSupervisorId.HasValue)
                 {
                     var summarySupervisorId =
-                        summaryUser.ResponsibleSupervisorId.Value.Combine(evnt.Payload.CompletedQuestionnaireId);
+                        summaryUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
                     var summaryPrevSupervisorId =
-                        summaryPrevUser.ResponsibleSupervisorId.Value.Combine(evnt.Payload.CompletedQuestionnaireId);
+                        summaryPrevUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
 
 
                     var summarySupervisor = this.summary.GetById(summarySupervisorId);
