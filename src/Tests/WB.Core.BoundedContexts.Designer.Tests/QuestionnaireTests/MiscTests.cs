@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class QuestionnaireARTest
+    public class MiscTests
     {
         [Test]
         public void AREventRaisingOnAddGroup()
