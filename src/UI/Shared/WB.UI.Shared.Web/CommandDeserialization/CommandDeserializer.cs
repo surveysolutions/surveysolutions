@@ -1,7 +1,3 @@
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-
 using System;
 using System.Collections.Generic;
 using Ncqrs.Commanding;
@@ -9,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace WB.UI.Shared.Web.CommandDeserialization
 {
-    internal abstract class CommandDeserializer : ICommandDeserializer
+    public abstract class CommandDeserializer : ICommandDeserializer
     {
         protected abstract Dictionary<string, Type> KnownCommandTypes { get; }
         

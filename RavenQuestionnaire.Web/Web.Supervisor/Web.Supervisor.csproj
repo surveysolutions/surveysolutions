@@ -296,6 +296,8 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
+    <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
