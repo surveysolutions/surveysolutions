@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
@@ -26,6 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests
 
         public static void Configure()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             if (NcqrsEnvironment.IsConfigured)
             {
                 return;
