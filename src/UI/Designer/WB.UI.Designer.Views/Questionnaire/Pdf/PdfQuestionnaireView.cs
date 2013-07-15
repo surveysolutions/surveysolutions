@@ -134,34 +134,92 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public void FillFrom(QuestionnaireDocument source)
         {
-            var treeToEnumerable1 = source.Children.TreeToEnumerable1();
-            foreach (IComposite composite in treeToEnumerable1)
+            var children = source.Children ?? new List<IComposite>();
+
+            foreach (var child in children)
             {
-                if (composite is IQuestion)
+                var childGroup = child as IGroup;
+                if (childGroup != null)
                 {
-                    var item = composite as IQuestion;
-                    Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?)null;
-                    this.AddQuestion(new PdfQuestionView 
+                    var pdfGroupView = new PdfGroupView
                     {
-                        Id = item.PublicKey,
-                        Title = item.QuestionText,
-                        Answers = (item.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
-                                    {
-                                        Title = x.AnswerText,
-                                        AnswerType = x.AnswerType,
-                                        AnswerValue = x.AnswerValue
-                                    }).ToList()
-                    }, parentId);
+                        Id = childGroup.PublicKey,
+                        Title = childGroup.Title,
+                        Depth = 1
+                    };
+                    this.AddGroup(pdfGroupView, null);
+                    Fill(pdfGroupView, child);
                 }
-                if (composite is IGroup)
+            }
+
+            //var treeToEnumerable1 = source.Children.TreeToEnumerable1();
+            //foreach (IComposite composite in treeToEnumerable1)
+            //{
+            //    if (composite is IQuestion)
+            //    {
+            //        var item = composite as IQuestion;
+            //        Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?)null;
+            //        if (parentId.HasValue)
+            //        {
+            //            this.AddQuestion(new PdfQuestionView
+            //                {
+            //                    Id = item.PublicKey,
+            //                    Title = item.QuestionText,
+            //                    Answers = (item.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
+            //                        {
+            //                            Title = x.AnswerText,
+            //                            AnswerType = x.AnswerType,
+            //                            AnswerValue = x.AnswerValue
+            //                        }).ToList()
+            //                }, parentId);
+            //        }
+            //    }
+            //    if (composite is IGroup)
+            //    {
+            //        var item = composite as IGroup;
+            //        Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?) null;
+            //        this.AddGroup(new PdfGroupView {
+            //            Id = item.PublicKey,
+            //            Title = item.Title,
+            //            Depth = this.GetEntityDepth(parentId) + 1
+            //        }, parentId);
+            //    }
+            //}
+        }
+
+        private void Fill(PdfGroupView group, IComposite item)
+        {
+            if (item.Children != null)
+            {
+                foreach (var child in item.Children)
                 {
-                    var item = composite as IGroup;
-                    Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?) null;
-                    this.AddGroup(new PdfGroupView {
-                        Id = item.PublicKey,
-                        Title = item.Title,
-                        Depth = this.GetEntityDepth(parentId) + 1
-                    }, parentId);
+                    var childQuestion = child as IQuestion;
+                    var childGroup = child as IGroup;
+                    if (childQuestion != null)
+                    {
+                        this.AddQuestion(new PdfQuestionView
+                        {
+                            Id = childQuestion.PublicKey,
+                            Title = childQuestion.QuestionText,
+                            Answers = (childQuestion.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
+                            {
+                                Title = x.AnswerText,
+                                AnswerType = x.AnswerType,
+                                AnswerValue = x.AnswerValue
+                            }).ToList(),
+                            HasCodition = !string.IsNullOrEmpty(childQuestion.ConditionExpression)
+                        }, item.PublicKey);
+                    }
+                    if (childGroup != null)
+                    {
+                        var pdfGroupView = new PdfGroupView {
+                            Id = childGroup.PublicKey, 
+                            Title = childGroup.Title, 
+                            Depth = this.GetEntityDepth(item.PublicKey) + 1
+                        };
+                        this.AddGroup(pdfGroupView, group.Id);
+                        Fill(pdfGroupView, child);
+                    }
                 }
             }
         }
