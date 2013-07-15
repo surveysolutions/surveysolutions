@@ -49,8 +49,6 @@
   <ItemGroup>
     <Compile Include="Compression\IStringCompressor.cs" />
     <Compile Include="Compression\GZipJsonCompressor.cs" />
-    <Compile Include="Logging\LogManager.cs" />
-    <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

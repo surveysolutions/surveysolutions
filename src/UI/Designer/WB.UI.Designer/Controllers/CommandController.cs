@@ -1,4 +1,8 @@
-﻿using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.UI.Shared.Web;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -9,7 +13,6 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
-    using WB.Core.SharedKernel.Utils.Logging;
     using WB.UI.Designer.Code.Helpers;
     using WB.UI.Designer.Exceptions;
     using WB.UI.Designer.Utils;
@@ -20,12 +23,14 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
+        private readonly ILogger logger;
 
         public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.expressionReplacer = expressionReplacer;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         [HttpPost]
@@ -44,7 +49,7 @@ namespace WB.UI.Designer.Controllers
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    LogManager.GetLogger(this.GetType()).Error("Unexpected error occurred", e);
+                    this.logger.Error("Unexpected error occurred", e);
                     error =
                         string.Format(
                             "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",

@@ -1,8 +1,8 @@
-namespace WB.UI.Designer.Code.Helpers
-{
-    using System;
-    using System.Runtime.Serialization;
+using System;
+using System.Runtime.Serialization;
 
+namespace WB.UI.Shared.Web.CommandDeserialization
+{
     [Serializable]
     internal class CommandDeserializationException : Exception
     {

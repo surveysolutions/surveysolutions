@@ -2,15 +2,13 @@
 {
     using System;
 
-    public class HandshakePackage
+    public class HandshakePackage : BasePackage
     {
         public Guid SyncProcessKey;
         public Guid ClientInstanceKey;
         public Guid ClientRegistrationKey;
         
-        public bool IsErrorOccured;
-        public string ErrorMessage ;
-
+        
         public HandshakePackage()
         {
         }
