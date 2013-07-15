@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ninject.Modules;
+﻿using Ninject.Modules;
+using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.UI.Shared.Web.CommandDeserialization
+namespace WB.UI.Designer.CommandDeserialization
 {
     public class DesignerCommandDeserializationModule : NinjectModule
     {

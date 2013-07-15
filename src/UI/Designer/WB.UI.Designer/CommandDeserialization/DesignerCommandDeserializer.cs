@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Commands.Questionnaire;
-using Main.Core.Commands.Questionnaire.Group;
-using Main.Core.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.UI.Shared.Web.CommandDeserialization
+namespace WB.UI.Designer.CommandDeserialization
 {
     internal class DesignerCommandDeserializer : CommandDeserializer
     {
@@ -30,6 +28,7 @@ namespace WB.UI.Shared.Web.CommandDeserialization
                         {"MoveQuestion", typeof (MoveQuestionCommand)},
                     };
             }
+
         }
     }
 }

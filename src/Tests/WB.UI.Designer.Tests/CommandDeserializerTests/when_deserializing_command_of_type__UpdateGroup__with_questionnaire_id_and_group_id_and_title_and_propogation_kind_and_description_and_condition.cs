@@ -1,12 +1,11 @@
 ﻿using WB.UI.Shared.Web.CommandDeserialization;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 
 namespace WB.UI.Designer.Tests.CommandDeserializerTests
 {
     using System;
 
     using Machine.Specifications;
-
-    using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Entities.SubEntities;
 
     using Ncqrs.Commanding;
