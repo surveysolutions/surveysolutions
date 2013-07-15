@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.Raven;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
+using Web.Supervisor.CommandDeserialization;
 using Web.Supervisor.Injections;
 using WebActivator;
 

@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Injections
@@ -43,12 +44,12 @@ namespace Web.Supervisor.Injections
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return
-                base.GetAssweblysForRegister().Concat(
-                    new[]
-                    {
-                            typeof(IndexViewFactory).Assembly, typeof(QuestionnaireMembershipProvider).Assembly
-                    });
+            return base.GetAssweblysForRegister().Concat(new[]
+            {
+                typeof(IndexViewFactory).Assembly,
+                typeof(QuestionnaireMembershipProvider).Assembly,
+                typeof(ImportQuestionnaireCommand).Assembly,
+            });
         }
 
         protected override object GetReadSideRepositoryReader(IContext context)
