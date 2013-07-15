@@ -192,12 +192,12 @@
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
-    <Compile Include="Code\ObjectExtensions.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
-    <Compile Include="Code\ConfigurationManager\WebConfigHelper.cs" />
+    <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
+    <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -213,8 +213,6 @@
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
     <Compile Include="Code\Exceptions\DesignerPermissionException.cs" />
     <Compile Include="Code\GlobalHelper.cs" />
-    <Compile Include="Code\Helpers\CommandDeserializationException.cs" />
-    <Compile Include="Code\Helpers\CommandDeserializer.cs" />
     <Compile Include="Code\Helpers\Routes\AreaRegistrationContextExtensions.cs" />
     <Compile Include="Code\Helpers\Routes\LowercaseRoute.cs" />
     <Compile Include="Code\Helpers\Routes\RouteCollectionExtensions.cs" />
@@ -224,7 +222,6 @@
     <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Code\Helpers\ICommandDeserializer.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
@@ -559,6 +556,14 @@
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
+      <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
+      <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
+      <Name>WB.Core.BoundedContexts.Designer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

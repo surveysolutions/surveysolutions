@@ -1,4 +1,5 @@
 ﻿using Main.Core.Domain;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -7,8 +8,6 @@ namespace WB.UI.Designer.Controllers
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
-
-    using Main.Core.Commands.Questionnaire;
     using Main.Core.View;
     using Main.Core.View.Question;
 

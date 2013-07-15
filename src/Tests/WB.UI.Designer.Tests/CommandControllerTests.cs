@@ -1,15 +1,16 @@
 ﻿using System;
-using Main.Core.Commands.Questionnaire.Group;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Code.Helpers;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Tests
 {

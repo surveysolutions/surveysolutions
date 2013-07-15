@@ -1,10 +1,12 @@
-﻿
+﻿using WB.UI.Shared.Web;
+
 namespace WB.UI.Designer
 {
+    
     using System.Collections.Specialized;
     using System.Configuration;
 
-    public sealed class AppSettings: WebConfigHelper
+    public sealed class AppSettings : WebConfigHelper
     {
         public static readonly AppSettings Instance = new AppSettings(ConfigurationManager.AppSettings);
 

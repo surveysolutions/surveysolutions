@@ -1,12 +1,13 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.UI.Shared.Web;
+using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Web.Mvc;
-
-    using Main.Core.Commands.Questionnaire.Base;
     using Main.Core.Domain;
 
     using Ncqrs.Commanding;
