@@ -18,7 +18,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
-    public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             QuestionType.AutoPropagate,
         };
 
-        public QuestionnaireAR()
+        public Questionnaire()
             : base()
         {
             this.questionFactory = new CompleteQuestionFactory();
@@ -44,13 +44,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         }
 
       
-        public QuestionnaireAR(Guid publicKey)
+        public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
             this.questionFactory = new CompleteQuestionFactory();
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
+        public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
             : base(publicKey)
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
@@ -69,16 +69,16 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     });
         }
         
-        public  QuestionnaireAR(Guid createdBy, IQuestionnaireDocument source): base(source.PublicKey)
+        public  Questionnaire(Guid createdBy, IQuestionnaireDocument source): base(source.PublicKey)
         {
             ImportQuestionnaire(createdBy, source);
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source) : this(publicKey, title,createdBy,false,source)
+        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source) : this(publicKey, title,createdBy,false,source)
         {
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
+        public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : this(publicKey, title, createdBy, isPublic)
         {
             source.Children.ApplyAction(
