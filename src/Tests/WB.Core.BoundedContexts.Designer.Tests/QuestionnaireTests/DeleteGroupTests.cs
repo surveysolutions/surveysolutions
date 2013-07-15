@@ -1,16 +1,16 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class DeleteGroupTests : QuestionnaireARTestContext {
-
+    public class DeleteGroupTests : QuestionnaireTestsContext
+    {
         [SetUp]
         public void SetUp()
         {
@@ -24,14 +24,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 Guid groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupPublicKey);
 
                 // act
                 Guid parentPublicKey = Guid.NewGuid();
                 questionnaire.NewDeleteGroup(groupPublicKey);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
+                Assert.That(GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
             }
         }
     }

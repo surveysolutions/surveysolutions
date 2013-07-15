@@ -2,77 +2,82 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using Main.Core.Domain;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    public class QuestionnaireARTestContext {
-
+    public class QuestionnaireTestsContext
+    {
         public static T GetSingleEvent<T>(EventContext eventContext)
         {
             return (T)eventContext.Events.Single(e => e.Payload is T).Payload;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireAR()
+        public static T GetLastEvent<T>(EventContext eventContext)
         {
-            return new QuestionnaireAR();
+            return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(Guid questionId)
+        public static Questionnaire CreateQuestionnaire()
         {
-            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId);
+            return new Questionnaire();
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options)
+        public static Questionnaire CreateQuestionnaireWithOneQuestion(Guid questionId)
         {
-            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId, questionType: questionType, options: options);
+            return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId);
         }
 
-        private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")
+        public static Questionnaire CreateQuestionnaireWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options)
         {
-            return new QuestionnaireAR(questionnaireId ?? Guid.NewGuid(), text);
+            return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId, questionType: questionType, options: options);
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey)
+        private static Questionnaire CreateQuestionnaire(Guid? questionnaireId = null, string text = "text of questionnaire")
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionKey);
+            return new Questionnaire(questionnaireId ?? Guid.NewGuid(), text);
+        }
+
+        public static Questionnaire CreateQuestionnaireWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey)
+        {
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionKey);
 
             questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
 
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupId = null, Propagate propagationKind = Propagate.None)
+        public static Questionnaire CreateQuestionnaireWithOneGroup(Guid? questionnaireId = null, Guid? groupId = null, Propagate propagationKind = Propagate.None)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), "Title");
+            Questionnaire questionnaire = CreateQuestionnaire(questionnaireId ?? Guid.NewGuid(), "Title");
 
             questionnaire.NewAddGroup(groupId ?? Guid.NewGuid(), null, "New group", propagationKind, null, null);
 
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneAutoPropagatedGroup(Guid groupId)
+        public static Questionnaire CreateQuestionnaireWithOneAutoPropagatedGroup(Guid groupId)
         {
-            return CreateQuestionnaireARWithOneGroup(groupId: groupId, propagationKind: Propagate.AutoPropagated);
+            return CreateQuestionnaireWithOneGroup(groupId: groupId, propagationKind: Propagate.AutoPropagated);
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneNonPropagatedGroup(Guid groupId)
+        public static Questionnaire CreateQuestionnaireWithOneNonPropagatedGroup(Guid groupId)
         {
-            return CreateQuestionnaireARWithOneGroup(groupId: groupId, propagationKind: Propagate.None);
+            return CreateQuestionnaireWithOneGroup(groupId: groupId, propagationKind: Propagate.None);
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(Guid questionId)
+        public static Questionnaire CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(Guid questionId)
         {
-            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(
+            return CreateQuestionnaireWithOneGroupAndQuestionInIt(
                 questionId: questionId, groupPropagationKind: Propagate.AutoPropagated);
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithOneGroupAndQuestionInIt(Guid questionId, Guid? groupId = null,
+        public static Questionnaire CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid questionId, Guid? groupId = null,
                                                                                        Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text, Option[] options = null)
         {
             groupId = groupId ?? Guid.NewGuid();
 
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupId.Value, groupPropagationKind);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(Guid.NewGuid(), groupId.Value, groupPropagationKind);
 
             questionnaire.NewAddQuestion(questionId,
                                          groupId.Value, "Title", questionType, "text", false, false,
@@ -82,11 +87,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithTwoQuestions(Guid secondQuestionId)
+        public static Questionnaire CreateQuestionnaireWithTwoQuestions(Guid secondQuestionId)
         {
             var groupId = Guid.NewGuid();
 
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(Guid.NewGuid(), groupId);
 
             questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Title", QuestionType.Text, "text", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
@@ -99,27 +104,27 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithTwoGroups(Guid firstGroup, Guid secondGroup)
+        public static Questionnaire CreateQuestionnaireWithTwoGroups(Guid firstGroup, Guid secondGroup)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneNonPropagatedGroup(firstGroup);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(firstGroup);
 
             questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null);
 
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithAutoGroupAndRegularGroup(Guid autoGroupPublicKey, Guid secondGroup)
+        public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroup(Guid autoGroupPublicKey, Guid secondGroup)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupPublicKey);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(autoGroupPublicKey);
 
             questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null);
 
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithAutoGroupAndRegularGroupAndQuestionInIt(Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestoinId)
+        public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionInIt(Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestoinId)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithAutoGroupAndRegularGroup(autoGroupPublicKey, secondGroup);
+            Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey, secondGroup);
 
             questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
@@ -127,10 +132,10 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             return questionnaire;
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithTwoRegularGroupsAndQuestionInLast(Guid firstGroup, Guid autoQuestoinId)
+        public static Questionnaire CreateQuestionnaireWithTwoRegularGroupsAndQuestionInLast(Guid firstGroup, Guid autoQuestoinId)
         {
             var secondGroup = Guid.NewGuid();
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroups(firstGroup, secondGroup);
+            Questionnaire questionnaire = CreateQuestionnaireWithTwoGroups(firstGroup, secondGroup);
             questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
                                          new Guid[0]);
@@ -151,9 +156,9 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 };
         }
 
-        public static QuestionnaireAR CreateQuestionnaireARWithRegularGroupAndRegularGroupInIt(Guid groupId)
+        public static Questionnaire CreateQuestionnaireWithRegularGroupAndRegularGroupInIt(Guid groupId)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneNonPropagatedGroup(groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId);
             
             questionnaire.NewAddGroup(Guid.NewGuid(), groupId, "New group", Propagate.None, null, null);
 

@@ -2,13 +2,14 @@
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class UpdateQuestionnaireTests : QuestionnaireARTestContext
+    public class UpdateQuestionnaireTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -22,7 +23,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         public void UpdateQuestionnaire_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException_with_type_QuestionnaireTitleRequired(string emptyTitle)
         {
             // arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            Questionnaire questionnaire = CreateQuestionnaire();
 
             // act
             TestDelegate act = () => questionnaire.UpdateQuestionnaire(emptyTitle);
@@ -39,7 +40,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 var nonEmptyTitle = "Title";
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
 
                 // act
                 questionnaire.UpdateQuestionnaire(nonEmptyTitle);

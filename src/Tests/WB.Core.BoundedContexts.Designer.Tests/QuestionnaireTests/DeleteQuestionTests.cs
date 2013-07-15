@@ -1,15 +1,15 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class DeleteQuestionTests : QuestionnaireARTestContext
+    public class DeleteQuestionTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -24,14 +24,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 Guid questionId = Guid.NewGuid();
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(questionId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestion(questionId);
 
                 // act
                 Guid parentPublicKey = Guid.NewGuid();
                 questionnaire.NewDeleteQuestion(questionId);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
+                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
             }
         }
     }
