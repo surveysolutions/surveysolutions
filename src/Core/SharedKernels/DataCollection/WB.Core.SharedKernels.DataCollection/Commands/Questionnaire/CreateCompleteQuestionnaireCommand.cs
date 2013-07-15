@@ -1,13 +1,12 @@
-﻿namespace Main.Core.Commands.Questionnaire.Completed
+﻿using System;
+using Main.Core.Domain;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+
+namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
-    using System;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     /// <summary>
     /// The create complete questionnaire command.
     /// </summary>
