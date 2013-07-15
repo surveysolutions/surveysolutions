@@ -7,6 +7,7 @@ using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.Questionnaire.ExportServices;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
@@ -33,7 +34,8 @@ namespace WB.UI.Designer.Code
                         typeof(QuestionnaireView).Assembly, 
                         typeof(DesignerRegistry).Assembly,
                         typeof(AccountAR).Assembly,
-                        typeof(PublicService).Assembly
+                        typeof(PublicService).Assembly,
+                        typeof(Questionnaire).Assembly,
                     });
         }
 

@@ -56,23 +56,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\CompleteQuestionnaireARTest.cs">
       <Link>Domain\CompleteQuestionnaireARTest.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\Configuration.cs">
-      <Link>Domain\Configuration.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\QuestionnaireARTest.cs">
       <Link>Domain\QuestionnaireARTest.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\TestDataConfigurator.cs">
       <Link>Domain\TestDataConfigurator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_creating_a_new_questionnaire.cs">
-      <Link>Domain\when_creating_a_new_questionnaire.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_updating_image.cs">
-      <Link>Domain\when_updating_image.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_uploading_new_image.cs">
-      <Link>Domain\when_uploading_new_image.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\CompleteGroupTest.cs">
       <Link>Entities\CompleteGroupTest.cs</Link>
