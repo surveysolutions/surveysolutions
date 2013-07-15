@@ -155,10 +155,8 @@
     <Compile Include="Commands\Location\CreateLocationCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
