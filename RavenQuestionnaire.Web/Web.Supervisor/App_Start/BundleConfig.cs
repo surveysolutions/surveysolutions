@@ -31,6 +31,8 @@
                     "~/Scripts/jquery.validate.js", 
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"));
 
+            bundles.Add(new StyleBundle("~/css/list").Include("~/Content/listview.css"));
+
             bundles.Add(
                 new ScriptBundle("~/js/list").Include(
                     "~/Scripts/knockout-2.2.1.js",

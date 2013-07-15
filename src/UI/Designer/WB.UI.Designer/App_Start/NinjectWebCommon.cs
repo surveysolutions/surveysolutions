@@ -2,7 +2,6 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using Main.Core;
-using Main.Core.Commands.Questionnaire;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -17,6 +16,8 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Questionnaire.ExportServices;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Shared.Web.CommandDeserialization;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -56,7 +57,7 @@ namespace WB.UI.Designer.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new NLogLoggingModule());
+            var kernel = new StandardKernel(new NLogLoggingModule(), new DesignerCommandDeserializationModule());
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

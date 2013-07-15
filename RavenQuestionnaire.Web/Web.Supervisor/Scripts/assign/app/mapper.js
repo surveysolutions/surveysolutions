@@ -21,7 +21,17 @@
                         return o;
                     }));
                 }
-              
+                switch (item.type()) {
+                    case "SingleOption":
+                    case "MultyOption": break;
+                    case "AutoPropagate":
+                    case "Numeric":
+                        item.selectedOption.extend({ number: true, digit: true });
+                        break;
+                    case "DateTime":
+                        item.selectedOption.extend({ date: true });
+                    case "Text":
+                }
                 return item;
             }
         },
@@ -33,7 +43,7 @@
                     item.id(dto.PublicKey);
                     item.title(dto.Title);
                     item.value(dto.AnswerValue);
-                    item.isSelected(dto.Selected);
+                    item.isSelected(dto.Selected || false);
                     return item;
                 }
             },
