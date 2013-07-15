@@ -12,9 +12,6 @@ namespace WB.UI.Designer.Models
             CanSynchronize = false;
         }
 
-        /// <summary>
-        ///     Gets a value indicating whether can copy.
-        /// </summary>
         public virtual bool CanCopy
         {
             get
@@ -23,34 +20,18 @@ namespace WB.UI.Designer.Models
             }
         }
 
-        /// <summary>
-        ///     Gets a value indicating whether can delete.
-        /// </summary>
         public virtual bool CanDelete { get; set; }
 
-        /// <summary>
-        ///     Gets a value indicating whether can edit.
-        /// </summary>
         public virtual bool CanEdit { get; set; }
 
-        /// <summary>
-        ///     Gets a value indicating whether can preview.
-        /// </summary>
         public virtual bool CanPreview { get; set; }
 
-        /// <summary>
-        ///     Gets a value indicating whether can export.
-        /// </summary>
         public virtual bool CanExport { get; set; }
 
-        /// <summary>
-        ///     Gets a value indicating whether can synchronize.
-        /// </summary>
         public virtual bool CanSynchronize { get; set; }
 
-        /// <summary>
-        ///     Gets a value indicating whether can print.
-        /// </summary>
+        public bool CanExportToPdf { get; set; }
+
         public virtual bool CanPrint
         {
             get

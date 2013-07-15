@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Main.Core.View;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Designer.Providers.CQRS.Accounts.View;
 using WB.UI.Designer.Views.Questionnaire.Pdf;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Views.EventHandler
 {
@@ -27,11 +30,15 @@ namespace WB.UI.Designer.Views.EventHandler
     {
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
         private readonly ILogger logger;
+        private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
 
-        public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter, ILogger logger)
+        public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter, 
+            ILogger logger,
+            IViewFactory<AccountViewInputModel, AccountView> userViewFactory)
         {
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
+            this.userViewFactory = userViewFactory;
         }
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
@@ -206,7 +213,8 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var newQuestionnaire = new PdfQuestionnaireView {
                     Title = @event.Title,
-                    CreationDate = @event.CreationDate
+                    CreationDate = @event.CreationDate,
+                    CreatedBy = userViewFactory.Load(new AccountViewInputModel(@event.CreatedBy)).UserName 
                 };
 
                 return newQuestionnaire;
@@ -245,8 +253,10 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var pdf = new PdfQuestionnaireView();
                 pdf.Title = @event.Source.Title;
-                pdf.FillFrom(@event.Source);
+                pdf.CreationDate = @event.Source.CreationDate;
+                pdf.CreatedBy = userViewFactory.Load(new AccountViewInputModel(@event.Source.CreatedBy)).UserName;
 
+                pdf.FillFrom(@event.Source);
                 return pdf;
             });
         }
