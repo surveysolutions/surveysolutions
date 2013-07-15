@@ -218,7 +218,6 @@
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
-    <Compile Include="Domain\QuestionnaireAR.cs" />
     <Compile Include="Domain\SyncActivityAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="Domain\UserAR.cs" />
