@@ -29,7 +29,7 @@
     <!-- /ko -->
     <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
     @RenderSection("grid", true)
-    <!-- ko if:ListView.Pager().TotalItemCount() > 1 -->
+    <!-- ko if:ListView.Pager().LastPage() > 1 -->
     <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
     <!-- /ko -->
     <!-- /ko -->
