@@ -21,20 +21,7 @@
             this.PageSize = pageSize;
             this.Status = status;
             this.Items = items.ToList();
-
-            var newHeaders = new List<TemplateLight>();
-            foreach (var header in headers)
-            {
-                var dict = new Dictionary<Guid, int>();
-                if (!dict.ContainsKey(header.TemplateId))
-                {
-                    var totalSum = Items.Select(i => i.GetCount(header.TemplateId)).Sum();
-                    dict.Add(header.TemplateId, totalSum);
-                    if (totalSum > 0)
-                        newHeaders.Add(header);
-                }
-            }
-            this.Headers = newHeaders;
+            this.Headers = headers;
         }
 
         public List<TemplateLight> Headers { get; private set; }
