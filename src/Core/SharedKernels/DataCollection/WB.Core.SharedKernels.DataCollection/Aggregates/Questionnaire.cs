@@ -1,6 +1,4 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.AbstractFactories;
@@ -12,11 +10,13 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Logging;
 
-namespace WB.Core.BoundedContexts.Designer.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
@@ -74,8 +74,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ImportQuestionnaire(createdBy, source);
         }
 
-        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source) : this(publicKey, title,createdBy,false,source)
-        {}
+        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
+            : this(publicKey, title,createdBy,false,source) {}
 
         public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : this(publicKey, title, createdBy, isPublic)
