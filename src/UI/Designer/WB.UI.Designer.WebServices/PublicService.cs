@@ -1,11 +1,11 @@
-﻿namespace WB.UI.Designer.WebServices
+﻿using WB.Core.BoundedContexts.Designer.Services;
+
+namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.IO;
 
     using Main.Core.View;
-
-    using WB.Core.Questionnaire.ExportServices;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.WebServices.Questionnaire;
     using WB.UI.Shared.Web.Membership;

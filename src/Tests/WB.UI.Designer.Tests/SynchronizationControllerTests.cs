@@ -8,7 +8,7 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.Questionnaire.ExportServices;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer.Tests

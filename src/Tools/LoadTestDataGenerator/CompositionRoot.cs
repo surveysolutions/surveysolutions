@@ -22,7 +22,6 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Questionnaire.ExportServices;
 using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
