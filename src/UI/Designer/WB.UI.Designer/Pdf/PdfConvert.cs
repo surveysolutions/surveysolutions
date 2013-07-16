@@ -51,8 +51,6 @@ namespace WB.UI.Designer.Pdf
             if (!File.Exists(environment.WkHtmlToPdfPath))
                 throw new PdfConvertException(String.Format("File '{0}' not found. Check if wkhtmltopdf application is installed.", environment.WkHtmlToPdfPath));
 
-           
-
             StringBuilder paramsBuilder = new StringBuilder();
             paramsBuilder.Append("--page-size A4 ");
             //paramsBuilder.Append("--redirect-delay 0 "); not available in latest version
@@ -80,7 +78,6 @@ namespace WB.UI.Designer.Pdf
             }
 
             paramsBuilder.AppendFormat("\"{0}\" \"{1}\"", document.Url, outputPdfFilePath);
-
 
             try
             {
