@@ -1,16 +1,10 @@
 using System;
 using Main.Core.Documents;
-using Main.Core.Domain;
-using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-using Formatting = System.Xml.Formatting;
-
-namespace WB.Core.Questionnaire.ExportServices
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class JsonExportService : IExportService
     {
