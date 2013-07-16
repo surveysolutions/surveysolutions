@@ -10,30 +10,24 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web.Mvc;
 
-    using Core.Supervisor.Views.Status;
-
     using Main.Core.View;
 
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
     using Web.Supervisor.Models;
-    using Web.Supervisor.Models.Chart;
 
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
-        private readonly IViewFactory<StatusViewInputModel, StatusView> statusViewFactory;
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<StatusViewInputModel, StatusView> statusViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
             : base(commandService, provider, logger)
         {
-            this.statusViewFactory = statusViewFactory;
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
         }
@@ -56,35 +50,6 @@ namespace Web.Supervisor.Controllers
         public ActionResult GotoBrowser()
         {
             return this.RedirectToAction("Index");
-        }
-
-        public ActionResult Status(Guid? statusId)
-        {
-            ViewBag.ActivePage = MenuItem.Statuses;
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.statusViewFactory.Load(new StatusViewInputModel()
-            {
-                ViewerId = user.Id,
-                StatusId = statusId
-            });
-            ViewBag.GraphData = new StatusChartModel(model);
-            return this.View(model);
-        }
-
-        public ActionResult StatusViewTable(GridDataRequestModel data)
-        {
-            var user = this.GlobalInfo.GetCurrentUser();
-            var input = new StatusViewInputModel
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                StatusId = data.StatusId,
-                ViewerId = user.Id
-            };
-            var model = this.statusViewFactory.Load(input);
-            ViewBag.GraphData = new StatusChartModel(model);
-            return this.PartialView("_StatusTable", model);
         }
 
         public ActionResult Summary()

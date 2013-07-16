@@ -326,8 +326,6 @@
     <Compile Include="Models\AssignSuveyData.cs" />
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
-    <Compile Include="Models\Chart\ChartModelBase.cs" />
-    <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentRequestModel.cs" />
@@ -341,9 +339,7 @@
     <Compile Include="Models\InterviewerListViewModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
-    <Compile Include="Models\Chart\SurveyChartModel.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
-    <Compile Include="Models\Chart\InterviewerChartModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
@@ -716,7 +712,6 @@
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Interview\_StatusHistory.cshtml" />
-    <Content Include="Views\Shared\_StatusTable.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
     <Content Include="Views\Interview\Approve.cshtml" />
     <Content Include="Views\Shared\AssignPerson.cshtml" />
@@ -728,7 +723,6 @@
     </Content>
     <Content Include="Views\Shared\IndexChart.cshtml" />
     <Content Include="Views\Interview\Redo.cshtml" />
-    <Content Include="Views\HQ\Status.cshtml" />
     <Content Include="Views\Shared\StatusChart.cshtml" />
     <Content Include="Views\HQ\Summary.cshtml" />
     <Content Include="Views\Shared\SummaryChart.cshtml" />

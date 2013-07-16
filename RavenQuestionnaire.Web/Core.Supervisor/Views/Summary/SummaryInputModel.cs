@@ -11,14 +11,8 @@
 
         public ViewerStatus ViewerStatus { get; set; }
 
-        /// <summary>
-        /// Gets or sets ViewerId.
-        /// </summary>
         public Guid ViewerId { get; set; }
 
-        /// <summary>
-        /// Gets or sets TemplateId.
-        /// </summary>
         public Guid? TemplateId { get; set; }
     }
 }

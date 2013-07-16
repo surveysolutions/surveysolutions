@@ -35,10 +35,7 @@ namespace Web.Supervisor.Controllers
                 this.GlobalInfo.GetCurrentUser().Id,
                 this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)
                             {
-                                Orders
-                                    =
-                                    data
-                                    .SortOrder
+                                Orders = data.SortOrder
                             };
             if (data.Pager != null)
             {

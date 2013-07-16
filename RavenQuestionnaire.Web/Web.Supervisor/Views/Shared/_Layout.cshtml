@@ -26,8 +26,7 @@
                                 <i class="icon-filter"></i>Surveys and Questionnaire Statuses</a> </li>
                             <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "HQ")">
                                 <i class="icon-filter"></i>Supervisors and Questionnaire Statuses</a> </li>
-                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "HQ")">
-                                <i class="icon-filter"></i>Supervisors and Surveys</a> </li>
+
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">
                             @Html.ActionLink("Interviews", "Interviews", "HQ")</li>
@@ -61,8 +60,7 @@
                                 <i class="icon-filter"></i>Surveys and Questionnaire Statuses</a> </li>
                             <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">
                                 <i class="icon-filter"></i>Interviewers and Questionnaire Statuses</a> </li>
-                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
-                                <i class="icon-filter"></i>Interviewers and Surveys</a> </li>
+
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">@Html.ActionLink("Interviews", "Interviews", "Survey")</li>
                     <li class="@(page == MenuItem.Teams ? "active" : "")">@Html.ActionLink("Interviewers", "Interviewers", "Team")</li>
@@ -82,7 +80,7 @@
         <div id="wrapper">
             <div id="menu" class="hidden-phone">
                 <div id="menuInner" class="slim-scroll">
-                        @RenderSection("sidebar", false)
+                    @RenderSection("sidebar", false)
                 </div>
             </div>
             <div id="content">
