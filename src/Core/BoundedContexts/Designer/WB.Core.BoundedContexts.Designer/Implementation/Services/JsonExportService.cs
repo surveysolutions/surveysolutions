@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class JsonExportService : IExportService
+    internal class JsonExportService : IJsonExportService
     {
         #warning ViewFactory should be used here
         private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage;
