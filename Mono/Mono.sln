@@ -103,7 +103,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernel", "SharedKerne
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Τests", "Τests", "{BB8E8409-ADEC-49D2-BC5D-D7F9519DEA5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Backup", "WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj", "{A134F8E7-42C7-4804-8177-D11178600CAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Backup", "..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj", "{A134F8E7-42C7-4804-8177-D11178600CAA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GenericSubdomains", "GenericSubdomains", "{C08A680F-4C96-45EE-811E-3E18A8DE7F48}"
 EndProject
