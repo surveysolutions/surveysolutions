@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class MoveGroupTests : QuestionnaireARTestContext
+    public class MoveGroupTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -27,7 +25,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             // Arrange
             var groupId = Guid.NewGuid();
             var targetAutoPropagateGroupId = Guid.NewGuid();
-            var questionnaire = CreateQuestionnaireARWithChapterWithRegularAndAutoPropagateGroup(targetAutoPropagateGroupId, groupId);
+            var questionnaire = CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(targetAutoPropagateGroupId, groupId);
 
             // Act
             TestDelegate act = () => questionnaire.MoveGroup(groupId, targetAutoPropagateGroupId, 0);
@@ -45,7 +43,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // Arrange
                 var moveAutoPropagateGroupId = Guid.NewGuid();
                 var targetRegularGroupId = Guid.NewGuid();
-                var questionnaire = CreateQuestionnaireARWithChapterWithRegularAndAutoPropagateGroup(moveAutoPropagateGroupId, targetRegularGroupId);
+                var questionnaire = CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(moveAutoPropagateGroupId, targetRegularGroupId);
 
                 // Act
                 questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0);
@@ -55,11 +53,11 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             }
         }
 
-        private QuestionnaireAR CreateQuestionnaireARWithChapterWithRegularAndAutoPropagateGroup(Guid autoPropagateGroupId, Guid regularGroupId)
+        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(Guid autoPropagateGroupId, Guid regularGroupId)
         {
             var chapterId = Guid.NewGuid();
             
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), chapterId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(Guid.NewGuid(), chapterId);
 
             questionnaire.NewAddGroup(autoPropagateGroupId, chapterId, "autoPropagateGroup", Propagate.AutoPropagated, null, null);
 

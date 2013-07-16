@@ -1,4 +1,6 @@
-﻿namespace Web.CAPI.Controllers
+﻿using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+
+namespace Web.CAPI.Controllers
 {
     using System;
     using System.Collections.Generic;

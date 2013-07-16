@@ -2,16 +2,16 @@
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Tests.Utils;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class NewAddGroupTests : QuestionnaireARTestContext
+    public class NewAddGroupTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -25,7 +25,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         public void NewAddGroup_When_groups_title_is_empty_or_whitespaces_Then_throws_DomainException(string emptyTitle)
         {
             // arrange
-            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+            Questionnaire questionnaire = CreateQuestionnaire();
 
             // act
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, emptyTitle, Propagate.None, null, null);
@@ -41,14 +41,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
                 string notEmptyNewTitle = "Some new title";
 
                 // act
                 questionnaire.NewAddGroup(Guid.NewGuid(), null, notEmptyNewTitle, Propagate.None, null, null);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
+                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
             }
         }
 
@@ -57,8 +57,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // arrange
             var parentAutoPropagateGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
-            questionnaire.AddChapter().AddGroup(parentAutoPropagateGroupId, propagationKind: Propagate.AutoPropagated);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(parentAutoPropagateGroupId);
 
             // act
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), parentAutoPropagateGroupId, "Title", Propagate.None, null, null);
@@ -75,14 +74,13 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
-                questionnaire.AddChapter().AddGroup(parentRegularGroupId, propagationKind: Propagate.None);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(parentRegularGroupId);
 
                 // act
                 questionnaire.NewAddGroup(Guid.NewGuid(), parentRegularGroupId, "Title", Propagate.None, null, null);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
+                Assert.That(GetLastEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
             }
         }
 
@@ -90,7 +88,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         public void NewAddGroup_When_groups_propagation_kind_is_unsupported_Then_throws_DomainException()
         {
             // arrange
-            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+            Questionnaire questionnaire = CreateQuestionnaire();
             var unsupportedPropagationKing = Propagate.Propagated;
 
             // act
@@ -108,13 +106,13 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
 
                 // act
                 questionnaire.NewAddGroup(Guid.NewGuid(), null, "Title", supportedPopagationKind, null, null);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewGroupAdded>(eventContext).Paropagateble, Is.EqualTo(supportedPopagationKind));
+                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).Paropagateble, Is.EqualTo(supportedPopagationKind));
             }
         }
     }

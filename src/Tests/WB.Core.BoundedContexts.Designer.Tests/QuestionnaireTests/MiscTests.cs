@@ -1,48 +1,26 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using Ncqrs.Eventing;
+using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Questionnaire;
-
-    using Ncqrs.Eventing;
-    using Ncqrs.Spec;
-
-    using NUnit.Framework;
-
-    /// <summary>
-    /// The questionnaire ar test.
-    /// </summary>
     [TestFixture]
-    public class QuestionnaireARTest
+    public class MiscTests
     {
-        #region Fields
-
-        /// <summary>
-        /// The document.
-        /// </summary>
-        private TestDataConfigurator configurator;
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The ar event raising on add group.
-        /// </summary>
         [Test]
         public void AREventRaisingOnAddGroup()
         {
             Guid key = Guid.NewGuid();
 
             string title = "test q";
-            var questionnaire = new QuestionnaireAR(key, title);
+            var questionnaire = new Questionnaire(key, title);
 
             using (var ctx = new EventContext())
             {
@@ -77,16 +55,13 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        /// <summary>
-        /// The AR event raising on add question.
-        /// </summary>
         [Test]
         public void AREventRaisingOnAddQuestion()
         {
             Guid key = Guid.NewGuid();
 
             string title = "test q 22";
-            var questionnaire = new QuestionnaireAR(key, title);
+            var questionnaire = new Questionnaire(key, title);
 
             Guid groupPublicKey = Guid.NewGuid();
             questionnaire.NewAddGroup(groupPublicKey, null, "title", Propagate.None, "description", null);
@@ -150,9 +125,6 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        /// <summary>
-        /// The ar event raising on created.
-        /// </summary>
         [Test]
         public void AREventRaisingOnCreated()
         {
@@ -162,7 +134,7 @@ namespace Main.Core.Tests.Domain
 
             using (var ctx = new EventContext())
             {
-                var questionnaire = new QuestionnaireAR(key, title);
+                var questionnaire = new Questionnaire(key, title);
 
                 Assert.True(ctx.Events.Count() == 1);
 
@@ -182,9 +154,6 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        /// <summary>
-        /// The ar event raising on update questionnaire.
-        /// </summary>
         [Test]
         public void AREventRaisingOnUpdateQuestionnaire()
         {
@@ -192,7 +161,7 @@ namespace Main.Core.Tests.Domain
 
             string title = "test q";
             string title1 = "test q";
-            var questionnaire = new QuestionnaireAR(key, title);
+            var questionnaire = new Questionnaire(key, title);
 
             using (var ctx = new EventContext())
             {
@@ -215,17 +184,10 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        /// <summary>
-        /// The create objects.
-        /// </summary>
         [SetUp]
         public void CreateObjects()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-
-            this.configurator = new TestDataConfigurator();
         }
-
-        #endregion
     }
 }

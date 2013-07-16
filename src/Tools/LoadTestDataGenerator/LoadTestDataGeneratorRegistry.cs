@@ -8,6 +8,7 @@ using Raven.Client.Document;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
@@ -35,13 +36,12 @@ namespace LoadTestDataGenerator
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return
-                base.GetAssweblysForRegister()
-                    .Concat(new[]
-                    {
-                        typeof(LoadTestDataGeneratorRegistry).Assembly,
-                        typeof(CompleteQuestionnaireDenormalizer).Assembly
-                    });
+            return base.GetAssweblysForRegister().Concat(new[]
+            {
+                typeof(LoadTestDataGeneratorRegistry).Assembly,
+                typeof(CompleteQuestionnaireDenormalizer).Assembly,
+                typeof(Questionnaire).Assembly,
+            });
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
