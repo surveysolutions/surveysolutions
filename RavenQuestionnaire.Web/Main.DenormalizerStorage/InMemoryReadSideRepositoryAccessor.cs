@@ -55,6 +55,11 @@ namespace Main.DenormalizerStorage
            repository.Values.Where(query.Compile()).AsQueryable();
         }
 
+        public IQueryable<TResult> QueryWithIndex<TResult>(Type index)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Remove(Guid id)
         {
             lock (locker)

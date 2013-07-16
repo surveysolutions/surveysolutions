@@ -1,6 +1,11 @@
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Web.Configuration;
+using Core.Supervisor.RavenIndexes;
 using Core.Supervisor.Views.Index;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
@@ -94,6 +99,11 @@ namespace Web.Supervisor.Injections
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
             
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
+
+
+            var store = Kernel.Get<DocumentStore>();
+            var catalog = new CompositionContainer(new AssemblyCatalog(typeof(SummaryItemByTemplate).Assembly));
+            IndexCreation.CreateIndexes(catalog, store.DatabaseCommands.ForDatabase("Views"), store.Conventions);
         }
     }
 }

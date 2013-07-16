@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Supervisor.RavenIndexes;
 using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -24,48 +25,52 @@ namespace Core.Supervisor.Views.Summary
 
         public SummaryView Load(SummaryInputModel input)
         {
-            IEnumerable<SummaryItem> items = Enumerable.Empty<SummaryItem>();
-           /* return this.summary.Query(
-                _ =>
-                {*/
-                    if (input.ViewerStatus == ViewerStatus.Headquarter)
-                    {
-                        items = summary.QueryAll(x => x.ResponsibleSupervisorId == null);
-                    }
-                    else if (input.ViewerStatus == ViewerStatus.Supervisor)
-                    {
-                        items = summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId);
-                    }
+            var items =
+                summary.QueryWithIndex<SummaryItem>(typeof (SummaryItemByInterviewer));
 
-                    if (input.TemplateId.HasValue)
-                    {
-                        items = summary.QueryAll(x => x.TemplateId == input.TemplateId);
-                    }
+            if (input.ViewerStatus == ViewerStatus.Headquarter)
+            {
+                items = items.Where(x => x.ResponsibleSupervisorId == null);
+            }
+            else if (input.ViewerStatus == ViewerStatus.Supervisor)
+            {
+                items = items.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+            }
+            
+            if (input.TemplateId.HasValue)
+            {
+                items = items.Where(x => x.TemplateId == input.TemplateId);
+            }
+            else
+            {
+                items = items.Where(x => x.TemplateId != Guid.Empty);
+            }
 
-                    var all = items.GroupBy(
-                        x => x.ResponsibleId,
-                        y => y,
-                        (x, y) =>
-                            new SummaryViewItem()
-                            {
-                                User = new UserLight(x, y.FirstOrDefault().ResponsibleName),
-                                Template = new TemplateLight(y.FirstOrDefault().TemplateId, string.Empty),
-                                Approved = y.Sum(z => z.ApprovedCount),
-                                Completed = y.Sum(z => z.CompletedCount),
-                                Error = y.Sum(z => z.CompletedWithErrorsCount),
-                                Initial = y.Sum(z => z.InitialCount),
-                                Redo = y.Sum(z => z.RedoCount),
-                                Unassigned = y.Sum(z => z.UnassignedCount),
-                                Total = y.Sum(z => z.TotalCount)
-                            }).AsQueryable().OrderUsingSortExpression(input.Order);
+            var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
+                           .Take(input.PageSize).ToList().Select(y =>
+                                                                         new SummaryViewItem()
+                                                                             {
+                                                                                 User =
+                                                                                     new UserLight(y.ResponsibleId,
+                                                                                                   y.ResponsibleName),
+                                                                                 Template =
+                                                                                     new TemplateLight(y.TemplateId,
+                                                                                                       string.Empty),
+                                                                                 Approved = y.ApprovedCount,
+                                                                                 Completed = y.CompletedCount,
+                                                                                 Error = y.CompletedWithErrorsCount,
+                                                                                 Initial = y.InitialCount,
+                                                                                 Redo = y.RedoCount,
+                                                                                 Unassigned = y.UnassignedCount,
+                                                                                 Total = y.TotalCount
+                                                                             }).ToList();
 
-                    return new SummaryView()
-                    {
-                        TotalCount = all.Count(),
-                        Items =
-                            all.Skip((input.Page - 1)*input.PageSize)
-                                .Take(input.PageSize),
-                        ItemsSummary = new SummaryViewItem()
+            return new SummaryView()
+                {
+                    TotalCount = all.Count(),
+                    Items =
+                        all,
+                    ItemsSummary = new SummaryViewItem()
                         {
                             User = new UserLight(Guid.Empty, "Summary"),
                             Total = all.Sum(x => x.Total),
@@ -76,8 +81,7 @@ namespace Core.Supervisor.Views.Summary
                             Redo = all.Sum(x => x.Redo),
                             Unassigned = all.Sum(x => x.Unassigned)
                         }
-                    };
-               // });
+                };
         }
     }
 }

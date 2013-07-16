@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Supervisor.DenormalizerStorageItem;
+using Core.Supervisor.RavenIndexes;
 using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -22,25 +23,28 @@ namespace Core.Supervisor.Views.Survey
 
         public SurveysView Load(SurveysInputModel input)
         {
-            IEnumerable<SummaryItem> items = Enumerable.Empty<SummaryItem>();
-        /*    return this._summary.Query(
-                _ =>
-                {*/
+            var items =
+                _summary.QueryWithIndex<SummaryItem>(typeof (SummaryItemByTemplate));
+      
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        items = _summary.QueryAll(x => x.ResponsibleSupervisorId == null);
+                        items = items.Where(x => x.ResponsibleSupervisorId == null);
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        items = _summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        items = items.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
 
                     if (input.UserId.HasValue)
                     {
-                        items = _summary.QueryAll(x => x.ResponsibleId == input.UserId);
+                        items = items.Where(x => x.ResponsibleId == input.UserId);
+                    }
+                    else
+                    {
+                        items = items.Where(x => x.ResponsibleId == Guid.Empty);
                     }
 
-                    var all = items.ToList().GroupBy(
+                /*    var all = items.ToList().GroupBy(
                         x => x.TemplateId,
                         y => y,
                         (x, y) =>
@@ -54,13 +58,24 @@ namespace Core.Supervisor.Views.Survey
                                 Redo = y.Sum(z => z.RedoCount),
                                 Unassigned = y.Sum(z => z.UnassignedCount),
                                 Total = y.Sum(z => z.TotalCount)
-                            }).AsQueryable().OrderUsingSortExpression(input.Order);
+                            }).AsQueryable().OrderUsingSortExpression(input.Order);*/
+                    var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).Select(y => new SurveysViewItem()
+                {
+                    Template = new TemplateLight(y.TemplateId, y.TemplateName),
+                    Approved = y.ApprovedCount,
+                    Completed = y.CompletedCount,
+                    Error = y.CompletedWithErrorsCount,
+                    Initial = y.InitialCount,
+                    Redo = y.RedoCount,
+                    Unassigned = y.UnassignedCount,
+                    Total = y.TotalCount
+                }).ToList();
 
                     return new SurveysView()
                     {
                         TotalCount = all.Count(),
                         Items =
-                            all.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize),
+                            all,
                         ItemsSummary = new SurveysViewItem(
                             new TemplateLight(Guid.Empty, "Summary"),
                             all.Sum(x => x.Total),
