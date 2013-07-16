@@ -28,7 +28,7 @@
 
 @section filters
 {
-    <ul class="nav nav-list">
+    <ul>
         <li class="nav-header">FILTER</li>
         <li class="divider"></li>
         <li>
@@ -87,6 +87,7 @@
     <table class="table table-striped table-bordered table-condensed table-hover table-break-words">
         <thead>
             <tr>
+                <th></th>
                 <!-- ko if:SelectedTemplate() == '' -->
                 <th>Featured Questions</th>
                 <!-- /ko -->
@@ -106,6 +107,7 @@
         <tbody>
             <!-- ko foreach:ListView.Items -->
             <tr>
+                <td></td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
                 <!-- /ko -->

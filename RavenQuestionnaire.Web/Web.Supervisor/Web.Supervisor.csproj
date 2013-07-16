@@ -292,6 +292,7 @@
     <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
+    <Compile Include="Controllers\StatusApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\SurveysApiController.cs" />
@@ -326,6 +327,8 @@
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\StatusListViewModel.cs" />
+    <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentRequestModel.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
@@ -499,6 +502,7 @@
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\query-string.js" />
+    <Content Include="Scripts\vm\statuslistview.js" />
     <Content Include="Scripts\vm\documentlistview.js" />
     <Content Include="Scripts\vm\userlistview.js" />
     <Content Include="Scripts\vm\surveylistview.js" />
@@ -561,6 +565,8 @@
     <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
+    <Content Include="Views\Survey\Status.cshtml" />
+    <Content Include="Views\HQ\Status.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

@@ -194,6 +194,10 @@
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\Status\StatusFactory.cs" />
+    <Compile Include="Views\Status\StatusView.cs" />
+    <Compile Include="Views\Status\StatusViewInputModel.cs" />
+    <Compile Include="Views\Status\StatusViewItem.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />

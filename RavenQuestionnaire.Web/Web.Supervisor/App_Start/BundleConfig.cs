@@ -26,14 +26,14 @@
             bundles.Add(new StyleBundle("~/css/main").Include(
                 "~/Content/css/bootstrap.css",
                 "~/Content/css/bootstrap.icon-large.css",
-                "~/Content/css/bootstrap-responsive.css",
+                //"~/Content/css/bootstrap-responsive.css",
                 "~/Content/supervisor.css",
                 "~/Content/main.css"));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
                 "~/Content/css/bootstrap.css",
                 "~/Content/css/bootstrap.icon-large.min.css",
-                "~/Content/css/bootstrap-responsive.css",
+                //"~/Content/css/bootstrap-responsive.css",
                  "~/Content/main-not-logged.css"));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(

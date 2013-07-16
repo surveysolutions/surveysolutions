@@ -71,60 +71,6 @@ namespace Web.Supervisor.Controllers
             return this.View(Filters());
         }
 
-        private DocumentFilter Filters()
-        {
-            var statuses = new List<SurveyStatusViewItem>()
-            {
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Unknown.PublicId,
-                    StatusName = SurveyStatus.Unknown.Name
-                },
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Unassign.PublicId,
-                    StatusName = SurveyStatus.Unassign.Name
-                },
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Initial.PublicId,
-                    StatusName = SurveyStatus.Initial.Name
-                },
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Redo.PublicId,
-                    StatusName = SurveyStatus.Redo.Name
-                },
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Complete.PublicId,
-                    StatusName = SurveyStatus.Complete.Name
-                },
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Error.PublicId,
-                    StatusName = SurveyStatus.Error.Name
-                },
-                new SurveyStatusViewItem()
-                {
-                    StatusId = SurveyStatus.Approve.PublicId,
-                    StatusName = SurveyStatus.Approve.Name
-                }
-            };
-
-            var viewerId = this.GlobalInfo.GetCurrentUser().Id;
-            var viewerStatus = ViewerStatus.Headquarter;
-
-            return new DocumentFilter()
-            {
-                Responsibles =
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
-                Templates =
-                    this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(viewerId, viewerStatus)).Items,
-                Statuses = statuses
-            };
-        }
-
         public ActionResult TakeNew(Guid id)
         {
             Guid key = id;
@@ -186,6 +132,62 @@ namespace Web.Supervisor.Controllers
             ViewBag.ActivePage = MenuItem.Summary;
             return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
                 this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Headquarter)).Items);
+        }
+
+        public ActionResult Status()
+        {
+            ViewBag.ActivePage = MenuItem.Statuses;
+            return this.View(SurveyStatusViewItems());
+        }
+
+        private DocumentFilter Filters()
+        {
+            var statuses = SurveyStatusViewItems();
+
+            var viewerId = this.GlobalInfo.GetCurrentUser().Id;
+            var viewerStatus = ViewerStatus.Headquarter;
+
+            return new DocumentFilter()
+            {
+                Responsibles =
+                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
+                Templates =
+                    this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(viewerId, viewerStatus)).Items,
+                Statuses = statuses
+            };
+        }
+
+        private IEnumerable<SurveyStatusViewItem> SurveyStatusViewItems()
+        {
+            var statuses = new List<SurveyStatusViewItem>()
+                {
+                    new SurveyStatusViewItem()
+                        {
+                            StatusId = SurveyStatus.Initial.PublicId,
+                            StatusName = SurveyStatus.Initial.Name
+                        },
+                    new SurveyStatusViewItem()
+                        {
+                            StatusId = SurveyStatus.Redo.PublicId,
+                            StatusName = SurveyStatus.Redo.Name
+                        },
+                    new SurveyStatusViewItem()
+                        {
+                            StatusId = SurveyStatus.Complete.PublicId,
+                            StatusName = SurveyStatus.Complete.Name
+                        },
+                    new SurveyStatusViewItem()
+                        {
+                            StatusId = SurveyStatus.Error.PublicId,
+                            StatusName = SurveyStatus.Error.Name
+                        },
+                    new SurveyStatusViewItem()
+                        {
+                            StatusId = SurveyStatus.Approve.PublicId,
+                            StatusName = SurveyStatus.Approve.Name
+                        }
+                };
+            return statuses;
         }
     }
 }

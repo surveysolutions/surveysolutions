@@ -1,0 +1,65 @@
+﻿@using System.Web.Optimization
+@model IEnumerable<Core.Supervisor.Views.Survey.SurveyStatusViewItem>
+@{
+    Layout = "~/Views/Shared/_ListViewLayout.cshtml";
+}
+@{
+    ViewBag.Title = "Status";
+}
+
+
+@section scripts
+{
+    @Scripts.Render("~/Scripts/vm/statuslistview.js")
+    @Html.Partial("_ListViewStatusesScript")
+
+    <script type="text/javascript">
+        var $surveysUrl = '@Url.Action("Surveys", "HQ")';
+        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
+        $(function () {
+            var model = new StatusListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "StatusApi", action = "Status" })');
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
+@section header
+{
+    <h3 class="sinle-line-header">Supervisors and Surveys.</h3>
+}
+
+@section filters
+{
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
+        <li>Status:
+            <select data-bind="value: SelectedStatus">
+                <option>Any</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.StatusId">@item.StatusName</option>
+                }
+            </select>
+        </li>
+    </ul>
+}
+
+@section grid
+{
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:ListView.Items -->
+            <tr>
+               <td></td>
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+}
+
