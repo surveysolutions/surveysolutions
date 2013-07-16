@@ -1,18 +1,17 @@
 ﻿using System;
 using Main.Core.Domain;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Tests.Utils;
 using Microsoft.Practices.ServiceLocation;
-using NUnit.Framework;
-using Ncqrs.Spec;
 using Moq;
 using Ncqrs;
+using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class QuestionnaireARTests : QuestionnaireARTestContext
+    public class ConstructorTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -29,7 +28,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             // arrange
 
             // act
-            TestDelegate act = () => new QuestionnaireAR(Guid.NewGuid(), emptyTitle);
+            TestDelegate act = () => new Questionnaire(Guid.NewGuid(), emptyTitle);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -45,10 +44,10 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 var publicKey = Guid.NewGuid();
 
                 // act
-                new QuestionnaireAR(publicKey, "title");
+                new Questionnaire(publicKey, "title");
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
             }
         }
 
@@ -61,10 +60,10 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 var title = "title, the";
 
                 // act
-                new QuestionnaireAR(Guid.NewGuid(), title);
+                new Questionnaire(Guid.NewGuid(), title);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
             }
         }
 
@@ -80,10 +79,10 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 NcqrsEnvironment.SetDefault(clockStub);
 
                 // act
-                new QuestionnaireAR(Guid.NewGuid(), "some title");
+                new Questionnaire(Guid.NewGuid(), "some title");
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
             }
         }
     }

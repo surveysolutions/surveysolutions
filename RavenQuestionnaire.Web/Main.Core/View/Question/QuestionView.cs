@@ -171,8 +171,6 @@ namespace Main.Core.View.Question
         /// </summary>
         public string Title { get; set; }
 
-        public ICompositeView ParentView { get; private set; }
-
         /// <summary>
         /// Gets or sets the validation expression.
         /// </summary>

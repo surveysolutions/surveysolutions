@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace Web.Supervisor.CommandDeserialization

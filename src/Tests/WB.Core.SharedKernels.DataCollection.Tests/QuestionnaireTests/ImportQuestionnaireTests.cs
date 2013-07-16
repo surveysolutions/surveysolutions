@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    public class ImportQuestionnaireTests
+    public class ImportQuestionnaireTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -26,14 +24,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
                 var newState = new QuestionnaireDocument();
 
                 // act
                 questionnaire.ImportQuestionnaire(Guid.NewGuid(),newState);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
+                Assert.That(GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
             }
         }
 
@@ -44,7 +42,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
                 Mock<IQuestionnaireDocument> docMock = new Mock<IQuestionnaireDocument>();
                 // act
                 TestDelegate act =
