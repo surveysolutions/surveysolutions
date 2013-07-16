@@ -1,7 +1,6 @@
 using System;
-using Main.Core.Documents;
 
-namespace WB.Core.Questionnaire.ExportServices
+namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IExportService
     {
