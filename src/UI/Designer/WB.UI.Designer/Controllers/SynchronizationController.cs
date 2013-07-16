@@ -17,14 +17,14 @@ namespace WB.UI.Designer.Controllers
     public class SynchronizationController : BaseController
     {
         private readonly ICommandService commandService;
-        private readonly IExportService exportService;
+        private readonly IJsonExportService exportService;
         private readonly IStringCompressor zipUtils;
 
         public SynchronizationController(
             ICommandService commandService, 
             IMembershipUserService userHelper, 
             IStringCompressor zipUtils, 
-            IExportService exportService)
+            IJsonExportService exportService)
             : base(userHelper)
         {
             this.commandService = commandService;

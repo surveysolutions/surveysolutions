@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Tests
     {
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IStringCompressor> ZipUtilsMock;
-        protected Mock<IExportService> ExportServiceMock;
+        protected Mock<IJsonExportService> ExportServiceMock;
         protected Mock<IMembershipUserService> UserHelperMock;
         
         [SetUp]
@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Tests
         {
             CommandServiceMock=new Mock<ICommandService>();
             ZipUtilsMock = new Mock<IStringCompressor>();
-            ExportServiceMock = new Mock<IExportService>();
+            ExportServiceMock = new Mock<IJsonExportService>();
             UserHelperMock=new Mock<IMembershipUserService>();
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }

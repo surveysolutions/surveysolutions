@@ -12,13 +12,13 @@ namespace WB.UI.Designer.WebServices
 
     public class PublicService : IPublicService
     {
-        private readonly IExportService exportService;
+        private readonly IJsonExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
 
         public PublicService(
-            IExportService exportService,
+            IJsonExportService exportService,
             IStringCompressor zipUtils, 
             IMembershipUserService userHelper,
             IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)

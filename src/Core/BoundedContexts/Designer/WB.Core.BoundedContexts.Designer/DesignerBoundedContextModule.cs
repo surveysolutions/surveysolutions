@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer
     {
         public override void Load()
         {
-            this.Bind<IExportService>().To<JsonExportService>().InSingletonScope();
+            this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
         }
     }
 }
