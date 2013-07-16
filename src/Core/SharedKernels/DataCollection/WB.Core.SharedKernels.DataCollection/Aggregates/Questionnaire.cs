@@ -1,28 +1,24 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.AbstractFactories;
+using Main.Core.Documents;
+using Main.Core.Domain;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.Extensions;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
 using Ncqrs.Domain;
-
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
 
-namespace Main.Core.Domain
+namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.AbstractFactories;
-    using Main.Core.Documents;
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.Extensions;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.Events.Questionnaire;
-    using Main.Core.Utility;
-
-    
-    using Ncqrs;
-
-    public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
@@ -40,7 +36,7 @@ namespace Main.Core.Domain
             QuestionType.AutoPropagate,
         };
 
-        public QuestionnaireAR()
+        public Questionnaire()
             : base()
         {
             this.questionFactory = new CompleteQuestionFactory();
@@ -48,13 +44,13 @@ namespace Main.Core.Domain
         }
 
       
-        public QuestionnaireAR(Guid publicKey)
+        public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
             this.questionFactory = new CompleteQuestionFactory();
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
+        public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
             : base(publicKey)
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
@@ -73,15 +69,15 @@ namespace Main.Core.Domain
                     });
         }
         
-        public  QuestionnaireAR(Guid createdBy, IQuestionnaireDocument source): base(source.PublicKey)
+        public  Questionnaire(Guid createdBy, IQuestionnaireDocument source): base(source.PublicKey)
         {
             ImportQuestionnaire(createdBy, source);
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
+        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
             : this(publicKey, title,createdBy,false,source) {}
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
+        public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : this(publicKey, title, createdBy, isPublic)
         {
             source.Children.ApplyAction(

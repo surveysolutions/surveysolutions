@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
+using Main.Core.Domain;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace Main.Core.Commands.Questionnaire.Completed
+namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
-    using System;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "CreateInterviewWithFeaturedQuestions")]
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CreateInterviewWithFeaturedQuestions")]
     public class CreateInterviewWithFeaturedQuestionsCommand : CommandBase
     {
         public CreateInterviewWithFeaturedQuestionsCommand(Guid interviewId, Guid questionnaireId, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)

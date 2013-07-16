@@ -104,9 +104,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\ChangeStatusCommand.cs">
       <Link>Commands\Questionnaire\Completed\ChangeStatusCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\CreateNewAssigment.cs">
       <Link>Commands\Questionnaire\Completed\CreateNewAssigment.cs</Link>
     </Compile>
@@ -268,9 +265,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\LocationAR.cs">
       <Link>Domain\LocationAR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\QuestionnaireAR.cs">
-      <Link>Domain\QuestionnaireAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\SyncProcessAR.cs">
       <Link>Domain\SyncProcessAR.cs</Link>

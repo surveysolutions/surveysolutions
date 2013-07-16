@@ -1,15 +1,15 @@
 ﻿using System;
-using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Spec;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace Main.Core.Tests.Domain.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
     [TestFixture]
-    public class MoveQuestionnaireItemTests : QuestionnaireARTestContext
+    public class MoveQuestionnaireItemTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -23,14 +23,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
                 var publicKey = Guid.NewGuid();
 
                 // act
                 questionnaire.MoveQuestionnaireItem(publicKey, null, null);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionnaireItemMoved>(eventContext).PublicKey, Is.EqualTo(publicKey));
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).PublicKey, Is.EqualTo(publicKey));
             }
         }
 
@@ -40,14 +40,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
                 var groupPublicKey = Guid.NewGuid();
 
                 // act
                 questionnaire.MoveQuestionnaireItem(Guid.NewGuid(), groupPublicKey, null);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionnaireItemMoved>(eventContext).GroupKey, Is.EqualTo(groupPublicKey));
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).GroupKey, Is.EqualTo(groupPublicKey));
             }
         }
 
@@ -57,14 +57,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
+                Questionnaire questionnaire = CreateQuestionnaire();
                 var afterItemPublicKey = Guid.NewGuid();
 
                 // act
                 questionnaire.MoveQuestionnaireItem(Guid.NewGuid(), null, afterItemPublicKey);
 
                 // assert
-                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionnaireItemMoved>(eventContext).AfterItemKey, Is.EqualTo(afterItemPublicKey));
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).AfterItemKey, Is.EqualTo(afterItemPublicKey));
             }
         }
     }

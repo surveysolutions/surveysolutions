@@ -57,6 +57,20 @@
     <Compile Include="NcqrsEnvironmentConfiguration.cs" />
     <Compile Include="CreateQuestionnaireCommandTests\when_creating_a_new_questionnaire.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\DeleteImageTests.cs" />
+    <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\MoveQuestionnaireItemTests.cs" />
+    <Compile Include="QuestionnaireTests\NewAddGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\NewAddQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\NewUpdateGroupTests.cs" />
+    <Compile Include="QuestionnaireTests\NewUpdateQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\MiscTests.cs" />
+    <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
+    <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
+    <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -75,6 +89,10 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
       <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

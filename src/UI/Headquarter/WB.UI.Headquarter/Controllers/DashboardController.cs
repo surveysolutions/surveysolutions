@@ -1,5 +1,6 @@
 ﻿using Main.Core.View;
 using Main.Core.View.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace WB.UI.Headquarter.Controllers
 {
