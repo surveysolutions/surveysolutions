@@ -304,7 +304,6 @@
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
@@ -361,19 +360,11 @@
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.icon-large.css" />
-    <Content Include="Content\bootstrap.icon-large.min.css" />
-    <Content Include="Content\bootstrap\bootstrap-editable.css" />
-    <Content Include="Content\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.icon-large.css" />
+    <Content Include="Content\css\bootstrap-responsive.css" />
+    <Content Include="Content\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap\bootstrap.css" />
-    <Content Include="Content\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
@@ -567,6 +558,9 @@
     <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
+    <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -644,15 +638,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Dashboard\Interviewers.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\Questionnaires.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\Survey.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Survey\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -700,7 +685,6 @@
     <Content Include="Views\Shared\Chart.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
-    <Content Include="Views\Survey\Status.cshtml" />
     <Content Include="Views\ImportExport\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
