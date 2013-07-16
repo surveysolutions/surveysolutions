@@ -11,7 +11,7 @@
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
-        $(function() {
+        $(function () {
 
             var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })');
 
@@ -29,26 +29,20 @@
 @section filters
 {
     <ul>
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
-        <li>
-            <div class="row-fluid">Template:</div>
-            <div class="row-fluid">
+        <li class="heading"><span>FILTER</span></li>
+        <li>Template:
                 <select data-bind="value: SelectedTemplate">
-                     @if (Model.Templates.Count() > 1)
-                     {
-                         <option value="">Any</option>
-                     }
+                    @if (Model.Templates.Count() > 1)
+                    {
+                        <option value="">Any</option>
+                    }
                     @foreach (var item in Model.Templates)
                     {
                         <option value="@item.TemplateId">@item.TemplateName</option>
                     }
                 </select>
-            </div>
         </li>
-        <li>
-            <div class="row-fluid">Responsible:</div>
-            <div class="row-fluid">
+        <li>Responsible:
                 <select data-bind="value: SelectedResponsible">
                     @if (Model.Responsibles.Count() > 1)
                     {
@@ -59,11 +53,8 @@
                         <option value="@item.UserId">@item.UserName</option>
                     }
                 </select>
-            </div>
         </li>
-        <li>
-            <div class="row-fluid">Status:</div>
-            <div class="row-fluid">
+        <li>Status:
                 <select data-bind="value: SelectedStatus">
                     <option value="">Any</option>
                     @foreach (var item in Model.Statuses)
@@ -71,7 +62,6 @@
                         <option value="@item.StatusId">@item.StatusName</option>
                     }
                 </select>
-            </div>
         </li>
         <li>
             <label class="checkbox">
@@ -94,13 +84,13 @@
                 <!-- ko ifnot:SelectedTemplate() == '' -->
                 <!-- ko if:ListView.Items().length > 0-->
                 <!-- ko foreach:ListView.Items()[0].FeaturedQuestions -->
-                <th data-bind='sortby : Question(), text: Question'></th>
+                <th data-bind='sortby: Question(), text: Question'></th>
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
-                <th data-bind='sortby : "Responsible.Name"'>Responsible</th>
-                <th data-bind='sortby : "LastEntryDate"'>Last Update</th>
-                <th data-bind='sortby : "Status.Name"'>Status</th>
+                <th data-bind='sortby: "Responsible.Name"'>Responsible</th>
+                <th data-bind='sortby: "LastEntryDate"'>Last Update</th>
+                <th data-bind='sortby: "Status.Name"'>Status</th>
                 <th></th>
             </tr>
         </thead>
