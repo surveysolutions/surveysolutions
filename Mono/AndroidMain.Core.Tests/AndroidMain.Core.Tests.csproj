@@ -137,7 +137,7 @@
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>

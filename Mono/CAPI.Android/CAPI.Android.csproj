@@ -321,7 +321,7 @@
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>
       <Name>Mono.Android.Crasher</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
