@@ -26,12 +26,11 @@
 
 @section filters
 {
-    <ul class="nav nav-list">
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
         <li>
-            <div class="row-fluid">Template:</div>
-            <div class="row-fluid">
+            Template:
+            
                 <select data-bind="value: SelectedTemplate">
                     <option value="">Any</option>
                     @foreach (var item in Model.Templates)
@@ -39,11 +38,11 @@
                         <option value="@item.TemplateId">@item.TemplateName</option>
                     }
                 </select>
-            </div>
+            
         </li>
         <li>
-            <div class="row-fluid">Responsible:</div>
-            <div class="row-fluid">
+            Responsible:
+            
                 <select data-bind="value: SelectedResponsible">
                     <option value="">Any</option>
                     @foreach (var item in Model.Responsibles)
@@ -51,11 +50,11 @@
                         <option value="@item.UserId">@item.UserName</option>
                     }
                 </select>
-            </div>
+            
         </li>
         <li>
-            <div class="row-fluid">Status:</div>
-            <div class="row-fluid">
+            Status:
+            
                 <select data-bind="value: SelectedStatus">
                     <option value="">Any</option>
                     @foreach (var item in Model.Statuses)
@@ -63,7 +62,6 @@
                         <option value="@item.StatusId">@item.StatusName</option>
                     }
                 </select>
-            </div>
         </li>
         <li>
             <label class="checkbox">

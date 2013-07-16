@@ -1,0 +1,98 @@
+﻿@using System.Web.Optimization
+@using Web.Supervisor.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")" />
+    @{
+        var page = ViewBag.ActivePage ?? MenuItem.Logon;
+    }
+    @Styles.Render("~/css/main")
+    @RenderSection("styles", false)
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="navbar main hidden-print">
+            @if (User.IsInRole("Headquarter"))
+            {
+                <a class="appbrand" href="@Url.Action("Index", "HQ")"><span>Dashboard<span>headquarter</span></span></a>
+                <ul class="topnav pull-right" role="menu">
+                    <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Surveys", "HQ")">
+                                <i class="icon-filter"></i>Surveys and Questionnaire Statuses</a> </li>
+                            <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "HQ")">
+                                <i class="icon-filter"></i>Supervisors and Questionnaire Statuses</a> </li>
+                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "HQ")">
+                                <i class="icon-filter"></i>Supervisors and Surveys</a> </li>
+                        </ul>
+                        <li class="@(page == MenuItem.Docs ? "active" : "")">
+                            @Html.ActionLink("Interviews", "Interviews", "HQ")</li>
+                    <li class="@(page == MenuItem.Teams ? "active" : "")">
+                        @Html.ActionLink("Supervisors", "Index", "Team")
+                    </li>
+                    <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Import template", "Import", "Template")</li>
+                            <li>@Html.ActionLink("Create new assigment", "Questionnaires", "Dashboard")</li>
+                            <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                        </ul>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <a class="brand" href="@Url.Action("Index", "Survey")"><span>Dashboard<span>supervisor</span></span></a>
+                <ul class="nav" role="menu">
+                    <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
+                                <i class="icon-filter"></i>Surveys and Questionnaire Statuses</a> </li>
+                            <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">
+                                <i class="icon-filter"></i>Interviewers and Questionnaire Statuses</a> </li>
+                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
+                                <i class="icon-filter"></i>Interviewers and Surveys</a> </li>
+                        </ul>
+                        <li class="@(page == MenuItem.Docs ? "active" : "")">@Html.ActionLink("Interviews", "Interviews", "Survey")</li>
+                    <li class="@(page == MenuItem.Teams ? "active" : "")">@Html.ActionLink("Interviewers", "Interviewers", "Team")</li>
+                </ul>
+                <div class="pull-right">
+                    <ul class="nav pull-right" role="menu">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+        <div id="wrapper">
+            <div id="menu" class="hidden-phone">
+                <div id="menuInner" class="slim-scroll">
+                        @RenderSection("sidebar", false)
+                </div>
+            </div>
+            <div id="content">
+                <div id="backdrop"></div>
+                <div>@Html.Partial("_alerts")</div>
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/js/main")
+    @RenderSection("scripts", false)
+</body>
+</html>

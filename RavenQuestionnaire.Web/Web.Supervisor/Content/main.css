@@ -1,8 +1,4 @@
-﻿body
-{
-	padding-top: 40px;
-}
-.pull-right #menu li
+﻿.pull-right #menu li
 {
 	float: right;
 }

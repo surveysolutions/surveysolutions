@@ -1,60 +1,49 @@
 ﻿@using System.Web.Optimization
 @{
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    @Styles.Render("~/css/list")
 }
 
 @section scripts
 {
-    @Styles.Render("~/css/list")
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
 }
-<div class="container-fluid">
-    <div class="row-fluid">
-        @RenderSection("header", false)        
+@section sidebar{
+    @RenderSection("filters", false)
+}
+
+@RenderSection("header", false)
+@RenderSection("gridnavigation", false)
+<div id="list">
+    <!-- ko ifnot:ListView.IsPageLoaded()  -->
+    <p class="text-center">
+        Loading. Please wait...
+    </p>
+    <!-- /ko -->
+    <!-- ko if:ListView.IsPageLoaded()  -->
+    <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
+    <p class="text-center">
+        No results found
+    </p>
+    <!-- /ko -->
+    <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
+    <div class="innerLR">
+        @RenderSection("grid", true)
+        <!-- ko: if TotalItemCount() > 1 -->
+            <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+         <!-- /ko -->
     </div>
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="well">
-                @RenderSection("filters", false)
-            </div>
-        </div>
-        <div class="span9">
-            @RenderSection("gridnavigation", false)
-            <div id="list">
-                <!-- ko ifnot:ListView.IsPageLoaded()  -->
-                <p class="text-center">
-                    Loading. Please wait...
-                </p>
-                <!-- /ko -->
-                <!-- ko if:ListView.IsPageLoaded()  -->
-                <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
-                <p class="text-center">
-                    No results found
-                </p>
-                <!-- /ko -->
-                <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
-                @RenderSection("grid", true)
-                <div class="pagination pull-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
-                <!-- /ko -->
-                <!-- /ko -->
-            </div>
-            @this.RenderBody()
-        </div>
-    </div>
+    <!-- /ko -->
+    <!-- /ko -->
 </div>
+@this.RenderBody()
 
 <script type="text/html" id="tpl-pager">
-    @*<div class="pagexofx">
-        <span data-bind="text: FirstItemIndex"></span>
-        -
-        <span data-bind="text: LastItemIndex"></span>
-        of
-        <strong>
-            <span data-bind="text: TotalItemCount"></span>
-        </strong>
-        results
-    </div>*@
+    
     <ul>
         <!-- ko if:CurrentPage() === 1 -->
         <li class="disabled">
@@ -101,4 +90,5 @@
             <a href="#" class="disabledPage">&raquo;&raquo;</a></li>
         <!-- /ko -->
     </ul>
+   
 </script>
