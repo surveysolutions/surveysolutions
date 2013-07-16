@@ -74,9 +74,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             ImportQuestionnaire(createdBy, source);
         }
 
-        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source) : this(publicKey, title,createdBy,false,source)
-        {
-        }
+        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
+            : this(publicKey, title,createdBy,false,source) {}
 
         public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : this(publicKey, title, createdBy, isPublic)

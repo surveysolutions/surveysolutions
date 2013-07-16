@@ -638,7 +638,6 @@
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
-    <Compile Include="View\CompositeViewExtensions.cs" />
     <Compile Include="View\Device\DeviceItemView.cs" />
     <Compile Include="View\Device\DeviceItemViewFactory.cs" />
     <Compile Include="View\Device\DeviceItemViewInputModel.cs" />

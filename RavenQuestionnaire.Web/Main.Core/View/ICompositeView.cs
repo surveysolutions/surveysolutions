@@ -14,8 +14,5 @@ namespace Main.Core.View
         Guid PublicKey { get; set; }
 
         string Title { get; set; }
-
-        [IgnoreDataMember]
-        ICompositeView ParentView { get; }
     }
 }
