@@ -14,15 +14,18 @@ header {
 h1 {
     font-weight: bold;
     font-size: 120%;
+    page-break-after: avoid;
 }
 h2 {
     font-weight: bold;
     font-style: italic;
     font-size: 100%;
+    page-break-after: avoid;
 }
-h3, h4, h5, h6 {
+h3, h4 {
     font-weight: normal;
     font-size: 100%;
+    page-break-after: avoid;
 }
 .answer-options {
     list-style-type: none;
