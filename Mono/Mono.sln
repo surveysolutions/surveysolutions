@@ -109,6 +109,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GenericSubdomains", "Generi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{76A886CA-A397-4DC1-BE95-73E927A66F29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Logging.AndroidLogger", "..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj", "{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -352,6 +354,12 @@ Global
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -409,5 +417,6 @@ Global
 		{A134F8E7-42C7-4804-8177-D11178600CAA} = {B8C5AD16-6C09-44B4-828F-94E6BDD76C86}
 		{C96EA28A-CDC4-468B-B111-D54B4C6C00C1} = {36B354FC-83B0-439D-8702-269342C18E91}
 		{AE5B9E45-0758-47AA-AFB4-E2795F09F850} = {76A886CA-A397-4DC1-BE95-73E927A66F29}
+		{A3369307-FDFA-4CD2-9FF4-6A7E23C47DD6} = {76A886CA-A397-4DC1-BE95-73E927A66F29}
 	EndGlobalSection
 EndGlobal
