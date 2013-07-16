@@ -4,8 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using Raven.Client;
 using Raven.Client.Document;
-
+using Raven.Client.Indexes;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Index;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -92,6 +93,18 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             {
                 return session.Query<TEntity>()
                               .Where(query);
+            }
+        }
+
+        public IQueryable<TResult> QueryWithIndex<TResult>(Type index)
+        {
+            if (!typeof(AbstractIndexCreationTask).IsAssignableFrom(index))
+            {
+                throw new ArgumentException("only AbstractIndexCreationTask can be passed as an index");
+            }
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return session.Query<TResult>(index.Name.Replace("_","/"));
             }
         }
 
