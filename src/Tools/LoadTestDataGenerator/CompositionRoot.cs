@@ -16,6 +16,7 @@ using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Ninject.Modules;
 using Raven.Client.Document;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
@@ -36,7 +37,8 @@ namespace LoadTestDataGenerator
                 new NinjectSettings { InjectNonPublic = true },
                 new RavenInfrastructureModule(),
                 new SynchronizationModule(),
-                new NLogLoggingModule()
+                new NLogLoggingModule(),
+                new DesignerBoundedContextModule()
             );
             
             RegisterServices(kernel);
@@ -57,8 +59,6 @@ namespace LoadTestDataGenerator
             NcqrsInit.InitializeEventStore = (store, pageSize) => new BatchedRavenDBEventStore(store, pageSize);
 
             NcqrsInit.Init(kernel);
-
-            kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IReadSideRepositoryReader<QuestionnaireDocument>>()));
             
             kernel.Load<MainModule>();
         }
