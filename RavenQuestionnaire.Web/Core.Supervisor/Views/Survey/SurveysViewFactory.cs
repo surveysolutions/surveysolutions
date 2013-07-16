@@ -26,18 +26,26 @@ namespace Core.Supervisor.Views.Survey
             var items =
                 _summary.QueryWithIndex<SummaryItem>(typeof (SummaryItemByTemplate));
       
-                    if (input.ViewerStatus == ViewerStatus.Headquarter)
+                    /*if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
                         items = items.Where(x => x.ResponsibleSupervisorId == null);
                     }
-                    else if (input.ViewerStatus == ViewerStatus.Supervisor)
+                    else*/ if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
                         items = items.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
                     }
 
                     if (input.UserId.HasValue)
                     {
-                        items = items.Where(x => x.ResponsibleId == input.UserId);
+                        if (input.ViewerStatus == ViewerStatus.Headquarter)
+                        {
+                            items = items.Where(x => x.ResponsibleSupervisorId == input.UserId && x.ResponsibleId == Guid.Empty);
+                        }
+                        else
+                        {
+                            items = items.Where(x => x.ResponsibleId == input.UserId);
+                        }
+                        
                     }
                     else
                     {
