@@ -23,9 +23,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Surveys", "HQ")">
-                                <i class="icon-filter"></i>Surveys and Questionnaire Statuses</a> </li>
+                                <i class="icon-filter"></i>Surveys and Statuses</a> </li>
                             <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "HQ")">
-                                <i class="icon-filter"></i>Supervisors and Questionnaire Statuses</a> </li>
+                                <i class="icon-filter"></i>Supervisors and Statuses</a> </li>
 
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">
@@ -57,9 +57,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
-                                <i class="icon-filter"></i>Surveys and Questionnaire Statuses</a> </li>
+                                <i class="icon-filter"></i>Surveys and Statuses</a> </li>
                             <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">
-                                <i class="icon-filter"></i>Interviewers and Questionnaire Statuses</a> </li>
+                                <i class="icon-filter"></i>Interviewers and Statuses</a> </li>
 
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">@Html.ActionLink("Interviews", "Interviews", "Survey")</li>
