@@ -67,7 +67,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{D02E77D7-B275-4D21-A59F-38DAE0552611}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.GenericSubdomains.Logging.NLog", "Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj", "{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}"
-EndProjectProject("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernels", "SharedKernels", "{FD680D46-007F-4452-B149-A2AD16B00628}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernels", "SharedKernels", "{FD680D46-007F-4452-B149-A2AD16B00628}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataCollection", "DataCollection", "{CA99323A-7AE6-424F-BC62-1070F29D9C24}"
