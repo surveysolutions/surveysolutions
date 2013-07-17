@@ -73,31 +73,6 @@ namespace Core.Supervisor.Tests.Views
 
         }
 
-        [Test]
-        public void Ctor_When_two_items_Then_summary_Rows_contains_total_number_of_all_questionnaries()
-        {
-            // arrange
-            var templateId = Guid.NewGuid();
-            var questionnarie1Count = 1;
-            var questionnarie2Count = 2;
-            var header = new List<TemplateLight>() {new TemplateLight(templateId, "test")};
-            var items = new StatusViewItem[]
-                {
-                    new StatusViewItem(new UserLight(Guid.NewGuid(), "user"),
-                                       new Dictionary<Guid, int>() {{templateId, questionnarie1Count}}),
-                    new StatusViewItem(new UserLight(Guid.NewGuid(), "user2"),
-                                       new Dictionary<Guid, int>() {{templateId, questionnarie2Count}})
-                };
-
-            // act
-            StatusView target = CreateStatusViewWithHeaderAndItems(header, items);
-
-            // assert
-            Assert.That(target.Summary.GetCount(templateId), Is.EqualTo(questionnarie1Count + questionnarie2Count));
-            Assert.That(target.Summary.User.Id, Is.EqualTo(Guid.Empty));
-
-        }
-
         private static StatusView CreateStatusViewWithHeaderAndItems(List<TemplateLight> header, IEnumerable<StatusViewItem> items)
         {
             return new StatusView(0, 10, SurveyStatus.Initial,
