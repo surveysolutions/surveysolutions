@@ -190,6 +190,7 @@
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
     <Compile Include="Denormalizer\UserDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
+    <Compile Include="RavenIndexes\SummaryForHQItemByInterviewer.cs" />
     <Compile Include="RavenIndexes\SummaryItemByTemplate.cs" />
     <Compile Include="RavenIndexes\SummaryItemByInterviewer.cs">
       <SubType>Code</SubType>

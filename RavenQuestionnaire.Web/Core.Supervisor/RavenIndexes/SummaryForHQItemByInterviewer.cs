@@ -4,20 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Supervisor.DenormalizerStorageItem;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View.Questionnaire;
-using Ncqrs.Commanding.CommandExecution.Mapping.Fluent;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
 namespace Core.Supervisor.RavenIndexes
 {
-    public class SummaryItemByInterviewer : AbstractMultiMapIndexCreationTask<SummaryItem>
+    public class SummaryForHQItemByInterviewer : AbstractMultiMapIndexCreationTask<SummaryItem>
     {
-        public SummaryItemByInterviewer()
+        public SummaryForHQItemByInterviewer()
         {
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId != null
+                                        where doc.ResponsibleSupervisorId == null
                                         select new
                                             {
                                                 doc.ResponsibleId,
@@ -34,7 +31,7 @@ namespace Core.Supervisor.RavenIndexes
                                             });
 
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId != null
+                                        where doc.ResponsibleSupervisorId == null
                                         select new
                                             {
                                                 doc.ResponsibleId,
@@ -70,6 +67,5 @@ namespace Core.Supervisor.RavenIndexes
             Index(x => x.ResponsibleSupervisorId, FieldIndexing.Analyzed);
             Index(x => x.TemplateId, FieldIndexing.Analyzed);
         }
-
     }
 }

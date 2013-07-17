@@ -25,16 +25,16 @@ namespace Core.Supervisor.Views.Summary
 
         public SummaryView Load(SummaryInputModel input)
         {
-            var items =
-                indexAccessor.Query<SummaryItem>(typeof (SummaryItemByInterviewer).Name);
+            IQueryable<SummaryItem> items = Enumerable.Empty<SummaryItem>().AsQueryable();
+               
 
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
-                items = items.Where(x => x.ResponsibleSupervisorId == null);
+                items = indexAccessor.Query<SummaryItem>(typeof(SummaryForHQItemByInterviewer).Name);
             }
             else if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
-                items = items.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                items = indexAccessor.Query<SummaryItem>(typeof(SummaryItemByInterviewer).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId);
             }
             
             if (input.TemplateId.HasValue)
@@ -43,7 +43,7 @@ namespace Core.Supervisor.Views.Summary
             }
             else
             {
-                items = items.Where(x => x.TemplateId != Guid.Empty);
+                items = items.Where(x => x.TemplateId == Guid.Empty);
             }
 
             var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
