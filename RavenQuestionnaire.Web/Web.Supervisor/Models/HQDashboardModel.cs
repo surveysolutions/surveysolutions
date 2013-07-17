@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Core.Supervisor.Views.User;
 using Main.Core.View.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Models
 {

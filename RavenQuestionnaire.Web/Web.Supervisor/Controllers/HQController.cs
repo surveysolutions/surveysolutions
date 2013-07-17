@@ -6,6 +6,7 @@ using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Controllers
 {

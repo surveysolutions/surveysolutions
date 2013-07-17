@@ -1,11 +1,10 @@
-namespace Main.Core.View.Questionnaire
+using System;
+using System.Collections.Generic;
+using Main.Core.Entities;
+using Main.Core.Utility;
+
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities;
-    using Main.Core.Utility;
-
     /// <summary>
     /// The questionnaire browse input model.
     /// </summary>
