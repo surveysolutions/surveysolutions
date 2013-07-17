@@ -195,6 +195,7 @@
     <Compile Include="RavenIndexes\SummaryItemByInterviewer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RavenIndexes\SummaryItemForHQByTemplate.cs" />
     <Compile Include="SyncCacher\ISyncCacher.cs" />
     <Compile Include="SyncCacher\SyncCacher.cs" />
     <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
