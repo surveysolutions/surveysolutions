@@ -1,37 +1,32 @@
 using System;
-
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Main.Core.EventHandlers
+namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.Document
 {
-    using Ncqrs.Eventing;
-
-    public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                             IEventHandler<NewGroupAdded>,
-                                             IEventHandler<GroupCloned>,
-                                             IEventHandler<QuestionnaireItemMoved>,
-                                             IEventHandler<QuestionDeleted>,
-                                             IEventHandler<NewQuestionAdded>,
-                                             IEventHandler<QuestionCloned>,
-                                             IEventHandler<QuestionChanged>,
-                                             IEventHandler<ImageUpdated>,
-                                             IEventHandler<ImageUploaded>,
-                                             IEventHandler<ImageDeleted>,
-                                             IEventHandler<GroupDeleted>,
-                                             IEventHandler<GroupUpdated>,
-                                             IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>,
+    public class QuestionnaireDenormalizer :
+        IEventHandler<NewQuestionnaireCreated>,
+        IEventHandler<NewGroupAdded>,
+        IEventHandler<GroupCloned>,
+        IEventHandler<QuestionnaireItemMoved>,
+        IEventHandler<QuestionDeleted>,
+        IEventHandler<NewQuestionAdded>,
+        IEventHandler<QuestionCloned>,
+        IEventHandler<QuestionChanged>,
+        IEventHandler<ImageUpdated>,
+        IEventHandler<ImageUploaded>,
+        IEventHandler<ImageDeleted>,
+        IEventHandler<GroupDeleted>,
+        IEventHandler<GroupUpdated>,
+        IEventHandler<QuestionnaireUpdated>,
+        IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>
     {
 

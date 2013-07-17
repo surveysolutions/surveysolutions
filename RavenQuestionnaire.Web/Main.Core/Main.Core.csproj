@@ -409,8 +409,6 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\AggregateRootEvent.cs">
       <SubType>Code</SubType>
     </Compile>

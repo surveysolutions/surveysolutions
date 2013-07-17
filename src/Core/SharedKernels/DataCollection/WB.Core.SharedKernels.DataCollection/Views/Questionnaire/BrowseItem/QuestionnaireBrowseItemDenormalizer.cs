@@ -1,43 +1,23 @@
-﻿using Main.Core.Documents;
+﻿using System;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View.Questionnaire;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Main.Core.EventHandlers
+namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
+    public class QuestionnaireBrowseItemDenormalizer :
+        IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<TemplateImported>,
-                                                       IEventHandler<QuestionnaireUpdated>,
+        IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>
     {
-        #region Fields
-
-        /// <summary>
-        /// The document storage.
-        /// </summary>
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
         public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
         {
             this.documentStorage = documentStorage;
         }
-
-        #endregion
-
-        #region Implementation of IEventHandler<in NewQuestionnaireCreated>
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
@@ -52,11 +32,6 @@ namespace Main.Core.EventHandlers
                 evnt.EventSourceId);
         }
 
-        #endregion
-
-
-        #region Implementation of IEventHandler<in QuestionnaireUpdated>
-
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
             var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
@@ -66,8 +41,6 @@ namespace Main.Core.EventHandlers
                 browseItem.IsPublic = evnt.Payload.IsPublic;
             }
         }
-
-        #endregion
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
