@@ -95,18 +95,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public IQueryable<TResult> QueryWithIndex<TResult>(Type index)
-        {
-            if (!typeof(AbstractIndexCreationTask).IsAssignableFrom(index))
-            {
-                throw new ArgumentException("only AbstractIndexCreationTask can be passed as an index");
-            }
-            using (IDocumentSession session = this.OpenSession())
-            {
-                return session.Query<TResult>(index.Name.Replace("_","/"));
-            }
-        }
-
         private void ThrowIfRepositoryIsNotAccessible()
         {
             if (this.readSideStatusService.AreViewsBeingRebuiltNow())
