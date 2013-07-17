@@ -15,6 +15,7 @@ namespace Core.Supervisor.RavenIndexes
         public SummaryItemByTemplate()
         {
             AddMap<SummaryItem>(docs => from doc in docs
+                                        where doc.ResponsibleSupervisorId!=null
                                         select new
                                         {
                                             doc.ResponsibleId,
@@ -32,6 +33,7 @@ namespace Core.Supervisor.RavenIndexes
                                         });
 
             AddMap<SummaryItem>(docs => from doc in docs
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                         {
                                             ResponsibleId = Guid.Empty,
