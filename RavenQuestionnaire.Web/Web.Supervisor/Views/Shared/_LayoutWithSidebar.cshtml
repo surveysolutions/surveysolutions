@@ -1,0 +1,24 @@
+﻿@using System.Web.Optimization
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    @RenderSection("styles", false)
+}
+@section scripts
+{
+    @RenderSection("scripts", false)
+}
+<div id="wrapper">
+    <div id="menu" class="hidden-phone">
+        <div id="menuInner" class="slim-scroll">
+            @RenderSection("sidebar", false)
+        </div>
+    </div>
+    <div id="content">
+        <div id="backdrop"></div>
+        <div>@Html.Partial("_alerts")</div>
+        @RenderBody()
+    </div>
+</div>

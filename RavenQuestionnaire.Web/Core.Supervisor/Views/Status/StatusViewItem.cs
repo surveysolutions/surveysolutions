@@ -12,49 +12,33 @@
     /// </summary>
     public class StatusViewItem
     {
-        #region Constructors and Destructors
-
+        public class StatusViewItemData
+        {
+            public Guid TemplateId { get; set; }
+            public int Count { get; set; }
+        }
         public StatusViewItem(
             UserLight userLight, Dictionary<Guid, int> templateGroup)
         {
             this.templateGroup = templateGroup;
+            this.CountersByTemplate = templateGroup.Select(k => new StatusViewItemData{ TemplateId = k.Key, Count = k.Value}).ToList();
             this.User = userLight;
-         /*   this.Items = new Dictionary<Guid, int>();
 
-            foreach (TemplateLight header in headers)
-            {
-                this.Items.Add(
-                    header.TemplateId, templateGroup.ContainsKey(header.TemplateId) ? templateGroup[header.TemplateId] : 0);
-            }*/
-
-            this.Total = this.templateGroup.Values.Sum();
+            this.Total = templateGroup.Values.Sum();
         }
 
-        private Dictionary<Guid, int> templateGroup;
-        #endregion
+        private readonly Dictionary<Guid, int> templateGroup;
 
         public int GetCount(Guid templateId)
         {
             return templateGroup.ContainsKey(templateId) ? templateGroup[templateId] : 0;
         }
 
-        #region Public Properties
+        public List<StatusViewItemData> CountersByTemplate;
 
-      /*  /// <summary>
-        /// Gets or sets Items.
-        /// </summary>
-        public Dictionary<Guid, int> Items { get; set; }*/
-
-        /// <summary>
-        /// Gets or sets Total.
-        /// </summary>
         public int Total { get; set; }
 
-        /// <summary>
-        /// Gets or sets user.
-        /// </summary>
         public UserLight User { get; set; }
 
-        #endregion
     }
 }

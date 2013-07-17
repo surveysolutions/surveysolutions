@@ -1,4 +1,6 @@
-﻿using Core.Supervisor.Views;
+﻿using System.Linq;
+using Core.Supervisor.Views;
+using Core.Supervisor.Views.Status;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
@@ -15,23 +17,23 @@ namespace Web.Supervisor.Controllers
     using Web.Supervisor.Models;
 
     [Authorize(Roles = "Headquarter, Supervisor")]
-    public class SummaryApiController : BaseApiController
+    public class StatusApiController : BaseApiController
     {
-        private readonly IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory;
+        private readonly IViewFactory<StatusViewInputModel, StatusView> summaryViewFactory;
 
-        public SummaryApiController(
+        public StatusApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IViewFactory<SummaryInputModel, SummaryView> summaryViewFactory)
+            IViewFactory<StatusViewInputModel, StatusView> summaryViewFactory)
             : base(commandService, provider, logger)
         {
             this.summaryViewFactory = summaryViewFactory;
         }
 
-        public SummaryView Summary(SummaryListViewModel data)
+        public StatusView Status(StatusListViewModel data)
         {
-            var input = new SummaryInputModel(
+            var input = new StatusViewInputModel(
                 this.GlobalInfo.GetCurrentUser().Id,
                 this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)
                             {
@@ -45,7 +47,7 @@ namespace Web.Supervisor.Controllers
 
             if (data.Request != null)
             {
-                input.TemplateId = data.Request.TemplateId;
+                input.StatusId = data.Request.StatusId;
             }
 
             return this.summaryViewFactory.Load(input);

@@ -22,15 +22,14 @@
 
 @section header
 {
-    <h2 class="sinle-line-header">Surveys and Questionnaire Statuses</h2>
+    <h3>Surveys and Statuses</h3>
 }
 
 @section filters
 {
-    <ul class="nav nav-list">
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
-        <li>Supervisors:
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
+        <li class="filter">Supervisors:
             <select data-bind="value: SelectedUser">
                 <option>Any</option>
                 @foreach (var item in Model)
@@ -44,48 +43,38 @@
 
 @section grid
 {
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <th data-bind='sortby : "Template.Title"'>Survey Name</th>
-                <th data-bind='sortby : "Unassigned"'>Unassigned</th>
-                <th data-bind='sortby : "Initial"'>Initial</th>
-                <th data-bind='sortby : "Redo"'>Redo</th>
-                <th data-bind='sortby : "Completed"'>Completed</th>
-                <th data-bind='sortby : "Error"'>Completed with Errors</th>
-                <th data-bind='sortby : "Approved"'>Approved</th>
-                <th data-bind='sortby : "Total"'>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach:ListView.Items -->
-            <tr>
-                <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template.TemplateId() }, text: Template.Title"></a>
-                </td>
-                <td data-bind="template: { name: 'unassignedTemplate' }"></td>
-                <td data-bind="template: { name: 'initialTemplate' }"></td>
-                <td data-bind="template: { name: 'redoTemplate' }"></td>
-                <td data-bind="template: { name: 'completedTemplate' }"></td>
-                <td data-bind="template: { name: 'errorTemplate' }"></td>
-                <td data-bind="template: { name: 'approvedTemplate' }"></td>
-                <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template.TemplateId() }, text: Total"></a>
-                </td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko if:ListView.ItemsSummary != null -->
-            <tr data-bind="with: ListView.ItemsSummary">
-                <th data-bind="text: Template.Title"></th>
-                <th data-bind="text: Unassigned"></th>
-                <th data-bind="text: Initial"></th>
-                <th data-bind="text: Redo"></th>
-                <th data-bind="text: Completed"></th>
-                <th data-bind="text: Error"></th>
-                <th data-bind="text: Approved"></th>
-                <th data-bind="text: Total"></th>
-            </tr>
-            <!-- /ko -->
-        </tbody>
-    </table>
+
+        <table class="table table-striped table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th data-bind='sortby: "Template.Title"'>Survey Name</th>
+                    <th data-bind='sortby: "Unassigned"'>Unassigned</th>
+                    <th data-bind='sortby: "Initial"'>Initial</th>
+                    <th data-bind='sortby: "Redo"'>Redo</th>
+                    <th data-bind='sortby: "Completed"'>Completed</th>
+                    <th data-bind='sortby: "Error"'>Completed with Errors</th>
+                    <th data-bind='sortby: "Approved"'>Approved</th>
+                    <th data-bind='sortby: "Total"'>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko foreach:ListView.Items -->
+                <tr>
+                    <td>
+                        <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template.TemplateId() }, text: Template.Title"></a>
+                    </td>
+                    <td data-bind="template: { name: 'unassignedTemplate' }"></td>
+                    <td data-bind="template: { name: 'initialTemplate' }"></td>
+                    <td data-bind="template: { name: 'redoTemplate' }"></td>
+                    <td data-bind="template: { name: 'completedTemplate' }"></td>
+                    <td data-bind="template: { name: 'errorTemplate' }"></td>
+                    <td data-bind="template: { name: 'approvedTemplate' }"></td>
+                    <td>
+                        <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template.TemplateId() }, text: Total"></a>
+                    </td>
+                </tr>
+                <!-- /ko -->
+            </tbody>
+        </table>
+
 }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Supervisor.DenormalizerStorageItem;
+using Core.Supervisor.Views;
 using Core.Supervisor.Views.Status;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -34,7 +35,7 @@ namespace Core.Supervisor.Tests
 
             //act
 
-            var result = target.Load(new StatusViewInputModel() {ViewerId = supervisorId});
+            var result = target.Load(new StatusViewInputModel(supervisorId, ViewerStatus.Supervisor) );
 
             //assert
             Assert.That(result.Items[0].GetCount(templateId), Is.EqualTo(totalCountByInterviewer));
@@ -50,7 +51,7 @@ namespace Core.Supervisor.Tests
 
             //act
 
-            var result = target.Load(new StatusViewInputModel() { ViewerId = supervisorId });
+            var result = target.Load(new StatusViewInputModel(supervisorId, ViewerStatus.Supervisor ));
 
             //assert
             Assert.That(result.Items.Count, Is.EqualTo(0));
@@ -75,9 +76,8 @@ namespace Core.Supervisor.Tests
             //act
 
             var result =
-                target.Load(new StatusViewInputModel()
+                target.Load(new StatusViewInputModel(supervisorId, ViewerStatus.Supervisor)
                     {
-                        ViewerId = supervisorId,
                         StatusId = SurveyStatus.Approve.PublicId
                     });
 
@@ -100,7 +100,7 @@ namespace Core.Supervisor.Tests
 
             //act
 
-            var result = target.Load(new StatusViewInputModel() {ViewerId = hqId});
+            var result = target.Load(new StatusViewInputModel(hqId, ViewerStatus.Headquarter));
 
             //assert
             Assert.That(result.Items[0].Total, Is.EqualTo(totalCount));
@@ -108,9 +108,7 @@ namespace Core.Supervisor.Tests
 
         private StatusViewFactory CreateStatusViewFactory(Guid supervisorId)
         {
-            return CreateStatusViewFactoryWithOneSupervisorAndOneTemplate(supervisorId, null,
-                                                                          new InMemoryReadSideRepositoryAccessor
-                                                                              <SummaryItem>());
+            return CreateStatusViewFactoryWithOneSupervisorAndOneTemplate(supervisorId, null, new InMemoryReadSideRepositoryAccessor<SummaryItem>());
         }
         private StatusViewFactory CreateStatusViewFactoryWithHQAndOneTemplate(Guid hqId, Guid? templateId, IQueryableReadSideRepositoryReader<SummaryItem> itemStorage)
         {
@@ -120,8 +118,6 @@ namespace Core.Supervisor.Tests
 
             return new StatusViewFactory(itemStorage, templateMock.Object, usersMock.Object);
         }
-
-       
 
         private StatusViewFactory CreateStatusViewFactoryWithOneSupervisorAndOneTemplate(Guid supervisorId, Guid? templateId, IQueryableReadSideRepositoryReader<SummaryItem> itemStorage)
         {

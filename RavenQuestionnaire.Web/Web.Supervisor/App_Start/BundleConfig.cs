@@ -23,8 +23,23 @@
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new StyleBundle("~/css/main").Include("~/Content/bootstrap.css", "~/Content/bootstrap.icon-large.min.css", "~/Content/bootstrap-responsive.css"));
-            bundles.Add(new ScriptBundle("~/js/main").Include("~/Scripts/jquery-{version}.js", "~/Scripts/bootstrap.js", "~/Scripts/query-string.js"));
+            bundles.Add(new StyleBundle("~/css/main").Include(
+                "~/Content/css/bootstrap.css",
+                "~/Content/css/bootstrap.icon-large.css",
+                //"~/Content/css/bootstrap-responsive.css",
+                "~/Content/supervisor.css",
+                "~/Content/main.css"));
+
+            bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
+                "~/Content/css/bootstrap.css",
+                "~/Content/css/bootstrap.icon-large.min.css",
+                //"~/Content/css/bootstrap-responsive.css",
+                 "~/Content/main-not-logged.css"));
+
+            bundles.Add(new ScriptBundle("~/js/main").Include(
+                "~/Scripts/jquery-{version}.js", 
+                "~/Scripts/bootstrap.js", 
+                "~/Scripts/query-string.js"));
 
             bundles.Add(
                 new ScriptBundle("~/validate").Include(

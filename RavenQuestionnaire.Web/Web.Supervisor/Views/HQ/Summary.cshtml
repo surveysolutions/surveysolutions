@@ -22,14 +22,13 @@
 
 @section header
 {
-    <h2 class="sinle-line-header">Supervisors and Questionnaire Statuses.</h2>
+    <h3 class="sinle-line-header">Supervisors and Statuses.</h3>
 }
 
 @section filters
 {
-    <ul class="nav nav-list">
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
         <li>Template:
             <select data-bind="value: SelectedTemplate">
                 <option>Any</option>
@@ -70,18 +69,6 @@
                 <td data-bind="template: { name: 'errorTemplate' }"></td>
                 <td data-bind="template: { name: 'approvedTemplate' }"></td>
                 <td data-bind="text: Total"></td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko if:ListView.ItemsSummary != null -->
-            <tr data-bind="with: ListView.ItemsSummary">
-                <th data-bind="text: User.Name"></th>
-                <th data-bind="text: Unassigned"></th>
-                <th data-bind="text: Initial"></th>
-                <th data-bind="text: Redo"></th>
-                <th data-bind="text: Completed"></th>
-                <th data-bind="text: Error"></th>
-                <th data-bind="text: Approved"></th>
-                <th data-bind="text: Total"></th>
             </tr>
             <!-- /ko -->
         </tbody>
