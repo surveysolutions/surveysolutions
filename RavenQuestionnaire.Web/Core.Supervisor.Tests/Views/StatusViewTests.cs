@@ -14,7 +14,7 @@ namespace Core.Supervisor.Tests.Views
     public class StatusViewTests
     {
         [Test]
-        public void Ctor_When_Grid_is_empty_header_is_not_empty_Then_final_header_is_empty()
+        public void Ctor_When_Grid_is_empty_header_is_not_empty_Then_final_header_is_still_not_empty()
         {
             // arrange
             var header = new List<TemplateLight>() {new TemplateLight(Guid.NewGuid(), "test")};
@@ -24,11 +24,11 @@ namespace Core.Supervisor.Tests.Views
             StatusView target = CreateStatusViewWithHeaderAndItems(header, items);
 
             // assert
-            Assert.That(target.Headers.Count,Is.EqualTo(0));
+            Assert.That(target.Headers.Count, Is.EqualTo(header.Count));
         }
 
         [Test]
-        public void Ctor_When_item_is_not_presented_in_heade_Then_final_header_is_empty_item_is_absent_in_grid()
+        public void Ctor_When_item_is_not_presented_in_header_Then_final_header_is_still_not_empty_item_is_present_in_grid()
         {
             // arrange
             var header = new List<TemplateLight>() { new TemplateLight(Guid.NewGuid(), "test") };
@@ -42,7 +42,7 @@ namespace Core.Supervisor.Tests.Views
             StatusView target = CreateStatusViewWithHeaderAndItems(header, items);
 
             // assert
-            Assert.That(target.Headers.Count, Is.EqualTo(0));
+            Assert.That(target.Headers.Count, Is.EqualTo(header.Count));
         }
 
         [Test]
