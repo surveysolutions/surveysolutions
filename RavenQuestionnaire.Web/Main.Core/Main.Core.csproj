@@ -657,7 +657,6 @@
     <Compile Include="View\Group\ScreenNavigation.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="View\Question\AutoPropagateQuestionView.cs" />
     <Compile Include="View\Question\BaseQuestionView.cs" />
     <Compile Include="View\Question\CompleteQuestionView.cs" />
