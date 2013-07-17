@@ -1,10 +1,11 @@
 using System.Linq;
+using Main.Core.Utility;
+using Main.Core.View;
+using Main.Core.View.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Main.Core.View.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 {
-    using Main.Core.Utility;
-
     /// <summary>
     /// The questionnaire browse view factory.
     /// </summary>

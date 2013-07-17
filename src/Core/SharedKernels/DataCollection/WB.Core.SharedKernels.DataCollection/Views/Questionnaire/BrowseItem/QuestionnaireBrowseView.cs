@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Main.Core.View.Questionnaire;
 
-namespace Main.Core.View.Questionnaire
+namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
 {
     /// <summary>
     /// The questionnaire browse view.
