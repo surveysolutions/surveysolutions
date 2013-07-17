@@ -192,7 +192,6 @@
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="SyncCacher\ISyncCacher.cs" />
     <Compile Include="SyncCacher\SyncCacher.cs" />
-    <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
@@ -261,9 +260,6 @@
     <Compile Include="Views\Index\IndexViewItem.cs" />
     <Compile Include="Views\Index\IndexView.cs" />
     <Compile Include="Views\Index\SurveyGroupedByStatusHeader.cs" />
-    <Compile Include="Views\Assignment\AssignmentInputModel.cs" />
-    <Compile Include="Views\Assignment\AssignmentViewItem.cs" />
-    <Compile Include="Views\Assignment\AssignmentView.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
     <Compile Include="Views\Summary\SummaryFactory.cs" />
