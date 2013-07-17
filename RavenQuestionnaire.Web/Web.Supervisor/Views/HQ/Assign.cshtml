@@ -1,18 +1,18 @@
 ﻿@using System.Runtime.Serialization.Formatters
-@using Main.Core.View.Question
 @using Newtonsoft.Json
-@using Questionnaire.Core.Web.Helpers
-@using Web.Supervisor.Models
 
 @model Core.Supervisor.Views.Assign.AssignSurveyView
 @{
     ViewBag.Title = "Assignment";
 }
-<script data-main="../../Scripts/assign/main.js" src="~/Scripts/lib/require.js"></script>
-
-<script type="text/javascript">
-    define('input', [], function() {
-        var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+@section styles{
+    
+}
+@section scripts{
+    <script data-main="../../Scripts/assign/main.js" src="~/Scripts/lib/require.js"></script>    
+    <script type="text/javascript">
+        define('input', [], function() {
+            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                         {
                             TypeNameHandling = TypeNameHandling.Objects,
                             TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
@@ -23,7 +23,9 @@
         };
     });
 </script>
-<h2 data-bind="text: questionnaire().title"></h2>
+}
+
+<h3 data-bind="text: questionnaire().title"></h3>
 <div class="row-fluid">
     <div class="span12">
         <div id="featured-questions" class="form-horizontal">

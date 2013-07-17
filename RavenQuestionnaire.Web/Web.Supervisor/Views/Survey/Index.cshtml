@@ -21,17 +21,19 @@
 
 @section header
 {
-    <h2 class="sinle-line-header">Surveys and Questionnaire Statuses</h2>
+    <h3 class="sinle-line-header">Surveys and Statuses</h3>
 }
 
 @section filters
 {
-    <ul class="nav nav-list">
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
-        <li>Interviewers:
-            <select data-bind="value: SelectedUser">
-                <option>Any</option>
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
+        <li><label>Interviewers</label>
+            <select data-bind="value: SelectedUser" class="input-block-level">
+                @if (Model.Count() > 1)
+                {
+                    <option>Any</option>
+                }
                 @foreach (var item in Model)
                 {
                     <option value="@item.UserId">@item.UserName</option>
@@ -70,18 +72,6 @@
                 <td>
                     <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template.TemplateId() }, text: Total"></a>
                 </td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko if:ListView.ItemsSummary != null -->
-            <tr data-bind="with: ListView.ItemsSummary">
-                <th data-bind="text: Template.Title"></th>
-                <th data-bind="text: Unassigned"></th>
-                <th data-bind="text: Initial"></th>
-                <th data-bind="text: Redo"></th>
-                <th data-bind="text: Completed"></th>
-                <th data-bind="text: Error"></th>
-                <th data-bind="text: Approved"></th>
-                <th data-bind="text: Total"></th>
             </tr>
             <!-- /ko -->
         </tbody>

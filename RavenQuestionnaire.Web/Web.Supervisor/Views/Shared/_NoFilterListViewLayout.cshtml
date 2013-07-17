@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 @{
-    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
 }
 @section styles
 {
@@ -11,9 +11,6 @@
 {
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
-}
-@section sidebar{
-    @RenderSection("filters", false)
 }
 
 @RenderSection("header", false)
@@ -31,19 +28,17 @@
     </p>
     <!-- /ko -->
     <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
-    <div class="innerLR">
-        @RenderSection("grid", true)
-        <!-- ko if:ListView.Pager().LastPage() > 1 -->
-        <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
-        <!-- /ko -->
-    </div>
+    @RenderSection("grid", true)
+    <!-- ko if:ListView.Pager().LastPage() > 1 -->
+    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+    <!-- /ko -->
     <!-- /ko -->
     <!-- /ko -->
 </div>
 @this.RenderBody()
 
 <script type="text/html" id="tpl-pager">
-    
+
     <ul>
         <!-- ko if:CurrentPage() === 1 -->
         <li class="disabled">
@@ -90,5 +85,5 @@
             <a href="#" class="disabledPage">&raquo;&raquo;</a></li>
         <!-- /ko -->
     </ul>
-   
+
 </script>

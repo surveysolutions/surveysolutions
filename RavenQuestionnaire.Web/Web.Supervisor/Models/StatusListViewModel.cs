@@ -4,11 +4,11 @@
 
     using Main.Core.Entities;
 
-    public class SummaryListViewModel : IGridRequest<SummaryRequestModel>
+    public class StatusListViewModel : IGridRequest<StatusRequestModel>
     {
         public PagerData Pager { get; set; }
 
-        public SummaryRequestModel Request { get; set; }
+        public StatusRequestModel Request { get; set; }
 
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
     }

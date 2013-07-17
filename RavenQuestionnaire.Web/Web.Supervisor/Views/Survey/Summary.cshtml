@@ -11,7 +11,7 @@
     <script type="text/javascript">
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
-        $(function() {
+        $(function () {
             var model = new SummaryListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SummaryApi", action = "Summary" })');
 
             ko.applyBindings(model);
@@ -22,22 +22,24 @@
 
 @section header
 {
-    <h2 class="sinle-line-header">Interviewers and Questionnaire Statuses.</h2>
+    <h3 class="sinle-line-header">Interviewers and Statuses.</h3>
 }
 
 @section filters
 {
-    <ul class="nav nav-list">
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
-        <li>Template:
-            <select data-bind="value: SelectedTemplate">
-                <option>Any</option>
-                @foreach (var item in Model)
-                {
-                    <option value="@item.TemplateId">@item.TemplateName</option>
-                }
-            </select>
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
+        <li><label>Template</label>
+    <select data-bind="value: SelectedTemplate" class="input-block-level">
+        @if (Model.Count() > 1)
+        {
+            <option>Any</option>
+        }
+        @foreach (var item in Model)
+        {
+            <option value="@item.TemplateId">@item.TemplateName</option>
+        }
+    </select>
         </li>
     </ul>
 }
@@ -47,13 +49,13 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th data-bind='sortby: "ResponsibleName"'>Interviewers</th>
-                <th data-bind='sortby: "InitialCount"'>Initial</th>
-                <th data-bind='sortby: "RedoCount"'>Redo</th>
-                <th data-bind='sortby: "CompletedCount"'>Completed</th>
-                <th data-bind='sortby: "CompletedWithErrorsCount"'>Completed with Errors</th>
-                <th data-bind='sortby: "ApprovedCount"'>Approved</th>
-                <th data-bind='sortby: "TotalCount"'>Total</th>
+                <th data-bind='sortby: "User.Name"'>Interviewers</th>
+                <th data-bind='sortby: "Initial"'>Initial</th>
+                <th data-bind='sortby: "Redo"'>Redo</th>
+                <th data-bind='sortby: "Completed"'>Completed</th>
+                <th data-bind='sortby: "Error"'>Completed with Errors</th>
+                <th data-bind='sortby: "Approved"'>Approved</th>
+                <th data-bind='sortby: "Total"'>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -68,17 +70,6 @@
                 <td data-bind="template: { name: 'errorTemplate' }"></td>
                 <td data-bind="template: { name: 'approvedTemplate' }"></td>
                 <td data-bind="text: Total"></td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko if:ListView.ItemsSummary != null -->
-            <tr data-bind="with: ListView.ItemsSummary">
-                <th data-bind="text: User.Name"></th>
-                <th data-bind="text: Initial"></th>
-                <th data-bind="text: Redo"></th>
-                <th data-bind="text: Completed"></th>
-                <th data-bind="text: Error"></th>
-                <th data-bind="text: Approved"></th>
-                <th data-bind="text: Total"></th>
             </tr>
             <!-- /ko -->
         </tbody>

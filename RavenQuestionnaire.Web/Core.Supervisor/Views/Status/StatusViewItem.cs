@@ -12,26 +12,29 @@
     /// </summary>
     public class StatusViewItem
     {
-        #region Constructors and Destructors
-
+        public class StatusViewItemData
+        {
+            public Guid TemplateId { get; set; }
+            public int Count { get; set; }
+        }
         public StatusViewItem(
             UserLight userLight, Dictionary<Guid, int> templateGroup)
         {
             this.Templates = templateGroup;
+            this.CountersByTemplate = templateGroup.Select(k => new StatusViewItemData{ TemplateId = k.Key, Count = k.Value}).ToList();
             this.User = userLight;
             this.Total = this.Templates.Values.Sum();
         }
 
         public Dictionary<Guid, int> Templates { get; set; }
 
-        #endregion
 
         public int GetCount(Guid templateId)
         {
             return Templates.ContainsKey(templateId) ? Templates[templateId] : 0;
         }
 
-        #region Public Properties
+        public List<StatusViewItemData> CountersByTemplate;
 
         public int Total { get; set; }
 
@@ -39,6 +42,5 @@
 
         public Guid StatusId { get; set; }
 
-        #endregion
     }
 }

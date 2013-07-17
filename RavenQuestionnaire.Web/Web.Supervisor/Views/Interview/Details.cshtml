@@ -4,7 +4,7 @@
 @using Core.Supervisor.Views.Survey
 @model SurveyScreenView
 @{
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     
     var serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
 }

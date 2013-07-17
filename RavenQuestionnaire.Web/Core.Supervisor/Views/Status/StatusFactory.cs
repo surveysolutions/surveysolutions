@@ -67,14 +67,15 @@ namespace Core.Supervisor.Views.Status
                          new StatusViewItem(new UserLight(x, y.FirstOrDefault().ResponsibleName),
                                             headers.ToDictionary(k => k.TemplateId,
                                                                  k => SumByTemplate(y, k.TemplateId, status))));
-            if (input.Orders.Count == 0)
+            var orders = input.Orders.ToList();
+            if (orders.Count() == 0)
             {
-                input.Orders.Add(new OrderRequestItem() {Direction = OrderDirection.Asc, Field = "Title"});
+                orders.Add(new OrderRequestItem() { Direction = OrderDirection.Asc, Field = "Title" });
             }
 
-            items = input.Orders[0].Direction == OrderDirection.Asc
-                        ? items.OrderBy(i => this.GetOrderValue(i, input.Orders[0].Field))
-                        : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
+            items = orders[0].Direction == OrderDirection.Asc
+                        ? items.OrderBy(i => this.GetOrderValue(i, orders[0].Field))
+                        : items.OrderByDescending(i => this.GetOrderValue(i, orders[0].Field));
 
             return new StatusView(input.Page, input.PageSize, status, headers, items);
         }

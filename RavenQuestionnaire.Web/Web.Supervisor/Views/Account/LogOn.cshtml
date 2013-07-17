@@ -3,28 +3,26 @@
 @using Web.Supervisor.Utils
 @model LogOnModel
 @{
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
     ViewBag.Title = "Log On";
 }
 @section scripts
 {
-    @Styles.Render("~/Content/main.css");
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"> </script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"> </script>
 }
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"> </script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"> </script>
-<div class="container">
-    @using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "form-signin" }))
-    {
-        <h2 class="form-signin-heading">Please sign in</h2>
-        @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
+
+@using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "form-signin" }))
+{
+    <h2 class="form-signin-heading">Please sign in</h2>
+    @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
         
-        @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Login" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.UserName)</span>
+    @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Login" })
+    <span class="help-block">@Html.ValidationMessageFor(m => m.UserName)</span>
         
-        @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", placeholder = "Password" })
-        <span class="help-inline">@Html.ValidationMessageFor(m => m.Password)</span>
-        <p class="pull-right">
-            <button class="btn btn-large btn-primary " type="submit">Sign in</button>
-        </p>
-    }
-</div>
+    @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", placeholder = "Password" })
+    <span class="help-block">@Html.ValidationMessageFor(m => m.Password)</span>
+    <p class="text-right">
+        <button class="btn btn-large btn-primary " type="submit">Sign in</button>
+    </p>
+}
