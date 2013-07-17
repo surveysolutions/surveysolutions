@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Entities.SubEntities.Question;
 
-namespace Main.Core.Tests.Utils
+namespace WB.Core.BoundedContexts.Designer.Tests
 {
     public static class QuestionnaireDocumentExtentions
     {
@@ -30,7 +26,7 @@ namespace Main.Core.Tests.Utils
                 Propagated = propagationKind
             };
             document.Children.Add(@group);
-            return document;
+            return group;
         }
 
         public static AbstractQuestion AddQuestion(this Group @group,

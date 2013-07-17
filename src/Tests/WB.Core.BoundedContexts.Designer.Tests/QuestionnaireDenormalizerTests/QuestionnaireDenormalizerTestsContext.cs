@@ -1,30 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using Machine.Specifications;
+using Main.Core.AbstractFactories;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Events.Questionnaire;
+using Moq;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
-    using Machine.Specifications;
-
-    using Main.Core.AbstractFactories;
-    using Main.Core.Documents;
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Question;
-    using Main.Core.EventHandlers;
-    using Main.Core.Events.Questionnaire;
-    using Main.DenormalizerStorage;
-
-    using Moq;
-
-    using Ncqrs.Eventing;
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
     [Subject(typeof(QuestionnaireDenormalizer))]
     internal class QuestionnaireDenormalizerTestsContext
     {

@@ -1,26 +1,17 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+﻿using System;
+using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
+using Moq;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using It = Machine.Specifications.It;
+using it = Moq.It;
 
-namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
-    using System;
-
-    using Machine.Specifications;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.EventHandlers;
-    using Main.Core.Events.Questionnaire;
-    using Main.DenormalizerStorage;
-
-    using Moq;
-
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
-    using It = Machine.Specifications.It;
-    using it = Moq.It;
-
     internal class when_adding_a_group_and_there_already_is_one_group_with_same_id : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>

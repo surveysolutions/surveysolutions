@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.EventHandlers;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NUnit.Framework;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Main.Core.Tests.Utils;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Main.DenormalizerStorage.Tests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 {
     [TestFixture]
     // ReSharper disable RedundantArgumentName
