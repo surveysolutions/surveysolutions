@@ -1,13 +1,10 @@
-using WB.Core.Infrastructure;
+using System;
+using Main.Core.Documents;
+using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace Main.Core.View.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 {
-    using System;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities;
-
     public class QuestionnaireBrowseItem : IView
     {
         public QuestionnaireBrowseItem()
