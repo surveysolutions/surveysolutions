@@ -1,6 +1,7 @@
 ﻿using Main.Core.View;
 using Main.Core.View.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace WB.UI.Headquarter.Controllers
 {
