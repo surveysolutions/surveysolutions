@@ -4,6 +4,7 @@ using Raven.Client.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Core.Supervisor.Views.Assignment
 {
@@ -16,8 +17,6 @@ namespace Core.Supervisor.Views.Assignment
     using Main.Core.Utility;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
-    using Main.Core.View.Questionnaire;
-
     using Main.DenormalizerStorage;
 
     public class DocumentViewListFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>

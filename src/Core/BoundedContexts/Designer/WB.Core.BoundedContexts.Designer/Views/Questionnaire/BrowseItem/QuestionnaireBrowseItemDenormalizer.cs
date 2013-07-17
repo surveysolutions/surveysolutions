@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Events.Questionnaire;
-using Main.Core.View.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 

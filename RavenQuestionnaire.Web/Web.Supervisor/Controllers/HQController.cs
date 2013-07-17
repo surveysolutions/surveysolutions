@@ -19,8 +19,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
-    using Main.Core.View.Questionnaire;
-
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
