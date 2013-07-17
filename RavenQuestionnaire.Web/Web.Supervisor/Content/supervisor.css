@@ -1,7 +1,4 @@
-﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600&subset=latin,latin-ext);
-
-@import url(http://fonts.googleapis.com/css?family=Raleway:400,600,700);
-/*!
+﻿/*!
  * AdminPlus v2.0
  *
  * Copyright MosaicPro
@@ -10,7 +7,6 @@
  * Designed and built exclusively for sale @Envato Marketplaces.
  */
 body {
-  font-family: 'Open Sans', sans-serif;
   background: #ffffff;
   font-size: 10pt;
 }
