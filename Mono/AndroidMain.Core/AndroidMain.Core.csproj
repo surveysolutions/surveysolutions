@@ -862,17 +862,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseInputModel.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseInputModel.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseItem.cs">
       <Link>View\Questionnaire\QuestionnaireBrowseItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseView.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseViewFactory.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseViewFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\CompleteQuestionView.cs">
       <Link>View\Question\CompleteQuestionView.cs</Link>
