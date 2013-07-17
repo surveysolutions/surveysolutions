@@ -10,6 +10,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
@@ -25,11 +26,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         }
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
-            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null, ICompleteQuestionFactory questionFactory = null)
+            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
+            ICompleteQuestionFactory questionFactory = null, ILogger logger = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
-                questionFactory ?? Mock.Of<ICompleteQuestionFactory>());
+                questionFactory ?? Mock.Of<ICompleteQuestionFactory>(),
+                logger ?? Mock.Of<ILogger>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(

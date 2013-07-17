@@ -29,19 +29,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>
     {
-
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
-
         private readonly ICompleteQuestionFactory questionFactory;
-
         private readonly ILogger logger;
 
-        public QuestionnaireDenormalizer(
-            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
+        public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
+            ICompleteQuestionFactory questionFactory, ILogger logger)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.logger = logger;
         }
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
