@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                 questionnaire.ImportQuestionnaire(Guid.NewGuid(),newState);
 
                 // assert
-                Assert.That(GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
+                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
             }
         }
 
