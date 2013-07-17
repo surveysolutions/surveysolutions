@@ -1,7 +1,4 @@
-﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600&subset=latin,latin-ext);
-
-@import url(http://fonts.googleapis.com/css?family=Raleway:400,600,700);
-/*!
+﻿/*!
  * AdminPlus v2.0
  *
  * Copyright MosaicPro
@@ -10,7 +7,6 @@
  * Designed and built exclusively for sale @Envato Marketplaces.
  */
 body {
-  font-family: 'Open Sans', sans-serif;
   background: #ffffff;
   font-size: 10pt;
 }
@@ -640,7 +636,7 @@ hr.separator {
   border-bottom: 1px solid #e5e5e5;
   position: relative;
   overflow: hidden;
-  padding: 0;
+  padding: 0 10px;
   margin: 0;
 }
 #menu > ul li.filter,
@@ -731,21 +727,19 @@ hr.separator {
 }
 #menu > ul li.heading ,
 #menu .slim-scroll > ul li.heading {
-    height: 39px;
+  height: 39px;
   line-height: 39px;
-
+  background: #ECECEC;
 }
 #menu > ul li.heading span,
 #menu .slim-scroll > ul li.heading span {
   display: block;
   text-transform: uppercase;
-  background: #ECECEC;
-  border-bottom: 1px solid #dddddd;
   height: 38px;
   color: #AFAFAF;
   font-weight: 600;
   font-family: 'Raleway', sans-serif;
-  padding: 0 0 0 10px;
+  padding: 0;
   font-size: 11pt;
 }
 #menu > ul ul,

@@ -28,8 +28,8 @@
 {
     <ul>
         <li class="heading"><span>FILTER</span></li>
-        <li>Interviewers:
-            <select data-bind="value: SelectedUser">
+        <li><label>Interviewers</label>
+            <select data-bind="value: SelectedUser" class="input-block-level">
                 @if (Model.Count() > 1)
                 {
                     <option>Any</option>

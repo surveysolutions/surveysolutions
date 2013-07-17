@@ -30,8 +30,8 @@
 {
     <ul>
         <li class="heading"><span>FILTER</span></li>
-        <li>Template:
-                <select data-bind="value: SelectedTemplate">
+        <li><label>Template</label>
+                <select data-bind="value: SelectedTemplate" class="input-block-level">
                     @if (Model.Templates.Count() > 1)
                     {
                         <option value="">Any</option>
@@ -42,8 +42,8 @@
                     }
                 </select>
         </li>
-        <li>Responsible:
-                <select data-bind="value: SelectedResponsible">
+        <li><label>Responsible</label>
+                <select data-bind="value: SelectedResponsible" class="input-block-level">
                     @if (Model.Responsibles.Count() > 1)
                     {
                         <option value="">Any</option>
@@ -54,8 +54,8 @@
                     }
                 </select>
         </li>
-        <li>Status:
-                <select data-bind="value: SelectedStatus">
+        <li><label>Status</label>
+                <select data-bind="value: SelectedStatus" class="input-block-level">
                     <option value="">Any</option>
                     @foreach (var item in Model.Statuses)
                     {
