@@ -1,7 +1,6 @@
 using System.Linq;
 using Main.Core.Utility;
 using Main.Core.View;
-using Main.Core.View.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem

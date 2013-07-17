@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Main.Core.View.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 {
