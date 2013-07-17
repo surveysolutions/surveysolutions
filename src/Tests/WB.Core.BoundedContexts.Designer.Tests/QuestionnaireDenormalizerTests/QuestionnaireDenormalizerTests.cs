@@ -11,6 +11,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
@@ -172,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
         private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> storageStub)
         {
             #warning: we shouldn't use CompleteQuestionFactory here?
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new CompleteQuestionFactory());
+            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new CompleteQuestionFactory(), Mock.Of<ILogger>());
 
             return denormalizer;
         }
