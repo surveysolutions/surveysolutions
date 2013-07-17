@@ -22,8 +22,6 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         
         IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query);
 
-        IQueryable<TResult> QueryWithIndex<TResult>(Type index);
-
         #endregion
 
     }

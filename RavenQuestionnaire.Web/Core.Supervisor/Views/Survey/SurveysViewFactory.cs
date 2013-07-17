@@ -2,6 +2,7 @@
 using Core.Supervisor.DenormalizerStorageItem;
 using Core.Supervisor.RavenIndexes;
 using Main.Core.Entities;
+using Raven.Client.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Survey
@@ -14,17 +15,17 @@ namespace Core.Supervisor.Views.Survey
 
     public class SurveysViewFactory : IViewFactory<SurveysInputModel, SurveysView>
     {
-        private readonly IQueryableReadSideRepositoryReader<SummaryItem> _summary;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public SurveysViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SurveysViewFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this._summary = summary;
+            this.indexAccessor = indexAccessor;
         }
 
         public SurveysView Load(SurveysInputModel input)
         {
             var items =
-                _summary.QueryWithIndex<SummaryItem>(typeof (SummaryItemByTemplate));
+                indexAccessor.Query<SummaryItem>(typeof(SummaryItemByTemplate).Name);
       
                     /*if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {

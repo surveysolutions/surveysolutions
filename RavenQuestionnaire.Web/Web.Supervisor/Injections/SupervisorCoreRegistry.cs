@@ -99,11 +99,6 @@ namespace Web.Supervisor.Injections
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
             
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
-
-
-            var store = Kernel.Get<DocumentStore>();
-            var catalog = new CompositionContainer(new AssemblyCatalog(typeof(SummaryItemByTemplate).Assembly));
-            IndexCreation.CreateIndexes(catalog, store.DatabaseCommands.ForDatabase("Views"), store.Conventions);
         }
     }
 }

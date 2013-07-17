@@ -16,17 +16,17 @@ namespace Core.Supervisor.Views.Summary
 
     public class SummaryFactory : IViewFactory<SummaryInputModel, SummaryView>
     {
-        private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public SummaryFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SummaryFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.summary = summary;
+            this.indexAccessor = indexAccessor;
         }
 
         public SummaryView Load(SummaryInputModel input)
         {
             var items =
-                summary.QueryWithIndex<SummaryItem>(typeof (SummaryItemByInterviewer));
+                indexAccessor.Query<SummaryItem>(typeof (SummaryItemByInterviewer).Name);
 
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
