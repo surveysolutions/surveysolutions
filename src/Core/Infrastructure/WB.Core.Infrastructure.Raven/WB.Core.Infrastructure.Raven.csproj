@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryAccessor.cs" />
+    <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryIndexAccessor.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\IRavenReadSideRepositoryWriter.cs" />
@@ -84,6 +85,7 @@
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

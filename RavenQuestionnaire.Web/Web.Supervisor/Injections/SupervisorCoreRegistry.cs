@@ -1,6 +1,11 @@
+using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Web.Configuration;
+using Core.Supervisor.RavenIndexes;
 using Core.Supervisor.Views.Index;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;

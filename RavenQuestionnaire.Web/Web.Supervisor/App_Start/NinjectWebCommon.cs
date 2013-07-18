@@ -2,6 +2,7 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.Supervisor.RavenIndexes;
 using Main.Core;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -13,6 +14,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
@@ -112,6 +114,10 @@ namespace Web.Supervisor.App_Start
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
+
+#warning dirty index registrations
+            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
+            indexccessor.RegisterIndexesFormAssembly(typeof(SummaryItemByTemplate).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

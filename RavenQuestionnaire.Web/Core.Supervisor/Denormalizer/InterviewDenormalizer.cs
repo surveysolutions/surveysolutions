@@ -44,6 +44,7 @@ namespace Core.Supervisor.Denormalizer
                 TemplateId = evnt.Payload.Questionnaire.TemplateId,
                 Title = evnt.Payload.Questionnaire.Title,
                 LastEntryDate = evnt.EventTimeStamp,
+                Status = new SurveyStatusLight() { Id = evnt.Payload.Questionnaire.Status.PublicId, Name = evnt.Payload.Questionnaire.Status.Name},
                 FeaturedQuestions =
                     evnt.Payload.Questionnaire.GetFeaturedQuestions()
                         .Select(
