@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -13,7 +12,7 @@ using WB.Core.Infrastructure.Backup;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
-    public class MvvmCrossSqliteEventStore : IEventStore, IMvxServiceConsumer,IBackupable
+    public class MvvmCrossSqliteEventStore : IEventStore, IBackupable
     {
         private  ISQLiteConnection _connection;
         private readonly string databaseName;
@@ -21,7 +20,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
             this.databaseName = databaseName;
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
             _connection = connectionFactory.Create(databaseName);
             _connection.CreateTable<StoredEvent>();
 
@@ -37,8 +36,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             var idString = id.ToString();
-            return new CommittedEventStream(id,
-                                            ((TableQuery<StoredEvent>) _connection.Table<StoredEvent>())
+            return new CommittedEventStream(id, ((ITableQuery<StoredEvent>) _connection.Table<StoredEvent>())
                                                 .Where(
                                                     x =>
                                                     x.EventSourceId == idString && x.Sequence >= minVersion &&
@@ -53,8 +51,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 
         public string GetPathToBakupFile()
         {
-            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
-                                          this.databaseName);
+            return this._connection.DatabasePath;
         }
 
         public void RestoreFromBakupFolder(string path)
@@ -65,7 +62,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                       System.IO.Path.Combine(
                           System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
                           this.databaseName), true);
-            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
             _connection = connectionFactory.Create(databaseName);
         }
     }
