@@ -81,12 +81,18 @@
     </div>
 </script>
 <script type="text/html" id="MultyOption">
-    <!-- ko foreach: options -->
-    <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-        <input type='checkbox' data-bind="attr: { value: id, name: title, id: optionFor }, checked: $parent.selectedOptions" />
-        <span data-bind="text: title"></span>
-    </label>
-    <!-- /ko -->
+    <div class="control-group" data-bind="validationElement: selectedOptions">
+        <label class="control-label" data-bind="text: title"></label>
+        <div class="controls">
+            <!-- ko foreach: options -->
+            <label class="checkbox" data-bind='attr: { "for": optionFor }'>
+                <input type='checkbox' data-bind="attr: { value: id, name: title, id: optionFor }, checked: $parent.selectedOptions" />
+                <span data-bind="text: title"></span>
+            </label>
+            <!-- /ko -->
+            <span class="help-inline" data-bind="validationMessage: selectedOptions"></span>
+        </div>
+    </div>
 </script>
 <script type="text/html" id="Numeric">
     <div class="control-group" data-bind="validationElement: selectedOption">
@@ -107,7 +113,7 @@
         <div class="controls">
               <div class="input-prepend">
                 <span class="add-on"><i class="icon-calendar"></i></span>
-                <input type="text" data-bind="datepicker: selectedOption, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
+                <input type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
             </div>
             <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
         </div>

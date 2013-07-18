@@ -3041,16 +3041,6 @@ legend {
   border: 0;
   color: #797979;
 }
-input[type=text],
-input[type=password],
-select,
-textarea {
-  border-color: #D8D9DA;
-  color: #A7A7A7;
-  -webkit-border-radius: 0 0 0 0;
-  -moz-border-radius: 0 0 0 0;
-  border-radius: 0 0 0 0;
-}
 .control-label.center {
   text-align: center;
 }
