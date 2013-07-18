@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Raven.Client;
 using Raven.Client.Document;
-
+using Raven.Client.Indexes;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
