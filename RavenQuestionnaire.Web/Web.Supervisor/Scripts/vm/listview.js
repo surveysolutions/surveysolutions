@@ -58,6 +58,8 @@
         }
     };
 
+    self.mappingOptions = {};
+
     self.search = function () {
 
         self.onBeforeRequest();
@@ -73,7 +75,7 @@
 
         $.post(self.ServiceUrl, params, null, "json")
             .done(function (data) {
-                ko.mapping.fromJS(data, { }, self);
+                ko.mapping.fromJS(data, self.mappingOptions, self);
                 self.ItemsSummary(data.ItemsSummary);
                 self.IsPageLoaded(true);
             });

@@ -103,6 +103,8 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
+            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+
             var questionnaire = this.questionnaires.GetById(evnt.Payload.CompletedQuestionnaireId);
 
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
@@ -128,6 +130,8 @@ namespace Core.Supervisor.Denormalizer
 
             if (evnt.Payload.PreviousResponsible != null)
             {
+                evnt.Payload.PreviousResponsible.Name = users.GetById(evnt.Payload.PreviousResponsible.Id).UserName;
+
                 var summaryPrevUserId =
                     evnt.Payload.PreviousResponsible.Id.Combine(questionnaire.TemplateId);
                 var summaryPrevUser = this.summary.GetById(summaryPrevUserId);

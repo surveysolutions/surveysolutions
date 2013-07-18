@@ -69,12 +69,13 @@ namespace Web.Supervisor.Controllers
         private DocumentFilter Filters()
         {
             var statuses = SurveyStatusViewItems();
-
             var viewerId = this.GlobalInfo.GetCurrentUser().Id;
             var viewerStatus = ViewerStatus.Supervisor;
 
             return new DocumentFilter()
             {
+                Users = this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
+                        ViewerStatus.Supervisor)).Items,
                 Responsibles =
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
                 Templates =

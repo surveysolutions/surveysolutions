@@ -1,4 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Logging;
+﻿using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using System;
@@ -20,6 +21,34 @@ namespace Web.Supervisor.Controllers
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.logger = logger;
+        }
+
+        [HttpPost]
+        public JsonResult ExecuteCommands(string type, string[] commands)
+        {
+            var errors = new List<string>();
+            foreach (var command in commands)
+            {
+                try
+                {
+                    var concreteCommand = this.commandDeserializer.Deserialize(type, command);
+                    this.commandService.Execute(concreteCommand);
+                }
+                catch (Exception e)
+                {
+                    var domainEx = e.As<DomainException>();
+                    if (domainEx == null)
+                    {
+                        this.logger.Error("Unexpected error occurred", e);
+                        errors.Add(string.Format("Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>", AppSettings.Instance.AdminEmail));
+                    }
+                    else
+                    {
+                        errors.Add(domainEx.Message);
+                    }
+                }
+            }
+            return this.Json(errors.Count == 0 ? (object)new {status = "ok"} : new { status ="error", errors = errors });
         }
 
         [HttpPost]
