@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Supervisor.DenormalizerStorageItem;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View.Questionnaire;
 using Ncqrs.Commanding.CommandExecution.Mapping.Fluent;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
