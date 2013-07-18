@@ -20,18 +20,18 @@
         public StatusViewItem(
             UserLight userLight, Dictionary<Guid, int> templateGroup)
         {
-            this.templateGroup = templateGroup;
+            this.Templates = templateGroup;
             this.CountersByTemplate = templateGroup.Select(k => new StatusViewItemData{ TemplateId = k.Key, Count = k.Value}).ToList();
             this.User = userLight;
-
-            this.Total = templateGroup.Values.Sum();
+            this.Total = this.Templates.Values.Sum();
         }
 
-        private readonly Dictionary<Guid, int> templateGroup;
+        public Dictionary<Guid, int> Templates { get; set; }
+
 
         public int GetCount(Guid templateId)
         {
-            return templateGroup.ContainsKey(templateId) ? templateGroup[templateId] : 0;
+            return Templates.ContainsKey(templateId) ? Templates[templateId] : 0;
         }
 
         public List<StatusViewItemData> CountersByTemplate;
@@ -39,6 +39,8 @@
         public int Total { get; set; }
 
         public UserLight User { get; set; }
+
+        public Guid StatusId { get; set; }
 
     }
 }

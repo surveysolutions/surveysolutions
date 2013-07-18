@@ -18,6 +18,7 @@
         /// <summary>
         /// Gets or sets the completed questionnaire id.
         /// </summary>
+        [Obsolete("this field is redundant, please use event's property EventSourceId")]
         public Guid CompletedQuestionnaireId { get; set; }
 
         /// <summary>
