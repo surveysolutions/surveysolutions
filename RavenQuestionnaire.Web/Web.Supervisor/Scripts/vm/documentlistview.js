@@ -45,7 +45,8 @@
             type: "AssignInterviewToUserCommand",
             commands:  commands
         };
-        self.ListView.IsPageLoaded(true);
+        
+        self.ListView.IsPageLoaded(false);
         
         $.ajax({
             type: "POST",

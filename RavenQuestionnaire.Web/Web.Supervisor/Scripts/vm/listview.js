@@ -31,6 +31,15 @@
         self.search(self.SortOrder);
     });
 
+    self.IsPageLoaded.subscribe(function (isLoaded) {
+        if (isLoaded) {
+            $('#umbrella').hide();
+        }
+        if (isLoaded == false) {
+            $('#umbrella').show();
+        }
+    });
+
     self.SortOrder = ko.observable("");
     self.SortDirection = ko.observable(false);
     self.OrderBy = function () {
@@ -62,6 +71,8 @@
 
     self.search = function () {
 
+        self.IsPageLoaded(false);
+        
         self.onBeforeRequest();
 
         var params = {
