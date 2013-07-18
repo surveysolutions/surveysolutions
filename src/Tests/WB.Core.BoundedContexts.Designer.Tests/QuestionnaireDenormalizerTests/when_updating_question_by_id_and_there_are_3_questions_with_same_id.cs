@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
@@ -39,10 +40,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
             var questionFactory = Mock.Of<ICompleteQuestionFactory>();
             Mock.Get(questionFactory)
-                .Setup(factory => factory.CreateQuestionFromExistingUsingDataFromEvent(it.IsAny<IQuestion>(), it.IsAny<QuestionChanged>()))
-                .Returns<IQuestion, QuestionChanged>((question, @event) =>
+                .Setup(factory => factory.CreateQuestionFromExistingUsingSpecifiedData(
+                    it.IsAny<IQuestion>(), it.IsAny<QuestionType>(), it.IsAny<QuestionScope>(),
+                    it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>(),
+                    it.IsAny<string>(), it.IsAny<Order>(), it.IsAny<bool>(), it.IsAny<bool>(), it.IsAny<bool>(),
+                    it.IsAny<string>(), it.IsAny<List<Guid>>(), it.IsAny<int>(), it.IsAny<Answer[]>()))
+                .Returns(delegate(IQuestion question, QuestionType questionType, QuestionScope questionScope, string questionText, string stataExportCaption, string conditionExpression, string validationExpression, string validationMessage, Order answerOrder, bool featured, bool mandatory, bool capital, string instructions, List<Guid> triggers, int maxValue, Answer[] answers)
                 {
-                    question.QuestionText = @event.QuestionText;
+                    question.QuestionText = questionText;
                     return question;
                 });
 
