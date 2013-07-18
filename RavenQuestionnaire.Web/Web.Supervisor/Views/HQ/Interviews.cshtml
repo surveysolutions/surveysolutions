@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using Newtonsoft.Json
 @model Web.Supervisor.Models.DocumentFilter
 @{
     Layout = "~/Views/Shared/_ListViewLayout.cshtml";
@@ -11,8 +12,10 @@
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("Surveys", "HQ")';
+        var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
         $(function () {
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })');
+            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
+            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })',commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });
@@ -22,6 +25,15 @@
 @section header
 {
     <h3 class="sinle-line-header">Interviews</h3>
+        <div class="menubar">
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" data-bind="foreach: Users">
+                <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
+            </ul>
+        </div>
+    </div>
 }
 
 @section filters
@@ -79,6 +91,7 @@
     <table class="table table-striped table-bordered table-condensed table-hover table-break-words">
         <thead>
             <tr>
+                <th></th>
                 <!-- ko if:SelectedTemplate() == '' -->
                 <th>Featured Questions</th>
                 <!-- /ko -->
@@ -98,6 +111,9 @@
         <tbody>
             <!-- ko foreach:ListView.Items -->
             <tr>
+                <td>
+                    <input type="checkbox"  data-bind="checked: IsSelected, enable: false"/>
+                </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
                 <!-- /ko -->

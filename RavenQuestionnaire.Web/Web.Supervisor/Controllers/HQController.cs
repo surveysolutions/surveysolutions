@@ -149,6 +149,7 @@ namespace Web.Supervisor.Controllers
 
             return new DocumentFilter()
             {
+                Users = this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Headquarter)).Items,
                 Responsibles =
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
                 Templates =
