@@ -228,6 +228,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 var itemToMove = questionnaire.Groups.TreeToEnumerable().FirstOrDefault(x => x.Id == @event.PublicKey);
                 if (itemToMove != null && itemToMove.Parent != null)
                 {
+                    itemToMove.Parent.Children.Remove(itemToMove);
 
                     if (@event.TargetIndex < 0)
                     {
