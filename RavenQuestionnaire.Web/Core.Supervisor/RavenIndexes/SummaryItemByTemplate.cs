@@ -37,7 +37,7 @@ namespace Core.Supervisor.RavenIndexes
                                         select new
                                         {
                                             ResponsibleId = Guid.Empty,
-                                            doc.ResponsibleName,
+                                            ResponsibleName ="",
                                             doc.TemplateId,
                                             doc.TemplateName,
                                             doc.UnassignedCount,
@@ -51,7 +51,7 @@ namespace Core.Supervisor.RavenIndexes
                                         });
 
             Reduce = results => from result in results
-                                group result by new { result.ResponsibleId, result.TemplateId } into g
+                                group result by new { result.ResponsibleId, result.TemplateId, result.ResponsibleSupervisorId } into g
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,
@@ -65,7 +65,7 @@ namespace Core.Supervisor.RavenIndexes
                                     CompletedWithErrorsCount = g.Sum(x => x.CompletedWithErrorsCount),
                                     ApprovedCount = g.Sum(x => x.ApprovedCount),
                                     TotalCount = g.Sum(x => x.TotalCount),
-                                    ResponsibleSupervisorId = g.First().ResponsibleSupervisorId
+                                    ResponsibleSupervisorId = g.Key.ResponsibleSupervisorId
                                 };
 
             Index(x => x.ResponsibleSupervisorId, FieldIndexing.Analyzed);
