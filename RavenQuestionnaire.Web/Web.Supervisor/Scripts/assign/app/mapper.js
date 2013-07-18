@@ -23,14 +23,18 @@
                 }
                 switch (item.type()) {
                     case "SingleOption":
-                    case "MultyOption": break;
+                        item.selectedOption.extend({ required: true }); break;
+                    case "MultyOption":
+                        item.selectedOptions.extend({ notempty: true }); break;
                     case "AutoPropagate":
                     case "Numeric":
-                        item.selectedOption.extend({ number: true, digit: true });
+                        item.selectedOption.extend({required: true , number: true, digit: true });
                         break;
                     case "DateTime":
-                        item.selectedOption.extend({ date: true });
+                        item.selectedOption(new Date());
+                        item.selectedOption.extend({required: true , date: true });
                     case "Text":
+                        item.selectedOption.extend({ required: true });
                 }
                 return item;
             }

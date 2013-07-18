@@ -28,6 +28,7 @@
                 "~/Content/css/bootstrap.icon-large.css",
                 //"~/Content/css/bootstrap-responsive.css",
                 "~/Content/jquery.pnotify.default.css",
+                "~/Content/datepicker.css",
                 "~/Content/supervisor.css",
                 "~/Content/main.css"));
 
@@ -42,7 +43,8 @@
                 "~/Scripts/jquery-{version}.js", 
                 "~/Scripts/bootstrap.js", 
                 "~/Scripts/query-string.js",
-                "~/Scripts/lib/jquery.pnotify.js"
+                "~/Scripts/lib/jquery.pnotify.js",
+                "~/Scripts/bootstrap-datepicker.js"
                 ));
 
             bundles.Add(
