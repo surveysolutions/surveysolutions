@@ -26,8 +26,6 @@ namespace CAPI.Android
 		
 		public static void UpdateIdValues()
 		{
-			WB.Core.GenericSubdomains.Logging.AndroidLogger.Resource.String.ApplicationName = CAPI.Android.Resource.String.ApplicationName;
-			WB.Core.GenericSubdomains.Logging.AndroidLogger.Resource.String.Hello = CAPI.Android.Resource.String.Hello;
 		}
 		
 		public partial class Attribute

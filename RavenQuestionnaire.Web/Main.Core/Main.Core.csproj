@@ -478,60 +478,6 @@
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\GroupCloned.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\GroupDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\GroupUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\ImageDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\ImageUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\ImageUploaded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\NewGroupAdded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\NewQuestionAdded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionCloned.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\TemplateImported.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs">
       <SubType>Code</SubType>
     </Compile>
