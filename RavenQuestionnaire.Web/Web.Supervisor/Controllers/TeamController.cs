@@ -30,33 +30,12 @@ namespace Web.Supervisor.Controllers
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
 
-        // GET: /Teams/
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The add interviewer.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(Guid id)
         {
             return this.View(new InterviewerViewModel { Id = id });
         }
 
-        /// <summary>
-        /// The add interviewer.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(InterviewerViewModel model)
@@ -88,27 +67,12 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        ///     The add supervisor.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor()
         {
             return this.View(new SupervisorViewModel());
         }
 
-        /// <summary>
-        /// The add supervisor.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor(SupervisorViewModel model)
@@ -156,24 +120,9 @@ namespace Web.Supervisor.Controllers
             return this.View(id);
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get user.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="UserView"/>.
-        /// </returns>
         private UserView GetUser(Guid id)
         {
             return this.userViewFactory.Load(new UserViewInputModel(id));
         }
-
-        #endregion
     }
 }
