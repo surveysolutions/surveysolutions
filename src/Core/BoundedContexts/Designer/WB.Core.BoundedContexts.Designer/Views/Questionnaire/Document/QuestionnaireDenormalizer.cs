@@ -134,7 +134,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionCloned> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload);
+            FullQuestionDataEvent e = evnt.Payload;
+            AbstractQuestion result = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
 
             if (result == null)
             {
@@ -148,7 +149,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload);
+            FullQuestionDataEvent e = evnt.Payload;
+            AbstractQuestion result = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             if (result == null)
             {
                 return;
@@ -169,7 +171,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingDataFromEvent(question, evnt.Payload);
+            QuestionChanged e = evnt.Payload;
+            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingSpecifiedData(question, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 

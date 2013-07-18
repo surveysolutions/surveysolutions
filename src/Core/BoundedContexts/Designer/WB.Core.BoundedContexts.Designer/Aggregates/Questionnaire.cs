@@ -562,7 +562,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
-            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            AbstractQuestion question = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             if (question == null)
             {
                 return;
@@ -573,7 +573,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
-            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            AbstractQuestion question = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             if (question == null)
             {
                 return;
@@ -595,7 +595,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingDataFromEvent(question, e);
+            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingSpecifiedData(question, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
