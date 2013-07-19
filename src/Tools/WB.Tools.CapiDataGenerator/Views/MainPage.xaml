@@ -56,7 +56,7 @@
         <StatusBar Grid.ColumnSpan="3" Grid.Row="3">
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding CanGenerate, Converter={StaticResource BoolToNegotiationVisibilityConverter}}">
-                    <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,1,5,0" HorizontalAlignment="Center" Width="110">
+                    <Border BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Padding="5,1,5,0" HorizontalAlignment="Center" Width="150">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Total: "></TextBlock>
                             <TextBlock Text="{Binding Progress}"></TextBlock>
