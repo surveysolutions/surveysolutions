@@ -4543,3 +4543,17 @@ a.pseudo-link:hover {
     position: relative;
     overflow-x: auto;
 }
+
+.table thead  tr th.sorting
+{
+    position: relative;
+}
+/*.table thead  tr th.sorting:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 40px;
+    background: red;
+}*/

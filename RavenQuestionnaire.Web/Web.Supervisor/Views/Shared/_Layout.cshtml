@@ -57,8 +57,8 @@
                         <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a> </li>
-                            <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">Interviewers and Statuses</a> </li>
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a></li>
+                            <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">Interviewers and Statuses</a></li>
                             <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">Interviewers and Surveys</a> </li>
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">

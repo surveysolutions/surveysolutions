@@ -24,7 +24,7 @@
     <div id="content">
         @RenderSection("header", false)
         <div class="menubar">
-            <span data-bind="visible: $root.ListView.IsFilterOpen()==false"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
+            <span data-bind="visible: $root.ListView.IsFilterOpen() == false"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
             @RenderSection("actionbar", false)
         </div>
         @RenderSection("gridnavigation", false)
@@ -36,21 +36,19 @@
             </p>
             <!-- /ko -->
             <!-- ko if:ListView.IsPageLoaded()  -->
-            <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
-            <p class="text-center">
+            <p class="text-center" data-bind="visible: ListView.Pager().TotalItemCount() == 0">
                 No results found
             </p>
             <!-- /ko -->
-            <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
-            <div class="horizontal-scroll">
+            <div class="horizontal-scroll" data-bind="visible: ListView.Pager().TotalItemCount() > 0">
                 <div class="innerLR ">
                     @RenderSection("grid", true)
-                    <!-- ko if:ListView.Pager().LastPage() > 1 -->
-                    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
-                    <!-- /ko -->
                 </div>
             </div>
-            <!-- /ko -->
+            <!-- ko if:ListView.Pager().LastPage() > 1 -->
+            <div class="innerLR ">
+                <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+            </div>
             <!-- /ko -->
         </div>
         @this.RenderBody()
