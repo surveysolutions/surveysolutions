@@ -9,7 +9,7 @@ namespace WB.Core.Synchronization.Tests.SyncManagerTests
     [TestFixture]
     class SyncManagerTests
     {
-        [Test]
+        /*[Test]*/
         public void ItitSync_when_New_ClientIdentifier_Arrived_New_Device_Is_Stored()
         {
             //Arrange
