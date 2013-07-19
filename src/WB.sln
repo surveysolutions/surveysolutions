@@ -204,7 +204,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Des
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Designer.Tests", "Tests\WB.Core.BoundedContexts.Designer.Tests\WB.Core.BoundedContexts.Designer.Tests.csproj", "{AF08CFAE-53CF-46DC-BA3D-11DB7F62D755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapiDataGenerator", "Tools\CapiDataGenerator\CapiDataGenerator.csproj", "{AEBAD20C-2FE1-419A-AF86-48EF13E7A573}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.CapiDataGenerator", "Tools\WB.Tools.CapiDataGenerator\WB.Tools.CapiDataGenerator.csproj", "{AEBAD20C-2FE1-419A-AF86-48EF13E7A573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
