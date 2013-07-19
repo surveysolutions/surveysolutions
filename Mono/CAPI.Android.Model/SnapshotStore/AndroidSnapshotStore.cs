@@ -1,19 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model.ModelUtils;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.SnapshotStore

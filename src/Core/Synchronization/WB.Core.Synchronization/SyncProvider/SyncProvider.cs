@@ -45,7 +45,9 @@ namespace WB.Core.Synchronization.SyncProvider
             var item = storage.GetLatestVersion(id);
             //doing tricky thing
             //we are saving old sequence even if new version was returned
-            commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(clientRegistrationKey, sequence));
+            //
+            //now disabled. handle using clent provided value
+            //commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(clientRegistrationKey, sequence));
             
             return item;
         }
@@ -79,8 +81,8 @@ namespace WB.Core.Synchronization.SyncProvider
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
-            if (clientSequence != device.LastSyncItemIdentifier)
-                logger.Info(string.Format("Local [{0}] and remote [{1}] sequence number mismatch.", device.LastSyncItemIdentifier, clientSequence));
+            /*if (clientSequence != device.LastSyncItemIdentifier)
+                logger.Info(string.Format("Local [{0}] and remote [{1}] sequence number mismatch.", device.LastSyncItemIdentifier, clientSequence));*/
 
             return storage.GetChunkPairsCreatedAfter(clientSequence, userId);
         }

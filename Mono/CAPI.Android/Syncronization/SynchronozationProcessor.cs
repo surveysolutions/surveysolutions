@@ -120,13 +120,20 @@ namespace CAPI.Android.Syncronization
                   
                     pullDataProcessor.Save(data);
                     remoteChuncksForDownload[chunckId] = true;
+
+                    pullDataProcessor.Proccess(chunckId);
+                    //save last handled item
+                    lastSequence = chunckId.Key.ToString();
                 }
                 catch
                 {
                     //in case of exception we stop pulling but without exception 
                     //in order to move forward and proccess uploaded data
                     //but in case of fault we do not request next item
-                    break;
+                    //break;
+
+                    //now we are handling rigth after receiving
+                    throw;
                 }
 
                 OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
@@ -196,7 +203,7 @@ namespace CAPI.Android.Syncronization
             Handshake();
             Push();
             Pull();
-            Validate();
+            //Validate();
             OnProcessFinished();
         }
 

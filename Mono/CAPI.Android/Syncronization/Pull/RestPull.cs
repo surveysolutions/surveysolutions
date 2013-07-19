@@ -60,7 +60,7 @@ namespace CAPI.Android.Syncronization.Pull
             }
             catch (RestException)
             {
-                throw new SynchronizationException("Data reciving was canceled.");
+                throw new SynchronizationException("Data receiving was canceled.");
             }
         }
 
