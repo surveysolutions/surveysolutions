@@ -254,7 +254,7 @@ namespace CapiDataGenerator
                     int.TryParse(CommentsCount, out ccount);
                     int.TryParse(StatusesCount, out scount);
 
-                    var questionsCount = template.GetAllQuestions<IQuestion>().Count();
+                    var questionsCount = template.GetAllQuestions<IQuestion>().Count(x => !x.Featured);
 
                     acount = (int) (questionsCount*((double) acount/100));
                     ccount = (int) (questionsCount*((double) ccount/100));
@@ -300,7 +300,7 @@ namespace CapiDataGenerator
 
         private void CreateComments(QuestionnaireDocument template, int commentsCount, List<Guid> questionnaires)
         {
-            var questions = ((CompleteQuestionnaireDocument)template).GetQuestions();
+            var questions = ((CompleteQuestionnaireDocument)template).GetQuestions().Where(x=>!x.Featured);
             for (int j = 0; j < questionnaires.Count; j++)
             {
                 var qId = questionnaires[j];
@@ -367,7 +367,7 @@ namespace CapiDataGenerator
 
         private void CreateAnswers(QuestionnaireDocument template, int answersCount, List<Guid> questionnaires)
         {
-            var questions = ((CompleteQuestionnaireDocument)template).GetQuestions();
+            var questions = ((CompleteQuestionnaireDocument)template).GetQuestions().Where(x=>!x.Featured);
             for (int j = 0; j < questionnaires.Count; j++)
             {
                 var qId = questionnaires[j];
