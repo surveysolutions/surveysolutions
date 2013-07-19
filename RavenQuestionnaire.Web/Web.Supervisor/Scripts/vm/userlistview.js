@@ -3,7 +3,9 @@
 
     self.LockUrl = lockUrl;
     self.ListView = new ListViewModel(listViewUrl);
-
+    self.ToggleFilter = function () {
+        self.ListView.ToggleFilter();
+    };
     self.lock = function () {
         var user = this;
         $.post(self.LockUrl, { UserId: user.UserId, IsLocked: user.IsLocked }, null, "json")

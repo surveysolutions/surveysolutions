@@ -11,6 +11,10 @@
             }
         }
     };
+    
+    self.ToggleFilter = function () {
+        self.ListView.ToggleFilter();
+    };
 
     var myChildModel = function(data) {
         ko.mapping.fromJS(data, {}, this);

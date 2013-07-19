@@ -8,6 +8,15 @@
     self.GetFilterMethod = function () {
         return null;
     };
+    self.IsFilterOpen = ko.observable(true);
+    self.ToggleFilter = function () {
+        if (self.IsFilterOpen()) {
+            $('#wrapper').addClass('menu-hidden');
+        } else {
+            $('#wrapper').removeClass('menu-hidden');
+        }
+        self.IsFilterOpen(!self.IsFilterOpen());
+    };
 
     self.Items = ko.observableArray([]);
     self.ItemsSummary = ko.observable(null);
@@ -94,6 +103,21 @@
 
     self.onBeforeRequest = function () {
     };
+
+    var setMinHeight = function () {
+        var windowHeight = $(window).height();
+        var navigationHeight = $('.navbar.navbar-fixed-top').height();
+        $('#content').css('min-height', (windowHeight - navigationHeight) + 'px');
+        $('#wrapper').css('margin-top', navigationHeight + 'px');
+
+    };
+
+    $(document).ready(function () {
+        setMinHeight();
+        $(window).resize(function () {
+            setMinHeight();
+        });
+    });
 };
 
 ko.bindingHandlers.sortby = {

@@ -558,7 +558,6 @@
     </Content>
     <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\_ListViewLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Interview\Details.cshtml" />

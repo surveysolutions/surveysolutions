@@ -874,7 +874,8 @@ hr.separator {
   border-bottom: 1px solid #dddddd;
   background: #f5f5f5;
   margin: -9px 0 10px;
-  padding: 3px 10px 0 10px;
+  padding: 0 10px 0 10px;
+  line-height: 30px;
 }
 
 .widget-stats {
@@ -4526,4 +4527,19 @@ a.thumbnail:focus {
     bottom: 0;
     background: url(img/loader.gif) center center no-repeat rgba(0, 0, 0, 0.5);
     z-index: 9999;
+}
+.pseudo-link {
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+    cursor: pointer;
+}
+a.pseudo-link:hover {
+    text-decoration: none;
+}
+.hide-panel-block {
+    margin: 5px 0;
+}
+.horizontal-scroll {
+    position: relative;
+    overflow-x: auto;
 }
