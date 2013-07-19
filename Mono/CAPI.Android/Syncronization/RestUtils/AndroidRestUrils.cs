@@ -85,7 +85,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                 this.logger
                           .Error("Sync error, response contains exception. Message:" + response.ErrorMessage, 
                                  response.ErrorException);
-                throw new Exception("Error occured on communication with target. Please, check settings.");
+                throw new Exception("Error occured on communication with target. Please, check settings or try again later.");
             }
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
@@ -95,8 +95,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("User is not authorized.");
 
-                this.logger
-                          .Error("Sync error. Response status:" + response.StatusCode, exception);
+                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
             }
