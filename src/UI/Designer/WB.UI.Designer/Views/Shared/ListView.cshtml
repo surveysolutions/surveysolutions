@@ -92,10 +92,10 @@
                                             {
                                                 <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
                                             }
-                                            if (actionModel.CanExport)
+                                            if (actionModel.CanExportToPdf)
                                             {
                                                 <li class="divider"></li>
-                                                <li>@Html.ActionLink("View/Export", "Export", controller, routevalues, null)</li>
+                                                <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
                                             }
                                             if (actionModel.CanDelete)
                                             {

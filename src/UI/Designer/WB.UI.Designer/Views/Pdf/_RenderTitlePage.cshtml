@@ -1,0 +1,16 @@
+﻿@using System.Globalization
+@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireView
+
+
+<header>
+    @Model.Title
+</header>
+<div class="create-date">
+    Created by: @Model.CreatedBy, @Model.CreationDate.ToString(CultureInfo.InvariantCulture)
+</div>
+<div class="statistics">
+    Chapters: @Model.ChaptersCount <br/>
+    Groups: @Model.GroupsCount<br/>
+    Questions with conditions: @Model.QuestionsWithConditionsCount <br/>
+    Questions: @Model.QuestionsCount <br/>
+</div>

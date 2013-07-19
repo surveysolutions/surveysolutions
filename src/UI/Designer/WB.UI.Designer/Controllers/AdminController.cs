@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AdminController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The administration controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
@@ -18,9 +9,6 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Security;
 
     using Main.Core.Utility;
-    using Main.Core.View;
-
-    using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Extensions;
@@ -29,50 +17,24 @@ namespace WB.UI.Designer.Controllers
 
     using WebMatrix.WebData;
 
-    /// <summary>
-    ///     The administration controller.
-    /// </summary>
     [CustomAuthorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
-        #region Constructors and Destructors
-
-        private readonly IQuestionnaireHelper _questionnaireHelper;
+        private readonly IQuestionnaireHelper questionnaireHelper;
 
         public AdminController(
-            IViewRepository repository,
-            ICommandService commandService,
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper)
-            : base(repository, commandService, userHelper)
+            : base(userHelper)
         {
-            this._questionnaireHelper = questionnaireHelper;
+            this.questionnaireHelper = questionnaireHelper;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///     The create.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         public ActionResult Create()
         {
             return this.View(new RegisterModel());
         }
 
-        /// <summary>
-        /// The create.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -84,7 +46,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { model.Email }, false);
-                    Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
+                    Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { this.UserHelper.USERROLENAME });
 
                     return this.RedirectToAction("Index");
                 }
@@ -97,15 +59,6 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// The delete confirmed.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -125,20 +78,11 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// The details.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ViewResult"/>.
-        /// </returns>
         public ViewResult Details(Guid id)
         {
             MembershipUser account = this.GetUser(id);
 
-            var questionnaires = _questionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
+            var questionnaires = this.questionnaireHelper.GetQuestionnairesByUserId(userId: id);
             questionnaires.ToList().ForEach(
                 x =>
                     {
@@ -166,15 +110,6 @@ namespace WB.UI.Designer.Controllers
                         });
         }
 
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Edit(Guid id)
         {
             MembershipUser intUser = this.GetUser(id);
@@ -191,15 +126,6 @@ namespace WB.UI.Designer.Controllers
                         });
         }
 
-        /// <summary>
-        /// The edit.
-        /// </summary>
-        /// <param name="user">
-        /// The user.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UpdateAccountModel user)
@@ -234,24 +160,6 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="p">
-        /// The p.
-        /// </param>
-        /// <param name="sb">
-        /// The sb.
-        /// </param>
-        /// <param name="so">
-        /// The so.
-        /// </param>
-        /// <param name="f">
-        /// The f.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ViewResult"/>.
-        /// </returns>
         public ViewResult Index(int? p, string sb, int? so, string f)
         {
             int page = p ?? 1;
@@ -277,7 +185,7 @@ namespace WB.UI.Designer.Controllers
                           .OrderUsingSortExpression(sb ?? string.Empty);
 
             Func<MembershipUser, bool> editAction =
-                (user) => !Roles.GetRolesForUser(user.UserName).Contains(UserHelper.ADMINROLENAME);
+                (user) => !Roles.GetRolesForUser(user.UserName).Contains(this.UserHelper.ADMINROLENAME);
 
             IEnumerable<AccountListViewItemModel> retVal =
                 users.Skip((page - 1) * GlobalHelper.GridPageItemsCount)
@@ -300,24 +208,9 @@ namespace WB.UI.Designer.Controllers
             return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get user.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="MembershipUser"/>.
-        /// </returns>
         private MembershipUser GetUser(Guid id)
         {
             return Membership.GetUser(id, false);
         }
-
-        #endregion
     }
 }

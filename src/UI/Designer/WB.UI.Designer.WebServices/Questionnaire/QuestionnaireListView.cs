@@ -1,8 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireListView.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System.ServiceModel;
