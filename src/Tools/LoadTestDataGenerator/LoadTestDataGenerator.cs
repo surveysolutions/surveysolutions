@@ -613,6 +613,21 @@ namespace LoadTestDataGenerator
             this.UpdateStatus("create surveys", statistics.SurveysCount);
             var surveyIds = this.GenerateSurveys(int.Parse(this.surveys_amount.Text), template, hq).ToList();
 
+
+            if (featuredQuestions != null && statistics.hasFeaturedQuestions)
+            {
+                var startTime = DateTime.Now;
+                var total = surveyIds.Count;
+                var processed = 1;
+                this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
+                foreach (var surveyId in surveyIds)
+                {
+                    this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
+                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
+                    processed++;
+                }
+            }
+
             if (statistics.hasSupervisorEvents)
             {
                 var startTime = DateTime.Now;
@@ -645,20 +660,7 @@ namespace LoadTestDataGenerator
                     processed++;
                 }
             }
-
-            if (featuredQuestions != null && statistics.hasFeaturedQuestions)
-            {
-                var startTime = DateTime.Now;
-                var total = surveyIds.Count;
-                var processed = 1;
-                this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
-                foreach (var surveyId in surveyIds)
-                {
-                    this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
-                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
-                    processed++;
-                }
-            }
+            
         }
 
         private QuestionnaireDocument ReadTemplate(string path)

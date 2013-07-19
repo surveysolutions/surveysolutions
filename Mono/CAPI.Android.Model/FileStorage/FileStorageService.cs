@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.FileStorage
 {
-    public class FileStorageService : IFileStorageService,IBackupable
+    public class FileStorageService : IFileStorageService, IBackupable
     {
         private const string ImageFolder = "IMAGES";
         private readonly string _basePath;
