@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventMergeUtils.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The event merge utils.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility
+﻿namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;

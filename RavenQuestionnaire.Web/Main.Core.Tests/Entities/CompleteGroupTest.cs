@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroupTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete group test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.Entities
 {
@@ -32,6 +26,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             IKernel kernel = new StandardKernel();
         }
 

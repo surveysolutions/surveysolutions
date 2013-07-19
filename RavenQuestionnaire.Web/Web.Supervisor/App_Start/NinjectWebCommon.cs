@@ -2,6 +2,7 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.Supervisor.RavenIndexes;
 using Main.Core;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -10,11 +11,14 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
-
+using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
-
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Synchronization;
+using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
+using Web.Supervisor.CommandDeserialization;
 using Web.Supervisor.Injections;
 using WebActivator;
 
@@ -86,8 +90,11 @@ namespace Web.Supervisor.App_Start
             string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
 
             var kernel = new StandardKernel(
+                new NinjectSettings { InjectNonPublic = true },
                 new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
-                new RavenInfrastructureModule());
+                new RavenInfrastructureModule(), new SynchronizationModule(),
+                new NLogLoggingModule(),
+                new SupervisorCommandDeserializationModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
@@ -107,6 +114,10 @@ namespace Web.Supervisor.App_Start
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
+
+#warning dirty index registrations
+            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
+            indexccessor.RegisterIndexesFormAssembly(typeof(SummaryItemByTemplate).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

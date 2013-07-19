@@ -1,4 +1,9 @@
+using System;
+using System.Linq.Expressions;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Assignment
 {
@@ -17,14 +22,14 @@ namespace Core.Supervisor.Views.Assignment
 
     public class DocumentViewListFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys;
 
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> templates;
 
         public DocumentViewListFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IQueryableDenormalizerStorage<UserDocument> users)
+            IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> templates,
+            IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
             this.surveys = surveys;
@@ -33,73 +38,82 @@ namespace Core.Supervisor.Views.Assignment
 
         public AssignmentView Load(AssignmentInputModel input)
         {
-            return this.surveys.Query(queryableSurveys =>
-            {
-                var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
-                var view = new AssignmentView(input.Page, input.PageSize, 0);
+            var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
+            var view = new AssignmentView(input.Page, input.PageSize, 0);
 
-                view.AssignableUsers = this.IsHq(input.ViewerId)
-                    ? this.GetSupervisorsListForViewer(input.ViewerId)
-                    : this.GetInterviewersListForViewer(input.ViewerId);
+            view.AssignableUsers = this.IsHq(input.ViewerId)
+                                       ? this.GetSupervisorsListForViewer(input.ViewerId)
+                                       : this.GetInterviewersListForViewer(input.ViewerId);
 
-                view.Template = !input.TemplateId.HasValue
+            view.Template = !input.TemplateId.HasValue
                                 ? null
                                 : this.templates.GetById(input.TemplateId.Value).GetTemplateLight();
 
-                view.User = !input.InterviewerId.HasValue
-                                ? null
-                                : this.users.GetById(input.InterviewerId.Value).GetUseLight();
+            view.User = !input.InterviewerId.HasValue
+                            ? null
+                            : this.users.GetById(input.InterviewerId.Value).GetUseLight();
 
-                view.Status = SurveyStatus.Unknown;
+            view.Status = SurveyStatus.Unknown;
 
-                if (input.StatusId.HasValue)
-                {
-                    view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
-                }
-                #warning need to be filtered by responsible supervisr
-                #warning ReadLayer: Contains is not supported in Raven, but In should be used, but here we are abstracted and cannot use it, so more data is now processed on client-side
-                IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
-                                                                         ? queryableSurveys
-                                                                         : queryableSurveys
-                                                                               .Where(
-                                                                                   v =>
-                                                                                   v.Status.PublicId == view.Status.PublicId))
-                    .ToList()
-                    .AsQueryable()
-                    .Where(q => (q.Responsible == null) || responsibleList.Contains(q.Responsible.Id))
-                    .OrderByDescending(t => t.CreationDate);
+            if (input.StatusId.HasValue)
+            {
+                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
+            }
+            
+            Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate = (s) =>
+                                                                                s.Responsible == null ||
+                                                                                s.Responsible.Id.In<Guid>(
+                                                                                    responsibleList);
 
-                if (input.TemplateId.HasValue)
-                {
-                    items = items.Where(x => (x.TemplateId == input.TemplateId));
-                }
+            if (view.Status.PublicId != SurveyStatus.Unknown.PublicId)
+            {
+                predicate = AndCondition(predicate, s => s.Status.PublicId == view.Status.PublicId);
+            }
 
-                if (input.IsNotAssigned)
-                {
-                    items = items.Where(t => t.Responsible == null);
-                }
-                else if (input.InterviewerId.HasValue)
-                {
-                    items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.InterviewerId);
-                }
+            if (input.TemplateId.HasValue)
+            {
+                predicate = AndCondition(predicate, s => s.TemplateId == input.TemplateId);
+            }
 
-                if (input.QuestionnaireId.HasValue)
-                {
-                    items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
-                }
+            if (input.IsNotAssigned)
+            {
+                predicate = AndCondition(predicate, s => s.Responsible == null);
+            }
+            else if (input.InterviewerId.HasValue)
+            {
+                predicate = AndCondition(predicate, s => s.Responsible != null && s.Responsible.Id == input.InterviewerId);
+            }
 
-                view.TotalCount = items.Count();
+            if (input.QuestionnaireId.HasValue)
+            {
+                predicate = AndCondition(predicate, s => s.CompleteQuestionnaireId == input.QuestionnaireId);
+            }
 
-                if (input.Orders.Count > 0)
-                {
-                    items = this.DefineOrderBy(items, input);
-                }
-
-                view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
+            IQueryable<CompleteQuestionnaireBrowseItem> items =
+                this.surveys.QueryEnumerable(predicate).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
+                    .OrderByDescending(t => t.CreationDate).ToList().AsQueryable();
 
 
-                return view;
-            });
+            view.TotalCount = this.surveys.Count(predicate);
+
+#warning this order by is wrong. It is doing sorting awith paged results
+            if (input.Orders.Count > 0)
+            {
+                items = this.DefineOrderBy(items, input);
+            }
+
+            view.SetItems(items.ToList());
+
+
+            return view;
+
+        }
+
+        private Expression<Func<CompleteQuestionnaireBrowseItem, bool>> AndCondition(Expression<Func<CompleteQuestionnaireBrowseItem, bool>> predicate, Expression<Func<CompleteQuestionnaireBrowseItem, bool>> condition)
+        {
+          //  return predicate.AndAlso(condition);
+            return Expression.Lambda<Func<CompleteQuestionnaireBrowseItem, bool>>(
+                Expression.AndAlso(predicate.Body, condition.Body), predicate.Parameters);
         }
 
         private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(
@@ -148,4 +162,6 @@ namespace Core.Supervisor.Views.Assignment
             return query;
         }
     }
+
+   
 }

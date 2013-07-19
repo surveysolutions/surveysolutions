@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusViewItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Status
+﻿namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
@@ -21,49 +12,35 @@ namespace Core.Supervisor.Views.Status
     /// </summary>
     public class StatusViewItem
     {
-        #region Constructors and Destructors
-
+        public class StatusViewItemData
+        {
+            public Guid TemplateId { get; set; }
+            public int Count { get; set; }
+        }
         public StatusViewItem(
             UserLight userLight, Dictionary<Guid, int> templateGroup)
         {
-            this.templateGroup = templateGroup;
+            this.Templates = templateGroup;
+            this.CountersByTemplate = templateGroup.Select(k => new StatusViewItemData{ TemplateId = k.Key, Count = k.Value}).ToList();
             this.User = userLight;
-         /*   this.Items = new Dictionary<Guid, int>();
-
-            foreach (TemplateLight header in headers)
-            {
-                this.Items.Add(
-                    header.TemplateId, templateGroup.ContainsKey(header.TemplateId) ? templateGroup[header.TemplateId] : 0);
-            }*/
-
-            this.Total = this.templateGroup.Values.Sum();
+            this.Total = this.Templates.Values.Sum();
         }
 
-        private Dictionary<Guid, int> templateGroup;
-        #endregion
+        public Dictionary<Guid, int> Templates { get; set; }
+
 
         public int GetCount(Guid templateId)
         {
-            return templateGroup.ContainsKey(templateId) ? templateGroup[templateId] : 0;
+            return Templates.ContainsKey(templateId) ? Templates[templateId] : 0;
         }
 
-        #region Public Properties
+        public List<StatusViewItemData> CountersByTemplate;
 
-      /*  /// <summary>
-        /// Gets or sets Items.
-        /// </summary>
-        public Dictionary<Guid, int> Items { get; set; }*/
-
-        /// <summary>
-        /// Gets or sets Total.
-        /// </summary>
         public int Total { get; set; }
 
-        /// <summary>
-        /// Gets or sets user.
-        /// </summary>
         public UserLight User { get; set; }
 
-        #endregion
+        public Guid StatusId { get; set; }
+
     }
 }

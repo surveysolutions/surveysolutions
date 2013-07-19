@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileStoreDenormalizer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Class handles file changes events.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.IO;
 using Main.Core.Documents;
@@ -16,40 +7,26 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
     /// <summary>
     /// Class handles file changes events.
     /// </summary>
-    public class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
+    public abstract class FileStoreDenormalizer : IEventHandler<FileUploaded>, IEventHandler<FileDeleted>
     {
         #region Fields
 
-        /// <summary>
-        /// The attachments.
-        /// </summary>
-        private readonly IDenormalizerStorage<FileDescription> attachments;
-
-        /// <summary>
-        /// The storage.
-        /// </summary>
+        private readonly IReadSideRepositoryWriter<FileDescription> attachments;
         private readonly IFileStorageService storage;
 
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileStoreDenormalizer"/> class.
-        /// </summary>
-        /// <param name="attachments">
-        /// The attachments.
-        /// </param>
-        /// <param name="storage">
-        /// The storage.
-        /// </param>
-        public FileStoreDenormalizer(IDenormalizerStorage<FileDescription> attachments, IFileStorageService storage)
+        public FileStoreDenormalizer(IReadSideRepositoryWriter<FileDescription> attachments, IFileStorageService storage)
         {
             this.attachments = attachments;
             this.storage = storage;
@@ -71,7 +48,7 @@ namespace Main.Core.EventHandlers
                 {
                     FileName = evnt.Payload.PublicKey.ToString(),
                     // Content = original,
-                    Description = evnt.Payload.Description, 
+                    Description = evnt.Payload.Description,
                     Title = evnt.Payload.Title
                 };
             this.attachments.Store(fileDescription, evnt.Payload.PublicKey);
@@ -81,6 +58,7 @@ namespace Main.Core.EventHandlers
                 this.storage.StoreFile(fileDescription);
                 fileDescription.Content = null;
             }
+            PostSaveHandler(evnt);
         }
 
         /// <summary>
@@ -96,6 +74,8 @@ namespace Main.Core.EventHandlers
         }
 
         #endregion
+
+        public abstract void PostSaveHandler(IPublishedEvent<FileUploaded> evnt);
 
         #region Methods
 

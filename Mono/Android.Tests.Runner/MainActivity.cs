@@ -14,22 +14,14 @@ namespace Android.Tests.Runner
 	{
 		protected override IEnumerable<TestAssemblyInfo> GetAssembliesForTest()
 		{
-			yield return NcqrsTests();
-			yield return CapiTests();
-			yield return NcalcTests();
-			yield return StepshootTests();
+            yield return NcqrsTests();
+            yield return NcalcTests();
 			yield return MainCoreTests();
 			yield return SQliteEventStoreTests();
             yield return AndroidAppTests();
 		}
 
 		#region TestAssemblyInfos
-		private TestAssemblyInfo StepshootTests()
-		{
-			var assembly = typeof (Ncqrs.Restoring.EventStapshoot.test.SnapshootableAggregateRootTests).Assembly;
-
-			return new TestAssemblyInfo(assembly);
-		}
 
 		private TestAssemblyInfo NcalcTests()
 		{
@@ -38,12 +30,6 @@ namespace Android.Tests.Runner
 			return new TestAssemblyInfo(assembly);
 		}
 
-		private TestAssemblyInfo CapiTests()
-		{
-			var assembly = typeof (Core.CAPI.Tests.Synchronization.ClientEventSyncTests).Assembly;
-
-			return new TestAssemblyInfo(assembly);
-		}
 
 		private TestAssemblyInfo SQliteEventStoreTests()
 		{

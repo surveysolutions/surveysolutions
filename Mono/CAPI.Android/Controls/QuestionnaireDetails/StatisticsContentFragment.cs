@@ -119,22 +119,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         }
 
-
-    /*    public override void OnSaveInstanceState(Bundle p0)
-        {
-            base.OnSaveInstanceState(p0);
-            p0.PutString("questionnaireKey", QuestionnaireKey.ToString());
-        }
-        public override void OnViewStateRestored(Bundle p0)
-        {
-            base.OnViewStateRestored(p0);
-            if (p0 == null)
-                return;
-            var publicKey = p0.GetString("questionnaireKey");
-            if (string.IsNullOrEmpty(publicKey))
-                return;
-            questionnaireKey = Guid.Parse(publicKey);
-        }*/
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -158,7 +142,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
 
             var status = SurveyStatus.IsStatusAllowCapiSync(this.Model.Status)
-                             ? SurveyStatus.Initial
+                             ? SurveyStatus.Reinit
                              : Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
             status.ChangeComment = etComments.Text;
             var command = new ChangeStatusCommand()
@@ -168,7 +152,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     Responsible = CapiApplication.Membership.CurrentUser
                 };
             CapiApplication.CommandService.Execute(command);
-        //    this.Activity.ClearAllBackStack<DashboardActivity>();
             this.Activity.Finish();
         }
 

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IGlobalInfoProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The GlobalInfoProvider interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Helpers
+﻿namespace Questionnaire.Core.Web.Helpers
 {
     using Main.Core.Entities.SubEntities;
 
@@ -33,6 +24,10 @@ namespace Questionnaire.Core.Web.Helpers
         /// The <see cref="bool"/>.
         /// </returns>
         bool IsAnyUserExist();
+
+        bool IsHeadquarter { get; }
+
+        bool IsSurepvisor { get; }
 
         #endregion
     }

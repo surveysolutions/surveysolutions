@@ -5,19 +5,19 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
-
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
     using Ncqrs.Eventing;
 
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                             IEventHandler<SnapshootLoaded>,
                                              IEventHandler<NewGroupAdded>,
                                              IEventHandler<GroupCloned>,
                                              IEventHandler<QuestionnaireItemMoved>,
@@ -35,15 +35,18 @@ namespace Main.Core.EventHandlers
         IEventHandler<TemplateImported>
     {
 
-        private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
 
         private readonly ICompleteQuestionFactory questionFactory;
 
+        private readonly ILogger logger;
+
         public QuestionnaireDenormalizer(
-            IDenormalizerStorage<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
+            IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
@@ -59,16 +62,6 @@ namespace Main.Core.EventHandlers
             this.documentStorage.Store(item, item.PublicKey);
         }
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
-        }
 
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {
@@ -80,7 +73,29 @@ namespace Main.Core.EventHandlers
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
-            item.Add(group, evnt.Payload.ParentGroupPublicKey, null);
+
+            Guid? parentGroupPublicKey = evnt.Payload.ParentGroupPublicKey;
+            if (parentGroupPublicKey.HasValue)
+            {
+                var parentGroup = item.Find<Group>(parentGroupPublicKey.Value);
+                if (parentGroup != null)
+                {
+                    group.SetParent(parentGroup);
+                }
+                else
+                {
+                    string errorMessage = string.Format("Event {0} attempted to add group {1} into group {2}. But group {2} doesnt exist in document {3}",
+                        evnt.EventIdentifier, 
+                        evnt.Payload.PublicKey, 
+                        evnt.Payload.ParentGroupPublicKey, 
+                        item.PublicKey);
+
+                    logger.Error(errorMessage);
+                }
+            }
+
+
+            item.Add(group, parentGroupPublicKey, null);
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -108,7 +123,7 @@ namespace Main.Core.EventHandlers
 
             if (isLegacyEvent)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
+                logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
                 return;
             }
 

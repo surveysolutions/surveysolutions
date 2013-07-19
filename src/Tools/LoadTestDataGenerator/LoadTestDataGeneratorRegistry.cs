@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Core.Supervisor.Denormalizer;
 using Main.Core;
-using Raven.Client.Document;
-using Raven.Client.Extensions;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace LoadTestDataGenerator
 {
+    using System.Web.Configuration;
+    using Ninject;
+    using Ninject.Activation;
+
     public class LoadTestDataGeneratorRegistry : CoreRegistry
     {
-        private readonly string repositoryPath;
-
         public LoadTestDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
             : base(repositoryPath, isEmbeded)
         {
-            this.repositoryPath = repositoryPath;
+        }
+
+        public override void Load()
+        {
+            base.Load();
         }
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return
-                base.GetAssweblysForRegister()
-                    .Concat(new[]
-                    {
-                        typeof(LoadTestDataGeneratorRegistry).Assembly
-                    });
+            return base.GetAssweblysForRegister().Concat(new[]
+            {
+                typeof(LoadTestDataGeneratorRegistry).Assembly,
+                typeof(CompleteQuestionnaireDenormalizer).Assembly,
+                typeof(Questionnaire).Assembly,
+            });
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
@@ -38,30 +43,23 @@ namespace LoadTestDataGenerator
             });
         }
 
-
-        protected override void RegisterAdditionalElements()
+        protected override object GetReadSideRepositoryReader(IContext context)
         {
-            base.RegisterAdditionalElements();
-/*
-            this.Unbind<DocumentStore>();
-            var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
-            var store = new DocumentStore
-                {
-                    Url = repositoryPath
-                };
-            bool isNotSystemDatabase = !string.IsNullOrWhiteSpace(databaseName);
-            if (isNotSystemDatabase)
-            {
-                store.DefaultDatabase = databaseName;
-            }
-            store.Initialize();
-            if (isNotSystemDatabase)
-            {
-                store.DatabaseCommands.EnsureDatabaseExists(databaseName);
-            }
-            
-            this.Bind<DocumentStore>().ToConstant(store);
- */
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
+
+        protected override object GetReadSideRepositoryWriter(IContext context)
+        {
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
+
+        public static bool ShouldUsePersistentReadLayer()
+        {
+            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }
     }
 }

@@ -1,0 +1,89 @@
+﻿@using System.Web.Optimization
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+}
+@section styles
+{
+    @Styles.Render("~/css/list")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/list")
+    @RenderSection("scripts", false)
+}
+
+@RenderSection("header", false)
+@RenderSection("gridnavigation", false)
+<div id="list">
+    <!-- ko ifnot:ListView.IsPageLoaded()  -->
+    <p class="text-center">
+        Loading. Please wait...
+    </p>
+    <!-- /ko -->
+    <!-- ko if:ListView.IsPageLoaded()  -->
+    <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
+    <p class="text-center">
+        No results found
+    </p>
+    <!-- /ko -->
+    <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
+    @RenderSection("grid", true)
+    <!-- ko if:ListView.Pager().LastPage() > 1 -->
+    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- /ko -->
+</div>
+@this.RenderBody()
+
+<script type="text/html" id="tpl-pager">
+
+    <ul>
+        <!-- ko if:CurrentPage() === 1 -->
+        <li class="disabled">
+            <a href="#" class="disabledPage">&laquo;&laquo;</a></li>
+        <!-- /ko -->
+        <!-- ko ifnot:CurrentPage() === 1 -->
+        <li>
+            <a href="#" data-bind="click: function () { CurrentPage(1); }">&laquo;&laquo;</a></li>
+        <!-- /ko -->
+        <!-- ko if:HasPrevPage -->
+        <li>
+            <a href="#" data-bind="click: function () { CurrentPage(CurrentPage() - 1); }">&laquo;</a></li>
+        <!-- /ko -->
+        <!-- ko ifnot:HasPrevPage -->
+        <li class="disabled">
+            <a href="#" class="disabledPage">&laquo;</a></li>
+        <!-- /ko -->
+        <!-- ko foreach:Pages -->
+        <!-- ko if:$data === $parent.CurrentPage() -->
+        <li class="active">
+            <span class="currentPage" data-bind="text: $data"></span>
+        </li>
+        <!-- /ko -->
+        <!-- ko if:$data !== $parent.CurrentPage() -->
+        <li>
+            <a href="#" data-bind="text: $data, click: function () { $parent.CurrentPage($data); }"></a>
+        </li>
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko if:HasNextPage -->
+        <li>
+            <a href="#" data-bind="click: function () { CurrentPage(CurrentPage() + 1); }">&raquo;</a></li>
+        <!-- /ko -->
+        <!-- ko ifnot:HasNextPage -->
+        <li class="disabled">
+            <a href="#" class="disabledPage">&raquo;</a></li>
+        <!-- /ko -->
+        <!-- ko ifnot:CurrentPage() === LastPage() -->
+        <li>
+            <a href="#" data-bind="click: function () { CurrentPage(LastPage()); }">&raquo;&raquo;</a></li>
+        <!-- /ko -->
+        <!-- ko if:CurrentPage() === LastPage() -->
+        <li class="disabled">
+            <a href="#" class="disabledPage">&raquo;&raquo;</a></li>
+        <!-- /ko -->
+    </ul>
+
+</script>

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionDeleted.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The question deleted.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire
+﻿namespace Main.Core.Events.Questionnaire
 {
     using System;
 

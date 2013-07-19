@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Linq.Expressions;
 
 using Main.DenormalizerStorage;
@@ -14,6 +5,8 @@ using System;
 using System.Linq;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Questionnaire
 {
@@ -29,7 +22,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession;
 
         #endregion
 
@@ -41,7 +34,7 @@ namespace Main.Core.View.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireBrowseViewFactory(IQueryableDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession)
+        public QuestionnaireBrowseViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }

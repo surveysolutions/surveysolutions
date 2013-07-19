@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="BaseAuthorizationService.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.WCF
+﻿namespace Main.Core.WCF
 {
     using System;
     using System.Collections.Generic;

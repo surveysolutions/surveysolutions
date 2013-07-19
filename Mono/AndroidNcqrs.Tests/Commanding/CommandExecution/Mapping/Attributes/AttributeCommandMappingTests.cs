@@ -1,6 +1,8 @@
 ﻿using System;
 //using System.Transactions;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
@@ -12,6 +14,12 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
     [TestFixture]
     public class AttributeCommandMappingTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [MapsToAggregateRootMethod("Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes.AttributeCommandMappingTests+AggregateRootTarget, AndroidNcqrs.Tests", "UpdateTitle")]
         public class AggregateRootTargetUpdateTitleCommand : CommandBase
         {

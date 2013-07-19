@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GroupUpdated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The group updated.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire
+﻿namespace Main.Core.Events.Questionnaire
 {
     using System;
 

@@ -5,14 +5,13 @@ using System.Linq;
 
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.SharedKernel.Logger;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Domain.Storage
 {
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
 

@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.User
 {
@@ -14,9 +16,9 @@ namespace Core.Supervisor.Views.User
 
     internal class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
-        
-        public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+
+        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }

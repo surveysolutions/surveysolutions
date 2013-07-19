@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IGetAggragateRootList.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The GetAggragateRootList interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.CompleteQuestionnaire
+﻿namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System.IO;
     using System.ServiceModel;

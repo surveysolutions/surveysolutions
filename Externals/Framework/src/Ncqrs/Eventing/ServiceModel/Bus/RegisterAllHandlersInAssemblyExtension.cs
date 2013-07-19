@@ -2,16 +2,13 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-
-using WB.Core.SharedKernel.Logger;
-using WB.Core.SharedKernel.Utils.Logging;
-
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public static class RegisterAllHandlersInAssemblyExtension
     {
-        private static ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILogger _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void RegisterAllHandlersInAssembly(this InProcessEventBus target, Assembly asm)
         {

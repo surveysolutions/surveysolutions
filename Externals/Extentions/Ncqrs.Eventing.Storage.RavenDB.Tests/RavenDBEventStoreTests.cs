@@ -166,6 +166,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
             {
                 Assert.IsTrue(AreEqual(streamList[i], resultList[i]));
             }
+            
         }
 
         private static bool AreEqual(UncommittedEvent uncommitted, CommittedEvent committed)

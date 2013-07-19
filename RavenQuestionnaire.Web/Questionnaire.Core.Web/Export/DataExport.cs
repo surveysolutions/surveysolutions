@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataExport.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The data export.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Text.RegularExpressions;
 
 namespace Questionnaire.Core.Web.Export
@@ -26,46 +17,20 @@ namespace Questionnaire.Core.Web.Export
 
     using SynchronizationMessages.Export;
 
-    /// <summary>
-    /// The data export.
-    /// </summary>
     public class DataExport : IDataExport
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The kernel.
-        /// </summary>
         private readonly IKernel kernel;
-
-        /// <summary>
-        /// The supplier.
-        /// </summary>
         private readonly IEnvironmentSupplier<CompleteQuestionnaireExportView> supplier;
+        private readonly IViewFactory<CQStatusReportViewInputModel, CQStatusReportView> completeQuestionnaireStatusReportViewFactory;
+        private readonly IViewFactory<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView> completeQuestionnaireExportViewFactory;
 
-        /// <summary>
-        /// The view repository.
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataExport"/> class. 
-        /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
-        public DataExport(IKernel kernel)
+        public DataExport(IKernel kernel, IViewFactory<CQStatusReportViewInputModel, CQStatusReportView> completeQuestionnaireStatusReportViewFactory, IViewFactory<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView> completeQuestionnaireExportViewFactory)
         {
             this.kernel = kernel;
-            this.viewRepository = kernel.Get<IViewRepository>();
+            this.completeQuestionnaireStatusReportViewFactory = completeQuestionnaireStatusReportViewFactory;
+            this.completeQuestionnaireExportViewFactory = completeQuestionnaireExportViewFactory;
             this.supplier = kernel.Get<IEnvironmentSupplier<CompleteQuestionnaireExportView>>();
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -93,7 +58,7 @@ namespace Questionnaire.Core.Web.Export
                 var manager = new ExportManager<CompleteQuestionnaireExportView>(provider);
                 var allLevels = new Dictionary<string, byte[]>();
                 CQStatusReportView questionnairies =
-                    this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
+                    this.completeQuestionnaireStatusReportViewFactory.Load(
                         new CQStatusReportViewInputModel(templateGuid, SurveyStatus.Approve.PublicId));
                 this.CollectLevels(
                     new CompleteQuestionnaireExportInputModel(
@@ -139,7 +104,7 @@ namespace Questionnaire.Core.Web.Export
             FileType type)
         {
             CompleteQuestionnaireExportView records =
-                this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(input);
+                this.completeQuestionnaireExportViewFactory.Load(input);
 
             if (records == null || !records.Items.Any())
                 return;

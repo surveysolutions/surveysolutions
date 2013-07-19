@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireConditionExecuteCollectorTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire condition execute collector test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace Main.Core.Tests.ExpressionExecutors
 {
@@ -61,6 +55,8 @@ namespace Main.Core.Tests.ExpressionExecutors
         [SetUp]
         public void CreateObjects()
         {
+	        ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            
             doc = new QuestionnaireDocument();
 
             var mainGroup = new Group("Main Group");

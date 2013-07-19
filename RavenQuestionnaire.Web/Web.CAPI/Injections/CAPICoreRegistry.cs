@@ -1,21 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CAPICoreRegistry.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Web.CAPI.Injections
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
 
-    using Core.CAPI.Synchronization;
-    using Core.CAPI.Views;
 
-    using DataEntryClient.SycProcessFactory;
 
     using Main.Core;
     using Main.Core.Events;
@@ -58,24 +47,9 @@ namespace Web.CAPI.Injections
         {
             return
                 base.GetAssweblysForRegister().Concat(
-                    new[] { typeof(ClientEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
+                    new[] { typeof(QuestionnaireMembershipProvider).Assembly });
         }
 
-        /// <summary>
-        /// The load.
-        /// </summary>
-        public override void Load()
-        {
-            base.Load();
-
-            this.Unbind<IScreenViewSupplier>();
-            this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
-
-            this.Unbind<IEventStreamReader>();
-            this.Bind<IEventStreamReader>().To<ClientEventStreamReader>();
-
-            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
-        }
 
         #endregion
     }

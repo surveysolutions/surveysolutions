@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignmentView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey group view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.Documents;
 
 namespace Core.Supervisor.Views.Assignment

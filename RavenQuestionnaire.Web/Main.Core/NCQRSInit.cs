@@ -1,13 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NCQRSInit.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The ncqrs init.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.SharedKernel.Utils.Logging;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core
 {
@@ -30,8 +22,6 @@ namespace Main.Core
 
     using Main.Core.Entities.Extensions;
     using Ncqrs.Domain.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
-    using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 #if MONODROID
     using AndroidNcqrs.Eventing.Storage.SQLite;
@@ -55,6 +45,8 @@ namespace Main.Core
 
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
+
+        
 
         public static bool IsReadLayerBuilt
         {
@@ -89,13 +81,9 @@ namespace Main.Core
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
-            var snpshotStore = new InMemorySnapshootStore(NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore,
-                                                          new InMemoryEventStore());
+            var snpshotStore = new InMemoryEventStore();
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
-
-            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
-                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
 
             var bus = new InProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
@@ -127,7 +115,8 @@ namespace Main.Core
         /// </exception>
         public static void RebuildReadLayer()
         {
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding started.");
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Info("Read layer rebuilding started.");
 
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
@@ -145,11 +134,12 @@ namespace Main.Core
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
+            IEnumerable<IPublishableEvent> events = eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent);
+            eventBus.Publish(events);
 
             isReadLayerBuilt = true;
 
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding finished.");
+            logger.Info("Read layer rebuilding finished.");
         }
 
 
@@ -170,33 +160,19 @@ namespace Main.Core
         private static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
             var mapper = new AttributeBasedCommandMapper();
-            var service = new ConcurrencyResolveCommandService();
+            var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             foreach (Type type in commandSupplier.GetCommandList())
             {
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
-            service.RegisterExecutor(typeof(CreateSnapshotForAR),
-                                    new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
-        
             return service;
         }
 
 #if !MONODROID
-        /// <summary>
-        /// The initialize event store.
-        /// </summary>
-        /// <param name="store">
-        /// The store.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IStreamableEventStore"/>.
-        /// </returns>
-        private static IStreamableEventStore InitializeEventStore(DocumentStore store, int pageSize)
-        {
-            return new RavenDBEventStore(store, pageSize);
-        }
+        
+        public static Func<DocumentStore, int, IStreamableEventStore> InitializeEventStore = (store, pageSize) => new RavenDBEventStore(store, pageSize);
 
 #endif
 

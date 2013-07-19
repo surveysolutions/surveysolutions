@@ -1,13 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireBrowseItemDenormalizer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire browse item denormalizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
@@ -22,78 +15,27 @@ namespace Main.Core.EventHandlers
     using Main.Core.View.Question;
     using Main.DenormalizerStorage;
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
-    /// <summary>
-    /// The complete questionnaire browse item denormalizer.
-    /// </summary>
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<SnapshootLoaded>
+                                                               IEventHandler<QuestionnaireAssignmentChanged>
     {
-        #region Fields
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
+        private readonly IReadSideRepositoryReader<UserDocument> users;
 
-        /// <summary>
-        /// The document item store.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireBrowseItemDenormalizer"/> class.
-        /// </summary>
-        /// <param name="documentItemStore">
-        /// The document item store.
-        /// </param>
-        public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore, IReadSideRepositoryReader<UserDocument> users)
         {
             this.documentItemStore = documentItemStore;
+            this.users = users;
         }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
+        
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             this.HandleNewSurvey(evnt.Payload.Questionnaire);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this.HandleNewSurvey(document.Clone() as CompleteQuestionnaireDocument);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
             if (evnt.Payload.Featured)
@@ -118,23 +60,11 @@ namespace Main.Core.EventHandlers
             }
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
         {
             this.documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
@@ -145,14 +75,10 @@ namespace Main.Core.EventHandlers
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
+            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+
             CompleteQuestionnaireBrowseItem item =
                 this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
 
@@ -160,8 +86,6 @@ namespace Main.Core.EventHandlers
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
-
-        #endregion
 
         #region Methods
 

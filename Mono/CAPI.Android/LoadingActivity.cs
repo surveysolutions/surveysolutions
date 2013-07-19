@@ -5,7 +5,21 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
+using CAPI.Android.Core.Model.ModelUtils;
+using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Main.Core;
+using Main.Core.Commands.Questionnaire.Completed;
+using Main.Core.Documents;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using Ninject;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
 {
@@ -39,9 +53,12 @@ namespace CAPI.Android
         {
             try
             {
-                var model = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
-                    new QuestionnaireScreenInput(publicKey));
-                
+                var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
+                var result = documentStorage.GetById(publicKey);
+                if (result == null)
+                {
+                    GenerateEvents(publicKey);
+                }
                 Intent intent = new Intent(this, typeof(DetailsActivity));
                 intent.PutExtra("publicKey", publicKey.ToString());
                 StartActivity(intent);
@@ -49,6 +66,49 @@ namespace CAPI.Android
             catch
             {
                 
+            }
+        }
+#warning remove after eluminating ncqrs
+        private void GenerateEvents(Guid publicKey)
+        {
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
+
+            var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
+            //todo: load from sync cache
+
+            var item = syncCacher.LoadItem(publicKey);
+
+            if (!string.IsNullOrWhiteSpace(item))
+            {
+                string content = PackageHelper.DecompressString(item);
+                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new CreateNewAssigment(questionnarieContent));
+
+                syncCacher.DeleteItem(publicKey);
+            }
+
+
+            var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
+            long minVersion = 0;
+            var snapshot = snapshotStore.GetSnapshot(publicKey, long.MaxValue);
+            if (snapshot != null)
+            {
+                var originalDoc = snapshot.Payload as CompleteQuestionnaireDocument;
+                if (originalDoc != null)
+                {
+                    documentStorage.Store(
+                        new CompleteQuestionnaireView(originalDoc),
+                        publicKey);
+                    minVersion = snapshot.Version + 1;
+                }
+            }
+            var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, minVersion, long.MaxValue);
+            foreach (CommittedEvent committedEvent in eventsAfterSnapshot)
+            {
+                bus.Publish(committedEvent);
             }
         }
     }

@@ -124,7 +124,18 @@ function GetProjectsWithTests() {
 
 function GetOutputAssembly($Project, $BuildConfiguration) {
     $projectFileInfo = Get-Item $Project
-    $fullPathToAssembly = "$($projectFileInfo.DirectoryName)\bin\$BuildConfiguration\$($projectFileInfo.BaseName).dll"
+    $projectXml = [xml] (Get-Content $Project)
+
+    $projectFolder = $projectFileInfo.DirectoryName
+
+    $outputPath = $projectXml.Project.PropertyGroup `
+        | ?{ $_.Condition -like "*'$BuildConfiguration|*" } `
+        | %{ $_.OutputPath } `
+        | select -First 1
+
+    $assemblyName = $projectXml.Project.PropertyGroup.AssemblyName[0]
+
+    $fullPathToAssembly = Join-Path (Join-Path $projectFolder $outputPath) "$assemblyName.dll"
 
     return GetPathRelativeToCurrectLocation $fullPathToAssembly
 }

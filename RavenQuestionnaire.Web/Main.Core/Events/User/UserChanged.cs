@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserChanged.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The user changed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.User
+﻿namespace Main.Core.Events.User
 {
     using System;
     using System.Linq;

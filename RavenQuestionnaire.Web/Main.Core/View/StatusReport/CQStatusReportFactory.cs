@@ -1,18 +1,11 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQStatusReportFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The cq status report factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.StatusReport
 {
@@ -27,7 +20,7 @@ namespace Main.Core.View.StatusReport
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -39,7 +32,7 @@ namespace Main.Core.View.StatusReport
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public CQStatusReportFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public CQStatusReportFactory(IQueryableReadSideRepositoryReader<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }

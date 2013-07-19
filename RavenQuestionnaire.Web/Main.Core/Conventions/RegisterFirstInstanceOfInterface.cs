@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RegisterFirstInstanceOfInterface.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The register first instance of interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Conventions
+﻿namespace Main.Core.Conventions
 {
     using System;
     using System.Collections.Generic;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The abstract complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Complete
+﻿namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
     using System.Collections.Generic;
@@ -56,11 +47,6 @@ namespace Main.Core.Entities.SubEntities.Complete
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the validated time.
-        /// </summary>
-        public DateTime ValidatedTime { get; set; }
 
         /// <summary>
         /// Gets or sets the answer date.

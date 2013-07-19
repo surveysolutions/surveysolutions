@@ -1,10 +1,6 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceDenormalizer.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
@@ -18,14 +14,14 @@ namespace Main.Core.EventHandlers
     /// TODO: Update summary.
     /// </summary>
     public class DeviceDenormalizer : IEventHandler<NewDeviceRegistered>,
-                                        IEventHandler<UpdateRegisteredDevice>
+                                      IEventHandler<UpdateRegisteredDevice>
     {
         #region Fields
 
         /// <summary>
         /// Devices field
         /// </summary>
-        private readonly IDenormalizerStorage<SyncDeviceRegisterDocument> devices;
+        private readonly IReadSideRepositoryWriter<SyncDeviceRegisterDocument> devices;
 
         #endregion
 
@@ -37,7 +33,7 @@ namespace Main.Core.EventHandlers
         /// <param name="registerDevices">
         /// The register devices.
         /// </param>
-        public DeviceDenormalizer(IDenormalizerStorage<SyncDeviceRegisterDocument> registerDevices)
+        public DeviceDenormalizer(IReadSideRepositoryWriter<SyncDeviceRegisterDocument> registerDevices)
         {
             this.devices = registerDevices;
         }

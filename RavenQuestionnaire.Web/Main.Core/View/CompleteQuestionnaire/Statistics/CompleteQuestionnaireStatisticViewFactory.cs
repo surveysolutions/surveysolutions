@@ -1,13 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireStatisticViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire statistic view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
@@ -27,7 +20,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store;
 
         #endregion
 
@@ -39,7 +32,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="store">
         /// The store.
         /// </param>
-        public CompleteQuestionnaireStatisticViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public CompleteQuestionnaireStatisticViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store)
         {
             this.store = store;
         }

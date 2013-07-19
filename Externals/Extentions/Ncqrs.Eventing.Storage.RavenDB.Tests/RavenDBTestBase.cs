@@ -10,7 +10,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
     public abstract class RavenDBTestBase
     {
         protected DocumentStore _documentStore;
-        private string path;
 
         [SetUp]
         public void SetUpDocumentStore()
@@ -29,34 +28,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
             }
         }
 
-        private static DocumentStore ConnectToDocumentStore()
-        {
-            var documentStore = new DocumentStore
-                                    {
-                                        Url = "http://localhost:8080",
-                                        Conventions = new DocumentConvention
-                                        {
-                                            JsonContractResolver = new PropertiesOnlyContractResolver(),
-                                            FindTypeTagName = x => "Snapshots"
-                                                /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
-                                        }
-                                    };
-            documentStore.Initialize();
-            return documentStore;
-        }
-
         private DocumentStore NewDocumentStore()
         {
-            path = Path.GetDirectoryName(Assembly.GetAssembly(typeof(RavenDBEventStoreTests)).CodeBase);
-            path = Path.Combine(path, "TestDb").Substring(6);
-            if (Directory.Exists(path))
-            {
-                File.SetAttributes(path, FileAttributes.Directory);
-                Directory.Delete(path, true);
-            }
             var documentStore = new EmbeddableDocumentStore
                                     {
-                                        DataDirectory = path,
+                                        RunInMemory = true,
                                         Conventions = new DocumentConvention
                                             {
                                                 JsonContractResolver = new PropertiesOnlyContractResolver(),

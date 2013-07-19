@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GlobalInfoProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The global info provider.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Helpers
+﻿namespace Questionnaire.Core.Web.Helpers
 {
     using Main.Core.Entities.SubEntities;
 
@@ -38,6 +29,20 @@ namespace Questionnaire.Core.Web.Helpers
         public bool IsAnyUserExist()
         {
             return GlobalInfo.IsAnyUserExist();
+        }
+
+        public bool IsHeadquarter {
+            get
+            {
+                return GlobalInfo.IsHeadquarter;
+            }
+        }
+
+        public bool IsSurepvisor {
+            get
+            {
+                return GlobalInfo.IsSupervisor;
+            }
         }
 
         #endregion

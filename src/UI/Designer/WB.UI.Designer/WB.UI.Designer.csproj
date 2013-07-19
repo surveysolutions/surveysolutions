@@ -192,12 +192,12 @@
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
-    <Compile Include="Code\ObjectExtensions.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
-    <Compile Include="Code\ConfigurationManager\WebConfigHelper.cs" />
+    <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
+    <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -213,8 +213,6 @@
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
     <Compile Include="Code\Exceptions\DesignerPermissionException.cs" />
     <Compile Include="Code\GlobalHelper.cs" />
-    <Compile Include="Code\Helpers\CommandDeserializationException.cs" />
-    <Compile Include="Code\Helpers\CommandDeserializer.cs" />
     <Compile Include="Code\Helpers\Routes\AreaRegistrationContextExtensions.cs" />
     <Compile Include="Code\Helpers\Routes\LowercaseRoute.cs" />
     <Compile Include="Code\Helpers\Routes\RouteCollectionExtensions.cs" />
@@ -224,7 +222,6 @@
     <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Code\Helpers\ICommandDeserializer.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
@@ -253,7 +250,14 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Code\PasswordPolicyFactory.cs" />
-    <Compile Include="PdfConvert.cs" />
+    <Compile Include="Pdf\OSUtil.cs" />
+    <Compile Include="Pdf\PdfConvert.cs" />
+    <Compile Include="Pdf\PdfConvertEnvironment.cs" />
+    <Compile Include="Pdf\PdfConvertException.cs" />
+    <Compile Include="Pdf\PdfConvertTimeoutException.cs" />
+    <Compile Include="Pdf\PdfDocument.cs" />
+    <Compile Include="Pdf\PdfOutput.cs" />
+    <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\IExpressionReplacer.cs" />
@@ -280,6 +284,7 @@
     <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
     <Content Include="Content\jquery.pnotify.icons.css" />
+    <Content Include="Content\pdf-title-page.css" />
     <Content Include="Content\pdf.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -376,6 +381,10 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Configuration\Vitalii.Designer.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
@@ -513,7 +522,6 @@
     <Content Include="Views\Questionnaire\Clone.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
-    <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
@@ -529,6 +537,8 @@
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
+    <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
+    <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -551,6 +561,14 @@
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
+      <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
+      <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
+      <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -559,9 +577,9 @@
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>

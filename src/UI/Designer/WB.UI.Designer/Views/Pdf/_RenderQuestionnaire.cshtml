@@ -1,11 +1,11 @@
 ﻿@using Main.Core.View
-@model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
+@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireView
 
-<div style="font-weight: bold; font-size: 140%; text-align: center; padding-bottom: 10px;">
+<header>
     @this.Model.Title
-</div>
+</header>
 
-@foreach (ICompositeView child in this.Model.Children)
+@foreach (var child in this.Model.Groups)
 {
     Html.RenderPartial("_RenderChild", child);
 }

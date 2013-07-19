@@ -2,12 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using Main.Core;
-using Main.Core.Documents;
-using Main.DenormalizerStorage;
 using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using Ninject;
-using WB.Core.Questionnaire.ExportServices;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -33,8 +30,14 @@ namespace WB.UI.Designer.Code
                         typeof(QuestionnaireView).Assembly, 
                         typeof(DesignerRegistry).Assembly,
                         typeof(AccountAR).Assembly,
-                        typeof(PublicService).Assembly
+                        typeof(PublicService).Assembly,
+                        typeof(Questionnaire).Assembly,
                     });
+        }
+        
+        public override void Load()
+        {
+            base.Load();
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()

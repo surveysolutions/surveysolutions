@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IndexViewItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey browse item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Index
 {
     using System;

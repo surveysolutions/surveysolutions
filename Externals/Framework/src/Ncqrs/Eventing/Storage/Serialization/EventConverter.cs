@@ -26,6 +26,9 @@ namespace Ncqrs.Eventing.Storage.Serialization
             #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(typeResolver != null, "typeResolver");
             #endif
+            if (typeResolver == null)
+                throw new ArgumentNullException("typeResolver");
+
             _converters = new Dictionary<string, IEventConverter>();
             _typeResolver = typeResolver;
         }
@@ -44,6 +47,9 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <seealso cref="AddConverter"/>
         public void Upgrade(StoredEvent<JObject> theEvent)
         {
+            if(theEvent == null)
+                throw new ArgumentNullException("theEvent");
+
             IEventConverter converter;
             if (_converters.TryGetValue(theEvent.EventName, out converter))
                 converter.Upgrade(theEvent);
@@ -68,6 +74,13 @@ namespace Ncqrs.Eventing.Storage.Serialization
             Contract.Requires<ArgumentNullException>(eventType != null, "eventType");
             Contract.Requires<ArgumentNullException>(converter != null, "converter");
             #endif
+
+            if (eventType == null)
+                throw new ArgumentNullException("eventType");
+
+            if (converter == null)
+                throw new ArgumentNullException("converter");
+
             string name = _typeResolver.EventNameFor(eventType);
             AddConverter(name, converter);
         }
@@ -89,6 +102,12 @@ namespace Ncqrs.Eventing.Storage.Serialization
             Contract.Requires<ArgumentNullException>(eventName != null, "eventName");
             Contract.Requires<ArgumentNullException>(converter != null, "converter");
 #endif
+            if (eventName == null)
+                throw new ArgumentNullException("eventName");
+
+            if (converter == null)
+                throw new ArgumentNullException("converter");
+
             ThrowIfNameExists(eventName);
             _converters.Add(eventName, converter);
         }

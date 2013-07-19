@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PasswordPolicyFactory.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using WB.UI.Shared.Web.MembershipProvider.Accounts;
 

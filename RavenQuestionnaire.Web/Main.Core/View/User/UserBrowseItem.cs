@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserBrowseItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The user browse item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Main.Core.Entities.SubEntities;
 

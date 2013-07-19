@@ -1,0 +1,13 @@
+--- SummaryFactory.cs
++++ SummaryFactory.cs
+@@ -43,6 +37,8 @@
+             }
+-
+-            
++            if (input.TemplateId.HasValue)
++            {
++                predicate = predicate.AndCondition(x => x.TemplateId == input.TemplateId);
++            }
+ 
+             var all = summary.QueryEnumerable(predicate).GroupBy(
+                 x => x.ResponsibleId,

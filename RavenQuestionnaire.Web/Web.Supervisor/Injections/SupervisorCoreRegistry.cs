@@ -1,7 +1,17 @@
+using System.ComponentModel.Composition.Hosting;
+using System.IO;
 using System.Web.Configuration;
-
+using Core.Supervisor.RavenIndexes;
+using Core.Supervisor.Views.Index;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Injections
@@ -12,24 +22,17 @@ namespace Web.Supervisor.Injections
     using System.Reflection;
     using System.Web.Mvc;
 
-    using Core.Supervisor.Synchronization;
-
-    using DataEntryClient.SycProcessFactory;
-
     using Main.Core;
     using Main.Core.Events;
     using Main.Core.Export;
     using Main.Core.View.Export;
     using Main.DenormalizerStorage;
-    using Main.Synchronization.SycProcessRepository;
 
     using Ninject;
     using Ninject.Activation;
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
     
     using Web.Supervisor.Filters;
@@ -46,21 +49,26 @@ namespace Web.Supervisor.Injections
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return
-                base.GetAssweblysForRegister().Concat(
-                    new[]
-                    {
-                            typeof(SupervisorEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly
-                    });
+            return base.GetAssweblysForRegister().Concat(new[]
+            {
+                typeof(IndexViewFactory).Assembly,
+                typeof(QuestionnaireMembershipProvider).Assembly,
+                typeof(ImportQuestionnaireCommand).Assembly,
+            });
         }
 
-        protected override object GetStorage(IContext context)
+        protected override object GetReadSideRepositoryReader(IContext context)
         {
-            Type storageType = ShouldUsePersistentReadLayer()
-                ? typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0])
-                : typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
 
-            return this.Kernel.Get(storageType);
+        protected override object GetReadSideRepositoryWriter(IContext context)
+        {
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
@@ -87,20 +95,9 @@ namespace Web.Supervisor.Injections
         {
             base.Load();
 
-            this.Unbind<IEventStreamReader>();
-            this.Bind<IEventStreamReader>()
-                .To<SupervisorEventStreamReader>()
-                .WithConstructorArgument("isApprovedSended", isApprovedSended);
-
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
-
-            this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
-            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
-
-            this.Bind<ILog>().ToMethod(
-                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
-
+            
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
         }
     }

@@ -1,10 +1,6 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceViewFactory.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Device
 {
@@ -25,7 +21,7 @@ namespace Main.Core.View.Device
         /// <summary>
         /// Devices field devices
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices;
+        private readonly IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> devices;
 
         #endregion
 
@@ -37,7 +33,7 @@ namespace Main.Core.View.Device
         /// <param name="devices">
         /// The devices.
         /// </param>
-        public DeviceViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices)
+        public DeviceViewFactory(IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> devices)
         {
             this.devices = devices;
         }

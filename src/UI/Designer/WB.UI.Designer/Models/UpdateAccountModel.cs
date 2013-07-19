@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UpdateAccountModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The update account model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System;
     using System.ComponentModel;

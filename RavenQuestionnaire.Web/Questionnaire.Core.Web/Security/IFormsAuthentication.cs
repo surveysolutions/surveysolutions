@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFormsAuthentication.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The FormsAuthentication interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Security
+﻿namespace Questionnaire.Core.Web.Security
 {
     using Main.Core.Entities.SubEntities;
 

@@ -1,13 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AsyncQuestionnaireUpdater.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The async questionnaire updater.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.SharedKernel.Utils.Logging;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Questionnaire.Core.Web.Threading
 {
@@ -116,7 +108,8 @@ namespace Questionnaire.Core.Web.Threading
                             }
                             catch (Exception e)
                             {
-                                LogManager.GetLogger(this.GetType()).Error(e.Message, e);
+                                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                                logger.Error(e.Message, e);
                             }
 
                             manager.OutstandingOperations.Decrement();

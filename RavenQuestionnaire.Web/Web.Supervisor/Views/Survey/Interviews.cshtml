@@ -1,0 +1,137 @@
+﻿@using System.Web.Optimization
+@using Newtonsoft.Json
+@model Web.Supervisor.Models.DocumentFilter
+@{
+    Layout = "~/Views/Shared/_ListViewLayout.cshtml";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/Scripts/vm/documentlistview.js")
+
+    <script type="text/javascript">
+        var $detailsUrl = '@Url.Action("Details", "Interview")';
+        var $surveysUrl = '@Url.Action("Index", "Survey")';
+        var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
+        $(function () {
+            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
+            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })',commandExecutionUrl, users);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
+@section header
+{
+    <h3 class="sinle-line-header">Interviews</h3>
+    <div class="menubar">
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign interviewer <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" data-bind="foreach: Users">
+                <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
+            </ul>
+        </div>
+    </div>
+}
+
+@section filters
+{
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
+        <li>
+            <label>Template</label>
+            <select data-bind="value: SelectedTemplate" class="input-block-level">
+                @if (Model.Templates.Count() > 1)
+                {
+                    <option value="">Any</option>
+                }
+                @foreach (var item in Model.Templates)
+                {
+                    <option value="@item.TemplateId">@item.TemplateName</option>
+                }
+            </select>
+        </li>
+        <li>
+            <label>Responsible</label>
+            <select data-bind="value: SelectedResponsible" class="input-block-level">
+                @if (Model.Responsibles.Count() > 1)
+                {
+                    <option value="">Any</option>
+                }
+                @foreach (var item in Model.Responsibles)
+                {
+                    <option value="@item.UserId">@item.UserName</option>
+                }
+            </select>
+        </li>
+        <li>
+            <label>Status</label>
+            <select data-bind="value: SelectedStatus" class="input-block-level">
+                <option value="">Any</option>
+                @foreach (var item in Model.Statuses)
+                {
+                    <option value="@item.StatusId">@item.StatusName</option>
+                }
+            </select>
+        </li>
+        <li>
+            <label class="checkbox">
+                <input id="chkOnlyAssigned" type="checkbox" data-bind="checked: OnlyAssigned" />
+                Not assigned only
+            </label>
+        </li>
+    </ul>
+}
+
+@section grid
+{
+    <table class="table table-striped table-bordered table-condensed table-hover table-break-words">
+        <thead>
+            <tr>
+                <th></th>
+                <!-- ko if:SelectedTemplate() == '' -->
+                <th>Featured Questions</th>
+                <!-- /ko -->
+                <!-- ko ifnot:SelectedTemplate() == '' -->
+                <!-- ko if:ListView.Items().length > 0-->
+                <!-- ko foreach:ListView.Items()[0].FeaturedQuestions -->
+                <th data-bind='sortby: Question(), text: Question'></th>
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <th data-bind='sortby: "Responsible.Name"'>Responsible</th>
+                <th data-bind='sortby: "LastEntryDate"'>Last Update</th>
+                <th data-bind='sortby: "Status.Name"'>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:ListView.Items -->
+            <tr>
+                <td>
+                    <input type="checkbox"  data-bind="checked: IsSelected"/>
+                </td>
+                <!-- ko if:$root.SelectedTemplate() == '' -->
+                <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
+                <!-- /ko -->
+                <!-- ko ifnot:$root.SelectedTemplate() == '' -->
+                <!-- ko foreach:FeaturedQuestions -->
+                <td data-bind="text: Answer"></td>
+                <!-- /ko -->
+                <!-- /ko -->
+                <td>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
+                </td>
+                <td data-bind="text: LastEntryDate"></td>
+                <td data-bind="text: Status"></td>
+                <td>
+                    <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
+                        <i class="icon icon-align-justify icon-white"></i></a>
+                </td>
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+}

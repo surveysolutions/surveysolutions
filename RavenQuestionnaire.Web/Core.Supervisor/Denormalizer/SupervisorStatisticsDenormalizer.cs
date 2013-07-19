@@ -1,13 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SupervisorStatisticsDenormalizer.cs" company="The World Bank">
-//   Complete Questionnaire Browse Item Denormalizer
-// </copyright>
-// <summary>
-//   The complete questionnaire browse item denormalizer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -25,70 +18,42 @@ namespace Core.Supervisor.Denormalizer
     using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
     /// </summary>
     public class SupervisorStatisticsDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                     IEventHandler<QuestionnaireStatusChanged>, 
-                                                    IEventHandler<QuestionnaireAssignmentChanged>, 
-                                                    IEventHandler<SnapshootLoaded>
+                                                    IEventHandler<QuestionnaireAssignmentChanged>
     {
-        #region Constants and Fields
+        private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
 
-        /// <summary>
-        /// The document item store.
-        /// </summary>
-        private readonly IDenormalizerStorage<SupervisorStatisticsItem> statistics;
+        private readonly IReadSideRepositoryReader<UserDocument> users;
 
         /// <summary>
         /// Information, grouped by date
         /// </summary>
-        private readonly IDenormalizerStorage<HistoryStatusStatistics> history;
+        private readonly IReadSideRepositoryWriter<HistoryStatusStatistics> history;
 
         /// <summary>
         /// Hash of statistics key to easier find previous CQ state
         /// </summary>
-        private readonly IDenormalizerStorage<StatisticsItemKeysHash> keysHash;
+        private readonly IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash;
 
-        /// <summary>
-        /// The document item store.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorStatisticsDenormalizer"/> class. 
-        /// </summary>
-        /// <param name="statistics">
-        /// The document item store.
-        /// </param>
-        /// <param name="surveys">
-        /// The surveys.
-        /// </param>
-        /// <param name="keysHash">
-        /// Statistics storage hash
-        /// </param>
-        /// <param name="history">
-        /// The history.
-        /// </param>
         public SupervisorStatisticsDenormalizer(
-            IDenormalizerStorage<SupervisorStatisticsItem> statistics, 
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys, 
-            IDenormalizerStorage<StatisticsItemKeysHash> keysHash, 
-            IDenormalizerStorage<HistoryStatusStatistics> history)
+            IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics,
+            IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys,
+            IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash,
+            IReadSideRepositoryWriter<HistoryStatusStatistics> history, IReadSideRepositoryReader<UserDocument> users)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
             this.history = history;
+            this.users = users;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -101,25 +66,6 @@ namespace Core.Supervisor.Denormalizer
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
             this.HandleNewQuestionnaire(evnt.Payload.Questionnaire);
-        }
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
-        {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            this.HandleStatusChanges(SurveyStatus.Unknown, document.Status, evnt.EventTimeStamp, document.PublicKey);
-            
-            this.HandleNewQuestionnaire(document);
         }
 
         /// <summary>
@@ -170,6 +116,9 @@ namespace Core.Supervisor.Denormalizer
             {
                 return;
             }
+
+            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+
 
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
@@ -301,6 +250,13 @@ namespace Core.Supervisor.Denormalizer
             }
 
             var old = this.statistics.GetById(oldKey.StorageKey);
+            // temporary fix
+            // in some cases old is null
+            if (old == null)
+            {
+                return;
+            }
+
             old.Surveys.Remove(completedQuestionnaireId);
             this.statistics.Store(old, oldKey.StorageKey);
         }

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateUserCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The create user command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.User
+﻿namespace Main.Core.Commands.User
 {
     using System;
 

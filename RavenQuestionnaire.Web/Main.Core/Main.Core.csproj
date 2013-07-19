@@ -93,6 +93,9 @@
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -104,21 +107,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Embedded, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Embedded, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2261\lib\net40\Raven.Client.Embedded.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2375\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Database, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Database, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\RavenDB.Database.2.0.2261\lib\net40\Raven.Database.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2375\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -150,42 +153,15 @@
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Location\CreateLocationCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\AssignInterviewToUserCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
-    <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\PushStatisticsCommand.cs" />
@@ -195,6 +171,10 @@
     <Compile Include="Commands\Synchronization\RegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewDeviceCapiCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
+    <Compile Include="Commands\Sync\CreateClientDeviceCommand.cs" />
+    <Compile Include="Commands\Sync\CreateSyncActivityCommand.cs" />
+    <Compile Include="Commands\Sync\UpdateClientDeviceLastSyncItemCommand.cs" />
+    <Compile Include="Commands\Sync\UpdateSyncActivityCommand.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserCommand.cs" />
@@ -204,7 +184,7 @@
     <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ChangeStatusDocument.cs" />
-    <Compile Include="Documents\ClientSettingsDocument.cs" />
+    <Compile Include="Documents\ClientDeviceDocument.cs" />
     <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs" />
@@ -219,16 +199,19 @@
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\ProcessedEventChunk.cs" />
+    <Compile Include="Documents\QuestionAnswer.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
+    <Compile Include="Documents\SyncActivityDocument.cs" />
     <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
     <Compile Include="Documents\SynchronizationStatisticType.cs" />
     <Compile Include="Documents\SynchronizationType.cs" />
     <Compile Include="Documents\SyncProcessDocument.cs" />
     <Compile Include="Documents\SyncProcessStatisticsDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Domain\ClientDeviceAR.cs" />
     <Compile Include="Domain\CollectionAR.cs" />
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
@@ -236,7 +219,7 @@
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
-    <Compile Include="Domain\QuestionnaireAR.cs" />
+    <Compile Include="Domain\SyncActivityAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs" />
@@ -331,6 +314,7 @@
     <Compile Include="Entities\SubEntities\Complete\Question\TextCompleteQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\SurveyStatusLight.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -422,27 +406,39 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\TemplateLight.cs" />
+    <Compile Include="EventHandlers\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="Events\AbstractEventStreamReader.cs" />
-    <Compile Include="Events\AbstractSnapshotableEventStreamReader.cs" />
-    <Compile Include="Events\AggregateRootEvent.cs" />
-    <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
-    <Compile Include="Events\Collection\CollectionRemoved.cs" />
-    <Compile Include="Events\Collection\NewCollectionCreated.cs" />
-    <Compile Include="Events\EventSyncExtensions.cs" />
-    <Compile Include="Events\File\FileDeleted.cs" />
-    <Compile Include="Events\File\FileMetaUpdated.cs" />
-    <Compile Include="Events\File\FileUploaded.cs" />
-    <Compile Include="Events\IEventStreamReader.cs" />
-    <Compile Include="Events\IUserEventSync.cs" />
-    <Compile Include="Events\Location\LocationDeleted.cs" />
-    <Compile Include="Events\Location\NewLocationCreated.cs" />
+    <Compile Include="Events\AggregateRootEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Collection\CollectionItemRemoved.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Collection\CollectionRemoved.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Collection\NewCollectionCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\File\FileDeleted.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\File\FileMetaUpdated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\File\FileUploaded.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Location\LocationDeleted.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Location\NewLocationCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -459,6 +455,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Questionnaire\Completed\FlagSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs">
@@ -482,10 +481,15 @@
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\QuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\GroupCloned.cs" />
+    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Questionnaire\GroupCloned.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\GroupDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -513,6 +517,9 @@
     <Compile Include="Events\Questionnaire\QuestionChanged.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\QuestionCloned.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -525,23 +532,51 @@
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\TemplateImported.cs" />
-    <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
-    <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
-    <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs" />
-    <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs" />
-    <Compile Include="Events\Synchronization\NewDeviceRegistered.cs" />
-    <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
-    <Compile Include="Events\Synchronization\ProcessEnded.cs" />
-    <Compile Include="Events\SyncItemsMeta.cs">
+    <Compile Include="Events\Questionnaire\TemplateImported.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\UserEventStreamReader.cs" />
-    <Compile Include="Events\User\NewUserCreated.cs" />
-    <Compile Include="Events\User\UserBaseEvent.cs" />
-    <Compile Include="Events\User\UserChanged.cs" />
-    <Compile Include="Events\User\UserLocked.cs" />
-    <Compile Include="Events\User\UserUnlocked.cs" />
+    <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\NewDeviceRegistered.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\ProcessEnded.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
+    <Compile Include="Events\Sync\NewClientDeviceCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Sync\SyncActivityUpdated.cs" />
+    <Compile Include="Events\User\NewUserCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserBaseEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserChanged.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserLocked.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserUnlocked.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\Sync\NewSyncActivityCreated.cs" />
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\FileType.cs" />
     <Compile Include="Export\IDataExport.cs" />
@@ -551,13 +586,22 @@
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollector.cs" />
+    <Compile Include="ExpressionExecutors\ConditionExecuterFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExpressionExecutors\ExpressionDependencyBuilder.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
+    <Compile Include="ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
+    <Compile Include="PackageHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
@@ -616,7 +660,6 @@
     <Compile Include="View\Group\ScreenNavigation.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
-    <Compile Include="View\IViewRepsoitory.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs" />
@@ -651,7 +694,6 @@
     <Compile Include="View\User\UserView.cs" />
     <Compile Include="View\User\UserViewFactory.cs" />
     <Compile Include="View\User\UserViewInputModel.cs" />
-    <Compile Include="View\ViewRepository.cs" />
     <Compile Include="WCF\AuthorizationPacket.cs" />
     <Compile Include="WCF\BaseAuthorizationService.cs" />
     <Compile Include="WCF\IAuthorizationPacket.cs" />
@@ -682,9 +724,9 @@
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
       <Name>WB.Core.Questionnaire.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -698,13 +740,12 @@
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
       <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
-      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
-      <Name>Ncqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Synchronization\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventMergeUtilsTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The event merge utils test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.Events
 {
@@ -26,6 +20,12 @@ namespace RavenQuestionnaire.Core.Tests.Events
     [TestFixture]
     public class EventMergeUtilsTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

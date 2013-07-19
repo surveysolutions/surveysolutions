@@ -1,16 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipModule.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the MembershipModule type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
-    using Main.Core.View;
-
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
@@ -27,14 +16,8 @@ namespace WB.UI.Designer
         {
             Bind<IPasswordStrategy>().To<HashPasswordStrategy>().InSingletonScope();
             Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy());
-            Bind<IAccountRepository>()
-                .ToConstructor(x => new CQRSAccountRepository(x.Inject<IViewRepository>(),
-                                                              NcqrsEnvironment.Get<ICommandService>()))
-                .InSingletonScope();
-            Bind<IRoleRepository>()
-                .ToConstructor(
-                    x => new CQRSRoleRepository(x.Inject<IViewRepository>(), NcqrsEnvironment.Get<ICommandService>()))
-                .InSingletonScope();
+            Bind<IAccountRepository>().To<CQRSAccountRepository>().InSingletonScope();
+            Bind<IRoleRepository>().To<CQRSRoleRepository>().InSingletonScope();
         }
     }
 }

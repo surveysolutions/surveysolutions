@@ -7,6 +7,8 @@ using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views
 {
@@ -14,9 +16,9 @@ namespace Core.Supervisor.Views
 
     public abstract class BaseUserViewFactory
     {
-        protected IQueryableDenormalizerStorage<UserDocument> users;
+        protected IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        protected BaseUserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        protected BaseUserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }

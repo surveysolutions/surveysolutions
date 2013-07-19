@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessLogView.cs" company="The World Bank">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.SyncProcess
+﻿namespace Core.Supervisor.Views.SyncProcess
 {
     using System.Collections.Generic;
 

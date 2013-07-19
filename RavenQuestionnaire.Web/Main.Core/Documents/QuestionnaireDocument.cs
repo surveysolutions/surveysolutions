@@ -1,16 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The QuestionnaireDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete;
+﻿using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
-
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
@@ -22,7 +15,6 @@ namespace Main.Core.Documents
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
 
-    using WB.Core.SharedKernel.Utils.Logging;
 
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
@@ -32,6 +24,7 @@ namespace Main.Core.Documents
 
         public QuestionnaireDocument()
         {
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
@@ -62,6 +55,8 @@ namespace Main.Core.Documents
         public bool IsPublic { get; set; }
 
         private IComposite parent;
+
+        private ILogger logger;
 
         public Propagate Propagated
         {
@@ -187,7 +182,7 @@ namespace Main.Core.Documents
             }
             else
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format(
+                logger.Warn(string.Format(
                     "Failed to replace question '{0}' with new because it's parent is not found.",
                     oldQuestionId));
             }
@@ -222,8 +217,7 @@ namespace Main.Core.Documents
             }
             else
             {
-                LogManager.GetLogger(this.GetType())
-                    .Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
+                logger.Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
             }
         }
 
@@ -262,8 +256,7 @@ namespace Main.Core.Documents
             }
             else
             {
-                LogManager.GetLogger(typeof(QuestionnaireDocument))
-                    .Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
+                logger.Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
             }
         }
 
@@ -406,7 +399,7 @@ namespace Main.Core.Documents
 
             if (itemToMove == null)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Failed to locate item {0}.", itemId));
+                logger.Warn(string.Format("Failed to locate item {0}.", itemId));
             }
 
             return itemToMove;
@@ -418,7 +411,7 @@ namespace Main.Core.Documents
 
             if (foundParent == null)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Failed to find parent of item {0}.", item.PublicKey));
+                logger.Warn(string.Format("Failed to find parent of item {0}.", item.PublicKey));
             }
 
             return foundParent;
@@ -433,7 +426,7 @@ namespace Main.Core.Documents
 
             if (foundGroup == null)
             {
-                LogManager.GetLogger(this.GetType()).Warn(string.Format("Failed to find group {0}.", groupId.Value));
+                logger.Warn(string.Format("Failed to find group {0}.", groupId.Value));
             }
 
             return foundGroup;

@@ -8,15 +8,6 @@ namespace Ncqrs.Eventing.Storage
     {
         IEnumerable<CommittedEvent> GetEventStream();
 
-        #warning move to readlayer
-        Guid? GetLastEvent(Guid aggregateRootId);
-
-        #warning move to readlayer
-        bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier);
-
-        #warning move to readlayer
-        CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion);
-
         int CountOfAllEventsWithoutSnapshots();
 
         int CountOfAllEventsIncludingSnapshots();

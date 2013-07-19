@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewSynchronizationProcessCreated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The new synchronization process created.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Synchronization
+﻿namespace Main.Core.Events.Synchronization
 {
     using System;
 
