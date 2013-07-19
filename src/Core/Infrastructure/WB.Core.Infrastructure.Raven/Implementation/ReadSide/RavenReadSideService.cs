@@ -322,7 +322,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             List<IRavenReadSideRepositoryWriter> writers = this.writerRegistry.GetAll().ToList();
 
             bool areThereNoWriters = writers.Count == 0;
-
+            #warning to Tolik: calls to dictionary (writer cache) from other thread rais exceptions because Dictionary is not thread safe
             return areThereNoWriters
                 ? "Registered writers: None"
                 : string.Format(
