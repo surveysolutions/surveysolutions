@@ -123,7 +123,7 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <!-- ko ifnot: typeof Responsible != null -->
+                    <!-- ko ifnot: typeof Responsible == null -->
                     <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
                       <!-- /ko -->
        

@@ -42,7 +42,7 @@ namespace Core.Supervisor.Views.Survey
             {
               /*  if (input.ViewerStatus == ViewerStatus.Headquarter)
                 {
-                    items = items.Where(x => x.ResponsibleSupervisorId == input.UserId);
+                    items = items.Where(x => x.ResponsibleId == input.UserId);
                 }
                 else
                 {*/
