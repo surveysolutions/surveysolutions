@@ -349,6 +349,7 @@ namespace CapiDataGenerator
                 var uId = users[i];
                 for (int j = 0; j < questionnariesCount; j++)
                 {
+                    completeDocument.Status = SurveyStatus.Initial;
                     completeDocument.PublicKey = Guid.NewGuid();
                     completeDocument.Responsible = new UserLight(id: uId, name: string.Concat("user", i));
 
