@@ -46,7 +46,7 @@ namespace WB.Core.Synchronization.SyncStorage
             lock (myLock)
             {
                 storage.Store(new SynchronizationDelta(syncItem.Id, syncItem.Content, CurrentSequence, userId, syncItem.IsCompressed,
-                                                    syncItem.ItemType), syncItem.Id);
+                                                    syncItem.ItemType, syncItem.MetaInfo), syncItem.Id);
                 CurrentSequence++;
             }
         }
@@ -62,7 +62,8 @@ namespace WB.Core.Synchronization.SyncStorage
                     Id = item.PublicKey,
                     IsCompressed = item.IsCompressed,
                     ItemType = item.ItemType,
-                    Content = item.Content
+                    Content = item.Content,
+                    MetaInfo = item.MetaInfo
                 };
         }
 
@@ -76,7 +77,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users)
         {
-            //todo: quesry is not optimal but will be replaced shortly
+            //todo: query is not optimal but will be replaced shortly
             var elements = queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
                 .Select(d => d)
                 .ToList()
