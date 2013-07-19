@@ -40,14 +40,18 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IDenormalizerStorage.cs" />
-    <Compile Include="IFilterableDenormalizerStorage.cs" />
-    <Compile Include="IQueryableDenormalizerStorage.cs" />
-    <Compile Include="IReadLayerAdministrationService.cs" />
-    <Compile Include="IReadLayerStatusService.cs" />
-    <Compile Include="IView.cs" />
+    <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
+    <Compile Include="ReadSide\IReadSideStatusService.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />
+    <Compile Include="ReadSide\Repository\IReadSideRepositoryEntity.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryReader.cs" />
+    <Compile Include="ReadSide\IView.cs" />
     <Compile Include="MaintenanceException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

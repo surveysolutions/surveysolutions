@@ -1,6 +1,10 @@
 ﻿using Ninject.Modules;
 
 using WB.Core.Infrastructure.Raven.Implementation;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Raven
 {
@@ -8,8 +12,14 @@ namespace WB.Core.Infrastructure.Raven
     {
         public override void Load()
         {
-            this.Bind<IReadLayerStatusService>().To<RavenReadLayerService>().InSingletonScope();
-            this.Bind<IReadLayerAdministrationService>().To<RavenReadLayerService>().InSingletonScope();
+            this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
+            this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope();
+            this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
+
+            this.Bind<IRavenReadSideRepositoryWriterRegistry>().To<RavenReadSideRepositoryWriterRegistry>().InSingletonScope();
+
+            // each repository writer should exist in one instance because it might use caching
+            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
         }
     }
 }

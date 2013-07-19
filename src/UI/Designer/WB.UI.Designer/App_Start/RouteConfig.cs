@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RouteConfig.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The route config.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using System.Web.Mvc;
     using System.Web.Routing;

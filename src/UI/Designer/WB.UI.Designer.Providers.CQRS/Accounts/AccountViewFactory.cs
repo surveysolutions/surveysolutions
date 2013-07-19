@@ -1,13 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountViewFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
@@ -30,7 +23,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         ///     The accounts.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<AccountDocument> accounts;
+        private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
 
         #endregion
 
@@ -42,7 +35,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="accounts">
         /// The accounts.
         /// </param>
-        public AccountViewFactory(IQueryableDenormalizerStorage<AccountDocument> accounts)
+        public AccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
         {
             this.accounts = accounts;
         }
@@ -85,7 +78,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             }
 
             return
-                this.accounts.Query()
+                this.accounts.Query(_ => _
                     .Where(query)
                     .Select(
                         x =>
@@ -118,7 +111,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                 PasswordResetExpirationDate = x.PasswordResetExpirationDate, 
                                 SimpleRoles = x.SimpleRoles
                             })
-                    .FirstOrDefault();
+                    .FirstOrDefault());
         }
 
         #endregion

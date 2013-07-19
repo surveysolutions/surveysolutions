@@ -1,0 +1,19 @@
+﻿@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireView
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@Model.Title</title>
+        @Styles.Render("~/Content/pdf-title-page.css")
+    </head>
+    <body>
+        <div>
+              @Html.Partial("_RenderTitlePage", Model)
+        </div>
+    </body>
+</html>

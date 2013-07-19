@@ -1,10 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireListViewFactory.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
@@ -25,7 +21,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         /// <summary>
         ///     The document group session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> document;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> document;
 
         #endregion
 
@@ -37,7 +33,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         /// <param name="document">
         /// The document.
         /// </param>
-        public QuestionnaireListViewFactory(IQueryableDenormalizerStorage<QuestionnaireBrowseItem> document)
+        public QuestionnaireListViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> document)
         {
             this.document = document;
         }
@@ -57,8 +53,9 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         /// </returns>
         public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
         {
-            var query =
-                this.document.Query()
+            return this.document.Query(queryable =>
+            {
+                var query = queryable
                     .Where(
                         x =>
                         (input.IsAdmin || x.CreatedBy == input.CreatedBy) && (input.IsAdmin || !x.IsDeleted)
@@ -66,24 +63,25 @@ namespace WB.UI.Designer.WebServices.Questionnaire
                     .AsQueryable()
                     .OrderUsingSortExpression(input.Order);
 
-            var documentItems =
-                query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+                var documentItems =
+                    query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
 
-            return new QuestionnaireListView()
-                       {
-                           Page = input.Page,
-                           PageSize = input.PageSize,
-                           TotalCount = query.Count(),
-                           Items =
-                               documentItems.Select(
-                                   x =>
-                                   new QuestionnaireListViewItem
-                                       {
-                                           Id = x.QuestionnaireId,
-                                           Title = x.Title
-                                       }).ToArray(),
-                           Order = input.Order
-                       };
+                return new QuestionnaireListView()
+                {
+                    Page = input.Page,
+                    PageSize = input.PageSize,
+                    TotalCount = query.Count(),
+                    Items =
+                        documentItems.Select(
+                            x =>
+                            new QuestionnaireListViewItem
+                            {
+                                Id = x.QuestionnaireId,
+                                Title = x.Title
+                            }).ToArray(),
+                    Order = input.Order
+                };
+            });
         }
 
         #endregion

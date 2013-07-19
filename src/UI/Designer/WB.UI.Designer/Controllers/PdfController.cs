@@ -1,36 +1,39 @@
-﻿
+﻿using Main.Core.View;
+using System;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Web.Mvc;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Designer.Pdf;
+using WB.UI.Designer.Views.Questionnaire;
+using WB.UI.Designer.Views.Questionnaire.Pdf;
+using WB.UI.Shared.Web.Membership;
+
 namespace WB.UI.Designer.Controllers
 {
-    using Codaxy.WkHtmlToPdf;
-    using Main.Core.View;
-    using System;
-    using System.Configuration;
-    using System.IO;
-    using System.Web.Mvc;
-    
-    using WB.UI.Designer.Views.Questionnaire;
-    using WB.UI.Shared.Web.Membership;
-
     public class PdfController : BaseController
     {
-         public PdfController(
-             IViewRepository repository,
-             IMembershipUserService userHelper)
-             : base(repository, null, userHelper)
-         {
-         }
+        private readonly IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory;
 
-        [Authorize]
-        public ActionResult PreviewQuestionnaire(Guid id)
+        public PdfController(
+            IMembershipUserService userHelper,
+            IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory)
+            : base(userHelper)
         {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
-
-            return this.View(questionnaire);
+            this.viewFactory = viewFactory;
         }
 
         public ActionResult RenderQuestionnaire(Guid id)
         {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+
+            return this.View(questionnaire);
+        }
+
+        public ActionResult RenderTitlePage(Guid id)
+        {
+            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
 
             return this.View(questionnaire);
         }
@@ -38,7 +41,7 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         public ActionResult ExportQuestionnaire(Guid id)
         {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
 
             using (var memoryStream = new MemoryStream())
             {
@@ -55,7 +58,8 @@ namespace WB.UI.Designer.Controllers
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
                     {
-                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new {id = id}),
+                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id }),
+                        CoverUrl = GlobalHelper.GenerateUrl("RenderTitlePage", "Pdf", new {id = id})
                     },
                 new PdfOutput
                     {
@@ -77,9 +81,10 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-        private QuestionnaireView LoadQuestionnaire(Guid id)
+
+        private PdfQuestionnaireView LoadQuestionnaire(Guid id)
         {
-            return this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            return this.viewFactory.GetById(id);
         }
     }
 }
