@@ -258,7 +258,7 @@ namespace CapiDataGenerator
 
                     acount = (int) (questionsCount*((double) acount/100));
                     ccount = (int) (questionsCount*((double) ccount/100));
-                    scount = (int) (questionsCount*((double) scount/100));
+                    scount = (int) (icount*qcount*((double) scount/100));
 
                     TotalCount = icount + icount*qcount*(acount + ccount + scount + 1);
 
@@ -283,21 +283,18 @@ namespace CapiDataGenerator
 
         private void ChangeStatuses(int statusesCount, List<Guid> questionnaires)
         {
-            for (int j = 0; j < questionnaires.Count; j++)
+            for (int z = 0; z < statusesCount; z++)
             {
-                var qId = questionnaires[j];
-                for (int z = 0; z < statusesCount; z++)
+                var qId = questionnaires.ElementAt(_rand.Next(questionnaires.Count()));
+                commandService.Execute(new ChangeStatusCommand()
                 {
-                    commandService.Execute(new ChangeStatusCommand()
-                    {
-                        CompleteQuestionnaireId = qId,
-                        Responsible = new UserLight(Guid.NewGuid(), string.Empty),
-                        Status = _rand.Next(0, 1) == 0 ? SurveyStatus.Complete : SurveyStatus.Redo
-                    });
+                    CompleteQuestionnaireId = qId,
+                    Responsible = new UserLight(Guid.NewGuid(), string.Empty),
+                    Status = _rand.Next(0, 1) == 0 ? SurveyStatus.Complete : SurveyStatus.Redo
+                });
 
-                    UpdateProgress();
-                    LogStatus("change statuses", (j * statusesCount) + z, questionnaires.Count * statusesCount);
-                }
+                UpdateProgress();
+                LogStatus("change statuses", z, statusesCount);
             }
         }
 
