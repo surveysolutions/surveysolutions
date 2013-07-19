@@ -5,13 +5,16 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
+using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -87,7 +90,18 @@ namespace CAPI.Android
             var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, minVersion, long.MaxValue);
             foreach (CommittedEvent committedEvent in eventsAfterSnapshot)
             {
-                bus.Publish(committedEvent);
+                try
+                {
+                    bus.Publish(committedEvent);
+                }
+                catch(Exception e)
+                {
+                    var logger = ServiceLocator.Current.GetInstance<ILogger>();
+
+                    logger.Error("Rebuild Error", e);
+
+                    logger.Error("Event: " + JsonUtils.GetJsonData(committedEvent.Payload));
+                }
             }
         }
     }
