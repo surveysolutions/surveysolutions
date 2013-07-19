@@ -14,6 +14,7 @@ using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
+using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
@@ -331,7 +332,7 @@ namespace CapiDataGenerator
                 var uId = Guid.NewGuid();
                 users.Add(uId);
                 var user = string.Concat("user", i);
-                commandService.Execute(new CreateUserCommand(publicKey: uId, userName: user, password: user,
+                commandService.Execute(new CreateUserCommand(publicKey: uId, userName: user, password: SimpleHash.ComputeHash(user),
                     email: string.Concat(user, "@mail.com"), roles: new[] { UserRoles.User }, isLocked: false,
                     supervsor: null));
                 UpdateProgress();

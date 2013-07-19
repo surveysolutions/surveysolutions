@@ -10,7 +10,7 @@ namespace CapiDataGenerator
     {
         private const string Capi = "CAPI";
         private const string BackupFolder = "Backup";
-
+        private const string ImagesFolderName = "IMAGES";
         private readonly string backupPath;
         private readonly string rootPath;
         public string RestorePath
@@ -42,7 +42,9 @@ namespace CapiDataGenerator
         {
             var backupFolderName = string.Format("backup-{0}", DateTime.Now.Ticks);
             var backupFolderPath = Path.Combine(backupPath, backupFolderName);
+            
             Directory.CreateDirectory(backupFolderPath);
+            Directory.CreateDirectory(Path.Combine(backupFolderPath, ImagesFolderName));
 
             foreach (var backupable in backupables)
             {
