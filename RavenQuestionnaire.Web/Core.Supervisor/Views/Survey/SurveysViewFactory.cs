@@ -40,14 +40,14 @@ namespace Core.Supervisor.Views.Survey
 
             if (input.UserId.HasValue)
             {
-                if (input.ViewerStatus == ViewerStatus.Headquarter)
-                {
-                    items = items.Where(x => x.ResponsibleSupervisorId == input.UserId);
-                }
-                else
+               /* if (input.ViewerStatus == ViewerStatus.Headquarter)
                 {
                     items = items.Where(x => x.ResponsibleId == input.UserId);
                 }
+                else
+                {*/
+                    items = items.Where(x => x.ResponsibleId == input.UserId);
+                //}
 
             }
             else

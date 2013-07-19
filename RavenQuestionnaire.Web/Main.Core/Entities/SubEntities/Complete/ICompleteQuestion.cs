@@ -18,11 +18,6 @@
         bool Valid { get; set; }
 
         /// <summary>
-        /// Gets or sets the validated time.
-        /// </summary>
-        DateTime ValidatedTime { get; set; }
-
-        /// <summary>
         /// Gets or sets the answer date.
         /// </summary>
         DateTime? AnswerDate { get; set; }

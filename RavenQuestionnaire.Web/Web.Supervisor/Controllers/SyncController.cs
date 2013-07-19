@@ -191,6 +191,7 @@ namespace Web.Supervisor.Controllers
                 result.IsErrorOccured = true;
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
+
             return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence));
         }
 

@@ -217,7 +217,7 @@ namespace Core.Supervisor.Denormalizer
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
 
-            syncStorage.SaveQuestionnarie(item, evnt.Payload.Responsible.Id);
+            syncStorage.SaveInterview(item, evnt.Payload.Responsible.Id);
         }
 
         /// <summary>
@@ -242,9 +242,9 @@ namespace Core.Supervisor.Denormalizer
             this.documentStorage.Store(item, item.PublicKey);
 
             if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
-                syncStorage.SaveQuestionnarie(item, evnt.Payload.Responsible.Id);
+                syncStorage.SaveInterview(item, evnt.Payload.Responsible.Id);
             else
-                syncStorage.DeleteQuestionnarie(evnt.EventSourceId, evnt.Payload.Responsible.Id);
+                syncStorage.DeleteInterview(evnt.EventSourceId, evnt.Payload.Responsible.Id);
         }
 
         /// <summary>

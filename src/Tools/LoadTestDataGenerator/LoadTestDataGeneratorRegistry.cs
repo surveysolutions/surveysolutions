@@ -4,23 +4,15 @@ using System.Linq;
 using System.Reflection;
 using Core.Supervisor.Denormalizer;
 using Main.Core;
-using Raven.Client.Document;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace LoadTestDataGenerator
 {
     using System.Web.Configuration;
-
-    using Main.DenormalizerStorage;
-
     using Ninject;
     using Ninject.Activation;
-
-    using WB.Core.Infrastructure.Raven.Implementation;
 
     public class LoadTestDataGeneratorRegistry : CoreRegistry
     {

@@ -82,6 +82,8 @@
     <Compile Include="ModelUtils\JsonUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapshotStore\AndroidSnapshotStore.cs" />
+    <Compile Include="SyncCacher\ISyncCacher.cs" />
+    <Compile Include="SyncCacher\FileSyncCacher.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
