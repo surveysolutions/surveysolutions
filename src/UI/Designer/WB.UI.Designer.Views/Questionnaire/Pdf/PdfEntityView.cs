@@ -16,6 +16,8 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public Guid Id { get; set; }
 
+        public int Depth { get; set; }
+
         public PdfEntityView Parent { get; set; } 
 
         public List<PdfEntityView> Children { get; set; }
