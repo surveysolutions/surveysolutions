@@ -52,10 +52,9 @@ namespace WB.UI.Designer.Views.EventHandler
                 if (updatedQuestionnaire != null)
                 {
                     this.repositoryWriter.Store(updatedQuestionnaire, questionnaireId);
-                    //this.repositoryWriter.Remove(questionnaireId);
                 }
             }
-            catch (Exception e)
+            catch (ApplicationException e)
             {
                 var errorMessage = string.Format("Error while apply event {0} with on questionnaire {1}", evnt.EventIdentifier, evnt.EventSourceId);
                 logger.Error(errorMessage, e);
@@ -221,7 +220,8 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     Title = @event.Title,
                     CreationDate = @event.CreationDate,
-                    CreatedBy = createdBy
+                    CreatedBy = createdBy,
+                    Id = @event.PublicKey
                 };
 
                 return newQuestionnaire;
@@ -232,13 +232,29 @@ namespace WB.UI.Designer.Views.EventHandler
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var itemToMove = questionnaire.Children.TreeToEnumerable().FirstOrDefault(x => x.Id == @event.PublicKey);
-                if (itemToMove != null)
+                PdfEntityView itemToMove = questionnaire.Children.TreeToEnumerable()
+                                                       .FirstOrDefault(x => x.Id == @event.PublicKey);
+                var targetContainer = questionnaire.Children.TreeToEnumerable()
+                                                            .FirstOrDefault(x => x.Id == @event.GroupKey) ?? questionnaire;
+
+
+                itemToMove.Parent.Children.Remove(itemToMove);
+                itemToMove.Depth = targetContainer.Depth + 1;
+                itemToMove.Parent = targetContainer;
+                if (@event.TargetIndex < 0)
                 {
-                    itemToMove.Parent.Children.Remove(itemToMove);
-                    var targetGroup = questionnaire.Children.TreeToEnumerable().FirstOrDefault(x => x.Id == @event.GroupKey);
-                    AppendItemTo(targetGroup.Children, itemToMove, @event.TargetIndex);
+                    targetContainer.Children.Insert(0, itemToMove);
+                    
                 }
+                else if (@event.TargetIndex >= targetContainer.Children.Count)
+                {
+                    targetContainer.Children.Add(itemToMove);
+                }
+                else
+                {
+                    targetContainer.Children.Insert(@event.TargetIndex, itemToMove);
+                }
+
                 return questionnaire;
             });
         }

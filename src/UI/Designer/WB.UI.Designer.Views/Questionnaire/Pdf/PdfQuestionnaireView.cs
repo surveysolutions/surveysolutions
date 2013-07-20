@@ -234,21 +234,5 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                 }
             }
         }
-
-        public static IEnumerable<T> TreeToEnumerable1<T>(this IEnumerable<T> tree) where T : IComposite
-        {
-            var groups = new Stack<T>(tree);
-
-            while (groups.Count > 0)
-            {
-                var group = groups.Pop();
-
-                yield return group;
-                foreach (T childGroup in group.Children.OfType<T>())
-                {
-                    groups.Push(childGroup);
-                }
-            }
-        }
     }
 }
