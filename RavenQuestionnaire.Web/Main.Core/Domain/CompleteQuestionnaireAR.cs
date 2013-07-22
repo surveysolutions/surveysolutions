@@ -575,6 +575,18 @@ namespace Main.Core.Domain
                     });
         }
 
+        public void AssignInterviewToUser(Guid userId)
+        {
+            var prevResponsible = this.doc.Responsible;
+            this.ApplyEvent(
+                new QuestionnaireAssignmentChanged
+                    {
+                        CompletedQuestionnaireId = this.doc.PublicKey,
+                        PreviousResponsible = prevResponsible,
+                        Responsible = new UserLight(userId, string.Empty)
+                    });
+        }
+
         /// <summary>
         /// The change status.
         /// </summary>

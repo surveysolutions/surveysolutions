@@ -53,8 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSideChunkStorageTests.cs" />
     <Compile Include="SimpleSynchronizationDataStorageTests.cs" />
-    <Compile Include="SyncManager\SyncManagerTests.cs" />
-    <Compile Include="SyncProvider\SyncProviderTests.cs" />
+    <Compile Include="SyncManagerTests\SyncManagerTests.cs" />
+    <Compile Include="SyncProviderTests\SyncProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -75,6 +75,10 @@
     <ProjectReference Include="..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
       <Name>SynchronizationMessages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

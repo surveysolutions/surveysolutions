@@ -122,7 +122,7 @@ namespace Web.Supervisor.Controllers
             if (state == 2)
             {
                 if (cancel != null)
-                    return this.RedirectToAction("Index", new { id = model.TemplateId });
+                    return this.RedirectToAction("Interviews", "Survey", new { id = model.TemplateId });
                 if (ModelState.IsValid)
                 {
                     var status = SurveyStatus.Redo;
@@ -134,7 +134,7 @@ namespace Web.Supervisor.Controllers
                             Status = status,
                             Responsible = this.GlobalInfo.GetCurrentUser()
                         });
-                    return this.RedirectToAction("Index", new { id = model.TemplateId });
+                    return this.RedirectToAction("Interviews", "Survey", new { id = model.TemplateId });
                 }
 
                 var stat = this.completeQuestionnaireStatisticViewFactory.Load(
@@ -148,7 +148,7 @@ namespace Web.Supervisor.Controllers
                     var status = SurveyStatus.Approve;
                     status.ChangeComment = model.Comment;
                     this.CommandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.GlobalInfo.GetCurrentUser() });
-                    return this.RedirectToAction("Index", new { id = model.TemplateId });
+                    return this.RedirectToAction("Interviews", "Survey", new { id = model.TemplateId });
                 }
 
                 var stat = this.completeQuestionnaireStatisticViewFactory.Load(
@@ -179,7 +179,7 @@ namespace Web.Supervisor.Controllers
                 var status = SurveyStatus.Approve;
                 status.ChangeComment = model.Comment;
                 this.CommandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.GlobalInfo.GetCurrentUser() });
-                return this.RedirectToAction("Index", new { id = model.TemplateId });
+                return this.RedirectToAction("Interviews", "Survey", new { id = model.TemplateId });
             }
 
             var stat = this.completeQuestionnaireStatisticViewFactory.Load(
@@ -198,13 +198,13 @@ namespace Web.Supervisor.Controllers
         public ActionResult Redo(ApproveRedoModel model, string redo, string cancel)
         {
             if (cancel != null)
-                return this.RedirectToAction("Index", new { id = model.TemplateId });
+                return this.RedirectToAction("Interviews", "Survey", new { id = model.TemplateId });
             if (ModelState.IsValid)
             {
                 var status = SurveyStatus.Redo;
                 status.ChangeComment = model.Comment;
                 this.CommandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.GlobalInfo.GetCurrentUser() });
-                return this.RedirectToAction("Index", new { id = model.TemplateId });
+                return this.RedirectToAction("Interviews", "Survey", new { id = model.TemplateId });
             }
 
             var stat = this.completeQuestionnaireStatisticViewFactory.Load(

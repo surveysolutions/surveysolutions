@@ -850,6 +850,8 @@ Date.prototype.mmddyyyy = function () {
                 }
             }
         }).init();
+
+        $('#umbrella').hide();
     });
 
 } ());

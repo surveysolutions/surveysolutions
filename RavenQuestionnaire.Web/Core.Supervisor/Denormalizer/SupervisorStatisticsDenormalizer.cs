@@ -28,6 +28,8 @@ namespace Core.Supervisor.Denormalizer
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
 
+        private readonly IReadSideRepositoryReader<UserDocument> users;
+
         /// <summary>
         /// Information, grouped by date
         /// </summary>
@@ -44,12 +46,13 @@ namespace Core.Supervisor.Denormalizer
             IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys,
             IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash,
-            IReadSideRepositoryWriter<HistoryStatusStatistics> history)
+            IReadSideRepositoryWriter<HistoryStatusStatistics> history, IReadSideRepositoryReader<UserDocument> users)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
             this.history = history;
+            this.users = users;
         }
 
         #region Public Methods and Operators
@@ -113,6 +116,9 @@ namespace Core.Supervisor.Denormalizer
             {
                 return;
             }
+
+            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+
 
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 

@@ -179,11 +179,11 @@
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\SettingsNames.cs" />
     <Compile Include="SplashScreenActivity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="StartApplicationObject.cs" />
@@ -215,9 +215,6 @@
     <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
       <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml">
-      <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml">
       <SubType>AndroidResource</SubType>

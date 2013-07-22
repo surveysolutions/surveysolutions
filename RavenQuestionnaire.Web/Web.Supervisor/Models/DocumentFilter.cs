@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
+using Main.Core.Documents;
 
 namespace Web.Supervisor.Models
 {
@@ -9,5 +10,6 @@ namespace Web.Supervisor.Models
         public IEnumerable<SurveyUsersViewItem> Responsibles { get; set; }
         public IEnumerable<SummaryTemplateViewItem> Templates { get; set; }
         public IEnumerable<SurveyStatusViewItem> Statuses { get; set; }
+        public IEnumerable<SurveyUsersViewItem> Users { get; set; }
     }
 }

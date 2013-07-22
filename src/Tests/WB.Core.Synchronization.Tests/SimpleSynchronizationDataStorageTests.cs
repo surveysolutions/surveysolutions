@@ -31,7 +31,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.SaveQuestionnarie(new CompleteQuestionnaireStoreDocument(){PublicKey = questionnarieId}, userId);
+            target.SaveInterview(new CompleteQuestionnaireStoreDocument(){PublicKey = questionnarieId}, userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -78,7 +78,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
             
             // act
-            target.DeleteQuestionnarie(questionnarieId, userId);
+            target.DeleteInterview(questionnarieId, userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);

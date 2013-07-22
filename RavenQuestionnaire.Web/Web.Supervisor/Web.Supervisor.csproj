@@ -379,6 +379,7 @@
     <Content Include="Content\img\divider.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -386,6 +387,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\jquery.dataTables.css" />
+    <Content Include="Content\jquery.pnotify.default.css" />
     <Content Include="Content\listview.css" />
     <Content Include="Content\main-not-logged.css" />
     <Content Include="Content\supervisor.css" />
@@ -453,6 +455,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\lib\jquery.pnotify.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -555,7 +558,6 @@
     </Content>
     <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\_ListViewLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Interview\Details.cshtml" />

@@ -869,38 +869,15 @@ hr.separator {
 .menubar {
   height: 34px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd;
   background: #f5f5f5;
-  margin: 0 0 10px;
+  margin: -9px 0 10px;
+  padding: 0 10px 0 10px;
+  line-height: 30px;
 }
-.menubar ul {
-  margin: 0;
-  padding: 0 10px;
-  list-style: none;
-  height: 33px;
-  border-bottom: 1px solid #fff;
-}
-.menubar ul li {
-  float: left;
-  display: block;
-  height: 33px;
-  line-height: 33px;
-  padding: 0 8px;
-}
-.menubar ul li.divider {
-  border-left: 1px solid #dddddd;
-  border-right: 1px solid #ffffff;
-  width: 0px;
-  padding: 0;
-  margin: 0 8px;
-}
-.menubar ul li a {
-  color: #4b4b4b;
-  font-weight: 700;
-  font-size: 9pt;
-}
+
 .widget-stats {
   background: #f5f5f5;
   padding: 10px 15px;
@@ -3065,16 +3042,6 @@ legend {
   border: 0;
   color: #797979;
 }
-input[type=text],
-input[type=password],
-select,
-textarea {
-  border-color: #D8D9DA;
-  color: #A7A7A7;
-  -webkit-border-radius: 0 0 0 0;
-  -moz-border-radius: 0 0 0 0;
-  border-radius: 0 0 0 0;
-}
 .control-label.center {
   text-align: center;
 }
@@ -4551,3 +4518,42 @@ a.thumbnail:focus {
     top: 0;
   }
 }
+#umbrella {
+    position: absolute;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(img/loader.gif) center center no-repeat rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+.pseudo-link {
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+    cursor: pointer;
+}
+a.pseudo-link:hover {
+    text-decoration: none;
+}
+.hide-panel-block {
+    margin: 5px 0;
+}
+.horizontal-scroll {
+    position: relative;
+    overflow-x: auto;
+}
+
+.table thead  tr th.sorting
+{
+    position: relative;
+}
+/*.table thead  tr th.sorting:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 40px;
+    background: red;
+}*/

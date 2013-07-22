@@ -153,6 +153,7 @@
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Location\CreateLocationCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\AssignInterviewToUserCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />

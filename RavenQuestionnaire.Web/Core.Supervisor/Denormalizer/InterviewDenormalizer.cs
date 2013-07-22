@@ -101,6 +101,8 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
+            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+
             var item = this.interviews.GetById(evnt.Payload.CompletedQuestionnaireId);
 
             var user = this.users.GetById(evnt.Payload.Responsible.Id);

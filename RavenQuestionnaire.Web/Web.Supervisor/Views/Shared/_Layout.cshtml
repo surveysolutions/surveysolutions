@@ -25,7 +25,7 @@
                         <ul class="dropdown-menu">
                             <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Surveys", "HQ")">Surveys and Statuses</a></li>
                             <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "HQ")">Supervisors and Statuses</a></li>
-                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "HQ")">Supervisors and Surveys</a></li>
+                            @*<li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "HQ")">Supervisors and Surveys</a></li>*@
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">
                             <a href="@Url.Action("Interviews", "HQ")"><i class="icon-list-alt"></i>Interviews</a>
@@ -57,9 +57,9 @@
                         <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i>Reports <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a> </li>
-                            <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">Interviewers and Statuses</a> </li>
-                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">Interviewers and Surveys</a> </li>
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">Surveys and Statuses</a></li>
+                            <li class="@(page == MenuItem.Summary ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">Interviewers and Statuses</a></li>
+                            @*<li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">Interviewers and Surveys</a> </li>*@
                         </ul>
                         <li class="@(page == MenuItem.Docs ? "active" : "")">
                             <a href="@Url.Action("Interviews", "Survey")"><i class="icon-list-alt"></i>Interviews</a>
@@ -80,9 +80,10 @@
             </div>
 
         </div>
-         @RenderBody()
+        @RenderBody()
       
     </div>
+    <div id="umbrella"></div>
     @Scripts.Render("~/js/main")
     @RenderSection("scripts", false)
 </body>
