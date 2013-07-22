@@ -44,7 +44,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
             lock (locker)
             {
-                using (var connection = connectionFactory.Create(Path.Combine(folderName, eventSourceId.ToString())))
+                using (var connection = connectionFactory.Create(Path.Combine(FullPathToFolder, eventSourceId.ToString())))
                 {
                     connection.CreateTable<StoredEvent>();
                     action(connection);
