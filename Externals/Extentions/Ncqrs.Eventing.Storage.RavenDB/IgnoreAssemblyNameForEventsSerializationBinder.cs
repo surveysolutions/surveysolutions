@@ -25,8 +25,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         public override Type BindToType(string assemblyName, string typeName)
         {
-            Debug.WriteLine("{0} {1} {2}", assemblyName, typeName, NcqrsEnvironment.IsEventDataType(typeName));
-
             if (NcqrsEnvironment.IsEventDataType(typeName))
             {
                 return NcqrsEnvironment.GetEventDataType(typeName);

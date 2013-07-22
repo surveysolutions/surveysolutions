@@ -181,6 +181,8 @@ namespace Ncqrs
 
         public static void RegisterEventDataType(Type eventDataType)
         {
+            ThrowIfThereIsAnotherEventWithSameFullName(eventDataType);
+
             KnownEventDataTypes[eventDataType.FullName] = eventDataType;
         }
 
@@ -192,6 +194,17 @@ namespace Ncqrs
         public static Type GetEventDataType(string typeFullName)
         {
             return KnownEventDataTypes[typeFullName];
+        }
+
+        private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
+        {
+            Type anotherEventWithSameName;
+            KnownEventDataTypes.TryGetValue(@event.FullName, out anotherEventWithSameName);
+
+            if (anotherEventWithSameName != null && anotherEventWithSameName != @event)
+                throw new ArgumentException(string.Format(
+                    "Two different events share same full type name:{0}{1}{0}{2}",
+                    Environment.NewLine, @event.AssemblyQualifiedName, anotherEventWithSameName.AssemblyQualifiedName));
         }
     }
 }
