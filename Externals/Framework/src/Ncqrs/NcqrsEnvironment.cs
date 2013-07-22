@@ -61,6 +61,8 @@ namespace Ncqrs
         /// </summary>
         private static IEnvironmentConfiguration _instance;
 
+        private static readonly Dictionary<string, Type> KnownEventDataTypes = new Dictionary<string, Type>();
+
         /// <summary>
         /// Gets or create the requested instance specified by the parameter <typeparamref name="T"/>.
         /// </summary>
@@ -177,5 +179,19 @@ namespace Ncqrs
         /// </remarks>
         public static IEnvironmentConfiguration CurrentConfiguration { get { return _instance; } }
 
+        public static void RegisterEventDataType(Type eventDataType)
+        {
+            KnownEventDataTypes[eventDataType.FullName] = eventDataType;
+        }
+
+        public static bool IsEventDataType(string typeFullName)
+        {
+            return KnownEventDataTypes.ContainsKey(typeFullName);
+        }
+
+        public static Type GetEventDataType(string typeFullName)
+        {
+            return KnownEventDataTypes[typeFullName];
+        }
     }
 }

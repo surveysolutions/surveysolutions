@@ -154,7 +154,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            var storedEvents =
+            IEnumerable<StoredEvent> storedEvents =
                 this.AccumulateEvents(
                     x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
@@ -269,8 +269,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
            var docStore = new DocumentConvention
                {
                    JsonContractResolver = new PropertiesOnlyContractResolver(),
-                   FindTypeTagName = x => "Events"
-                   /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
+                   FindTypeTagName = x => "Events",
+                   CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder(),
                };
             return docStore;
         }

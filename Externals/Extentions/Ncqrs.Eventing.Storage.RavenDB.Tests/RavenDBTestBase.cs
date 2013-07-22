@@ -36,8 +36,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
                                         Conventions = new DocumentConvention
                                             {
                                                 JsonContractResolver = new PropertiesOnlyContractResolver(),
-                                                FindTypeTagName = x => "Snapshots"
-                                                /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
+                                                FindTypeTagName = x => "Snapshots",
+                                                CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder(),
                                             }
                                     };
             documentStore.Initialize();

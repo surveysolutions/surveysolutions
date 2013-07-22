@@ -1,34 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using Raven.Imports.Newtonsoft.Json.Serialization;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
-    public class TypeNameSerializationBinder : SerializationBinder
+    public class TypeNameSerializationBinder : DefaultSerializationBinder
     {
-        public string TypeFormat { get; private set; }
-
-        public TypeNameSerializationBinder(string typeFormat)
-        {
-            TypeFormat = typeFormat;
-        }
-
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
-            assemblyName = null;
-            typeName = serializedType.FullName;
+            if (NcqrsEnvironment.IsEventDataType(serializedType.FullName))
+            {
+                assemblyName = null;
+                typeName = serializedType.FullName;
+            }
+            else
+            {
+                base.BindToName(serializedType, out assemblyName, out typeName);
+            }
         }
 
         public override Type BindToType(string assemblyName, string typeName)
         {
-            string resolvedTypeName = string.Format(TypeFormat, typeName);
-            var types = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType(resolvedTypeName)).ToList();
-            var type = Type.GetType(resolvedTypeName) ?? types.FirstOrDefault(t => t != null);
-            if (type == null)
-                throw new TypeLoadException(string.Format("Cannot load type {0}", typeName));
-            return type;
+            Debug.WriteLine("{0} {1} {2}", assemblyName, typeName, NcqrsEnvironment.IsEventDataType(typeName));
+
+            if (NcqrsEnvironment.IsEventDataType(typeName))
+            {
+                return NcqrsEnvironment.GetEventDataType(typeName);
+            }
+            else
+            {
+                return base.BindToType(assemblyName, typeName);
+            }
         }
     }
 }
