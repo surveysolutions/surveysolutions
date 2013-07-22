@@ -131,6 +131,10 @@ namespace WB.Core.Synchronization.SyncProvider
             var items = GetContentAsItem<AggregateRootEvent[]>(item);
 
             var processor = new SyncEventHandler();
+
+            //could be slow
+            //think about deffered handling
+
             processor.Merge(items);
             processor.Commit();
             
