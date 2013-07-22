@@ -2,6 +2,7 @@
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 
 using Raven.Client.Indexes;
+using Raven.Imports.Newtonsoft.Json;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
@@ -19,8 +20,10 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     /// <summary>
     /// The raven DB event store.
     /// </summary>
-    public class RavenDBEventStore : IStreamableEventStore
+    public class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
     {
+        private const string CollectionName = "Events";
+
         #region Fields
 
         /// <summary>
@@ -56,7 +59,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="pageSize"></param>
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
-            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions()}.Initialize();
+            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateStoreConventions(CollectionName)}.Initialize();
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
@@ -74,7 +77,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="pageSize"></param>
         public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
         {
-            externalDocumentStore.Conventions = CreateConventions();
+            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
@@ -256,23 +259,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// The create conventions.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="DocumentConvention"/>.
-        /// </returns>
-        public static DocumentConvention CreateConventions()
-        {
-           var docStore = new DocumentConvention
-               {
-                   JsonContractResolver = new PropertiesOnlyContractResolver(),
-                   FindTypeTagName = x => "Events",
-                   CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder(),
-               };
-            return docStore;
         }
 
 

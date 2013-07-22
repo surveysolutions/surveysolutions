@@ -104,6 +104,7 @@
     <Compile Include="RavenDBSnapshotStore.cs" />
     <Compile Include="RavenIndexes\Event_ByEventSource.cs" />
     <Compile Include="RavenIndexes\UniqueEventsIndex.cs" />
+    <Compile Include="RavenWriteSideStore.cs" />
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredEventWithoutPayload.cs" />
     <Compile Include="StoredSnaphot.cs" />

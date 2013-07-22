@@ -7,8 +7,9 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
-    public class RavenDBSnapshotStore : ISnapshotStore
+    public class RavenDBSnapshotStore : RavenWriteSideStore, ISnapshotStore
     {
+        private const string CollectionName = "Snapshots";
         private readonly IDocumentStore _documentStore;
 
         public RavenDBSnapshotStore(string ravenUrl)
@@ -16,26 +17,16 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             _documentStore = new DocumentStore
             {
                 Url = ravenUrl,                
-                Conventions = CreateConventions()
+                Conventions = CreateStoreConventions(CollectionName)
             }.Initialize(); 
         }
 
         public RavenDBSnapshotStore(DocumentStore externalDocumentStore)
         {
-            externalDocumentStore.Conventions = CreateConventions();
+            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             _documentStore = externalDocumentStore;            
         }
 
-        public static DocumentConvention CreateConventions()
-        {
-            return new DocumentConvention
-            {
-                JsonContractResolver = new PropertiesOnlyContractResolver(),
-                FindTypeTagName = x => "Snapshots",
-                CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder(),
-            };
-        }
-        
         public void SaveShapshot(Snapshot source)
         {
             using (var session = _documentStore.OpenSession())

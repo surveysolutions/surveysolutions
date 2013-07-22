@@ -33,12 +33,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
             var documentStore = new EmbeddableDocumentStore
                                     {
                                         RunInMemory = true,
-                                        Conventions = new DocumentConvention
-                                            {
-                                                JsonContractResolver = new PropertiesOnlyContractResolver(),
-                                                FindTypeTagName = x => "Snapshots",
-                                                CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder(),
-                                            }
+                                        Conventions = RavenWriteSideStore.CreateStoreConventions("Snapshots"),
                                     };
             documentStore.Initialize();
             return documentStore;
