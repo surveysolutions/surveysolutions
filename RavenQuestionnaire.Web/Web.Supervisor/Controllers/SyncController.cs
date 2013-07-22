@@ -83,7 +83,7 @@ namespace Web.Supervisor.Controllers
             return Json(package, JsonRequestBehavior.AllowGet);
         }
 
-        //In case of error of type missing or casting error we send correct response.
+        //In case of error of type missing or casting error we'll try to send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult InitPulling(string login, string password, string clientRegistrationId)
@@ -146,15 +146,19 @@ namespace Web.Supervisor.Controllers
             try
             {
                 package = this.syncManager.ReceiveSyncPackage(clientRegistrationKey, key, sequence);
-                return Json(package, JsonRequestBehavior.AllowGet);
+                
             }
             catch (Exception ex)
             {
                 logger.Fatal("Error on sync", ex);
+                logger.Fatal(ex.StackTrace);
+
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Error occured. Try later.";
-                return Json(package, JsonRequestBehavior.AllowGet);
             }
+
+            return Json(package, JsonRequestBehavior.AllowGet);
+
         }
 
         //In case of error of type missing or casting error we send correct response.
@@ -192,7 +196,7 @@ namespace Web.Supervisor.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence));
+            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence), JsonRequestBehavior.AllowGet);
         }
 
         private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey, long clientSequence)
@@ -209,6 +213,8 @@ namespace Web.Supervisor.Controllers
                 logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
                 logger.Fatal(ex.Message);
                 logger.Fatal(ex.StackTrace);
+
+                result.ErrorMessage = "Server error occured.";
                 result.IsErrorOccured = true;
             }
 

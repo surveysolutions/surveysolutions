@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
-    public class SyncItemsMetaContainer
+    public class SyncItemsMetaContainer : BasePackage
     {
         public SyncItemsMetaContainer()
         {
@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public List<KeyValuePair<long,Guid>> ARId { set; get; }
 
-        public bool IsErrorOccured;
     }
 
 }
