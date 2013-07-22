@@ -4,7 +4,7 @@
 @using WB.UI.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.Title 
+        <span>@Model.ItemNumber &nbsp;&nbsp;&nbsp;</span> @Model.Title 
     </span>
 
     @if (Model.Answers.Count > 0) {
