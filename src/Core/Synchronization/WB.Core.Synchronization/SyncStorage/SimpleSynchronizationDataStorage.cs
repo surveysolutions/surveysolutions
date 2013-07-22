@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
@@ -16,6 +17,7 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly IChunkStorage chunkStorage;
 
         private const bool UseCompression = true;
+        private const bool UseCompressionForFiles = false;
 
         public SimpleSynchronizationDataStorage(
             IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
@@ -26,19 +28,23 @@ namespace WB.Core.Synchronization.SyncStorage
             this.chunkStorage = chunkStorage;
         }
 
-        public void SaveQuestionnarie(CompleteQuestionnaireStoreDocument doc, Guid responsibleId)
+        public void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId)
         {
+            var interview = CreateQuestionnarieDocument(doc);
+            
+            
             var syncItem = new SyncItem
                 {
                     Id = doc.PublicKey,
                     ItemType = SyncItemType.Questionnare,
                     IsCompressed = UseCompression,
-                    Content = GetItemAsContent(CreateQuestionnarieDocument(doc))
+                    Content = GetItemAsContent(interview),
+                    MetaInfo = GetItemAsContent(new MetaInfoBuilder().GetInterviewMetaInfo(interview)) 
                 };
             chunkStorage.StoreChunk(syncItem, responsibleId);
         }
 
-        public void DeleteQuestionnarie(Guid id, Guid responsibleId)
+        public void DeleteInterview(Guid id, Guid responsibleId)
         {
             var syncItem = new SyncItem
             {
@@ -63,7 +69,7 @@ namespace WB.Core.Synchronization.SyncStorage
             {
                 Id = publicKey,
                 ItemType = SyncItemType.File,
-                IsCompressed = UseCompression,
+                IsCompressed = UseCompressionForFiles,
                 Content = GetItemAsContent(fileDescription)
             };
             chunkStorage.StoreChunk(syncItem, null);
@@ -153,7 +159,12 @@ namespace WB.Core.Synchronization.SyncStorage
 
         private string GetItemAsContent(object item)
         {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            var settings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Objects, 
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+
             return  JsonConvert.SerializeObject(item, Formatting.None, settings);
         }
         #endregion
