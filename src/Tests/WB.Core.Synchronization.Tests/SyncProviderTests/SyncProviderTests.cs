@@ -18,14 +18,13 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
     [TestFixture]
     public class SyncProviderTests
     {
-
         [SetUp]
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
-        /*[Test]*/
+        [Test]
         public void CheckAndCreateNewSyncActivity_when_New_Valid_ClientIdentifier_Arrived_then_Device_Is_Stored()
         {
             //Arrange
