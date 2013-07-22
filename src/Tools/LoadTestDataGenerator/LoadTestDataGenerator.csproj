@@ -151,6 +151,10 @@
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
       <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
+      <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
+      <Name>WB.Core.BoundedContexts.Designer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
@@ -162,10 +166,6 @@
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
-      <Project>{DEDC7ECF-21F8-4D39-81C4-5DBE2E8B9D5D}</Project>
-      <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>

@@ -2,6 +2,8 @@
 using System.IO;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -167,6 +169,8 @@ namespace CAPI.Android
             }
             catch (Exception ex)
             {
+                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                logger.Error("Error on Sync: " + ex.Message, ex);
                 tvSyncResult.Text = ex.Message;
                 return;
             }

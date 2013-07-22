@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using Core.Supervisor.DenormalizerStorageItem;
 using Core.Supervisor.Views.Survey;
-using Main.Core.View.Questionnaire;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Core.Supervisor.Views.Status
 {

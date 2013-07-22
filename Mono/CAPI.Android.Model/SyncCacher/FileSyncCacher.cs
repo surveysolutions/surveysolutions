@@ -1,9 +1,10 @@
 using System;
 using System.IO;
+using WB.Core.Infrastructure.Backup;
 
 namespace CAPI.Android.Core.Model.SyncCacher
 {
-    public class FileSyncCacher : ISyncCacher
+    public class FileSyncCacher : ISyncCacher, IBackupable
     {
         private const string CacheFolder = "SyncCache";
 
@@ -49,5 +50,21 @@ namespace CAPI.Android.Core.Model.SyncCacher
             return Path.Combine(_basePath, fileName);
         }
 
+        public string GetPathToBakupFile()
+        {
+            return _basePath;
+        }
+
+        public void RestoreFromBakupFolder(string path)
+        {
+            var dirWithCahngelog = Path.Combine(path, _basePath);
+            foreach (var file in Directory.EnumerateFiles(_basePath))
+            {
+                File.Delete(file);
+            }
+
+            foreach (var file in Directory.GetFiles(dirWithCahngelog))
+                File.Copy(file, Path.Combine(_basePath, Path.GetFileName(file)));
+        }
     }
 }

@@ -493,9 +493,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\FileStoreDenormalizer.cs">
       <Link>EventHandlers\FileStoreDenormalizer.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\QuestionnaireDenormalizer.cs">
-      <Link>EventHandlers\QuestionnaireDenormalizer.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\AggregateRootEvent.cs">
       <Link>Events\AggregateRootEvent.cs</Link>
     </Compile>
@@ -564,60 +561,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\FullGroupDataEvent.cs">
-      <Link>Events\Questionnaire\FullGroupDataEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\FullQuestionDataEvent.cs">
-      <Link>Events\Questionnaire\FullQuestionDataEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupCloned.cs">
-      <Link>Events\Questionnaire\GroupCloned.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupDeleted.cs">
-      <Link>Events\Questionnaire\GroupDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupUpdated.cs">
-      <Link>Events\Questionnaire\GroupUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\ImageDeleted.cs">
-      <Link>Events\Questionnaire\ImageDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\ImageUpdated.cs">
-      <Link>Events\Questionnaire\ImageUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\ImageUploaded.cs">
-      <Link>Events\Questionnaire\ImageUploaded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewGroupAdded.cs">
-      <Link>Events\Questionnaire\NewGroupAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewQuestionAdded.cs">
-      <Link>Events\Questionnaire\NewQuestionAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewQuestionnaireCreated.cs">
-      <Link>Events\Questionnaire\NewQuestionnaireCreated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionChanged.cs">
-      <Link>Events\Questionnaire\QuestionChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionCloned.cs">
-      <Link>Events\Questionnaire\QuestionCloned.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionDeleted.cs">
-      <Link>Events\Questionnaire\QuestionDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireDeleted.cs">
-      <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireItemMoved.cs">
-      <Link>Events\Questionnaire\QuestionnaireItemMoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireUpdated.cs">
-      <Link>Events\Questionnaire\QuestionnaireUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\TemplateImported.cs">
-      <Link>Events\Questionnaire\TemplateImported.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootEventStreamPushed.cs">
       <Link>Events\Synchronization\AggregateRootEventStreamPushed.cs</Link>
@@ -865,18 +808,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\IViewFactory.cs">
       <Link>View\IViewFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseInputModel.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseInputModel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseItem.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseItem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseView.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Questionnaire\QuestionnaireBrowseViewFactory.cs">
-      <Link>View\Questionnaire\QuestionnaireBrowseViewFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Question\CompleteQuestionView.cs">
       <Link>View\Question\CompleteQuestionView.cs</Link>
     </Compile>
@@ -951,10 +882,6 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
-      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
-      <Name>WB.Core.Questionnaire.Events</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
@@ -988,6 +915,7 @@
       <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
