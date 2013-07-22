@@ -40,14 +40,14 @@ namespace Core.Supervisor.Views.Survey
 
             if (input.UserId.HasValue)
             {
-                if (input.ViewerStatus == ViewerStatus.Headquarter)
-                {
-                    items = items.Where(x => x.ResponsibleSupervisorId == input.UserId);
-                }
-                else
+              /*  if (input.ViewerStatus == ViewerStatus.Headquarter)
                 {
                     items = items.Where(x => x.ResponsibleId == input.UserId);
                 }
+                else
+                {*/
+                    items = items.Where(x => x.ResponsibleId == input.UserId);
+               // }
 
             }
             else
@@ -55,7 +55,7 @@ namespace Core.Supervisor.Views.Survey
                 items = items.Where(x => x.ResponsibleId == Guid.Empty);
             }
 
-            var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).Select(y => new SurveysViewItem()
+            var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList().Select(y => new SurveysViewItem()
         {
             Template = new TemplateLight(y.TemplateId, y.TemplateName),
             Approved = y.ApprovedCount,
@@ -65,7 +65,7 @@ namespace Core.Supervisor.Views.Survey
             Redo = y.RedoCount,
             Unassigned = y.UnassignedCount,
             Total = y.TotalCount
-        }).ToList();
+        });
 
             return new SurveysView()
             {

@@ -73,15 +73,15 @@ namespace Core.Supervisor.Views.Interview
             //    .Skip((input.Page - 1)*input.PageSize)
             //    .Take(input.PageSize);
 
-            var items = this.interviews.QueryEnumerable(predicate)
+            var interviewItems = DefineOrderBy(this.interviews.QueryEnumerable(predicate),input)
                             .Skip((input.Page - 1)*input.PageSize)
-                            .Take(input.PageSize).ToList().AsQueryable();
+                            .Take(input.PageSize).ToList();
 
-            items = DefineOrderBy(items, input);
+           
             return new InterviewView()
                 {
                     TotalCount = this.interviews.Count(predicate),
-                    Items = items.Select(x => new InterviewViewItem()
+                    Items = interviewItems.Select(x => new InterviewViewItem()
                         {
                             FeaturedQuestions = x.FeaturedQuestions,
                             InterviewId = x.InterviewId,
@@ -95,12 +95,14 @@ namespace Core.Supervisor.Views.Interview
         }
 
         private IQueryable<InterviewItem> DefineOrderBy(IQueryable<InterviewItem> query,
-            InterviewInputModel model)
+                                                        InterviewInputModel model)
         {
             var orderBy = model.Orders.FirstOrDefault();
-            if (orderBy != null)
+            if (orderBy == null)
             {
-                List<string> o = query.SelectMany(t => t.FeaturedQuestions).Select(y => y.Question).Distinct().ToList();
+                return query;
+            }
+            /*  List<string> o = query.SelectMany(t => t.FeaturedQuestions).Select(y => y.Question).Distinct().ToList();
                 if (o.Contains(orderBy.Field))
                 {
                     query = orderBy.Direction == OrderDirection.Asc
@@ -115,10 +117,9 @@ namespace Core.Supervisor.Views.Interview
                 }
                 else
                 {
-                    query = query.OrderUsingSortExpression(model.Order).AsQueryable();
-                }
-            }
-            return query;
+                    query =*/
+            return query.OrderUsingSortExpression(model.Order).AsQueryable();
+            //   }
         }
     }
 }

@@ -3,7 +3,6 @@ using System.IO;
 using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core;
 using Main.Core.Events;
-using Newtonsoft.Json;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {

@@ -5,13 +5,20 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core;
+using CAPI.Android.Core.Model.ModelUtils;
+using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Main.Core;
+using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -70,6 +77,22 @@ namespace CAPI.Android
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
 
+            var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
+            //todo: load from sync cache
+
+            var item = syncCacher.LoadItem(publicKey);
+
+            if (!string.IsNullOrWhiteSpace(item))
+            {
+                string content = PackageHelper.DecompressString(item);
+                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(new CreateNewAssigment(questionnarieContent));
+
+                syncCacher.DeleteItem(publicKey);
+            }
+
+
             var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
             long minVersion = 0;
             var snapshot = snapshotStore.GetSnapshot(publicKey, long.MaxValue);
@@ -87,7 +110,18 @@ namespace CAPI.Android
             var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, minVersion, long.MaxValue);
             foreach (CommittedEvent committedEvent in eventsAfterSnapshot)
             {
-                bus.Publish(committedEvent);
+                try
+                {
+                    bus.Publish(committedEvent);
+                }
+                catch(Exception e)
+                {
+                    var logger = ServiceLocator.Current.GetInstance<ILogger>();
+
+                    logger.Error("Rebuild Error", e);
+
+                    logger.Error("Event: " + JsonUtils.GetJsonData(committedEvent.Payload));
+                }
             }
         }
     }

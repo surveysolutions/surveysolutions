@@ -105,42 +105,20 @@ namespace CAPI.Android
 
         protected void UpdateDashboard()
         {
-            var newDashboard =
-                    CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                        new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
-            var unhandledSurveysKeys = newDashboard.Surveys.Select(s=>s.PublicKey).ToList();
-            foreach (var survey in currentDashboard.Surveys)
+            currentDashboard =
+              CapiApplication.LoadView<DashboardInput, DashboardModel>(
+                  new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
+            sureveyHolders = new Dictionary<Guid, View>();
+            llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
+            this.RunOnUiThread(() =>
             {
-                
-                var newSurvey = newDashboard.Surveys.FirstOrDefault(s => s.PublicKey == survey.PublicKey);
-                if (newSurvey == null)
+                llSurveyHolder.RemoveAllViews();
+
+                foreach (var dashboardSurveyItem in currentDashboard.Surveys)
                 {
-                    this.RunOnUiThread(() =>
-                        {
-                            llSurveyHolder.RemoveView(sureveyHolders[survey.PublicKey]);
-                        });
-                    
-                    sureveyHolders.Remove(survey.PublicKey);
-                    continue;
+                    AddSurveyItem(dashboardSurveyItem);
                 }
-                unhandledSurveysKeys.Remove(newSurvey.PublicKey);
-                if (newSurvey.ActiveItems.Count != survey.ActiveItems.Count)
-                {
-                    var txtSurveyCount = sureveyHolders[survey.PublicKey].FindViewById<TextView>(Resource.Id.txtSurveyCount);
-                    this.RunOnUiThread(() =>
-                        {
-                            txtSurveyCount.Text = newSurvey.ActiveItems.Count.ToString();
-                        });
-                }
-                var llQuestionnarieHolder = sureveyHolders[survey.PublicKey].FindViewById<ListView>(Resource.Id.llQuestionnarieHolder);
-                ((DashboardAdapter) llQuestionnarieHolder.Adapter).Update(newSurvey.ActiveItems);
-            }
-            foreach (var dashboardSurveyItem in unhandledSurveysKeys)
-            {
-                this.RunOnUiThread(() =>
-                    { AddSurveyItem(newDashboard.Surveys.FirstOrDefault(s => s.PublicKey == dashboardSurveyItem)); });
-            }
-            currentDashboard = newDashboard;
+            });
         }
         
         protected override void OnStart()

@@ -1,20 +1,4 @@
-// -----------------------------------------------------------------------
-// <copyright file="QuestionnaireScreenViewFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using System;
-using Main.Core.Documents;
 using Main.Core.View;
-using Main.DenormalizerStorage;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails

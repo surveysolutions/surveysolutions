@@ -14,10 +14,7 @@
     {
         #region Fields
 
-        /// <summary>
-        /// The inner document.
-        /// </summary>
-        private FileDescription innerDocument = new FileDescription();
+        //private FileDescription innerDocument = new FileDescription();
 
         #endregion
 
@@ -75,7 +72,7 @@
         /// </param>
         public void OnFileDeleted(FileDeleted e)
         {
-            this.innerDocument = null;
+            //this.innerDocument = null;
 
             // storage.DeleteFile(e.PublicKey.ToString());
             // storage.DeleteFile(string.Format(thumbFormat, e.PublicKey));
@@ -118,12 +115,12 @@
         /// </param>
         protected void OnFileUploaded(FileUploaded e)
         {
-            this.innerDocument = new FileDescription
+            /*this.innerDocument = new FileDescription
                 {
                    FileName = e.PublicKey.ToString(), 
                    Description = e.Description, 
                    Title = e.Title 
-                };
+                };*/
 
             //// storage.StoreFile(originalFile);
 

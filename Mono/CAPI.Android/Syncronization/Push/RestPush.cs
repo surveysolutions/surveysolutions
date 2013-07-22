@@ -35,7 +35,7 @@ namespace CAPI.Android.Syncronization.Push
                                                                         new KeyValuePair<string, string>("password",
                                                                                                          password));
                 if (!result)
-                throw new SynchronizationException("Push was failed.");
+                throw new SynchronizationException("Push was failed. Try again later.");
             }
             catch (RestException)
             {
