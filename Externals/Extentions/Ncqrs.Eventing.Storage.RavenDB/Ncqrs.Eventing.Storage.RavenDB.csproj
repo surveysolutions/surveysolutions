@@ -108,7 +108,7 @@
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredEventWithoutPayload.cs" />
     <Compile Include="StoredSnaphot.cs" />
-    <Compile Include="TypeNameSerializationBinder.cs" />
+    <Compile Include="IgnoreAssemblyNameForEventsSerializationBinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Framework\src\Ncqrs\Ncqrs.csproj">

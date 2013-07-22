@@ -19,7 +19,12 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         private static void CustomizeJsonSerializer(JsonSerializer serializer)
         {
-            serializer.Binder = new TypeNameSerializationBinder();
+            SetupSerializerToIgnoreAssemblyNameForEvents(serializer);
+        }
+
+        private static void SetupSerializerToIgnoreAssemblyNameForEvents(JsonSerializer serializer)
+        {
+            serializer.Binder = new IgnoreAssemblyNameForEventsSerializationBinder();
 
             // if we want to perform serialized type name substitution
             // then JsonDynamicConverter should be removed
