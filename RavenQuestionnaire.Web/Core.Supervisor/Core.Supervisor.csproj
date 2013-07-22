@@ -192,7 +192,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RavenIndexes\SummaryItemForHQByTemplate.cs" />
-    <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
@@ -261,9 +260,6 @@
     <Compile Include="Views\Index\IndexViewItem.cs" />
     <Compile Include="Views\Index\IndexView.cs" />
     <Compile Include="Views\Index\SurveyGroupedByStatusHeader.cs" />
-    <Compile Include="Views\Assignment\AssignmentInputModel.cs" />
-    <Compile Include="Views\Assignment\AssignmentViewItem.cs" />
-    <Compile Include="Views\Assignment\AssignmentView.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
     <Compile Include="Views\Summary\SummaryFactory.cs" />
@@ -294,6 +290,10 @@
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>

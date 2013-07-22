@@ -106,6 +106,10 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
       <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>
       <Name>Core.Supervisor</Name>

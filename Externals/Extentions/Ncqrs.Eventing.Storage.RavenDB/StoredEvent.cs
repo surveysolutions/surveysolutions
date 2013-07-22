@@ -1,5 +1,6 @@
 ﻿using System;
 //using Newtonsoft.Json;
+using System.Diagnostics;
 using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
@@ -7,6 +8,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     using Raven.Imports.Newtonsoft.Json;
     using Raven.Imports.Newtonsoft.Json.Converters;
 
+    [DebuggerDisplay("StoredEvent {Data.GetType().Name}")]
     public class StoredEvent
     {
         public string Id { get; set; }

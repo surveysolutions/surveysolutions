@@ -19,8 +19,10 @@ namespace LoadTestDataGenerator
 
     using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
 
-    public class BatchedRavenDBEventStore: IStreamableEventStore
+    public class BatchedRavenDBEventStore: RavenWriteSideStore, IStreamableEventStore
     {
+        private const string CollectionName = "Events";
+
         #region Fields
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace LoadTestDataGenerator
         /// <param name="pageSize"></param>
         public BatchedRavenDBEventStore(string ravenUrl, int pageSize)
         {
-            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions()}.Initialize();
+            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateStoreConventions(CollectionName)}.Initialize();
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
@@ -74,7 +76,7 @@ namespace LoadTestDataGenerator
         /// <param name="pageSize"></param>
         public BatchedRavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
         {
-            externalDocumentStore.Conventions = CreateConventions();
+            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
@@ -270,23 +272,6 @@ namespace LoadTestDataGenerator
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// The create conventions.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="DocumentConvention"/>.
-        /// </returns>
-        public static DocumentConvention CreateConventions()
-        {
-           var docStore = new DocumentConvention
-               {
-                   JsonContractResolver = new PropertiesOnlyContractResolver(),
-                   FindTypeTagName = x => "Events"
-                   /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
-               };
-            return docStore;
         }
 
 

@@ -8,25 +8,10 @@
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
     using Main.Core.Entities.SubEntities.Question;
-    using Main.Core.Events.Questionnaire;
     using Main.Core.Utility.OrderStrategy;
 
-    /// <summary>
-    /// The complete question factory.
-    /// </summary>
     public class CompleteQuestionFactory : ICompleteQuestionFactory
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The convert to complete question.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.SubEntities.Complete.ICompleteQuestion.
-        /// </returns>
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
             var maxValue = int.MaxValue;
@@ -114,80 +99,70 @@
             return completeQuestion;
         }
 
-        /// <summary>
-        /// The create.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        /// <returns>
-        /// The <see cref="AbstractQuestion"/>.
-        /// </returns>
-        public AbstractQuestion Create(FullQuestionDataEvent e)
+        public AbstractQuestion CreateQuestion(Guid publicKey, QuestionType questionType,
+            QuestionScope questionScope, string questionText, string stataExportCaption,
+            string conditionExpression, string validationExpression, string validationMessage,
+            Order answerOrder, bool featured, bool mandatory, bool capital, string instructions,
+            List<Guid> triggers, int maxValue, Answer[] answers)
         {
-            AbstractQuestion q = CreateQuestion(e.QuestionType);
+            AbstractQuestion q = CreateQuestion(questionType);
 
-            q.PublicKey = e.PublicKey;
+            q.PublicKey = publicKey;
 
             UpdateQuestion(
                 q,
-                e.QuestionType,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                e.AnswerOrder,
-                e.Featured,
-                e.Mandatory,
-                e.Capital,
-                e.Instructions,
-                e.Triggers,
-                e.MaxValue);
+                questionType,
+                questionScope,
+                questionText,
+                stataExportCaption,
+                conditionExpression,
+                validationExpression,
+                validationMessage,
+                answerOrder,
+                featured,
+                mandatory,
+                capital,
+                instructions,
+                triggers,
+                maxValue);
 
-            UpdateAnswerList(e.Answers, q);
+            UpdateAnswerList(answers, q);
 
             return q;
         }
 
-        public IQuestion CreateQuestionFromExistingUsingDataFromEvent(IQuestion question, QuestionChanged e)
+        public IQuestion CreateQuestionFromExistingUsingSpecifiedData(IQuestion question, QuestionType questionType,
+            QuestionScope questionScope, string questionText, string stataExportCaption,
+            string conditionExpression, string validationExpression, string validationMessage,
+            Order answerOrder, bool featured, bool mandatory, bool capital, string instructions,
+            List<Guid> triggers, int maxValue, Answer[] answers)
         {
-            AbstractQuestion q = CreateQuestion(e.QuestionType);
+            AbstractQuestion q = CreateQuestion(questionType);
 
             q.PublicKey = question.PublicKey;
 
             UpdateQuestion(
                 q,
-                e.QuestionType,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                e.AnswerOrder,
-                e.Featured,
-                e.Mandatory,
-                e.Capital,
-                e.Instructions,
-                e.Triggers,
-                e.MaxValue);
+                questionType,
+                questionScope,
+                questionText,
+                stataExportCaption,
+                conditionExpression,
+                validationExpression,
+                validationMessage,
+                answerOrder,
+                featured,
+                mandatory,
+                capital,
+                instructions,
+                triggers,
+                maxValue);
 
-            UpdateAnswerList(e.Answers, q);
+            UpdateAnswerList(answers, q);
 
             return q;
         }
 
-        /// <summary>
-        /// The create question.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The <see cref="AbstractQuestion"/>.
-        /// </returns>
         private static AbstractQuestion CreateQuestion(QuestionType type)
         {
             switch (type)
@@ -220,19 +195,6 @@
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The update answer list.
-        /// </summary>
-        /// <param name="answers">
-        /// The answers.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
         private static void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
         {
             if (question.Answers != null)
@@ -296,7 +258,5 @@
                 }
             }
         }
-
-        #endregion
     }
 }

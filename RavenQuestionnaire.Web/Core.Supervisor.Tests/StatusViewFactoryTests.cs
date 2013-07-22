@@ -9,11 +9,11 @@ using Core.Supervisor.Views;
 using Core.Supervisor.Views.Status;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View.Questionnaire;
 using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Core.Supervisor.Tests
 {
