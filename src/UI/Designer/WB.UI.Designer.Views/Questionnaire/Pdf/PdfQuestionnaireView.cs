@@ -143,40 +143,6 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                     Fill(pdfGroupView, child);
                 }
             }
-
-            //var treeToEnumerable1 = source.Children.TreeToEnumerable1();
-            //foreach (IComposite composite in treeToEnumerable1)
-            //{
-            //    if (composite is IQuestion)
-            //    {
-            //        var item = composite as IQuestion;
-            //        Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?)null;
-            //        if (parentId.HasValue)
-            //        {
-            //            this.AddQuestion(new PdfQuestionView
-            //                {
-            //                    Id = item.PublicKey,
-            //                    Title = item.QuestionText,
-            //                    Answers = (item.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
-            //                        {
-            //                            Title = x.AnswerText,
-            //                            AnswerType = x.AnswerType,
-            //                            AnswerValue = x.AnswerValue
-            //                        }).ToList()
-            //                }, parentId);
-            //        }
-            //    }
-            //    if (composite is IGroup)
-            //    {
-            //        var item = composite as IGroup;
-            //        Guid? parentId = item.GetParent() != null ? item.GetParent().PublicKey : (Guid?) null;
-            //        this.AddGroup(new PdfGroupView {
-            //            Id = item.PublicKey,
-            //            Title = item.Title,
-            //            Depth = this.GetEntityDepth(parentId) + 1
-            //        }, parentId);
-            //    }
-            //}
         }
 
         private void Fill(PdfGroupView group, IComposite item)
