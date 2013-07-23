@@ -238,8 +238,6 @@ namespace Web.Supervisor.Controllers
                 Stream requestStream = Request.InputStream;
                 requestStream.Seek(0, SeekOrigin.Begin);
                 string json = new StreamReader(requestStream).ReadToEnd();
-
-
                 SyncItem syncItem = null;
                 try
                 {

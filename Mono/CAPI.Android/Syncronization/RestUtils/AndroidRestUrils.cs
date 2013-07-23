@@ -128,8 +128,10 @@ namespace CAPI.Android.Syncronization.RestUtils
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
             if (!string.IsNullOrWhiteSpace(requestBody))
+            {
                 //request.AddBody(requestBody);
                 request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
+            }
             else
             {
                 foreach (var additionalParam in additionalParams)
