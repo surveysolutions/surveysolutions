@@ -2,6 +2,8 @@
     var self = this;
 
     self.IsPageLoaded = ko.observable(false);
+    
+    self.IsAjaxComplete = ko.observable(true);
 
     self.ServiceUrl = url;
 
@@ -40,7 +42,7 @@
         self.search(self.SortOrder);
     });
 
-    self.IsPageLoaded.subscribe(function (isLoaded) {
+    self.IsAjaxComplete.subscribe(function (isLoaded) {
         if (isLoaded) {
             $('#umbrella').hide();
         }
@@ -80,7 +82,7 @@
 
     self.search = function () {
 
-        self.IsPageLoaded(false);
+        self.IsAjaxComplete(false);
         
         self.onBeforeRequest();
 
@@ -98,6 +100,7 @@
                 ko.mapping.fromJS(data, self.mappingOptions, self);
                 self.ItemsSummary(data.ItemsSummary);
                 self.IsPageLoaded(true);
+                self.IsAjaxComplete(true);
             });
     };
 
@@ -109,6 +112,7 @@
         var navigationHeight = $('.navbar.navbar-fixed-top').height();
         $('#content').css('min-height', (windowHeight - navigationHeight) + 'px');
         $('#wrapper').css('margin-top', navigationHeight + 'px');
+        $('#umbrella').css('top', navigationHeight + 'px');
 
     };
 

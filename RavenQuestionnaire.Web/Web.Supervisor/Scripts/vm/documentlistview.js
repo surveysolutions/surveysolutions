@@ -50,7 +50,7 @@
             commands:  commands
         };
         
-        self.ListView.IsPageLoaded(false);
+        self.ListView.IsAjaxComplete(false);
         
         $.ajax({
             type: "POST",
@@ -67,7 +67,10 @@
                 if (data.status == "error") {
                     
                 }
-                self.ListView.IsPageLoaded(true);
+                self.ListView.IsAjaxComplete(true);
+            },
+            error :function() {
+                
             },
             dataType: "json",
             traditional: true
