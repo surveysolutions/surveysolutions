@@ -51,9 +51,6 @@
     <None Include="Resources\AboutResources.txt" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
       <Project>{e21bc003-84b5-41be-928c-75874418acd2}</Project>
       <Name>AndroidNinject.Extensions.Conventions</Name>
@@ -70,6 +67,9 @@
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Values\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
