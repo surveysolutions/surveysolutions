@@ -13,6 +13,9 @@ Requesting status...
 
 @Html.ActionLink("Stop", "StopReadLayerRebuilding", new {}, new { @class = "btn " })
 
+@section scripts
+{
+
 <script type="text/javascript">
 
     function updateReadLayerStatus() {
@@ -37,3 +40,5 @@ Requesting status...
     });
 
 </script>
+    
+}
