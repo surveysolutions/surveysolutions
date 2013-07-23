@@ -11,38 +11,45 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         private static readonly string LogFilename = Path.Combine(GetLogDirectory(), "WBCapi.log.txt");
         
         private const string Tag = "Android.WBCapi";
-
-        private const string CAPI = "WBCapi";
+        private const string CapiFolderName = "CAPI";
+        private const string LogFolderName = "Logs";
 
         private static string GetLogDirectory()
         {
-            string extStorage = Environment.ExternalStorageDirectory.AbsolutePath;
-            if (Directory.Exists(extStorage))
+            var storageDirectory = Directory.Exists(Environment.ExternalStorageDirectory.AbsolutePath)
+                             ? Environment.ExternalStorageDirectory.AbsolutePath
+                             : System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
+            storageDirectory = Path.Combine(storageDirectory, CapiFolderName);
+
+            if (!Directory.Exists(storageDirectory))
             {
-                extStorage = Path.Combine(extStorage, CAPI);
-                if (!Directory.Exists(extStorage))
-                {
-                    Directory.CreateDirectory(extStorage);
-                }
+                Directory.CreateDirectory(storageDirectory);
             }
-            else
+
+            storageDirectory = Path.Combine(storageDirectory, LogFolderName);
+
+            if (!Directory.Exists(storageDirectory))
             {
-                extStorage = global::System.Environment.GetFolderPath(global::System.Environment.SpecialFolder.Personal);
+                Directory.CreateDirectory(storageDirectory);
             }
-            return extStorage;
+           
+            return storageDirectory;
         }
 
         public FileLogger()
         {
 #if DEBUG
             this.IsDebugEnabled = true;
+            this.IsInfoEnabled = true;
+            this.IsWarnEnabled = true;
 #else
-            IsDebugEnabled = false;
+            this.IsDebugEnabled = false;
+            this.IsInfoEnabled = false;
+            this.IsWarnEnabled = false;
 #endif
             this.IsErrorEnabled = true;
             this.IsFatalEnabled = true;
-            this.IsInfoEnabled = true;
-            this.IsWarnEnabled = true;
         }
 
         public void Debug(string message, Exception exception = null)
@@ -118,6 +125,7 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
             }
         }
 
+        public bool IsTraceEnabled { get; private set; }
         public bool IsDebugEnabled { get; private set; }
         public bool IsInfoEnabled { get; private set; }
         public bool IsWarnEnabled { get; private set; }
