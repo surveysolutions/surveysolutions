@@ -36,7 +36,7 @@ namespace WB.Core.Synchronization.SyncProvider
         /// <param name="stream">
         /// The stream.
         /// </param>
-        public void Merge(IEnumerable<AggregateRootEvent> stream)
+        private void Merge(IEnumerable<AggregateRootEvent> stream)
         {
             if (stream != null)
             {
@@ -53,7 +53,7 @@ namespace WB.Core.Synchronization.SyncProvider
         /// <summary>
         /// The commit.
         /// </summary>
-        public void Commit()
+        private void Commit()
         {
             var myEventBus = NcqrsEnvironment.Get<IEventBus>();
             if (myEventBus == null)
