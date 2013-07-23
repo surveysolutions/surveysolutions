@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CAPI.Android.Syncronization.RestUtils;
+using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Handshake
@@ -17,12 +18,11 @@ namespace CAPI.Android.Syncronization.Handshake
 
         public string Execute(string login, string password, string androidId, string appID, string registrationKey)
         {
-            var package = webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath,
-                                                                       new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password", password),
-                                                                       new KeyValuePair<string, string>("clientId", appID),
-                                                                       new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
-                                                                       new KeyValuePair<string, string>("androidId", androidId));
+            var package = webExecutor.ExcecuteRestRequest<HandshakePackage>(handshakePath, 
+                new HttpBasicAuthenticator(login, password),
+                new KeyValuePair<string, string>("clientId", appID),
+                new KeyValuePair<string, string>("clientRegistrationId", registrationKey),
+                new KeyValuePair<string, string>("androidId", androidId));
 
             if (package.IsErrorOccured)
             {
