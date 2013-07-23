@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Main.Core.Commands.Sync;
 using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -17,7 +18,13 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
     [TestFixture]
     public class SyncProviderTests
     {
-        /*[Test]*/
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
+        [Test]
         public void CheckAndCreateNewSyncActivity_when_New_Valid_ClientIdentifier_Arrived_then_Device_Is_Stored()
         {
             //Arrange
