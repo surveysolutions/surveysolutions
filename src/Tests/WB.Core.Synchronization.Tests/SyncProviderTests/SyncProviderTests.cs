@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -22,7 +23,9 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-            
+
+            var commandService = new Mock<IEventStore>();
+            NcqrsEnvironment.SetDefault(commandService.Object);
         }
 
         [Test]
