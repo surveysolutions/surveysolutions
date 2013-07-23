@@ -35,9 +35,13 @@
     });
 
     self.Assign = function (user) {
+        
+        self.ListView.CheckForRequestComplete();
+        
         var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
             return item.IsSelected();
         });
+        
         var commands = ko.utils.arrayMap(selectedRawInterviews, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON({
@@ -45,6 +49,7 @@
                 InterviewId: item.InterviewId
             });
         });
+        
         var command = {
             type: "AssignInterviewToUserCommand",
             commands:  commands

@@ -47,9 +47,28 @@
             $('#umbrella').hide();
         }
         if (isLoaded == false) {
-            $('#umbrella').show();
+            setTimeout(function () {
+                if (self.IsAjaxComplete() == false) {
+                    $('#umbrella').show();
+                }
+            }, 500);
         }
     });
+
+    self.ShowNotification = function (title, text, type) {
+        $.pnotify({
+            title: title,
+            text: text,
+            type: type || 'notice'
+        });
+    };
+
+    self.CheckForRequestComplete = function () {
+        if (self.IsAjaxComplete() == false) {
+            self.ShowNotification("Please wait", "Your previous request is not complete. Please wait for it to be finished and repeat your operation.");
+            return;
+        }
+    };
 
     self.SortOrder = ko.observable("");
     self.SortDirection = ko.observable(false);
@@ -81,6 +100,8 @@
     self.mappingOptions = {};
 
     self.search = function () {
+
+        self.CheckForRequestComplete();
 
         self.IsAjaxComplete(false);
         
