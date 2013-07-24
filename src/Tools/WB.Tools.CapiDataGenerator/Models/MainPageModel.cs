@@ -567,6 +567,7 @@ namespace CapiDataGenerator
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             var template = JsonConvert.DeserializeObject<QuestionnaireDocument>(File.OpenText(path).ReadToEnd(), settings);
+            template.PublicKey = Guid.NewGuid();
             return template;
         }
 
