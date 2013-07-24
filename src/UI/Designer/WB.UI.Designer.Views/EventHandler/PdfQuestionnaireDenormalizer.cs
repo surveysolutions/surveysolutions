@@ -135,7 +135,8 @@ namespace WB.UI.Designer.Views.EventHandler
                                             AnswerType = x.AnswerType,
                                             AnswerValue = x.AnswerValue
                                         }).ToList(),
-                        Condition = @event.ConditionExpression
+                        Condition = @event.ConditionExpression,
+                        Variable = @event.StataExportCaption
                     };
 
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
@@ -178,7 +179,8 @@ namespace WB.UI.Designer.Views.EventHandler
                         AnswerType = x.AnswerType,
                         AnswerValue = x.AnswerValue
                     }).ToList(),
-                    Condition= @event.ConditionExpression
+                    Condition= @event.ConditionExpression,
+                    Variable = @event.StataExportCaption
                 };
 
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
