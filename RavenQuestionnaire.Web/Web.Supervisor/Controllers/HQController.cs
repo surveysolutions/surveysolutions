@@ -6,6 +6,7 @@ using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Controllers
 {
@@ -18,8 +19,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
-    using Main.Core.View.Questionnaire;
-
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
@@ -65,8 +64,12 @@ namespace Web.Supervisor.Controllers
         
         }
 
-        public ActionResult Interviews()
+        public ActionResult Interviews(Guid? templateId)
         {
+            if (templateId.HasValue)
+            {
+                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = templateId.Value })));
+            }
             ViewBag.ActivePage = MenuItem.Docs;
             return this.View(Filters());
         }

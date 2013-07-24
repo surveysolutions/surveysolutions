@@ -1,4 +1,11 @@
+param( [string]$DeployFolder )
+
 $ErrorActionPreference = "Stop"
+
+$TargetDeployFolder = '\\192.168.3.113\Web\Experimental\Designer'
+
+if($DeployFolder)
+{$TargetDeployFolder = $DeployFolder} 
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
@@ -11,8 +18,8 @@ try {
         -Solution 'src\Designer.sln' `
         -Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
         -BuildConfiguration 'Release' `
-        -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `
-        -TargetFolder '\\192.168.3.113\Web\Experimental\Designer' `
+        -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `		
+        -TargetFolder $TargetDeployFolder
 
 }
 catch {

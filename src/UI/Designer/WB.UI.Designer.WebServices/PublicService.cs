@@ -1,24 +1,24 @@
-﻿namespace WB.UI.Designer.WebServices
+﻿using WB.Core.BoundedContexts.Designer.Services;
+
+namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.IO;
 
     using Main.Core.View;
-
-    using WB.Core.Questionnaire.ExportServices;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.WebServices.Questionnaire;
     using WB.UI.Shared.Web.Membership;
 
     public class PublicService : IPublicService
     {
-        private readonly IExportService exportService;
+        private readonly IJsonExportService exportService;
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory;
 
         public PublicService(
-            IExportService exportService,
+            IJsonExportService exportService,
             IStringCompressor zipUtils, 
             IMembershipUserService userHelper,
             IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)

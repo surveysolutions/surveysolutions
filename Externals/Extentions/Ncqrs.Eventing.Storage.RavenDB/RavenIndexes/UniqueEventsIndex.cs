@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Raven.Client.Indexes;
 
@@ -27,6 +28,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
                                     };
         }
     }
+
+    [DebuggerDisplay("UniqueEventsResults {EventSourceId}")]
     public class UniqueEventsResults
     {
         public Guid EventSourceId { get; set; }

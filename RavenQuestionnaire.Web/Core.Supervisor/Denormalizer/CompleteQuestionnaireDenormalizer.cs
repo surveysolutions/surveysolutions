@@ -143,7 +143,7 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
 
             CompleteQuestionnaireStoreDocument item =
                 this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);

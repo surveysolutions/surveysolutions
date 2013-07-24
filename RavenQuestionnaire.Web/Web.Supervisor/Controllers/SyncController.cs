@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -48,9 +51,9 @@ namespace Web.Supervisor.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult Handshake(string login, string password, string clientId, string androidId, Guid? clientRegistrationId)
+        public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId)
         {
-            var user = GetUser(login, password);
+            var user = GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -86,9 +89,9 @@ namespace Web.Supervisor.Controllers
         //In case of error of type missing or casting error we'll try to send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult InitPulling(string login, string password, string clientRegistrationId)
+        public ActionResult InitPulling(string clientRegistrationId)
         {
-            var user = GetUser(login, password);
+            var user = GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -111,9 +114,9 @@ namespace Web.Supervisor.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId, string login, string password)
+        public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId)
         {
-            var user = GetUser(login, password);
+            var user = GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -164,9 +167,9 @@ namespace Web.Supervisor.Controllers
         //In case of error of type missing or casting error we send correct response.
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
-        public JsonResult GetARKeys(string login, string password, string clientRegistrationId, string sequence)
+        public JsonResult GetARKeys(string clientRegistrationId, string sequence)
         {
-            var user = GetUser(login, password);
+            var user = GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -226,16 +229,19 @@ namespace Web.Supervisor.Controllers
         [HandleUIException]
         public ActionResult PostPackage(string login, string password, string syncItemContent)
         {
-            var user = GetUser(login, password);
+            var user = GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
             try
             {
+                Stream requestStream = Request.InputStream;
+                requestStream.Seek(0, SeekOrigin.Begin);
+                string json = new StreamReader(requestStream).ReadToEnd();
                 SyncItem syncItem = null;
                 try
                 {
-                    syncItem = JsonConvert.DeserializeObject<SyncItem>(syncItemContent,
+                    syncItem = JsonConvert.DeserializeObject<SyncItem>(json,
                                                                            new JsonSerializerSettings
                                                                                {
                                                                                    TypeNameHandling =
@@ -256,7 +262,7 @@ namespace Web.Supervisor.Controllers
                 var result = this.syncManager.SendSyncItem(syncItem);
 
                 return Json(result, JsonRequestBehavior.AllowGet);
-                
+
             }
             catch (Exception ex)
             {
@@ -266,6 +272,43 @@ namespace Web.Supervisor.Controllers
 
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        //move to filter
+        //or change to web API
+        private UserView GetUserByNameAndPassword()
+        {
+            UserView user = null;
+            var username = string.Empty;
+            var password = string.Empty;
+
+            if (!Request.Headers.AllKeys.Contains("Authorization")) 
+                return null;
+
+            try
+            {
+                string authHeader = Request.Headers["Authorization"];
+                char[] delims = { ' ' };
+                string[] authHeaderTokens = authHeader.Split(new char[] { ' ' });
+                if (authHeaderTokens[0].Contains("Basic"))
+                {
+                    string decodedStr = DecodeFrom64(authHeaderTokens[1]);
+                    string[] unpw = decodedStr.Split(new char[] { ':' });
+                    username = unpw[0];
+                    password = unpw[1];
+                }
+                user = GetUser(username, password);
+            }
+            catch {  }
+
+            return user;
+        }
+
+        private static string DecodeFrom64(string encodedData)
+        {
+            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
+            string returnValue = System.Text.Encoding.ASCII.GetString(encodedDataAsBytes);
+            return returnValue;
         }
     }
 }

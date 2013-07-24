@@ -2,19 +2,8 @@
 {
     using System.Web.Optimization;
 
-    /// <summary>
-    /// The bundle config.
-    /// </summary>
     public class BundleConfig
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The register bundles.
-        /// </summary>
-        /// <param name="bundles">
-        /// The bundles.
-        /// </param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.UseCdn = false;
@@ -27,6 +16,7 @@
                 "~/Content/css/bootstrap.css",
                 "~/Content/css/bootstrap.icon-large.css",
                 //"~/Content/css/bootstrap-responsive.css",
+                "~/Content/font-awesome.css",
                 "~/Content/jquery.pnotify.default.css",
                 "~/Content/datepicker.css",
                 "~/Content/supervisor.css",
@@ -80,7 +70,5 @@
                 "~/Scripts/date.js", 
                 "~/Scripts/details.js"));
         }
-
-        #endregion
     }
 }

@@ -56,6 +56,7 @@ namespace Web.Supervisor.Controllers
                             isLocked: false,
                             roles: new[] { UserRoles.Operator },
                             supervsor: this.GetUser(model.Id).GetUseLight()));
+                    this.Success("Interviewer was successfully created");
                     return this.RedirectToAction("Interviewers", new { id = model.Id });
                 }
                 else
@@ -94,6 +95,7 @@ namespace Web.Supervisor.Controllers
                             roles: new[] { UserRoles.Supervisor },
                             supervsor: null));
 
+                    this.Success("Supervisor was successfully created");
                     return this.RedirectToAction("Index");
                 }
                 else

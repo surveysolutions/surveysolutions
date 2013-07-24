@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
 using Raven.Client;
@@ -14,6 +16,12 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
     [TestFixture]
     public class RavenDBEventStoreTests : RavenDBTestBase
     {
+        [SetUp]
+        public void Setup()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Serializable]
         public class CustomerCreatedEvent
         {

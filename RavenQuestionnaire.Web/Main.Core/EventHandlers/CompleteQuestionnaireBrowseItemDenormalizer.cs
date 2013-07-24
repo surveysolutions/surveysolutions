@@ -77,7 +77,7 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
 
             CompleteQuestionnaireBrowseItem item =
                 this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
