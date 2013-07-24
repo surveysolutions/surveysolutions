@@ -163,8 +163,8 @@ namespace Core.Supervisor.Denormalizer
             item.StatusChangeComments.Add(
                 new ChangeStatusDocument
                     {
-                        Status = evnt.Payload.Status, 
-                        Responsible = evnt.Payload.Responsible, 
+                        Status = evnt.Payload.Status,
+                        Responsible = item.Responsible, 
                         ChangeDate = evnt.EventTimeStamp
                     });
             item.LastEntryDate = evnt.EventTimeStamp;
