@@ -54,6 +54,32 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
             Assert.That(item.ClientInstanceKey, Is.EqualTo(clientIdentifier.ClientInstanceKey));
         }
 
+
+        [Test]
+        public void CheckAndCreateNewSyncActivity_when_Valid_Non_Existent_ClientIdentifier_Arrived_then_Exeption_is_Thrown()
+        {
+            //Arrange
+            var commandService = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault(commandService.Object);
+
+            ISyncProvider provider = CreateDefaultSyncProvider();
+            var clientIdentifier = new ClientIdentifier()
+            {
+                ClientDeviceKey = "device1",
+                ClientInstanceKey = Guid.NewGuid(),
+                ClientRegistrationKey = Guid.NewGuid(),
+                ClientVersionIdentifier = "v1",
+                CurrentProcessKey = null,
+                LastSyncKey = null
+            };
+
+            //Act
+            TestDelegate act = () => provider.CheckAndCreateNewSyncActivity(clientIdentifier);
+
+            //Assert
+            Assert.Throws<ArgumentException>(act);
+        }
+
         [Test]
         public void HandleSyncItem_If_Item_Content_Is_Empty_Exception_is_thrown()
         {
