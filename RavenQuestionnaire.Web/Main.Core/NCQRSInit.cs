@@ -96,7 +96,6 @@ namespace Main.Core
 
         public static void InitPartial(IKernel kernel)
         {
-            NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
