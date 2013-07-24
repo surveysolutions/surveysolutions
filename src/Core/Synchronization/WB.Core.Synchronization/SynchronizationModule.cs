@@ -13,6 +13,13 @@ namespace WB.Core.Synchronization
 {
     public class SynchronizationModule : NinjectModule
     {
+        private readonly string currentFolderPath;
+
+        public SynchronizationModule(string currentFolderPath)
+        {
+            this.currentFolderPath = currentFolderPath;
+        }
+
         public override void Load()
         {
             this.Bind<ISyncManager>().To<SyncManager>();
@@ -21,7 +28,9 @@ namespace WB.Core.Synchronization
 
 
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
-            this.Bind<IChunkStorage>().To<ReadSideChunkStorage>().InSingletonScope(); 
+            this.Bind<IChunkStorage>().To<ReadSideChunkStorage>().InSingletonScope();
+            var incomeStorage=new IncomePackagesRepository(currentFolderPath);
+            this.Bind<IIncomePackagesRepository>().ToConstant(incomeStorage);
         }
     }
 }
