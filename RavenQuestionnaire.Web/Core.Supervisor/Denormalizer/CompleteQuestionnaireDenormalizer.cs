@@ -146,7 +146,7 @@ namespace Core.Supervisor.Denormalizer
             evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
 
             CompleteQuestionnaireStoreDocument item =
-                this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentStorage.GetById(evnt.EventSourceId);
 
             item.Responsible = evnt.Payload.Responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
@@ -158,7 +158,7 @@ namespace Core.Supervisor.Denormalizer
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireStoreDocument item =
-                this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentStorage.GetById(evnt.EventSourceId);
             item.Status = evnt.Payload.Status;
             item.StatusChangeComments.Add(
                 new ChangeStatusDocument
@@ -171,9 +171,9 @@ namespace Core.Supervisor.Denormalizer
             this.documentStorage.Store(item, item.PublicKey);
 
             if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
-                syncStorage.SaveInterview(item, evnt.Payload.Responsible.Id);
+                syncStorage.SaveInterview(item, item.Responsible.Id);
             else
-                syncStorage.DeleteInterview(evnt.EventSourceId, evnt.Payload.Responsible.Id);
+                syncStorage.DeleteInterview(evnt.EventSourceId, item.Responsible.Id);
         }
 
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
