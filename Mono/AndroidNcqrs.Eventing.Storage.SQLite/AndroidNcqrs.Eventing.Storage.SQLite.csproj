@@ -95,6 +95,10 @@
     <Compile Include="StoredEventWithoutPayload.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -106,10 +110,6 @@
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
-      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
-      <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

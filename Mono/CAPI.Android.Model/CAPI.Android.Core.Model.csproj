@@ -148,6 +148,10 @@
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
@@ -179,10 +183,6 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
-      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
-      <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
