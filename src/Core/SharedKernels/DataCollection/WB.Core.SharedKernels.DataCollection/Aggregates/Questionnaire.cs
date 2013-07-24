@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
+        public Questionnaire(){}
+
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
