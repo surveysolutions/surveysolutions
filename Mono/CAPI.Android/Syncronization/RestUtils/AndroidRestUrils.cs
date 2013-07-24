@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace CAPI.Android.Syncronization.RestUtils
 {
-    public class AndroidRestUrils:IRestUrils
+    public class AndroidRestUrils : IRestUrils
     {
         private readonly string baseAddress;
 
@@ -22,11 +22,14 @@ namespace CAPI.Android.Syncronization.RestUtils
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-        public void ExcecuteRestRequest(string url, params KeyValuePair<string, string>[] additionalParams)
+        public void ExcecuteRestRequest(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = BuildRequest(url, additionalParams);
+            var request = BuildRequest(url, additionalParams, null);
+
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
 
             var response = restClient.Execute(request);
 
@@ -45,23 +48,30 @@ namespace CAPI.Android.Syncronization.RestUtils
             }
         }
 
-        public T ExcecuteRestRequest<T>(string url, params KeyValuePair<string, string>[] additionalParams)
+        public T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = BuildRequest(url, additionalParams);
+            var request = BuildRequest(url, additionalParams, null);
+
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
 
             var response = restClient.Execute(request);
 
             return HandlerResponse<T>(response);
         }
 
-        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, params KeyValuePair<string, string>[] additionalParams)
+        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator,
+            params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = BuildRequest(url, additionalParams);
+            var request = BuildRequest(url, additionalParams, requestBody);
 
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
+            
             IRestResponse response = null;
 
             var token = restClient.ExecuteAsync(request, (r) => { response = r; });
@@ -109,17 +119,27 @@ namespace CAPI.Android.Syncronization.RestUtils
 
             return syncItemsMetaContainer;
         }
-       
-        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams)
+
+        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, string requestBody)
         {
             var request = new RestRequest(url, Method.POST);
             request.RequestFormat = DataFormat.Json;
 
             request.AddHeader("Accept-Encoding", "gzip,deflate");
-            foreach (var additionalParam in additionalParams)
+
+            if (!string.IsNullOrWhiteSpace(requestBody))
             {
-                request.AddParameter(additionalParam.Key, additionalParam.Value);
+                //request.AddBody(requestBody);
+                request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             }
+            else
+            {
+                foreach (var additionalParam in additionalParams)
+                {
+                    request.AddParameter(additionalParam.Key, additionalParam.Value);
+                }
+            }
+
             return request;
         }
     }

@@ -14,7 +14,7 @@ namespace Core.Supervisor.Views.User
     using Main.Core.View;
     using Main.DenormalizerStorage;
 
-    internal class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
+    public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 

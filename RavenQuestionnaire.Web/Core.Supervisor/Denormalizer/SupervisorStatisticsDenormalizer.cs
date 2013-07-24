@@ -117,7 +117,7 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
 
 
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);

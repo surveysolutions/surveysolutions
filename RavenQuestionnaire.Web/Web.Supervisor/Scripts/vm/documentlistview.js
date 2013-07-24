@@ -11,6 +11,10 @@
             }
         }
     };
+    
+    self.ToggleFilter = function () {
+        self.ListView.ToggleFilter();
+    };
 
     var myChildModel = function(data) {
         ko.mapping.fromJS(data, {}, this);
@@ -31,9 +35,13 @@
     });
 
     self.Assign = function (user) {
+        
+        self.ListView.CheckForRequestComplete();
+        
         var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
             return item.IsSelected();
         });
+        
         var commands = ko.utils.arrayMap(selectedRawInterviews, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON({
@@ -41,12 +49,13 @@
                 InterviewId: item.InterviewId
             });
         });
+        
         var command = {
             type: "AssignInterviewToUserCommand",
             commands:  commands
         };
         
-        self.ListView.IsPageLoaded(false);
+        self.ListView.IsAjaxComplete(false);
         
         $.ajax({
             type: "POST",
@@ -63,7 +72,10 @@
                 if (data.status == "error") {
                     
                 }
-                self.ListView.IsPageLoaded(true);
+                self.ListView.IsAjaxComplete(true);
+            },
+            error :function() {
+                
             },
             dataType: "json",
             traditional: true

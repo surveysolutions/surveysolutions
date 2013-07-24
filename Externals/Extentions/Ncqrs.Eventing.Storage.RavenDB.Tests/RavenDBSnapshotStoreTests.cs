@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using NUnit.Framework;
 
@@ -8,6 +10,12 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
     [TestFixture]
     public class RavenDBSnapshotStoreTests : RavenDBTestBase
     {
+        [SetUp]
+        public void Setup()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Serializable]
         public class MySnapshot
         {

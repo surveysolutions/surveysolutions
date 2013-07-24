@@ -6,6 +6,7 @@ using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Controllers
 {
@@ -18,8 +19,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
-    using Main.Core.View.Questionnaire;
-
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
