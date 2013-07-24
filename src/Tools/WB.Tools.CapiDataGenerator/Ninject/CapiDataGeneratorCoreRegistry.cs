@@ -1,19 +1,16 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="AndroidCoreRegistry.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
+﻿using System.Configuration;
+using Core.Supervisor.Denormalizer;
 using Main.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Ninject;
+using Ninject.Activation;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace CapiDataGenerator
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class CapiDataGeneratorRegistry : CoreRegistry
     {
         public CapiDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
@@ -28,7 +25,12 @@ namespace CapiDataGenerator
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
             return
-                Enumerable.Concat(base.GetAssweblysForRegister(), new[] { GetType().Assembly });
+                Enumerable.Concat(base.GetAssweblysForRegister(), new[]
+                {
+                    GetType().Assembly,
+                    typeof (CompleteQuestionnaireDenormalizer).Assembly,
+                    typeof(ImportQuestionnaireCommand).Assembly
+                });
         }
     }
 }

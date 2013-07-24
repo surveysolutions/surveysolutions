@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Cirrious.MvvmCross.ViewModels;
+using Core.Supervisor.Views.User;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
@@ -15,10 +16,12 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Utility;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace CapiDataGenerator
 {
@@ -48,15 +51,54 @@ namespace CapiDataGenerator
             }
         }
 
+        private IViewFactory<UserListViewInputModel, UserListView> userListViewFactory
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IViewFactory<UserListViewInputModel, UserListView>>();
+            }
+        }
+
         readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
+        private UserLight _headquarterUser;
 
         public MainPageModel()
         {
             this.GenerateCommand = new MvxCommand(this.Generate, () => this.CanGenerate);
             this.OpenTemplateCommand = new MvxCommand(this.OpenTemplate, () => this.CanGenerate);
+
+            
             _timer.Elapsed += _timer_Elapsed;
+        }
+
+        protected override void InitFromBundle(IMvxBundle parameters)
+        {
+            base.InitFromBundle(parameters);
+
+            this.SupervisorList =
+                new ObservableCollection<UserListItem>(
+                    userListViewFactory.Load(new UserListViewInputModel() {Role = UserRoles.Supervisor}).Items);
+            if (this.SupervisorList.Count == 0)
+            {
+                var emptySupervisor = new UserListItem(Guid.Empty, "Please, create new supervisor", null, DateTime.Now,
+                    false, null);
+                this.SupervisorList = new ObservableCollection<UserListItem>() {emptySupervisor};
+                this.SelectedSupervisor = emptySupervisor;
+            }
+            var hq = userListViewFactory.Load(new UserListViewInputModel() {Role = UserRoles.Headquarter})
+                .Items.FirstOrDefault();
+            if (hq == null)
+            {
+                this.HeadquarterName = "Please, create new headquarter";
+            }
+            else
+            {
+                this._headquarterUser = new UserLight(hq.UserId, hq.UserName);
+                this.HeadquarterName = this._headquarterUser.Name;
+            }
+
         }
 
         void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -71,6 +113,17 @@ namespace CapiDataGenerator
 
         public MvxCommand GenerateCommand { get; set; }
         public MvxCommand OpenTemplateCommand { get; set; }
+
+        private string _headquarterName = string.Empty;
+        public string HeadquarterName
+        {
+            get { return _headquarterName; }
+            set
+            {
+                _headquarterName = value;
+                RaisePropertyChanged(() => HeadquarterName);
+            }
+        }
 
         private string _templatePath = string.Empty;
         public string TemplatePath
@@ -174,6 +227,20 @@ namespace CapiDataGenerator
             }
         }
 
+        private UserListItem _selectedSupervisor = null;
+        public UserListItem SelectedSupervisor
+        {
+            get
+            {
+                return _selectedSupervisor;
+            }
+            set
+            {
+                _selectedSupervisor = value;
+                RaisePropertyChanged(() => SelectedSupervisor);
+            }
+        }
+
         private ObservableCollection<string> _logMessages = new ObservableCollection<string>();
         public ObservableCollection<string> LogMessages
         {
@@ -185,6 +252,34 @@ namespace CapiDataGenerator
             {
                 _logMessages = value;
                 RaisePropertyChanged(() => LogMessages);
+            }
+        }
+
+        private ObservableCollection<string> _interviewersList = new ObservableCollection<string>();
+        public ObservableCollection<string> InterviewersList
+        {
+            get
+            {
+                return _interviewersList;
+            }
+            set
+            {
+                _interviewersList = value;
+                RaisePropertyChanged(() => InterviewersList);
+            }
+        }
+
+        private ObservableCollection<UserListItem> _supervisorList = new ObservableCollection<UserListItem>();
+        public ObservableCollection<UserListItem> SupervisorList
+        {
+            get
+            {
+                return _supervisorList;
+            }
+            set
+            {
+                _supervisorList = value;
+                RaisePropertyChanged(() => SupervisorList);
             }
         }
 
@@ -217,7 +312,9 @@ namespace CapiDataGenerator
 
         public void Generate()
         {
-            if (string.IsNullOrEmpty(TemplatePath)) return;
+            if (string.IsNullOrEmpty(TemplatePath) || SelectedSupervisor == null || 
+                this._headquarterUser == null)
+                return;
 
             LogMessages.Clear();
 
@@ -262,16 +359,23 @@ namespace CapiDataGenerator
 
                     TotalCount = icount + icount*qcount*(acount + ccount + scount + 1);
 
-                    var users = CreateUsers(icount);
-                    var questionnaries = CreateQuestionnaires(template, qcount, users);
-                    CreateAnswers(template, acount, questionnaries);
-                    CreateComments(template, ccount, questionnaries);
-                    ChangeStatuses(scount, questionnaries);
+                    try
+                    {
+                        var users = CreateUsers(icount);
+                        var questionnaries = CreateQuestionnaires(template, qcount, users);
+                        CreateAnswers(template, acount, questionnaries);
+                        CreateComments(template, ccount, questionnaries);
+                        ChangeStatuses(scount, questionnaries);
+                    }
+                    catch (Exception e)
+                    {
+                        Log(e.Message);
+                    }
                 }
 
                 Log("create backup");
                 string backupPath = backupService.Backup();
-                Log(string.Format("Backup was saved to {0}", backupPath));
+                Log(string.Format("backup was saved to {0}", backupPath));
 
                 Log("end");
                 _timer.Stop();
@@ -321,17 +425,19 @@ namespace CapiDataGenerator
         }
 
 
-        private List<Guid> CreateUsers(int usersCount)
+        private List<UserLight> CreateUsers(int usersCount)
         {
-            var users = new List<Guid>();
+            var users = new List<UserLight>();
             for (int i = 0; i < usersCount; i++)
             {
                 var uId = Guid.NewGuid();
-                users.Add(uId);
-                var user = string.Concat("user", i);
-                commandService.Execute(new CreateUserCommand(publicKey: uId, userName: user, password: SimpleHash.ComputeHash(user),
-                    email: string.Concat(user, "@mail.com"), roles: new[] { UserRoles.User }, isLocked: false,
-                    supervsor: null));
+                var userName = string.Format("interviewer_{0}_{1}", i, DateTime.Now.Ticks);
+                users.Add(new UserLight(uId, userName));
+                commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
+                    password: SimpleHash.ComputeHash(userName),
+                    email: string.Concat(userName, "@mail.com"), roles: new[] {UserRoles.User}, isLocked: false,
+                    supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
+                InvokeOnMainThread(() => InterviewersList.Add(userName));
                 UpdateProgress();
                 LogStatus("create users", i, usersCount);
             }
@@ -339,26 +445,38 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private List<Guid> CreateQuestionnaires(QuestionnaireDocument template, int questionnariesCount, List<Guid> users)
+        private List<Guid> CreateQuestionnaires(QuestionnaireDocument template, int questionnariesCount, List<UserLight> users)
         {
+            Log("import template");
+            commandService.Execute(new ImportQuestionnaireCommand(_headquarterUser.Id, template));
+
             var completeDocument = (CompleteQuestionnaireDocument)template;
 
             var questionnaires = new List<Guid>();
             for (int i = 0; i < users.Count; i++)
             {
-                var uId = users[i];
+                var interviewer = users[i];
                 for (int j = 0; j < questionnariesCount; j++)
                 {
+                    LogStatus("create questionnaires", (i * questionnariesCount) + j, questionnariesCount * users.Count);
+
+                    completeDocument.Creator = new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName);
                     completeDocument.Status = SurveyStatus.Initial;
                     completeDocument.PublicKey = Guid.NewGuid();
-                    completeDocument.Responsible = new UserLight(id: uId, name: string.Concat("user", i));
+                    completeDocument.Responsible = interviewer;
+
+                    commandService.Execute(new CreateCompleteQuestionnaireCommand(completeDocument.PublicKey,
+                        template.PublicKey, _headquarterUser));
+                    commandService.Execute(new ChangeAssignmentCommand(completeDocument.PublicKey, completeDocument.Creator));
+                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = completeDocument.PublicKey, Status = SurveyStatus.Unassign, Responsible = completeDocument.Creator });
+                    commandService.Execute(new ChangeAssignmentCommand(completeDocument.PublicKey, interviewer));
+                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = completeDocument.PublicKey, Status = SurveyStatus.Initial, Responsible = interviewer });
 
                     questionnaires.Add(completeDocument.PublicKey);
 
                     commandService.Execute(new CreateNewAssigment(completeDocument));
 
                     UpdateProgress();
-                    LogStatus("create questionnaires", (i * questionnariesCount) + j, questionnariesCount * users.Count);
                 }
             }
 
@@ -449,6 +567,7 @@ namespace CapiDataGenerator
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             var template = JsonConvert.DeserializeObject<QuestionnaireDocument>(File.OpenText(path).ReadToEnd(), settings);
+            template.PublicKey = Guid.NewGuid();
             return template;
         }
 
