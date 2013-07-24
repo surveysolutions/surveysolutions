@@ -165,7 +165,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                                 AnswerType = x.AnswerType,
                                 AnswerValue = x.AnswerValue
                             }).ToList(),
-                            HasCodition = !string.IsNullOrEmpty(childQuestion.ConditionExpression)
+                            Condition = childQuestion.ConditionExpression
                         }, item.PublicKey);
                     }
                     if (childGroup != null)
