@@ -14,6 +14,14 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public List<PdfAnswerView> Answers { get; set; }
 
-        public bool HasCodition { get; set; }
+        public string Condition { get; set; }
+
+        public bool HasCodition
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(Condition);
+            }
+        }
     }
 }
