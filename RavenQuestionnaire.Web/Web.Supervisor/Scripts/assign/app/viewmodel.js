@@ -68,6 +68,7 @@
             saveCommand : saveCommand,
             hideOutput: hideOutput,
             errors: errors,
-            isSaveEnable: isSaveEnable
+            isSaveEnable: isSaveEnable,
+            isSaving: isSaving
         };
     });
