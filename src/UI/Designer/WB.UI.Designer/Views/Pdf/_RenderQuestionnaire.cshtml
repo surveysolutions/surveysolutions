@@ -5,7 +5,7 @@
     @this.Model.Title
 </header>
 
-@foreach (var child in this.Model.Groups)
+@foreach (var child in this.Model.Children)
 {
     Html.RenderPartial("_RenderChild", child);
 }
