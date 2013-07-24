@@ -26,6 +26,8 @@ namespace WB.Core.Synchronization.SyncProvider
 
         private readonly ILogger logger;
 
+        private readonly ISyncEventHandler eventProcessor;
+
         public SyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage,
             ILogger logger)
@@ -34,6 +36,8 @@ namespace WB.Core.Synchronization.SyncProvider
             //this.syncActivities = syncActivities;
             this.storage = storage;
             this.logger = logger;
+
+            eventProcessor = new SyncEventHandler();
         }
 
         public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
@@ -125,20 +129,22 @@ namespace WB.Core.Synchronization.SyncProvider
         
         public bool HandleSyncItem(SyncItem item, Guid syncActivityId)
         {
-            if (string.IsNullOrWhiteSpace(item.Content))
+            if(item == null)
                 throw new ArgumentException("Sync Item is not set.");
+
+            if (string.IsNullOrWhiteSpace(item.Content))
+                throw new ArgumentException("Sync Item content is not set.");
             
+            if(item.Id == Guid.Empty)
+                throw new ArgumentException("Sync Item id is not set.");
+
             var items = GetContentAsItem<AggregateRootEvent[]>(item);
-
-            var processor = new SyncEventHandler();
-
-            //could be slow
+            
+            #warning: could be slow
             //think about deffered handling
 
-            processor.Merge(items);
-            processor.Commit();
+            return eventProcessor.Process(items);
             
-            return true;
         }
 
         private T GetContentAsItem<T>(SyncItem syncItem)
