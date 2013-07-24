@@ -27,10 +27,10 @@
 
 @section gridnavigation
 {
-    <p>
-        <a class="btn btn-primary" href="@Url.Action("AddSupervisor", "Team")">
+    <div class="menubar">
+        <a class="btn" href="@Url.Action("AddSupervisor", "Team")">
             <i class="icon icon-user icon-white"></i> Add supervisor</a>
-    </p>
+    </div>
 }
 
 @section grid
@@ -54,7 +54,7 @@
                 <td data-bind="text: Email"></td>
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
-                        <i class="icon icon-eye-open icon-white"></i> Interviewers</a>
+                        <i class="icon icon-group icon-white"></i> Interviewers</a>
                 </td>
                 <td>
                     <!-- ko if:IsLocked -->

@@ -12,10 +12,12 @@
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
 }
+<div class="innerLR">
+    @RenderSection("header", false)
+</div>
 
-@RenderSection("header", false)
 @RenderSection("gridnavigation", false)
-<div id="list">
+<div id="list" class="innerLR">
     <!-- ko ifnot:ListView.IsPageLoaded()  -->
     <p class="text-center">
         Loading. Please wait...

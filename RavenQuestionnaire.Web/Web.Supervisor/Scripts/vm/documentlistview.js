@@ -91,15 +91,13 @@
     self.SelectedTemplate = ko.observable('');
     self.SelectedResponsible = ko.observable('');
     self.SelectedStatus = ko.observable('');
-    self.OnlyAssigned = ko.observable(false);
 
     self.load = function () {
         self.ListView.GetFilterMethod = function () {
             return {
                 TemplateId: self.SelectedTemplate,
                 ResponsibleId: self.SelectedResponsible,
-                StatusId: self.SelectedStatus,
-                OnlyAssigned: self.OnlyAssigned
+                StatusId: self.SelectedStatus
             };
         };
         
@@ -109,7 +107,6 @@
         self.SelectedTemplate.subscribe(self.ListView.filter);
         self.SelectedResponsible.subscribe(self.ListView.filter);
         self.SelectedStatus.subscribe(self.ListView.filter);
-        self.OnlyAssigned.subscribe(self.ListView.filter);
 
         self.ListView.search();
     };

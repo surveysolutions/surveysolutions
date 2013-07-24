@@ -29,10 +29,10 @@
 {
     @if (User.IsInRole("Headquarter"))
     {
-        <p>
-            <a class="btn btn-primary" href="@Url.Action("AddInterviewer", "Team", new {id = Model})">
+        <div class="menubar">
+            <a class="btn " href="@Url.Action("AddInterviewer", "Team", new {id = Model})">
                 <i class="icon icon-user icon-white"></i> Add interviewer</a>    
-        </p>
+        </div>
     }
 }
 
