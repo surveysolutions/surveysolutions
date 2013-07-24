@@ -12,7 +12,6 @@
     <RootNamespace>WB.Core.GenericSubdomains.Logging.AndroidLogger</RootNamespace>
     <AssemblyName>WB.Core.GenericSubdomains.Logging.AndroidLogger</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -44,11 +43,7 @@
     <Compile Include="AndroidLoggingModule.cs" />
     <Compile Include="ExceptionExtension.cs" />
     <Compile Include="FileLogger.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AboutResources.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
