@@ -6,6 +6,7 @@ using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -23,21 +24,20 @@ namespace WB.Core.Synchronization.SyncProvider
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
         private readonly ISynchronizationDataStorage storage;
+        private readonly IIncomePackagesRepository incomeRepository;
 
         private readonly ILogger logger;
 
-        private readonly ISyncEventHandler eventProcessor;
 
         public SyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
-            ISynchronizationDataStorage storage,
+            ISynchronizationDataStorage storage,IIncomePackagesRepository incomeRepository,
             ILogger logger)
         {
             this.devices = devices;
-            //this.syncActivities = syncActivities;
+            this.incomeRepository = incomeRepository;
             this.storage = storage;
             this.logger = logger;
 
-            eventProcessor = new SyncEventHandler();
         }
 
         public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
@@ -126,38 +126,25 @@ namespace WB.Core.Synchronization.SyncProvider
 
             return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }
-        
+
         public bool HandleSyncItem(SyncItem item, Guid syncActivityId)
         {
-            if(item == null)
+            if (item == null)
                 throw new ArgumentException("Sync Item is not set.");
 
             if (string.IsNullOrWhiteSpace(item.Content))
                 throw new ArgumentException("Sync Item content is not set.");
-            
-            if(item.Id == Guid.Empty)
+
+            if (item.Id == Guid.Empty)
                 throw new ArgumentException("Sync Item id is not set.");
 
-            var items = GetContentAsItem<AggregateRootEvent[]>(item);
-            
-            #warning: could be slow
-            //think about deffered handling
 
-            return eventProcessor.Process(items);
-            
+            incomeRepository.StoreIncomingItem(item);
+            return true;
+
         }
 
-        private T GetContentAsItem<T>(SyncItem syncItem)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            var item = JsonConvert.DeserializeObject<T>(
-                syncItem.IsCompressed ?
-                PackageHelper.DecompressString(syncItem.Content) :
-                syncItem.Content, 
-                settings);
 
-            return item;
-        }
 
     }
 }
