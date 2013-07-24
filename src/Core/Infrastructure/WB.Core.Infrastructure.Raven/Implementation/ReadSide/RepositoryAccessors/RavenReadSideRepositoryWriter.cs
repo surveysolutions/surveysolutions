@@ -33,7 +33,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private bool isCacheEnabled = false;
         private readonly Dictionary<Guid, CachedEntity> cache = new Dictionary<Guid, CachedEntity>();
 
-        internal RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+        public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
             : base(ravenStore)
         {
             writerRegistry.Register(this);
