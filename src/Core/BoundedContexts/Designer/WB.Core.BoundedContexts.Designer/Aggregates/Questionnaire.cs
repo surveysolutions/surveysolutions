@@ -166,21 +166,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void CreateInterviewWithFeaturedQuestions(Guid interviewId, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
-        #warning probably a factory should be used here
-        {
-            // TODO: check is it good to create new AR form another?
-            new CompleteQuestionnaireAR(interviewId, this.innerDocument, creator, responsible, featuredAnswers);
-        }
-
-        public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
-        #warning probably a factory should be used here
-        {
-            // TODO: check is it good to create new AR form another?
-            // Do we need Saga here?
-            new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
-        }
-
         public void DeleteImage(Guid questionKey, Guid imageKey)
         {
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
@@ -577,7 +562,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
-            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            AbstractQuestion question = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             if (question == null)
             {
                 return;
@@ -588,7 +573,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
-            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            AbstractQuestion question = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             if (question == null)
             {
                 return;
@@ -610,7 +595,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingDataFromEvent(question, e);
+            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingSpecifiedData(question, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
