@@ -8,10 +8,12 @@
     
     var serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
 }
+@section styles{
+    @Styles.Render("~/css/interview")
+}
 @section scripts
 {
-    @Styles.Render("~/css/interview");
-    @Scripts.Render("~/js/interview");
+    @Scripts.Render("~/js/interview")
     <script type="text/javascript">
         var dataHelper = null;
         var questionnaire = @Html.Raw(serializer.Serialize(Model));
