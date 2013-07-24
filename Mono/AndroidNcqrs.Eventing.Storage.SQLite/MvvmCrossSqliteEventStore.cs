@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -13,7 +12,7 @@ using WB.Core.Infrastructure.Backup;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
-    public class MvvmCrossSqliteEventStore : IEventStore, IMvxServiceConsumer,IBackupable
+    public class MvvmCrossSqliteEventStore : IEventStore, IBackupable
     {
         private readonly string folderName;
         private readonly ISQLiteConnectionFactory connectionFactory;
@@ -29,7 +28,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             }
 
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
         }
 
         private string FullPathToFolder {
@@ -64,7 +63,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             
             WrapConnection(id, (connection) =>
                 {
-                    events = ((TableQuery<StoredEvent>) connection.Table<StoredEvent>())
+                    events = ((ITableQuery<StoredEvent>) connection.Table<StoredEvent>())
                         .Where(
                             x => x.Sequence >= minVersion &&
                                  x.Sequence <= maxVersion).ToList()

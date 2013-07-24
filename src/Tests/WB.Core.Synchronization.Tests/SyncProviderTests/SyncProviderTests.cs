@@ -147,10 +147,10 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
 
             var storage = new Mock<ISynchronizationDataStorage>();
             storage.Setup(s => s.GetLatestVersion(itemKey)).Returns(syncStoredItem);
-
+            var incomeStorage = new Mock<IIncomePackagesRepository>();
             var logger = new Mock<ILogger>();
 
-            var provider = new SyncProvider(devices.Object, storage.Object, logger.Object);
+            var provider = CreateDefaultSyncProvider(devices.Object, storage.Object,incomeStorage.Object, logger.Object);
 
             //Act
             var syncItem = provider.GetSyncItem(registrationKey, itemKey, sequence);
@@ -161,6 +161,7 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
             Assert.That(syncItem.Id, Is.EqualTo(itemKey));
         }
 
+      
         public void GetSyncItem_when_ClientId_and_sequence_provided_SyncItem_Is_returned()
         {
 
@@ -190,10 +191,10 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
 
             var storage = new Mock<ISynchronizationDataStorage>();
             storage.Setup(s => s.GetChunksCreatedAfter(2, userId)).Returns(listIds);
-
+            var incomeStorage = new Mock<IIncomePackagesRepository>();
             var logger = new Mock<ILogger>();
 
-            var provider = new SyncProvider(devices.Object, storage.Object, logger.Object);
+            var provider = CreateDefaultSyncProvider(devices.Object, storage.Object, incomeStorage.Object, logger.Object);
 
             //Act
             var ids = provider.GetAllARIds(userId, registrationKey);
@@ -207,10 +208,14 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
         {
             var devices = new Mock<IQueryableReadSideRepositoryReader<ClientDeviceDocument>>();
             var storage = new Mock<ISynchronizationDataStorage>();
-
+            var incomeStorage = new Mock<IIncomePackagesRepository>();
             var logger = new Mock<ILogger>();
-            
-            return new SyncProvider(devices.Object, storage.Object, logger.Object);
+
+            return CreateDefaultSyncProvider(devices.Object, storage.Object, incomeStorage.Object, logger.Object);
+        }
+        private SyncProvider CreateDefaultSyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices, ISynchronizationDataStorage storage, IIncomePackagesRepository incomeRepository, ILogger logger)
+        {
+            return new SyncProvider(devices, storage, incomeRepository, logger);
         }
 
     }

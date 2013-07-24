@@ -3,17 +3,19 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
+using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using Cirrious.MvvmCross.Binding.Interfaces;
 
 namespace CAPI.Android.Bindings
 {
-    public class BackgroundBinding: MvxBaseAndroidTargetBinding
+    public class BackgroundBinding : MvxAndroidTargetBinding
     {
-        private readonly View _control;
+        private readonly View control;
+
         public BackgroundBinding(View control)
+            : base(control)
         {
-            _control = control;
+            this.control = control;
         }
         #region Overrides of MvxBaseTargetBinding
 
@@ -30,9 +32,9 @@ namespace CAPI.Android.Bindings
             else if (status.HasFlag(QuestionStatus.Answered))
                 bgId = Resource.Drawable.questionAnsweredShape;
 
-            _control.SetBackgroundResource(bgId);
+            control.SetBackgroundResource(bgId);
 
-            var llWrapper = _control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
+            var llWrapper = control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
 
             if (llWrapper != null)
             {

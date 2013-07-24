@@ -6,7 +6,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
 
@@ -20,19 +20,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
-        private readonly IMvxBindingActivity _bindingActivity;
+        private readonly IMvxAndroidBindingContext bindingActivity;
 
-        private readonly int _templateId;
+        private readonly int templateId;
 
 
         public void ClearBindings()
         {
-            _bindingActivity.ClearBindings(this);
+            bindingActivity.ClearBindings(this);
         }
 
-        protected IMvxBindingActivity BindingActivity
+        protected IMvxAndroidBindingContext BindingActivity
         {
-            get { return _bindingActivity; }
+            get { return bindingActivity; }
         }
 
         protected override void Dispose(bool disposing)
@@ -48,12 +48,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected View Content { get; set; }
 
 
-        public AbstractQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context)
         {
-            _bindingActivity = bindingActivity;
-            _templateId = Resource.Layout.AbstractQuestionView;
-            Content = BindingActivity.BindingInflate(source, _templateId, this);
+            this.bindingActivity = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
+            templateId = Resource.Layout.AbstractQuestionView;
+            Content = BindingActivity.BindingInflate(templateId, this);
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
@@ -64,11 +64,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void Initialize()
         {
-         /*   LayoutInflater layoutInflater =
-                (LayoutInflater)this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);*/
-        //    tvTitle.Text = Model.Text + (Model.Mandatory ? "*" : "");
-        //    etComments.Text = tvComments.Text = Model.Comments;
             etComments.ImeOptions = ImeAction.Done;
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
@@ -77,10 +72,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
             llWrapper.Clickable = true;
         }
-
-       
-
-      
 
         protected virtual void SaveAnswer()
         {
@@ -171,7 +162,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 btnInstructions.Click += new EventHandler(btnInstructions_Click);
             }
-
         }
 
         void btnInstructions_Click(object sender, EventArgs e)
@@ -180,10 +170,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             instructionsBuilder.SetMessage(Model.Instructions);
             instructionsBuilder.Show();
         }
-       
-
-       
-
 
         protected LinearLayout llRoot
         {

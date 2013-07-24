@@ -7,14 +7,13 @@
       android:orientation="vertical"
       android:background="@drawable/dashboardquestionnaire"
                
-               >  <!--local:MvxBind="{'Visible':{'Path':'Visible'}}"--> 
+               >  
     <LinearLayout android:id="@+id/llQuestionnairie"
           android:orientation=    "horizontal"
           android:layout_width=    "fill_parent"
           android:layout_height=    "wrap_content"
           android:background="?android:attr/selectableItemBackground"
           android:padding="10dip">
-      <!--android:layout_alignParentLeft="true"-->
       <TextView  android:id="@+id/tvStatus"
                android:layout_width="200px"
                android:layout_height="wrap_content"

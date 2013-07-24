@@ -1,23 +1,22 @@
 using System;
 using Android.Text;
 using Android.Widget;
+using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using Cirrious.MvvmCross.Binding.Interfaces;
-
 namespace CAPI.Android.Bindings
 {
-    public class HtmlBinding : MvxBaseAndroidTargetBinding
+    public class HtmlBinding : MvxAndroidTargetBinding
     {
-        private readonly TextView _control;
+        private readonly TextView control;
 
-        public HtmlBinding(TextView control)
+        public HtmlBinding(TextView control):base(control)
         {
-            _control = control;
+            this.control = control;
         }
         public override void SetValue(object value)
         {
             var htmlString = (string) value;
-            _control.SetText(Html.FromHtml(htmlString), TextView.BufferType.Spannable);
+            control.SetText(Html.FromHtml(htmlString), TextView.BufferType.Spannable);
         }
 
         public override Type TargetType
