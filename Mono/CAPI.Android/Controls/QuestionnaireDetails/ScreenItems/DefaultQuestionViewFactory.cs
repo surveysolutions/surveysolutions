@@ -1,7 +1,8 @@
 using System;
 using Android.Content;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
@@ -13,7 +14,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model,
                                                        Guid questionnairePublicKey)
         {
-            var bindingActivity = context as IMvxBindingActivity;
+            var bindingActivity = (context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext;
             AbstractQuestionView itemView;
             switch (model.QuestionType)
             {

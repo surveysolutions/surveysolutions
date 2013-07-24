@@ -36,14 +36,20 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f010000
 			public const int MvxBind = 2130771968;
 			
-			// aapt resource value: 0x7f010002
-			public const int MvxDropDownItemTemplate = 2130771970;
+			// aapt resource value: 0x7f010004
+			public const int MvxDropDownItemTemplate = 2130771972;
 			
 			// aapt resource value: 0x7f010003
-			public const int MvxHttpSource = 2130771971;
+			public const int MvxItemTemplate = 2130771971;
 			
 			// aapt resource value: 0x7f010001
-			public const int MvxItemTemplate = 2130771969;
+			public const int MvxLang = 2130771969;
+			
+			// aapt resource value: 0x7f010005
+			public const int MvxSource = 2130771973;
+			
+			// aapt resource value: 0x7f010002
+			public const int MvxTemplate = 2130771970;
 			
 			static Attribute()
 			{
@@ -128,197 +134,194 @@ namespace CAPI.Android
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050004
+			public const int AnswerId = 2131034116;
+			
+			// aapt resource value: 0x7f050034
+			public const int ImageSwitcher01 = 2131034164;
+			
 			// aapt resource value: 0x7f050005
-			public const int AnswerId = 2131034117;
-			
-			// aapt resource value: 0x7f050035
-			public const int ImageSwitcher01 = 2131034165;
-			
-			// aapt resource value: 0x7f050006
-			public const int Index = 2131034118;
-			
-			// aapt resource value: 0x7f050001
-			public const int MvxBindableListItemTagUnique = 2131034113;
+			public const int Index = 2131034117;
 			
 			// aapt resource value: 0x7f050000
 			public const int MvxBindingTagUnique = 2131034112;
 			
-			// aapt resource value: 0x7f05000f
-			public const int MyLayout = 2131034127;
-			
-			// aapt resource value: 0x7f050020
-			public const int NavList = 2131034144;
-			
-			// aapt resource value: 0x7f050004
-			public const int PrpagationKey = 2131034116;
-			
-			// aapt resource value: 0x7f050002
-			public const int QuestionnaireId = 2131034114;
-			
-			// aapt resource value: 0x7f050003
-			public const int ScreenId = 2131034115;
-			
-			// aapt resource value: 0x7f050036
-			public const int btnAnswered = 2131034166;
-			
-			// aapt resource value: 0x7f05003c
-			public const int btnBackup = 2131034172;
-			
-			// aapt resource value: 0x7f05003f
-			public const int btnCancel = 2131034175;
-			
-			// aapt resource value: 0x7f050032
-			public const int btnCollect = 2131034162;
-			
-			// aapt resource value: 0x7f050033
-			public const int btnCollectMajor = 2131034163;
-			
-			// aapt resource value: 0x7f05003a
-			public const int btnComplete = 2131034170;
-			
-			// aapt resource value: 0x7f050008
-			public const int btnInstructions = 2131034120;
-			
-			// aapt resource value: 0x7f050039
-			public const int btnInvalid = 2131034169;
-			
-			// aapt resource value: 0x7f050027
-			public const int btnLogin = 2131034151;
-			
-			// aapt resource value: 0x7f05001d
-			public const int btnNavigation = 2131034141;
-			
-			// aapt resource value: 0x7f05003d
-			public const int btnRestore = 2131034173;
-			
-			// aapt resource value: 0x7f05003b
-			public const int btnSync = 2131034171;
-			
-			// aapt resource value: 0x7f050031
-			public const int btnSyncPoint = 2131034161;
-			
-			// aapt resource value: 0x7f050037
-			public const int btnUnanswered = 2131034167;
-			
-			// aapt resource value: 0x7f050030
-			public const int editSettingsSyncPoint = 2131034160;
-			
 			// aapt resource value: 0x7f05000e
-			public const int etComments = 2131034126;
+			public const int MyLayout = 2131034126;
 			
 			// aapt resource value: 0x7f05001f
-			public const int flDetails = 2131034143;
+			public const int NavList = 2131034143;
 			
-			// aapt resource value: 0x7f05001c
-			public const int flSpaceFiller = 2131034140;
+			// aapt resource value: 0x7f050003
+			public const int PrpagationKey = 2131034115;
 			
-			// aapt resource value: 0x7f050024
-			public const int footer = 2131034148;
+			// aapt resource value: 0x7f050001
+			public const int QuestionnaireId = 2131034113;
 			
-			// aapt resource value: 0x7f050023
-			public const int header = 2131034147;
+			// aapt resource value: 0x7f050002
+			public const int ScreenId = 2131034114;
 			
-			// aapt resource value: 0x7f05001a
-			public const int lNavigationContainer = 2131034138;
+			// aapt resource value: 0x7f050035
+			public const int btnAnswered = 2131034165;
 			
-			// aapt resource value: 0x7f05002b
-			public const int llButtom = 2131034155;
-			
-			// aapt resource value: 0x7f050018
-			public const int llContainer = 2131034136;
-			
-			// aapt resource value: 0x7f05002c
-			public const int llContent = 2131034156;
-			
-			// aapt resource value: 0x7f05001b
-			public const int llNavigationButton = 2131034139;
-			
-			// aapt resource value: 0x7f05001e
-			public const int llNavigationHolder = 2131034142;
-			
-			// aapt resource value: 0x7f050014
-			public const int llPropertyHolder = 2131034132;
-			
-			// aapt resource value: 0x7f050012
-			public const int llQuestionnairie = 2131034130;
-			
-			// aapt resource value: 0x7f050017
-			public const int llQuestionnarieHolder = 2131034135;
-			
-			// aapt resource value: 0x7f050007
-			public const int llRoot = 2131034119;
-			
-			// aapt resource value: 0x7f05002e
-			public const int llScreen = 2131034158;
-			
-			// aapt resource value: 0x7f050028
-			public const int llSurveyHolder = 2131034152;
-			
-			// aapt resource value: 0x7f050029
-			public const int llTop = 2131034153;
-			
-			// aapt resource value: 0x7f050009
-			public const int llWrapper = 2131034121;
-			
-			// aapt resource value: 0x7f05002d
-			public const int qGuid = 2131034157;
-			
-			// aapt resource value: 0x7f05002a
-			public const int sv = 2131034154;
-			
-			// aapt resource value: 0x7f050025
-			public const int teLogin = 2131034149;
-			
-			// aapt resource value: 0x7f050026
-			public const int tePassword = 2131034150;
-			
-			// aapt resource value: 0x7f050034
-			public const int textMem = 2131034164;
-			
-			// aapt resource value: 0x7f05002f
-			public const int textSyncPoint = 2131034159;
-			
-			// aapt resource value: 0x7f05000c
-			public const int tvComments = 2131034124;
-			
-			// aapt resource value: 0x7f05000d
-			public const int tvCommentsTitle = 2131034125;
-			
-			// aapt resource value: 0x7f050022
-			public const int tvCount = 2131034146;
-			
-			// aapt resource value: 0x7f05000a
-			public const int tvError = 2131034122;
-			
-			// aapt resource value: 0x7f050038
-			public const int tvErrorWarning = 2131034168;
-			
-			// aapt resource value: 0x7f050021
-			public const int tvITem = 2131034145;
-			
-			// aapt resource value: 0x7f050013
-			public const int tvStatus = 2131034131;
+			// aapt resource value: 0x7f05003b
+			public const int btnBackup = 2131034171;
 			
 			// aapt resource value: 0x7f05003e
-			public const int tvSyncResult = 2131034174;
+			public const int btnCancel = 2131034174;
 			
-			// aapt resource value: 0x7f05000b
-			public const int tvTitle = 2131034123;
+			// aapt resource value: 0x7f050031
+			public const int btnCollect = 2131034161;
 			
-			// aapt resource value: 0x7f050015
-			public const int txtPropertyName = 2131034133;
+			// aapt resource value: 0x7f050032
+			public const int btnCollectMajor = 2131034162;
 			
-			// aapt resource value: 0x7f050016
-			public const int txtPropertyValue = 2131034134;
+			// aapt resource value: 0x7f050039
+			public const int btnComplete = 2131034169;
 			
-			// aapt resource value: 0x7f050011
-			public const int txtSurveyCount = 2131034129;
+			// aapt resource value: 0x7f050007
+			public const int btnInstructions = 2131034119;
 			
-			// aapt resource value: 0x7f050010
-			public const int txtSurveyName = 2131034128;
+			// aapt resource value: 0x7f050038
+			public const int btnInvalid = 2131034168;
+			
+			// aapt resource value: 0x7f050026
+			public const int btnLogin = 2131034150;
+			
+			// aapt resource value: 0x7f05001c
+			public const int btnNavigation = 2131034140;
+			
+			// aapt resource value: 0x7f05003c
+			public const int btnRestore = 2131034172;
+			
+			// aapt resource value: 0x7f05003a
+			public const int btnSync = 2131034170;
+			
+			// aapt resource value: 0x7f050030
+			public const int btnSyncPoint = 2131034160;
+			
+			// aapt resource value: 0x7f050036
+			public const int btnUnanswered = 2131034166;
+			
+			// aapt resource value: 0x7f05002f
+			public const int editSettingsSyncPoint = 2131034159;
+			
+			// aapt resource value: 0x7f05000d
+			public const int etComments = 2131034125;
+			
+			// aapt resource value: 0x7f05001e
+			public const int flDetails = 2131034142;
+			
+			// aapt resource value: 0x7f05001b
+			public const int flSpaceFiller = 2131034139;
+			
+			// aapt resource value: 0x7f050023
+			public const int footer = 2131034147;
+			
+			// aapt resource value: 0x7f050022
+			public const int header = 2131034146;
 			
 			// aapt resource value: 0x7f050019
-			public const int vpContent = 2131034137;
+			public const int lNavigationContainer = 2131034137;
+			
+			// aapt resource value: 0x7f05002a
+			public const int llButtom = 2131034154;
+			
+			// aapt resource value: 0x7f050017
+			public const int llContainer = 2131034135;
+			
+			// aapt resource value: 0x7f05002b
+			public const int llContent = 2131034155;
+			
+			// aapt resource value: 0x7f05001a
+			public const int llNavigationButton = 2131034138;
+			
+			// aapt resource value: 0x7f05001d
+			public const int llNavigationHolder = 2131034141;
+			
+			// aapt resource value: 0x7f050013
+			public const int llPropertyHolder = 2131034131;
+			
+			// aapt resource value: 0x7f050011
+			public const int llQuestionnairie = 2131034129;
+			
+			// aapt resource value: 0x7f050016
+			public const int llQuestionnarieHolder = 2131034134;
+			
+			// aapt resource value: 0x7f050006
+			public const int llRoot = 2131034118;
+			
+			// aapt resource value: 0x7f05002d
+			public const int llScreen = 2131034157;
+			
+			// aapt resource value: 0x7f050027
+			public const int llSurveyHolder = 2131034151;
+			
+			// aapt resource value: 0x7f050028
+			public const int llTop = 2131034152;
+			
+			// aapt resource value: 0x7f050008
+			public const int llWrapper = 2131034120;
+			
+			// aapt resource value: 0x7f05002c
+			public const int qGuid = 2131034156;
+			
+			// aapt resource value: 0x7f050029
+			public const int sv = 2131034153;
+			
+			// aapt resource value: 0x7f050024
+			public const int teLogin = 2131034148;
+			
+			// aapt resource value: 0x7f050025
+			public const int tePassword = 2131034149;
+			
+			// aapt resource value: 0x7f050033
+			public const int textMem = 2131034163;
+			
+			// aapt resource value: 0x7f05002e
+			public const int textSyncPoint = 2131034158;
+			
+			// aapt resource value: 0x7f05000b
+			public const int tvComments = 2131034123;
+			
+			// aapt resource value: 0x7f05000c
+			public const int tvCommentsTitle = 2131034124;
+			
+			// aapt resource value: 0x7f050021
+			public const int tvCount = 2131034145;
+			
+			// aapt resource value: 0x7f050009
+			public const int tvError = 2131034121;
+			
+			// aapt resource value: 0x7f050037
+			public const int tvErrorWarning = 2131034167;
+			
+			// aapt resource value: 0x7f050020
+			public const int tvITem = 2131034144;
+			
+			// aapt resource value: 0x7f050012
+			public const int tvStatus = 2131034130;
+			
+			// aapt resource value: 0x7f05003d
+			public const int tvSyncResult = 2131034173;
+			
+			// aapt resource value: 0x7f05000a
+			public const int tvTitle = 2131034122;
+			
+			// aapt resource value: 0x7f050014
+			public const int txtPropertyName = 2131034132;
+			
+			// aapt resource value: 0x7f050015
+			public const int txtPropertyValue = 2131034133;
+			
+			// aapt resource value: 0x7f050010
+			public const int txtSurveyCount = 2131034128;
+			
+			// aapt resource value: 0x7f05000f
+			public const int txtSurveyName = 2131034127;
+			
+			// aapt resource value: 0x7f050018
+			public const int vpContent = 2131034136;
 			
 			static Id()
 			{
@@ -422,27 +425,37 @@ namespace CAPI.Android
 		public partial class Styleable
 		{
 			
-			public static int[] MvxBindableListView = new int[] {
-					2130771969,
-					2130771970};
-			
-			// aapt resource value: 1
-			public const int MvxBindableListView_MvxDropDownItemTemplate = 1;
-			
-			// aapt resource value: 0
-			public const int MvxBindableListView_MvxItemTemplate = 0;
-			
 			public static int[] MvxBinding = new int[] {
-					2130771968};
+					2130771968,
+					2130771969};
 			
 			// aapt resource value: 0
 			public const int MvxBinding_MvxBind = 0;
 			
-			public static int[] MvxHttpImageView = new int[] {
-					2130771971};
+			// aapt resource value: 1
+			public const int MvxBinding_MvxLang = 1;
+			
+			public static int[] MvxControl = new int[] {
+					2130771970};
 			
 			// aapt resource value: 0
-			public const int MvxHttpImageView_MvxHttpSource = 0;
+			public const int MvxControl_MvxTemplate = 0;
+			
+			public static int[] MvxImageView = new int[] {
+					2130771973};
+			
+			// aapt resource value: 0
+			public const int MvxImageView_MvxSource = 0;
+			
+			public static int[] MvxListView = new int[] {
+					2130771971,
+					2130771972};
+			
+			// aapt resource value: 1
+			public const int MvxListView_MvxDropDownItemTemplate = 1;
+			
+			// aapt resource value: 0
+			public const int MvxListView_MvxItemTemplate = 0;
 			
 			static Styleable()
 			{

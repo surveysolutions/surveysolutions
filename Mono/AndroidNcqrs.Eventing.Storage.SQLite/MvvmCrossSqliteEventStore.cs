@@ -28,7 +28,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             }
 
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
+            connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
         }
 
         private string FullPathToFolder {

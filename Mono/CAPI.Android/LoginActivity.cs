@@ -16,7 +16,7 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Simple;
+using Cirrious.MvvmCross.Droid.Simple;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -33,7 +33,7 @@ namespace CAPI.Android
     /// </summary>
     [Activity(Icon = "@drawable/capi",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
+    public class LoginActivity : MvxSimpleBindingActivity//<LoginViewModel>
     {
         #region Properties
 
@@ -84,8 +84,9 @@ namespace CAPI.Android
         /// </param>
         protected override void OnCreate(Bundle bundle)
         {
+
+            this.DataContext = new LoginViewModel();
             base.OnCreate(bundle);
-            this.ViewModel = new LoginViewModel();
             if (CapiApplication.Membership.IsLoggedIn)
             {
                 this.StartActivity(typeof (DashboardActivity));
