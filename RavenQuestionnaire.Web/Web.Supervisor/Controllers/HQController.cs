@@ -64,8 +64,12 @@ namespace Web.Supervisor.Controllers
         
         }
 
-        public ActionResult Interviews()
+        public ActionResult Interviews(Guid? templateId)
         {
+            if (templateId.HasValue)
+            {
+                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = templateId.Value })));
+            }
             ViewBag.ActivePage = MenuItem.Docs;
             return this.View(Filters());
         }

@@ -24,6 +24,7 @@
                             $('body').addClass('output-visible');
                         }
                         if (response.status == "ok") {
+                            input.backUrl = input.backUrl.replace("_______", datacontext.questionnaire.templateId);
                             window.location = input.backUrl;
                         }
                         isSaving(false);
@@ -34,7 +35,8 @@
                 isSaving(true);
                 datacontext.sendCommand("CreateInterviewWithFeaturedQuestionsCommand", ko.toJS(responsible), {
                     success: function (response) {
-                        window.location = input.backUrl;
+                        var backUrl = input.backUrl.replace("_______", datacontext.questionnaire.templateId);
+                        window.location = backUrl;
                         isSaving(false);
                     },
                     error: function (response) {
@@ -43,6 +45,7 @@
                             error: response.error
                         });
                         $('body').addClass('output-visible');
+                        isSaving(false);
                     }
                 });
             },
