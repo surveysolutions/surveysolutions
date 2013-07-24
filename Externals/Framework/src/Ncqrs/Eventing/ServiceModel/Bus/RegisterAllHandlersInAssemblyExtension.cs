@@ -39,6 +39,8 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public static void RegisterHandler(this InProcessEventBus target,object handler, Type eventDataType)
         {
+            NcqrsEnvironment.RegisterEventDataType(eventDataType);
+
             var registerHandlerMethod = target.GetType().GetMethods().Single
             (
                 m => m.Name == "RegisterHandler" && m.IsGenericMethod && m.GetParameters().Count() == 1

@@ -2,7 +2,7 @@
 @using Newtonsoft.Json
 @model Web.Supervisor.Models.DocumentFilter
 @{
-    Layout = "~/Views/Shared/_ListViewLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 
 @section scripts
@@ -25,15 +25,68 @@
 @section header
 {
     <h3 class="sinle-line-header">Interviews</h3>
-    <div class="menubar">
-        <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign interviewer <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" data-bind="foreach: Users">
-                <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
-            </ul>
-        </div>
+}
+
+@section  actionbar{
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign interviewer <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" data-bind="foreach: Users">
+            <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
+        </ul>
     </div>
+}
+
+
+@section grid
+{
+    <table class="table table-striped table-bordered table-condensed table-hover table-break-words">
+        <thead>
+            <tr>
+                <th></th>
+                <!-- ko if:SelectedTemplate() == '' -->
+                <th>Featured Questions</th>
+                <!-- /ko -->
+                <!-- ko ifnot:SelectedTemplate() == '' -->
+                <!-- ko if:ListView.Items().length > 0-->
+                <!-- ko foreach:ListView.Items()[0].FeaturedQuestions -->
+                <th data-bind='text: Question'></th>
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <th data-bind='sortby: "Responsible.Name"'>Responsible</th>
+                <th data-bind='sortby: "LastEntryDate"'>Last Update</th>
+                <th data-bind='sortby: "Status.Name"'>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:ListView.Items -->
+            <tr>
+                <td>
+                    <input type="checkbox" data-bind="checked: IsSelected" />
+                </td>
+                <!-- ko if:$root.SelectedTemplate() == '' -->
+                <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
+                <!-- /ko -->
+                <!-- ko ifnot:$root.SelectedTemplate() == '' -->
+                <!-- ko foreach:FeaturedQuestions -->
+                <td data-bind="text: Answer"></td>
+                <!-- /ko -->
+                <!-- /ko -->
+                <td>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
+                </td>
+                <td data-bind="text: LastEntryDate"></td>
+                <td data-bind="text: Status"></td>
+                <td>
+                    <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
+                        <i class="icon icon-align-justify icon-white"></i></a>
+                </td>
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
 }
 
 @section filters
@@ -83,55 +136,4 @@
             </label>
         </li>
     </ul>
-}
-
-@section grid
-{
-    <table class="table table-striped table-bordered table-condensed table-hover table-break-words">
-        <thead>
-            <tr>
-                <th></th>
-                <!-- ko if:SelectedTemplate() == '' -->
-                <th>Featured Questions</th>
-                <!-- /ko -->
-                <!-- ko ifnot:SelectedTemplate() == '' -->
-                <!-- ko if:ListView.Items().length > 0-->
-                <!-- ko foreach:ListView.Items()[0].FeaturedQuestions -->
-                <th data-bind='text: Question'></th>
-                <!-- /ko -->
-                <!-- /ko -->
-                <!-- /ko -->
-                <th data-bind='sortby: "Responsible.Name"'>Responsible</th>
-                <th data-bind='sortby: "LastEntryDate"'>Last Update</th>
-                <th data-bind='sortby: "Status.Name"'>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach:ListView.Items -->
-            <tr>
-                <td>
-                    <input type="checkbox"  data-bind="checked: IsSelected"/>
-                </td>
-                <!-- ko if:$root.SelectedTemplate() == '' -->
-                <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
-                <!-- /ko -->
-                <!-- ko ifnot:$root.SelectedTemplate() == '' -->
-                <!-- ko foreach:FeaturedQuestions -->
-                <td data-bind="text: Answer"></td>
-                <!-- /ko -->
-                <!-- /ko -->
-                <td>
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
-                </td>
-                <td data-bind="text: LastEntryDate"></td>
-                <td data-bind="text: Status"></td>
-                <td>
-                    <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
-                        <i class="icon icon-align-justify icon-white"></i></a>
-                </td>
-            </tr>
-            <!-- /ko -->
-        </tbody>
-    </table>
 }

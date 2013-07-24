@@ -75,8 +75,9 @@
                 return y;
             }
 
-            Type matchedType =
-                assemblyes.SelectMany(a=>a.GetTypes()).FirstOrDefault(
+            Type matchedType = assemblyes
+                .SelectMany(a=>a.GetTypes().Where(t => t.IsVisible))
+                .FirstOrDefault(
                     x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
             if (matchedType == null)
             {

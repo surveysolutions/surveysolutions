@@ -25,7 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <OutputPath>bin\Debug\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
@@ -58,6 +58,9 @@
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsSQLServerOption />
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -104,10 +107,11 @@
     <Compile Include="RavenDBSnapshotStore.cs" />
     <Compile Include="RavenIndexes\Event_ByEventSource.cs" />
     <Compile Include="RavenIndexes\UniqueEventsIndex.cs" />
+    <Compile Include="RavenWriteSideStore.cs" />
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredEventWithoutPayload.cs" />
     <Compile Include="StoredSnaphot.cs" />
-    <Compile Include="TypeNameSerializationBinder.cs" />
+    <Compile Include="IgnoreAssemblyNameForEventsSerializationBinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Framework\src\Ncqrs\Ncqrs.csproj">
