@@ -1,3 +1,4 @@
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -8,7 +9,6 @@ namespace WB.UI.Designer.WebServices.Questionnaire
 
     using Main.Core.Utility;
     using Main.Core.View;
-    using Main.Core.View.Questionnaire;
     using Main.DenormalizerStorage;
 
     /// <summary>

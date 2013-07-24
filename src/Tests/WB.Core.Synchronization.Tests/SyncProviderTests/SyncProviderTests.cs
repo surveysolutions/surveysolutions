@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -22,6 +23,9 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
         public void SetUp()
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
+            var commandService = new Mock<IEventStore>();
+            NcqrsEnvironment.SetDefault(commandService.Object);
         }
 
         [Test]
@@ -48,6 +52,45 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
             //Assert
             commandService.Verify(x => x.Execute(It.IsAny<CreateClientDeviceCommand>()),Times.Once());
             Assert.That(item.ClientInstanceKey, Is.EqualTo(clientIdentifier.ClientInstanceKey));
+        }
+
+        [Test]
+        public void HandleSyncItem_If_Item_Content_Is_Empty_Exception_is_thrown()
+        {
+            //Arrange
+            var commandService = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault(commandService.Object);
+            ISyncProvider provider = CreateDefaultSyncProvider();
+
+            Guid syncId = Guid.NewGuid();
+
+            SyncItem item = new SyncItem() {Content = string.Empty};
+
+            //Act
+            TestDelegate act = () => provider.HandleSyncItem(item, syncId);
+
+            //Assert
+            Assert.Throws<ArgumentException>(act);
+        }
+
+        [Test]
+        public void HandleSyncItem_If_Item_Is_Null_Exception_is_thrown()
+        {
+            //Arrange
+            var commandService = new Mock<ICommandService>();
+            NcqrsEnvironment.SetDefault(commandService.Object);
+            ISyncProvider provider = CreateDefaultSyncProvider();
+
+            Guid syncId = Guid.NewGuid();
+
+            SyncItem item = null;
+
+            //Act
+            TestDelegate act = () => provider.HandleSyncItem(item, syncId);
+
+            //Assert
+            var ex = Assert.Throws<ArgumentException>(act);
+            //Assert.That(ex.ParamName, Is.EqualTo("Sync Item is not set."));
         }
 
         /*[Test]*/
