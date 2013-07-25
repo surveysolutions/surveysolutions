@@ -35,7 +35,7 @@ namespace LoadTestDataGenerator
             kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new RavenInfrastructureModule(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                new SynchronizationModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
                 new NLogLoggingModule(),
                 new DesignerBoundedContextModule()
             );
