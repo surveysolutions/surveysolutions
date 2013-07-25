@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities;
 using Main.Core.Utility;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
+namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     /// <summary>
     /// The questionnaire browse input model.

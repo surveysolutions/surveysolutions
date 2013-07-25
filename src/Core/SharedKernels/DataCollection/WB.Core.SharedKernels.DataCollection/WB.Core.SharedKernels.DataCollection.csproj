@@ -34,6 +34,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -51,14 +54,28 @@
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
+    <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItem.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseView.cs" />
-    <Compile Include="Views\Questionnaire\BrowseItem\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Services\ISampleImportService.cs" />
+    <Compile Include="Services\SampleImportService.cs" />
+    <Compile Include="Services\TempFileImportData.cs" />
+    <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Questionnaire\QuestionnaireItemViewFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">

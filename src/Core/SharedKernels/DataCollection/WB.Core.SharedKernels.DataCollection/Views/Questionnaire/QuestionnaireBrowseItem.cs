@@ -1,9 +1,10 @@
 using System;
+using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
+namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     public class QuestionnaireBrowseItem : IView
     {
@@ -11,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
         {
         }
 
-        public QuestionnaireBrowseItem(Guid questionnaireId, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
+        protected QuestionnaireBrowseItem(Guid questionnaireId, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
         {
             this.QuestionnaireId = questionnaireId;
             this.Title = title;
@@ -24,6 +25,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
         public QuestionnaireBrowseItem(QuestionnaireDocument doc)
             : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic)
         {
+            this.FeaturedQuestions =
+                doc.Find<IQuestion>(q => q.Featured)
+                   .Select(q => new FeaturedQuestionItem(q.PublicKey, q.QuestionText, q.StataExportCaption))
+                   .ToArray();
         }
 
         public DateTime CreationDate { get; private set; }
@@ -40,14 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
 
         public bool IsDeleted { get; set; }
 
-        public static QuestionnaireBrowseItem New()
-        {
-            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now, null, false);
-        }
+        public FeaturedQuestionItem[] FeaturedQuestions { get; private set; }
 
-        public TemplateLight GetTemplateLight()
-        {
-            return new TemplateLight(this.QuestionnaireId, this.Title);
-        }
     }
 }
