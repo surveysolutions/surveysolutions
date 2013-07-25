@@ -42,7 +42,6 @@ namespace WB.UI.Designer.Views.EventHandler
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
         {
-
             try
             {
                 Guid questionnaireId = evnt.EventSourceId;
@@ -136,7 +135,8 @@ namespace WB.UI.Designer.Views.EventHandler
                                             AnswerType = x.AnswerType,
                                             AnswerValue = x.AnswerValue
                                         }).ToList(),
-                        HasCodition = !string.IsNullOrEmpty(@event.ConditionExpression)
+                        Condition = @event.ConditionExpression,
+                        Variable = @event.StataExportCaption
                     };
 
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
@@ -149,7 +149,7 @@ namespace WB.UI.Designer.Views.EventHandler
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
-                existingQuestion.HasCodition = !string.IsNullOrEmpty(@event.ConditionExpression);
+                existingQuestion.Condition = @event.ConditionExpression;
 
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = @event.QuestionType;
@@ -179,7 +179,8 @@ namespace WB.UI.Designer.Views.EventHandler
                         AnswerType = x.AnswerType,
                         AnswerValue = x.AnswerValue
                     }).ToList(),
-                    HasCodition = !string.IsNullOrEmpty(@event.ConditionExpression)
+                    Condition= @event.ConditionExpression,
+                    Variable = @event.StataExportCaption
                 };
 
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
@@ -195,11 +196,6 @@ namespace WB.UI.Designer.Views.EventHandler
                 return questionnaire;
             });
         }
-
-        //public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
-        //{
-        //    HandleUpdateEvent(evnt, handle: (@event, questionnaire) => null);
-        //}
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
