@@ -17,6 +17,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
         private readonly GZipJsonCompressor compressor;
         private readonly ConcurrentDictionary<Guid, TEntity> memcache; 
+        private object locker=new object();
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
                                                             IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService)
@@ -41,16 +42,21 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         public void Remove(Guid id)
         {
-           
-            internalImplementationOfWriter.Remove(id);
-            TEntity outEntity;
-            memcache.TryRemove(id, out outEntity);
+            lock (locker)
+            {
+                internalImplementationOfWriter.Remove(id);
+                TEntity outEntity;
+                memcache.TryRemove(id, out outEntity);
+            }
         }
 
         public void Store(TEntity view, Guid id)
         {
-            internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
-            memcache.AddOrUpdate(id, (key) => view, (key, item) => view);
+            lock (locker)
+            {
+                internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
+                memcache.AddOrUpdate(id, (key) => view, (key, item) => view);
+            }
         }
       
     }
