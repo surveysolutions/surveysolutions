@@ -16,8 +16,29 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public Guid Id { get; set; }
 
-        public PdfEntityView Parent { get; set; } 
+        public int Depth { get; set; }
+
+        public PdfEntityView Parent { get; set; }
 
         public List<PdfEntityView> Children { get; set; }
+
+        public string ItemNumber
+        {
+            get
+            {
+                var parent = this.Parent;
+                var questionNumberSections = new List<int>();
+                var currentItem = this;
+                while (parent != null)
+                {
+                    var currentItemNumber = parent.Children.IndexOf(currentItem) + 1;
+                    questionNumberSections.Insert(0, currentItemNumber);
+                    currentItem = parent;
+                    parent = parent.Parent;
+                }
+
+                return string.Join(".", questionNumberSections);
+            }
+        }
     }
 }
