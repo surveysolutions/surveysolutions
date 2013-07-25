@@ -7,6 +7,7 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Core.Supervisor.Denormalizer;
+using Core.Supervisor.Views;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.EventHandlers;
@@ -94,6 +95,11 @@ namespace CapiDataGenerator
 
         private void InitSupervisorStorage(InProcessEventBus bus)
         {
+            this.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
+            this.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+            this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            this.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+
             var usereventHandler = Kernel.Get<Core.Supervisor.Denormalizer.UserDenormalizer>();
             bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
 

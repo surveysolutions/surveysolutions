@@ -169,6 +169,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Configuration\Stacy.WB.Tools.CapiDataGenerator.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="HostMap.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
