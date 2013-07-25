@@ -9,9 +9,7 @@
     }
     else
     {
-        <text>
-            @Html.Raw(string.Format("<h{0}>{1}</h{0}>", Math.Min(4, ((PdfGroupView)Model).Depth), Html.Encode(Model.Title)))
-        </text>
+        @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1}</h{0}>", Math.Min(4, Model.Depth), Html.Encode(Model.Title), Html.Encode(Model.ItemNumber)))
     }
 
     @if (this.Model.Children.Count > 0)

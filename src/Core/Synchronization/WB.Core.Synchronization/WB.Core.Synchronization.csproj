@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="IBackupManager.cs" />
+    <Compile Include="IIncomePackagesRepository.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISynchronizationDataStorage.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SyncStorage\IncomePackagesRepository.cs" />
     <Compile Include="SyncStorage\InMemoryChunkStorage.cs" />
     <Compile Include="SyncStorage\ReadSideChunkStorage.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
