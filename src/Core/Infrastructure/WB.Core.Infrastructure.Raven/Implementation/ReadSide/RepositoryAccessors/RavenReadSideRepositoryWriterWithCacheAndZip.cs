@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide;
@@ -15,6 +16,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private readonly RavenReadSideRepositoryWriter<ZipView> internalImplementationOfWriter;
         private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
         private readonly GZipJsonCompressor compressor;
+        private readonly ConcurrentDictionary<Guid, TEntity> memcache; 
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
                                                             IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService)
@@ -22,6 +24,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             internalImplementationOfWriter = new RavenReadSideRepositoryWriter<ZipView>(ravenStore, writerRegistry);
             internalImplementationOfReader = new RavenReadSideRepositoryReader<ZipView>(ravenStore, readSideStatusService);
             compressor=new GZipJsonCompressor();
+            memcache = new ConcurrentDictionary<Guid, TEntity>();
         }
 
         public int Count()
@@ -31,18 +34,23 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         public TEntity GetById(Guid id)
         {
-            var item = internalImplementationOfWriter.GetById(id);
-            return compressor.DecompressString<TEntity>(item.Payload);
+            return memcache.GetOrAdd(id, (key) =>
+                                         compressor.DecompressString<TEntity>(
+                                             internalImplementationOfWriter.GetById(key).Payload));
         }
 
         public void Remove(Guid id)
         {
+           
             internalImplementationOfWriter.Remove(id);
+            TEntity outEntity;
+            memcache.TryRemove(id, out outEntity);
         }
 
         public void Store(TEntity view, Guid id)
         {
             internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
+            memcache.AddOrUpdate(id, (key) => view, (key, item) => view);
         }
       
     }
