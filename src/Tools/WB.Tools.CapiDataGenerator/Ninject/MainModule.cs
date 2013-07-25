@@ -26,7 +26,7 @@ using Raven.Client.Document;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.Document;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Tools.CapiDataGenerator.Models;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 

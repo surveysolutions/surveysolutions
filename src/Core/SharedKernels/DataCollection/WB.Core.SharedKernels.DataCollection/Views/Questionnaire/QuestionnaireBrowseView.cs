@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
 {
