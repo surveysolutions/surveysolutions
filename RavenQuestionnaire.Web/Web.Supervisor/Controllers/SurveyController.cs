@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Core.Supervisor.Views;
+using Core.Supervisor.Views.Interviewer;
 using Core.Supervisor.Views.Status;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
+using Core.Supervisor.Views.User;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -23,14 +26,16 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
+        private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory)
+            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory)
             : base(commandService, provider, logger)
         {
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
+            this.interviewersFactory = interviewersFactory;
         }
 
         public ActionResult Index()
@@ -74,8 +79,11 @@ namespace Web.Supervisor.Controllers
 
             return new DocumentFilter()
             {
-                Users = this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                        ViewerStatus.Supervisor)).Items,
+                Users = this.interviewersFactory.Load(new InterviewersInputModel(viewerId){PageSize = int.MaxValue}).Items.Where(u => !u.IsLocked).Select(u => new SurveyUsersViewItem()
+                    {
+                        UserId = u.UserId,
+                        UserName = u.UserName
+                    }),
                 Responsibles =
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
                 Templates =

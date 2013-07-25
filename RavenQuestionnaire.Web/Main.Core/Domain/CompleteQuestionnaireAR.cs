@@ -587,6 +587,7 @@ namespace Main.Core.Domain
                         PreviousResponsible = prevResponsible,
                         Responsible = new UserLight(userId, string.Empty)
                     });
+            this.ChangeStatus(SurveyStatus.Initial, new UserLight(userId, string.Empty));
         }
 
         /// <summary>
