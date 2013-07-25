@@ -2,8 +2,11 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.Supervisor.Denormalizer;
 using Core.Supervisor.RavenIndexes;
+using Core.Supervisor.Views;
 using Main.Core;
+using Main.Core.Documents;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -14,6 +17,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -95,6 +99,12 @@ namespace Web.Supervisor.App_Start
                 new RavenInfrastructureModule(), new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new NLogLoggingModule(),
                 new SupervisorCommandDeserializationModule());
+
+#warning dirty hack for register ziped read side
+            kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
+            kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+            kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

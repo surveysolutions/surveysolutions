@@ -39,6 +39,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
         private readonly ISampleImportService sampleImportService;
+        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
@@ -57,6 +58,7 @@ namespace Web.Supervisor.Controllers
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
+            this.supervisorsFactory = supervisorsFactory;
         }
 
         public ActionResult Index()
@@ -69,7 +71,7 @@ namespace Web.Supervisor.Controllers
                     Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor })
                 };
             return this.View(model);
-        
+
         }
 
         public ActionResult Interviews(Guid? templateId)
@@ -118,7 +120,7 @@ namespace Web.Supervisor.Controllers
                         ViewerStatus.Headquarter)).Items);
         }
 
-        
+
         public ActionResult Assign(Guid id)
         {
             var user = this.GlobalInfo.GetCurrentUser();
@@ -154,7 +156,7 @@ namespace Web.Supervisor.Controllers
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-       
+
 
         public ActionResult Summary()
         {
@@ -178,7 +180,11 @@ namespace Web.Supervisor.Controllers
 
             return new DocumentFilter()
             {
-                Users = this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Headquarter)).Items,
+                Users = this.supervisorsFactory.Load(new UserListViewInputModel() { PageSize = int.MaxValue }).Items.Where(u => !u.IsLocked).Select(u => new SurveyUsersViewItem()
+                    {
+                        UserId = u.UserId,
+                        UserName = u.UserName
+                    }),
                 Responsibles =
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
                 Templates =

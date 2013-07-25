@@ -15,6 +15,7 @@
             bundles.Add(new StyleBundle("~/css/main").Include(
                 "~/Content/css/bootstrap.css",
                 "~/Content/css/bootstrap.icon-large.css",
+                "~/Content/bootstrap-mvc-validation.css",
                 //"~/Content/css/bootstrap-responsive.css",
                 "~/Content/font-awesome.css",
                 "~/Content/jquery.pnotify.default.css",
@@ -25,8 +26,8 @@
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
                 "~/Content/css/bootstrap.css",
                 "~/Content/css/bootstrap.icon-large.min.css",
-                
-                //"~/Content/css/bootstrap-responsive.css",
+                "~/Content/bootstrap-mvc-validation.css",
+                "~/Content/css/bootstrap-responsive.css",
                  "~/Content/main-not-logged.css"));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(

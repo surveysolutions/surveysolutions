@@ -26,7 +26,7 @@ namespace CapiDataGenerator
 
             new StandardKernel(
                 new RavenInfrastructureModule(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                new SynchronizationModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
                 new CapiDataGeneratorRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"], false),
                 new NLogLoggingModule(),
                 new MainModelModule());

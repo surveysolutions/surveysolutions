@@ -363,6 +363,10 @@
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-mvc-validation.css" />
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap.css" />
     <Content Include="Content\css\bootstrap.icon-large.css" />
     <Content Include="Content\css\bootstrap-responsive.css" />
     <Content Include="Content\css\bootstrap-responsive.min.css" />
@@ -460,6 +464,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
@@ -476,17 +483,14 @@
     <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\highcharts.js" />
-    <Content Include="Scripts\jquery-1.7.2.min.js" />
-    <Content Include="Scripts\jquery-1.9.0-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.9.0.js" />
-    <Content Include="Scripts\jquery-1.9.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.0.js" />
     <Content Include="Scripts\jquery-ui-1.10.0.min.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\assign\app\datacontext.js" />
@@ -699,7 +703,6 @@
     <Content Include="Views\Survey\Summary.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
-    <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
