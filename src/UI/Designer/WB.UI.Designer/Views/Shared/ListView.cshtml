@@ -13,8 +13,6 @@
     var propertyList = Model.VisibleProperties(userHelper);
 
     var sortOrder = (int?)ViewBag.SortOrder;
-
-    var list_width = (int) (propertyList.Count() > 1 ? (70/propertyList.Count() - 1) : 100);
 }
 
 <table class="table table-hover">
@@ -24,9 +22,9 @@
             @for (int i=0;i<propertyList.Count(); i++)
             {
                 var property = propertyList[i];
-                var w = i == 0 ? string.Empty : string.Format("width:{0}%", list_width);
+                var w = i == 0 ? "350px" : "auto";
                 
-                <th style="@w">
+                <th style="width: @w; min-width: 135px">
                     @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = property.Name, so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == property.Name), f = ViewBag.Filter })
                     @if (ViewBag.SortBy == property.Name)
                     {
