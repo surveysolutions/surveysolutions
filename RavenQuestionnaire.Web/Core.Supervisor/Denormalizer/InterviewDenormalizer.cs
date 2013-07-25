@@ -83,7 +83,7 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var item = this.interviews.GetById(evnt.Payload.CompletedQuestionnaireId);
+            var item = this.interviews.GetById(evnt.EventSourceId);
 
             item.Status = new SurveyStatusLight() {Id = evnt.Payload.Status.PublicId, Name = evnt.Payload.Status.Name};
             item.LastEntryDate = evnt.EventTimeStamp;
@@ -95,7 +95,7 @@ namespace Core.Supervisor.Denormalizer
         {
             var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
-            var item = this.interviews.GetById(evnt.Payload.CompletedQuestionnaireId);
+            var item = this.interviews.GetById(evnt.EventSourceId);
 
             var user = this.users.GetById(responsible.Id);
 

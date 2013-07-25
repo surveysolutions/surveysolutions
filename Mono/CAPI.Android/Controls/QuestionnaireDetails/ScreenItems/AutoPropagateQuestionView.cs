@@ -11,13 +11,14 @@ using Android.Text;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class AutoPropagateQuestionView : NumericQuestionView
     {
-        public AutoPropagateQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey) : base(context, bindingActivity, source, questionnairePublicKey)
+        public AutoPropagateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+            : base(context, bindingActivity, source, questionnairePublicKey)
         {
         }
 

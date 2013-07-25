@@ -77,9 +77,9 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            this.HandleStatusChanges(evnt.Payload.PreviousStatus, evnt.Payload.Status, evnt.EventTimeStamp, evnt.Payload.CompletedQuestionnaireId);
+            this.HandleStatusChanges(evnt.Payload.PreviousStatus, evnt.Payload.Status, evnt.EventTimeStamp, evnt.EventSourceId);
             
-            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.EventSourceId);
             if (doc == null)
             {
                 return;
@@ -98,7 +98,7 @@ namespace Core.Supervisor.Denormalizer
                                                     User = doc.Responsible ?? new UserLight(Guid.Empty, string.Empty), 
                                                     Status = evnt.Payload.Status
                                                 };
-            item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
+            item.Surveys.Add(evnt.EventSourceId);
            
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
@@ -112,7 +112,7 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.EventSourceId);
             if (doc == null)
             {
                 return;
@@ -133,7 +133,7 @@ namespace Core.Supervisor.Denormalizer
                                                     Status = doc.Status
                                                 };
 
-            item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
+            item.Surveys.Add(evnt.EventSourceId);
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
         }

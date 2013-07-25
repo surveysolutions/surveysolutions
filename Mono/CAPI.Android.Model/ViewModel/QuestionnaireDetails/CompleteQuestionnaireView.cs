@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.Validation;
+using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -14,7 +15,7 @@ using WB.Core.Infrastructure.ReadSide;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel, IView
+    public class CompleteQuestionnaireView : MvxViewModel, IView
     {
         public CompleteQuestionnaireView(string publicKey)
         {

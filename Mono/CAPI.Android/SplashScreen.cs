@@ -1,23 +1,17 @@
 using Android.App;
+using Android.Content.PM;
 using Cirrious.MvvmCross.Droid.Views;
 
 namespace CAPI.Android
 {
-    using global::Android.Content.PM;
-
     [Activity(Label = "CAPI", MainLauncher = true, NoHistory = true, Icon = "@drawable/capi",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class SplashScreenActivity : MvxBaseSplashScreenActivity
+    public class SplashScreen : MvxSplashScreenActivity
     {
-        public SplashScreenActivity()
+        public SplashScreen()
             : base(Resource.Layout.SplashScreen)
         {
         }
-      /*  protected override void TriggerFirstNavigate()
-        {
-            CapiApplication.GenerateEvents();
-            base.TriggerFirstNavigate();
-        }*/
 
     }
 }

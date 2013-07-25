@@ -1,7 +1,6 @@
 ﻿@using Recaptcha
 @using WB.UI.Designer
 @using WB.UI.Designer.BootstrapSupport
-@using WB.UI.Designer.Code.ConfigurationManager
 @model WB.UI.Designer.Models.RegisterModel
 
 @{
@@ -20,9 +19,9 @@
 
         @if (AppSettings.Instance.IsReCaptchaEnabled)
         {
-            <p>
+            <div style="line-height: 0">
                 @Html.Raw(Html.GenerateCaptcha())
-            </p>
+            </div>
         }
 
         <div class="form-actions">

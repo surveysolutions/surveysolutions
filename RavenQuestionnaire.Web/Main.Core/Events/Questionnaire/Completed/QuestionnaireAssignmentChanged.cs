@@ -24,6 +24,7 @@
         /// <summary>
         /// Gets or sets previous responsible person.
         /// </summary>
+        [Obsolete("are you sure you need this? get it from read model")]
         public UserLight PreviousResponsible { get; set; }
 
         /// <summary>

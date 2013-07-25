@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using SQLite;
 using WB.Core.Infrastructure.Backup;
@@ -13,7 +12,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteReadSideRepositoryAccessor<TView> : IMvxServiceConsumer,IBackupable,
+    public class SqliteReadSideRepositoryAccessor<TView> : IBackupable,
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
@@ -23,7 +22,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         {
             this.dbName=dbName;
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
             connection = connectionFactory.Create(dbName);
 
             connection.CreateTable<TView>();
@@ -38,12 +37,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         {
             var idString = id.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
-            return ((TableQuery<TView>) connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
+            return ((ITableQuery<TView>) connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
         public IEnumerable<TView> Filter(Expression<Func<TView, bool>> predExpr)
         {
-            return ((TableQuery<TView>) connection.Table<TView>()).Where(predExpr);
+            return ((ITableQuery<TView>) connection.Table<TView>()).Where(predExpr);
         }
 
         public void Remove(Guid id)
@@ -65,8 +64,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 
         public string GetPathToBakupFile()
         {
-            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
-                                          this.dbName);
+            return this.connection.DatabasePath;
         }
 
         public void RestoreFromBakupFolder(string path)
@@ -76,7 +74,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             File.Copy(Path.Combine(path, dbName),
                       System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
                                           this.dbName), true);
-            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
             connection = connectionFactory.Create(dbName);
         }
     }

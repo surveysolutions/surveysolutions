@@ -69,7 +69,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
-                this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentItemStore.GetById(evnt.EventSourceId);
 
             item.Status = evnt.Payload.Status;
             item.LastEntryDate = evnt.EventTimeStamp;
@@ -81,7 +81,7 @@ namespace Main.Core.EventHandlers
             var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
             CompleteQuestionnaireBrowseItem item = 
-                this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentItemStore.GetById(evnt.EventSourceId);
 
             item.Responsible = responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
