@@ -53,10 +53,12 @@
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
