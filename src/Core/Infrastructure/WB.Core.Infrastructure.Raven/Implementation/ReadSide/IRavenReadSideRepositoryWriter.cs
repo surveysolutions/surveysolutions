@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface which is implemented by each Raven-specific read side repository writer.
     /// </summary>
-    internal interface IRavenReadSideRepositoryWriter
+    public interface IRavenReadSideRepositoryWriter
     {
         /// <summary>
         /// Enables caching of repository entities.
