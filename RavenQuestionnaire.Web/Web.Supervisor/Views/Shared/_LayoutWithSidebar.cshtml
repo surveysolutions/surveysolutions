@@ -12,49 +12,49 @@
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
 }
-<div id="wrapper">
-    <div id="menu" class="hidden-phone">
-        <div id="menuInner" class="slim-scroll">
-            <div class="hide-panel-block text-right innerLR">
-                &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
-            </div>
-            @RenderSection("filters", false)
-        </div>
-    </div>
-    <div id="content">
-        @RenderSection("header", false)
-        <div class="menubar">
-            <span data-bind="visible: $root.ListView.IsFilterOpen() == false"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
-            @RenderSection("actionbar", false)
-        </div>
-        @RenderSection("gridnavigation", false)
-        <div class="innerLR">@Html.Partial("_alerts")</div>
-        <div id="list">
-            <!-- ko ifnot:ListView.IsPageLoaded()  -->
-            <p class="text-center">
-                Loading. Please wait...
-            </p>
-            <!-- /ko -->
-            <!-- ko if:ListView.IsPageLoaded()  -->
-            <p class="text-center" data-bind="visible: ListView.Pager().TotalItemCount() == 0">
-                No results found
-            </p>
-            <!-- /ko -->
-            <div class="horizontal-scroll" data-bind="visible: ListView.Pager().TotalItemCount() > 0">
-                <div class="innerLR ">
-                    @RenderSection("grid", true)
-                </div>
-            </div>
-            <!-- ko if:ListView.Pager().LastPage() > 1 -->
-            <div class="innerLR ">
-                <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
-            </div>
-            <!-- /ko -->
-        </div>
-        @this.RenderBody()
 
+<div id="menu" class="hidden-phone">
+    <div id="menuInner" class="slim-scroll">
+        <div class="hide-panel-block text-right innerLR">
+            &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
+        </div>
+        @RenderSection("filters", false)
     </div>
 </div>
+<div id="content">
+    @RenderSection("header", false)
+    <div class="menubar">
+        <span data-bind="visible: $root.ListView.IsFilterOpen() == false"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
+        @RenderSection("actionbar", false)
+    </div>
+    @RenderSection("gridnavigation", false)
+    <div class="innerLR">@Html.Partial("_alerts")</div>
+    <div id="list">
+        <!-- ko ifnot:ListView.IsPageLoaded()  -->
+        <p class="text-center">
+            Loading. Please wait...
+        </p>
+        <!-- /ko -->
+        <!-- ko if:ListView.IsPageLoaded()  -->
+        <p class="text-center" data-bind="visible: ListView.Pager().TotalItemCount() == 0">
+            No results found
+        </p>
+        <!-- /ko -->
+        <div class="horizontal-scroll" data-bind="visible: ListView.Pager().TotalItemCount() > 0">
+            <div class="innerLR ">
+                @RenderSection("grid", true)
+            </div>
+        </div>
+        <!-- ko if:ListView.Pager().LastPage() > 1 -->
+        <div class="innerLR ">
+            <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+        </div>
+        <!-- /ko -->
+    </div>
+    @this.RenderBody()
+
+</div>
+
 
 <script type="text/html" id="tpl-pager">
 

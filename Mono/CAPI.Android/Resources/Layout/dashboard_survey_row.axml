@@ -45,18 +45,6 @@
        android:layout_height="fill_parent"
        android:orientation="vertical"
       />
-<!--android:numColumns="1"
-       android:gravity="center"
-       android:listSelector="#00000000"-->
-  <!--,'ItemClick':{'Path':'CustomerSelectedCommand'}-->
-  <!--<AndroidApp.Controls.Dashboard.DashboardSurveyItems android:id="@+id/tlTableContainer"
-    android:layout_width="fill_parent"
-    android:padding="10px"
-    android:background="@drawable/surveyshape"
-    android:layout_height="wrap_content"
-    local:MvxBind="{'Items':{'Path':'Items'}}">
-    
-  </AndroidApp.Controls.Dashboard.DashboardSurveyItems>-->
 
 
 </LinearLayout>

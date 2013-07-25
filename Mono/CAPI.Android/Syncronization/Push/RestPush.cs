@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using CAPI.Android.Syncronization.RestUtils;
 using Newtonsoft.Json;
+using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
 namespace CAPI.Android.Syncronization.Push
 {
@@ -24,24 +25,18 @@ namespace CAPI.Android.Syncronization.Push
 
             try
             {
-                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct,
-                                                                        new KeyValuePair<string, string>(
-                                                                            "syncItemContent",
-                                                                            JsonConvert
-                                                                                .SerializeObject
-                                                                                (
-                                                                                    item)),
-                                                                        new KeyValuePair<string, string>("login", login),
-                                                                        new KeyValuePair<string, string>("password",
-                                                                                                         password));
+                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct, 
+                    JsonConvert.SerializeObject(item), 
+                    new HttpBasicAuthenticator(login, password));
+
                 if (!result)
-                throw new SynchronizationException("Push was failed. Try again later.");
+                    throw new SynchronizationException("Push was failed. Try again later.");
             }
             catch (RestException)
             {
                 throw new SynchronizationException("Data sending was canceled");
             }
-           
+
         }
     }
 }

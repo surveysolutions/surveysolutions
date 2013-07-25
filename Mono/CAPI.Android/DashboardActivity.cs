@@ -10,7 +10,6 @@ using Android.Widget;
 using CAPI.Android.Controls;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace CAPI.Android
 {

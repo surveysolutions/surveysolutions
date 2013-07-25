@@ -9,13 +9,14 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using RestSharp;
 
 namespace CAPI.Android.Syncronization.RestUtils
 {
     public interface IRestUrils
     {
-        void ExcecuteRestRequest(string url, params KeyValuePair<string, string>[] additionalParams);
-        T ExcecuteRestRequest<T>(string url, params KeyValuePair<string, string>[] additionalParams);
-        T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, params KeyValuePair<string, string>[] additionalParams);
+        void ExcecuteRestRequest(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams);
+        T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams);
+        T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams);
     }
 }

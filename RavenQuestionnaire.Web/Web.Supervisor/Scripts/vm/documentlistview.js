@@ -35,9 +35,13 @@
     });
 
     self.Assign = function (user) {
+        
+        self.ListView.CheckForRequestComplete();
+        
         var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
             return item.IsSelected();
         });
+        
         var commands = ko.utils.arrayMap(selectedRawInterviews, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON({
@@ -45,12 +49,13 @@
                 InterviewId: item.InterviewId
             });
         });
+        
         var command = {
             type: "AssignInterviewToUserCommand",
             commands:  commands
         };
         
-        self.ListView.IsPageLoaded(false);
+        self.ListView.IsAjaxComplete(false);
         
         $.ajax({
             type: "POST",
@@ -67,7 +72,10 @@
                 if (data.status == "error") {
                     
                 }
-                self.ListView.IsPageLoaded(true);
+                self.ListView.IsAjaxComplete(true);
+            },
+            error :function() {
+                
             },
             dataType: "json",
             traditional: true
@@ -83,15 +91,13 @@
     self.SelectedTemplate = ko.observable('');
     self.SelectedResponsible = ko.observable('');
     self.SelectedStatus = ko.observable('');
-    self.OnlyAssigned = ko.observable(false);
 
     self.load = function () {
         self.ListView.GetFilterMethod = function () {
             return {
                 TemplateId: self.SelectedTemplate,
                 ResponsibleId: self.SelectedResponsible,
-                StatusId: self.SelectedStatus,
-                OnlyAssigned: self.OnlyAssigned
+                StatusId: self.SelectedStatus
             };
         };
         
@@ -101,7 +107,6 @@
         self.SelectedTemplate.subscribe(self.ListView.filter);
         self.SelectedResponsible.subscribe(self.ListView.filter);
         self.SelectedStatus.subscribe(self.ListView.filter);
-        self.OnlyAssigned.subscribe(self.ListView.filter);
 
         self.ListView.search();
     };

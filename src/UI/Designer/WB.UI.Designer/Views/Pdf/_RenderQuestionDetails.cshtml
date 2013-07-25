@@ -4,7 +4,12 @@
 @using WB.UI.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.Title 
+        @Model.ItemNumber &nbsp;&nbsp; <i>@Model.Variable</i>&nbsp;&nbsp; @Model.Title 
+        @if (Model.HasCodition)
+        {
+            <i class="icon-warning-sign"></i>
+            <sup>@Model.Condition</sup>
+        }
     </span>
 
     @if (Model.Answers.Count > 0) {

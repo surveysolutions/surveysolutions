@@ -27,6 +27,9 @@ h3, h4 {
     font-size: 100%;
     page-break-after: avoid;
 }
+sup {
+    font-size: 70%;
+}
 .answer-options {
     list-style-type: none;
 }
@@ -57,4 +60,23 @@ h3, h4 {
 }
 .date-answer-year {
     width: 100px;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  *margin-right: .3em;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("images/glyphicons-halflings.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+}
+
+
+.icon-warning-sign {
+  background-position: -144px -120px;
 }
