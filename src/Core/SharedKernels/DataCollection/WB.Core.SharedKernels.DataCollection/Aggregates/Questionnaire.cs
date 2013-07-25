@@ -18,7 +18,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>, IQuestionnaire
+    public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
@@ -28,16 +28,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             : base(source.PublicKey)
         {
             ImportQuestionnaire(createdBy, source);
-        }
-
-        public QuestionnaireDocument CreateSnapshot()
-        {
-            return this.innerDocument;
-        }
-
-        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
-        {
-            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
         }
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
