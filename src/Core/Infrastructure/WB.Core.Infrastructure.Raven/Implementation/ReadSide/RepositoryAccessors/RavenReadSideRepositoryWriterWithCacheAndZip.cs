@@ -1,31 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core;
-using Newtonsoft.Json;
 using Raven.Client.Document;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils;
+using WB.Core.SharedKernel.Utils.Compression;
 
-namespace Core.Supervisor.Views
+namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     public class RavenReadSideRepositoryWriterWithCacheAndZip<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryReader<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly RavenReadSideRepositoryWriter<ZipView> internalImplementationOfWriter;
         private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
+        private readonly GZipJsonCompressor compressor;
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
                                                             IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService)
         {
             internalImplementationOfWriter = new RavenReadSideRepositoryWriter<ZipView>(ravenStore, writerRegistry);
             internalImplementationOfReader = new RavenReadSideRepositoryReader<ZipView>(ravenStore, readSideStatusService);
-          //  internalImplementationOfReader.EnableCache();
+            compressor=new GZipJsonCompressor();
         }
 
         public int Count()
@@ -35,8 +31,8 @@ namespace Core.Supervisor.Views
 
         public TEntity GetById(Guid id)
         {
-            var zipView = PackageHelper.DecompressString(internalImplementationOfWriter.GetById(id).Payload);
-            return JsonConvert.DeserializeObject<TEntity>(zipView, JsonSerializerSettings);
+            var item = internalImplementationOfWriter.GetById(id);
+            return compressor.DecompressString<TEntity>(item.Payload);
         }
 
         public void Remove(Guid id)
@@ -46,27 +42,10 @@ namespace Core.Supervisor.Views
 
         public void Store(TEntity view, Guid id)
         {
-            var viewToString = GetItemAsContent(view);
-            internalImplementationOfWriter.Store(new ZipView(id, PackageHelper.CompressString(viewToString)), id);
+            internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
         }
-        private string GetItemAsContent(object item)
-        {
-            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
-        }
-
-        private JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                return  new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        NullValueHandling = NullValueHandling.Ignore
-                    };
-            }
-        }
+      
     }
-
     public class ZipView : IView
     {
         public ZipView(Guid publicKey, string payload)
@@ -75,7 +54,7 @@ namespace Core.Supervisor.Views
             Payload = payload;
         }
 
-        public Guid PublicKey { get;private set; }
-        public string Payload { get;private set; }
+        public Guid PublicKey { get; private set; }
+        public string Payload { get; private set; }
     }
 }

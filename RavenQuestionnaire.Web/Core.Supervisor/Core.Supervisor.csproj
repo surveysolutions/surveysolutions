@@ -194,7 +194,6 @@
     </Compile>
     <Compile Include="RavenIndexes\SummaryItemForHQByTemplate.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
-    <Compile Include="Views\RavenReadSideRepositoryWriterWithCacheAndZip.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
     <Compile Include="Views\Status\StatusViewInputModel.cs" />
@@ -288,10 +287,6 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
-      <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
