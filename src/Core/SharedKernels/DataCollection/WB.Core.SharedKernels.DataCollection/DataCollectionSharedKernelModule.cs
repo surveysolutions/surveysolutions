@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public override void Load()
         {
-            this.Bind<IHistoricalQuestionnaireRepository>().To<HistoricalQuestionnaireRepository>();
+            this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
         }
     }
 }
