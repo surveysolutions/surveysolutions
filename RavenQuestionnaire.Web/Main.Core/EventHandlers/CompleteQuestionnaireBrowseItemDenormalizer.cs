@@ -1,3 +1,4 @@
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,9 +24,9 @@ namespace Main.Core.EventHandlers
                                                                IEventHandler<QuestionnaireAssignmentChanged>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
-        private readonly IReadSideRepositoryReader<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore, IReadSideRepositoryReader<UserDocument> users)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore, IReadSideRepositoryWriter<UserDocument> users)
         {
             this.documentItemStore = documentItemStore;
             this.users = users;
@@ -77,14 +78,26 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
-            CompleteQuestionnaireBrowseItem item =
+            CompleteQuestionnaireBrowseItem item = 
                 this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
 
-            item.Responsible = evnt.Payload.Responsible;
+            item.Responsible = responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
+        }
+
+        private UserLight FillResponsiblesName(UserLight responsible)
+        {
+            var user = this.users.GetById(responsible.Id);
+            return new UserLight
+                {
+                    Id = responsible.Id,
+                    Name = string.IsNullOrWhiteSpace(responsible.Name)
+                               ? user == null ? "" : user.UserName
+                               : responsible.Name
+                };
         }
 
         #region Methods

@@ -184,6 +184,7 @@
     <Compile Include="Denormalizer\SummaryDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="Denormalizer\UserDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="RavenIndexes\SummaryForHQItemByInterviewer.cs" />

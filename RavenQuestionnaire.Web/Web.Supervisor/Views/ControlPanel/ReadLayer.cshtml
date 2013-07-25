@@ -12,28 +12,30 @@ Requesting status...
 @Html.ActionLink("Rebuild", "RebuildReadLayer", new {}, new { @class = "btn " })
 
 @Html.ActionLink("Stop", "StopReadLayerRebuilding", new {}, new { @class = "btn " })
+@section scripts
+{
+    <script type="text/javascript">
 
-<script type="text/javascript">
+        function updateReadLayerStatus() {
+            return $.ajax({
+                url: '@Url.Action("GetReadLayerStatus")',
+                data: { timestamp: new Date().getMilliseconds() }
+            }).done(function(result) {
+                $('#statusArea').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
+            }).fail(function(xhr, status, error) {
+                $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+            });
+        }
 
-    function updateReadLayerStatus() {
-        return $.ajax({
-            url: '@Url.Action("GetReadLayerStatus")',
-            data: { timestamp: new Date().getMilliseconds() }
-        }).done(function (result) {
-            $('#statusArea').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
-        }).fail(function (xhr, status, error) {
-            $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+        function updateReadLayerStatusNeverending() {
+            $.when(updateReadLayerStatus()).always(function() {
+                setTimeout(updateReadLayerStatusNeverending, 1000);
+            });
+        }
+
+        $(function() {
+            updateReadLayerStatusNeverending();
         });
-    }
 
-    function updateReadLayerStatusNeverending() {
-        $.when(updateReadLayerStatus()).always(function() {
-            setTimeout(updateReadLayerStatusNeverending, 1000);
-        });
-    }
-
-    $(function () {
-        updateReadLayerStatusNeverending();
-    });
-
-</script>
+    </script>
+}

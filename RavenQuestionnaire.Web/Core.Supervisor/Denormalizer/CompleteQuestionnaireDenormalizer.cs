@@ -14,7 +14,8 @@ namespace Core.Supervisor.Denormalizer
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>
-    public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
+    public class CompleteQuestionnaireDenormalizer : UserBaseDenormalizer,
+                                                     IEventHandler<NewCompleteQuestionnaireCreated>,
                                                      IEventHandler<CommentSet>,
                                                      IEventHandler<FlagSet>, 
                                                      IEventHandler<CompleteQuestionnaireDeleted>, 
@@ -28,20 +29,22 @@ namespace Core.Supervisor.Denormalizer
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
-        private readonly IReadSideRepositoryReader<UserDocument> users;
 
-        public CompleteQuestionnaireDenormalizer(ISynchronizationDataStorage syncStorage, IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, IReadSideRepositoryReader<UserDocument> users)
+        public CompleteQuestionnaireDenormalizer(ISynchronizationDataStorage syncStorage, 
+            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage,
+            IReadSideRepositoryWriter<UserDocument> users)
+            :base(users)
         {
             this.syncStorage = syncStorage;
             this.documentStorage = documentStorage;
-            this.users = users;
         }
 
         public CompleteQuestionnaireDenormalizer(
-            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, IReadSideRepositoryReader<UserDocument> users)
+            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, 
+            IReadSideRepositoryWriter<UserDocument> users)
+            : base(users)
         {
             this.documentStorage = documentStorage;
-            this.users = users;
         }
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
@@ -143,12 +146,12 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
             CompleteQuestionnaireStoreDocument item =
                 this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
 
-            item.Responsible = evnt.Payload.Responsible;
+            item.Responsible = responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
 

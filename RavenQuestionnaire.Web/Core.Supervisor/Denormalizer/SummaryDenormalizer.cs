@@ -16,13 +16,13 @@ namespace Core.Supervisor.Denormalizer
 
     using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-    public class SummaryDenormalizer : IEventHandler<QuestionnaireStatusChanged>, 
+    public class SummaryDenormalizer : UserBaseDenormalizer,
+                                       IEventHandler<QuestionnaireStatusChanged>, 
                                        IEventHandler<QuestionnaireAssignmentChanged>
     {
         #region Constants and Fields
 
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
 
         #endregion
@@ -33,9 +33,9 @@ namespace Core.Supervisor.Denormalizer
             IReadSideRepositoryWriter<SummaryItem> summaryItem,
             IReadSideRepositoryWriter<UserDocument> users,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires)
+            :base(users)
         {
             this.summaryItem = summaryItem;
-            this.users = users;
             this.questionnaires = questionnaires;
         }
 
@@ -102,8 +102,6 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
-
             var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
 
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
