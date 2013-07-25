@@ -2,88 +2,22 @@
 @using Newtonsoft.Json
 @model Web.Supervisor.Models.DocumentFilter
 @{
-    Layout = "~/Views/Shared/_ListViewLayout.cshtml";
-}
-
-@section scripts
-{
-    @Scripts.Render("~/Scripts/vm/documentlistview.js")
-
-    <script type="text/javascript">
-        var $detailsUrl = '@Url.Action("Details", "Interview")';
-        var $surveysUrl = '@Url.Action("Surveys", "HQ")';
-        var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
-        $(function () {
-            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })',commandExecutionUrl, users);
-            ko.applyBindings(model);
-            model.load();
-        });
-    </script>
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 
 @section header
 {
     <h3 class="sinle-line-header">Interviews</h3>
-    <div class="menubar">
-        <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" data-bind="foreach: Users">
-                <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
-            </ul>
-        </div>
-    </div>
 }
 
-@section filters
-{
-    <ul>
-        <li class="heading"><span>FILTER</span></li>
-        <li>Template:
-            <select data-bind="value: SelectedTemplate" class="input-block-level">
-                @if (Model.Templates.Count() > 1)
-                {
-                    <option value="">Any</option>
-                }
-                @foreach (var item in Model.Templates)
-                {
-                    <option value="@item.TemplateId">@item.TemplateName</option>
-                }
-            </select>
-
-        </li>
-        <li>Responsible:
-            
-                <select data-bind="value: SelectedResponsible" class="input-block-level">
-                    @if (Model.Responsibles.Count() > 1)
-                    {
-                        <option value="">Any</option>
-                    }
-                    @foreach (var item in Model.Responsibles)
-                    {
-                        <option value="@item.UserId">@item.UserName</option>
-                    }
-                </select>
-
-        </li>
-        <li>Status:
-            
-                <select data-bind="value: SelectedStatus" class="input-block-level">
-                    <option value="">Any</option>
-                    @foreach (var item in Model.Statuses)
-                    {
-                        <option value="@item.StatusId">@item.StatusName</option>
-                    }
-                </select>
-        </li>
-        <li>
-            <label class="checkbox">
-                <input id="chkOnlyAssigned" type="checkbox" data-bind="checked: OnlyAssigned" />
-                Not assigned only
-            </label>
-        </li>
-    </ul>
+@section  actionbar{
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" data-bind="foreach: Users">
+            <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
+        </ul>
+    </div>
 }
 
 @section grid
@@ -137,4 +71,65 @@
             <!-- /ko -->
         </tbody>
     </table>
+}
+
+@section filters
+{
+    <ul>
+        <li class="heading"><span>FILTER</span></li>
+        <li>Template:
+            <select data-bind="value: SelectedTemplate" class="input-block-level">
+                @if (Model.Templates.Count() > 1)
+                {
+                    <option value="">Any</option>
+                }
+                @foreach (var item in Model.Templates)
+                {
+                    <option value="@item.TemplateId">@item.TemplateName</option>
+                }
+            </select>
+
+        </li>
+        <li>Responsible:
+            
+                <select data-bind="value: SelectedResponsible" class="input-block-level">
+                    @if (Model.Responsibles.Count() > 1)
+                    {
+                        <option value="">Any</option>
+                    }
+                    @foreach (var item in Model.Responsibles)
+                    {
+                        <option value="@item.UserId">@item.UserName</option>
+                    }
+                </select>
+
+        </li>
+        <li>Status:
+            
+                <select data-bind="value: SelectedStatus" class="input-block-level">
+                    <option value="">Any</option>
+                    @foreach (var item in Model.Statuses)
+                    {
+                        <option value="@item.StatusId">@item.StatusName</option>
+                    }
+                </select>
+        </li>
+    </ul>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/Scripts/vm/documentlistview.js")
+
+    <script type="text/javascript">
+        var $detailsUrl = '@Url.Action("Details", "Interview")';
+        var $surveysUrl = '@Url.Action("Surveys", "HQ")';
+        var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
+        $(function () {
+            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
+            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })',commandExecutionUrl, users);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
 }

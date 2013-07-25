@@ -2,7 +2,9 @@
     var self = this;
 
     self.ListView = new ListViewModel(listViewUrl);
-
+    self.ToggleFilter = function () {
+        self.ListView.ToggleFilter();
+    };
     self.Statuses = ko.observableArray([]);
     self.SelectedStatus = ko.observable('');
 
