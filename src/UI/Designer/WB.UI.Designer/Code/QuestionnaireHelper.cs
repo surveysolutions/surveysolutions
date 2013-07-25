@@ -76,12 +76,12 @@
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
                            CanDelete =
-                               x.CreatedBy == this.userService.WebUser.UserId
-                               || this.userService.WebUser.IsAdmin, 
+                               (x.CreatedBy == this.userService.WebUser.UserId
+                               || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
                            CanExport = true, 
                            CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
-                           CanExportToPdf = !x.IsDeleted,
+                           CanExportToPdf = true,
                            CreatorName =
                                x.CreatedBy == null
                                    ? GlobalHelper.EmptyString
@@ -99,8 +99,8 @@
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
-                           CanExportToPdf = !x.IsDeleted,
-                           CanDelete = true, 
+                           CanExportToPdf = true,
+                           CanDelete = !x.IsDeleted, 
                            CanEdit = true, 
                            CanExport = true, 
                            CanSynchronize = this.userService.WebUser.IsAdmin

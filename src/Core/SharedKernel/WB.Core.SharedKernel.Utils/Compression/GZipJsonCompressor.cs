@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace WB.Core.SharedKernel.Utils.Compression
 {
     using System.IO;
@@ -57,9 +60,53 @@ namespace WB.Core.SharedKernel.Utils.Compression
                 using (var reader = new StreamReader(zip, Encoding.UTF8))
                 {
                     return JsonConvert.DeserializeObject<T>(
-                        reader.ReadToEnd(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+                        reader.ReadToEnd(), JsonSerializerSettings);
                 }
             }
+        }
+
+        public string CompressObject(object s)
+        {
+            var bytes = Encoding.Unicode.GetBytes(GetItemAsContent(s));
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                {
+                    msi.CopyTo(gs);
+                }
+                return Convert.ToBase64String(mso.ToArray());
+            }
+        }
+
+        public T DecompressString<T>(string s)
+        {
+            var bytes = Convert.FromBase64String(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                var stringData = Encoding.Unicode.GetString(mso.ToArray());
+                return JsonConvert.DeserializeObject<T>(stringData, JsonSerializerSettings);
+            }
+        }
+        private JsonSerializerSettings JsonSerializerSettings
+        {
+            get
+            {
+                return new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Objects,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+            }
+        }
+        private string GetItemAsContent(object item)
+        {
+            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
         }
 
         #endregion
