@@ -25,7 +25,7 @@
 @section header
 {
     <h3 class="sinle-line-header">Interviews</h3>
-        <div class="menubar">
+    <div class="menubar">
         <div class="btn-group">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
             </a>
@@ -112,7 +112,7 @@
             <!-- ko foreach:ListView.Items -->
             <tr>
                 <td>
-                    <input type="checkbox"  data-bind="checked: IsSelected, enable: false"/>
+                    <input type="checkbox" data-bind="checked: IsSelected, enable: false" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
@@ -123,10 +123,9 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <!-- ko ifnot: typeof Responsible == null -->
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
-                      <!-- /ko -->
-       
+                    <span data-bind="with: Responsible">
+                        <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Id() }, text: Name"></a>
+                    </span>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td data-bind="text: Status"></td>

@@ -122,6 +122,8 @@ namespace Main.Core.Domain
                 this.SetAnswer(featuredAnswer.Id, null, featuredAnswer.Answer, featuredAnswer.Answers.ToList(),
                                clock.UtcNow());
             }
+            #warning Madagaskar fix. Should be discussed
+            this.ChangeStatus(SurveyStatus.Unassign, responsible);
         }
 
         #endregion
