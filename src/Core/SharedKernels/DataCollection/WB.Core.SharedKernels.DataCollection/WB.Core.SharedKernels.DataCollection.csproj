@@ -58,6 +58,7 @@
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Exceptions\InterviewException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
