@@ -18,7 +18,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>, IQuestionnaire
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
