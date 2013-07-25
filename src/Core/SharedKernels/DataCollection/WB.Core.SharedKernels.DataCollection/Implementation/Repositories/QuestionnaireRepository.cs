@@ -18,10 +18,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.domainRepository = domainRepository;
         }
 
+        public IQuestionnaire GetQuestionnaire(Guid id)
+        {
+            return this.GetQuestionnaireImpl(id);
+        }
+
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
-            CommittedEventStream eventStream = eventStore.ReadFrom(id, long.MinValue, version);
-            AggregateRoot aggregateRoot = domainRepository.Load(typeof(Questionnaire), null, eventStream);
+            return this.GetQuestionnaireImpl(id, version);
+        }
+
+        private IQuestionnaire GetQuestionnaireImpl(Guid id, long? version = null)
+        {
+            CommittedEventStream eventStream = eventStore.ReadFrom(id, long.MinValue, version ?? long.MaxValue);
+            AggregateRoot aggregateRoot = domainRepository.Load(typeof (Questionnaire), null, eventStream);
             return (Questionnaire) aggregateRoot;
         }
     }
