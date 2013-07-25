@@ -31,7 +31,7 @@ namespace Core.Supervisor.Views.Survey
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        items = this.summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        items = this.summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId || x.ResponsibleId == input.ViewerId);
                     }
 
                     return new SurveyUsersView()

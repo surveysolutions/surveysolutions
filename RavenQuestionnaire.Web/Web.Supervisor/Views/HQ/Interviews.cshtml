@@ -57,10 +57,9 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <!-- ko ifnot: typeof Responsible == null -->
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
-                    <!-- /ko -->
-
+                    <span data-bind="with: Responsible">
+                        <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Id() }, text: Name"></a>
+                    </span>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td data-bind="text: Status"></td>

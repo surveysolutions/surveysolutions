@@ -33,6 +33,7 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
+        private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
@@ -40,7 +41,7 @@ namespace Web.Supervisor.Controllers
             IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory)
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -49,6 +50,7 @@ namespace Web.Supervisor.Controllers
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
+            this.supervisorsFactory = supervisorsFactory;
         }
 
         public ActionResult Index()
@@ -61,7 +63,7 @@ namespace Web.Supervisor.Controllers
                     Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor })
                 };
             return this.View(model);
-        
+
         }
 
         public ActionResult Interviews(Guid? templateId)
@@ -92,7 +94,7 @@ namespace Web.Supervisor.Controllers
                         ViewerStatus.Headquarter)).Items);
         }
 
-        
+
         public ActionResult Assign(Guid id)
         {
             var user = this.GlobalInfo.GetCurrentUser();
@@ -128,7 +130,7 @@ namespace Web.Supervisor.Controllers
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-       
+
 
         public ActionResult Summary()
         {
@@ -152,7 +154,11 @@ namespace Web.Supervisor.Controllers
 
             return new DocumentFilter()
             {
-                Users = this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Headquarter)).Items,
+                Users = this.supervisorsFactory.Load(new UserListViewInputModel() { PageSize = int.MaxValue }).Items.Where(u => !u.IsLocked).Select(u => new SurveyUsersViewItem()
+                    {
+                        UserId = u.UserId,
+                        UserName = u.UserName
+                    }),
                 Responsibles =
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
                 Templates =
