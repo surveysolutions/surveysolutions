@@ -111,6 +111,7 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
             bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
             bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
+            bus.RegisterHandler(eventHandler, typeof(CompleteQuestionnaireDeleted));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
