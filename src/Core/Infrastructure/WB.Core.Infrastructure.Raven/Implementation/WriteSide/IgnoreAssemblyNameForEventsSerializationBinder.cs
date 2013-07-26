@@ -8,7 +8,7 @@ using Raven.Imports.Newtonsoft.Json.Serialization;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
-    public class IgnoreAssemblyNameForEventsSerializationBinder : DefaultSerializationBinder
+    internal class IgnoreAssemblyNameForEventsSerializationBinder : DefaultSerializationBinder
     {
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {

@@ -5,7 +5,7 @@ using Raven.Imports.Newtonsoft.Json;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
-    public class RavenWriteSideStore
+    internal class RavenWriteSideStore
     {
         protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName)
         {

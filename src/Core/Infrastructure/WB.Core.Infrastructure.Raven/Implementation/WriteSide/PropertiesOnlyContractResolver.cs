@@ -7,7 +7,7 @@ using Raven.Imports.Newtonsoft.Json.Serialization;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
-    public class PropertiesOnlyContractResolver : DefaultContractResolver
+    internal class PropertiesOnlyContractResolver : DefaultContractResolver
     {
         //this inheritance has to be validated and tested
         public PropertiesOnlyContractResolver():base(true)

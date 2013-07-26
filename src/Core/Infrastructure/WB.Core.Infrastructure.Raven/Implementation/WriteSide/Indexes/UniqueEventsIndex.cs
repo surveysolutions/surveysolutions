@@ -5,7 +5,7 @@ using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
 {
-    public class UniqueEventsIndex : AbstractIndexCreationTask<StoredEvent, UniqueEventsResults>
+    internal class UniqueEventsIndex : AbstractIndexCreationTask<StoredEvent, UniqueEventsResults>
     {
         public UniqueEventsIndex()
         {

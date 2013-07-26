@@ -11,7 +11,7 @@
     using System.Linq.Expressions;
     using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
 
-    public class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
+    internal class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
     {
         private const string CollectionName = "Events";
 
