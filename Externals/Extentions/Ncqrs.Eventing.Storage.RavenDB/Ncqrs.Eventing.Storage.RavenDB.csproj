@@ -108,7 +108,6 @@
     <Compile Include="RavenIndexes\UniqueEventsIndex.cs" />
     <Compile Include="RavenWriteSideStore.cs" />
     <Compile Include="StoredEvent.cs" />
-    <Compile Include="StoredEventWithoutPayload.cs" />
     <Compile Include="IgnoreAssemblyNameForEventsSerializationBinder.cs" />
   </ItemGroup>
   <ItemGroup>
