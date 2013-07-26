@@ -103,8 +103,14 @@ namespace Web.Supervisor.App_Start
 #warning dirty hack for register ziped read side
             kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
             kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-            kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
-            kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+
+            //midnigth fixx
+            //both services have to share the same cache
+            //they have to have two different implementations and _maybe_ share single cache
+            kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
+                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            
+            //kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
