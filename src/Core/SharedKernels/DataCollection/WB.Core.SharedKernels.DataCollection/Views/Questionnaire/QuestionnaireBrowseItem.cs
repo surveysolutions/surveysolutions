@@ -31,21 +31,21 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                    .ToArray();
         }
 
-        public DateTime CreationDate { get; private set; }
+        public DateTime CreationDate { get;  set; }
 
-        public Guid QuestionnaireId { get; private set; }
+        public Guid QuestionnaireId { get;  set; }
 
-        public DateTime LastEntryDate { get; private set; }
+        public DateTime LastEntryDate { get;  set; }
 
         public string Title { get;  set; }
 
         public bool IsPublic { get; set; }
 
-        public Guid? CreatedBy { get; private set; }
+        public Guid? CreatedBy { get;  set; }
 
         public bool IsDeleted { get; set; }
 
-        public FeaturedQuestionItem[] FeaturedQuestions { get; private set; }
+        public FeaturedQuestionItem[] FeaturedQuestions { get;  set; }
 
     }
 }

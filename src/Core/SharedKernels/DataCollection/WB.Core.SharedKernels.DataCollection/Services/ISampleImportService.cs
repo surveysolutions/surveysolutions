@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     public interface ISampleImportService
     {
         Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor);
-        ImportResult IsImportStatus(Guid id);
+        ImportResult GetImportStatus(Guid id);
         void CreateSample(Guid id);
     }
 }

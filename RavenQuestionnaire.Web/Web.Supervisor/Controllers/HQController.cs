@@ -103,7 +103,7 @@ namespace Web.Supervisor.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult ImportResult(Guid id)
         {
-            return this.PartialView(this.sampleImportService.IsImportStatus(id));
+            return this.PartialView(this.sampleImportService.GetImportStatus(id));
         }
 
         public ActionResult CreateSample(Guid id)
