@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
+using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
@@ -13,7 +14,10 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Main.Core.Events.User;
 using Main.Core.Utility;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
+using Ncqrs.Spec;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -32,25 +36,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             this.templateRepository = templateRepository;
             this.tempImportRepository = tempImportRepository;
             this.templateSmallRepository = templateSmallRepository;
-        }
-
-        public IEnumerable<CompleteQuestionnaireDocument> GetSampleList(Guid templateId, TextReader textReader)
-        {
-            var template = templateRepository.GetById(templateId);
-            string[] header=null;
-            using (var reader = new CsvReader(textReader))
-            {
-
-                while (reader.Read())
-                {
-                    if (header == null)
-                    {
-                        header = reader.FieldHeaders;
-                        continue;
-                    }
-                    yield return BuiltInterview(Guid.NewGuid(), reader.CurrentRecord,header, template);
-                }
-            }
         }
 
         public Guid ImportSampleAsync(Guid templateId, Stream sampleStream)
@@ -84,12 +69,39 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             return new ImportResult(id, item.IsCompleted, item.ErrorMassage, item.Header, item.Values);
         }
 
+        public void CreateSample(Guid id)
+        {
+            var item = this.tempImportRepository.GetById(id);
+            if (item == null)
+                return;
+            if(!item.IsCompleted)
+                return;
+            if(!string.IsNullOrEmpty(item.ErrorMassage))
+                return;
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            if(commandService==null)
+                return;
+            var bigTemplate = this.templateRepository.GetById(item.TemplateId);
+            if(bigTemplate==null)
+                return;
+            var documents=new List<CompleteQuestionnaireDocument>();
+            foreach (var value in item.Values)
+            {
+                documents.Add(BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate));
+                
+            }
+            foreach (var completeQuestionnaireDocument in documents)
+            {
+                commandService.Execute(new CreateNewAssigment(completeQuestionnaireDocument));
+            }
+        }
+
         private void Process(Guid templateId, Stream sampleStream, Guid id)
         {
             var smallTemplate = this.templateSmallRepository.GetById(templateId);
             if (smallTemplate == null)
             {
-                tempImportRepository.Store(CreateErrorTempRecord(templateId, id,"Template IsAbsent"), id);
+                tempImportRepository.Store(CreateErrorTempRecord(templateId, id,"Template Is Absent"), id);
                 return;
             }
 
@@ -168,27 +180,30 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         private CompleteQuestionnaireDocument BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template)
         {
-            var ar = new CompleteQuestionnaireAR(publicKey, template, null);
-
-            for (int i = 0; i < header.Length; i++)
+            using (EventContext ex = new EventContext())
             {
-                var question =
-                    template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == header[i]);
-                if (question == null)
-                    continue;
+                var ar = new CompleteQuestionnaireAR(publicKey, template, null);
 
-                var singleOption = question as SingleQuestion;
-                if (singleOption != null)
+                for (int i = 0; i < header.Length; i++)
                 {
-                    var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
-                    ar.SetAnswer(question.PublicKey, null, null, new List<Guid> {answer.PublicKey}, DateTime.Now);
+                    var question =
+                        template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == header[i]);
+                    if (question == null)
+                        continue;
+
+                    var singleOption = question as SingleQuestion;
+                    if (singleOption != null)
+                    {
+                        var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
+                        ar.SetAnswer(question.PublicKey, null, null, new List<Guid> {answer.PublicKey}, DateTime.Now);
+                    }
+                    else
+                    {
+                        ar.SetAnswer(question.PublicKey, null, values[i], null, DateTime.Now);
+                    }
                 }
-                else
-                {
-                    ar.SetAnswer(question.PublicKey, null, values[i], null, DateTime.Now);
-                }
+                return ar.CreateSnapshot();
             }
-            return ar.CreateSnapshot();
 
         }
 
