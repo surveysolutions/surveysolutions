@@ -97,8 +97,9 @@ namespace CapiDataGenerator
         {
             this.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
             this.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-            this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
-            this.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
+                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            
 
             var usereventHandler = Kernel.Get<Core.Supervisor.Denormalizer.UserDenormalizer>();
             bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
