@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             return new TempFileImportData() { PublicKey = importId, TemplateId = templateId, IsCompleted = true, ErrorMassage = errorMessage };
         }
 
-        public ImportResult IsImportStatus(Guid id)
+        public ImportResult GetImportStatus(Guid id)
         {
             var item = this.tempImportRepository.GetById(id);
             if (item == null)
