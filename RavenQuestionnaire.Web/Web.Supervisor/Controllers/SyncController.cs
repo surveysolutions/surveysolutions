@@ -288,18 +288,21 @@ namespace Web.Supervisor.Controllers
             try
             {
                 string authHeader = Request.Headers["Authorization"];
-                char[] delims = { ' ' };
-                string[] authHeaderTokens = authHeader.Split(new char[] { ' ' });
+                char[] delims = {' '};
+                string[] authHeaderTokens = authHeader.Split(new char[] {' '});
                 if (authHeaderTokens[0].Contains("Basic"))
                 {
                     string decodedStr = DecodeFrom64(authHeaderTokens[1]);
-                    string[] unpw = decodedStr.Split(new char[] { ':' });
+                    string[] unpw = decodedStr.Split(new char[] {':'});
                     username = unpw[0];
                     password = unpw[1];
                 }
                 user = GetUser(username, password);
             }
-            catch {  }
+            catch (Exception ex)
+            {
+                logger.Fatal("Error on credentials check.", ex);
+            }
 
             return user;
         }

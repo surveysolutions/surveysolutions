@@ -10,6 +10,7 @@ namespace Main.Core
     using Raven.Client.Document;
     using Raven.Client.Embedded;
     using Raven.Client.Extensions;
+    using Ncqrs.Eventing.Storage.RavenDB;
 
     public class DocumentStoreProvider : Provider<DocumentStore>
     {
@@ -41,7 +42,13 @@ namespace Main.Core
 
         private DocumentStore GetServerStorage()
         {
-            var store = new DocumentStore { Url = this.storagePath, DefaultDatabase = this.defaultDatabase };
+            var store = new DocumentStore
+                {
+                    Url = this.storagePath,
+                    DefaultDatabase = this.defaultDatabase,
+                    Conventions = {JsonContractResolver = new PropertiesOnlyContractResolver()}
+                };
+
             if (!string.IsNullOrWhiteSpace(this.username))
             {
                 store.Credentials = new NetworkCredential(this.username, this.password);
@@ -57,7 +64,12 @@ namespace Main.Core
 
             if (this.embeddedStorage == null || this.embeddedStorage.WasDisposed)
             {
-                this.embeddedStorage = new EmbeddableDocumentStore() { DataDirectory = this.storagePath, UseEmbeddedHttpServer = false };
+                this.embeddedStorage = new EmbeddableDocumentStore()
+                    {
+                        DataDirectory = this.storagePath,
+                        UseEmbeddedHttpServer = false,
+                        Conventions = new DocumentConvention() { JsonContractResolver = new PropertiesOnlyContractResolver() }
+                    };
                 this.embeddedStorage.ResourceManagerId = Guid.NewGuid();
             }
 

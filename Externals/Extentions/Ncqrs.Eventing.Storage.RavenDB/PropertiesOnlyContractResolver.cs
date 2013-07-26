@@ -9,7 +9,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 {
     public class PropertiesOnlyContractResolver : DefaultContractResolver
     {
-        public PropertiesOnlyContractResolver()
+        //this inheritance has to be validated and tested
+        public PropertiesOnlyContractResolver():base(true)
         {
             DefaultMembersSearchFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         }

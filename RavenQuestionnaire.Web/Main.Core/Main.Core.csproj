@@ -543,9 +543,7 @@
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
-    <Compile Include="PackageHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="PackageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
