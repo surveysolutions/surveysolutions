@@ -467,6 +467,8 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\jquery.fileupload.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
@@ -583,6 +585,8 @@
     <Content Include="Views\Survey\Status.cshtml" />
     <Content Include="Views\HQ\Status.cshtml" />
     <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportResult.cshtml" />
+    <Content Include="Views\HQ\ImportSample.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

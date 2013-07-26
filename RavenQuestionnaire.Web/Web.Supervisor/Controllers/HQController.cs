@@ -91,17 +91,19 @@ namespace Web.Supervisor.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public IEnumerable<CompleteQuestionnaireDocument> ImportSample(Guid id, HttpPostedFileBase uploadFile)
+        public ActionResult ImportSample(Guid id, HttpPostedFileBase uploadFile)
         {
-            var interviews = Enumerable.Empty<CompleteQuestionnaireDocument>();
-            using (var fileReader = new StreamReader(uploadFile.InputStream))
-            {
-                interviews = this.sampleImportService.GetSampleList(id, fileReader);
-
-                var result = interviews.ToList();
-                return result;
-            }
+            ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id, uploadFile.InputStream);
+            var model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+            return this.View(model);
         }
+
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public ActionResult ImportResult(Guid id)
+        {
+            return this.PartialView(this.sampleImportService.IsImportStatus(id));
+        }
+
         public ActionResult TakeNew(Guid id)
         {
             Guid key = id;

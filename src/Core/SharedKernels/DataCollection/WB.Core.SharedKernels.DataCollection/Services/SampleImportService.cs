@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using Main.Core.Documents;
@@ -14,16 +15,23 @@ using Main.Core.Events.User;
 using Main.Core.Utility;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public class SampleImportService : ISampleImportService
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
+        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
+        private readonly IReadSideRepositoryWriter<TempFileImportData> tempImportRepository;
 
-        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository)
+        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
+                                   IReadSideRepositoryWriter<TempFileImportData> tempImportRepository,
+                                   IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository)
         {
             this.templateRepository = templateRepository;
+            this.tempImportRepository = tempImportRepository;
+            this.templateSmallRepository = templateSmallRepository;
         }
 
         public IEnumerable<CompleteQuestionnaireDocument> GetSampleList(Guid templateId, TextReader textReader)
@@ -43,6 +51,119 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                     yield return BuiltInterview(Guid.NewGuid(), reader.CurrentRecord,header, template);
                 }
             }
+        }
+
+        public Guid ImportSampleAsync(Guid templateId, Stream sampleStream)
+        {
+            Guid importId = Guid.NewGuid();
+            tempImportRepository.Store( CreateInitialTempRecord(templateId, importId), importId);
+            new Task(() => Process(templateId, sampleStream, importId)).Start();
+            return importId;
+        }
+
+        private TempFileImportData CreateInitialTempRecord(Guid templateId, Guid importId)
+        {
+            return new TempFileImportData(){ PublicKey = importId, TemplateId = templateId};
+        }
+
+        private TempFileImportData CreateTempRecordWithHeader(Guid templateId, Guid importId, string[] header)
+        {
+            return new TempFileImportData() {PublicKey = importId, TemplateId = templateId, Header = header};
+        }
+
+        private TempFileImportData CreateErrorTempRecord(Guid templateId, Guid importId, string errorMessage)
+        {
+            return new TempFileImportData() { PublicKey = importId, TemplateId = templateId, IsCompleted = true, ErrorMassage = errorMessage };
+        }
+
+        public ImportResult IsImportStatus(Guid id)
+        {
+            var item = this.tempImportRepository.GetById(id);
+            if (item == null)
+                return null;
+            return new ImportResult(id, item.IsCompleted, item.ErrorMassage, item.Header, item.Values);
+        }
+
+        private void Process(Guid templateId, Stream sampleStream, Guid id)
+        {
+            var smallTemplate = this.templateSmallRepository.GetById(templateId);
+            if (smallTemplate == null)
+            {
+                tempImportRepository.Store(CreateErrorTempRecord(templateId, id,"Template IsAbsent"), id);
+                return;
+            }
+
+            string[] header = null;
+            int i = 0;
+            const int BatchCount = 10;
+            var tempBatch = new string[BatchCount][];
+            try
+            {
+                using (var fileReader = new StreamReader(sampleStream))
+                {
+                    using (var csvReader = new CsvReader(fileReader))
+                    {
+                        while (csvReader.Read())
+                        {
+                            if (header == null)
+                            {
+                                header = csvReader.FieldHeaders;
+                                try
+                                {
+                                    ValidateHeader(header, smallTemplate.FeaturedQuestions, id, templateId);
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
+                                    break;
+                                }
+                                continue;
+                            }
+                            tempBatch[i] = csvReader.CurrentRecord;
+                            i++;
+                            if (i == BatchCount)
+                            {
+                                SaveBatch(id, tempBatch, false);
+                                tempBatch = new string[BatchCount][];
+                                i = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
+            }
+            if(tempBatch.Length>0)
+                SaveBatch(id, tempBatch.Take(i).ToArray(), true);
+
+
+        }
+
+        private void SaveBatch(Guid id, IEnumerable<string[]> tempBatch, bool complete)
+        {
+            var item = this.tempImportRepository.GetById(id);
+            if(tempBatch.Any())
+                item.AddValueBatch(tempBatch.ToArray());
+            if(complete)
+                item.CompleteImport();
+            this.tempImportRepository.Store(item, id);
+        }
+
+
+        private void ValidateHeader(string[] header, FeaturedQuestionItem[] expectedHeader, Guid id,Guid templateId)
+        {
+            var newHeader = new List<FeaturedQuestionItem>();
+            for (int i = 0; i < header.Length; i++)
+            {
+                var realHeader = expectedHeader.FirstOrDefault(h => h.Caption != header[i]);
+                if(realHeader==null)
+                    throw new ArgumentException("invalid header Capiton");
+                newHeader.Add(realHeader);
+            }
+            tempImportRepository.Store(
+                CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id);
         }
 
         private CompleteQuestionnaireDocument BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template)
