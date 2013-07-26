@@ -93,7 +93,9 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ImportSample(Guid id, HttpPostedFileBase uploadFile)
         {
-            ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id, uploadFile.InputStream);
+            ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id,
+                                                                          new CsvSampleRecordsAccessor(
+                                                                              uploadFile.InputStream));
             var model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
             return this.View(model);
         }
