@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide;
@@ -15,6 +17,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private readonly RavenReadSideRepositoryWriter<ZipView> internalImplementationOfWriter;
         private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
         private readonly GZipJsonCompressor compressor;
+        private readonly Dictionary<Guid, TEntity> memcache; 
+        private object locker=new object();
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
                                                             IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService)
@@ -22,6 +26,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             internalImplementationOfWriter = new RavenReadSideRepositoryWriter<ZipView>(ravenStore, writerRegistry);
             internalImplementationOfReader = new RavenReadSideRepositoryReader<ZipView>(ravenStore, readSideStatusService);
             compressor=new GZipJsonCompressor();
+            memcache = new Dictionary<Guid, TEntity>();
         }
 
         public int Count()
@@ -31,18 +36,45 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         public TEntity GetById(Guid id)
         {
-            var item = internalImplementationOfWriter.GetById(id);
-            return compressor.DecompressString<TEntity>(item.Payload);
+            if (!memcache.ContainsKey(id))
+            {
+                lock (locker)
+                {
+                    if (!memcache.ContainsKey(id))
+                    {
+                        var view = compressor.DecompressString<TEntity>(
+                            internalImplementationOfWriter.GetById(id).Payload);
+                        memcache.Add(id,view);
+                    }
+                }
+            }
+            try
+            {
+                return memcache[id];
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
+           
         }
 
         public void Remove(Guid id)
         {
-            internalImplementationOfWriter.Remove(id);
+            lock (locker)
+            {
+                internalImplementationOfWriter.Remove(id);
+                memcache.Remove(id);
+            }
         }
 
         public void Store(TEntity view, Guid id)
         {
-            internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
+            lock (locker)
+            {
+                internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
+                memcache[id] = view;
+            }
         }
       
     }
