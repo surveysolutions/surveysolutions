@@ -20,7 +20,7 @@ try {
         -Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
         -BuildConfiguration 'Release' `
         -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `		
-        -TargetFolder $TargetDeployFolder
+        -TargetFolder $TargetDeployFolder `
 
 }
 catch {
