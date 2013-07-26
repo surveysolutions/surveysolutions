@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             Id = id;
             IsCompleted = isCompleted;
             ErrorMessage = errorMessage;
+            if(!string.IsNullOrEmpty(ErrorMessage))
             Header = header;
             if (values != null)
                 Values = values.ToArray();
