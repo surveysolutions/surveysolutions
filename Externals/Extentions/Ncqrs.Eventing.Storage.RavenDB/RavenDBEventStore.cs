@@ -11,23 +11,12 @@
     using System.Linq.Expressions;
     using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
 
-    /// <summary>
-    /// The raven DB event store.
-    /// </summary>
     public class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
     {
         private const string CollectionName = "Events";
 
-        #region Fields
-
-        /// <summary>
-        /// The _document store.
-        /// </summary>
         protected readonly IDocumentStore DocumentStore;
 
-        /// <summary>
-        /// The use async save.
-        /// </summary>
         private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
 
         /// <summary>
@@ -35,22 +24,8 @@
         /// </summary>
         private readonly int pageSize = 1024;
 
-        /// <summary>
-        /// PageSize for loading by chunk
-        /// </summary>
         private readonly int timeout = 120;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
-        /// </summary>
-        /// <param name="ravenUrl">
-        /// The raven url.
-        /// </param>
-        /// <param name="pageSize"></param>
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
             this.DocumentStore = new DocumentStore
@@ -67,13 +42,6 @@
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
-        /// </summary>
-        /// <param name="externalDocumentStore">
-        /// The external document store.
-        /// </param>
-        /// <param name="pageSize"></param>
         public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
         {
             externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
@@ -86,33 +54,12 @@
             IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The to committed event.
-        /// </summary>
-        /// <param name="x">
-        /// The x.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommittedEvent"/>.
-        /// </returns>
         public static CommittedEvent ToCommittedEvent(StoredEvent x)
         {
             return new CommittedEvent(
                 x.CommitId, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
         }
 
-        /// <summary>
-        /// The get event stream.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public IEnumerable<CommittedEvent> GetEventStream()
         {
             var retval = new List<CommittedEvent>();
@@ -153,25 +100,14 @@
 
         }
 
-
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             IEnumerable<StoredEvent> storedEvents =
                 this.AccumulateEvents(
                     x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
-
-            // }
         }
 
-        /// <summary>
-        /// The store.
-        /// </summary>
-        /// <param name="eventStream">
-        /// The event stream.
-        /// </param>
-        /// <exception cref="Storage.ConcurrencyException">
-        /// </exception>
         public void Store(UncommittedEventStream eventStream)
         {
             try
@@ -217,11 +153,6 @@
             }
         }
 
-        #endregion
-
-
-        #region Methods
-
         /// <summary>
         /// Reads all committed events from storage. 
         /// </summary>
@@ -260,19 +191,6 @@
             return result;
         }
 
-
-        /// <summary>
-        /// The to stored event.
-        /// </summary>
-        /// <param name="commitId">
-        /// The commit id.
-        /// </param>
-        /// <param name="uncommittedEvent">
-        /// The uncommitted event.
-        /// </param>
-        /// <returns>
-        /// The <see cref="StoredEvent"/>.
-        /// </returns>
         private static StoredEvent ToStoredEvent(Guid commitId, UncommittedEvent uncommittedEvent)
         {
             return new StoredEvent
@@ -289,18 +207,24 @@
                 };
         }
 
-        #endregion
-        private int CountOfAllEvents(bool includeShapshots)
+        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session)
+        {
+            return session
+                .Query<StoredEvent>()
+                .Customize(x => x.WaitForNonStaleResultsAsOfNow());
+        }
+
+        public int CountOfAllEvents()
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 return
-                    QueryAllEvents(session, includeShapshots)
+                    QueryAllEvents(session)
                     .Count();
             }
         }
 
-        private IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize, bool includeShapshots)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
             int returnedEventCount = 0;
 
@@ -309,7 +233,7 @@
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
                     StoredEvent[] storedEventsBulk =
-                        QueryAllEvents(session, includeShapshots)
+                        QueryAllEvents(session)
                         .OrderBy(y => y.EventSequence)
                         .Skip(returnedEventCount)
                         .Take(bulkSize)
@@ -324,37 +248,6 @@
                     returnedEventCount += bulkSize;
                 }
             }
-        }
-
-        private static IQueryable<StoredEvent> QueryAllEvents(IDocumentSession session, bool includeShapshots)
-        {
-            return includeShapshots
-                       ? session
-                             .Query<StoredEvent>()
-                             .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                       : session
-                             .Query<StoredEvent>()
-                             .Customize(x => x.WaitForNonStaleResultsAsOfNow());
-        }
-        public int CountOfAllEventsWithoutSnapshots()
-        {
-            return this.CountOfAllEvents(includeShapshots: false);
-        }
-
-        public int CountOfAllEventsIncludingSnapshots()
-        {
-            return this.CountOfAllEvents(includeShapshots: true);
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: false);
-        }
-
-        [Obsolete("because there are no snapshots in event stream now")]
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: true);
         }
     }
 }

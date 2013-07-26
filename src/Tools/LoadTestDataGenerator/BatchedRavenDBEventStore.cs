@@ -350,23 +350,14 @@ namespace LoadTestDataGenerator
                              .Query<StoredEvent>()
                              .Customize(x => x.WaitForNonStaleResultsAsOfNow());
         }
-        public int CountOfAllEventsWithoutSnapshots()
-        {
-            return this.CountOfAllEvents(includeShapshots: false);
-        }
 
-        public int CountOfAllEventsIncludingSnapshots()
+        public int CountOfAllEvents()
         {
             return this.CountOfAllEvents(includeShapshots: true);
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: false);
-        }
-
         [Obsolete("because there are no snapshots in event stream now")]
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
             return this.GetAllEvents(bulkSize, includeShapshots: true);
         }
