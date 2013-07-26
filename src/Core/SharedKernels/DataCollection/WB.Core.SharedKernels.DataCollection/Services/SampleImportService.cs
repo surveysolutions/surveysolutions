@@ -38,11 +38,11 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             this.templateSmallRepository = templateSmallRepository;
         }
 
-        public Guid ImportSampleAsync(Guid templateId, Stream sampleStream)
+        public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
         {
             Guid importId = Guid.NewGuid();
             tempImportRepository.Store( CreateInitialTempRecord(templateId, importId), importId);
-            new Task(() => Process(templateId, sampleStream, importId)).Start();
+            new Task(() => Process(templateId, recordAccessor, importId)).Start();
             return importId;
         }
 
@@ -96,12 +96,12 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             }
         }
 
-        private void Process(Guid templateId, Stream sampleStream, Guid id)
+        private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
         {
             var smallTemplate = this.templateSmallRepository.GetById(templateId);
             if (smallTemplate == null)
             {
-                tempImportRepository.Store(CreateErrorTempRecord(templateId, id,"Template Is Absent"), id);
+                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, "Template Is Absent"), id);
                 return;
             }
 
@@ -111,43 +111,41 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             var tempBatch = new string[BatchCount][];
             try
             {
-                using (var fileReader = new StreamReader(sampleStream))
+                foreach (var record in recordAccessor.Records)
                 {
-                    using (var csvReader = new CsvReader(fileReader))
+
+
+                    if (header == null)
                     {
-                        while (csvReader.Read())
+                        header = record;
+                        try
                         {
-                            if (header == null)
-                            {
-                                header = csvReader.FieldHeaders;
-                                try
-                                {
-                                    ValidateHeader(header, smallTemplate.FeaturedQuestions, id, templateId);
-                                }
-                                catch (ArgumentException e)
-                                {
-                                    tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
-                                    break;
-                                }
-                                continue;
-                            }
-                            tempBatch[i] = csvReader.CurrentRecord;
-                            i++;
-                            if (i == BatchCount)
-                            {
-                                SaveBatch(id, tempBatch, false);
-                                tempBatch = new string[BatchCount][];
-                                i = 0;
-                            }
+                            ValidateHeader(header, smallTemplate.FeaturedQuestions, id, templateId);
                         }
+                        catch (ArgumentException e)
+                        {
+                            tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
+                            break;
+                        }
+                        continue;
                     }
+                    tempBatch[i] = record;
+                    i++;
+                    if (i == BatchCount)
+                    {
+                        SaveBatch(id, tempBatch, false);
+                        tempBatch = new string[BatchCount][];
+                        i = 0;
+                    }
+
                 }
+
             }
             catch (Exception e)
             {
                 tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
             }
-            if(tempBatch.Length>0)
+            if (tempBatch.Length > 0)
                 SaveBatch(id, tempBatch.Take(i).ToArray(), true);
 
 
