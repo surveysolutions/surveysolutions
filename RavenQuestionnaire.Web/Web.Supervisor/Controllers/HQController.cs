@@ -104,6 +104,12 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(this.sampleImportService.IsImportStatus(id));
         }
 
+        public ActionResult CreateSample(Guid id)
+        {
+            this.sampleImportService.CreateSample(id);
+            return RedirectToAction("Index");
+        }
+
         public ActionResult TakeNew(Guid id)
         {
             Guid key = id;
