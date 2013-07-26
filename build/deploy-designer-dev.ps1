@@ -4,7 +4,7 @@ $ErrorActionPreference = "Stop"
 
 $TargetDeployFolder = '\\192.168.3.113\Web\Designer'
 
-if($DeployFolder)
+if(-not [string]::IsNullOrWhiteSpace($DeployFolder)
 {$TargetDeployFolder = $DeployFolder} 
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName

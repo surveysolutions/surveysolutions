@@ -4,8 +4,8 @@ $ErrorActionPreference = "Stop"
 
 $TargetDeployFolder = '\\192.168.3.113\Dev\Supervisor'
 
-if($DeployFolder){
-$TargetDeployFolder = $DeployFolder}
+if(-not [string]::IsNullOrWhiteSpace($DeployFolder)
+{$TargetDeployFolder = $DeployFolder} 
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
@@ -15,10 +15,10 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 try {
 
     Deploy `
-        -Solution 'src\Supervisor.sln' `
-        -Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
+        -Solution 'src\Designer.sln' `
+        -Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
         -BuildConfiguration 'Release' `
-        -SourceFolder 'RavenQuestionnaire.Web\Web.Supervisor\obj\Release\Package\PackageTmp' `
+        -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `
         -TargetFolder $TargetDeployFolder 
 
 }
