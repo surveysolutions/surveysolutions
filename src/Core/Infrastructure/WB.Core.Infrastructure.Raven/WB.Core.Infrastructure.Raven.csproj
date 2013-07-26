@@ -62,6 +62,12 @@
     <Compile Include="Implementation\ReadSide\IRavenReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\ReadSide\IRavenReadSideRepositoryWriterRegistry.cs" />
     <Compile Include="Implementation\ReadSide\RepositoryAccessors\RavenReadSideRepositoryWriterWithCacheAndZip.cs" />
+    <Compile Include="Implementation\WriteSide\IgnoreAssemblyNameForEventsSerializationBinder.cs" />
+    <Compile Include="Implementation\WriteSide\PropertiesOnlyContractResolver.cs" />
+    <Compile Include="Implementation\WriteSide\RavenDBEventStore.cs" />
+    <Compile Include="Implementation\WriteSide\Indexes\Event_ByEventSource.cs" />
+    <Compile Include="Implementation\WriteSide\Indexes\UniqueEventsIndex.cs" />
+    <Compile Include="Implementation\WriteSide\RavenWriteSideStore.cs" />
     <Compile Include="RavenInfrastructureModule.cs" />
     <Compile Include="Implementation\ReadSide\RavenReadSideService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
