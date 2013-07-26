@@ -122,12 +122,9 @@ namespace Main.Core.Documents
         #region Properties
 
         #warning ReadLayer: this is now serialized to DB. but should not
-        private GroupHash QuestionHash
+        private GroupHash QuestionHash()
         {
-            get
-            {
-                return this.questionHash ?? (this.questionHash = new GroupHash(this));
-            }
+            return this.questionHash ?? (this.questionHash = new GroupHash(this));
         }
 
         #endregion
@@ -234,7 +231,7 @@ namespace Main.Core.Documents
             if (itemToadd != null)
             {
                 itemToadd.Children.Add(c);
-                this.QuestionHash.AddGroup(group);
+                this.QuestionHash().AddGroup(group);
                 return;
             }
 
@@ -305,7 +302,7 @@ namespace Main.Core.Documents
 
         public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
         {
-            return this.QuestionHash.GetFeaturedQuestions();
+            return this.QuestionHash().GetFeaturedQuestions();
         }
 
         public IComposite GetParent()
@@ -315,22 +312,22 @@ namespace Main.Core.Documents
 
         public ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey)
         {
-            return this.QuestionHash.GetQuestion(publicKey, propagationKey);
+            return this.QuestionHash().GetQuestion(publicKey, propagationKey);
         }
 
         public CompleteQuestionWrapper GetQuestionByKey(string key)
         {
-            return this.QuestionHash.GetQuestionByKey(key);
+            return this.QuestionHash().GetQuestionByKey(key);
         }
 
         public CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey)
         {
-            return this.QuestionHash.GetQuestionWrapper(publicKey, propagationKey);
+            return this.QuestionHash().GetQuestionWrapper(publicKey, propagationKey);
         }
 
         public IEnumerable<ICompleteQuestion> GetQuestions()
         {
-            return this.QuestionHash.Questions;
+            return this.QuestionHash().Questions;
         }
 
         public bool HasVisibleItemsForScope(QuestionScope questionScope)
@@ -424,7 +421,7 @@ namespace Main.Core.Documents
                     b => b.PropagationPublicKey == propagationKey);
 
             parent.Children.Remove(itemToDelete);
-            this.QuestionHash.RemoveGroup(itemToDelete);
+            this.QuestionHash().RemoveGroup(itemToDelete);
         }
 
         public void SetParent(IComposite parent)
@@ -434,7 +431,7 @@ namespace Main.Core.Documents
 
         public IEnumerable<CompleteQuestionWrapper> WrappedQuestions()
         {
-            return this.QuestionHash.WrapedQuestions;
+            return this.QuestionHash().WrapedQuestions;
         }
 
         #endregion

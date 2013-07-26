@@ -1,20 +1,14 @@
-﻿using System.Net;
-using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
-
-using Raven.Client.Indexes;
-using Raven.Imports.Newtonsoft.Json;
-
-namespace Ncqrs.Eventing.Storage.RavenDB
+﻿namespace Ncqrs.Eventing.Storage.RavenDB
 {
+    using RavenIndexes;
+    using Raven.Client;
+    using Raven.Client.Document;
+    using Raven.Client.Indexes;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-
-    using Raven.Client;
-    using Raven.Client.Document;
-
     using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
 
     /// <summary>
@@ -59,7 +53,12 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="pageSize"></param>
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
-            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateStoreConventions(CollectionName)}.Initialize();
+            this.DocumentStore = new DocumentStore
+                {
+                    Url = ravenUrl, 
+                    Conventions = CreateStoreConventions(CollectionName)
+                }.Initialize();
+
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
