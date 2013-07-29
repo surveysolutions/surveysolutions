@@ -319,6 +319,7 @@
                             calcStatistics();
                             hideOutput();
                             question.canUpdate(true);
+                            question.commit();
                         },
                         error: function(d) {
                             errors.removeAll();
@@ -327,6 +328,8 @@
                             question.canUpdate(true);
                         }
                     });
+            },
+            revertQuestionChanges = function(question) {
             },
             saveQuestionnaire = function (questionnaire) {
                 

@@ -5,7 +5,7 @@
 @model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit " + Model.Title;
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 @section Styles{
