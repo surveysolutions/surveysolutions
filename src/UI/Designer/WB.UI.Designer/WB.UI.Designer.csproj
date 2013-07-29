@@ -539,6 +539,9 @@
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
     <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionDetails.cshtml" />
+    <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
