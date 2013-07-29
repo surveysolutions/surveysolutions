@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.SharedKernel.Utils.Serialization;
 
-namespace WB.Core.SharedKernels.DataCollection.Services
+namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors
 {
-    public class TemporaryFileStorageRepositoryAccessor
+    public class FileTemporaryDataRepositoryAccessor : ITemporaryDataRepositoryAccessor
     {
         private readonly string rootPath;
         private readonly IJsonUtils jsonSerrializer;
 
-        public TemporaryFileStorageRepositoryAccessor(string rootPath, IJsonUtils jsonSerrializer)
+        public FileTemporaryDataRepositoryAccessor(IJsonUtils jsonSerrializer, string rootPath = null)
         {
-            this.rootPath = rootPath;
+            this.rootPath = rootPath ?? AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             this.jsonSerrializer = jsonSerrializer;
         }
 

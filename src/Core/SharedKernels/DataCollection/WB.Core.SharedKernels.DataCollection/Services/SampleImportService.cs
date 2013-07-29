@@ -24,6 +24,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Services
@@ -32,14 +35,14 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
-        private readonly TemporaryFileStorageRepositoryAccessor tempImportRepository;
+        private readonly FileTemporaryDataRepositoryAccessor tempImportRepository;
 
         public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
                                    IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository)
         {
             this.templateRepository = templateRepository;
             this.templateSmallRepository = templateSmallRepository;
-            this.tempImportRepository = new TemporaryFileStorageRepositoryAccessor(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new NewtonJsonUtils());
+            this.tempImportRepository = new FileTemporaryDataRepositoryAccessor(new NewtonJsonUtils());
         }
 
         public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
