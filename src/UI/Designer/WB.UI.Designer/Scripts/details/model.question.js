@@ -34,7 +34,19 @@
               self.instruction = ko.observable('');
 
               self.answerOrder = ko.observable();
-              self.answerOptions = ko.observableArray([]);
+              self.answerOptions = ko.observableArray([]).extend({
+                  required: {
+                      onlyIf: function () {
+                          return self.qtype() === "SingleOption" || self.qtype() === "MultyOption";
+                      }
+                  },
+                  minLength: {
+                      params: 2,
+                      onlyIf: function () {
+                          return self.qtype() === "SingleOption" || self.qtype() === "MultyOption";
+                      }
+                  }
+              });
               self.cards = ko.observableArray([]);
 
               self.maxValue = ko.observable();
@@ -58,11 +70,11 @@
                   return self.propagatedGroups().length != 0;
               });
               self.addAnswer = function () {
-                  var answer = new answerOption().id(Math.uuid()).title(self.currentAnswerTitle()).value(self.currentAnswerValue());
+                  var answer = new answerOption().id(Math.uuid()).title('').value('');
+                  
+                  answer.errors();
+                  
                   self.answerOptions.push(answer);
-                  self.currentAnswerTitle('');
-                  self.currentAnswerValue('');
-                  $('#currentAnswerValue').focus();
               };
               self.removeAnswer = function (answer) {
                   self.answerOptions.remove(answer);
@@ -75,11 +87,7 @@
                   self.triggers.remove(trigger);
               };
 
-
-              self.currentAnswerValue = ko.observable();
-              self.currentAnswerTitle = ko.observable();
-
-              self.typeOptions = _.keys(config.questionTypes);
+              self.typeOptions = config.questionTypeOptions;
               self.scopeOptions = config.questionScopes;
               self.orderOptions = config.answerOrders;
 
@@ -93,11 +101,13 @@
               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers]);
               self.dirtyFlag().reset();
               self.errors = ko.validation.group(self);
-
+              this.cache = function () { };
               self.canUpdate = ko.observable(true);
 
               return self;
           };
+        
+       
 
         Question.Nullo = new Question().id(0).title('Title').type('QuestionView');
         Question.Nullo.isNullo = true;
@@ -172,6 +182,8 @@
 
                     return item;
                 };
+            
+
             return {
                 isNullo: false,
                 children: children,
@@ -180,6 +192,41 @@
                 hasParent: hasParent
             };
         }();
+
+        ko.utils.extend(Question.prototype, {
+            update: function (data) {
+                this.title(data.title);
+                this.alias(data.alias);
+                this.qtype(data.qtype);
+                this.isHead(data.isHead);
+                this.isFeatured(data.isFeatured);
+                this.isMandatory(data.isMandatory);
+                this.scope(data.scope);
+                this.condition(data.condition);
+                this.validationExpression(data.validationExpression);
+                this.validationMessage(data.validationMessage);
+                this.instruction(data.instruction);
+                this.answerOrder(data.answerOrder);
+                this.maxValue(data.maxValue);
+               
+                this.answerOptions(_.map(data.answerOptions, function (answer) {
+                    return new answerOption().id(answer.id).title(answer.title).value(answer.value);
+                }));
+
+                this.triggers(_.map(data.triggers, function (trigger) {
+                    return {key: trigger.key, value: trigger.value};
+                }));
+
+                //save off the latest data for later use
+                this.cache.latestData = data;
+            },
+            revert: function () {
+                this.update(this.cache.latestData);
+            },
+            commit: function () {
+                this.cache.latestData = ko.toJS(this);
+            }
+        });
 
         return Question;
     });

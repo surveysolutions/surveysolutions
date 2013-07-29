@@ -50,8 +50,8 @@
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/Scripts/jquery-{version}.js", 
-                    "~/Scripts/bootstrap.js", 
-                    "~/Scripts/knockout-2.2.1.js", 
+                    "~/Scripts/bootstrap.js",
+                    "~/Scripts/knockout-{version}.js", 
                     "~/Scripts/common.js"));
 
             bundles.Add(
