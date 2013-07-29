@@ -15,10 +15,10 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 try {
 
     Deploy `
-        -Solution 'src\Designer.sln' `
-        -Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
+        -Solution 'src\Supervisor.sln' `
+        -Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
         -BuildConfiguration 'Release' `
-        -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `
+        -SourceFolder 'RavenQuestionnaire.Web\Web.Supervisor\obj\Release\Package\PackageTmp' `
         -TargetFolder $TargetDeployFolder 
 
 }
