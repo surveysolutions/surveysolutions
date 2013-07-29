@@ -18,7 +18,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         {
             get
             {
-                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.Parent == null);
+                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.Parent.Id == this.Id);
             }
         }
 
@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         {
             get
             {
-                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.Parent != null);
+                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.Parent != null && x.Parent.Id != this.Id);
             }
         }
 
