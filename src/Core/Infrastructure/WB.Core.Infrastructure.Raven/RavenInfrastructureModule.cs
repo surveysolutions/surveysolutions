@@ -1,6 +1,6 @@
-﻿using Main.Core;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using Raven.Client.Document;
+using WB.Core.Infrastructure.Raven.Implementation;
 
 namespace WB.Core.Infrastructure.Raven
 {
