@@ -483,7 +483,6 @@
             errors: errors,
             statistics: statistics,
             searchResult: searchResult,
-            questionnaire: questionnaire,
             saveQuestionnaire: saveQuestionnaire
         };
     });
