@@ -50,12 +50,17 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
                        && Age.Equals(other.Age);
                 return result;
             }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
         }
 
         [Serializable]
         public class CustomerNameChanged
         {
-            public string NewName { get; set; }
+            public string NewName { get; private set; }
 
             public CustomerNameChanged(string newName)
             {
@@ -71,6 +76,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
                 }
                 bool result = NewName.Equals(other.NewName);
                 return result;
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
             }
         }
 
