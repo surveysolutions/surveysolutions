@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide;
@@ -19,7 +20,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
         private readonly IStringCompressor compressor;
         private readonly Dictionary<Guid, TEntity> memcache; 
-        private object locker=new object();
+        private object locker = new object();
+
+        private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
                                                             IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService,
@@ -74,6 +77,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             lock (locker)
             {
+                if (memcache.Count >= memcacheItemsSizeLimit)
+                    memcache.Clear();
+
                 internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
                 memcache[id] = view;
             }

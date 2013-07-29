@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
@@ -27,29 +28,23 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         public void Store(UncommittedEventStream eventStream)
         {
-            var supervisorEvents = new[]
-            {
-                typeof(NewUserCreated),
-                typeof(NewCompleteQuestionnaireCreated),
-                typeof(QuestionnaireStatusChanged),
-                typeof(QuestionnaireAssignmentChanged),
-                typeof(TemplateImported)
-            };
-            var capiEvents = new[]
-            {
-                typeof(NewUserCreated),
-                typeof(NewAssigmentCreated),
-                typeof(QuestionnaireStatusChanged)
-            };
+            Func<object, bool> supervisorExpression = (o) => o is NewUserCreated || o is NewCompleteQuestionnaireCreated ||
+                o is TemplateImported || o is QuestionnaireAssignmentChanged ||
+                (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId || 
+                ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId));
 
-            var committedEvents = eventStream.Select(x => x.Payload.GetType());
+            Func<object, bool> capiExpression = (o) => !(o is NewCompleteQuestionnaireCreated || o is TemplateImported || o is QuestionnaireAssignmentChanged ||
+                 (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
+                 ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId)));
 
-            if (capiEvents.Intersect(committedEvents).Any())
+            var committedEvents = eventStream.Select(x => x.Payload);
+
+            if (committedEvents.Any(capiExpression))
             {
                 capiEventStore.Store(eventStream);
             }
 
-            if (supervisorEvents.Intersect(committedEvents).Any())
+            if (committedEvents.Any(supervisorExpression))
             {
                 supevisorEventStore.Store(eventStream);
             }

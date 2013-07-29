@@ -356,6 +356,16 @@ namespace Main.Core.Domain
             }
         }
 
+        public void DeleteInterview(Guid deletedById)
+        {
+            this.ApplyEvent(
+                    new InterviewDeleted()
+                    {
+                        InterviewId = this.EventSourceId,
+                        DeletedBy = deletedById,
+                    });
+        }
+
         #endregion
 
         #region Methods
@@ -839,6 +849,13 @@ namespace Main.Core.Domain
 
             question.IsFlaged = e.IsFlaged;
         }
+
+        protected void OnInterviewDeleted(InterviewDeleted e)
+        {
+            this.doc.IsDeleted = true;
+            this.doc.DeletedBy = e.DeletedBy;
+        }
+
         #endregion
     }
 }

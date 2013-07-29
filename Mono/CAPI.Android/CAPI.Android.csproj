@@ -179,7 +179,6 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="Settings\SettingsNames.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
@@ -364,7 +363,6 @@
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
     <AndroidResource Include="Resources\Drawable\donecountershape.xml" />
-    <Content Include="ToDo-MvvmCross\_ Droid UI.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Synchroniation\" />
