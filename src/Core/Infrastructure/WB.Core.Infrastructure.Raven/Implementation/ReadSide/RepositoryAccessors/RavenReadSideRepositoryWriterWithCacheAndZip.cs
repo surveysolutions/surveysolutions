@@ -21,7 +21,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private readonly Dictionary<Guid, TEntity> memcache; 
         private object locker = new object();
 
-        private int memcacheItemsSizeLimit = 256; //avoid memory
+        private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
                                                             IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService)
@@ -78,7 +78,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 if (memcache.Count >= memcacheItemsSizeLimit)
                     memcache.Clear();
 
-                    internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
+                internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
                 memcache[id] = view;
             }
         }
