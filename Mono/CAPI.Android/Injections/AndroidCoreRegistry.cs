@@ -20,15 +20,8 @@ using Main.Core;
 
 namespace CAPI.Android.Injections
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class AndroidCoreRegistry : CoreRegistry
     {
-        public AndroidCoreRegistry(string repositoryPath, bool isEmbeded) : base(repositoryPath, isEmbeded)
-        {
-        }
-
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return
