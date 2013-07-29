@@ -3,6 +3,7 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Raven.Client.Document;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Raven
 {

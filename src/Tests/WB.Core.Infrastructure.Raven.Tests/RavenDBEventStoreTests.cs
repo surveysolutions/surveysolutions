@@ -8,11 +8,11 @@ using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Eventing.Storage.RavenDB;
 using NUnit.Framework;
 using Raven.Client;
 using Rhino.Mocks;
 using Ncqrs.Eventing.Sourcing;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Raven.Tests
 {
