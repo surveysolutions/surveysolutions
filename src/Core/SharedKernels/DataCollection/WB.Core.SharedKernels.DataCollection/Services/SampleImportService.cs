@@ -78,29 +78,68 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         public void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
         {
+            tempImportRepository.Store(new SampleCreationStatus(id,false,""), id.ToString());
+            new Task(() => CreateSamplInternal(id,responsibleHeadquaterId,responsibleSupervisorId)).Start();
+        }
+
+        public SampleCreationStatus GetSampleCreationStatus(Guid id)
+        {
+            return tempImportRepository.GetByName<SampleCreationStatus>(id.ToString());
+        }
+        private void CreateSamplInternal(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
+        {
+            var result = GetSampleCreationStatus(id);
             var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
             if (item == null)
+            {
+                result.SetErrorMessage("Data is absent");
+                tempImportRepository.Store(result,id.ToString());
                 return;
+            }
             if (!item.IsCompleted)
+            {
+                result.SetErrorMessage("Parsing is still in process");
+                tempImportRepository.Store(result, id.ToString());
                 return;
+            }
             if (!string.IsNullOrEmpty(item.ErrorMassage))
-                return;
+                {
+                    result.SetErrorMessage("Parsing wasn't successed");
+                    tempImportRepository.Store(result, id.ToString());
+                    return;
+                }
 
             var bigTemplate = this.templateRepository.GetById(item.TemplateId);
             if (bigTemplate == null)
+            {
+                result.SetErrorMessage("Template is absent");
+                tempImportRepository.Store(result, id.ToString());
                 return;
+            }
             Questionnaire questionnarie;
-
+            Thread.Sleep(15000);
+            //return;
+            
             using (new ObliviousEventContext())
             {
                 questionnarie = new Questionnaire(Guid.NewGuid(), bigTemplate);
             }
-
+            int i = 0;
             foreach (var value in item.Values)
             {
-                using (new ObliviousEventContext())
+                try
                 {
-                    PreBuiltInterview(Guid.NewGuid(), value, item.Header, questionnarie);
+                    using (new ObliviousEventContext())
+                    {
+                        PreBuiltInterview(Guid.NewGuid(), value, item.Header, questionnarie);
+                        i++;
+                    }
+                }
+                catch
+                {
+                    result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
+                    tempImportRepository.Store(result, id.ToString());
+                    return;
                 }
             }
             foreach (var value in item.Values)
@@ -114,8 +153,9 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 {
                 }
             }
+            result.CompleteProcess();
+            tempImportRepository.Store(result, id.ToString());
         }
-
         private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
         {
             var smallTemplate = this.templateSmallRepository.GetById(templateId);

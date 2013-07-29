@@ -59,6 +59,7 @@
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SampleImport\DTO\ImportResult.cs" />
+    <Compile Include="Services\SampleImport\DTO\SampleCreationStatus.cs" />
     <Compile Include="Services\SampleImport\DTO\TempFileImportData.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\SampleImport\SampleDataReaders\CsvSampleRecordsAccessor.cs" />
