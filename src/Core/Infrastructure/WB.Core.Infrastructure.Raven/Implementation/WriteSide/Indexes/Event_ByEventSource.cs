@@ -1,8 +1,9 @@
 using System.Linq;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
-namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
+namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
 {
     internal class Event_ByEventSource : AbstractIndexCreationTask<StoredEvent>
     {

@@ -1,16 +1,18 @@
-﻿namespace Ncqrs.Eventing.Storage.RavenDB
-{
-    using RavenIndexes;
-    using Raven.Client;
-    using Raven.Client.Document;
-    using Raven.Client.Indexes;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
+using StoredEvent = Ncqrs.Eventing.Storage.RavenDB.StoredEvent;
 
+namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
+{
     internal class RavenDBEventStore : RavenWriteSideStore, IStreamableEventStore
     {
         private const string CollectionName = "Events";
@@ -139,7 +141,7 @@
                     }
                 }
             }
-            catch (Raven.Abstractions.Exceptions.ConcurrencyException)
+            catch (global::Raven.Abstractions.Exceptions.ConcurrencyException)
             {
                 Guid sourceId = Guid.Empty;
                 long version = 0;
