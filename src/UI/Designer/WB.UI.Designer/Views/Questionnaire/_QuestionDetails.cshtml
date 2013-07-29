@@ -9,18 +9,25 @@
             <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="control-group" data-bind="validationElement: alias">
-            <label class="control-label required">Variable</label>
-            <div class="controls">
-                <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
+    <div class="form-horizontal">
+        <div class="row-fluid">
+            <div class="control-group" data-bind="validationElement: alias">
+                <label class="control-label required">Variable</label>
+                <div class="controls">
+                    <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="control-group">
+                <label class="control-label required">Type</label>
+                <div class="controls">
+                    <select class="span12" data-bind="options: typeOptions, optionsValue: 'key', optionsText: 'value', value: qtype"></select>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row-fluid">
-        <label class="control-label required">Type</label>
-        <select class="span12" data-bind="options: typeOptions, optionsValue: 'key', optionsText: 'value', value: qtype"></select>
-    </div>
+
     <div data-bind="template: { name: qtype(), data: $data }"></div>
     <div class="row-fluid">
         <div class="btn-group">
