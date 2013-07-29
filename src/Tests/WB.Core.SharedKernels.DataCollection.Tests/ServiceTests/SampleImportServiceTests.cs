@@ -10,6 +10,8 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
