@@ -12,7 +12,6 @@
                 "Text": "Text",
                 "AutoPropagate": "AutoPropagate"
             },
-            index = 0,
             questionTypeOptions = [
                 {
                     key: "SingleOption",
@@ -97,7 +96,6 @@
 
             storeExpirationMs = (1000 * 60 * 60 * 24), // 1 day
             throttle = 400,
-            title = 'Details',
             loggerTmeout = 2000,
             warnings = {
                 propagatedGroupCantBecomeChapter: {
@@ -147,7 +145,6 @@
             logger: logger,
             storeExpirationMs: storeExpirationMs,
             throttle: throttle,
-            title: title,
             warnings: warnings,
             hashes: hashes,
             viewIds: viewIds,
