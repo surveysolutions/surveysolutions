@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using System.Reflection;
 using log4net.Config;
+using Ncqrs.Eventing.Storage.RavenDB;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 
-namespace Ncqrs.Eventing.Storage.RavenDB.Tests
+namespace WB.Core.Infrastructure.Raven.Tests
 {
     public abstract class RavenDBTestBase
     {

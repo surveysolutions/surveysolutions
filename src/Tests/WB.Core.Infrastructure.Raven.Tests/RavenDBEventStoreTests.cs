@@ -6,12 +6,15 @@ using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Eventing.Storage.RavenDB;
 using NUnit.Framework;
 using Raven.Client;
 using Rhino.Mocks;
 using Ncqrs.Eventing.Sourcing;
 
-namespace Ncqrs.Eventing.Storage.RavenDB.Tests
+namespace WB.Core.Infrastructure.Raven.Tests
 {
     [TestFixture]
     public class RavenDBEventStoreTests : RavenDBTestBase
