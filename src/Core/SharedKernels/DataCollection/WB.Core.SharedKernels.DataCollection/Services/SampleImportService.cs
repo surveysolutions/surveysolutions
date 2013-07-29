@@ -21,6 +21,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -31,21 +32,20 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
-        private readonly IReadSideRepositoryWriter<TempFileImportData> tempImportRepository;
+        private readonly TemporaryFileStorageRepositoryAccessor tempImportRepository;
 
         public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
-                                   IReadSideRepositoryWriter<TempFileImportData> tempImportRepository,
                                    IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository)
         {
             this.templateRepository = templateRepository;
-            this.tempImportRepository = tempImportRepository;
             this.templateSmallRepository = templateSmallRepository;
+            this.tempImportRepository = new TemporaryFileStorageRepositoryAccessor(AppDomain.CurrentDomain.GetData("DataDirectory").ToString(), new NewtonJsonUtils());
         }
 
         public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
         {
             Guid importId = Guid.NewGuid();
-            tempImportRepository.Store( CreateInitialTempRecord(templateId, importId), importId);
+            tempImportRepository.Store( CreateInitialTempRecord(templateId, importId), importId.ToString());
             new Task(() => Process(templateId, recordAccessor, importId)).Start();
             return importId;
         }
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         public ImportResult GetImportStatus(Guid id)
         {
-            var item = this.tempImportRepository.GetById(id);
+            var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
             if (item == null)
                 return null;
             return new ImportResult(id, item.IsCompleted, item.ErrorMassage, item.Header, item.Values);
@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         public void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
         {
-            var item = this.tempImportRepository.GetById(id);
+            var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
             if (item == null)
                 return;
             if (!item.IsCompleted)
@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             var smallTemplate = this.templateSmallRepository.GetById(templateId);
             if (smallTemplate == null)
             {
-                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, "Template Is Absent"), id);
+                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, "Template Is Absent"), id.ToString());
                 return;
             }
 
@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                         }
                         catch (ArgumentException e)
                         {
-                            tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
+                            tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id.ToString());
                             break;
                         }
                         continue;
@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             }
             catch (Exception e)
             {
-                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id);
+                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id.ToString());
             }
             if (tempBatch.Length > 0)
                 SaveBatch(id, tempBatch.Take(i).ToArray(), true);
@@ -170,12 +170,12 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         private void SaveBatch(Guid id, IEnumerable<string[]> tempBatch, bool complete)
         {
-            var item = this.tempImportRepository.GetById(id);
+            var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
             if(tempBatch.Any())
                 item.AddValueBatch(tempBatch.ToArray());
             if(complete)
                 item.CompleteImport();
-            this.tempImportRepository.Store(item, id);
+            this.tempImportRepository.Store(item, id.ToString());
         }
 
 
@@ -190,7 +190,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 newHeader.Add(realHeader);
             }
             tempImportRepository.Store(
-                CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id);
+                CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id.ToString());
         }
 
         private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)

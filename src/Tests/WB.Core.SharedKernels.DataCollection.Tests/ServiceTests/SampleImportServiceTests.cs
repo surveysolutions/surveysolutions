@@ -108,8 +108,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
             IReadSideRepositoryWriter<QuestionnaireBrowseItem> smallTemplateRepository = null)
         {
             return new SampleImportService(new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>().Object,
-                                           tempStorage ??
-                                           new InMemoryReadSideRepositoryAccessor<TempFileImportData>(),
                                            smallTemplateRepository ??
                                            new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>());
         }

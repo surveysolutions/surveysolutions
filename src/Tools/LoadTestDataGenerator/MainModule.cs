@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject.Modules;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace LoadTestDataGenerator
 {
@@ -14,7 +15,8 @@ namespace LoadTestDataGenerator
         public override void Load()
         {
             this.Bind<ICommandService>().ToConstant(Ncqrs.NcqrsEnvironment.Get<ICommandService>());
-            this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
         }
     }
 }
