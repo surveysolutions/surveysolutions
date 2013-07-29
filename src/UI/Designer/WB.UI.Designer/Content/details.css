@@ -732,3 +732,10 @@ a.btn.btn-help {
     display: none;
     visibility: hidden;
 }
+#details-question .form-horizontal .control-label {
+    width: 75px;
+    text-align: left;
+}
+#details-question .form-horizontal .controls {
+    margin-left: 85px;
+}
