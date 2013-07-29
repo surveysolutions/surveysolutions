@@ -43,16 +43,13 @@ else
 
 @if (Model.IsCompleted || !Model.IsSuccessed)
 {
-
     <script>
         isStopMarker = true;
     </script>
 }
-
-
 @if (Model.IsCompleted && Model.IsSuccessed)
 {
-    using (Html.BeginForm("CreateSample", "HQ", new { id = Model.Id }, FormMethod.Post))
+    using (Html.BeginForm("CreateSample", "HQ", new {id = Model.Id}, FormMethod.Post, new {id = "createSampleForm"}))
     {
         <fieldset class="form-horizontal">
             <div class="control-group">
@@ -71,5 +68,6 @@ else
             </div>
         </fieldset>
     }
+    
 
 }

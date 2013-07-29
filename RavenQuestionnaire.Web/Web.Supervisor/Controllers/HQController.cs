@@ -9,6 +9,7 @@ using Core.Supervisor.Views.User;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
 using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
@@ -121,6 +122,10 @@ namespace Web.Supervisor.Controllers
             return RedirectToAction("Index");
         }
 
+        public JsonResult GetSampleCreationStatus(Guid id)
+        {
+            return this.Json(this.sampleImportService.GetSampleCreationStatus(id));
+        }
         public ActionResult TakeNew(Guid id)
         {
             Guid key = id;
