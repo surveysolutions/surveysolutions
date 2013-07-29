@@ -40,17 +40,6 @@
             <!-- /ko -->
         </div>
     </div>
-    <label>
-        <a href="#" class="btn btn-info btn-small btn-help"
-            data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-            data-original-title="Condition expression"
-            data-html="true"
-            data-trigger="hover"
-            data-placement="right"
-            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
-    <div class="editor-container">
-        <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
-    </div>
 
     <label>
         <a href="#" class="btn btn-info btn-small btn-help"
@@ -63,11 +52,24 @@
     <div class="editor-container">
         <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
     </div>
-
+    
     <div class="row-fluid">
         <label>Validation message</label>
         <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
     </div>
+
+    <label>
+        <a href="#" class="btn btn-info btn-small btn-help"
+            data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+            data-original-title="Condition expression"
+            data-html="true"
+            data-trigger="hover"
+            data-placement="right"
+            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+    <div class="editor-container">
+        <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
+    </div>
+
     <div class="row-fluid">
         <label>Instruction</label>
         <div class="note">
