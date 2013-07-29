@@ -1,4 +1,6 @@
-﻿namespace Main.Core
+﻿using WB.Core.Infrastructure.Raven;
+
+namespace Main.Core
 {
     using System;
     using System.Net;
@@ -12,26 +14,18 @@
 
     internal class DocumentStoreProvider : Provider<DocumentStore>
     {
-        private readonly bool isEmbedded;
-        private readonly string username;
-        private readonly string password;
-        private readonly string storagePath;
-        private readonly string defaultDatabase;
+        private readonly RavenConnectionSettings settings;
 
         private EmbeddableDocumentStore embeddedStorage;
 
-        public DocumentStoreProvider(string storagePath, string defaultDatabase, bool isEmbedded, string username, string password)
+        public DocumentStoreProvider(RavenConnectionSettings settings)
         {
-            this.storagePath = storagePath;
-            this.isEmbedded = isEmbedded;
-            this.username = username;
-            this.password = password;
-            this.defaultDatabase = defaultDatabase;
+            this.settings = settings;
         }
 
         protected override DocumentStore CreateInstance(IContext context)
         {
-            DocumentStore store = this.isEmbedded ? this.GetEmbededStorage() : this.GetServerStorage();
+            DocumentStore store = this.settings.IsEmbedded ? this.GetEmbededStorage() : this.GetServerStorage();
 
             store.Initialize();
 
@@ -42,14 +36,14 @@
         {
             var store = new DocumentStore
                 {
-                    Url = this.storagePath,
-                    DefaultDatabase = this.defaultDatabase,
+                    Url = this.settings.StoragePath,
+                    DefaultDatabase = this.settings.DefaultDatabase,
                     Conventions = {JsonContractResolver = new PropertiesOnlyContractResolver()}
                 };
 
-            if (!string.IsNullOrWhiteSpace(this.username))
+            if (!string.IsNullOrWhiteSpace(this.settings.Username))
             {
-                store.Credentials = new NetworkCredential(this.username, this.password);
+                store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
             }
 
             return store;
@@ -57,14 +51,14 @@
 
         private EmbeddableDocumentStore GetEmbededStorage()
         {
-            if (!isEmbedded)
+            if (!this.settings.IsEmbedded)
                 throw new InvalidOperationException("You can't call this method");
 
             if (this.embeddedStorage == null || this.embeddedStorage.WasDisposed)
             {
                 this.embeddedStorage = new EmbeddableDocumentStore()
                     {
-                        DataDirectory = this.storagePath,
+                        DataDirectory = this.settings.StoragePath,
                         UseEmbeddedHttpServer = false,
                         Conventions = new DocumentConvention() { JsonContractResolver = new PropertiesOnlyContractResolver() }
                     };

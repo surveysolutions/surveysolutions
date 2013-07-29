@@ -19,12 +19,6 @@ using WB.Core.Infrastructure.ReadSide;
 
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-#if !MONODROID
-using Raven.Client;
-using Raven.Client.Document;
-
-#endif
-
 namespace Main.Core
 {
     using Ninject.Planning.Bindings;
@@ -94,13 +88,6 @@ namespace Main.Core
 
         protected virtual void RegisterAdditionalElements()
         {
-#if !MONODROID
-            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.defaultDatabase, this.isEmbeded, this.username, this.password);
-            this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-            this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
-#endif
-
-
             ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
 
