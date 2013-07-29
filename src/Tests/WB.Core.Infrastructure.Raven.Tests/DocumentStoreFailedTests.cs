@@ -11,7 +11,7 @@ using Raven.Client.Embedded;
 using Raven.Client.Indexes;
 using log4net.Config;
 
-namespace Ncqrs.Eventing.Storage.RavenDB.Tests
+namespace WB.Core.Infrastructure.Raven.Tests
 {
     [TestFixture]
     public class DocumentStoreFailedTests
