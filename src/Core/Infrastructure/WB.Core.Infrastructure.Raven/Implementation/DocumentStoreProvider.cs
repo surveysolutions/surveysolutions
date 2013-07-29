@@ -1,4 +1,5 @@
 ﻿using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
 namespace Main.Core
 {

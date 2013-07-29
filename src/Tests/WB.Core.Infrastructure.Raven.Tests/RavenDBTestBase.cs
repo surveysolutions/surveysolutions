@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Reflection;
 using log4net.Config;
-using Ncqrs.Eventing.Storage.RavenDB;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
 namespace WB.Core.Infrastructure.Raven.Tests
 {

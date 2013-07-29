@@ -1,10 +1,11 @@
 ﻿using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
 
 namespace LoadTestDataGenerator
 {
     using System.Net;
-    using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
     using Ncqrs.Eventing.Storage.RavenDB;
 
     using Raven.Client.Indexes;
@@ -50,7 +51,7 @@ namespace LoadTestDataGenerator
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ncqrs.Eventing.Storage.RavenDB.RavenDBEventStore"/> class.
+        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
         /// </summary>
         /// <param name="ravenUrl">
         /// The raven url.
@@ -68,7 +69,7 @@ namespace LoadTestDataGenerator
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ncqrs.Eventing.Storage.RavenDB.RavenDBEventStore"/> class.
+        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
         /// </summary>
         /// <param name="externalDocumentStore">
         /// The external document store.
