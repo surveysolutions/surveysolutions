@@ -103,12 +103,20 @@ namespace Web.Supervisor.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult ImportResult(Guid id)
         {
-            return this.PartialView(this.sampleImportService.GetImportStatus(id));
+            var result = this.sampleImportService.GetImportStatus(id);
+            if (result.IsCompleted && result.IsSuccessed)
+            {
+
+                ViewBag.SupervisorList =
+                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
+                                                                                   ViewerStatus.Headquarter)).Items;
+            }
+            return this.PartialView(result);
         }
 
-        public ActionResult CreateSample(Guid id)
+        public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
         {
-            this.sampleImportService.CreateSample(id);
+            this.sampleImportService.CreateSample(id, GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
             return RedirectToAction("Index");
         }
 

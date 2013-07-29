@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             return new ImportResult(id, item.IsCompleted, item.ErrorMassage, item.Header, item.Values);
         }
 
-        public void CreateSample(Guid id)
+        public void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
         {
             var item = this.tempImportRepository.GetById(id);
             if (item == null)
@@ -104,7 +104,8 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             {
                 try
                 {
-                    BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate);
+                    BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate, responsibleHeadquaterId,
+                                   responsibleSupervisorId);
                 }
                 catch
                 {
@@ -198,11 +199,14 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
         }
-        private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template)
+        private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template, Guid headqarter, Guid supervisor)
         {
             var featuredAnswers = CreateFeaturedAnswerList(values, header, template);
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey,template.PublicKey,null,null,featuredAnswers));
+            commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey, template.PublicKey,
+                                                                                   new UserLight(headqarter, ""),
+                                                                                   new UserLight(supervisor, ""),
+                                                                                   featuredAnswers));
         }
         private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, QuestionnaireDocument template)
         {

@@ -1,4 +1,6 @@
-﻿@model WB.Core.SharedKernels.DataCollection.Services.ImportResult
+﻿@using Core.Supervisor.Views.Survey
+@using Main.Core.Entities.SubEntities
+@model WB.Core.SharedKernels.DataCollection.Services.ImportResult
 
 @if (Model.IsSuccessed)
 {
@@ -48,9 +50,24 @@ else
 
 @if (Model.IsCompleted && Model.IsSuccessed)
 {
-    <div class="btn-group">
-        <a href="@Url.Action("CreateSample", "HQ", new { id = Model.Id })" class="btn btn-primary"><i class="icon-white"></i>Create sample from this data</a>
-
-    </div>
+    using (Html.BeginForm("CreateSample", "HQ", new { id = Model.Id }, FormMethod.Post))
+    {
+        <fieldset class="form-horizontal">
+            <div class="control-group">
+                <div class="control-label">Select responsible</div>
+                <div class="controls">
+                    <select name="responsibleSupervisor" class="input-block-level">
+                        @foreach (SurveyUsersViewItem item in ViewBag.SupervisorList)
+                        {
+                            <option value="@item.UserId" >@item.UserName</option>
+                        }
+                    </select>        
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-large btn-primary pull-right" type="submit">Create sample from this data</button>
+            </div>
+        </fieldset>
+    }
 
 }

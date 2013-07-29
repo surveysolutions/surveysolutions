@@ -9,6 +9,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     {
         Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor);
         ImportResult GetImportStatus(Guid id);
-        void CreateSample(Guid id);
+        void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId);
     }
 }
