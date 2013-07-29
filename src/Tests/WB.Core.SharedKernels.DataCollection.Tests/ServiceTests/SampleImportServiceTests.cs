@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
 using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
@@ -38,8 +39,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
 
             //arrange
             Guid tempFileId = Guid.NewGuid();
-            var tempFileStorageMock = new Mock<IReadSideRepositoryWriter<TempFileImportData>>();
-            tempFileStorageMock.Setup(x => x.GetById(tempFileId))
+            var tempFileStorageMock = new Mock<ITemporaryDataRepositoryAccessor>();
+            tempFileStorageMock.Setup(x => x.GetByName<TempFileImportData>(tempFileId.ToString()))
                                .Returns(new TempFileImportData() {ErrorMassage = "some error", PublicKey = tempFileId});
 
             SampleImportService target = CreateSampleImportService(tempFileStorageMock.Object);
@@ -106,12 +107,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
         }
 
         private SampleImportService CreateSampleImportService(
-            IReadSideRepositoryWriter<TempFileImportData> tempStorage = null,
+            ITemporaryDataRepositoryAccessor tempStorage = null,
             IReadSideRepositoryWriter<QuestionnaireBrowseItem> smallTemplateRepository = null)
         {
             return new SampleImportService(new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>().Object,
                                            smallTemplateRepository ??
-                                           new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>());
+                                           new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>(),
+                                           tempStorage ?? new InMemoryTemporaryDataRepositoryAccessor());
         }
     }
 }
