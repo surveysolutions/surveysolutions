@@ -64,6 +64,7 @@
     <Compile Include="Services\ISampleRecordsAccessor.cs" />
     <Compile Include="Services\SampleImportService.cs" />
     <Compile Include="Services\TempFileImportData.cs" />
+    <Compile Include="Services\TemporaryFileStorageRepositoryAccessor.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -104,6 +105,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
