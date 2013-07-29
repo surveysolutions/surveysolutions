@@ -34,7 +34,19 @@
               self.instruction = ko.observable('');
 
               self.answerOrder = ko.observable();
-              self.answerOptions = ko.observableArray([]);
+              self.answerOptions = ko.observableArray([]).extend({
+                  required: {
+                      onlyIf: function () {
+                          return self.qtype() === "SingleOption" || self.qtype() === "MultyOption";
+                      }
+                  },
+                  minLength: {
+                      params: 2,
+                      onlyIf: function () {
+                          return self.qtype() === "SingleOption" || self.qtype() === "MultyOption";
+                      }
+                  }
+              });
               self.cards = ko.observableArray([]);
 
               self.maxValue = ko.observable();
