@@ -70,11 +70,11 @@
                   return self.propagatedGroups().length != 0;
               });
               self.addAnswer = function () {
-                  var answer = new answerOption().id(Math.uuid()).title(self.currentAnswerTitle()).value(self.currentAnswerValue());
+                  var answer = new answerOption().id(Math.uuid()).title('').value('');
+                  
+                  answer.errors();
+                  
                   self.answerOptions.push(answer);
-                  self.currentAnswerTitle('');
-                  self.currentAnswerValue('');
-                  $('#currentAnswerValue').focus();
               };
               self.removeAnswer = function (answer) {
                   self.answerOptions.remove(answer);
@@ -86,10 +86,6 @@
               self.removeTrigger = function (trigger) {
                   self.triggers.remove(trigger);
               };
-
-
-              self.currentAnswerValue = ko.observable();
-              self.currentAnswerTitle = ko.observable();
 
               self.typeOptions = config.questionTypeOptions;
               self.scopeOptions = config.questionScopes;
