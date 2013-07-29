@@ -61,14 +61,12 @@ namespace WB.UI.Designer.App_Start
             var ravenSettings = new RavenConnectionSettings(AppSettings.Instance.RavenDocumentStore);
 
             var kernel = new StandardKernel(
+                new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule()
             );
-
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
-            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();

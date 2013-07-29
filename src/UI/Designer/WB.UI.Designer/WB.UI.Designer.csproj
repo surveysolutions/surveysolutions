@@ -259,6 +259,7 @@
     <Compile Include="Pdf\PdfOutput.cs" />
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\IExpressionReplacer.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
