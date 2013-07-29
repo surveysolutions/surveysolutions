@@ -17,6 +17,8 @@ using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -74,26 +76,44 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             var item = this.tempImportRepository.GetById(id);
             if (item == null)
                 return;
-            if(!item.IsCompleted)
+            if (!item.IsCompleted)
                 return;
-            if(!string.IsNullOrEmpty(item.ErrorMassage))
+            if (!string.IsNullOrEmpty(item.ErrorMassage))
                 return;
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            if(commandService==null)
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            if (eventStore == null)
                 return;
+            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+            if (myEventBus == null)
+            {
+                return;
+            }
+
             var bigTemplate = this.templateRepository.GetById(item.TemplateId);
-            if(bigTemplate==null)
+            if (bigTemplate == null)
                 return;
-            var documents=new List<CompleteQuestionnaireDocument>();
+            var uncommitedStreams = new List<UncommittedEventStream>();
             foreach (var value in item.Values)
             {
-                documents.Add(BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate));
-                
+                using (EventContext ex = new EventContext())
+                {
+                    BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate);
+
+                    var stream = new UncommittedEventStream(Guid.NewGuid());
+                    foreach (var uncommittedEvent in ex.Events)
+                    {
+                        stream.Append(uncommittedEvent);
+                    }
+                    uncommitedStreams.Add(stream);
+                }
             }
-            foreach (var completeQuestionnaireDocument in documents)
+            foreach (var uncommitedStream in uncommitedStreams)
             {
-                commandService.Execute(new CreateNewAssigment(completeQuestionnaireDocument));
+                eventStore.Store(uncommitedStream);
+                myEventBus.Publish(uncommitedStream.Select(e => e as IPublishableEvent));
             }
+
+
         }
 
         private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
@@ -176,10 +196,8 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id);
         }
 
-        private CompleteQuestionnaireDocument BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template)
+        private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template)
         {
-            using (EventContext ex = new EventContext())
-            {
                 var ar = new CompleteQuestionnaireAR(publicKey, template, null);
 
                 for (int i = 0; i < header.Length; i++)
@@ -200,8 +218,8 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                         ar.SetAnswer(question.PublicKey, null, values[i], null, DateTime.Now);
                     }
                 }
-                return ar.CreateSnapshot();
-            }
+            
+            
 
         }
 

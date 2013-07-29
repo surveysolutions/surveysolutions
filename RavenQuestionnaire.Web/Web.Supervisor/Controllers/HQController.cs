@@ -47,7 +47,7 @@ namespace Web.Supervisor.Controllers
             IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, ISampleImportService sampleImportService)
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, ISampleImportService sampleImportService)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
