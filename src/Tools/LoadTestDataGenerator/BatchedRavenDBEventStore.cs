@@ -19,7 +19,7 @@ namespace LoadTestDataGenerator
 
     using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
 
-    public class BatchedRavenDBEventStore: RavenWriteSideStore, IStreamableEventStore
+    internal class BatchedRavenDBEventStore: RavenWriteSideStore, IStreamableEventStore
     {
         private const string CollectionName = "Events";
 
@@ -74,7 +74,7 @@ namespace LoadTestDataGenerator
         /// The external document store.
         /// </param>
         /// <param name="pageSize"></param>
-        public BatchedRavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
+        public BatchedRavenDBEventStore(DocumentStore externalDocumentStore, int pageSize = 50)
         {
             externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;

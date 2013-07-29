@@ -2,7 +2,8 @@
 {
     public class RavenConnectionSettings
     {
-        public RavenConnectionSettings(bool isEmbedded, string username, string password, string storagePath, string defaultDatabase)
+        public RavenConnectionSettings(string storagePath, bool isEmbedded = false,
+            string username = null, string password = null, string defaultDatabase = null)
         {
             this.IsEmbedded = isEmbedded;
             this.Username = username;

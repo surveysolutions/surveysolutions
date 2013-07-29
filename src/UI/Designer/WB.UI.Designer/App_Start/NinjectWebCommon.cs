@@ -12,6 +12,7 @@ using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.App_Start;
@@ -57,8 +58,11 @@ namespace WB.UI.Designer.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            var ravenSettings = new RavenConnectionSettings(AppSettings.Instance.RavenDocumentStore);
+
             var kernel = new StandardKernel(
                 new NLogLoggingModule(),
+                new RavenWriteSideInfrastructureModule(ravenSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule()
             );
@@ -86,8 +90,7 @@ namespace WB.UI.Designer.App_Start
             #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            kernel.Load(new DesignerRegistry(
-                            repositoryPath: AppSettings.Instance.RavenDocumentStore, isEmbeded: false));
+            kernel.Load(new DesignerRegistry());
 
             #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);

@@ -93,10 +93,18 @@ namespace Web.Supervisor.App_Start
 
             string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
 
+            int? pageSize = GetEventStorePageSize();
+
+            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username, password: password, defaultDatabase: defaultDatabase);
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
-                new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
-                new RavenInfrastructureModule(), new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                pageSize.HasValue
+                    ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
+                    : new RavenWriteSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings),
+                new SupervisorCoreRegistry(),
+                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new NLogLoggingModule(),
                 new SupervisorCommandDeserializationModule());
 
@@ -120,13 +128,7 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
 
-            int pageSize;
-            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
-            {
-                NcqrsInit.Init(kernel, pageSize);
-            }
-            else
-                NcqrsInit.Init(kernel);
+            NcqrsInit.Init(kernel);
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
@@ -138,5 +140,14 @@ namespace Web.Supervisor.App_Start
             return kernel;
         }
 
+        private static int? GetEventStorePageSize()
+        {
+            int pageSize;
+
+            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
+                return pageSize;
+            else
+                return null;
+        }
     }
 }
