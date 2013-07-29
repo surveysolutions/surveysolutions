@@ -9,12 +9,15 @@ namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDa
         private readonly string rootPath;
         private readonly IJsonUtils jsonSerrializer;
 
-        public FileTemporaryDataRepositoryAccessor(IJsonUtils jsonSerrializer, string rootPath = null)
+        public FileTemporaryDataRepositoryAccessor(IJsonUtils jsonSerrializer, string rootPath)
         {
-            this.rootPath = rootPath ?? AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+            this.rootPath = rootPath;
             this.jsonSerrializer = jsonSerrializer;
         }
-
+        public FileTemporaryDataRepositoryAccessor(IJsonUtils jsonSerrializer)
+            : this(jsonSerrializer, AppDomain.CurrentDomain.GetData("DataDirectory").ToString())
+        {
+        }
         public void Store<T>(T payload, string name) where T : class 
         {
             var path = GetOrCreateObjectStoreFolder<T>();

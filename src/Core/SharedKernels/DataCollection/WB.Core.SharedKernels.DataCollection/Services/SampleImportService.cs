@@ -35,14 +35,14 @@ namespace WB.Core.SharedKernels.DataCollection.Services
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
-        private readonly FileTemporaryDataRepositoryAccessor tempImportRepository;
+        private readonly ITemporaryDataRepositoryAccessor tempImportRepository;
 
         public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
-                                   IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository)
+                                   IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, ITemporaryDataRepositoryAccessor tempImportRepository)
         {
             this.templateRepository = templateRepository;
             this.templateSmallRepository = templateSmallRepository;
-            this.tempImportRepository = new FileTemporaryDataRepositoryAccessor(new NewtonJsonUtils());
+            this.tempImportRepository = tempImportRepository;
         }
 
         public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
