@@ -73,7 +73,7 @@
                             var results = options && options.results,
                                 sortFunction = options && options.sortFunction,
                                 filter = options && options.filter,
-                                forceRefresh = options && options.forceRefresh;
+                                forceRefresh = (options && options.forceRefresh) || false;
 
                             var dtos = mapper.objectsFromDto(data);
 
