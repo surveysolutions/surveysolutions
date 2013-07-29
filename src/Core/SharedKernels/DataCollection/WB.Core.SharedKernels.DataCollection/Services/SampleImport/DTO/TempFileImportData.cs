@@ -1,12 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.SharedKernels.DataCollection.Services
+namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
 {
     public class TempFileImportData:IView
     {

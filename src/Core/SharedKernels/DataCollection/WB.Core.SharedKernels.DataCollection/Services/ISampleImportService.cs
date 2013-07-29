@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using Main.Core.Documents;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
 
 namespace WB.Core.SharedKernels.DataCollection.Services
 {

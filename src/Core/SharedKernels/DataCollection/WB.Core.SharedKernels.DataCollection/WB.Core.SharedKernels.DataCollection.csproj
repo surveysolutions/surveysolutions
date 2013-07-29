@@ -58,13 +58,14 @@
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\CsvSampleRecordsAccessor.cs" />
-    <Compile Include="Services\ImportResult.cs" />
+    <Compile Include="Services\SampleImport\DTO\ImportResult.cs" />
+    <Compile Include="Services\SampleImport\DTO\TempFileImportData.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
-    <Compile Include="Services\ISampleRecordsAccessor.cs" />
+    <Compile Include="Services\SampleImport\SampleDataReaders\CsvSampleRecordsAccessor.cs" />
+    <Compile Include="Services\SampleImport\SampleDataReaders\ISampleRecordsAccessor.cs" />
     <Compile Include="Services\SampleImportService.cs" />
-    <Compile Include="Services\TempFileImportData.cs" />
-    <Compile Include="Services\TemporaryFileStorageRepositoryAccessor.cs" />
+    <Compile Include="Services\SampleImport\TemporaryDataAccessors\FileTemporaryDataRepositoryAccessor.cs" />
+    <Compile Include="Services\SampleImport\TemporaryDataAccessors\ITemporaryDataRepositoryAccessor.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
