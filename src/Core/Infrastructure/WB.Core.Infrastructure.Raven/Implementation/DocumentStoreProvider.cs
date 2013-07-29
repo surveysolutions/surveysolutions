@@ -1,23 +1,18 @@
-﻿using WB.Core.Infrastructure.Raven;
+﻿using System;
+using System.Net;
+using Ninject.Activation;
+using Raven.Client.Document;
+using Raven.Client.Embedded;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
-namespace Main.Core
+namespace WB.Core.Infrastructure.Raven.Implementation
 {
-    using System;
-    using System.Net;
-
-    using Ninject.Activation;
-
-    using Raven.Client.Document;
-    using Raven.Client.Embedded;
-    using Raven.Client.Extensions;
-    using Ncqrs.Eventing.Storage.RavenDB;
-
     internal class DocumentStoreProvider : Provider<DocumentStore>
     {
         private readonly RavenConnectionSettings settings;
 
         private EmbeddableDocumentStore embeddedStorage;
+        private DocumentStore serverStorage;
 
         public DocumentStoreProvider(RavenConnectionSettings settings)
         {
@@ -28,12 +23,15 @@ namespace Main.Core
         {
             DocumentStore store = this.settings.IsEmbedded ? this.GetEmbededStorage() : this.GetServerStorage();
 
-            store.Initialize();
-
             return store;
         }
 
         private DocumentStore GetServerStorage()
+        {
+            return this.serverStorage ?? (this.serverStorage = this.GetServerStorageImpl());
+        }
+
+        private DocumentStore GetServerStorageImpl()
         {
             var store = new DocumentStore
                 {
@@ -46,6 +44,8 @@ namespace Main.Core
             {
                 store.Credentials = new NetworkCredential(this.settings.Username, this.settings.Password);
             }
+
+            store.Initialize();
 
             return store;
         }
@@ -64,6 +64,8 @@ namespace Main.Core
                         Conventions = new DocumentConvention() { JsonContractResolver = new PropertiesOnlyContractResolver() }
                     };
                 this.embeddedStorage.ResourceManagerId = Guid.NewGuid();
+
+                this.embeddedStorage.Initialize();
             }
 
             return this.embeddedStorage;
