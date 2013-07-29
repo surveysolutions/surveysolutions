@@ -21,6 +21,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.Services
@@ -80,40 +82,34 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 return;
             if (!string.IsNullOrEmpty(item.ErrorMassage))
                 return;
-            var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            if (eventStore == null)
-                return;
-            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
-            if (myEventBus == null)
-            {
-                return;
-            }
 
             var bigTemplate = this.templateRepository.GetById(item.TemplateId);
             if (bigTemplate == null)
                 return;
-            var uncommitedStreams = new List<UncommittedEventStream>();
+            Questionnaire questionnarie;
+
+            using (new EventContext())
+            {
+                questionnarie = new Questionnaire(Guid.NewGuid(), bigTemplate);
+            }
+
             foreach (var value in item.Values)
             {
-                using (EventContext ex = new EventContext())
+                using (new EventContext())
                 {
-                    BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate);
-
-                    var stream = new UncommittedEventStream(Guid.NewGuid());
-                    foreach (var uncommittedEvent in ex.Events)
-                    {
-                        stream.Append(uncommittedEvent);
-                    }
-                    uncommitedStreams.Add(stream);
+                    PreBuiltInterview(Guid.NewGuid(), value, item.Header, questionnarie);
                 }
             }
-            foreach (var uncommitedStream in uncommitedStreams)
+            foreach (var value in item.Values)
             {
-                eventStore.Store(uncommitedStream);
-                myEventBus.Publish(uncommitedStream.Select(e => e as IPublishableEvent));
+                try
+                {
+                    BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate);
+                }
+                catch
+                {
+                }
             }
-
-
         }
 
         private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
@@ -196,34 +192,48 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id);
         }
 
+        private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
+        {
+            var featuredAnswers = CreateFeaturedAnswerList(values, header, template.CreateSnapshot());
+            template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
+                                                    new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
+        }
         private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template)
         {
-                var ar = new CompleteQuestionnaireAR(publicKey, template, null);
+            var featuredAnswers = CreateFeaturedAnswerList(values, header, template);
+            var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
+            commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey,template.PublicKey,null,null,featuredAnswers));
+        }
+        private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, QuestionnaireDocument template)
+        {
+            var featuredAnswers = new List<QuestionAnswer>();
+            for (int i = 0; i < header.Length; i++)
+            {
+                var question =
+                    template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == header[i]);
+                if (question == null)
+                    continue;
 
-                for (int i = 0; i < header.Length; i++)
+                var singleOption = question as SingleQuestion;
+                if (singleOption != null)
                 {
-                    var question =
-                        template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == header[i]);
-                    if (question == null)
-                        continue;
-
-                    var singleOption = question as SingleQuestion;
-                    if (singleOption != null)
-                    {
-                        var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
-                        ar.SetAnswer(question.PublicKey, null, null, new List<Guid> {answer.PublicKey}, DateTime.Now);
-                    }
-                    else
-                    {
-                        ar.SetAnswer(question.PublicKey, null, values[i], null, DateTime.Now);
-                    }
+                    var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
+                    featuredAnswers.Add(new QuestionAnswer() {Answers = new Guid[] {answer.PublicKey}, Id = question.PublicKey});
                 }
-            
-            
-
+                else
+                {
+                    featuredAnswers.Add(new QuestionAnswer()
+                        {
+                            Answer = values[i],
+                            Answers = new Guid[] {},
+                            Id = question.PublicKey
+                        });
+                }
+            }
+            return featuredAnswers;
         }
 
-      /*  public void ParseSource(Guid templateId, TextReader textReader)
+        /*  public void ParseSource(Guid templateId, TextReader textReader)
         {
             var tempFile = new TempFileImportData() {PublicKey = Guid.NewGuid(), TemplateId = templateId};
             var template = templateRepository.GetById(templateId);
@@ -239,7 +249,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                         continue;
                     }
                     valueList.Add(reader.CurrentRecord);
-        //            yield return BuiltInterview(Guid.NewGuid(), reader.CurrentRecord, header, template);
+        //            yield return PreBuiltInterview(Guid.NewGuid(), reader.CurrentRecord, header, template);
                 }
             }
             tempFile.Values = valueList.ToArray();
