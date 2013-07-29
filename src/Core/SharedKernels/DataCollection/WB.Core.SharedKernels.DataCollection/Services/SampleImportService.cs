@@ -88,14 +88,14 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 return;
             Questionnaire questionnarie;
 
-            using (new EventContext())
+            using (new ObliviousEventContext())
             {
                 questionnarie = new Questionnaire(Guid.NewGuid(), bigTemplate);
             }
 
             foreach (var value in item.Values)
             {
-                using (new EventContext())
+                using (new ObliviousEventContext())
                 {
                     PreBuiltInterview(Guid.NewGuid(), value, item.Header, questionnarie);
                 }
