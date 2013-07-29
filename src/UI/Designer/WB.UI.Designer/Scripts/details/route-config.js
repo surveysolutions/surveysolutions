@@ -1,10 +1,7 @@
 ﻿define('route-config',
     ['config', 'router', 'vm'],
     function (config, router, vm) {
-        var
-            logger = config.logger,
-            
-            register = function() {
+        var register = function() {
 
                 var routeData = [
 
