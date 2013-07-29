@@ -740,3 +740,10 @@ a.btn.btn-help {
 #details-question .form-horizontal .controls {
     margin-left: 85px;
 }
+.cancel-edit {
+    color: #113950;
+    font-size: 22px;
+}
+.cancel-edit:hover {
+    text-decoration: none;
+}
