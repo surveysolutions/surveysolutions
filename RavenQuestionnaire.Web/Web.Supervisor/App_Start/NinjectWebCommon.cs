@@ -35,6 +35,7 @@ namespace Web.Supervisor.App_Start
 
     using NinjectAdapter;
 
+
     /// <summary>
     /// The ninject web common.
     /// </summary>
@@ -99,13 +100,14 @@ namespace Web.Supervisor.App_Start
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
+                new ServiceLocationModule(),
+                new NLogLoggingModule(),
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
-                new NLogLoggingModule(),
                 new SupervisorCommandDeserializationModule());
 
 #warning dirty hack for register ziped read side
@@ -120,10 +122,8 @@ namespace Web.Supervisor.App_Start
             
             //kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
 
-            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
