@@ -1,6 +1,4 @@
-﻿#if !MONODROID
-
-namespace Main.Core
+﻿namespace Main.Core
 {
     using System;
     using System.Net;
@@ -12,7 +10,7 @@ namespace Main.Core
     using Raven.Client.Extensions;
     using Ncqrs.Eventing.Storage.RavenDB;
 
-    public class DocumentStoreProvider : Provider<DocumentStore>
+    internal class DocumentStoreProvider : Provider<DocumentStore>
     {
         private readonly bool isEmbedded;
         private readonly string username;
@@ -77,5 +75,3 @@ namespace Main.Core
         }
     }
 }
-
-#endif
