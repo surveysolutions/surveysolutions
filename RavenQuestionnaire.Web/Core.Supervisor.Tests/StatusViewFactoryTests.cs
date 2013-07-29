@@ -135,15 +135,15 @@ namespace Core.Supervisor.Tests
                 templateMock.Setup(x => x.QueryAll(It.IsAny<Expression<Func<QuestionnaireBrowseItem, bool>>>()))
                             .Returns(new QuestionnaireBrowseItem[]
                                 {
-                                    new QuestionnaireBrowseItem(
-                                         new QuestionnaireDocument()
-                                             {
-                                                 PublicKey = templateId.Value,
-                                                 Title = "smth",
-                                                 CreationDate = DateTime.Now,
-                                                 CloseDate = DateTime.Now,
-                                                 IsPublic = true
-                                             })
+
+                                    new QuestionnaireBrowseItem()
+                                        {
+                                            QuestionnaireId = templateId.Value,
+                                            Title = "smth",
+                                            CreationDate = DateTime.Now,
+                                            LastEntryDate = DateTime.Now,
+                                            IsPublic = true
+                                        }
                                 });
             }
             return templateMock;
