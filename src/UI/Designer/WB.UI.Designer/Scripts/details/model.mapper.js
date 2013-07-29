@@ -68,6 +68,7 @@
 
                     item.isNew(false);
                     item.dirtyFlag().reset();
+                    item.commit();
                     return item;
                 },
                 objectsFromDto: function (dto) {
