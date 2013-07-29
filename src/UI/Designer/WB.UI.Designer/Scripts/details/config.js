@@ -1,17 +1,43 @@
 ﻿define('config',
     ['pnotify', 'ko', 'amplify'],
-    function (toastr, ko, amplify) {
+    function(toastr, ko, amplify) {
 
         var// properties
             //-----------------
             questionTypes = {
-                "SingleOption": "SingleOption",
-                "MultyOption": "MultyOption",
+                "SingleOption": "Categorical: one answer",
+                "MultyOption": "Categorical: multiple answers",
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
                 "AutoPropagate": "AutoPropagate"
             },
+            questionTypeOptions = [
+                {
+                    key: "SingleOption",
+                    value: "Categorical: one answer"
+                },
+                {
+                    key: "MultyOption",
+                    value: "Categorical: multiple answers"
+                },
+                {
+                    key: "Numeric",
+                    value: "Numeric"
+                },
+                {
+                    key: "DateTime",
+                    value: "Date and time"
+                },
+                {
+                    key: "Text",
+                    value: "Text"
+                },
+                {
+                    key: "AutoPropagate",
+                    value: "Auto propagate"
+                }
+            ],
             questionScopes = [
                 "Interviewer",
                 "Supervisor",
@@ -38,7 +64,7 @@
                 deleteGroup: "DeleteGroup",
                 groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
-                cloneQuestion : "CloneQuestion",
+                cloneQuestion: "CloneQuestion",
                 updateQuestion: "UpdateQuestion",
                 deleteQuestion: "DeleteQuestion",
                 questionMove: "MoveQuestion"
@@ -70,9 +96,7 @@
 
             storeExpirationMs = (1000 * 60 * 60 * 24), // 1 day
             throttle = 400,
-            title = 'Details',
             loggerTmeout = 2000,
-
             warnings = {
                 propagatedGroupCantBecomeChapter: {
                     title: 'Cant move',
@@ -96,11 +120,10 @@
                 },
                 savedData: 'Data saved successfully'
             },
-
             // methods
             //-----------------
 
-            init = function () {
+            init = function() {
                 logger.defaults.delay = loggerTmeout;
 
                 ko.validation.configure({
@@ -114,7 +137,6 @@
 
                 ko.bindingHandlers.sortable.options = { cursor: "move", handle: ".handler", axis: "y", placeholder: "ui-state-highlight" };
                 ko.bindingHandlers.draggable.options = { cursor: "move", handle: ".handler", axis: "y" };
-
             };
 
         init();
@@ -123,13 +145,13 @@
             logger: logger,
             storeExpirationMs: storeExpirationMs,
             throttle: throttle,
-            title: title,
             warnings: warnings,
             hashes: hashes,
             viewIds: viewIds,
             messages: messages,
             stateKeys: stateKeys,
             questionTypes: questionTypes,
+            questionTypeOptions: questionTypeOptions,
             questionScopes: questionScopes,
             answerOrders: answerOrders,
             groupTypes: groupTypes,
