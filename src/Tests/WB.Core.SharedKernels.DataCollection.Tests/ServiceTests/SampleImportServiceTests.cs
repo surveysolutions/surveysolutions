@@ -94,6 +94,59 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
             Assert.That(status.ErrorMessage, Is.EqualTo("invalid header Capiton"));
         }
 
+        [Test]
+        [TestCase(2,2,2)]
+        [TestCase(4, 2,2)]
+        [TestCase(2, 2, 12)]
+        [TestCase(4, 2, 12)]
+        public void ImportSampleAsync_When_Featured_questions_list_is_acceptable_Then_import_result_marked_as_successefull(
+            int featuredQuestionsCount, 
+            int presentQuestions,
+            int valuesCount)
+        {
+
+            //arrange
+            var templateId = Guid.NewGuid();
+            var avalibleFeaturedQuestions = new FeaturedQuestionItem[featuredQuestionsCount];
+            var randomizer = new Random();
+            for (int i = 0; i < featuredQuestionsCount; i++)
+            {
+                avalibleFeaturedQuestions[i] = new FeaturedQuestionItem(Guid.NewGuid(), randomizer.Next().ToString(),
+                                                                        randomizer.Next().ToString());
+            }
+
+            var smallTemplateStorage = new Mock<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>();
+
+            var values =new string[valuesCount+1][];
+            values[0] = avalibleFeaturedQuestions.Take(presentQuestions).Select(q => q.Caption).ToArray();
+            for (int i = 1; i < valuesCount; i++)
+            {
+                values[i] = avalibleFeaturedQuestions.Take(presentQuestions).Select(q => randomizer.Next().ToString()).ToArray();
+            }
+
+
+            var sampleMock = new Mock<ISampleRecordsAccessor>();
+            sampleMock.Setup(x => x.Records)
+                      .Returns(values);
+            smallTemplateStorage.Setup(x => x.GetById(templateId))
+                                .Returns(new QuestionnaireBrowseItem() { QuestionnaireId = templateId, FeaturedQuestions = avalibleFeaturedQuestions });
+
+            SampleImportService target = CreateSampleImportService(null, smallTemplateStorage.Object);
+
+            //act
+
+            var importId = target.ImportSampleAsync(templateId, sampleMock.Object);
+
+            //assert
+            var status = WhaitForCompletedImportResult(target, importId);
+
+            //assert
+            Assert.True(status.IsSuccessed);
+            Assert.True(status.IsCompleted);
+            Assert.That(status.Values.Length, Is.EqualTo(valuesCount));
+            Assert.That(status.Header.Length, Is.EqualTo(presentQuestions));
+        }
+
         private ImportResult WhaitForCompletedImportResult(SampleImportService target, Guid importId)
         {
             var status = target.GetImportStatus(importId);

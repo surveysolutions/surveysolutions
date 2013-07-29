@@ -239,28 +239,5 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             }
             return featuredAnswers;
         }
-
-        /*  public void ParseSource(Guid templateId, TextReader textReader)
-        {
-            var tempFile = new TempFileImportData() {PublicKey = Guid.NewGuid(), TemplateId = templateId};
-            var template = templateRepository.GetById(templateId);
-            var valueList = new List<string[]>();
-            using (var reader = new CsvReader(textReader))
-            {
-
-                while (reader.Read())
-                {
-                    if (tempFile.Header == null)
-                    {
-                        tempFile.Header = reader.FieldHeaders;
-                        continue;
-                    }
-                    valueList.Add(reader.CurrentRecord);
-        //            yield return PreBuiltInterview(Guid.NewGuid(), reader.CurrentRecord, header, template);
-                }
-            }
-            tempFile.Values = valueList.ToArray();
-            tempFileRepository.Store(tempFile,tempFile.TemplateId);
-        }*/
     }
 }
