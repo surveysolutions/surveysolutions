@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors
 {
@@ -16,17 +17,18 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
     {
         private readonly RavenReadSideRepositoryWriter<ZipView> internalImplementationOfWriter;
         private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
-        private readonly GZipJsonCompressor compressor;
+        private readonly IStringCompressor compressor;
         private readonly Dictionary<Guid, TEntity> memcache; 
         private object locker=new object();
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
-                                                            IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService)
+                                                            IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService,
+            IStringCompressor comperessor)
         {
-            internalImplementationOfWriter = new RavenReadSideRepositoryWriter<ZipView>(ravenStore, writerRegistry);
-            internalImplementationOfReader = new RavenReadSideRepositoryReader<ZipView>(ravenStore, readSideStatusService);
-            compressor=new GZipJsonCompressor();
-            memcache = new Dictionary<Guid, TEntity>();
+            this.internalImplementationOfWriter = new RavenReadSideRepositoryWriter<ZipView>(ravenStore, writerRegistry);
+            this.internalImplementationOfReader = new RavenReadSideRepositoryReader<ZipView>(ravenStore, readSideStatusService);
+            this.compressor = comperessor;
+            this.memcache = new Dictionary<Guid, TEntity>();
         }
 
         public int Count()

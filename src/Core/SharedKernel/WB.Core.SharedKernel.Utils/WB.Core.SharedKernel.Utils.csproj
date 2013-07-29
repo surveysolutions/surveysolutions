@@ -50,6 +50,8 @@
     <Compile Include="Compression\IStringCompressor.cs" />
     <Compile Include="Compression\GZipJsonCompressor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\IJsonUtils.cs" />
+    <Compile Include="Serialization\NewtonJsonUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
