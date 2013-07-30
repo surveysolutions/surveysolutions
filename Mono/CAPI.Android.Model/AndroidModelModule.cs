@@ -11,6 +11,7 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
+using CAPI.Android.Settings;
 using Main.Core.Services;
 using Main.Core.View;
 using Ncqrs.Eventing.Storage;
@@ -38,6 +39,8 @@ namespace CAPI.Android.Core.Model
             var fileSystem = new FileStorageService();
             var changeLogStore = new FileChangeLogStore();
             var syncCacher = new FileSyncCacher();
+            var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
+
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
@@ -61,7 +64,8 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
 #warning bad idea to pass loginStore in backuper
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, loginStore, snapshotStore, bigSurveyStore, syncCacher));
+            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, loginStore, snapshotStore,
+                bigSurveyStore, syncCacher, sharedPreferencesBackup));
         }
     }
 }

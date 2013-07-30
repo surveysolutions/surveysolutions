@@ -1,25 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SettingsManager.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The settings manager.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Android.App;
 using Android.Content;
 using Java.Util;
 
 namespace CAPI.Android.Settings
 {
-    /// <summary>
-    /// The settings manager.
-    /// </summary>
     public static class SettingsManager
     {
         #region Constants

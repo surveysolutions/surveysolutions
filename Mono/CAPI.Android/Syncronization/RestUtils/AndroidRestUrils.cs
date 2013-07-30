@@ -39,9 +39,7 @@ namespace CAPI.Android.Syncronization.RestUtils
 
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("user wasn't authorized");
-
-                var logger = ServiceLocator.Current.GetInstance<ILogger>();
-
+                
                 logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
