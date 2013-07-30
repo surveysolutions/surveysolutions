@@ -327,6 +327,7 @@
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
     <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
