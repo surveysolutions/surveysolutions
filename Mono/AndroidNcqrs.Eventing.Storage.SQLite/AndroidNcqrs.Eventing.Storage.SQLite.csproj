@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
+    <Compile Include="DenormalizerStorage\SqliteDenormalizerStore.cs" />
     <Compile Include="DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
     <Compile Include="MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
