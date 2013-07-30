@@ -1,25 +1,32 @@
-﻿using Ninject.Modules;
-
+﻿using System.Linq;
+using Ninject.Modules;
+using Raven.Client.Document;
 using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Raven
 {
-    public class RavenInfrastructureModule : NinjectModule
+    public abstract class RavenInfrastructureModule : NinjectModule
     {
-        public override void Load()
+        private readonly RavenConnectionSettings settings;
+
+        protected RavenInfrastructureModule(RavenConnectionSettings settings)
         {
-            this.Bind<IReadSideStatusService>().To<RavenReadSideService>().InSingletonScope();
-            this.Bind<IReadSideRepositoryIndexAccessor>().To<RavenReadSideRepositoryIndexAccessor>().InSingletonScope();
-            this.Bind<IReadSideAdministrationService>().To<RavenReadSideService>().InSingletonScope();
+            this.settings = settings;
+        }
 
-            this.Bind<IRavenReadSideRepositoryWriterRegistry>().To<RavenReadSideRepositoryWriterRegistry>().InSingletonScope();
+        protected void BindDocumentStore()
+        {
+            if (this.IsDocumentStoreAlreadyBound())
+                return;
 
-            // each repository writer should exist in one instance because it might use caching
-            this.Kernel.Bind(typeof(RavenReadSideRepositoryWriter<>)).ToSelf().InSingletonScope();
+            var storeProvider = new DocumentStoreProvider(this.settings);
+            this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
+            this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
+        }
+
+        private bool IsDocumentStoreAlreadyBound()
+        {
+            return this.Kernel.GetBindings(typeof(DocumentStore)).Any();
         }
     }
 }
