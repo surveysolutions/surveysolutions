@@ -464,7 +464,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Configuration\Seropyan.Web.config">
+    <Content Include="Configuration\Ira.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
