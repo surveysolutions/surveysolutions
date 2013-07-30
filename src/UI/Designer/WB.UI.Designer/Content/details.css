@@ -651,8 +651,17 @@ h1 {
     padding-right: 3px;
     margin-top: 6px;
 }
-.ui-expander-head.ui-expander-head-collapsed i{
-    background-position: -408px -96px;
+.ui-expander-head i.icon-plus{
+    display: none;
+}
+.ui-expander-head i.icon-minus{
+    display: inline-block;
+}
+.ui-expander-head.ui-expander-head-collapsed i.icon-minus{
+    display: none;
+}
+.ui-expander-head.ui-expander-head-collapsed i.icon-plus{
+    display: inline-block;
 }
  ul.list.ui-sortable:empty {
      min-height: 24px;
