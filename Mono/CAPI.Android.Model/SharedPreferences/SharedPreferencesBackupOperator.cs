@@ -50,7 +50,7 @@ namespace CAPI.Android.Settings
             if (!File.Exists(pathToPreferences))
                 return;
 
-            var preferencesAsText = File.ReadAllText(pathToPreferences));
+            var preferencesAsText = File.ReadAllText(pathToPreferences);
             Dictionary<string, object> preferences = null;
 
             preferences = JsonConvert.DeserializeObject<Dictionary<string, object>>(preferencesAsText,
