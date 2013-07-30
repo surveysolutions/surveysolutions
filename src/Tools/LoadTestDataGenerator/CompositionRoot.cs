@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
@@ -57,7 +58,7 @@ namespace LoadTestDataGenerator
 
             kernel.Load(new LoadTestDataGeneratorRegistry());
 
-            var store = new BatchedRavenDBEventStore(kernel.Get<DocumentStore>());
+            var store = new BatchedRavenDBEventStore(kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore());
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
             kernel.Bind<IStreamableEventStore>().ToConstant(store);

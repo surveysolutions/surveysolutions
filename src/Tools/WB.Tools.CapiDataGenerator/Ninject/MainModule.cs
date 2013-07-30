@@ -25,6 +25,7 @@ using Ninject.Modules;
 using NinjectAdapter;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -50,7 +51,7 @@ namespace CapiDataGenerator
             var changeLogStore = new FileChangeLogStore();
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
-                new RavenDBEventStore(this.Kernel.Get<DocumentStore>(), 50));
+                new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
 
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
