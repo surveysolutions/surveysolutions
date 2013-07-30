@@ -455,8 +455,22 @@
         toogleGroups = function () {
             $('.ui-expander-head:not(.ui-expander-head-collapsed)').click();
         },
+        collapseItemIfNeeded = function (arg) {
+            console.log(arg.item);
+        },
+        expandItemIfNeeded = function (arg) {
+            console.log(arg);
+        },
         init = function() {
             filter.subscribe(filterContent);
+            ko.bindingHandlers.sortable.options.start = function(arg, ui) {
+                if ($(ui.item).children('.ui-expander').length > 0) {
+                    var button = $(ui.item).children('.ui-expander').children('.ui-expander-head');
+                    if ($(button).hasClass('ui-expander-head-collapsed') == false) {
+                        button.click();
+                    }
+                }
+            };
         };
 
         init();
