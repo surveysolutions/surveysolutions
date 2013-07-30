@@ -14,7 +14,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
     public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private const int MaxCountOfCachedEntities = 512;
+        private const int MaxCountOfCachedEntities = 256;
         private const int MaxCountOfEntitiesInOneStoreOperation = 16;
 
         private class CachedEntity
