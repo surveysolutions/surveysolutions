@@ -159,7 +159,10 @@ namespace CAPI.Android
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule(), new AndroidLoggingModule());
+            kernel = new StandardKernel(
+                new AndroidCoreRegistry(),
+                new AndroidModelModule(),
+                new AndroidLoggingModule());
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);

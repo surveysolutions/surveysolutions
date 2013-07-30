@@ -1,11 +1,12 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Indexes;
 
-namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
+namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes
 {
-    public class UniqueEventsIndex : AbstractIndexCreationTask<StoredEvent, UniqueEventsResults>
+    internal class UniqueEventsIndex : AbstractIndexCreationTask<StoredEvent, UniqueEventsResults>
     {
         public UniqueEventsIndex()
         {

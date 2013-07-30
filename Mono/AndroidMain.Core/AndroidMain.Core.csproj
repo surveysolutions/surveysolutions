@@ -158,9 +158,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CoreRegistry.cs">
       <Link>CoreRegistry.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\DocumentStoreProvider.cs">
-      <Link>DocumentStoreProvider.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\AbstractDocument.cs">
       <Link>Documents\AbstractDocument.cs</Link>
     </Compile>

@@ -10,7 +10,6 @@ using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
-using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
@@ -27,6 +26,7 @@ using System.Windows.Forms;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;

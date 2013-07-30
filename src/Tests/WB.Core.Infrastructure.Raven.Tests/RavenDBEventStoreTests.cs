@@ -6,12 +6,15 @@ using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using Raven.Client;
 using Rhino.Mocks;
 using Ncqrs.Eventing.Sourcing;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 
-namespace Ncqrs.Eventing.Storage.RavenDB.Tests
+namespace WB.Core.Infrastructure.Raven.Tests
 {
     [TestFixture]
     public class RavenDBEventStoreTests : RavenDBTestBase
@@ -50,12 +53,17 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
                        && Age.Equals(other.Age);
                 return result;
             }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
         }
 
         [Serializable]
         public class CustomerNameChanged
         {
-            public string NewName { get; set; }
+            public string NewName { get; private set; }
 
             public CustomerNameChanged(string newName)
             {
@@ -71,6 +79,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
                 }
                 bool result = NewName.Equals(other.NewName);
                 return result;
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
             }
         }
 

@@ -24,10 +24,12 @@ namespace CapiDataGenerator
             var setup = new Setup(Dispatcher, presenter);
             setup.Initialize();
 
+            var ravenSettings = new RavenConnectionSettings(ConfigurationManager.AppSettings["Raven.DocumentStore"]);
+
             new StandardKernel(
-                new RavenInfrastructureModule(),
+                new RavenReadSideInfrastructureModule(ravenSettings),
                 new SynchronizationModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
-                new CapiDataGeneratorRegistry(ConfigurationManager.AppSettings["Raven.DocumentStore"], false),
+                new CapiDataGeneratorRegistry(),
                 new NLogLoggingModule(),
                 new MainModelModule());
 
