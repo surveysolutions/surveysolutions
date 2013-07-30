@@ -119,9 +119,14 @@ namespace Web.Supervisor.Controllers
         public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
         {
             this.sampleImportService.CreateSample(id, GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
-            return RedirectToAction("Index");
+            return RedirectToAction("SampleCreationResult", new {id = id});
         }
 
+        public ActionResult SampleCreationResult(Guid id)
+        {
+            var result = this.sampleImportService.GetSampleCreationStatus(id);
+            return this.View(result);
+        }
         public JsonResult GetSampleCreationStatus(Guid id)
         {
             return this.Json(this.sampleImportService.GetSampleCreationStatus(id));

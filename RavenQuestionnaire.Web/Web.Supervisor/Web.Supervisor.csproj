@@ -591,6 +591,7 @@
     <Content Include="Views\HQ\BatchUpload.cshtml" />
     <Content Include="Views\HQ\ImportResult.cshtml" />
     <Content Include="Views\HQ\ImportSample.cshtml" />
+    <Content Include="Views\HQ\SampleCreationResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
