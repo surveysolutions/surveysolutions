@@ -588,6 +588,9 @@
     <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <Content Include="Views\Survey\Status.cshtml" />
     <Content Include="Views\HQ\Status.cshtml" />
+    <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportResult.cshtml" />
+    <Content Include="Views\HQ\ImportSample.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

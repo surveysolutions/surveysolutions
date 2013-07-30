@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.Filters;
 
@@ -89,8 +90,9 @@ namespace Web.Supervisor.Injections
 
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
-            
-            this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
+
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
         }
     }
 }
