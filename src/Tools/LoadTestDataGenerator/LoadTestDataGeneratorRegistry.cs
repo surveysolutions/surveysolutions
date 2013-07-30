@@ -16,19 +16,9 @@ namespace LoadTestDataGenerator
 
     public class LoadTestDataGeneratorRegistry : CoreRegistry
     {
-        public LoadTestDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded)
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
-        }
-
-        public override void Load()
-        {
-            base.Load();
-        }
-
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
-        {
-            return base.GetAssweblysForRegister().Concat(new[]
+            return base.GetAssembliesForRegistration().Concat(new[]
             {
                 typeof(LoadTestDataGeneratorRegistry).Assembly,
                 typeof(CompleteQuestionnaireDenormalizer).Assembly,

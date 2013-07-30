@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+using Ncqrs;
 using Raven.Imports.Newtonsoft.Json.Serialization;
 
-namespace Ncqrs.Eventing.Storage.RavenDB
+namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 {
-    public class IgnoreAssemblyNameForEventsSerializationBinder : DefaultSerializationBinder
+    internal class IgnoreAssemblyNameForEventsSerializationBinder : DefaultSerializationBinder
     {
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {

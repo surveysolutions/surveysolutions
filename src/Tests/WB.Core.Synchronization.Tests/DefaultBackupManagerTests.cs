@@ -68,7 +68,7 @@ namespace WB.Core.Synchronization.Tests
                 eventList.Add(eventsPerAr);
             }
 
-            eventStore.Setup(x => x.GetAllEventsIncludingSnapshots(It.IsAny<int>())).Returns(eventList);
+            eventStore.Setup(x => x.GetAllEvents(It.IsAny<int>())).Returns(eventList);
             NcqrsEnvironment.SetDefault(eventStore.Object as IEventStore);
 
             DefaultBackupManager target = CreateDefaultBackupManager();
