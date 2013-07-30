@@ -41,21 +41,31 @@
 
     <div id="footer">
         <div class="inner">
-
-            <div class="statistics">
-                <ul class="nav nav-pills" data-bind="with: statistics">
-                    <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
-                    <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
-                </ul>
+            <div class="row-fluid">
+                <div class="span4">
+                    <div id="filter">
+                        <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
+                        <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="statistics">
+                        <ul class="nav nav-pills" data-bind="with: statistics">
+                            <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
+                            <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="pull-right">
+                        <button class="btn btn-info" data-bind="click: $root.showOutput">Show errors</button>
+                    </div>
+                </div>
             </div>
-@*            <div class="statistics" data-bind="with: statistics">
+            <div class="statistics" data-bind="with: statistics">
                 <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
                     <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
                 </div>
-            </div>*@
-
-            <div class="pull-right">
-                <button class="btn btn-info" data-bind="click: $root.showOutput">Show errors</button>
             </div>
         </div>
     </div>
@@ -77,10 +87,7 @@
     <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
-                <div id="filter">
-                    <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
-                    <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
-                </div>
+
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
                         <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
