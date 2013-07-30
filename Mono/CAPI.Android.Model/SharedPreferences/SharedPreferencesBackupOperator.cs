@@ -46,7 +46,11 @@ namespace CAPI.Android.Settings
 
         public void RestoreFromBakupFolder(string path)
         {
-            var preferencesAsText = File.ReadAllText(Path.Combine(path, PreferencesFileName));
+            string pathToPreferences = Path.Combine(path, PreferencesFileName);
+            if (!File.Exists(pathToPreferences))
+                return;
+
+            var preferencesAsText = File.ReadAllText(pathToPreferences));
             Dictionary<string, object> preferences = null;
 
             preferences = JsonConvert.DeserializeObject<Dictionary<string, object>>(preferencesAsText,
