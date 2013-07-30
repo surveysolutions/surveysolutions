@@ -55,5 +55,6 @@
 <div class="pane-bottom">
     <div class="inner">
         <button class="btn btn-success" data-bind="click: $root.saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+        <button class="btn btn-link cancel-edit" data-bind="click: revert, visible: dirtyFlag().isDirty() && !isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-remove"></i></button>
     </div>
 </div>
