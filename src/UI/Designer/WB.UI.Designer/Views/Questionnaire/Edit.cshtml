@@ -37,7 +37,7 @@
 
 <div id="busyindicator"></div>
 
-<div id="stacks">
+<div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
 
     <div id="footer">
         <div class="inner">
@@ -55,24 +55,27 @@
                             <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
                         </ul>
                     </div>
+                    <div class="statistics" data-bind="with: statistics">
+                        <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
+                            <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="span4">
                     <div class="pull-right">
-                        <button class="btn btn-info" data-bind="click: $root.showOutput">Show errors</button>
+                        <button class="btn btn-info" data-bind="click: $root.toggleOutput">
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="hidden: isOutputVisible">Show</span> errors
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="statistics" data-bind="with: statistics">
-                <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
-                    <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
-                </div>
-            </div>
+
         </div>
     </div>
     <div id="output" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: $root.hideOutput">&times</button>
+                <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
                 <span>Errors log</span>
             </div>
             <div class="body">

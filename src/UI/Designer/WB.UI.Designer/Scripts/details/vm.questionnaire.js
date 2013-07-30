@@ -123,11 +123,9 @@
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').removeClass('detail-visible');
             },
-            showOutput = function() {
-                $('#stacks').addClass('output-visible');
-            },
-            hideOutput = function() {
-                $('#stacks').removeClass('output-visible');
+            isOutputVisible = ko.observable(false);
+            toggleOutput = function () {
+                isOutputVisible(!isOutputVisible());
             },
             addQuestion = function(parent) {
                 var question = new model.Question();
@@ -480,8 +478,8 @@
             deleteGroup: deleteGroup,
             saveQuestion: saveQuestion,
             deleteQuestion: deleteQuestion,
-            showOutput: showOutput,
-            hideOutput: hideOutput,
+            isOutputVisible: isOutputVisible,
+            toggleOutput: toggleOutput,
             errors: errors,
             statistics: statistics,
             searchResult: searchResult,
