@@ -6,7 +6,6 @@
             bind = function () {
                 $(document).ready(function () {
                     ko.applyBindings(vm.questionnaire);
-                    $('input, textarea').placeholder();
                 });
             };
         return {

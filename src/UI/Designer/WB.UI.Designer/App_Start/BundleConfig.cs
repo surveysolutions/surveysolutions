@@ -84,6 +84,7 @@
                     // Plugins
                     "~/Scripts/lib/jquery.autogrow-textarea.js", 
                     "~/Scripts/lib/Math.uuid.js",
+                    "~/Scripts/lib/Placeholders.js",
  
                     "~/Scripts/require.js", 
                     "~/Scripts/details/*.js", 
