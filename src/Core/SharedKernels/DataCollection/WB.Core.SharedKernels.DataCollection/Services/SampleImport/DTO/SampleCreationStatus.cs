@@ -8,16 +8,18 @@ namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
 {
     public  class SampleCreationStatus
     {
-        public SampleCreationStatus(Guid id, bool isCompleted, string errorMessage)
+        public SampleCreationStatus()
+        {
+        }
+        public SampleCreationStatus(Guid id)
         {
             Id = id;
-            IsCompleted = isCompleted;
-            ErrorMessage = errorMessage;
         }
 
-        public Guid Id { get; private set; }
-        public bool IsCompleted { get; private set; }
-        public string ErrorMessage { get; private set; }
+        public Guid Id { get;  set; }
+        public bool IsCompleted { get;  set; }
+        public string ErrorMessage { get;  set; }
+        public string StatusMessage { get;  set; }
 
         public bool IsSuccessed
         {
@@ -27,6 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
         public void CompleteProcess()
         {
             this.IsCompleted = true;
+        }
+
+        public void SetStatusMessage(string message)
+        {
+            this.StatusMessage = message;
         }
 
         public void SetErrorMessage(string message)
