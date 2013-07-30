@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.Core.SharedKernel.Utils.Compression
 {
@@ -14,6 +15,13 @@ namespace WB.Core.SharedKernel.Utils.Compression
     /// </summary>
     public class GZipJsonCompressor : IStringCompressor
     {
+        private readonly IJsonUtils jsonSerrializer;
+
+        public GZipJsonCompressor(IJsonUtils jsonSerrializer)
+        {
+            this.jsonSerrializer = jsonSerrializer;
+        }
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -59,15 +67,14 @@ namespace WB.Core.SharedKernel.Utils.Compression
             {
                 using (var reader = new StreamReader(zip, Encoding.UTF8))
                 {
-                    return JsonConvert.DeserializeObject<T>(
-                        reader.ReadToEnd(), JsonSerializerSettings);
+                    return jsonSerrializer.Deserrialize<T>(reader.ReadToEnd());
                 }
             }
         }
 
         public string CompressObject(object s)
         {
-            var bytes = Encoding.Unicode.GetBytes(GetItemAsContent(s));
+            var bytes = Encoding.Unicode.GetBytes(jsonSerrializer.GetItemAsContent(s));
             using (var msi = new MemoryStream(bytes))
             using (var mso = new MemoryStream())
             {
@@ -79,7 +86,7 @@ namespace WB.Core.SharedKernel.Utils.Compression
             }
         }
 
-        public T DecompressString<T>(string s)
+        public T DecompressString<T>(string s) where T:class 
         {
             var bytes = Convert.FromBase64String(s);
             using (var msi = new MemoryStream(bytes))
@@ -90,23 +97,8 @@ namespace WB.Core.SharedKernel.Utils.Compression
                     gs.CopyTo(mso);
                 }
                 var stringData = Encoding.Unicode.GetString(mso.ToArray());
-                return JsonConvert.DeserializeObject<T>(stringData, JsonSerializerSettings);
+                return this.jsonSerrializer.Deserrialize<T>(stringData);
             }
-        }
-        private JsonSerializerSettings JsonSerializerSettings
-        {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-            }
-        }
-        private string GetItemAsContent(object item)
-        {
-            return JsonConvert.SerializeObject(item, Formatting.None, JsonSerializerSettings);
         }
 
         #endregion

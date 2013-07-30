@@ -1,14 +1,9 @@
-using System;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.Document
+namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
     public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>
     {
