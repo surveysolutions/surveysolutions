@@ -147,6 +147,51 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
             Assert.That(status.Header.Length, Is.EqualTo(presentQuestions));
         }
 
+
+        [Test]
+        public void ImportSampleAsync_When_Featured_questions_list_is_lest_then_avalible_Then_import_result_marked_as_successefull()
+        {
+
+            //arrange
+            var templateId = Guid.NewGuid();
+            var avalibleFeaturedQuestions = new FeaturedQuestionItem[4];
+            for (int i = 0; i < avalibleFeaturedQuestions.Length; i++)
+            {
+                avalibleFeaturedQuestions[i] = new FeaturedQuestionItem(Guid.NewGuid(), "title", "q" + i);
+            }
+
+            var smallTemplateStorage = new Mock<IReadSideRepositoryWriter<QuestionnaireBrowseItem>>();
+
+            var values = new string[3][];
+            values[0] =new string[]{"q1","q2"};
+            for (int i = 1; i < values.Length; i++)
+            {
+                values[i] = new string[] { "a1", "a2" };
+            }
+
+
+            var sampleMock = new Mock<ISampleRecordsAccessor>();
+            sampleMock.Setup(x => x.Records)
+                      .Returns(values);
+            smallTemplateStorage.Setup(x => x.GetById(templateId))
+                                .Returns(new QuestionnaireBrowseItem() { QuestionnaireId = templateId, FeaturedQuestions = avalibleFeaturedQuestions });
+
+            SampleImportService target = CreateSampleImportService(null, smallTemplateStorage.Object);
+
+            //act
+
+            var importId = target.ImportSampleAsync(templateId, sampleMock.Object);
+
+            //assert
+            var status = WhaitForCompletedImportResult(target, importId);
+
+            //assert
+            Assert.True(status.IsSuccessed);
+            Assert.True(status.IsCompleted);
+            Assert.That(status.Header[0], Is.EqualTo("q1"));
+            Assert.That(status.Header[1], Is.EqualTo("q2"));
+        }
+
         private ImportResult WhaitForCompletedImportResult(SampleImportService target, Guid importId)
         {
             var status = target.GetImportStatus(importId);
