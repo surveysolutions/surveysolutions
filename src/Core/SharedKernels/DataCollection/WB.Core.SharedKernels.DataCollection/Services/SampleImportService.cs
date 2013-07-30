@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using Main.Core.Commands.Questionnaire.Completed;
@@ -78,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         public void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
         {
-            tempImportRepository.Store(new SampleCreationStatus(id,false,""), id.ToString());
+            tempImportRepository.Store(new SampleCreationStatus(id), id.ToString());
             new Task(() => CreateSamplInternal(id,responsibleHeadquaterId,responsibleSupervisorId)).Start();
         }
 
@@ -117,7 +116,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                 return;
             }
             Questionnaire questionnarie;
-            Thread.Sleep(15000);
             //return;
             
             using (new ObliviousEventContext())
@@ -132,7 +130,11 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                     using (new ObliviousEventContext())
                     {
                         PreBuiltInterview(Guid.NewGuid(), value, item.Header, questionnarie);
+
                         i++;
+
+                        result.SetStatusMessage(string.Format("Validated {0} interview(s) from {1}", i, item.Values.Count));
+                        tempImportRepository.Store(result, id.ToString());
                     }
                 }
                 catch
@@ -142,12 +144,17 @@ namespace WB.Core.SharedKernels.DataCollection.Services
                     return;
                 }
             }
+            i = 1;
             foreach (var value in item.Values)
             {
                 try
                 {
                     BuiltInterview(Guid.NewGuid(), value, item.Header, bigTemplate, responsibleHeadquaterId,
                                    responsibleSupervisorId);
+
+                    result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, item.Values.Count));
+                    tempImportRepository.Store(result, id.ToString());
+                    i++;
                 }
                 catch
                 {
