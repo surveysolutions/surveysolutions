@@ -1,10 +1,10 @@
 ﻿define('model.mapper',
     ['model', 'config'],
     function (model, config) {
-        var 
+        var
         // private methods
             getGroups = function (group, level) {
-                var items = _.filter(group.Children, { '__type': 'GroupView' }).map(function(item) {
+                var items = _.filter(group.Children, { '__type': 'GroupView' }).map(function (item) {
                     return { level: level, group: item };
                 });
                 var groups = [];
@@ -13,7 +13,7 @@
                 }
                 return groups;
             },
-            getAllGroups = function(questionnaire) {
+            getAllGroups = function (questionnaire) {
                 var groups = [];
                 var stack = getGroups(questionnaire, 0);
                 while (stack.length > 0) {
@@ -53,19 +53,19 @@
                  }
              },
             group = {
-                getDtoId: function(dto) { return dto.group.PublicKey; },
-                fromDto: function(dto, item) {
+                getDtoId: function (dto) { return dto.group.PublicKey; },
+                fromDto: function (dto, item) {
                     item = item || new model.Group().id(dto.group.PublicKey).level(dto.level);
                     item.title(dto.group.Title);
                     item.parent(null);
                     item.description(dto.group.Description);
                     item.condition(dto.group.ConditionExpression);
                     item.gtype(dto.group.Propagated);
-                    
+
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
                     }));
-                    
+
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     return item;
@@ -76,12 +76,12 @@
             },
             question = {
                 getDtoId: function (dto) { return dto.PublicKey; },
-                fromDto: function(dto, item, otherData) {
+                fromDto: function (dto, item, otherData) {
                     var groups = otherData.groups;
                     item = item || new model.Question().id(dto.PublicKey).title(dto.Title);
                     item.parent(null);
                     item.qtype(dto.QuestionType);
-                    
+
                     item.scope(dto.QuestionScope);
 
                     item.answerOrder(dto.AnswerOrder);
@@ -97,7 +97,7 @@
                         return { key: groupId, value: groups.getLocalById(groupId).title() };
                     });
 
-                        _.map(dto.Triggers, function (groupId) {
+                    _.map(dto.Triggers, function (groupId) {
                         var item = groups.getLocalById(groupId);
                         if (!_.isNull(item)) {
                             return { key: groupId, value: groups.getLocalById(groupId).title() };
@@ -114,14 +114,15 @@
                     item.condition(dto.ConditionExpression);
                     item.instruction(dto.Instructions);
                     item.maxValue(dto.MaxValue);
-                    
+
                     item.alias(dto.StataExportCaption);
-                    
+
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
 
                     item.isNew(false);
                     item.dirtyFlag().reset();
+                    item.commit();
                     return item;
                 },
                 objectsFromDto: function (dto) {
@@ -130,7 +131,7 @@
             };
 
         return {
-            questionnaire : questionnaire,
+            questionnaire: questionnaire,
             question: question,
             group: group
         };
