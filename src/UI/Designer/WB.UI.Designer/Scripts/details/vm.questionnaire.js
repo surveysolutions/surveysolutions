@@ -124,337 +124,340 @@
                 $('#stacks').removeClass('detail-visible');
             },
             isOutputVisible = ko.observable(false);
-            toggleOutput = function () {
-                isOutputVisible(!isOutputVisible());
-            },
-            addQuestion = function(parent) {
-                var question = new model.Question();
-                question.parent(parent);
+        toggleOutput = function() {
+            isOutputVisible(!isOutputVisible());
+        },
+        addQuestion = function(parent) {
+            var question = new model.Question();
+            question.parent(parent);
 
-                datacontext.questions.add(question);
+            datacontext.questions.add(question);
 
-                parent.childrenID.push({ type: question.type(), id: question.id() });
-                parent.fillChildren();
-                router.navigateTo(question.getHref());
-                calcStatistics();
-            },
-            addChapter = function() {
-                var group = new model.Group();
-                group.level(0);
-                group.title('New Chapter');
-                group.parent(null);
-                datacontext.groups.add(group);
-                datacontext.questionnaire.childrenID.push({ type: group.type(), id: group.id() });
-                chapters.push(group);
-                router.navigateTo(group.getHref());
-                calcStatistics();
-            },
-            addGroup = function(parent) {
-                var group = new model.Group();
-                group.parent(parent);
-                datacontext.groups.add(group);
-                parent.childrenID.push({ type: group.type(), id: group.id() });
-                parent.fillChildren();
-                router.navigateTo(group.getHref());
-                calcStatistics();
-            },
-            deleteGroup = function(item) {
-                bootbox.confirm("Are you sure you want to delete this question?", function(result) {
-                    if (result == false)
-                        return;
+            parent.childrenID.push({ type: question.type(), id: question.id() });
+            parent.fillChildren();
+            router.navigateTo(question.getHref());
+            calcStatistics();
+        },
+        addChapter = function() {
+            var group = new model.Group();
+            group.level(0);
+            group.title('New Chapter');
+            group.parent(null);
+            datacontext.groups.add(group);
+            datacontext.questionnaire.childrenID.push({ type: group.type(), id: group.id() });
+            chapters.push(group);
+            router.navigateTo(group.getHref());
+            calcStatistics();
+        },
+        addGroup = function(parent) {
+            var group = new model.Group();
+            group.parent(parent);
+            datacontext.groups.add(group);
+            parent.childrenID.push({ type: group.type(), id: group.id() });
+            parent.fillChildren();
+            router.navigateTo(group.getHref());
+            calcStatistics();
+        },
+        deleteGroup = function(item) {
+            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+                if (result == false)
+                    return;
 
-                    if (item.isNew()) {
-                        deleteGroupSuccessCallback(item);
-                    } else {
-                        datacontext.sendCommand(
-                            config.commands.deleteGroup,
-                            item,
-                            {
-                                success: function() {
-                                    deleteGroupSuccessCallback(item);
-                                },
-                                error: function(d) {
-                                    errors.removeAll();
-                                    errors.push(d);
-                                    showOutput();
-                                }
-                            });
-                    }
-                });
-            },
-            deleteGroupSuccessCallback = function(item) {
-                datacontext.groups.removeGroup(item.id());
-
-                var parent = item.parent();
-                if (!(_.isUndefined(parent) || (_.isNull(parent)))) {
-                    var child = _.find(parent.childrenID(), { 'id': item.id() });
-                    parent.childrenID.remove(child);
-
-                    _.each(datacontext.groups.getAllLocal(), function(group) {
-                        group.fillChildren();
-                    });
-                    //parent.fillChildren();
-                    datacontext.questions.cleanTriggers(child);
-                    router.navigateTo(parent.getHref());
+                if (item.isNew()) {
+                    deleteGroupSuccessCallback(item);
                 } else {
-                    var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
-                    datacontext.questionnaire.childrenID.remove(child);
-
-                    chapters(datacontext.groups.getChapters());
-                    router.navigateTo(config.hashes.details);
+                    datacontext.sendCommand(
+                        config.commands.deleteGroup,
+                        item,
+                        {
+                            success: function() {
+                                deleteGroupSuccessCallback(item);
+                            },
+                            error: function(d) {
+                                errors.removeAll();
+                                errors.push(d);
+                                showOutput();
+                            }
+                        });
                 }
-                calcStatistics();
-                hideOutput();
-            },
-            deleteQuestion = function(item) {
-                bootbox.confirm("Are you sure you want to delete this question?", function(result) {
-                    if (result == false)
-                        return;
+            });
+        },
+        deleteGroupSuccessCallback = function(item) {
+            datacontext.groups.removeGroup(item.id());
 
-                    if (item.isNew()) {
-                        deleteQuestionSuccessCallback(item);
-                    } else {
-                        datacontext.sendCommand(
-                            config.commands.deleteQuestion,
-                            item,
-                            {
-                                success: function() {
-                                    deleteQuestionSuccessCallback(item);
-
-                                },
-                                error: function(d) {
-                                    errors.removeAll();
-                                    errors.push(d);
-                                    showOutput();
-                                }
-                            });
-                    }
-                });
-            },
-            deleteQuestionSuccessCallback = function(item) {
-                datacontext.questions.removeById(item.id());
-
-                var parent = item.parent();
+            var parent = item.parent();
+            if (!(_.isUndefined(parent) || (_.isNull(parent)))) {
                 var child = _.find(parent.childrenID(), { 'id': item.id() });
                 parent.childrenID.remove(child);
-                parent.fillChildren();
-                calcStatistics();
 
-                if (isFilterMode() == true) {
-                    filter.valueHasMutated();
+                _.each(datacontext.groups.getAllLocal(), function(group) {
+                    group.fillChildren();
+                });
+                //parent.fillChildren();
+                datacontext.questions.cleanTriggers(child);
+                router.navigateTo(parent.getHref());
+            } else {
+                var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
+                datacontext.questionnaire.childrenID.remove(child);
+
+                chapters(datacontext.groups.getChapters());
+                router.navigateTo(config.hashes.details);
+            }
+            calcStatistics();
+            hideOutput();
+        },
+        deleteQuestion = function(item) {
+            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+                if (result == false)
+                    return;
+
+                if (item.isNew()) {
+                    deleteQuestionSuccessCallback(item);
                 } else {
-                    router.navigateTo(parent.getHref());
-                }
+                    datacontext.sendCommand(
+                        config.commands.deleteQuestion,
+                        item,
+                        {
+                            success: function() {
+                                deleteQuestionSuccessCallback(item);
 
-                hideOutput();
-            },
-            saveGroup = function(group) {
-
-                if (group.hasParent() && group.parent().isNew()) {
-                    config.logger(config.warnings.saveParentFirst);
-                    return;
-                }
-
-                var command = '';
-                if (group.isNew()) {
-                    if (group.isClone()) {
-                        command = config.commands.cloneGroup;
-                    } else {
-                        command = config.commands.createGroup;
-                    }
-                } else {
-                    command = config.commands.updateGroup;
-                }
-
-                group.canUpdate(false);
-
-                datacontext.sendCommand(
-                    command,
-                    group,
-                    {
-                        success: function() {
-                            group.isNew(false);
-                            group.dirtyFlag().reset();
-                            calcStatistics();
-                            hideOutput();
-                            group.canUpdate(true);
-                            group.commit();
-                        },
-                        error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
-                            group.canUpdate(true);
-                        }
-                    });
-            },
-            saveQuestion = function(question) {
-
-                if (question.hasParent() && question.parent().isNew()) {
-                    config.logger(config.warnings.saveParentFirst);
-                    return;
-                }
-
-                var command = '';
-                if (question.isNew()) {
-                    if (question.isClone()) {
-                        command = config.commands.cloneQuestion;
-                    } else {
-                        command = config.commands.createQuestion;
-                    }
-                } else {
-                    command = config.commands.updateQuestion;
-                }
-
-                question.canUpdate(false);
-
-                datacontext.sendCommand(
-                    command,
-                    question,
-                    {
-                        success: function() {
-                            question.isNew(false);
-                            question.dirtyFlag().reset();
-                            calcStatistics();
-                            hideOutput();
-                            question.canUpdate(true);
-                            question.commit();
-                        },
-                        error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
-                            question.canUpdate(true);
-                        }
-                    });
-            },
-            saveQuestionnaire = function (questionnaire) {
-                
-                questionnaire.canUpdate(false);
-                
-                datacontext.sendCommand(
-                    config.commands.updateQuestionnaire,
-                    questionnaire,
-                    {
-                        success: function() {
-                            questionnaire.dirtyFlag().reset();
-                            hideOutput();
-                            questionnaire.canUpdate(true);
-                        },
-                        error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
-                            questionnaire.canUpdate(true);
-                        }
-                    });
-            },
-            clearFilter = function() {
-                filter('');
-            },
-            filterContent = function() {
-                var query = filter().trim().toLowerCase();
-                isFilterMode(query !== '');
-                searchResult.removeAll();
-                if (query != '') {
-                    searchResult(datacontext.questions.search(query));
-                }
-            },
-            isMovementPossible = function(arg, event, ui) {
-
-                var fromId = arg.sourceParent.id;
-                var toId = arg.targetParent.id;
-                var moveItemType = arg.item.type().replace('View', '').toLowerCase();
-                var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
-                var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
-
-                if (arg.item.isNew()) {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveUnsavedItem);
-                    return;
-                }
-
-                if (isDropedInChapter && moveItemType == "question") {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveQuestionOutsideGroup);
-                    return;
-                }
-                var target = datacontext.groups.getLocalById(toId);
-                var source = datacontext.groups.getLocalById(fromId);
-
-                if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.propagatedGroupCantBecomeChapter);
-                    return;
-                }
-
-                if (!isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
-                    arg.cancelDrop = true;
-                    config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
-                    return;
-                }
-
-                var item = arg.item;
-
-                var moveCommand = {
-                    targetGroupId: toId,
-                    targetIndex: arg.targetIndex
-                };
-                moveCommand[moveItemType + 'Id'] = item.id();
-
-                datacontext.sendCommand(
-                    config.commands[moveItemType + "Move"],
-                    moveCommand,
-                    {
-                        success: function(d) {
-                            if (isDraggedFromChapter) {
-                                var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
-                                datacontext.questionnaire.childrenID.remove(child);
-                                chapters(datacontext.groups.getChapters());
-                            } else {
-                                var child = _.find(source.childrenID(), { 'id': item.id() });
-                                source.childrenID.remove(child);
-                                source.fillChildren();
+                            },
+                            error: function(d) {
+                                errors.removeAll();
+                                errors.push(d);
+                                showOutput();
                             }
+                        });
+                }
+            });
+        },
+        deleteQuestionSuccessCallback = function(item) {
+            datacontext.questions.removeById(item.id());
 
-                            if (isDropedInChapter) {
-                                item.level(0);
-                                datacontext.questionnaire.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
-                                chapters(datacontext.groups.getChapters());
-                            } else {
-                                if (moveItemType == "group") {
-                                    item.level(target.level() + 1);
-                                }
-                                target.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
-                                target.fillChildren();
-                            }
-                        },
-                        error: function(d) {
-                            _.each(datacontext.groups.getAllLocal(), function(group) {
-                                group.fillChildren();
-                            });
+            var parent = item.parent();
+            var child = _.find(parent.childrenID(), { 'id': item.id() });
+            parent.childrenID.remove(child);
+            parent.fillChildren();
+            calcStatistics();
 
-                            chapters(datacontext.groups.getChapters());
+            if (isFilterMode() == true) {
+                filter.valueHasMutated();
+            } else {
+                router.navigateTo(parent.getHref());
+            }
 
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
-                        }
-                    });
-            },
-            calcStatistics = function() {
-                var questions = datacontext.questions.getAllLocal();
-                var groups = datacontext.groups.getAllLocal();
-                statistics.questions(questions.length);
-                statistics.groups(groups.length);
-                var counter = _.countBy(questions, function(q) { return q.isNew(); });
-                statistics.unsavedQuestion(_.isUndefined(counter['true']) ? 0 : counter['true']);
-                counter = _.countBy(groups, function(g) { return g.isNew(); });
-                statistics.unsavedGroups(_.isUndefined(counter['true']) ? 0 : counter['true']);
-            },
-            init = function() {
-                filter.subscribe(filterContent);
+            hideOutput();
+        },
+        saveGroup = function(group) {
+
+            if (group.hasParent() && group.parent().isNew()) {
+                config.logger(config.warnings.saveParentFirst);
+                return;
+            }
+
+            var command = '';
+            if (group.isNew()) {
+                if (group.isClone()) {
+                    command = config.commands.cloneGroup;
+                } else {
+                    command = config.commands.createGroup;
+                }
+            } else {
+                command = config.commands.updateGroup;
+            }
+
+            group.canUpdate(false);
+
+            datacontext.sendCommand(
+                command,
+                group,
+                {
+                    success: function() {
+                        group.isNew(false);
+                        group.dirtyFlag().reset();
+                        calcStatistics();
+                        hideOutput();
+                        group.canUpdate(true);
+                        group.commit();
+                    },
+                    error: function(d) {
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                        group.canUpdate(true);
+                    }
+                });
+        },
+        saveQuestion = function(question) {
+
+            if (question.hasParent() && question.parent().isNew()) {
+                config.logger(config.warnings.saveParentFirst);
+                return;
+            }
+
+            var command = '';
+            if (question.isNew()) {
+                if (question.isClone()) {
+                    command = config.commands.cloneQuestion;
+                } else {
+                    command = config.commands.createQuestion;
+                }
+            } else {
+                command = config.commands.updateQuestion;
+            }
+
+            question.canUpdate(false);
+
+            datacontext.sendCommand(
+                command,
+                question,
+                {
+                    success: function() {
+                        question.isNew(false);
+                        question.dirtyFlag().reset();
+                        calcStatistics();
+                        hideOutput();
+                        question.canUpdate(true);
+                        question.commit();
+                    },
+                    error: function(d) {
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                        question.canUpdate(true);
+                    }
+                });
+        },
+        saveQuestionnaire = function(questionnaire) {
+
+            questionnaire.canUpdate(false);
+
+            datacontext.sendCommand(
+                config.commands.updateQuestionnaire,
+                questionnaire,
+                {
+                    success: function() {
+                        questionnaire.dirtyFlag().reset();
+                        hideOutput();
+                        questionnaire.canUpdate(true);
+                    },
+                    error: function(d) {
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                        questionnaire.canUpdate(true);
+                    }
+                });
+        },
+        clearFilter = function() {
+            filter('');
+        },
+        filterContent = function() {
+            var query = filter().trim().toLowerCase();
+            isFilterMode(query !== '');
+            searchResult.removeAll();
+            if (query != '') {
+                searchResult(datacontext.questions.search(query));
+            }
+        },
+        isMovementPossible = function(arg, event, ui) {
+
+            var fromId = arg.sourceParent.id;
+            var toId = arg.targetParent.id;
+            var moveItemType = arg.item.type().replace('View', '').toLowerCase();
+            var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
+            var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
+
+            if (arg.item.isNew()) {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveUnsavedItem);
+                return;
+            }
+
+            if (isDropedInChapter && moveItemType == "question") {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveQuestionOutsideGroup);
+                return;
+            }
+            var target = datacontext.groups.getLocalById(toId);
+            var source = datacontext.groups.getLocalById(fromId);
+
+            if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.propagatedGroupCantBecomeChapter);
+                return;
+            }
+
+            if (!isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
+                return;
+            }
+
+            var item = arg.item;
+
+            var moveCommand = {
+                targetGroupId: toId,
+                targetIndex: arg.targetIndex
             };
+            moveCommand[moveItemType + 'Id'] = item.id();
+
+            datacontext.sendCommand(
+                config.commands[moveItemType + "Move"],
+                moveCommand,
+                {
+                    success: function(d) {
+                        if (isDraggedFromChapter) {
+                            var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
+                            datacontext.questionnaire.childrenID.remove(child);
+                            chapters(datacontext.groups.getChapters());
+                        } else {
+                            var child = _.find(source.childrenID(), { 'id': item.id() });
+                            source.childrenID.remove(child);
+                            source.fillChildren();
+                        }
+
+                        if (isDropedInChapter) {
+                            item.level(0);
+                            datacontext.questionnaire.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
+                            chapters(datacontext.groups.getChapters());
+                        } else {
+                            if (moveItemType == "group") {
+                                item.level(target.level() + 1);
+                            }
+                            target.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
+                            target.fillChildren();
+                        }
+                    },
+                    error: function(d) {
+                        _.each(datacontext.groups.getAllLocal(), function(group) {
+                            group.fillChildren();
+                        });
+
+                        chapters(datacontext.groups.getChapters());
+
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                    }
+                });
+        },
+        calcStatistics = function() {
+            var questions = datacontext.questions.getAllLocal();
+            var groups = datacontext.groups.getAllLocal();
+            statistics.questions(questions.length);
+            statistics.groups(groups.length);
+            var counter = _.countBy(questions, function(q) { return q.isNew(); });
+            statistics.unsavedQuestion(_.isUndefined(counter['true']) ? 0 : counter['true']);
+            counter = _.countBy(groups, function(g) { return g.isNew(); });
+            statistics.unsavedGroups(_.isUndefined(counter['true']) ? 0 : counter['true']);
+        },
+        toogleGroups = function () {
+            $('.ui-expander-head:not(.ui-expander-head-collapsed)').click();
+        },
+        init = function() {
+            filter.subscribe(filterContent);
+        };
 
         init();
 
@@ -483,6 +486,7 @@
             errors: errors,
             statistics: statistics,
             searchResult: searchResult,
-            saveQuestionnaire: saveQuestionnaire
+            saveQuestionnaire: saveQuestionnaire,
+            toogleGroups: toogleGroups
         };
     });
