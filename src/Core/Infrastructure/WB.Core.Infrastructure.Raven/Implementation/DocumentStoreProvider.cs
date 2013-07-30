@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using Ninject.Activation;
+using Ninject.Planning.Targets;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
@@ -19,19 +20,41 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             this.settings = settings;
         }
 
+        /// <summary>
+        /// Creates a separate instance for event store.
+        /// This is needed because event store substitutes conventions and substituted are not compatible with read side.
+        /// Always creates a new instance, so should be called only once per app.
+        /// </summary>
+        public DocumentStore CreateSeparateInstanceForEventStore()
+        {
+            return this.settings.IsEmbedded
+                ? this.CreateEmbeddedStorage()
+                : this.CreateServerStorage();
+        }
+
         protected override DocumentStore CreateInstance(IContext context)
         {
-            DocumentStore store = this.settings.IsEmbedded ? this.GetEmbededStorage() : this.GetServerStorage();
-
-            return store;
+            return this.settings.IsEmbedded
+                ? this.GetOrCreateEmbeddedStorage()
+                : this.GetOrCreateServerStorage();
         }
 
-        private DocumentStore GetServerStorage()
+        private DocumentStore GetOrCreateServerStorage()
         {
-            return this.serverStorage ?? (this.serverStorage = this.GetServerStorageImpl());
+            return this.serverStorage ?? (this.serverStorage = this.CreateServerStorage());
         }
 
-        private DocumentStore GetServerStorageImpl()
+        private EmbeddableDocumentStore GetOrCreateEmbeddedStorage()
+        {
+            if (this.embeddedStorage == null || this.embeddedStorage.WasDisposed)
+            {
+                this.embeddedStorage = this.CreateEmbeddedStorage();
+            }
+
+            return this.embeddedStorage;
+        }
+
+        private DocumentStore CreateServerStorage()
         {
             var store = new DocumentStore
                 {
@@ -50,25 +73,19 @@ namespace WB.Core.Infrastructure.Raven.Implementation
             return store;
         }
 
-        private EmbeddableDocumentStore GetEmbededStorage()
+        private EmbeddableDocumentStore CreateEmbeddedStorage()
         {
-            if (!this.settings.IsEmbedded)
-                throw new InvalidOperationException("You can't call this method");
-
-            if (this.embeddedStorage == null || this.embeddedStorage.WasDisposed)
+            var store = new EmbeddableDocumentStore
             {
-                this.embeddedStorage = new EmbeddableDocumentStore()
-                    {
-                        DataDirectory = this.settings.StoragePath,
-                        UseEmbeddedHttpServer = false,
-                        Conventions = new DocumentConvention() { JsonContractResolver = new PropertiesOnlyContractResolver() }
-                    };
-                this.embeddedStorage.ResourceManagerId = Guid.NewGuid();
+                DataDirectory = this.settings.StoragePath,
+                UseEmbeddedHttpServer = false,
+                Conventions = new DocumentConvention {JsonContractResolver = new PropertiesOnlyContractResolver()},
+                ResourceManagerId = Guid.NewGuid(),
+            };
 
-                this.embeddedStorage.Initialize();
-            }
+            store.Initialize();
 
-            return this.embeddedStorage;
+            return store;
         }
     }
 }
