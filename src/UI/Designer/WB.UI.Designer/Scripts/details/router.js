@@ -10,11 +10,6 @@
             window = config.window,
 
             sammy = new Sammy.Application(function () {
-                if (Sammy.Title) {
-                    this.use(Sammy.Title);
-                    this.setTitle(config.title);
-                }
-
                 this.get('', function () {
                     this.app.runRoute('get', startupUrl);
                 });
