@@ -40,17 +40,9 @@ namespace Web.Supervisor.Injections
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
-        private readonly bool isApprovedSended;
-
-        public SupervisorCoreRegistry(string repositoryPath, string defaultDatabase, bool isEmbeded, string username, string password, bool isApprovedSended)
-            : base(repositoryPath, isEmbeded, username, password, defaultDatabase)
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
-            this.isApprovedSended = isApprovedSended;
-        }
-
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
-        {
-            return base.GetAssweblysForRegister().Concat(new[]
+            return base.GetAssembliesForRegistration().Concat(new[]
             {
                 typeof(IndexViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,

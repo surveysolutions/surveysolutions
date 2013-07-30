@@ -16,19 +16,10 @@ namespace CapiDataGenerator
 {
     public class CapiDataGeneratorRegistry : CoreRegistry
     {
-        public CapiDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded)
-        {
-        }
-        /// <summary>
-        /// The get assweblys for register.
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return
-                Enumerable.Concat(base.GetAssweblysForRegister(), new[]
+                Enumerable.Concat(base.GetAssembliesForRegistration(), new[]
                 {
                     GetType().Assembly,
                     typeof (CompleteQuestionnaireDenormalizer).Assembly,

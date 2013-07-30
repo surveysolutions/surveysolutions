@@ -1,11 +1,12 @@
 ﻿using System.Linq;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Abstractions.Json;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 
-namespace Ncqrs.Eventing.Storage.RavenDB
+namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
 {
-    public class RavenWriteSideStore
+    internal class RavenWriteSideStore
     {
         protected internal static DocumentConvention CreateStoreConventions(string ravenCollectionName)
         {
