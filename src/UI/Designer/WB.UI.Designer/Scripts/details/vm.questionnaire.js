@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
-    function(ko, _, config, utils, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
+    function(ko, _, config, utils, datacontext, router, messenger, store, model, bootbox) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -319,6 +319,7 @@
                             calcStatistics();
                             hideOutput();
                             question.canUpdate(true);
+                            question.commit();
                         },
                         error: function(d) {
                             errors.removeAll();
@@ -327,6 +328,8 @@
                             question.canUpdate(true);
                         }
                     });
+            },
+            revertQuestionChanges = function(question) {
             },
             saveQuestionnaire = function (questionnaire) {
                 
@@ -483,7 +486,6 @@
             errors: errors,
             statistics: statistics,
             searchResult: searchResult,
-            questionnaire: questionnaire,
             saveQuestionnaire: saveQuestionnaire
         };
     });

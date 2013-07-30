@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Cirrious.MvvmCross.ViewModels;
 using Core.Supervisor.Views.User;
+using Main.Core;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
@@ -435,7 +436,7 @@ namespace CapiDataGenerator
                 users.Add(new UserLight(uId, userName));
                 commandService.Execute(new CreateUserCommand(publicKey: uId, userName: userName,
                     password: SimpleHash.ComputeHash(userName),
-                    email: string.Concat(userName, "@mail.com"), roles: new[] {UserRoles.User}, isLocked: false,
+                    email: string.Concat(userName, "@mail.com"), roles: new[] {UserRoles.Operator}, isLocked: false,
                     supervsor: new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName)));
                 InvokeOnMainThread(() => InterviewersList.Add(userName));
                 UpdateProgress();

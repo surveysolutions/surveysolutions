@@ -378,14 +378,14 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Preview.Designer.Web.config" />
-    <Content Include="Content\font\fontawesome-webfont.woff" />
-    <Content Include="Content\font\fontawesome-webfont.ttf" />
-    <Content Include="Content\font\fontawesome-webfont.eot" />
-    <Content Include="Content\font\FontAwesome.otf" />
     <Content Include="Configuration\Vitalii.Designer.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
@@ -447,8 +447,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
-    <Content Include="Scripts\knockout-2.2.1.debug.js" />
-    <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\knockout-2.3.0.debug.js" />
+    <Content Include="Scripts\knockout-2.3.0.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\lib\ace\ace.js" />
@@ -540,6 +540,9 @@
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
     <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionDetails.cshtml" />
+    <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

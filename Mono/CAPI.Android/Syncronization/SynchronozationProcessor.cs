@@ -13,14 +13,16 @@ using CAPI.Android.Syncronization.Pull;
 using CAPI.Android.Syncronization.Push;
 using CAPI.Android.Syncronization.RestUtils;
 using CAPI.Android.Utils;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace CAPI.Android.Syncronization
 {
     public class SynchronozationProcessor
     {
-        
+        private readonly ILogger logger;
         private readonly Context context;
         private CancellationToken ct;
         private CancellationTokenSource tokenSource2;
@@ -69,6 +71,8 @@ namespace CAPI.Android.Syncronization
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             pullDataProcessor = new PullDataProcessor(changelog, commandService);
             pushDataProcessor = new PushDataProcessor(changelog, commandService);
+
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         #region operations
@@ -301,8 +305,9 @@ namespace CAPI.Android.Syncronization
             {
                 action();
             }
-            catch
+            catch (Exception exc)
             {
+                logger.Error("Error occured during the process. Pcocess is being canceled.", exc);
                 Cancel();
                 throw;
             }

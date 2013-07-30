@@ -42,6 +42,8 @@
 
             //// this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
+
+            this.IsDeleted = false;
         }
 
         #endregion
@@ -236,6 +238,10 @@
             {
             }
         }
+
+        public Guid? DeletedBy { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         /// <summary>
         /// Gets the wrapped questions.

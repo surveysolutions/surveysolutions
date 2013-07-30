@@ -535,6 +535,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\FlagSet.cs">
       <Link>Events\Questionnaire\Completed\FlagSet.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
+      <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <Link>Events\Questionnaire\Completed\NewAssigmentCreated.cs</Link>
     </Compile>

@@ -23,7 +23,10 @@
         // Plugins must be loaded after jQuery and Knockout, 
         // since they depend on them.
         require.config({
-            baseUrl: '/Scripts/details'
+            paths: {
+                'ace/theme/designer': '../../Scripts/lib/ace/mode-ncalc',
+                'ace/mode/ncalc': '../../Scripts/lib/ace/theme-designer'
+            }
         });
         requirejs([
                 'ko.bindingHandlers',
@@ -34,12 +37,13 @@
     }
 
     function boot() {
-        require(['jquery', 'bootstrapper', 'presenter', 'ace/theme/designer', 'ace/mode/ncalc'], function ($, bs, presenter, designer_theme, ncalc_style_rules) {
-            $.fn.activity.defaults.color = "#fff";
+        require(['jquery', 'bootstrapper', 'presenter'],
+            function ($, bs, presenter) {
+                $.fn.activity.defaults.color = "#fff";
 
-            presenter.toggleActivity(true);
-            
-            bs.run();
-        });
+                presenter.toggleActivity(true);
+
+                bs.run();
+            });
     }
 })();

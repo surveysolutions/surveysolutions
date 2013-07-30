@@ -11,6 +11,9 @@
             self.image = ko.observable();
             
             self.isNullo = false;
+            
+            self.errors = ko.validation.group(self);
+            
             return self;
         };
 
