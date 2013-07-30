@@ -43,7 +43,7 @@
                 self.errors = ko.validation.group(self);
                 
                 self.canUpdate = ko.observable(true);
-
+                this.cache = function () { };
                 return self;
             };
         
@@ -132,6 +132,25 @@
         Group.Nullo = new Group().id(0).title('Title').type('GroupView');
         Group.Nullo.isNullo = true;
         Group.Nullo.dirtyFlag().reset();
+
+        ko.utils.extend(Group.prototype, {
+            update: function (data) {
+                
+                this.title(data.title);
+                this.gtype(data.gtype);
+                this.description(data.description);
+                this.condition(data.condition);
+
+                //save off the latest data for later use
+                this.cache.latestData = data;
+            },
+            revert: function () {
+                this.update(this.cache.latestData);
+            },
+            commit: function () {
+                this.cache.latestData = ko.toJS(this);
+            }
+        });
 
         return Group;
     });

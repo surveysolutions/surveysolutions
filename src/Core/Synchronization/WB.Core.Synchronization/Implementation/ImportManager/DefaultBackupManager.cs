@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.Implementation.ImportManager
                 return null;
             var retval = new ZipFileData();
             retval.Events =
-                eventStore.GetAllEventsIncludingSnapshots().SelectMany(e => e).Select(e => new AggregateRootEvent(e));
+                eventStore.GetAllEvents().SelectMany(e => e).Select(e => new AggregateRootEvent(e));
             return retval;
         }
 

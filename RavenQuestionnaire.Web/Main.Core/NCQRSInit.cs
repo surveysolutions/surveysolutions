@@ -25,9 +25,6 @@ namespace Main.Core
 
 #if MONODROID
     using AndroidNcqrs.Eventing.Storage.SQLite;
-#else
-    using Ncqrs.Eventing.Storage.RavenDB;
-    using Raven.Client.Document;
 #endif
 
 
@@ -57,21 +54,11 @@ namespace Main.Core
 
         public static void Init(IKernel kernel)
         {
-            Init(kernel, 50);
-        }
-
-        public static void Init(IKernel kernel, int pageSize)
-        {
 #if MONODROID
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             
-            var store = InitializeEventStore(kernel.Get<DocumentStore>(), pageSize);
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
-            kernel.Bind<IStreamableEventStore>().ToConstant(store);
-
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
@@ -184,13 +171,6 @@ namespace Main.Core
 
             return service;
         }
-
-#if !MONODROID
-        
-        public static Func<DocumentStore, int, IStreamableEventStore> InitializeEventStore = (store, pageSize) => new RavenDBEventStore(store, pageSize);
-
-#endif
-
 
         /// <summary>
         /// The is i event handler interface.

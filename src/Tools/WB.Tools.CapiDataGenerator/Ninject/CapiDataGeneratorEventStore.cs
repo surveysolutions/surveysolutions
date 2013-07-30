@@ -85,22 +85,12 @@ namespace WB.Tools.CapiDataGenerator.Models
             throw new NotImplementedException();
         }
 
-        public int CountOfAllEventsWithoutSnapshots()
+        public int CountOfAllEvents()
         {
             throw new NotImplementedException();
         }
 
-        public int CountOfAllEventsIncludingSnapshots()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize = 256)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize = 32)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 32)
         {
             throw new NotImplementedException();
         }

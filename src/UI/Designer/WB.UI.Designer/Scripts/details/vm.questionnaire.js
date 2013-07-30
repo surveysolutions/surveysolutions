@@ -280,6 +280,7 @@
                             calcStatistics();
                             hideOutput();
                             group.canUpdate(true);
+                            group.commit();
                         },
                         error: function(d) {
                             errors.removeAll();
@@ -328,8 +329,6 @@
                             question.canUpdate(true);
                         }
                     });
-            },
-            revertQuestionChanges = function(question) {
             },
             saveQuestionnaire = function (questionnaire) {
                 
