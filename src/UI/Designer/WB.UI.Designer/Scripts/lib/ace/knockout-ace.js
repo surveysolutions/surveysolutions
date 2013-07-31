@@ -1,16 +1,19 @@
 // Based on Knockout Bindings for TinyMCE
 // https://github.com/SteveSanderson/knockout/wiki/Bindings---tinyMCE
-// Initial version by Ryan Niemeyer. Updated by Scott Messinger, Frederik Raabye, Thomas Hallock, Drew Freyling, and Shane Carr.
+// Initial version by Ryan Niemeyer. Updated by Scott Messinger, Frederik Raabye, Thomas Hallock and Drew Freyling.
 
-(function () {
+(function ($) {
     var instances_by_id = {} // needed for referencing instances during updates.
     , init_id = 0;           // generated id increment storage
 
     ko.bindingHandlers.ace = {
-        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        init: function (element, valueAccessor, allBindingsAccessor, context) {
 
+            var init_arguments = arguments;
             var options = allBindingsAccessor().aceOptions || {};
+            var modelValue = valueAccessor();
             var value = ko.utils.unwrapObservable(valueAccessor());
+            var el = $(element);
 
             // Ace attaches to the element by DOM id, so we need to make one for the element if it doesn't have one already.
             if (!element.id) {
@@ -22,28 +25,40 @@
 
             if (options.theme) editor.setTheme("ace/theme/" + options.theme);
             if (options.mode) editor.getSession().setMode("ace/mode/" + options.mode);
-            if (options.readOnly) editor.setReadOnly(true);
 
             editor.setValue(value);
             editor.gotoLine(0);
 
+            var heightUpdateFunction = function () {
+
+                // http://stackoverflow.com/questions/11584061/
+                var newHeight =
+                          editor.getSession().getScreenLength()
+                          * editor.renderer.lineHeight
+                          + (editor.renderer.$horizScroll ? editor.renderer.scrollBar.getWidth() : 0);
+                var editorElement = $(editor.container);
+                var editorContainer = editorElement.parent();
+                $(editorElement).height(newHeight.toString() + "px");
+                $(editorContainer).height(newHeight.toString() + "px");
+
+                // This call is required for the editor to fix all of
+                // its inner structure for adapting to a change in size
+                editor.resize();
+            };
+
             editor.getSession().on("change", function (delta) {
-                if (ko.isWriteableObservable(valueAccessor())) {
-                    valueAccessor()(editor.getValue());
+                heightUpdateFunction();
+                if (ko.isWriteableObservable(modelValue)) {
+                    modelValue(editor.getValue());
                 }
             });
 
             instances_by_id[element.id] = editor;
-
-            // destroy the editor instance when the element is removed
-            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                editor.destroy();
-                delete instances_by_id[element.id];
-            });
         },
-        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        update: function (element, valueAccessor, allBindingsAccessor, context) {
+            var el = $(element);
             var value = ko.utils.unwrapObservable(valueAccessor());
-            var id = element.id;
+            var id = el.attr('id');
 
             //handle programmatic updates to the observable
             // also makes sure it doesn't update it if it's the same.
@@ -58,17 +73,4 @@
             }
         }
     };
-
-    ko.aceEditors = {
-        resizeAll: function () {
-            for (var id in instances_by_id) {
-                if (!instances_by_id.hasOwnProperty(id)) continue;
-                var editor = instances_by_id[id];
-                editor.resize();
-            }
-        },
-        get: function (id) {
-            return instances_by_id[id];
-        }
-    };
-}());
+}(jQuery));
