@@ -80,9 +80,6 @@
                         e.preventDefault();
                     });
             },
-            canLeave = function () {
-                return true;
-            },
             getChapters = function () {
                 if (!chapters().length) {
                     chapters(datacontext.groups.getChapters());
@@ -174,10 +171,7 @@
                                 deleteGroupSuccessCallback(item);
                             },
                             error: function (d) {
-                                    showError(d);
-                                errors.removeAll();
-                                errors.push(d);
-                                isOutputVisible(true);
+                                showError(d);
                             }
                         });
                 }
@@ -224,10 +218,7 @@
 
                             },
                             error: function (d) {
-                                    showError(d);
-                                errors.removeAll();
-                                errors.push(d);
-                                isOutputVisible(true);
+                                 showError(d);
                             }
                         });
                 }
@@ -283,10 +274,7 @@
                         group.commit();
                     },
                     error: function (d) {
-                            showError(d);
-                        errors.removeAll();
-                        errors.push(d);
-                        isOutputVisible(true);
+                        showError(d);
                         group.canUpdate(true);
                     }
                 });
@@ -324,9 +312,6 @@
                         question.commit();
                     },
                     error: function (d) {
-                            showError(d);
-                        errors.removeAll();
-                        errors.push(d);
                         isOutputVisible(true);
                         question.canUpdate(true);
                     }
@@ -346,9 +331,6 @@
                         questionnaire.canUpdate(true);
                     },
                     error: function (d) {
-                            showError(d);
-                        errors.removeAll();
-                        errors.push(d);
                         isOutputVisible(true);
                         questionnaire.canUpdate(true);
                     }
@@ -461,12 +443,6 @@
         toogleGroups = function () {
             $('.ui-expander-head:not(.ui-expander-head-collapsed)').click();
         },
-        collapseItemIfNeeded = function (arg) {
-            console.log(arg.item);
-        },
-        expandItemIfNeeded = function (arg) {
-            console.log(arg);
-        },
         init = function () {
             filter.subscribe(filterContent);
             ko.bindingHandlers.sortable.options.start = function (arg, ui) {
@@ -481,7 +457,7 @@
         showError = function(message) {
                 errors.removeAll();
                 errors.push(message);
-                showOutput();
+                isOutputVisible(true);
         };
 
         init();
