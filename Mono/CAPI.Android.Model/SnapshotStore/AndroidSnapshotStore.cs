@@ -30,7 +30,6 @@ namespace CAPI.Android.Core.Model.SnapshotStore
         {
             _snapshots[snapshot.EventSourceId] = snapshot;
         }
-
         
         public Snapshot TryGetSnapshot(Guid eventSourceId, long maxVersion)
         {
@@ -44,7 +43,7 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
         {
-            var inMemorySnapshot = this.GetSnapshot(eventSourceId, maxVersion);
+            var inMemorySnapshot = this.TryGetSnapshot(eventSourceId, maxVersion);
             if (inMemorySnapshot != null)
                 return inMemorySnapshot;
 
