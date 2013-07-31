@@ -30,20 +30,24 @@
         });
         requirejs([
                 'ko.bindingHandlers',
-                'ko.debug.helpers',
-                'ace/theme/designer',
-                'ace/mode/ncalc'
+                'ko.debug.helpers'
         ], boot);
     }
 
     function boot() {
-        require(['jquery', 'bootstrapper', 'presenter'],
-            function ($, bs, presenter) {
+        require(['jquery', 'config', 'presenter', 'dataprimer', 'binder', 'route-config'],
+            function($, config, presenter, dataprimer, binder, routeConfig) {
+
                 $.fn.activity.defaults.color = "#fff";
 
                 presenter.toggleActivity(true);
 
-                bs.run();
+                $.when(dataprimer.fetch())
+                    .done(binder.bind)
+                    .done(routeConfig.register)
+                    .always(function() {
+                        presenter.toggleActivity(false);
+                    });
             });
     }
 })();
