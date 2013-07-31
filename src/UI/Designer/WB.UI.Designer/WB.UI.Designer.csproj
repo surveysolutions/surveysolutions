@@ -396,16 +396,14 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\details\binder.js" />
-    <Content Include="Scripts\details\bootstrapper.js" />
     <Content Include="Scripts\details\config.js" />
+    <Content Include="Scripts\details\dataprimer.js" />
     <Content Include="Scripts\details\model.statistic.js" />
     <Content Include="Scripts\details\datacontext.js" />
-    <Content Include="Scripts\details\dataprimer.js" />
     <Content Include="Scripts\details\dataservice.js" />
     <Content Include="Scripts\details\ko.bindingHandlers.js" />
     <Content Include="Scripts\details\ko.debug.helpers.js" />
     <Content Include="Scripts\details\main.js" />
-    <Content Include="Scripts\details\messenger.js" />
     <Content Include="Scripts\details\model.answerOption.js" />
     <Content Include="Scripts\details\model.group.js" />
     <Content Include="Scripts\details\model.js" />
@@ -416,7 +414,6 @@
     <Content Include="Scripts\details\route-config.js" />
     <Content Include="Scripts\details\route-mediator.js" />
     <Content Include="Scripts\details\router.js" />
-    <Content Include="Scripts\details\store.js" />
     <Content Include="Scripts\details\utils.js" />
     <Content Include="Scripts\details\vm.js" />
     <Content Include="Scripts\details\vm.questionnaire.js" />
@@ -456,7 +453,6 @@
     <Content Include="Scripts\lib\ace\mode-ncalc.js" />
     <Content Include="Scripts\lib\ace\theme-designer.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
-    <Content Include="Scripts\lib\knockout-ace.js" />
     <Content Include="Scripts\lib\knockout-sortable.js" />
     <Content Include="Scripts\lib\knockout-sortable.min.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
