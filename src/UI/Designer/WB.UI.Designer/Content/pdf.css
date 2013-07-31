@@ -52,6 +52,16 @@ sup {
 .no-line-break{
     white-space: nowrap;
 }
+.square-placeholder {
+    display: inline-block;
+    border: 1px solid black;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    width: 20px;
+    font-size: 130%;
+}
+
 .date-answer-day, .date-answer-month, .date-answer-year {
     display: inline-block
 }
