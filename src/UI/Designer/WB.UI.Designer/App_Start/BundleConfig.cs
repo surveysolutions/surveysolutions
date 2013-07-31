@@ -114,12 +114,10 @@
                     "~/Scripts/details/binder.js",
                     "~/Scripts/details/bootstrapper.js",
 
-                    "~/Scripts/lib/ace/ace.js",
-                    "~/Scripts/lib/ace/mode-ncalc.js",
-                    "~/Scripts/lib/ace/theme-designer.js",
-                    
-
-                    "~/Scripts/details/main.js"));
+                    "~/Scripts/lib/ace/ace.js"
+                   // "~/Scripts/lib/ace/mode-ncalc.js",
+                    //"~/Scripts/lib/ace/theme-designer.js",
+                   ));
 
             #endregion
         }

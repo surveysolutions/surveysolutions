@@ -28,7 +28,9 @@
 
             editor.setValue(value);
             editor.gotoLine(0);
-
+            editor.renderer.setShowGutter(false);
+            editor.setShowPrintMargin(false);
+            
             var heightUpdateFunction = function () {
 
                 // http://stackoverflow.com/questions/11584061/
