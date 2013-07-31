@@ -176,9 +176,7 @@
                                     deleteGroupSuccessCallback(item);
                                 },
                                 error: function(d) {
-                                    errors.removeAll();
-                                    errors.push(d);
-                                    showOutput();
+                                    showError(d);
                                 }
                             });
                     }
@@ -225,9 +223,7 @@
 
                                 },
                                 error: function(d) {
-                                    errors.removeAll();
-                                    errors.push(d);
-                                    showOutput();
+                                    showError(d);
                                 }
                             });
                     }
@@ -283,9 +279,7 @@
                             group.commit();
                         },
                         error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                             group.canUpdate(true);
                         }
                     });
@@ -323,17 +317,15 @@
                             question.commit();
                         },
                         error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                             question.canUpdate(true);
                         }
                     });
             },
-            saveQuestionnaire = function (questionnaire) {
-                
+            saveQuestionnaire = function(questionnaire) {
+
                 questionnaire.canUpdate(false);
-                
+
                 datacontext.sendCommand(
                     config.commands.updateQuestionnaire,
                     questionnaire,
@@ -344,9 +336,7 @@
                             questionnaire.canUpdate(true);
                         },
                         error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                             questionnaire.canUpdate(true);
                         }
                     });
@@ -438,9 +428,7 @@
 
                             chapters(datacontext.groups.getChapters());
 
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                         }
                     });
             },
@@ -456,6 +444,11 @@
             },
             init = function() {
                 filter.subscribe(filterContent);
+            },
+            showError = function(message) {
+                errors.removeAll();
+                errors.push(message);
+                showOutput();
             };
 
         init();

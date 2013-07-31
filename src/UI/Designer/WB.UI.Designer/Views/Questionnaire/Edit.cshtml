@@ -1,6 +1,7 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Script.Serialization
 @using Newtonsoft.Json
+@using WB.UI.Designer
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
 
@@ -25,7 +26,8 @@
                         })) ;
             return {
                 questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)'
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
+                settings : { unhandledExceptionMessage : 'Unexpected error occurred. Please contact support via following email: <a href="mailto:@AppSettings.Instance.AdminEmail">@AppSettings.Instance.AdminEmail</a>'  }
             };
         }(document));
         
