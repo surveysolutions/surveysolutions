@@ -27,13 +27,66 @@
             return {
                 questionnaire: q,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                settings : { unhandledExceptionMessage : 'Unexpected error occurred. Please contact support via following email: <a href="mailto:@AppSettings.Instance.AdminEmail">@AppSettings.Instance.AdminEmail</a>'  }
+                settings : { unhandledExceptionMessage : 'Unexpected error occurred. Please contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
             };
         }(document));
         
         window.input = input;
     </script>
     @Scripts.Render("~/designer")
+    <script type="text/javascript">
+        (function () {
+            var root = this;
+
+            define3rdPartyModules();
+            loadPluginsAndBoot();
+
+            function define3rdPartyModules() {
+                // These are already loaded via bundles. 
+                // We define them and put them in the root object.
+                define('jquery', [], function () { return root.jQuery; });
+                define('ko', [], function () { return root.ko; });
+                define('amplify', [], function () { return root.amplify; });
+                define('infuser', [], function () { return root.infuser; });
+                define('moment', [], function () { return root.moment; });
+                define('sammy', [], function () { return root.Sammy; });
+                define('pnotify', [], function () { return root.jQuery.pnotify; });
+                define('underscore', [], function () { return root._; });
+                define('bootbox', [], function () { return root.bootbox; });
+                define('input', [], function () { return root.input; });
+            }
+
+            function loadPluginsAndBoot() {
+                requirejs.config({
+                    baseUrl: '@Url.Content("~/Scripts/lib/")',
+                    paths: {
+                        'ace/mode/ncalc': '/ace/mode-ncalc'
+                    }
+                });
+                requirejs([
+                        'ko.bindingHandlers',
+                        'ko.debug.helpers'
+                ], boot);
+            }
+
+            function boot() {
+                require(['jquery', 'config', 'presenter', 'dataprimer', 'binder', 'route-config'],
+                    function ($, config, presenter, dataprimer, binder, routeConfig) {
+              
+                        $.fn.activity.defaults.color = "#fff";
+
+                        presenter.toggleActivity(true);
+
+                        $.when(dataprimer.fetch())
+                            .done(binder.bind)
+                            .done(routeConfig.register)
+                            .always(function() {
+                                presenter.toggleActivity(false);
+                            });
+                    });
+            }
+        })();
+    </script>
 
 }
 
@@ -44,13 +97,20 @@
     <div id="footer">
         <div class="inner">
             <div class="row-fluid">
-                <div class="span4">
-                    <div id="filter">
-                        <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
-                        <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                <div class="span5">
+                    <div class="form-horizontal" id="search-form">
+                        <div class="control-group">
+                            <label class="control-label">Search question</label>
+                            <div class="controls">
+                                <div id="filter">
+                                    <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
+                                    <input type="text" class="transparent" maxlength="255" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="span4">
+                <div class="span3">
                     <div class="statistics">
                         <ul class="nav nav-pills" data-bind="with: statistics">
                             <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
@@ -66,7 +126,7 @@
                 <div class="span4">
                     <div class="pull-right">
                         <button class="btn btn-info" data-bind="click: $root.toggleOutput">
-                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="hidden: isOutputVisible">Show</span> errors
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
                         </button>
                         <button class="btn" data-bind="click: $root.toogleGroups">Collapse all</button>
                     </div>

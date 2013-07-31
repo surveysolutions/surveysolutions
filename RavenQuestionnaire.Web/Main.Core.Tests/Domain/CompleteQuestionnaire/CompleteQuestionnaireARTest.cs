@@ -1,21 +1,17 @@
-﻿using Microsoft.Practices.ServiceLocation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Domain;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire.Completed;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
+using NUnit.Framework;
+using Ncqrs.Eventing;
+using Ncqrs.Spec;
 
-namespace Main.Core.Tests.Domain
+namespace Main.Core.Tests.Domain.CompleteQuestionnaire
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Questionnaire.Completed;
-
-    using Ncqrs.Eventing;
-    using Ncqrs.Spec;
-
-    using NUnit.Framework;
-
     /// <summary>
     /// The complete questionnaire  test.
     /// </summary>

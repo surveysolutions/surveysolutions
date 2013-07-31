@@ -1,7 +1,13 @@
 ﻿<script type="text/html" id="SingleOption">
-    <div class="row-fluid">
-        <label>Answer order</label>
-        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    <div class="form-horizontal">
+        <div class="row-fluid">
+            <div class="control-group">
+                <label  class="control-label">Answer order</label>
+                <div class="controls">
+                    <select class="span12" data-bind="options: orderOptions, optionsValue: 'key', optionsText: 'value', value: answerOrder"></select>
+                </div>
+            </div>
+        </div>
     </div>
     <label class="control-label required">Answers</label>
     <div class="answer-options">
@@ -25,9 +31,15 @@
 </script>
 
 <script type="text/html" id="MultyOption">
-    <div class="row-fluid">
-        <label>Answer order</label>
-        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    <div class="form-horizontal">
+        <div class="row-fluid">
+            <div class="control-group">
+                <label class="control-label">Answer order</label>
+                <div class="controls">
+                    <select class="span12" data-bind="options: orderOptions, optionsValue: 'key', optionsText: 'value', value: answerOrder"></select>
+                </div>
+            </div>
+        </div>
     </div>
     <label class="control-label required">Answers</label>
     <div class="answer-options">

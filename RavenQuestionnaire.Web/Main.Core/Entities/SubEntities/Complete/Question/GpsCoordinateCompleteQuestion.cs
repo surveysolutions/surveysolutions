@@ -140,6 +140,11 @@
             this.Answer = answerValue;
         }
 
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            
+        }
+
         #endregion
 
         #region Implementation of ICompelteValueQuestion<string>

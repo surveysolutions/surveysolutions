@@ -380,6 +380,8 @@
             this.Comments.Add(new CommentDocument {CommentDate = date, Comment = comments, User = user});
         }
 
+        public abstract void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue);
+
         #endregion
     }
 }
