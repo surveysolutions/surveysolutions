@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide;
@@ -68,7 +69,8 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             lock (locker)
             {
-                internalImplementationOfWriter.Remove(id);
+                
+                Task.Factory.StartNew(() => internalImplementationOfWriter.Remove(id));
                 memcache.Remove(id);
             }
         }
@@ -80,7 +82,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 if (memcache.Count >= memcacheItemsSizeLimit)
                     memcache.Clear();
 
-                internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id);
+                Task.Factory.StartNew(() => internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id));
                 memcache[id] = view;
             }
         }
