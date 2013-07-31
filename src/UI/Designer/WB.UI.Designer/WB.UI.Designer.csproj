@@ -453,7 +453,6 @@
     <Content Include="Scripts\lib\ace\mode-ncalc.js" />
     <Content Include="Scripts\lib\ace\theme-designer.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
-    <Content Include="Scripts\lib\knockout-ace.js" />
     <Content Include="Scripts\lib\knockout-sortable.js" />
     <Content Include="Scripts\lib\knockout-sortable.min.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
