@@ -21,9 +21,8 @@ namespace CAPI.Android.Settings
             "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
         //"http://192.168.173.1:8000/";
         // "http://217.12.197.135/DEV-Supervisor/";
-        // "http://192.168.173.1:8084/";
-        // "http://192.168.173.1:9089/";
-        // "http://10.0.2.2:8084";
+        
+        // "http://10.0.2.2";  //access to attached computer by cord
 
         
         #endregion
