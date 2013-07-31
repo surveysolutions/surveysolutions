@@ -34,7 +34,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        [CustomHandleErrorFilter]
         public JsonResult Execute(string type, string command)
         {
             string error = string.Empty;
@@ -49,11 +48,7 @@ namespace WB.UI.Designer.Controllers
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    this.logger.Error("Unexpected error occurred", e);
-                    error =
-                        string.Format(
-                            "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",
-                            AppSettings.Instance.AdminEmail);
+                    throw e;
                 }
                 else
                 {
