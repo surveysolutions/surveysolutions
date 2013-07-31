@@ -1,4 +1,5 @@
-﻿using Ncqrs.Domain;
+﻿using Main.Core.Domain.Exceptions;
+using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Main.Core.Domain
@@ -300,6 +301,8 @@ namespace Main.Core.Domain
             else
             {
                 var answerList = new List<string>();
+                if (completeAnswers == null)
+                    throw new InterviewException("optiona are absent");
                 foreach (Guid answerGuid in completeAnswers)
                 {
                     var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
@@ -311,6 +314,8 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+
+            question.ThrowDomainExceptionIfAnswerInvalid(completeAnswers, completeAnswerValue);
             ///////////////
 
             // handle propagation
@@ -324,8 +329,8 @@ namespace Main.Core.Domain
                 new AnswerSet
                     {
                         QuestionPublicKey = questionPublicKey, 
-                        PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = completeAnswers  != null ? new List<Guid>(completeAnswers) : null, 
+                        PropogationPublicKey = propogationPublicKey,
+                        AnswerKeys = completeAnswers, 
                         AnswerValue = completeAnswerValue, 
                         AnswerDate = answerDate,
                         Featured = question.Featured, 

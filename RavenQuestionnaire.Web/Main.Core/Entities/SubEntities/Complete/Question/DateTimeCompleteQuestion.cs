@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Main.Core.Domain.Exceptions;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
@@ -142,6 +143,13 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             DateTime date;
             if (DateTime.TryParse(answerValue, out date))
                 this.Answer = date;
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            DateTime date;
+            if (!DateTime.TryParse(answerValue, out date))
+                throw new InterviewException("value must be date time");
         }
 
         #endregion
