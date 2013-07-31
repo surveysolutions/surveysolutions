@@ -1,9 +1,9 @@
-﻿using System;
-using Main.Core.Events.Questionnaire;
+﻿using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
+namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>
     {
@@ -18,13 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
         {
             var document = evnt.Payload.Source;
 
-            var browseItem = new QuestionnaireBrowseItem(
-                document.PublicKey,
-                document.Title,
-                document.CreationDate,
-                document.LastEntryDate,
-                document.CreatedBy,
-                document.IsPublic);
+            var browseItem = new QuestionnaireBrowseItem(document);
 
             this.documentStorage.Store(browseItem, document.PublicKey);
         }

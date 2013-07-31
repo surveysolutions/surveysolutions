@@ -465,6 +465,7 @@
     <Content Include="Scripts\lib\knockout.mapping.js" />
     <Content Include="Scripts\lib\koExternalTemplateEngine.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
+    <Content Include="Scripts\lib\Placeholders.js" />
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Scripts\lodash.js" />
