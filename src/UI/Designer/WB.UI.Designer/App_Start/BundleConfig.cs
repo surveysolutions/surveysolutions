@@ -82,13 +82,42 @@
                     "~/Scripts/jquery.pnotify.js", 
                     "~/Scripts/bootbox.js", 
                     // Plugins
-                    "~/Scripts/lib/jquery.autogrow-textarea.js", 
+                   "~/Scripts/lib/ace/knockout-ace.js",
+                   "~/Scripts/lib/jquery.autogrow-textarea.js", 
                     "~/Scripts/lib/Math.uuid.js",
                     "~/Scripts/lib/Placeholders.js",
  
-                    "~/Scripts/require.js", 
-                    "~/Scripts/details/*.js", 
-                    "~/Scripts/lib/ace/*.js", 
+                    "~/Scripts/require.js",
+
+                    "~/Scripts/details/config.js",
+                    "~/Scripts/details/router.js",
+                    "~/Scripts/details/route-config.js",
+                    "~/Scripts/details/route-mediator.js",
+                    "~/Scripts/details/utils.js",
+                    "~/Scripts/details/presenter.js",
+
+                    "~/Scripts/details/datacontext.js",
+                    "~/Scripts/details/dataprimer.js",
+                    "~/Scripts/details/dataservice.js",
+                    "~/Scripts/details/ko.bindingHandlers.js",
+                    "~/Scripts/details/ko.debug.helpers.js",
+                    "~/Scripts/details/model.answerOption.js",
+                    "~/Scripts/details/model.statistic.js",
+                    "~/Scripts/details/model.group.js",
+                    "~/Scripts/details/model.mapper.js",
+                    "~/Scripts/details/model.question.js",
+                    "~/Scripts/details/model.questionnaire.js",
+                    "~/Scripts/details/model.js",
+                    
+                    "~/Scripts/details/vm.questionnaire.js",
+                    "~/Scripts/details/vm.js",
+                    "~/Scripts/details/binder.js",
+                    "~/Scripts/details/bootstrapper.js",
+
+                    "~/Scripts/lib/ace/ace.js",
+                    "~/Scripts/lib/ace/mode-ncalc.js",
+                    "~/Scripts/lib/ace/theme-designer.js",
+                    
 
                     "~/Scripts/details/main.js"));
 
