@@ -163,6 +163,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             result.CompleteProcess();
             tempImportRepository.Store(result, id.ToString());
         }
+
         private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
         {
             var smallTemplate = this.templateSmallRepository.GetById(templateId);
@@ -180,8 +181,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             {
                 foreach (var record in recordAccessor.Records)
                 {
-
-
                     if (header == null)
                     {
                         header = record;

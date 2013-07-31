@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
@@ -16,6 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
         {
             if(Values==null)
                 this.Values=new List<string[]>();
+            values = values.Where(row => row.Any(item => !string.IsNullOrEmpty(item))).ToArray();
             for (int i = 0; i < values.Length; i++)
             {
                 Values.Add(values[i]);
