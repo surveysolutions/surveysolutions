@@ -24,26 +24,30 @@
         // since they depend on them.
         require.config({
             paths: {
-                'ace/theme/designer': '../../Scripts/lib/ace/mode-ncalc',
-                'ace/mode/ncalc': '../../Scripts/lib/ace/theme-designer'
+                //'ace/theme/designer': '../../Scripts/lib/ace/mode-ncalc',
+                //'ace/mode/ncalc': '../../Scripts/lib/ace/theme-designer'
             }
         });
         requirejs([
                 'ko.bindingHandlers',
-                'ko.debug.helpers',
-                'ace/theme/designer',
-                'ace/mode/ncalc'
+                'ko.debug.helpers'
         ], boot);
     }
 
     function boot() {
-        require(['jquery', 'bootstrapper', 'presenter'],
-            function ($, bs, presenter) {
+        require(['jquery', 'config', 'presenter', 'dataprimer', 'binder', 'route-config'],
+            function($, config, presenter, dataprimer, binder, routeConfig) {
+
                 $.fn.activity.defaults.color = "#fff";
 
                 presenter.toggleActivity(true);
 
-                bs.run();
+                $.when(dataprimer.fetch())
+                    .done(binder.bind)
+                    .done(routeConfig.register)
+                    .always(function() {
+                        presenter.toggleActivity(false);
+                    });
             });
     }
 })();
