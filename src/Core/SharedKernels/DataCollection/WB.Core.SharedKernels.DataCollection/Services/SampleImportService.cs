@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
             var newHeader = new List<FeaturedQuestionItem>();
             for (int i = 0; i < header.Length; i++)
             {
-                var realHeader = expectedHeader.FirstOrDefault(h => h.Caption != header[i]);
+                var realHeader = expectedHeader.FirstOrDefault(h => h.Caption == header[i]);
                 if(realHeader==null)
                     throw new ArgumentException("invalid header Capiton");
                 newHeader.Add(realHeader);
