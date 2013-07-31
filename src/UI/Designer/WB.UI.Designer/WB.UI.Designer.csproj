@@ -403,7 +403,6 @@
     <Content Include="Scripts\details\dataservice.js" />
     <Content Include="Scripts\details\ko.bindingHandlers.js" />
     <Content Include="Scripts\details\ko.debug.helpers.js" />
-    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\details\model.answerOption.js" />
     <Content Include="Scripts\details\model.group.js" />
     <Content Include="Scripts\details\model.js" />
