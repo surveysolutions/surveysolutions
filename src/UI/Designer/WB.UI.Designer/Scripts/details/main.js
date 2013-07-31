@@ -24,8 +24,8 @@
         // since they depend on them.
         require.config({
             paths: {
-                'ace/theme/designer': '../../Scripts/lib/ace/mode-ncalc',
-                'ace/mode/ncalc': '../../Scripts/lib/ace/theme-designer'
+                //'ace/theme/designer': '../../Scripts/lib/ace/mode-ncalc',
+                //'ace/mode/ncalc': '../../Scripts/lib/ace/theme-designer'
             }
         });
         requirejs([
