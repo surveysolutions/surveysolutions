@@ -101,7 +101,7 @@
             tips = {
                 newGroup: {
                     title: "Save this group",
-                    content: "",
+                    content: "You should save this group to perfome some actions with it",
                     placement: "top",
                     trigger: "hover"
                 }
