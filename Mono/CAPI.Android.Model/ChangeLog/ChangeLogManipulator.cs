@@ -1,23 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.ChangeLog
@@ -102,17 +89,25 @@ namespace CAPI.Android.Core.Model.ChangeLog
             draftChangeLog.Store(record, recodId);
         }
 
-        public Guid MarkDraftChangesetAsPublicAndReturnARId(Guid recordId)
+        public void CleanUpChangeLogByRecordId(Guid recordId)
         {
             var record = draftChangeLog.GetById(recordId);
+            
             if (record == null)
-                throw new InvalidOperationException("changeset wasn't found");
+                return;
+
             draftChangeLog.Remove(recordId);
             fileChangeLogStore.DeleteDraftChangeSet(recordId);
-            CreatePublicRecord(recordId);
-            return Guid.Parse(record.EventSourceId);
         }
 
+
+        public void CleanUpChangeLogByEventSourceId(Guid eventSourceId)
+        {
+            var record = draftChangeLog.Filter(c => c.EventSourceId == eventSourceId.ToString()).FirstOrDefault();
+            if (record == null)
+                return;
+            CleanUpChangeLogByRecordId(Guid.Parse(record.Id));
+        }
 
         #endregion
 

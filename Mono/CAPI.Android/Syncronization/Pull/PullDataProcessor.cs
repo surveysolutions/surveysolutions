@@ -6,14 +6,16 @@ using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Services;
 using Main.Core;
 using Main.Core.Commands.File;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
-using Ncqrs;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
@@ -23,15 +25,21 @@ namespace CAPI.Android.Syncronization.Pull
     {
         private const string syncTemp = "sync_temp";
 
+        private ILogger logger;
+
         public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
             this.chuncksFroProccess=new List<SyncItem>();
+
+            cleanUpExecutor = new CleanUpExecutor(changelog);
         }
         private IList<SyncItem> chuncksFroProccess;
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
+        private CleanUpExecutor cleanUpExecutor;
 
         public void Save(SyncItem  data)
         {
@@ -87,12 +95,14 @@ namespace CAPI.Android.Syncronization.Pull
 
             try
             {
-                commandService.Execute(new DeleteCompleteQuestionnaireCommand(questionnarieId));
+                cleanUpExecutor.DeleteInterveiw(questionnarieId);
             }
-#warning replace catch with propper handler of absent questionnaries
-            catch (Exception)
+
+            #warning replace catch with propper handler of absent questionnaries
+            catch (Exception ex)
             {
-                
+                logger.Error("Error on item deletion " + questionnarieId);
+                throw;
             }
           
         }
@@ -119,16 +129,15 @@ namespace CAPI.Android.Syncronization.Pull
                 syncCacher.SaveItem(item.Id, item.Content);
 
                 //apply meta to make chanages on dashboard
-                // create elgant solution
-
+                //think about more elegant solution
+                //waiting for interview and template separation
                 var dashboard = new DashboardDenormalizer(CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           CapiApplication.Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
 
                 dashboard.ProcessInterviewMeta(metaInfo);
 
             }
-            ////todo: add lazy loadng of Interview
-            ////then uncomment 
+            
             else
             {
                 string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;

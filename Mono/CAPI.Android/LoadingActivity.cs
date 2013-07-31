@@ -4,7 +4,6 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -19,8 +18,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
