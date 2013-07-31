@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using NLog;
+using NLog.Targets;
 
 namespace WB.Core.GenericSubdomains.Logging.NLog
 {
@@ -10,86 +12,38 @@ namespace WB.Core.GenericSubdomains.Logging.NLog
         public NLogLogger(string type)
         {
             this.logger = LogManager.GetLogger(type);
+            var logFiles = this.logger.Factory.Configuration.AllTargets.OfType<FileTarget>();
+            foreach (var log in logFiles)
+            {
+                log.Layout =
+                    "${longdate}|${level}|${message} ${onexception:${exception:format=tostring} | ${stacktrace}}";
+            }
         }
 
         public void Debug(string message, Exception exception = null)
         {
-            if (!this.IsDebugEnabled) return;
-            if (exception == null)
-            {
-                this.logger.Debug(new LogEventInfo(LogLevel.Debug, this.logger.Name, null, "{0}", new[] { (object) message }, null));
-            }
-
-            this.logger.Debug(new LogEventInfo(LogLevel.Debug, this.logger.Name, null, "{0}", new[] { (object) message }, exception));
+            this.logger.DebugException(message, exception);
         }
 
         public void Info(string message, Exception exception = null)
         {
-            if (!this.IsInfoEnabled) return;
-            if (exception == null)
-            {
-                this.logger.Info(new LogEventInfo(LogLevel.Info, this.logger.Name, null, "{0}", new[] { (object)message }, null));
-            }
-
-            this.logger.Info(new LogEventInfo(LogLevel.Info, this.logger.Name, null, "{0}", new[] { (object)message }, exception));
+            this.logger.InfoException(message, exception);
         }
 
 
         public void Warn(string message, Exception exception = null)
         {
-            if (!this.IsWarnEnabled) return;
-            if (exception == null)
-            {
-                this.logger.Warn(new LogEventInfo(LogLevel.Warn, this.logger.Name, null, "{0}", new[] { (object)message }, null));
-            }
-
-            this.logger.Warn(new LogEventInfo(LogLevel.Warn, this.logger.Name, null, "{0}", new[] { (object)message }, exception));
+            this.logger.WarnException(message, exception);
         }
 
         public void Error(string message, Exception exception = null)
         {
-            if (!this.IsErrorEnabled) return;
-            if (exception == null)
-            {
-                this.logger.Error(new LogEventInfo(LogLevel.Error, this.logger.Name, null, "{0}", new[] { (object)message }, null));
-            }
-
-            this.logger.Error(new LogEventInfo(LogLevel.Error, this.logger.Name, null, "{0}", new[] { (object)message }, exception));
+            this.logger.ErrorException(message, exception);
         }
 
         public void Fatal(string message, Exception exception = null)
         {
-            if (!this.IsFatalEnabled) return;
-            if (exception == null)
-            {
-                this.logger.Fatal(new LogEventInfo(LogLevel.Fatal, this.logger.Name, null, "{0}", new[] { (object)message }, null));
-            }
-            this.logger.Fatal(new LogEventInfo(LogLevel.Fatal, this.logger.Name, null, "{0}", new[] { (object)message }, exception));
-        }
-
-        internal bool IsDebugEnabled
-        {
-            get { return this.logger.IsDebugEnabled; }
-        }
-
-        internal bool IsInfoEnabled
-        {
-            get { return this.logger.IsInfoEnabled; }
-        }
-
-        internal bool IsWarnEnabled
-        {
-            get { return this.logger.IsWarnEnabled; }
-        }
-
-        internal bool IsErrorEnabled
-        {
-            get { return this.logger.IsErrorEnabled; }
-        }
-
-        public bool IsFatalEnabled
-        {
-            get { return this.logger.IsFatalEnabled; }
+            this.logger.FatalException(message, exception);
         }
     }
 }
