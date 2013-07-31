@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using NLog;
-using NLog.Targets;
 
 namespace WB.Core.GenericSubdomains.Logging.NLog
 {
@@ -12,12 +10,6 @@ namespace WB.Core.GenericSubdomains.Logging.NLog
         public NLogLogger(string type)
         {
             this.logger = LogManager.GetLogger(type);
-            var logFiles = this.logger.Factory.Configuration.AllTargets.OfType<FileTarget>();
-            foreach (var log in logFiles)
-            {
-                log.Layout =
-                    "${longdate}|${level}|${message} ${onexception:${exception:format=tostring} | ${stacktrace}}";
-            }
         }
 
         public void Debug(string message, Exception exception = null)
