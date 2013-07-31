@@ -44,12 +44,26 @@
                 "Headquarter"
             ],
             answerOrders = [
-                "AsIs",
-                "Random",
-                "AZ",
-                "ZA",
-                "MinMax",
-                "MaxMin"
+                {
+                    key: "AsIs",
+                    value: "As is"
+                },
+                {
+                    key: "AZ",
+                    value: "Sort by label AZ"
+                },
+                {
+                    key: "ZA",
+                    value: "Sort by label ZA"
+                },
+                {
+                    key: "MinMax",
+                    value: "Sort by value, accending"
+                },
+                {
+                    key: "MaxMin",
+                    value: "Sort by value, discending"
+                }
             ],
             groupTypes = [
                 "None",
@@ -87,7 +101,7 @@
             tips = {
                 newGroup: {
                     title: "Save this group",
-                    content: "",
+                    content: "You should save this group to perfome some actions with it",
                     placement: "top",
                     trigger: "hover"
                 }

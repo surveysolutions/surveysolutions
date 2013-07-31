@@ -37,6 +37,8 @@ namespace WB.UI.Designer
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             ValidatorsConfig.Register();
+
+            //BundleTable.EnableOptimizations = true;
         }
 
         protected void Application_Error(object sender, EventArgs e)
