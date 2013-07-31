@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
-    function (ko, _, config, utils, datacontext, router, messenger, store, model, bootbox) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox'],
+    function (ko, _, config, utils, datacontext, router, model, bootbox) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -47,7 +47,7 @@
                 calcStatistics();
             },
             activate = function (routeData, callback) {
-                messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
+                
 
                 if (!isInitialized) {
                     getChapters();
