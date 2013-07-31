@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
     ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
-    function(ko, _, config, utils, datacontext, router, messenger, store, model, bootbox) {
+    function (ko, _, config, utils, datacontext, router, messenger, store, model, bootbox) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -11,7 +11,7 @@
             searchResult = ko.observableArray(),
             statistics = new model.Statistic(),
             isInitialized = false,
-            cloneQuestion = function(question) {
+            cloneQuestion = function (question) {
                 if (question.isNew())
                     return;
                 var parent = question.parent();
@@ -25,7 +25,7 @@
                 router.navigateTo(clonedQuestion.getHref());
                 calcStatistics();
             },
-            cloneGroup = function(group) {
+            cloneGroup = function (group) {
                 if (group.isNew())
                     return;
 
@@ -46,7 +46,7 @@
                 router.navigateTo(clonedGroup.getHref());
                 calcStatistics();
             },
-            activate = function(routeData, callback) {
+            activate = function (routeData, callback) {
                 messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
 
                 if (!isInitialized) {
@@ -76,23 +76,23 @@
 
                 $("a[data-toggle=popover]")
                     .popover()
-                    .click(function(e) {
+                    .click(function (e) {
                         e.preventDefault();
                     });
             },
-            canLeave = function() {
+            canLeave = function () {
                 return true;
             },
-            getChapters = function() {
+            getChapters = function () {
                 if (!chapters().length) {
                     chapters(datacontext.groups.getChapters());
                 }
             },
-            editQuestionnaire = function() {
+            editQuestionnaire = function () {
                 questionnaire().isSelected(true);
                 openDetails("show-questionnaire");
             },
-            editQuestion = function(id) {
+            editQuestion = function (id) {
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
@@ -104,7 +104,7 @@
                 openDetails("show-question");
                 $('#alias').focus();
             },
-            editGroup = function(id) {
+            editGroup = function (id) {
                 var group = datacontext.groups.getLocalById(id);
                 if (_.isNull(group) || group.isNullo) {
                     return;
@@ -113,21 +113,21 @@
                 selectedGroup(group);
                 openDetails("show-group");
             },
-            openDetails = function(style) {
+            openDetails = function (style) {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').addClass('detail-visible').addClass(style);
                 $('#details-question .body').css('top', ($('#details-question .title').outerHeight() + 'px'));
                 $('#details-group .body').css('top', ($('#details-group .title').outerHeight() + 'px'));
             },
-            closeDetails = function() {
+            closeDetails = function () {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').removeClass('detail-visible');
             },
-            isOutputVisible = ko.observable(false);
-        toggleOutput = function() {
+            isOutputVisible = ko.observable(false),
+        toggleOutput = function () {
             isOutputVisible(!isOutputVisible());
         },
-        addQuestion = function(parent) {
+        addQuestion = function (parent) {
             var question = new model.Question();
             question.parent(parent);
 
@@ -138,7 +138,7 @@
             router.navigateTo(question.getHref());
             calcStatistics();
         },
-        addChapter = function() {
+        addChapter = function () {
             var group = new model.Group();
             group.level(0);
             group.title('New Chapter');
@@ -149,7 +149,7 @@
             router.navigateTo(group.getHref());
             calcStatistics();
         },
-        addGroup = function(parent) {
+        addGroup = function (parent) {
             var group = new model.Group();
             group.parent(parent);
             datacontext.groups.add(group);
@@ -158,8 +158,8 @@
             router.navigateTo(group.getHref());
             calcStatistics();
         },
-        deleteGroup = function(item) {
-            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+        deleteGroup = function (item) {
+            bootbox.confirm("Are you sure you want to delete this question?", function (result) {
                 if (result == false)
                     return;
 
@@ -170,19 +170,19 @@
                         config.commands.deleteGroup,
                         item,
                         {
-                            success: function() {
+                            success: function () {
                                 deleteGroupSuccessCallback(item);
                             },
-                            error: function(d) {
+                            error: function (d) {
                                 errors.removeAll();
                                 errors.push(d);
-                                showOutput();
+                                isOutputVisible(true);
                             }
                         });
                 }
             });
         },
-        deleteGroupSuccessCallback = function(item) {
+        deleteGroupSuccessCallback = function (item) {
             datacontext.groups.removeGroup(item.id());
 
             var parent = item.parent();
@@ -190,7 +190,7 @@
                 var child = _.find(parent.childrenID(), { 'id': item.id() });
                 parent.childrenID.remove(child);
 
-                _.each(datacontext.groups.getAllLocal(), function(group) {
+                _.each(datacontext.groups.getAllLocal(), function (group) {
                     group.fillChildren();
                 });
                 //parent.fillChildren();
@@ -204,10 +204,10 @@
                 router.navigateTo(config.hashes.details);
             }
             calcStatistics();
-            hideOutput();
+            isOutputVisible(false);
         },
-        deleteQuestion = function(item) {
-            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+        deleteQuestion = function (item) {
+            bootbox.confirm("Are you sure you want to delete this question?", function (result) {
                 if (result == false)
                     return;
 
@@ -218,20 +218,20 @@
                         config.commands.deleteQuestion,
                         item,
                         {
-                            success: function() {
+                            success: function () {
                                 deleteQuestionSuccessCallback(item);
 
                             },
-                            error: function(d) {
+                            error: function (d) {
                                 errors.removeAll();
                                 errors.push(d);
-                                showOutput();
+                                isOutputVisible(true);
                             }
                         });
                 }
             });
         },
-        deleteQuestionSuccessCallback = function(item) {
+        deleteQuestionSuccessCallback = function (item) {
             datacontext.questions.removeById(item.id());
 
             var parent = item.parent();
@@ -246,9 +246,9 @@
                 router.navigateTo(parent.getHref());
             }
 
-            hideOutput();
+            isOutputVisible(false);
         },
-        saveGroup = function(group) {
+        saveGroup = function (group) {
 
             if (group.hasParent() && group.parent().isNew()) {
                 config.logger(config.warnings.saveParentFirst);
@@ -272,23 +272,23 @@
                 command,
                 group,
                 {
-                    success: function() {
+                    success: function () {
                         group.isNew(false);
                         group.dirtyFlag().reset();
                         calcStatistics();
-                        hideOutput();
+                        isOutputVisible(false);
                         group.canUpdate(true);
                         group.commit();
                     },
-                    error: function(d) {
+                    error: function (d) {
                         errors.removeAll();
                         errors.push(d);
-                        showOutput();
+                        isOutputVisible(true);
                         group.canUpdate(true);
                     }
                 });
         },
-        saveQuestion = function(question) {
+        saveQuestion = function (question) {
 
             if (question.hasParent() && question.parent().isNew()) {
                 config.logger(config.warnings.saveParentFirst);
@@ -312,23 +312,23 @@
                 command,
                 question,
                 {
-                    success: function() {
+                    success: function () {
                         question.isNew(false);
                         question.dirtyFlag().reset();
                         calcStatistics();
-                        hideOutput();
+                        isOutputVisible(false);
                         question.canUpdate(true);
                         question.commit();
                     },
-                    error: function(d) {
+                    error: function (d) {
                         errors.removeAll();
                         errors.push(d);
-                        showOutput();
+                        isOutputVisible(true);
                         question.canUpdate(true);
                     }
                 });
         },
-        saveQuestionnaire = function(questionnaire) {
+        saveQuestionnaire = function (questionnaire) {
 
             questionnaire.canUpdate(false);
 
@@ -336,23 +336,23 @@
                 config.commands.updateQuestionnaire,
                 questionnaire,
                 {
-                    success: function() {
+                    success: function () {
                         questionnaire.dirtyFlag().reset();
-                        hideOutput();
+                        isOutputVisible(false);
                         questionnaire.canUpdate(true);
                     },
-                    error: function(d) {
+                    error: function (d) {
                         errors.removeAll();
                         errors.push(d);
-                        showOutput();
+                        isOutputVisible(true);
                         questionnaire.canUpdate(true);
                     }
                 });
         },
-        clearFilter = function() {
+        clearFilter = function () {
             filter('');
         },
-        filterContent = function() {
+        filterContent = function () {
             var query = filter().trim().toLowerCase();
             isFilterMode(query !== '');
             searchResult.removeAll();
@@ -360,7 +360,7 @@
                 searchResult(datacontext.questions.search(query));
             }
         },
-        isMovementPossible = function(arg, event, ui) {
+        isMovementPossible = function (arg, event, ui) {
 
             var fromId = arg.sourceParent.id;
             var toId = arg.targetParent.id;
@@ -406,7 +406,7 @@
                 config.commands[moveItemType + "Move"],
                 moveCommand,
                 {
-                    success: function(d) {
+                    success: function (d) {
                         if (isDraggedFromChapter) {
                             var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
                             datacontext.questionnaire.childrenID.remove(child);
@@ -429,8 +429,8 @@
                             target.fillChildren();
                         }
                     },
-                    error: function(d) {
-                        _.each(datacontext.groups.getAllLocal(), function(group) {
+                    error: function (d) {
+                        _.each(datacontext.groups.getAllLocal(), function (group) {
                             group.fillChildren();
                         });
 
@@ -438,18 +438,18 @@
 
                         errors.removeAll();
                         errors.push(d);
-                        showOutput();
+                        isOutputVisible(true);
                     }
                 });
         },
-        calcStatistics = function() {
+        calcStatistics = function () {
             var questions = datacontext.questions.getAllLocal();
             var groups = datacontext.groups.getAllLocal();
             statistics.questions(questions.length);
             statistics.groups(groups.length);
-            var counter = _.countBy(questions, function(q) { return q.isNew(); });
+            var counter = _.countBy(questions, function (q) { return q.isNew(); });
             statistics.unsavedQuestion(_.isUndefined(counter['true']) ? 0 : counter['true']);
-            counter = _.countBy(groups, function(g) { return g.isNew(); });
+            counter = _.countBy(groups, function (g) { return g.isNew(); });
             statistics.unsavedGroups(_.isUndefined(counter['true']) ? 0 : counter['true']);
         },
         toogleGroups = function () {
@@ -461,9 +461,9 @@
         expandItemIfNeeded = function (arg) {
             console.log(arg);
         },
-        init = function() {
+        init = function () {
             filter.subscribe(filterContent);
-            ko.bindingHandlers.sortable.options.start = function(arg, ui) {
+            ko.bindingHandlers.sortable.options.start = function (arg, ui) {
                 if ($(ui.item).children('.ui-expander').length > 0) {
                     var button = $(ui.item).children('.ui-expander').children('.ui-expander-head');
                     if ($(button).hasClass('ui-expander-head-collapsed') == false) {
