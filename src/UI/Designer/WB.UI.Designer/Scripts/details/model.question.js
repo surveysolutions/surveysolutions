@@ -17,7 +17,8 @@
                   pattern: {
                       message: "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit",
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
-                  }
+                  },
+                  notEqual : 'this'
               });
 
               self.type = ko.observable("QuestionView"); // Object type

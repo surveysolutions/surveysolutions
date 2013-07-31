@@ -39,7 +39,7 @@
 
 <div id="busyindicator"></div>
 
-<div id="stacks">
+<div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
 
     <div id="footer">
         <div class="inner">
@@ -57,16 +57,19 @@
                             <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
                         </ul>
                     </div>
+                    <div class="statistics" data-bind="with: statistics">
+                        <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
+                            <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="span4">
                     <div class="pull-right">
-                        <button class="btn btn-info" data-bind="click: $root.showOutput">Show errors</button>
+                        <button class="btn btn-info" data-bind="click: $root.toggleOutput">
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="hidden: isOutputVisible">Show</span> errors
+                        </button>
+                        <button class="btn" data-bind="click: $root.toogleGroups">Collapse all</button>
                     </div>
-                </div>
-            </div>
-            <div class="statistics" data-bind="with: statistics">
-                <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
-                    <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
                 </div>
             </div>
         </div>
@@ -74,7 +77,7 @@
     <div id="output" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: $root.hideOutput">&times</button>
+                <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
                 <span>Errors log</span>
             </div>
             <div class="body">
@@ -148,7 +151,7 @@
 
 <script type="text/html" id="GroupView">
     <div class="ui-expander" data-bind="expand: true">
-        <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-minus icon-white"></i></button>
+        <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-plus icon-white"></i><i class="icon-minus icon-white"></i></button>
         <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
             <div class="handler"></div>
             <div class="q-item">
