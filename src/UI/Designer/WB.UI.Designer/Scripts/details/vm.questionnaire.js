@@ -174,6 +174,7 @@
                                 deleteGroupSuccessCallback(item);
                             },
                             error: function (d) {
+                                    showError(d);
                                 errors.removeAll();
                                 errors.push(d);
                                 isOutputVisible(true);
@@ -223,6 +224,7 @@
 
                             },
                             error: function (d) {
+                                    showError(d);
                                 errors.removeAll();
                                 errors.push(d);
                                 isOutputVisible(true);
@@ -281,6 +283,7 @@
                         group.commit();
                     },
                     error: function (d) {
+                            showError(d);
                         errors.removeAll();
                         errors.push(d);
                         isOutputVisible(true);
@@ -321,6 +324,7 @@
                         question.commit();
                     },
                     error: function (d) {
+                            showError(d);
                         errors.removeAll();
                         errors.push(d);
                         isOutputVisible(true);
@@ -342,6 +346,7 @@
                         questionnaire.canUpdate(true);
                     },
                     error: function (d) {
+                            showError(d);
                         errors.removeAll();
                         errors.push(d);
                         isOutputVisible(true);
@@ -436,6 +441,7 @@
 
                         chapters(datacontext.groups.getChapters());
 
+                            showError(d);
                         errors.removeAll();
                         errors.push(d);
                         isOutputVisible(true);
@@ -471,6 +477,11 @@
                     }
                 }
             };
+        },
+        showError = function(message) {
+                errors.removeAll();
+                errors.push(message);
+                showOutput();
         };
 
         init();
