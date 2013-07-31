@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using Core.Supervisor.Views;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
+using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
+using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace Web.Supervisor.Controllers
@@ -28,28 +34,32 @@ namespace Web.Supervisor.Controllers
     public class HQController : BaseController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
         private readonly IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
+        private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
-
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
             IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
             IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory)
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, ISampleImportService sampleImportService)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionnaireItemFactory = questionnaireItemFactory;
             this.userListViewFactory = userListViewFactory;
             this.assignSurveyViewFactory = assignSurveyViewFactory;
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
+            this.sampleImportService = sampleImportService;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -76,6 +86,51 @@ namespace Web.Supervisor.Controllers
             return this.View(Filters());
         }
 
+        public ActionResult BatchUpload(Guid id)
+        {
+            var model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+            return this.View(model);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult ImportSample(Guid id, HttpPostedFileBase uploadFile)
+        {
+            ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id,
+                                                                          new CsvSampleRecordsAccessor(
+                                                                              uploadFile.InputStream));
+            var model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+            return this.View(model);
+        }
+
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public ActionResult ImportResult(Guid id)
+        {
+            var result = this.sampleImportService.GetImportStatus(id);
+            if (result.IsCompleted && result.IsSuccessed)
+            {
+
+                ViewBag.SupervisorList =
+                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
+                                                                                   ViewerStatus.Headquarter)).Items;
+            }
+            return this.PartialView(result);
+        }
+
+        public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
+        {
+            this.sampleImportService.CreateSample(id, GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
+            return RedirectToAction("SampleCreationResult", new {id = id});
+        }
+
+        public ActionResult SampleCreationResult(Guid id)
+        {
+            var result = this.sampleImportService.GetSampleCreationStatus(id);
+            return this.View(result);
+        }
+        public JsonResult GetSampleCreationStatus(Guid id)
+        {
+            return this.Json(this.sampleImportService.GetSampleCreationStatus(id));
+        }
         public ActionResult TakeNew(Guid id)
         {
             Guid key = id;

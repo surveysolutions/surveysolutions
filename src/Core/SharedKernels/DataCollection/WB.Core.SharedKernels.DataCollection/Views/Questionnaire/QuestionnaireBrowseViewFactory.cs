@@ -1,9 +1,10 @@
-using System.Linq;
+﻿using System.Linq;
 using Main.Core.Utility;
 using Main.Core.View;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
+namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
     /// <summary>
     /// The questionnaire browse view factory.
@@ -73,12 +74,12 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
 
                     if (!string.IsNullOrEmpty(input.Filter))
                     {
-                        #warning ReadLayer: ToList materialization because not supported by Raven
+#warning ReadLayer: ToList materialization because not supported by Raven
                         query = query.ToList().AsQueryable().Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
                     }
                 }
 
-                #warning ReadLayer: ToList materialization because not supported by Raven
+#warning ReadLayer: ToList materialization because not supported by Raven
                 var queryResult = query.ToList().AsQueryable().OrderUsingSortExpression(input.Order);
 
                 var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();

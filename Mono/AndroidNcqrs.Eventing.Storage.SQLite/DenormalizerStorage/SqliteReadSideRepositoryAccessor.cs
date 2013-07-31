@@ -12,70 +12,39 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteReadSideRepositoryAccessor<TView> : IBackupable,
+    public class SqliteReadSideRepositoryAccessor<TView> : 
         IFilterableReadSideRepositoryReader<TView>, IFilterableReadSideRepositoryWriter<TView>
         where TView : DenormalizerRow, new()
     {
-        private ISQLiteConnection connection;
-        private readonly string dbName;
-        public SqliteReadSideRepositoryAccessor(string dbName)
+        private readonly SqliteDenormalizerStore documentStore;
+        public SqliteReadSideRepositoryAccessor(SqliteDenormalizerStore documentStore)
         {
-            this.dbName=dbName;
-            Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
-            connection = connectionFactory.Create(dbName);
-
-            connection.CreateTable<TView>();
+            this.documentStore = documentStore;
         }
 
         public int Count()
         {
-            return connection.Table<TView>().Count();
+            return this.documentStore.Count<TView>();
         }
 
         public TView GetById(Guid id)
         {
-            var idString = id.ToString();
-            //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
-            return ((ITableQuery<TView>) connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
+            return this.documentStore.GetById<TView>(id);
         }
 
         public IEnumerable<TView> Filter(Expression<Func<TView, bool>> predExpr)
         {
-            return ((ITableQuery<TView>) connection.Table<TView>()).Where(predExpr);
+            return this.documentStore.Filter(predExpr);
         }
 
         public void Remove(Guid id)
         {
-            connection.Delete<TView>(id.ToString());
+            this.documentStore.Remove<TView>(id);
         }
 
         public void Store(TView view, Guid id)
         {
-            try
-            {
-                connection.Insert(view);
-            }
-            catch
-            {
-                connection.Update(view);
-            }
-        }
-
-        public string GetPathToBakupFile()
-        {
-            return this.connection.DatabasePath;
-        }
-
-        public void RestoreFromBakupFolder(string path)
-        {
-            connection.Close();
-
-            File.Copy(Path.Combine(path, dbName),
-                      System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
-                                          this.dbName), true);
-            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
-            connection = connectionFactory.Create(dbName);
+            this.documentStore.Store<TView>(view,id);
         }
     }
 

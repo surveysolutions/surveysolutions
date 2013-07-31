@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using WB.Core.SharedKernel.Utils.Serialization;
 
 namespace WB.UI.Designer.Tests.Integration
 {
@@ -36,7 +37,7 @@ namespace WB.UI.Designer.Tests.Integration
 
         private IStringCompressor CreateZipUtils()
         {
-            return new GZipJsonCompressor();
+            return new GZipJsonCompressor(new NewtonJsonUtils());
         }
     }
 }

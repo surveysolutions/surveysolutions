@@ -13,7 +13,7 @@ using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Tests
 {
@@ -135,8 +135,15 @@ namespace Core.Supervisor.Tests
                 templateMock.Setup(x => x.QueryAll(It.IsAny<Expression<Func<QuestionnaireBrowseItem, bool>>>()))
                             .Returns(new QuestionnaireBrowseItem[]
                                 {
-                                    new QuestionnaireBrowseItem(templateId.Value, "smth", DateTime.Now, DateTime.Now,
-                                                                null, true)
+
+                                    new QuestionnaireBrowseItem()
+                                        {
+                                            QuestionnaireId = templateId.Value,
+                                            Title = "smth",
+                                            CreationDate = DateTime.Now,
+                                            LastEntryDate = DateTime.Now,
+                                            IsPublic = true
+                                        }
                                 });
             }
             return templateMock;
