@@ -94,7 +94,7 @@ namespace WB.Core.Synchronization.Tests
             var userStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
 
             var retval =
-                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage);
+                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage, inmemoryChunkStorage);
 
             retval.SaveUser(new UserDocument()
             {
