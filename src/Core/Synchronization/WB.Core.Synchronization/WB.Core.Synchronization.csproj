@@ -82,11 +82,13 @@
     <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SyncStorage\IChunkReader.cs" />
     <Compile Include="SyncStorage\IncomePackagesRepository.cs" />
     <Compile Include="SyncStorage\InMemoryChunkStorage.cs" />
-    <Compile Include="SyncStorage\ReadSideChunkStorage.cs" />
+    <Compile Include="SyncStorage\ReadSideChunkReader.cs" />
+    <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
-    <Compile Include="SyncStorage\IChunkStorage.cs" />
+    <Compile Include="SyncStorage\IChunkWriter.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
   </ItemGroup>
   <ItemGroup>

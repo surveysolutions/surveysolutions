@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    internal interface IChunkStorage
+    public interface IChunkReader
     {
-        void StoreChunk(SyncItem syncItem, Guid? userId);
         SyncItem ReadChunk(Guid id);
         IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users);
 
