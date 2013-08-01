@@ -47,6 +47,15 @@
                     </span>
                     break;
                 }
+            case QuestionType.Numeric:
+                {
+                    <span class="no-line-break">
+                        @for (int i = 0; i < 10; i++) {
+                            <span class="square-placeholder">&nbsp;</span>
+                        }
+                    </span>
+                    break;
+                }
             default:
                 <div class="answer-placeholder">&nbsp;</div>
                 break;
