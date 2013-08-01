@@ -442,6 +442,84 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_there_is_only_one_option_in_categorical_question_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(targetQuestionPublicKey, questionType: questionType, options: new Option[2]
+                    {
+                        new Option(id: Guid.NewGuid(), title: "text1", value: "1") ,
+                        new Option(id: Guid.NewGuid(), title: "text2", value: "2") 
+                    });
+
+            Option[] oneOption = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewUpdateQuestion(questionId: targetQuestionPublicKey,
+                                   title: "What is your last name?",
+                                   alias: "name",
+                                   type: questionType,
+                                   scope: QuestionScope.Interviewer,
+                                   condition: string.Empty,
+                                   validationExpression: string.Empty,
+                                   validationMessage: string.Empty,
+                                   isFeatured: false,
+                                   isMandatory: false,
+                                   isHeaderOfPropagatableGroup: false,
+                                   optionsOrder: Order.AZ,
+                                   instructions: string.Empty,
+                                   triggedGroupIds: new Guid[0],
+                                   maxValue: 0,
+                                   options: oneOption);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TooFewOptionsInCategoryQuestion));
+        }
+
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_there_are_two_options_in_categorical_question_Then_raised_NewQuestionAdded_event_contains_the_same_options_count(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(targetQuestionPublicKey, questionType: questionType, options: new Option[2]
+                    {
+                        new Option(id: Guid.NewGuid(), title: "text1", value: "1") ,
+                        new Option(id: Guid.NewGuid(), title: "text2", value: "2") 
+                    });
+
+                const int answerOptionsCount = 2;
+
+                Option[] options = new Option[answerOptionsCount] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") };
+                // act
+                questionnaire.NewUpdateQuestion(questionId: targetQuestionPublicKey,
+                                   title: "What is your last name?",
+                                   alias: "name",
+                                   type: questionType,
+                                   scope: QuestionScope.Interviewer,
+                                   condition: string.Empty,
+                                   validationExpression: string.Empty,
+                                   validationMessage: string.Empty,
+                                   isFeatured: false,
+                                   isMandatory: false,
+                                   isHeaderOfPropagatableGroup: false,
+                                   optionsOrder: Order.AZ,
+                                   instructions: string.Empty,
+                                   triggedGroupIds: new Guid[0],
+                                   maxValue: 0,
+                                   options: options);
+
+                // assert
+                var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.That(raisedEvent.Answers.Length, Is.EqualTo(answerOptionsCount));
+            }
+        }
+
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]

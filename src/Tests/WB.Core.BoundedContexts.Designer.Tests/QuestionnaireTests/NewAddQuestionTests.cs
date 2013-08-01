@@ -132,17 +132,65 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleRequired));
         }
 
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_there_is_only_one_option_in_categorical_question_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            var questionnaireKey = Guid.NewGuid();
+            var groupKey = Guid.NewGuid();
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
+
+            Option[] oneOption = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, oneOption, Order.AsIs, null, new Guid[0]);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TooFewOptionsInCategoryQuestion));
+        }
+
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_there_are_two_options_in_categorical_question_Then_raised_NewQuestionAdded_event_contains_the_same_options_count(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                var questionnaireKey = Guid.NewGuid();
+                var groupKey = Guid.NewGuid();
+                // arrange
+                Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
+
+                const int answerOptionsCount = 2;
+
+                Option[] options = new Option[answerOptionsCount]{ new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") };
+                // act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                                  false, QuestionScope.Interviewer, string.Empty, string.Empty,
+                                                  string.Empty,
+                                                  string.Empty, options, Order.AsIs, null, new Guid[0]);
+
+                // assert
+                var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.That(raisedEvent.Answers.Length, Is.EqualTo(answerOptionsCount));
+            }
+        }
+
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_AnswerTitleIsAbsent_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewAddQuestion_When_AnswerTitle_is_absent_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             var questionnaireKey = Guid.NewGuid();
             var groupKey = Guid.NewGuid();
             // arrange
             Questionnaire questionnsire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
 
-            Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
+            Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
                 () =>
@@ -456,19 +504,22 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorEmpty));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TooFewOptionsInCategoryQuestion));
         }
 
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
 #warning Roma: when part is incorrect should be something like when answer option value contains not number
-        public void NewAddQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewAddQuestion_When_answer_option_is_not_numeric_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire();
 
             // Act
+            var notNumericAnswerValue1 = "some value";
+            var notNumericAnswerValue2 = "some value";
+
             TestDelegate act = () =>
                                questionnaire.NewAddQuestion(
                                    questionId: Guid.NewGuid(),
@@ -487,7 +538,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    optionsOrder: Order.AsIs,
                                    maxValue: 0,
                                    triggedGroupIds: new Guid[0],
-                                   options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
+                                   options: new Option[2]
+                                       {
+                                           new Option(id: Guid.NewGuid(), value: notNumericAnswerValue1, title: "text"),
+                                           new Option(id: Guid.NewGuid(), value: notNumericAnswerValue2, title: "text1")
+                                       });
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -572,7 +627,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
                     maxValue: null,
-                    triggedGroupIds: new Guid[]{},
+                    triggedGroupIds: new Guid[] { },
                     options: AreOptionsRequiredByQuestionType(allowedQuestionType) ? CreateTwoOptions() : null);
 
                 // assert
