@@ -113,8 +113,8 @@ namespace Web.Supervisor.App_Start
                 new SupervisorCommandDeserializationModule());
 
 #warning dirty hack for register ziped read side
-            kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
-            kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+        /*    kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
+            kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();*/
 
             //midnigth fixx
             //both services have to share the same cache
