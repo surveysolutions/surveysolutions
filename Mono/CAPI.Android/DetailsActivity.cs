@@ -1,6 +1,5 @@
 using System;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
@@ -9,16 +8,14 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
-using CAPI.Android.Core;
-using CAPI.Android.Core.Model.SnapshotStore;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
+using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
-using Main.Core.Domain;
-using Ncqrs;
-using Ncqrs.Eventing.Storage;
+using Ninject;
 
 
 namespace CAPI.Android
@@ -68,6 +65,8 @@ namespace CAPI.Android
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
 
+        protected CleanUpExecutor cleanUpExecutor { get; set; }
+
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -112,6 +111,8 @@ namespace CAPI.Android
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, ScreenId);
             VpContent.Adapter = Adapter;
             VpContent.PageSelected += VpContent_PageSelected;
+
+            cleanUpExecutor = new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>());
 
         }
 
@@ -250,8 +251,8 @@ namespace CAPI.Android
         {
 
             if (Adapter.IsRoot)
-                NavList.SelectItem(e.P0);
-            var statistic = Adapter.GetItem(e.P0) as StatisticsContentFragment;
+                NavList.SelectItem(e.Position);
+            var statistic = Adapter.GetItem(e.Position) as StatisticsContentFragment;
             if (statistic != null)
                 statistic.RecalculateStatistics();
         }
@@ -266,9 +267,8 @@ namespace CAPI.Android
         public override void Finish()
         {
             base.Finish();
-            var storage = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
-            if (storage != null)
-                storage.Flush(QuestionnaireId);
+            
+            cleanUpExecutor.CleanUpInterviewCaches(QuestionnaireId);
         }
 
         public override void OnLowMemory()

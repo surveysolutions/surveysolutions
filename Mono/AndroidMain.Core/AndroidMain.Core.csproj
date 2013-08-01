@@ -110,6 +110,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs">
       <Link>Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\DeleteInterviewCommand.cs">
+      <Link>Commands\Questionnaire\Completed\DeleteInterviewCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetAnswerCommand.cs">
       <Link>Commands\Questionnaire\Completed\SetAnswerCommand.cs</Link>
     </Compile>

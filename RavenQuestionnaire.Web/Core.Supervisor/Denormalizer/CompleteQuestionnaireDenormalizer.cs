@@ -176,7 +176,10 @@ namespace Core.Supervisor.Denormalizer
             if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
                 syncStorage.SaveInterview(item, item.Responsible.Id);
             else
-                syncStorage.DeleteInterview(evnt.EventSourceId, item.Responsible.Id);
+                syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, item.Responsible.Id);
+
+            //when deleting logic is implemented call syncStorage.DeleteInterview(id) in apropriate place    
+
         }
 
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)

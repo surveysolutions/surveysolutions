@@ -13,6 +13,8 @@ namespace CAPI.Android.Core.Model
         string GetDraftRecordContent(Guid recordId);
 
         void CreatePublicRecord(Guid recordId);
-        Guid MarkDraftChangesetAsPublicAndReturnARId(Guid recordId);
+        void CleanUpChangeLogByRecordId(Guid recordId);
+
+        void CleanUpChangeLogByEventSourceId(Guid eventSourceId);
     }
 }

@@ -102,7 +102,6 @@ namespace Web.Supervisor.App_Start
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
-                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
                 pageSize.HasValue
