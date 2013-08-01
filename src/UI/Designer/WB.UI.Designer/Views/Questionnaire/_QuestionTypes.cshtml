@@ -47,10 +47,10 @@
         <div class="row-fluid">
             <div class="controls  controls-row">
                 <div class="span3 control-group" data-bind="validationElement: value">
-                    <input type="number" placeholder="Value" class="input-block-level" data-bind="value: value">
+                    <input type="number" placeholder="Value" class="input-block-level" data-bind="value: value, valueUpdate: 'afterkeydown'">
                 </div>
                 <div class="span8 control-group" data-bind="validationElement: title">
-                    <input type="text" placeholder="Label" class="input-block-level" data-bind="value: title">
+                    <input type="text" placeholder="Label" class="input-block-level" data-bind="value: title, valueUpdate: 'afterkeydown'">
                 </div>
                 <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
             </div>

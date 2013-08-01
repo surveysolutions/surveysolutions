@@ -35,6 +35,7 @@
 
                 self.cloneSource = ko.observable();
                 self.isSelected = ko.observable();
+                self.isExpanded = ko.observable(true);
                 self.typeOptions = config.groupTypes;
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.gtype, self.description, self.condition]);

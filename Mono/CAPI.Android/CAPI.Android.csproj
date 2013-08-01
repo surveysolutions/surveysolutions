@@ -177,12 +177,12 @@
     <Compile Include="LoginActivity.cs" />
     <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Services\CleanUpExecutor.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
     <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
     <Compile Include="Syncronization\Pull\PullDataProcessor.cs" />

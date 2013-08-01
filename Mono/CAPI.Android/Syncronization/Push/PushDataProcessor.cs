@@ -1,22 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using AndroidNcqrs.Eventing.Storage.SQLite;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.ChangeLog;
-using CAPI.Android.Core.Model.SnapshotStore;
-using Main.Core.Commands.Questionnaire.Completed;
-using Ncqrs;
+using CAPI.Android.Services;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing.Storage;
+using Ninject;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
@@ -30,7 +17,6 @@ namespace CAPI.Android.Syncronization.Push
             this.changelog = changelog;
             this.commandService = commandService;
         }
-
 
         public IList<SyncPackage> GetChuncks()
         {
@@ -58,27 +44,9 @@ namespace CAPI.Android.Syncronization.Push
             return retval;
         }
 
-        public void MarkChunckAsPushed(Guid chunckId)
+        public void DeleteInterview(Guid chunckId, Guid itemId)
         {
-            var arId = changelog.MarkDraftChangesetAsPublicAndReturnARId(chunckId);
-            commandService.Execute(new DeleteCompleteQuestionnaireCommand(arId));
-            CleanupEventStream(arId);
-            CleanSnapshotStore(arId);
-        }
-
-        private void CleanSnapshotStore(Guid arId)
-        {
-            var storage = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
-            if (storage != null)
-                storage.Flush(arId);
-        }
-
-        private void CleanupEventStream(Guid arId)
-        {
-            #warning invent some better way of doing that
-            var eventStore = NcqrsEnvironment.Get<IEventStore>() as MvvmCrossSqliteEventStore;
-            if (eventStore != null)
-                eventStore.CleanStream(arId);
+            new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>()).DeleteInterveiw(itemId);
         }
     }
 
