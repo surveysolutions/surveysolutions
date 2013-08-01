@@ -18,13 +18,10 @@ namespace WB.UI.Designer.Code
 
     public class DesignerRegistry : CoreRegistry
     {
-        public DesignerRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded) {}
-
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return
-                base.GetAssweblysForRegister()
+                base.GetAssembliesForRegistration()
                     .Concat(new[]
                     {
                         typeof(QuestionnaireView).Assembly, 
