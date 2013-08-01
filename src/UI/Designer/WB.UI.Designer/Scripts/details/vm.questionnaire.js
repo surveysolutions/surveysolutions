@@ -441,9 +441,6 @@
                 counter = _.countBy(groups, function(g) { return g.isNew(); });
                 statistics.unsavedGroups(_.isUndefined(counter['true']) ? 0 : counter['true']);
             },
-            toogleGroups = function() {
-                $('.ui-expander-head:not(.ui-expander-head-collapsed)').click();
-            },
             init = function() {
                 filter.subscribe(filterContent);
                 ko.bindingHandlers.sortable.options.start = function(arg, ui) {
@@ -454,8 +451,33 @@
                         }
                     }
                 };
+                
+
             },
-            focusOnSearch = function () {
+            isAllChaptersExpanded = ko.computed(function() {
+                return _.some(chapters(), function(chapter) {
+                    return chapter.isExpanded();
+                });
+            }),
+            toggleAllChapters = function () {
+                if (isAllChaptersExpanded()) {
+                    _.each(chapters(), function (chapter) {
+                        chapter.isExpanded(false);
+                    });
+                } else {
+                    _.each(chapters(), function (chapter) {
+                        chapter.isExpanded(true);
+                    });
+                }
+            },
+            toggleAllChaptersTooltip = ko.computed(function () {
+                var tooltip = {
+                    title: (isAllChaptersExpanded() == true ? 'Collapse' : 'Expand') + ' all chapters',
+                    placement: 'right'
+                };
+                return tooltip;
+            }).extend({throttle: 400}),
+            focusOnSearch = function() {
                 $('#filter input').get(0).focus();
             },
             showError = function(message) {
@@ -493,6 +515,8 @@
             statistics: statistics,
             searchResult: searchResult,
             saveQuestionnaire: saveQuestionnaire,
-            toogleGroups: toogleGroups
+            isAllChaptersExpanded: isAllChaptersExpanded,
+            toggleAllChapters: toggleAllChapters,
+            toggleAllChaptersTooltip: toggleAllChaptersTooltip
         };
     });
