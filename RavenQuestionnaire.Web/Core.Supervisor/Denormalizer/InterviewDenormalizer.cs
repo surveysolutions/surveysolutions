@@ -13,7 +13,6 @@ namespace Core.Supervisor.Denormalizer
     public class InterviewDenormalizer : UserBaseDenormalizer,
         IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
-                                                               IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
                                                                IEventHandler<InterviewDeleted>
@@ -76,12 +75,7 @@ namespace Core.Supervisor.Denormalizer
                 this.interviews.Store(item, item.InterviewId);
             }
         }
-
-        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
-        {
-            this.interviews.Remove(evnt.Payload.CompletedQuestionnaireId);
-        }
-
+        
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             var item = this.interviews.GetById(evnt.EventSourceId);
