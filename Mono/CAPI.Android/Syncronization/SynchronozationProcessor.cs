@@ -159,8 +159,11 @@ namespace CAPI.Android.Syncronization
                     foreach (var chunckDescription in dataByChuncks)
                     {
                         ExitIfCanceled();
+
                         push.PushChunck(credentials.Login, credentials.Password, chunckDescription, ct);
-                        pushDataProcessor.MarkChunckAsPushed(chunckDescription.Id);
+                        //fix method
+                        pushDataProcessor.DeleteInterview(chunckDescription.Id, chunckDescription.ItemsContainer[0].Id);
+
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;
                     }

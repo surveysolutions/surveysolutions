@@ -688,6 +688,7 @@ namespace Main.Core.Domain
         {
 #warning implement proper way of deleting questionnaries
             this.doc = new CompleteQuestionnaireDocument();
+            this.doc.IsDeleted = true;
         }
 
         /// <summary>
