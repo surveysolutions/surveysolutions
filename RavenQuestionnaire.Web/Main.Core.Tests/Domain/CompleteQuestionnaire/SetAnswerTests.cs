@@ -138,31 +138,26 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             //arrange
             var document = new QuestionnaireDocument();
             document.Add(question, null, null);
-            using (var eventContext = new EventContext())
-            {
-                CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
+            CompleteQuestionnaireAR target = this.CreateCompleteQuestionnaireAR(document);
 
-                //act
+            //act
+            TestDelegate act = () => target.SetAnswer(question.PublicKey, null, answer, answerKeys, DateTime.Now);
 
-                Assert.Throws<InterviewException>(
-                    () => target.SetAnswer(question.PublicKey, null, answer, answerKeys, DateTime.Now));
-
-            }
+            //assert
+            Assert.Throws<InterviewException>(act);
         }
 
         public void TestValueQuestionForAnswerSetEventRise(IQuestion question, string answer)
         {
-            //arrange
-            var document = new QuestionnaireDocument();
-            document.Add(question, null, null);
             using (var eventContext = new EventContext())
             {
+                //arrange
+                var document = new QuestionnaireDocument();
+                document.Add(question, null, null);
                 CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
 
                 //act
-
                 target.SetAnswer(question.PublicKey, null, answer, null, DateTime.Now);
-
 
                 //assert
                 Assert.That(GetSingleEvent<AnswerSet>(eventContext).QuestionPublicKey, Is.EqualTo(question.PublicKey));
@@ -172,17 +167,15 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
 
         public void TestOptionQuestionForAnswerSetEventRise(IQuestion question, List<Guid> answerKeys)
         {
-            //arrange
-            var document = new QuestionnaireDocument();
-            document.Add(question, null, null);
             using (var eventContext = new EventContext())
             {
+                //arrange
+                var document = new QuestionnaireDocument();
+                document.Add(question, null, null);
                 CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
 
                 //act
-
                 target.SetAnswer(question.PublicKey, null, null, answerKeys, DateTime.Now);
-
 
                 //assert
                 Assert.That(GetSingleEvent<AnswerSet>(eventContext).QuestionPublicKey, Is.EqualTo(question.PublicKey));
