@@ -9,7 +9,7 @@ namespace WB.Core.Synchronization
     {
         void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId);
         void DeleteInterview(Guid id);
-        void MarkInterviewForClientDeleting(Guid id, Guid responsibleId);
+        void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId);
         void SaveImage(Guid publicKey, string title, string desc, string origData);
         void SaveUser(UserDocument doc);
         

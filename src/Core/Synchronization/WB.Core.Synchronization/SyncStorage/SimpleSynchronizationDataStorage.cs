@@ -46,7 +46,7 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
-        public void MarkInterviewForClientDeleting(Guid id, Guid responsibleId)
+        public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId)
         {
             var syncItem = new SyncItem
             {
