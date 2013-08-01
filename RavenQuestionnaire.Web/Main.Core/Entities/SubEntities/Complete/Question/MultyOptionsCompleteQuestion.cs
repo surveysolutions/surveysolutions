@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Entities.SubEntities.Complete.Question
+﻿using Main.Core.Domain.Exceptions;
+
+namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
@@ -125,8 +127,6 @@
         {
             if (answer == null)
             {
-                ////multiOption supports only list of answers
-                throw new Exception("Parameter: answer");
             }
 
             // iterates over all items to set on/off current state
@@ -135,6 +135,19 @@
                 (item as ICompleteAnswer).Selected = answer.Contains(item.PublicKey);
             }
 
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            if (answerKeys == null)
+            {
+                return;
+            }
+            foreach (var item in answerKeys)
+            {
+                if (this.Answers.All(a => a.PublicKey != item))
+                    throw new InterviewException(string.Format("value {0} is absent", item));
+            }
         }
 
         #endregion
