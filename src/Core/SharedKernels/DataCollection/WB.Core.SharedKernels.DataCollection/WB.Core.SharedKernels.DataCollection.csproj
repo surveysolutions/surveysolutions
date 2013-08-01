@@ -62,6 +62,7 @@
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\InterviewCreated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Exceptions\InterviewException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
