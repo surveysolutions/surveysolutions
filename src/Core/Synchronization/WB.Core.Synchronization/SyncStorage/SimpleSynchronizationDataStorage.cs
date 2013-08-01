@@ -60,7 +60,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public void DeleteInterview(Guid id)
         {
-            chunkStorage.RemoveChunk(id);
+            chunkStorageWriter.RemoveChunk(id);
         }
 
         public void SaveImage(Guid publicKey, string title, string desc, string origData)
