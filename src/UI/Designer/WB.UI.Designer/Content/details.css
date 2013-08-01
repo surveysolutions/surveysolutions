@@ -458,12 +458,12 @@ h1 {
 
     .q-item-wrap.q-questionnaire {
         background-color: #AAA;
-        margin-left: 0;
+        margin-left: 25px;
         font-size: 120%;
         font-weight: bold;
     }
     .q-item-wrap.q-questionnaire .q-item {
-        padding-left: 25px;
+        padding-left: 10px;
     }
     .q-item-wrap.selected {
         background-color: #2a8fc8;
@@ -764,7 +764,9 @@ a.btn.btn-help {
     text-decoration: none;
 }
 #toggleAllChapters {
-    position: absolute;
-    left: 4px;
     font-size: 14px;
+    float: left;
+}
+#questionnaire ul#chapters-list.list {
+    margin-left: 25px;
 }
