@@ -19,6 +19,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
@@ -101,7 +102,9 @@ namespace Web.Supervisor.App_Start
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new NLogLoggingModule(),
+                new DataCollectionSharedKernelModule(),
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),
