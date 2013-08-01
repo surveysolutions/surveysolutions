@@ -27,7 +27,7 @@
             return {
                 questionnaire: q,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                settings : { unhandledExceptionMessage : 'Unexpected error occurred. Please contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
+                settings : { unhandledExceptionMessage : 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
             };
         }(document));
         
@@ -151,12 +151,15 @@
     <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
-
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
+                        <button id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
+                            <span data-bind="visible: $root.isAllChaptersExpanded" ><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
+                            <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="icon-plus icon-white"></i></sup><sub><i class="icon-plus icon-white"></i></sub></span>
+                        </button>
                         <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
+                            
                             <div class="q-item">
-                                <button id="toggleAllChapters" class="btn btn-info btn-mini ui-expander-head" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip"><i data-bind="    visible: $root.isAllChaptersExpanded" class="icon-minus-sign-alt icon-white"></i><i data-bind="    visible:  $root.isAllChaptersExpanded()==false" class="icon-plus-sign-alt icon-white"></i></button>
                                 <div class="group-actions  pull-right">
                                     <div class="btn-group">
                                         <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
@@ -173,7 +176,7 @@
                     </li>
                 </ul>
                 <!-- ko ifnot: isFilterMode -->
-                <ul data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
+                <ul id="chapters-list" data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
                 <!-- /ko -->
