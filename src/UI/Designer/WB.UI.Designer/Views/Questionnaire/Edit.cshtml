@@ -27,7 +27,7 @@
             return {
                 questionnaire: q,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                settings : { unhandledExceptionMessage : 'Unexpected error occurred. Please contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
+                settings : { unhandledExceptionMessage : 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
             };
         }(document));
         
