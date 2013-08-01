@@ -27,7 +27,7 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            return capiEventStore.ReadFrom(id, minVersion, maxVersion);
+            return supevisorEventStore.ReadFrom(id, minVersion, maxVersion);
         }
 
         public void Store(UncommittedEventStream eventStream)
