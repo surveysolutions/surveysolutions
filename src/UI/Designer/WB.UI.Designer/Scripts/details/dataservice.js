@@ -7,17 +7,14 @@
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 decoder: function (data, status, xhr, success, error) {
-                    if (xhr.status == 500) {
-                        error({error : "Unexpected error occured. Try to refresh page to continue. If this problem persists, please contact support."}, status);
-                    } else if (status === "success") {
-                        var result = JSON.parse(xhr.responseText);
-                        if (result.error == null) {
+                    if (data == null) {
+                        error({ error: input.settings.unhandledExceptionMessage }, status);
+                    } else {
+                        if (data['error'] == undefined) {
                             success(data, status);
                         } else {
-                            error(result, status);
+                            error(data, status);
                         }
-                    } else {
-                        error(status, xhr);
                     }
                 }
             });

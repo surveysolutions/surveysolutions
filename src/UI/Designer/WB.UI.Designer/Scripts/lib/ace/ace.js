@@ -180,7 +180,7 @@ exportAce(ACE_NAMESPACE);
 
 })();
 
-define('ace/ace', ['require', 'exports', 'module' , 'ace/lib/fixoldbrowsers', 'ace/lib/dom', 'ace/lib/event', 'ace/editor', 'ace/edit_session', 'ace/undomanager', 'ace/virtual_renderer', 'ace/multi_select', 'ace/worker/worker_client', 'ace/keyboard/hash_handler', 'ace/placeholder', 'ace/mode/folding/fold_mode', 'ace/config', 'ace/theme/textmate'], function(require, exports, module) {
+define('ace/ace', ['require', 'exports', 'module', 'ace/lib/fixoldbrowsers', 'ace/lib/dom', 'ace/lib/event', 'ace/editor', 'ace/edit_session', 'ace/undomanager', 'ace/virtual_renderer', 'ace/multi_select', 'ace/worker/worker_client', 'ace/keyboard/hash_handler', 'ace/placeholder', 'ace/mode/folding/fold_mode', 'ace/config', 'ace/theme/textmate', 'ace/theme/designer', 'ace/mode/ncalc'], function (require, exports, module) {
 
 
 require("./lib/fixoldbrowsers");
@@ -14256,6 +14256,228 @@ background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZ
 
 var dom = require("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
+});
+define('ace/theme/designer', ['require', 'exports', 'module', 'ace/lib/dom'], function (require, exports, module) {
+
+    exports.isDark = false;
+    exports.cssClass = "ace-designer";
+    exports.cssText = "/* CSS style content from designer's default pygments highlighter template.\
+Cursor and selection styles from textmate.css. */\
+.ace-designer .ace_gutter {\
+background: #e8e8e8;\
+color: #AAA;\
+}\
+.ace-designer .ace_scroller {\
+background: #fff;\
+}\
+.ace-designer .ace_keyword {\
+font-weight: bold;\
+}\
+.ace-designer .ace_string {\
+color: #D14;\
+}\
+.ace-designer .ace_variable.ace_class {\
+color: teal;\
+}\
+.ace-designer .ace_identifier{\
+	color: #AAAAAA;\
+}\
+.ace-designer .ace_variable{\
+	color: blue;\
+    font-weight: bold;\
+}\
+.ace-designer .ace_constant.ace_numeric {\
+color: #099;\
+}\
+.ace-designer .ace_constant.ace_buildin {\
+color: #0086B3;\
+}\
+.ace-designer .ace_support.ace_function {\
+color: #0086B3;\
+}\
+.ace-designer .ace_comment {\
+color: #998;\
+font-style: italic;\
+}\
+.ace-designer .ace_variable.ace_language  {\
+color: #0086B3;\
+}\
+.ace-designer .ace_paren {\
+font-weight: bold;\
+color: #0086B3;\
+}\
+.ace-designer .ace_boolean {\
+font-weight: bold;\
+}\
+.ace-designer .ace_string.ace_regexp {\
+color: #009926;\
+font-weight: normal;\
+}\
+.ace-designer .ace_variable.ace_instance {\
+color: teal;\
+}\
+.ace-designer .ace_constant.ace_language {\
+font-weight: bold;\
+}\
+.ace-designer .ace_text-layer {\
+}\
+.ace-designer .ace_cursor {\
+border-left: 2px solid black;\
+}\
+.ace-designer .ace_overwrite-cursors .ace_cursor {\
+border-left: 0px;\
+border-bottom: 1px solid black;\
+}\
+.ace-designer .ace_marker-layer .ace_active-line {\
+background: rgb(255, 255, 204);\
+}\
+.ace-designer .ace_marker-layer .ace_selection {\
+background: rgb(181, 213, 255);\
+}\
+.ace-designer.ace_multiselect .ace_selection.ace_start {\
+box-shadow: 0 0 3px 0px white;\
+border-radius: 2px;\
+}\
+/* bold keywords cause cursor issues for some fonts */\
+/* this disables bold style for editor and keeps for static highlighter */\
+.ace-designer.ace_nobold .ace_line > span {\
+font-weight: normal !important;\
+}\
+.ace-designer .ace_marker-layer .ace_step {\
+background: rgb(252, 255, 0);\
+}\
+.ace-designer .ace_marker-layer .ace_stack {\
+background: rgb(164, 229, 101);\
+}\
+.ace-designer .ace_marker-layer .ace_bracket {\
+margin: -1px 0 0 -1px;\
+border: 1px solid rgb(192, 192, 192);\
+}\
+.ace-designer .ace_gutter-active-line {\
+background-color : rgba(0, 0, 0, 0.07);\
+}\
+.ace-designer .ace_marker-layer .ace_selected-word {\
+background: rgb(250, 250, 255);\
+border: 1px solid rgb(200, 200, 250);\
+}\
+.ace-designer .ace_print-margin {\
+width: 1px;\
+background: #e8e8e8;\
+}\
+.ace-designer .ace_indent-guide {\
+background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y;\
+}";
+
+    var dom = require("../lib/dom");
+    dom.importCssString(exports.cssText, exports.cssClass);
+});
+define('ace/mode/ncalc', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/ncalc_highlight_rules', 'ace/mode/folding/ncalc'], function (require, exports, module) {
+
+    var oop = require("../lib/oop");
+    var TextMode = require("./text").Mode;
+    var Tokenizer = require("../tokenizer").Tokenizer;
+    var NCalcHighlightRules = require("./ncalc_highlight_rules").NCalcHighlightRules;
+    var NCalcFoldMode = require("./folding/ncalc").FoldMode;
+
+    var Mode = function () {
+        var highlighter = new NCalcHighlightRules();
+
+        this.$tokenizer = new Tokenizer(highlighter.getRules());
+        this.foldingRules = new NCalcFoldMode();
+    };
+    oop.inherits(Mode, TextMode);
+
+    (function () {
+        this.getNextLineIndent = function (state, line, tab) {
+            if (state == "listblock") {
+                var match = /^((?:.+)?)([-+*][ ]+)/.exec(line);
+                if (match) {
+                    return new Array(match[1].length + 1).join(" ") + match[2];
+                } else {
+                    return "";
+                }
+            } else {
+                return this.$getIndent(line);
+            }
+        };
+    }).call(Mode.prototype);
+
+    exports.Mode = Mode;
+});
+
+define('ace/mode/ncalc_highlight_rules',
+['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text_highlight_rules'],
+function (require, exports, module) {
+
+    var oop = require("../lib/oop");
+    var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+
+    var NCalcHighlightRules = function () {
+        var identifier = "[$A-Za-z_][$\\w]*";
+        var keywords = ("this");
+        var operators = ("and|or");
+        var langConstant = ("true|false");
+        var illegal = ("");
+
+        var keywordMapper = this.createKeywordMapper({
+            "keyword": keywords,
+            "keyword.operator": operators,
+            "constant.language": langConstant,
+            "invalid.illegal": illegal,
+        }, "identifier");
+
+        this.$rules = {
+            start: [{
+                token: "variable",
+                regex: "\\[(?:" + identifier + ")?\\]"
+            }, {
+                token: "constant.numeric",
+                regex: "(?:0x[\\da-fA-F]+|(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:[eE][+-]?\\d+)?)"
+            }, {
+                token: "keyword.operator",
+                regex: "(?:[-+*/%<>&|^!?=]=|>>>=?|\\-\\-|\\+\\+|::|&&=|\\|\\|=|<<=|>>=|\\?\\.|\\.{2,3}|[!*+-=><])"
+            }, {
+                token: keywordMapper,
+                regex: identifier
+            }, {
+                token: "paren.lparen",
+                regex: "[(]"
+            }, {
+                token: "paren.rparen",
+                regex: "[)]"
+            }, {
+                token: "text",
+                regex: "\\s+"
+            }
+            ]
+        };
+    };
+
+    oop.inherits(NCalcHighlightRules, TextHighlightRules);
+
+    exports.NCalcHighlightRules = NCalcHighlightRules;
+});
+
+define('ace/mode/folding/ncalc', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function (require, exports, module) {
+
+    var oop = require("../../lib/oop");
+    var BaseFoldMode = require("./fold_mode").FoldMode;
+    var Range = require("../../range").Range;
+
+    var FoldMode = exports.FoldMode = function () { };
+    oop.inherits(FoldMode, BaseFoldMode);
+
+    (function () {
+        this.foldingStartMarker = "";
+
+        this.getFoldWidget = function (session, foldStyle, row) {
+        };
+
+        this.getFoldWidgetRange = function (session, foldStyle, row) {
+        };
+
+    }).call(FoldMode.prototype);
+
 });
 ;
             (function() {
