@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
@@ -60,6 +61,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
+        }
+
+        public IQuestion GetQuestionByStataCaption(string stataCaption)
+        {
+            return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
         }
     }
 }
