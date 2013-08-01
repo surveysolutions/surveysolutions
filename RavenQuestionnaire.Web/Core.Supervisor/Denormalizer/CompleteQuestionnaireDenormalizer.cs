@@ -213,6 +213,8 @@ namespace Core.Supervisor.Denormalizer
             item.DeletedBy = evnt.Payload.DeletedBy;
 
             this.documentStorage.Store(item, item.PublicKey);
+
+            syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
         }
     }
 }
