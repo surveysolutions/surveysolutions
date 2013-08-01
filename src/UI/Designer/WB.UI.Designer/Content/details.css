@@ -458,12 +458,12 @@ h1 {
 
     .q-item-wrap.q-questionnaire {
         background-color: #AAA;
-        margin-left: 0;
+        margin-left: 28px;
         font-size: 120%;
         font-weight: bold;
     }
     .q-item-wrap.q-questionnaire .q-item {
-        padding-left: 20px;
+        padding-left: 10px;
     }
     .q-item-wrap.selected {
         background-color: #2a8fc8;
@@ -538,7 +538,6 @@ h1 {
     text-shadow: 0 1px 0 rgba(255,255,255,0.8);
     outline: none;
 }
-
 .alias {
     background-color: #A38F8F;
     border-radius: 2px 2px 2px 2px;
@@ -763,4 +762,13 @@ a.btn.btn-help {
 }
 .cancel-edit:hover {
     text-decoration: none;
+}
+#toggleAllChapters {
+    font-size: 9px;
+    float: left;
+    padding: 0 3px;
+    margin-top: 5px;
+}
+#questionnaire ul#chapters-list.list {
+    margin-left: 28px;
 }

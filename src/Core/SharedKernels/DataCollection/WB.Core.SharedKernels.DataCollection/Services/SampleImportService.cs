@@ -244,26 +244,30 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 
         private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header, template.CreateSnapshot());
+            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+                getQuestionByStataCaption: template.GetQuestionByStataCaption);
+
             template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
         }
         private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template, Guid headqarter, Guid supervisor)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header, template);
+            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+                getQuestionByStataCaption: stataCaption => template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption));
+
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
             commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey, template.PublicKey,
                                                                                    new UserLight(headqarter, ""),
                                                                                    new UserLight(supervisor, ""),
                                                                                    featuredAnswers));
         }
-        private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, QuestionnaireDocument template)
+        private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
         {
             var featuredAnswers = new List<QuestionAnswer>();
             for (int i = 0; i < header.Length; i++)
             {
                 var question =
-                    template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == header[i]);
+                    getQuestionByStataCaption(header[i]);
                 if (question == null)
                     continue;
 
