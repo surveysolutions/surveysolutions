@@ -25,6 +25,11 @@ namespace WB.Core.Synchronization.SyncStorage
             this.container[syncItem.Id] = syncItem;
         }
 
+        public void RemoveChunk(Guid Id)
+        {
+            this.container.Remove(Id);
+        }
+
         public SyncItem ReadChunk(Guid id)
         {
             return container[id];

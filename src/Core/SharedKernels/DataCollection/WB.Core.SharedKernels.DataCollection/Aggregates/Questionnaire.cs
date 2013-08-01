@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
@@ -18,7 +19,7 @@ using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
@@ -28,16 +29,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             : base(source.PublicKey)
         {
             ImportQuestionnaire(createdBy, source);
-        }
-
-        public QuestionnaireDocument CreateSnapshot()
-        {
-            return this.innerDocument;
-        }
-
-        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
-        {
-            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
         }
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
@@ -70,6 +61,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
+        }
+
+        public IQuestion GetQuestionByStataCaption(string stataCaption)
+        {
+            return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
         }
     }
 }
