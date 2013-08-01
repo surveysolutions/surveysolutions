@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,14 +54,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Exceptions\InterviewException.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="Services\SampleImport\DTO\ImportResult.cs" />
     <Compile Include="Services\SampleImport\DTO\SampleCreationStatus.cs" />
     <Compile Include="Services\SampleImport\DTO\TempFileImportData.cs" />
