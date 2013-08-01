@@ -8,7 +8,9 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
     {
         public void OnAssemblyStart()
         {
-            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 
         public void OnAssemblyComplete() {}
