@@ -44,7 +44,7 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorage.StoreChunk(syncItem, responsibleId);
         }
 
-        public void DeleteInterview(Guid id, Guid responsibleId)
+        public void MarkInterviewForClientDeleting(Guid id, Guid responsibleId)
         {
             var syncItem = new SyncItem
             {
@@ -54,6 +54,11 @@ namespace WB.Core.Synchronization.SyncStorage
                 Content = id.ToString()
             };
             chunkStorage.StoreChunk(syncItem, responsibleId);
+        }
+
+        public void DeleteInterview(Guid id)
+        {
+            chunkStorage.RemoveChunk(id);
         }
 
         public void SaveImage(Guid publicKey, string title, string desc, string origData)

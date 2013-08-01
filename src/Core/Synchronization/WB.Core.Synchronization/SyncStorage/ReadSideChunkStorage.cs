@@ -49,6 +49,14 @@ namespace WB.Core.Synchronization.SyncStorage
             }
         }
 
+        public void RemoveChunk(Guid Id)
+        {
+            lock (myLock)
+            {
+                storage.Remove(Id);
+            }
+        }
+
         public SyncItem ReadChunk(Guid id)
         {
             var item = storage.GetById(id);

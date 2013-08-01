@@ -72,7 +72,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
             
             // act
-            target.DeleteInterview(questionnarieId, userId);
+            target.MarkInterviewForClientDeleting(questionnarieId, userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
