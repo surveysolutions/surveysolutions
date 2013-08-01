@@ -119,7 +119,7 @@
     <Compile Include="CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />
-    <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup__with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition.cs" />
+    <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Integration\ZipUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
