@@ -17,8 +17,7 @@ namespace Core.Supervisor.Denormalizer
     public class CompleteQuestionnaireDenormalizer : UserBaseDenormalizer,
                                                      IEventHandler<NewCompleteQuestionnaireCreated>,
                                                      IEventHandler<CommentSet>,
-                                                     IEventHandler<FlagSet>, 
-                                                     IEventHandler<CompleteQuestionnaireDeleted>, 
+                                                     IEventHandler<FlagSet>,
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<ConditionalStatusChanged>, 
                                                      IEventHandler<PropagatableGroupAdded>, 
@@ -88,12 +87,7 @@ namespace Core.Supervisor.Denormalizer
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
         }
-
-        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
-        {
-            this.documentStorage.Remove(evnt.Payload.CompletedQuestionnaireId);
-        }
-
+        
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
             CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);

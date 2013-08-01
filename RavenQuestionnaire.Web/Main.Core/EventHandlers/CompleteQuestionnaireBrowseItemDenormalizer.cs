@@ -1,6 +1,4 @@
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
@@ -14,12 +12,10 @@ namespace Main.Core.EventHandlers
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Question;
-    using Main.DenormalizerStorage;
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
-                                                               IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>
     {
@@ -60,12 +56,7 @@ namespace Main.Core.EventHandlers
                 this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
             }
         }
-
-        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
-        {
-            this.documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
-        }
-
+        
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
