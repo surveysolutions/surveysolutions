@@ -15,7 +15,8 @@ namespace Core.Supervisor.Denormalizer
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>
+                                                               IEventHandler<QuestionnaireAssignmentChanged>,
+                                                               IEventHandler<InterviewDeleted>
     {
         private readonly IReadSideRepositoryWriter<InterviewItem> interviews;
 
@@ -105,6 +106,13 @@ namespace Core.Supervisor.Denormalizer
 
             item.LastEntryDate = evnt.EventTimeStamp;
 
+            this.interviews.Store(item, item.InterviewId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            var item = this.interviews.GetById(evnt.EventSourceId);
+            item.IsDeleted = true;
             this.interviews.Store(item, item.InterviewId);
         }
 

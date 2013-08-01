@@ -25,7 +25,8 @@ namespace Core.Supervisor.Denormalizer
                                                      IEventHandler<PropagateGroupCreated>, 
                                                      IEventHandler<PropagatableGroupDeleted>, 
                                                      IEventHandler<QuestionnaireAssignmentChanged>, 
-                                                     IEventHandler<QuestionnaireStatusChanged>
+                                                     IEventHandler<QuestionnaireStatusChanged>,
+                                                     IEventHandler<InterviewDeleted>
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
@@ -208,6 +209,16 @@ namespace Core.Supervisor.Denormalizer
             }
 
             this.documentStorage.Store(doc, doc.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+
+            item.IsDeleted = true;
+            item.DeletedBy = evnt.Payload.DeletedBy;
+
+            this.documentStorage.Store(item, item.PublicKey);
         }
     }
 }

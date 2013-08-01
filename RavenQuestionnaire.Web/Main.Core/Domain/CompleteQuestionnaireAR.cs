@@ -361,14 +361,21 @@ namespace Main.Core.Domain
             }
         }
 
-        public void DeleteInterview(Guid deletedById)
+        public void DeleteInterview(Guid deletedBy)
         {
-            this.ApplyEvent(
+            if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
+                this.doc.Status == SurveyStatus.Initial)
+            {
+                this.ApplyEvent(
                     new InterviewDeleted()
                     {
-                        InterviewId = this.EventSourceId,
-                        DeletedBy = deletedById,
+                        DeletedBy = deletedBy
                     });
+            }
+            else
+            {
+                throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
+            }
         }
 
         #endregion

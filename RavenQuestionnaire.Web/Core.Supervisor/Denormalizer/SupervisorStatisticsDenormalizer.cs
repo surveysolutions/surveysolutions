@@ -26,7 +26,8 @@ namespace Core.Supervisor.Denormalizer
     public class SupervisorStatisticsDenormalizer : UserBaseDenormalizer,
                                                     IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                     IEventHandler<QuestionnaireStatusChanged>, 
-                                                    IEventHandler<QuestionnaireAssignmentChanged>
+                                                    IEventHandler<QuestionnaireAssignmentChanged>,
+                                                    IEventHandler<InterviewDeleted>
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
 
@@ -136,6 +137,12 @@ namespace Core.Supervisor.Denormalizer
             item.Surveys.Add(evnt.EventSourceId);
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            this.RemoveOldStatistics(evnt.EventSourceId);
+            //this.keysHash.Remove(evnt.EventSourceId);
         }
 
         #endregion

@@ -12,12 +12,14 @@
 
 @section  actionbar{
     <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
+        @*<a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" data-bind="foreach: Users">
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
-        </ul>
+        </ul>*@
+        <button type="button" class="btn btn-default" data-bind="css: { disabled: ListView.IsNothingSelected }, click: $root.deleteInterview">Delete interview</button>
     </div>
+
 }
 
 @section grid
@@ -46,7 +48,7 @@
             <!-- ko foreach:ListView.Items -->
             <tr>
                 <td>
-                    <input type="checkbox" data-bind="checked: IsSelected, enable: false" />
+                    <input type="checkbox" data-bind="checked: IsSelected, enabled: CanDelete" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>
@@ -125,9 +127,11 @@
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("Surveys", "HQ")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
+        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })';
+        var deleteInterviewUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "DeleteInterview" })';
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })',commandExecutionUrl, users);
+            var model = new DocumentListViewModel(interviewsListUrl, deleteInterviewUrl, commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });

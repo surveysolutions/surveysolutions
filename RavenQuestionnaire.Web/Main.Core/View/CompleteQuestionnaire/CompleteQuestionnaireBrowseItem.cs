@@ -126,6 +126,8 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// </summary>
         public int TotalQuestionCount { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         #endregion
     }
 }

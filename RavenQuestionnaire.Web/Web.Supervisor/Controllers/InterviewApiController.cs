@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Http;
 using Core.Supervisor.Views;
 using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Commands.Questionnaire.Completed;
+using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Ncqrs.Commanding;
@@ -51,14 +53,33 @@ namespace Web.Supervisor.Controllers
             return this.interviewViewFactory.Load(input);
         }
 
-        public void DeleteInterviews(DeleteInterviewsModel model)
+        [HttpPost]
+        public DeleteInterviewResult DeleteInterview(DeleteInterviewsModel model)
         {
-            var responsibleId = this.GlobalInfo.GetCurrentUser().Id;
-            foreach (var interviewId in model.Interviews)
+            var blockedInterviews = new List<Guid>();
+            if (model != null)
             {
-                this.CommandService.Execute(new DeleteInterviewCommand(interviewId: interviewId,
-                    deletedBy: responsibleId));
+                var responsibleId = this.GlobalInfo.GetCurrentUser().Id;
+                foreach (var interviewId in model.Interviews)
+                {
+                    try
+                    {
+                        this.CommandService.Execute(new DeleteInterviewCommand(interviewId: interviewId,
+                            deletedBy: responsibleId));
+                    }
+                    catch
+                    {
+                        blockedInterviews.Add(interviewId);
+                    }
+
+                }
             }
+            return new DeleteInterviewResult() {BlockedInterviews = blockedInterviews};
+        }
+
+        public class DeleteInterviewResult
+        {
+            public IEnumerable<Guid> BlockedInterviews { get; set; }
         }
 
         public void Assign()

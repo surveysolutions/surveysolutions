@@ -21,7 +21,8 @@ namespace Main.Core.EventHandlers
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>
+                                                               IEventHandler<QuestionnaireAssignmentChanged>,
+                                                               IEventHandler<InterviewDeleted>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -85,6 +86,15 @@ namespace Main.Core.EventHandlers
 
             item.Responsible = responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            CompleteQuestionnaireBrowseItem item =
+                this.documentItemStore.GetById(evnt.EventSourceId);
+
+            item.IsDeleted = true;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 

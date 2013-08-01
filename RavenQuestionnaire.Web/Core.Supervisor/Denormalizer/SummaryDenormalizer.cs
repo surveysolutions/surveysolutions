@@ -18,7 +18,8 @@ namespace Core.Supervisor.Denormalizer
 
     public class SummaryDenormalizer : UserBaseDenormalizer,
                                        IEventHandler<QuestionnaireStatusChanged>, 
-                                       IEventHandler<QuestionnaireAssignmentChanged>
+                                       IEventHandler<QuestionnaireAssignmentChanged>,
+                                       IEventHandler<InterviewDeleted>
     {
         #region Constants and Fields
 
@@ -75,7 +76,7 @@ namespace Core.Supervisor.Denormalizer
 
             this.DecreaseByStatus(summaryUser, oldStatus);
 
-          //  summaryUser.QuestionnaireStatus = newStatus;
+            summaryUser.QuestionnaireStatus = newStatus;
 
             this.IncreaseByStatus(summaryUser, newStatus);
             this.summaryItem.Store(summaryUser, summmaryUserId);
@@ -167,6 +168,31 @@ namespace Core.Supervisor.Denormalizer
 
         }
 
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
+            var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
+            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+
+            if (summaryUser != null)
+            {
+                this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+                this.summaryItem.Store(summaryUser, summmaryUserId);
+
+                if (summaryUser.ResponsibleSupervisorId != null)
+                {
+                    var summarySupervisorId =
+                       summaryUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
+                    var summarySupervisor = this.summaryItem.GetById(summarySupervisorId);
+
+                    this.DecreaseByStatus(summarySupervisor, summarySupervisor.QuestionnaireStatus);
+                    this.summaryItem.Store(summarySupervisor, summarySupervisorId);
+                }
+            }
+            
+        }
+
         #endregion
+
     }
 }
