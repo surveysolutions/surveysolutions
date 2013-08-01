@@ -44,7 +44,6 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    </Reference>
     <Reference Include="Machine.Specifications.Clr4, Version=0.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.0.5.14\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
