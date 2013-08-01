@@ -347,6 +347,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
+            this.ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(type, options);
+
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
             var group = this.innerDocument.Find<IGroup>(groupId);
@@ -357,7 +359,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
-            this.ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(type, options);
 
             this.ApplyEvent(new NewQuestionAdded
             {
