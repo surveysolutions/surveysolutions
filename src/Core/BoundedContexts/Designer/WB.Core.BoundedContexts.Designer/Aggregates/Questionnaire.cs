@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
 
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
@@ -345,7 +345,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
 
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
@@ -356,6 +356,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+
+            this.ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(type, options);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -417,11 +419,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             alias = alias.Trim();
 
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+
+            this.ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(type, options);
 
             IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -784,7 +788,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
         }
 
-        private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
+        private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
@@ -823,6 +827,33 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new DomainException(
                    DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
+            }
+
+            var keywords = new[] { "this" };
+            foreach (var keyword in keywords)
+            {
+                if (stataCaption.ToLower() == keyword)
+                {
+                    throw new DomainException(
+                        DomainExceptionType.VariableNameShouldNotMatchWithKeywords, keyword + " is a keyword. Variable name shouldn't match with keywords");
+                }
+            }
+        }
+
+        private void ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(QuestionType questionType, Option[] options)
+        {
+            bool isQuestionIsCategoruQuestion = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
+
+            if (!isQuestionIsCategoruQuestion)
+            {
+                return;
+            }
+
+            if (options.Length < 2)
+            {
+                throw new DomainException(DomainExceptionType.TooFewOptionsInCategoryQuestion,
+                                          string.Format(
+                                              "Categorical questions should contains two or more answer options"));
             }
         }
 
