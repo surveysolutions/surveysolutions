@@ -30,7 +30,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaireWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options)
         {
-            return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId, questionType: questionType, options: options);
+            var groupId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(Guid.NewGuid(), groupId, Propagate.None );
+
+            questionnaire.NewAddQuestion(questionId,
+                                         groupId, "Title", questionType, "text", false, false,
+                                         false, QuestionScope.Interviewer, "", "", "", "",
+                                         options, Order.AsIs, null,
+                                         new Guid[] { });
+
+            return questionnaire;
+            
         }
 
         private static Questionnaire CreateQuestionnaire(Guid? questionnaireId = null, string text = "text of questionnaire")
@@ -73,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         public static Questionnaire CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid questionId, Guid? groupId = null,
-                                                                                       Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text, Option[] options = null)
+                                                                                       Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text)
         {
             groupId = groupId ?? Guid.NewGuid();
 
@@ -81,7 +92,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.NewAddQuestion(questionId,
                                          groupId.Value, "Title", questionType, "text", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", options ?? new Option[] { }, Order.AsIs, null,
+                                         false, QuestionScope.Interviewer, "", "", "", "", 
+                                         new Option[0], Order.AsIs, null,
                                          new Guid[] { });
 
             return questionnaire;

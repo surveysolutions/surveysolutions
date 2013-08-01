@@ -23,15 +23,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_AnswerTitleIsNotEmpty_Then_event_contains_the_same_answer_title(QuestionType questionType)
+        public void NewAddQuestion_When_AnswerTitle_is_not_empty_Then_event_contains_the_same_answer_title(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
                 var questionnaireKey = Guid.NewGuid();
                 var groupKey = Guid.NewGuid();
+                var notEmptyAnswerTitle1 = "title";
+                var notEmptyAnswerTitle2 = "title1";
+
                 // arrange
                 Questionnaire questionnsire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
-                Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+                Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerTitle2) };
 
                 // act
                 questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
@@ -39,7 +42,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                              string.Empty, options, Order.AsIs, null, new Guid[0]);
                 // assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
-                Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
+                Assert.AreEqual(notEmptyAnswerTitle1, risedEvent.Answers[0].AnswerText);
+                Assert.AreEqual(notEmptyAnswerTitle2, risedEvent.Answers[1].AnswerText);
             }
         }
 
@@ -128,17 +132,65 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleRequired));
         }
 
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_there_is_only_one_option_in_categorical_question_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            var questionnaireKey = Guid.NewGuid();
+            var groupKey = Guid.NewGuid();
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
+
+            Option[] oneOption = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, oneOption, Order.AsIs, null, new Guid[0]);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TooFewOptionsInCategoryQuestion));
+        }
+
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_there_are_two_options_in_categorical_question_Then_raised_NewQuestionAdded_event_contains_the_same_options_count(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                var questionnaireKey = Guid.NewGuid();
+                var groupKey = Guid.NewGuid();
+                // arrange
+                Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
+
+                const int answerOptionsCount = 2;
+
+                Option[] options = new Option[answerOptionsCount]{ new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") };
+                // act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                                  false, QuestionScope.Interviewer, string.Empty, string.Empty,
+                                                  string.Empty,
+                                                  string.Empty, options, Order.AsIs, null, new Guid[0]);
+
+                // assert
+                var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.That(raisedEvent.Answers.Length, Is.EqualTo(answerOptionsCount));
+            }
+        }
+
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_AnswerTitleIsAbsent_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewAddQuestion_When_AnswerTitle_is_absent_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             var questionnaireKey = Guid.NewGuid();
             var groupKey = Guid.NewGuid();
             // arrange
             Questionnaire questionnsire = CreateQuestionnaireWithOneGroup(questionnaireKey, groupKey);
 
-            Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
+            Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
                 () =>
@@ -304,6 +356,41 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             }
         }
 
+        [TestCase("this")]
+        public void NewAddQuestion_When_variable_name_mathes_with_keyword_Then_DomainException_should_be_thrown(string variableNameMatchedWithKeyword)
+        {
+            // Arrange
+            Questionnaire questionnaire = CreateQuestionnaire();
+
+            // Act
+            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
+                                                                  variableNameMatchedWithKeyword,
+                                                                  false, false, false, QuestionScope.Interviewer,
+                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameShouldNotMatchWithKeywords));
+        }
+
+        [TestCase("This")]
+        [TestCase("tHis")]
+        public void NewAddQuestion_When_variable_name_mathes_with_keyword_in_lowercase_only_Then_DomainException_should_be_thrown(string variableNameMatchedWithKeyword)
+        {
+            // Arrange
+            Questionnaire questionnaire = CreateQuestionnaire();
+
+            // Act
+            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
+                                                                  variableNameMatchedWithKeyword,
+                                                                  false, false, false, QuestionScope.Interviewer,
+                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameShouldNotMatchWithKeywords));
+        }
+
         [Test]
         public void NewAddQuestion_When_variable_name_has_33_chars_Then_DomainException_should_be_thrown()
         {
@@ -417,19 +504,22 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorEmpty));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TooFewOptionsInCategoryQuestion));
         }
 
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
 #warning Roma: when part is incorrect should be something like when answer option value contains not number
-        public void NewAddQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewAddQuestion_When_answer_option_is_not_numeric_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire();
 
             // Act
+            var notNumericAnswerValue1 = "some value";
+            var notNumericAnswerValue2 = "some value";
+
             TestDelegate act = () =>
                                questionnaire.NewAddQuestion(
                                    questionId: Guid.NewGuid(),
@@ -448,7 +538,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    optionsOrder: Order.AsIs,
                                    maxValue: 0,
                                    triggedGroupIds: new Guid[0],
-                                   options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
+                                   options: new Option[2]
+                                       {
+                                           new Option(id: Guid.NewGuid(), value: notNumericAnswerValue1, title: "text"),
+                                           new Option(id: Guid.NewGuid(), value: notNumericAnswerValue2, title: "text1")
+                                       });
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -458,13 +552,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_answer_option_value_contains_only_numbers_Then_raised_NewQuestionAdded_event_contains_question_answer_with_only_numbers_value(
+        public void NewAddQuestion_When_answer_option_value_contains_only_numbers_Then_raised_NewQuestionAdded_event_contains_question_answer_the_same_answer_values(
             QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
-                string answerValue = "10";
+                string answerValue1 = "10";
+                string answerValue2 = "100";
                 Guid autoGroupId = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(autoGroupId);
 
@@ -486,11 +581,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     optionsOrder: Order.AsIs,
                     maxValue: 0,
                     triggedGroupIds: new Guid[0],
-                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: answerValue, title: "text") });
+                    options: new Option[2]
+                        {
+                            new Option(id: Guid.NewGuid(), value: answerValue1, title: "text1"),
+                            new Option(id: Guid.NewGuid(), value: answerValue2, title: "text2")
+                        });
 
 
                 // assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[0].AnswerValue, Is.EqualTo(answerValue1));
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[1].AnswerValue, Is.EqualTo(answerValue2));
             }
         }
 
@@ -527,7 +627,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
                     maxValue: null,
-                    triggedGroupIds: new Guid[]{},
+                    triggedGroupIds: new Guid[] { },
                     options: AreOptionsRequiredByQuestionType(allowedQuestionType) ? CreateTwoOptions() : null);
 
                 // assert
@@ -599,7 +699,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    optionsOrder: Order.AZ,
                                    maxValue: 0,
                                    triggedGroupIds: new Guid[] { },
-                                   options: new Option[1] { new Option(id: Guid.NewGuid(), value: null, title: "text") });
+                                   options: new Option[2]
+                                       {
+                                           new Option(id: Guid.NewGuid(), value: null, title: "text"),
+                                           new Option(id: Guid.NewGuid(), value: "1", title: "text2")
+                                       });
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -615,7 +719,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                string answerValue = "10";
+                string answerValue1 = "10";
+                string answerValue2 = "100";
                 Guid autoGroupId = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaireWithOneAutoPropagatedGroup(autoGroupId);
 
@@ -637,11 +742,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     optionsOrder: Order.AsIs,
                     maxValue: 0,
                     triggedGroupIds: new Guid[0],
-                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: answerValue, title: "text") });
+                    options: new Option[2]
+                        {
+                            new Option(id: Guid.NewGuid(), value: answerValue1, title: "text1") , 
+                            new Option(id: Guid.NewGuid(), value: answerValue2, title: "text2")
+                        });
 
 
                 // assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[0].AnswerValue, !Is.Empty);
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[1].AnswerValue, !Is.Empty);
             }
         }
 
