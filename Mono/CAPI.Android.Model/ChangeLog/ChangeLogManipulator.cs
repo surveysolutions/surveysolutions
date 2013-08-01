@@ -103,7 +103,8 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void CleanUpChangeLogByEventSourceId(Guid eventSourceId)
         {
-            var record = draftChangeLog.Filter(c => c.EventSourceId == eventSourceId.ToString()).FirstOrDefault();
+            string eventSource = eventSourceId.ToString();
+            var record = draftChangeLog.Filter(c => c.EventSourceId == eventSource).FirstOrDefault();
             if (record == null)
                 return;
             CleanUpChangeLogByRecordId(Guid.Parse(record.Id));

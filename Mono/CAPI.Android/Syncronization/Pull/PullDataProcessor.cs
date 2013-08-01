@@ -101,8 +101,8 @@ namespace CAPI.Android.Syncronization.Pull
             #warning replace catch with propper handler of absent questionnaries
             catch (Exception ex)
             {
-                logger.Error("Error on item deletion " + questionnarieId);
-                throw;
+                logger.Error("Error on item deletion " + questionnarieId, ex);
+                //throw;
             }
           
         }
