@@ -65,13 +65,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_AnswerTitleIsAbsent_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewUpdateQuestion_When_AnswerTitle_is_absent_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             Guid questionKey = Guid.NewGuid();
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
-                questionKey, questionType, new[] { new Option(Guid.NewGuid(), "123", "title") });
-            Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, new[] { new Option(Guid.NewGuid(), "123", "title") , new Option(Guid.NewGuid(), "2", "title1")});
+            Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
                 () =>
@@ -86,17 +85,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_AnswerTitleIsNotEmpty_Then_event_contains_the_same_answer_title(QuestionType questionType)
+        public void NewUpdateQuestion_When_AnswerTitle_is_not_empty_Then_event_contains_the_same_answer_title(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
                 Guid questionKey = Guid.NewGuid();
-                Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+                var notEmptyAnswerOptionTitle1 = "title";
+                var notEmptyAnswerOptionTitle2 = "title1";
+                Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
                 // arrange
                 Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
                     questionKey, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
+                            new Option(Guid.NewGuid(), "2", "option text1"),
                         });
 
 
@@ -106,18 +108,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
-                Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
+                Assert.AreEqual(notEmptyAnswerOptionTitle1, risedEvent.Answers[0].AnswerText);
+                Assert.AreEqual(notEmptyAnswerOptionTitle2, risedEvent.Answers[1].AnswerText);
             }
         }
 
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_AnswerTitleIsNotUnique_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewUpdateQuestion_When_AnswerTitle_is_not_unique_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             Guid questionKey = Guid.NewGuid();
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title"), new Option(Guid.NewGuid(), "125", "title1") });
             Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title") };
             // act
             TestDelegate act =
@@ -133,24 +136,28 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_AnswerTitleIsUnique_Then_event_contains_the_same_answer_titles(QuestionType questionType)
+        public void NewUpdateQuestion_When_AnswerTitle_is_unique_Then_event_contains_the_same_answer_titles(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
-                Guid questionKey = Guid.NewGuid();
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
-                Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title1"), new Option(Guid.NewGuid(), "2", "title2") };
+                var firstAnswerOptionTitle = "title1";
+                var secondAnswerOptionTitleThatNotEqualsFirstOne = firstAnswerOptionTitle + "1";
+
+                Guid questionKey = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "121", "title"), new Option(Guid.NewGuid(), "12", "title1") });
+                Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", firstAnswerOptionTitle), new Option(Guid.NewGuid(), "2", secondAnswerOptionTitleThatNotEqualsFirstOne) };
+                
                 // act
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
-                for (int i = 0; i < options.Length; i++)
-                {
-                    Assert.IsTrue(options[i].Title == risedEvent.Answers[i].AnswerText);
-                }
+
+                Assert.That(risedEvent.Answers[0].AnswerText, Is.EqualTo(firstAnswerOptionTitle));
+                Assert.That(risedEvent.Answers[1].AnswerText, Is.EqualTo(secondAnswerOptionTitleThatNotEqualsFirstOne));
+                
             }
         }
 
@@ -473,14 +480,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_answer_option_value_contains_only_numbers_Then_raised_QuestionChanged_event_contains_question_answer_with_only_numbers_value(
+        public void NewUpdateQuestion_When_answer_option_value_contains_only_numbers_Then_raised_QuestionChanged_event_contains_question_answer_with_the_same_answe_values(
             QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
-                string answerValue = "10";
+                string answerValue1 = "10";
+                string answerValue2 = "100";
                 var questionnaire = CreateQuestionnaireWithOneQuestion(targetQuestionPublicKey);
 
                 // act
@@ -500,11 +508,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     triggedGroupIds: new Guid[0],
                     maxValue: 0,
-                    options: new Option[1] { new Option(id: Guid.NewGuid(), title: "text", value: answerValue) });
+                    options: new Option[2] { 
+                        new Option(id: Guid.NewGuid(), title: "text1", value: answerValue1),
+                        new Option(id: Guid.NewGuid(), title: "text2", value: answerValue2)});
 
 
                 // assert
-                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo(answerValue1));
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[1].AnswerValue, Is.EqualTo(answerValue2));
             }
         }
 
@@ -627,7 +638,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             {
                 // arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
-                string answerValue = "10";
+                string notEmptyAnswerValue1 = "10";
+                string notEmptyAnswerValue2 = "100";
                 var questionnaire = CreateQuestionnaireWithOneQuestion(targetQuestionPublicKey);
 
                 // act
@@ -647,11 +659,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     triggedGroupIds: new Guid[0],
                     maxValue: 0,
-                    options: new Option[1] { new Option(id: Guid.NewGuid(), title: "text", value: answerValue) });
+                    options: new Option[2]
+                        {
+                            new Option(id: Guid.NewGuid(), title: "text", value: notEmptyAnswerValue1),
+                            new Option(id: Guid.NewGuid(), title: "text1", value: notEmptyAnswerValue2)
+                        });
 
 
                 // assert
-                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, !Is.Empty);
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[1].AnswerValue, !Is.Empty);
             }
         }
 

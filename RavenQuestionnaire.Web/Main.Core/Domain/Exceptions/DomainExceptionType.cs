@@ -124,6 +124,10 @@
 
         MoreThanOneGroupsWithSuchIdExists,
 
-        TemplateIsInvalid
+        TemplateIsInvalid,
+
+        VariableNameShouldNotMatchWithKeywords,
+
+        TooFewOptionsInCategoryQuestion
     }
 }
