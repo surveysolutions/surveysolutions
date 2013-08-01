@@ -17,20 +17,20 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
     public class RavenReadSideRepositoryWriterWithCacheAndZip<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideRepositoryReader<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly RavenReadSideRepositoryWriter<ZipView> internalImplementationOfWriter;
-        private readonly RavenReadSideRepositoryReader<ZipView> internalImplementationOfReader;
+        private readonly IReadSideRepositoryWriter<ZipView> internalImplementationOfWriter;
+        private readonly IReadSideRepositoryReader<ZipView> internalImplementationOfReader;
         private readonly IStringCompressor compressor;
         private readonly Dictionary<Guid, TEntity> memcache; 
         private object locker = new object();
 
         private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
-        public RavenReadSideRepositoryWriterWithCacheAndZip(DocumentStore ravenStore,
-                                                            IRavenReadSideRepositoryWriterRegistry writerRegistry,IReadSideStatusService readSideStatusService,
+        public RavenReadSideRepositoryWriterWithCacheAndZip(
+                                                            IReadSideRepositoryWriter<ZipView> internalImplementationOfWriter, IReadSideRepositoryReader<ZipView> internalImplementationOfReader,
             IStringCompressor comperessor)
         {
-            this.internalImplementationOfWriter = new RavenReadSideRepositoryWriter<ZipView>(ravenStore, writerRegistry);
-            this.internalImplementationOfReader = new RavenReadSideRepositoryReader<ZipView>(ravenStore, readSideStatusService);
+            this.internalImplementationOfWriter = internalImplementationOfWriter;
+            this.internalImplementationOfReader = internalImplementationOfReader;
             this.compressor = comperessor;
             this.memcache = new Dictionary<Guid, TEntity>();
         }
@@ -82,7 +82,11 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 if (memcache.Count >= memcacheItemsSizeLimit)
                     memcache.Clear();
 
-                Task.Factory.StartNew(() => internalImplementationOfWriter.Store(new ZipView(id, compressor.CompressObject(view)), id));
+                Task.Factory.StartNew(() =>
+                    {
+                        internalImplementationOfWriter.Store(
+                            new ZipView(id, compressor.CompressObject(view)), id);
+                    });
                 memcache[id] = view;
             }
         }
