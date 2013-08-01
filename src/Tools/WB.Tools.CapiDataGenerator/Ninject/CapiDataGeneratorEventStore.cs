@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
@@ -13,11 +14,15 @@ namespace WB.Tools.CapiDataGenerator.Models
     {
         private readonly IEventStore capiEventStore;
         private readonly IEventStore supevisorEventStore;
+        private readonly IDictionary<Guid, long> capiSequences;
+        private readonly IDictionary<Guid, long> supervisorSequences; 
 
         public CapiDataGeneratorEventStore(IEventStore capiEventStore, IEventStore supervisorEventStore)
         {
             this.capiEventStore = capiEventStore;
             this.supevisorEventStore = supervisorEventStore;
+            this.capiSequences = new Dictionary<Guid, long>();
+            this.supervisorSequences = new Dictionary<Guid, long>();
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
@@ -27,32 +32,52 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         public void Store(UncommittedEventStream eventStream)
         {
-            var supervisorEvents = new[]
-            {
-                typeof(NewUserCreated),
-                typeof(NewCompleteQuestionnaireCreated),
-                typeof(QuestionnaireStatusChanged),
-                typeof(QuestionnaireAssignmentChanged),
-                typeof(TemplateImported)
-            };
-            var capiEvents = new[]
-            {
-                typeof(NewUserCreated),
-                typeof(NewAssigmentCreated),
-                typeof(QuestionnaireStatusChanged)
-            };
+            var eventstream = new UncommittedEventStream(eventStream.CommitId);
 
-            var committedEvents = eventStream.Select(x => x.Payload.GetType());
+            Func<object, bool> supervisorExpression = (o) => o is NewUserCreated || o is NewCompleteQuestionnaireCreated ||
+                o is TemplateImported || o is QuestionnaireAssignmentChanged ||
+                (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId || 
+                ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId));
 
-            if (capiEvents.Intersect(committedEvents).Any())
+            Func<object, bool> capiExpression = (o) => !(o is NewCompleteQuestionnaireCreated || o is TemplateImported || o is QuestionnaireAssignmentChanged ||
+                 (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
+                 ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId)));
+
+            
+            IDictionary<Guid, long> eventsequences = null;
+            IEventStore eventstore = null;
+
+            var committedEvents = eventStream.Select(x => x.Payload);
+            if (committedEvents.Any(capiExpression))
             {
-                capiEventStore.Store(eventStream);
+                eventsequences = capiSequences;
+                eventstore = capiEventStore;
+            }
+            if (committedEvents.Any(supervisorExpression))
+            {
+                eventsequences = supervisorSequences;
+                eventstore = supevisorEventStore;
             }
 
-            if (supervisorEvents.Intersect(committedEvents).Any())
+            foreach (var @event in eventStream)
             {
-                supevisorEventStore.Store(eventStream);
+                if (!eventsequences.ContainsKey(@event.EventSourceId))
+                {
+                    eventsequences.Add(@event.EventSourceId, 1);
+                }
+                else
+                {
+                    eventsequences[@event.EventSourceId] += 1;
+                }
+
+                eventstream.Append(new UncommittedEvent(eventIdentifier: @event.EventIdentifier,
+                    eventSequence: eventsequences[@event.EventSourceId], eventSourceId: @event.EventSourceId,
+                    eventTimeStamp: @event.EventTimeStamp, eventVersion: @event.EventVersion,
+                    initialVersionOfEventSource: @event.InitialVersionOfEventSource, payload: @event.Payload));
             }
+
+            eventstore.Store(eventstream);
+
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
@@ -60,22 +85,12 @@ namespace WB.Tools.CapiDataGenerator.Models
             throw new NotImplementedException();
         }
 
-        public int CountOfAllEventsWithoutSnapshots()
+        public int CountOfAllEvents()
         {
             throw new NotImplementedException();
         }
 
-        public int CountOfAllEventsIncludingSnapshots()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize = 256)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize = 32)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize = 32)
         {
             throw new NotImplementedException();
         }

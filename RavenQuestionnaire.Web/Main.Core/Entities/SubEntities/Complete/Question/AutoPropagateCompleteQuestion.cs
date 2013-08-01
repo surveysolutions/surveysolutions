@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Entities.SubEntities.Complete.Question
+﻿using Main.Core.Domain.Exceptions;
+
+namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
@@ -148,6 +150,28 @@
                     this.Answer = value;
                 }
             }
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            if (string.IsNullOrWhiteSpace(answerValue))
+            {
+                return;
+            }
+
+            int value;
+            if (int.TryParse(answerValue.Trim(), out value))
+            {
+                if (value > this.MaxValue)
+                    throw new InterviewException("max value is reached");
+
+
+            }
+            else
+            {
+                throw new InterviewException("value must be numeric");
+            }
+
         }
 
         #endregion

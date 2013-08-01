@@ -7,6 +7,7 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Core.Supervisor.Denormalizer;
+using Core.Supervisor.Views;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.EventHandlers;
@@ -24,9 +25,11 @@ using Ninject.Modules;
 using NinjectAdapter;
 using Raven.Client.Document;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.Document;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Tools.CapiDataGenerator.Models;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
@@ -41,14 +44,15 @@ namespace CapiDataGenerator
         public override void Load()
         {
             var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
-            var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(ProjectionStoreName);
-            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(ProjectionStoreName);
-            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(ProjectionStoreName);
-            var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(ProjectionStoreName);
+            var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
+            var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
+            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
+            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
+            var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var changeLogStore = new FileChangeLogStore();
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
-                new RavenDBEventStore(this.Kernel.Get<DocumentStore>(), 50));
+                new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
 
             this.Bind<IEventStore>().ToConstant(eventStore);
             this.Bind<IStreamableEventStore>().ToConstant(eventStore);
@@ -66,7 +70,7 @@ namespace CapiDataGenerator
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocument>>().To<RavenReadSideRepositoryWriter<QuestionnaireDocument>>();
 
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, loginStore));
+            this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, denormalizerStore));
 
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
@@ -94,6 +98,12 @@ namespace CapiDataGenerator
 
         private void InitSupervisorStorage(InProcessEventBus bus)
         {
+            this.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
+            this.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+            this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
+                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            
+/*
             var usereventHandler = Kernel.Get<Core.Supervisor.Denormalizer.UserDenormalizer>();
             bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
 
@@ -103,7 +113,7 @@ namespace CapiDataGenerator
             bus.RegisterHandler(completeQuestionnaireHandler, typeof(QuestionnaireAssignmentChanged));
 
             var questionnaireHandler = Kernel.Get<QuestionnaireDenormalizer>();
-            bus.RegisterHandler(questionnaireHandler, typeof(TemplateImported));
+            bus.RegisterHandler(questionnaireHandler, typeof(TemplateImported));*/
         }
 
         private void InitUserStorage(InProcessEventBus bus)

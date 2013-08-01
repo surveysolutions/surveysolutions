@@ -158,9 +158,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CoreRegistry.cs">
       <Link>CoreRegistry.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\DocumentStoreProvider.cs">
-      <Link>DocumentStoreProvider.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\AbstractDocument.cs">
       <Link>Documents\AbstractDocument.cs</Link>
     </Compile>
@@ -259,6 +256,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainExceptionType.cs">
       <Link>Domain\Exceptions\DomainExceptionType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\InterviewException.cs">
+      <Link>Domain\Exceptions\InterviewException.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
@@ -537,6 +537,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\FlagSet.cs">
       <Link>Events\Questionnaire\Completed\FlagSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
+      <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <Link>Events\Questionnaire\Completed\NewAssigmentCreated.cs</Link>

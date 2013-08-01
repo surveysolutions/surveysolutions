@@ -10,29 +10,21 @@ namespace Core.Supervisor.Denormalizer
     using Main.Core.Events.Questionnaire.Completed;
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-    public class InterviewDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
+    public class InterviewDenormalizer : UserBaseDenormalizer,
+        IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>
     {
-        #region Fields
-
         private readonly IReadSideRepositoryWriter<InterviewItem> interviews;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
-
-        #endregion
-
-        #region Constructors and Destructors
 
         public InterviewDenormalizer(IReadSideRepositoryWriter<InterviewItem> interviews,
-                                     IReadSideRepositoryWriter<UserDocument> users)
+                                     IReadSideRepositoryWriter<UserDocument> users) 
+            :base(users)
         {
             this.interviews = interviews;
-            this.users = users;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -101,15 +93,15 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
             var item = this.interviews.GetById(evnt.EventSourceId);
 
-            var user = this.users.GetById(evnt.Payload.Responsible.Id);
+            var user = this.users.GetById(responsible.Id);
 
             item.ResponsibleSupervisorId =
                 user.Supervisor == null ? user.PublicKey : user.Supervisor.Id;
-            item.Responsible = new UserLight(id: user.PublicKey, name: user.UserName);
+            item.Responsible = responsible;
 
             item.LastEntryDate = evnt.EventTimeStamp;
 

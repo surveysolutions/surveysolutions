@@ -22,13 +22,13 @@ namespace Core.Supervisor.Denormalizer
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
     /// </summary>
-    public class SupervisorStatisticsDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
+    
+    public class SupervisorStatisticsDenormalizer : UserBaseDenormalizer,
+                                                    IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                     IEventHandler<QuestionnaireStatusChanged>, 
                                                     IEventHandler<QuestionnaireAssignmentChanged>
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
-
-        private readonly IReadSideRepositoryReader<UserDocument> users;
 
         /// <summary>
         /// Information, grouped by date
@@ -46,13 +46,14 @@ namespace Core.Supervisor.Denormalizer
             IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys,
             IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash,
-            IReadSideRepositoryWriter<HistoryStatusStatistics> history, IReadSideRepositoryReader<UserDocument> users)
+            IReadSideRepositoryWriter<HistoryStatusStatistics> history, 
+            IReadSideRepositoryWriter<UserDocument> users)
+             :base(users)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
             this.history = history;
-            this.users = users;
         }
 
         #region Public Methods and Operators
@@ -117,18 +118,18 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            evnt.Payload.Responsible.Name = evnt.Payload.Responsible.Name;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
 
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
-            Guid key = this.GetKey(doc.TemplateId, doc.Status.PublicId, evnt.Payload.Responsible.Id);
+            Guid key = this.GetKey(doc.TemplateId, doc.Status.PublicId, responsible.Id);
             SupervisorStatisticsItem item = this.statistics.GetById(key)
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
                                                     Template = new TemplateLight(doc.TemplateId, doc.QuestionnaireTitle),
-                                                    User = evnt.Payload.Responsible, 
+                                                    User = responsible, 
                                                     Status = doc.Status
                                                 };
 
@@ -138,6 +139,8 @@ namespace Core.Supervisor.Denormalizer
         }
 
         #endregion
+
+
 
         #region Methods
 

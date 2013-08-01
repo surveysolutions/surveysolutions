@@ -1,4 +1,5 @@
-﻿using Ncqrs.Domain;
+﻿using Main.Core.Domain.Exceptions;
+using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Main.Core.Domain
@@ -122,6 +123,8 @@ namespace Main.Core.Domain
                 this.SetAnswer(featuredAnswer.Id, null, featuredAnswer.Answer, featuredAnswer.Answers.ToList(),
                                clock.UtcNow());
             }
+            #warning Madagaskar fix. Should be discussed
+            this.ChangeStatus(SurveyStatus.Unassign, responsible);
         }
 
         #endregion
@@ -298,6 +301,8 @@ namespace Main.Core.Domain
             else
             {
                 var answerList = new List<string>();
+                if (completeAnswers == null)
+                    throw new InterviewException("optiona are absent");
                 foreach (Guid answerGuid in completeAnswers)
                 {
                     var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
@@ -309,6 +314,8 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+
+            question.ThrowDomainExceptionIfAnswerInvalid(completeAnswers, completeAnswerValue);
             ///////////////
 
             // handle propagation
@@ -322,8 +329,8 @@ namespace Main.Core.Domain
                 new AnswerSet
                     {
                         QuestionPublicKey = questionPublicKey, 
-                        PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = completeAnswers  != null ? new List<Guid>(completeAnswers) : null, 
+                        PropogationPublicKey = propogationPublicKey,
+                        AnswerKeys = completeAnswers, 
                         AnswerValue = completeAnswerValue, 
                         AnswerDate = answerDate,
                         Featured = question.Featured, 
@@ -352,6 +359,16 @@ namespace Main.Core.Domain
                             ResultQuestionsStatus = resultQuestionsStatus
                         });
             }
+        }
+
+        public void DeleteInterview(Guid deletedById)
+        {
+            this.ApplyEvent(
+                    new InterviewDeleted()
+                    {
+                        InterviewId = this.EventSourceId,
+                        DeletedBy = deletedById,
+                    });
         }
 
         #endregion
@@ -585,6 +602,7 @@ namespace Main.Core.Domain
                         PreviousResponsible = prevResponsible,
                         Responsible = new UserLight(userId, string.Empty)
                     });
+            this.ChangeStatus(SurveyStatus.Initial, new UserLight(userId, string.Empty));
         }
 
         /// <summary>
@@ -836,6 +854,13 @@ namespace Main.Core.Domain
 
             question.IsFlaged = e.IsFlaged;
         }
+
+        protected void OnInterviewDeleted(InterviewDeleted e)
+        {
+            this.doc.IsDeleted = true;
+            this.doc.DeletedBy = e.DeletedBy;
+        }
+
         #endregion
     }
 }

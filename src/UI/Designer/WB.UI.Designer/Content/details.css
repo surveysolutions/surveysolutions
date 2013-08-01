@@ -5,7 +5,7 @@
     left: 50%;
     margin-top: -8px;
     margin-left: -8px;
-    z-index: 9999999
+    z-index: 9999999;
 }
 
 footer {
@@ -69,6 +69,11 @@ body:before {
     top: 0;
     z-index: -99999;
     background-color: #1a5a7e;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
 }
 
 body.loading .loading-backdrop {
@@ -288,6 +293,15 @@ h1 {
     text-shadow: 0 1px 0 rgba(0,0,0,0.2);
 }
 
+#search-form.form-horizontal .control-label {
+     width: 110px;
+    text-align: left;
+}
+
+#search-form.form-horizontal .controls {
+    margin-left: 115px;
+}
+
 #filter {
     -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.4);
     -moz-box-shadow: inset 0 0 4px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.4);
@@ -295,17 +309,17 @@ h1 {
     -o-box-shadow: inset 0 0 4px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.4);
     box-shadow: inset 0 0 4px rgba(0,0,0,0.4),0 1px 0 rgba(255,255,255,0.4);
     background: rgba(0,0,0,0.3);
-    background: -webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,0.3)),to(rgba(0,0,0,0.1)));
-    background: -moz-linear-gradient(top,rgba(0,0,0,0.3),rgba(0,0,0,0.1));
-    background: -ms-linear-gradient(top,rgba(0,0,0,0.3),rgba(0,0,0,0.1));
-    background: linear-gradient(top,rgba(0,0,0,0.3),rgba(0,0,0,0.1));
+    background: -webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,0.15)),to(rgba(0,0,0,0.07)));
+    background: -moz-linear-gradient(top,rgba(0,0,0,0.15),rgba(0,0,0,0.07));
+    background: -ms-linear-gradient(top,rgba(0,0,0,0.15),rgba(0,0,0,0.07));
+    background: linear-gradient(top,rgba(0,0,0,0.15),rgba(0,0,0,0.07));
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
     border-radius: 4px;
     position: relative;
-    margin: 6px 0;
+    margin: 0;
     border-top: 1px solid rgba(0,0,0,0.4);
     padding: 5px 7px;
 }
@@ -330,10 +344,10 @@ h1 {
         -o-box-sizing: border-box;
         box-sizing: border-box;
         width: 100%;
-        color: white;
+        color: #333;
         font-size: 13px;
         font-weight: bold;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        text-shadow: 0 1px 2px #fff;
         padding-right: 60px;
         margin: 0;
     }
@@ -342,12 +356,12 @@ h1 {
         position: absolute;
         right: 5px;
         top: 5px;
-        color: #fff;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        color: #333;
+        text-shadow: 0 1px 2px #fff;
     }
 
         #filter .close:hover {
-            color: #fff;
+            color: #111;
             opacity: 0.8;
         }
 
@@ -646,15 +660,23 @@ h1 {
     padding-right: 3px;
     margin-top: 6px;
 }
-.ui-expander-head.ui-expander-head-collapsed i{
-    background-position: -408px -96px;
+.ui-expander-head i.icon-plus{
+    display: none;
+}
+.ui-expander-head i.icon-minus{
+    display: inline-block;
+}
+.ui-expander-head.ui-expander-head-collapsed i.icon-minus{
+    display: none;
+}
+.ui-expander-head.ui-expander-head-collapsed i.icon-plus{
+    display: inline-block;
 }
  ul.list.ui-sortable:empty {
      min-height: 24px;
  }
 .statistics {
     display: inline-block;
-    float: left;
 }
 .statistics .nav-pills > li > a {
     margin-top: 0;
@@ -678,8 +700,6 @@ h1 {
 }
 .controls .btn.btn-danger {
     margin-left: 5px;
-    padding-left: 6px;
-    padding-left: 6px;
 }
 
 .control-label.required:after {
@@ -696,17 +716,13 @@ h1 {
 .details.stack .answer-options [class*="span"].control-group {
     margin-bottom: 0
 }
-.details.stack .answer-options{
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-}
 .editor-container{
-    height: 100px;
+    height: 20px;
     margin-bottom: 10px;
     position: relative
 }
 .editor {
-    height: 100px;
+    height: 20px;
     width: 100%;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid #CCCCCC;
@@ -715,6 +731,7 @@ h1 {
 a.btn.btn-help {
     border-radius: 16px 16px 16px 16px;
     padding: 0 3px;
+    font-size: 14px;
 }
 .row-fluid .btn-group {
     margin-bottom: 10px;
@@ -732,4 +749,18 @@ a.btn.btn-help {
 #footer-block {
     display: none;
     visibility: hidden;
+}
+#details-question .form-horizontal .control-label {
+    width: 75px;
+    text-align: left;
+}
+#details-question .form-horizontal .controls {
+    margin-left: 85px;
+}
+.cancel-edit {
+    color: #113950;
+    font-size: 22px;
+}
+.cancel-edit:hover {
+    text-decoration: none;
 }

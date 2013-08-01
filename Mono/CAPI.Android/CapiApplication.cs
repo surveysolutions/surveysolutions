@@ -111,6 +111,7 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
             bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
             bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
+            bus.RegisterHandler(eventHandler, typeof(CompleteQuestionnaireDeleted));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
@@ -158,7 +159,10 @@ namespace CAPI.Android
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule(), new AndroidLoggingModule());
+            kernel = new StandardKernel(
+                new AndroidCoreRegistry(),
+                new AndroidModelModule(),
+                new AndroidLoggingModule());
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);

@@ -1,12 +1,18 @@
-﻿namespace CapiDataGenerator
+﻿using Microsoft.Win32;
+
+namespace CapiDataGenerator
 {
     public class OpenFileService : IOpenFileService
     {
         public string OpenFileDialog()
         {
-            // Show dialog and take result into account
-            bool? result = AppSettings.Instance.OpenDialog.Show();
-            return result == true ? AppSettings.Instance.OpenDialog.SelectedFilePath : string.Empty;
+            // Configure open file dialog box
+            var dlg = new OpenFileDialog {Filter = "Template file|*.*"};
+
+            // Show open file dialog box
+            bool? result = dlg.ShowDialog();
+
+            return result == true ? dlg.FileName : string.Empty;
         }
     }
 }

@@ -2,8 +2,11 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.Supervisor.Denormalizer;
 using Core.Supervisor.RavenIndexes;
+using Core.Supervisor.Views;
 using Main.Core;
+using Main.Core.Documents;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -14,6 +17,7 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.Synchronization;
@@ -31,6 +35,7 @@ namespace Web.Supervisor.App_Start
     using Microsoft.Practices.ServiceLocation;
 
     using NinjectAdapter;
+
 
     /// <summary>
     /// The ninject web common.
@@ -90,30 +95,43 @@ namespace Web.Supervisor.App_Start
 
             string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
 
+            int? pageSize = GetEventStorePageSize();
+
+            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username, password: password, defaultDatabase: defaultDatabase);
+
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
-                new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
-                new RavenInfrastructureModule(),
+                new ServiceLocationModule(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
+                pageSize.HasValue
+                    ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
+                    : new RavenWriteSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings),
+                new SupervisorCoreRegistry(),
+                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule());
 
-            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+#warning dirty hack for register ziped read side
+            kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
+            kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
+
+            //midnigth fixx
+            //both services have to share the same cache
+            //they have to have two different implementations and _maybe_ share single cache
+            kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
+                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+            
+            //kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
 
-            int pageSize;
-            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
-            {
-                NcqrsInit.Init(kernel, pageSize);
-            }
-            else
-                NcqrsInit.Init(kernel);
+            NcqrsInit.Init(kernel);
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
@@ -125,5 +143,14 @@ namespace Web.Supervisor.App_Start
             return kernel;
         }
 
+        private static int? GetEventStorePageSize()
+        {
+            int pageSize;
+
+            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
+                return pageSize;
+            else
+                return null;
+        }
     }
 }

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.Supervisor.Views;
 using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
+using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
@@ -46,6 +49,16 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.interviewViewFactory.Load(input);
+        }
+
+        public void DeleteInterviews(DeleteInterviewsModel model)
+        {
+            var responsibleId = this.GlobalInfo.GetCurrentUser().Id;
+            foreach (var interviewId in model.Interviews)
+            {
+                this.CommandService.Execute(new DeleteInterviewCommand(interviewId: interviewId,
+                    deletedBy: responsibleId));
+            }
         }
 
         public void Assign()

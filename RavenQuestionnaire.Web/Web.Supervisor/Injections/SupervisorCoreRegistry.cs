@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.Filters;
 
@@ -39,17 +40,9 @@ namespace Web.Supervisor.Injections
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
-        private readonly bool isApprovedSended;
-
-        public SupervisorCoreRegistry(string repositoryPath, string defaultDatabase, bool isEmbeded, string username, string password, bool isApprovedSended)
-            : base(repositoryPath, isEmbeded, username, password, defaultDatabase)
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
-            this.isApprovedSended = isApprovedSended;
-        }
-
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
-        {
-            return base.GetAssweblysForRegister().Concat(new[]
+            return base.GetAssembliesForRegistration().Concat(new[]
             {
                 typeof(IndexViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
@@ -97,8 +90,9 @@ namespace Web.Supervisor.Injections
 
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
-            
-            this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
+
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
         }
     }
 }
