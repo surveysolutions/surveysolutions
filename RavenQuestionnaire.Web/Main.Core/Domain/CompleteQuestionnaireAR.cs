@@ -29,28 +29,15 @@ namespace Main.Core.Domain
         /// <summary>
         /// The doc.
         /// </summary>
-        private CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-
-        /*/// <summary>
-        /// The condition question dependencies.
-        /// </summary>
-        private Dictionary<Guid, List<Guid>> conditionQuestionDependencies;
-
-        /// <summary>
-        /// The condition group dependencies.
-        /// </summary>
-        private Dictionary<Guid, List<Guid>> conditionGroupDependencies;*/
-
-        /*/// <summary>
-        /// The condition executor.
-        /// </summary>
-        private CompleteQuestionnaireConditionExecutor conditionExecutor;
-
-        /// <summary>
-        /// The validation executor.
-        /// </summary>
-        private CompleteQuestionnaireValidationExecutor validationExecutor;*/
-
+        private CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
+        
+        private CompleteQuestionnaireDocument doc
+        {
+            get { return document; }
+            set { document = value.Clone() as CompleteQuestionnaireDocument; }
+        }
+    
+        
         #endregion
 
         #region Constructors and Destructors
@@ -106,7 +93,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewCompleteQuestionnaireCreated
                     {
-                        Questionnaire = document, 
+                        Questionnaire = document, // to avoid pass as refecence 
                         CreationDate = clock.UtcNow(), 
                         TotalQuestionCount = document.Find<ICompleteQuestion>(q => true).Count()
                     });
@@ -144,32 +131,6 @@ namespace Main.Core.Domain
         {
             throw new InvalidOperationException("Is not supported any more.");
 
-
-            //// performe check before event raising
-            /*
-            var templateGroup = this.doc.Find<CompleteGroup>(publicKey);
-
-            this.ApplyEvent(
-                new PropagatableGroupAdded
-                    {
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (templateGroup.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in templateGroup.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupAdded
-                        {
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
         /// <summary>
@@ -209,19 +170,7 @@ namespace Main.Core.Domain
         /// </param>
         public  void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
-            // Due to the storing snapshot in the memory
-            // to provide consistency of UoW we have to make copy of the memory structure.
-            // This method handles 2 situations: restore from Framework in memory snapshot
-            // and event of snapshot type.
-            var cached = snapshot.Clone() as CompleteQuestionnaireDocument;
-
-            if (cached != null)
-            {
-                this.doc = cached;
-            }
-
-            // moved to the OnDeserialized for object created from serialized event
-            // this.doc.ConnectChildsWithParent();
+            this.doc = snapshot;
         }
 
         /// <summary>
@@ -626,7 +575,7 @@ namespace Main.Core.Domain
 
         protected void OnNewAssigmentCreated(NewAssigmentCreated e)
         {
-            this.doc = e.Source.Clone() as CompleteQuestionnaireDocument;
+            this.doc = e.Source;
         }
 
         // Event handler for the AnswerSet event. This method
