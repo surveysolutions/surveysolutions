@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
+        public void NewUpdateQuestion_When_Title_is_not_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
         {
             using (var eventContext = new EventContext())
             {
@@ -515,7 +515,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    options: options);
 
                 // assert
-                var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                var raisedEvent = GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.That(raisedEvent.Answers.Length, Is.EqualTo(answerOptionsCount));
             }
         }
