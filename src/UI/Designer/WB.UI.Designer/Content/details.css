@@ -772,3 +772,13 @@ a.btn.btn-help {
 #questionnaire ul#chapters-list.list {
     margin-left: 28px;
 }
+#details-question label,
+#details-group label,
+#details-questionnaire label{
+    cursor: default;
+}
+#details-question label.checkbox,
+#details-group label.checkbox,
+#details-questionnaire label.checkbox {
+    cursor: pointer;
+}
