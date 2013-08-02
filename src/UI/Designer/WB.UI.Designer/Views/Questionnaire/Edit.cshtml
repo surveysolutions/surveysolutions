@@ -97,7 +97,8 @@
     <div id="footer">
         <div class="inner">
             <div class="row-fluid">
-                <div class="span5">
+
+                <div class="span4">
                     <div class="form-horizontal" id="search-form">
                         <div class="control-group">
                             <label class="control-label">Search question</label>
@@ -110,11 +111,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="span3">
+                <div class="span6">
                     <div class="statistics">
                         <ul class="nav nav-pills" data-bind="with: statistics">
-                            <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
-                            <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
+                            <li><a>Groups: <span class="badge" data-bind="text: groups"></span></a></li>
+                            <li><a>Questions: <span class="badge" data-bind="text: questions"></span></a></li>
                         </ul>
                     </div>
                     <div class="statistics" data-bind="with: statistics">
@@ -123,9 +124,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="span4">
-                    <div class="pull-right">
-                        <button class="btn btn-info" data-bind="click: $root.toggleOutput">
+                <div class="span2">
+                    <div id="footer-buttons" class="pull-right">
+                        <button class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
                             <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
                         </button>
                     </div>
