@@ -18,10 +18,9 @@ namespace WB.Core.Synchronization.SyncProvider
 
     internal class SyncProvider : ISyncProvider
     {
-        private ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
+        private readonly ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
         
-        #warning ViewFactory should be used here
-        private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
+        private readonly IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
         private readonly ISynchronizationDataStorage storage;
         private readonly IIncomePackagesRepository incomeRepository;
@@ -29,7 +28,7 @@ namespace WB.Core.Synchronization.SyncProvider
         private readonly ILogger logger;
 
 
-        public SyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
+        public SyncProvider(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage,IIncomePackagesRepository incomeRepository,
             ILogger logger)
         {
