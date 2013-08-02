@@ -13,8 +13,16 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
 
         protected InterviewCommand(Guid interviewId, Guid userId)
         {
+            ThrowArgumentExceptionIfGuidIsEmpty(userId);
+
             this.InterviewId = interviewId;
             this.UserId = userId;
+        }
+
+        private void ThrowArgumentExceptionIfGuidIsEmpty(Guid guid)
+        {
+            if (guid == Guid.Empty)
+                throw new ArgumentException("Guid cannot be empty.");
         }
     }
 }
