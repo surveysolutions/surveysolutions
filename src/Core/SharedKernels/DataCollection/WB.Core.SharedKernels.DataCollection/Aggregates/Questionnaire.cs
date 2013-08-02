@@ -16,6 +16,7 @@ using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
@@ -66,6 +67,16 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
+        }
+
+        public QuestionType GetQuestionType(Guid questionId)
+        {
+            var question = this.innerDocument.Find<IQuestion>(questionId);
+
+            if (question == null)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' is not found.", questionId));
+
+            return question.QuestionType;
         }
     }
 }
