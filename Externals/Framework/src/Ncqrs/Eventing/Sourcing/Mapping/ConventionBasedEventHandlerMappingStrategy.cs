@@ -40,7 +40,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
         public ConventionBasedEventHandlerMappingStrategy()
         {
-            MethodNameRegexPattern = "^(on|On|ON|Apply)+";
+            MethodNameRegexPattern = "^(on|On|ON)+|Apply$";
             EventBaseType = typeof (Object);
         }
 
