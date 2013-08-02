@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(InterviewCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
-            this.questionnaireVersion = @event.Version;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
         #endregion
