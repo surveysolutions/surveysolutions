@@ -9,12 +9,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class InterviewCreated
     {
         public Guid QuestionnaireId { get; private set; }
-        public long Version { get; private set; }
+        public long QuestionnaireVersion { get; private set; }
 
-        public InterviewCreated(Guid questionnaireId, long version)
+        public InterviewCreated(Guid questionnaireId, long questionnaireVersion)
         {
             this.QuestionnaireId = questionnaireId;
-            this.Version = version;
+            this.QuestionnaireVersion = questionnaireVersion;
         }
     }
 }
