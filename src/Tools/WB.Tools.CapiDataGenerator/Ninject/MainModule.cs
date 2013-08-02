@@ -61,7 +61,7 @@ namespace CapiDataGenerator
             this.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
-            this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
+            this.Bind<IChangeLogManipulator>().ToConstant(new ChangeLogManipulator(null, draftStore, capiEvenStore,changeLogStore));
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
 
             this.Bind<IReadSideRepositoryReader<UserDocument>>().To<RavenReadSideRepositoryReader<UserDocument>>();

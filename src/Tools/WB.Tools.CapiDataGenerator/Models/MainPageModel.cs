@@ -395,7 +395,7 @@ namespace CapiDataGenerator
                 {
                     CompleteQuestionnaireId = qId,
                     Responsible = new UserLight(Guid.NewGuid(), string.Empty),
-                    Status = _rand.Next(0, 1) == 0 ? SurveyStatus.Complete : SurveyStatus.Redo
+                    Status = SurveyStatus.Complete
                 });
 
                 UpdateProgress();
