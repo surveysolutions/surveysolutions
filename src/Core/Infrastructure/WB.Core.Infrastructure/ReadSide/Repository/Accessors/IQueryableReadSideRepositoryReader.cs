@@ -14,10 +14,6 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     {
         TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
 
-        int Count(Expression<Func<TEntity, bool>> query);
-
-        IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query);
-
         IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query);
     }
 }
