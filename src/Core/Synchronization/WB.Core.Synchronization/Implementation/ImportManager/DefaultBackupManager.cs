@@ -15,10 +15,12 @@ namespace WB.Core.Synchronization.Implementation.ImportManager
     public class DefaultBackupManager : IBackupManager
     {
         private readonly IStreamableEventStore eventStore;
+        private readonly ISyncEventHandler eventProcessor;
 
         public DefaultBackupManager()
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
+            this.eventProcessor = new SyncEventHandler();
         }
 
         public ZipFileData Backup()
@@ -27,7 +29,7 @@ namespace WB.Core.Synchronization.Implementation.ImportManager
                 return null;
             var retval = new ZipFileData();
             retval.Events =
-                eventStore.GetAllEventsIncludingSnapshots().SelectMany(e => e).Select(e => new AggregateRootEvent(e));
+                eventStore.GetAllEvents().SelectMany(e => e).Select(e => new AggregateRootEvent(e));
             return retval;
         }
 
@@ -35,9 +37,9 @@ namespace WB.Core.Synchronization.Implementation.ImportManager
         {
 #warning restore must clean up db before updloading data
             var events = GetEventStream(zipData);
-            var processor = new SyncEventHandler();
-            processor.Merge(events);
-            processor.Commit();
+
+            eventProcessor.Process(events);
+            
         }
 
         protected IEnumerable<AggregateRootEvent> GetEventStream(List<string> zipData)

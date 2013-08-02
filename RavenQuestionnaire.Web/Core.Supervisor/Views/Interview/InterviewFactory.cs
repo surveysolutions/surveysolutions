@@ -2,8 +2,10 @@ using System;
 using System.Linq.Expressions;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Entities;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Raven.Client.Linq;
+using Raven.Database.Linq.PrivateExtensions;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Interview
@@ -27,7 +29,7 @@ namespace Core.Supervisor.Views.Interview
         {
             /*  return this.interviews.Query(_ =>
               {*/
-            Expression<Func<InterviewItem, bool>> predicate = (s) => true;
+            Expression<Func<InterviewItem, bool>> predicate = (s) => !s.IsDeleted;
 
             if (input.StatusId.HasValue)
             {
@@ -88,7 +90,9 @@ namespace Core.Supervisor.Views.Interview
                             LastEntryDate = x.LastEntryDate.ToShortDateString(),
                             Responsible = x.Responsible,
                             Status = x.Status.Name,
-                            Title = x.Title
+                            Title = x.Title,
+                            CanDelete = x.Status.Id == SurveyStatus.Unknown.PublicId || 
+                                        x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId
                         })
                 };
             //  });

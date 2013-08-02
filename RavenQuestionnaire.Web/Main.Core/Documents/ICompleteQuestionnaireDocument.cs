@@ -86,6 +86,9 @@ namespace Main.Core.Documents
         /// </returns>
         IEnumerable<ICompleteQuestion> GetFeaturedQuestions();
 
+        bool IsDeleted { get; set; }
+
+        Guid? DeletedBy { get; set; }
 
         #endregion
     }

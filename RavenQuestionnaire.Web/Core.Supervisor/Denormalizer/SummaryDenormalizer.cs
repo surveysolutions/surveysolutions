@@ -16,13 +16,14 @@ namespace Core.Supervisor.Denormalizer
 
     using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-    public class SummaryDenormalizer : IEventHandler<QuestionnaireStatusChanged>, 
-                                       IEventHandler<QuestionnaireAssignmentChanged>
+    public class SummaryDenormalizer : UserBaseDenormalizer,
+                                       IEventHandler<QuestionnaireStatusChanged>, 
+                                       IEventHandler<QuestionnaireAssignmentChanged>,
+                                       IEventHandler<InterviewDeleted>
     {
         #region Constants and Fields
 
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
 
         #endregion
@@ -33,9 +34,9 @@ namespace Core.Supervisor.Denormalizer
             IReadSideRepositoryWriter<SummaryItem> summaryItem,
             IReadSideRepositoryWriter<UserDocument> users,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires)
+            :base(users)
         {
             this.summaryItem = summaryItem;
-            this.users = users;
             this.questionnaires = questionnaires;
         }
 
@@ -75,7 +76,7 @@ namespace Core.Supervisor.Denormalizer
 
             this.DecreaseByStatus(summaryUser, oldStatus);
 
-          //  summaryUser.QuestionnaireStatus = newStatus;
+            summaryUser.QuestionnaireStatus = newStatus;
 
             this.IncreaseByStatus(summaryUser, newStatus);
             this.summaryItem.Store(summaryUser, summmaryUserId);
@@ -102,8 +103,6 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
-
             var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
 
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
@@ -169,6 +168,31 @@ namespace Core.Supervisor.Denormalizer
 
         }
 
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
+            var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
+            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+
+            if (summaryUser != null)
+            {
+                this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+                this.summaryItem.Store(summaryUser, summmaryUserId);
+
+                if (summaryUser.ResponsibleSupervisorId != null)
+                {
+                    var summarySupervisorId =
+                       summaryUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
+                    var summarySupervisor = this.summaryItem.GetById(summarySupervisorId);
+
+                    this.DecreaseByStatus(summarySupervisor, summarySupervisor.QuestionnaireStatus);
+                    this.summaryItem.Store(summarySupervisor, summarySupervisorId);
+                }
+            }
+            
+        }
+
         #endregion
+
     }
 }

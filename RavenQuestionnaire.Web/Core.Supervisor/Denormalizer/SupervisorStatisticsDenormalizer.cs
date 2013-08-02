@@ -22,13 +22,14 @@ namespace Core.Supervisor.Denormalizer
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
     /// </summary>
-    public class SupervisorStatisticsDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
+    
+    public class SupervisorStatisticsDenormalizer : UserBaseDenormalizer,
+                                                    IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                     IEventHandler<QuestionnaireStatusChanged>, 
-                                                    IEventHandler<QuestionnaireAssignmentChanged>
+                                                    IEventHandler<QuestionnaireAssignmentChanged>,
+                                                    IEventHandler<InterviewDeleted>
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
-
-        private readonly IReadSideRepositoryReader<UserDocument> users;
 
         /// <summary>
         /// Information, grouped by date
@@ -46,13 +47,14 @@ namespace Core.Supervisor.Denormalizer
             IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys,
             IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash,
-            IReadSideRepositoryWriter<HistoryStatusStatistics> history, IReadSideRepositoryReader<UserDocument> users)
+            IReadSideRepositoryWriter<HistoryStatusStatistics> history, 
+            IReadSideRepositoryWriter<UserDocument> users)
+             :base(users)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
             this.history = history;
-            this.users = users;
         }
 
         #region Public Methods and Operators
@@ -76,9 +78,9 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            this.HandleStatusChanges(evnt.Payload.PreviousStatus, evnt.Payload.Status, evnt.EventTimeStamp, evnt.Payload.CompletedQuestionnaireId);
+            this.HandleStatusChanges(evnt.Payload.PreviousStatus, evnt.Payload.Status, evnt.EventTimeStamp, evnt.EventSourceId);
             
-            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.EventSourceId);
             if (doc == null)
             {
                 return;
@@ -97,7 +99,7 @@ namespace Core.Supervisor.Denormalizer
                                                     User = doc.Responsible ?? new UserLight(Guid.Empty, string.Empty), 
                                                     Status = evnt.Payload.Status
                                                 };
-            item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
+            item.Surveys.Add(evnt.EventSourceId);
            
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
@@ -111,33 +113,41 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.EventSourceId);
             if (doc == null)
             {
                 return;
             }
 
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
 
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
-            Guid key = this.GetKey(doc.TemplateId, doc.Status.PublicId, evnt.Payload.Responsible.Id);
+            Guid key = this.GetKey(doc.TemplateId, doc.Status.PublicId, responsible.Id);
             SupervisorStatisticsItem item = this.statistics.GetById(key)
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
                                                     Template = new TemplateLight(doc.TemplateId, doc.QuestionnaireTitle),
-                                                    User = evnt.Payload.Responsible, 
+                                                    User = responsible, 
                                                     Status = doc.Status
                                                 };
 
-            item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
+            item.Surveys.Add(evnt.EventSourceId);
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
         }
 
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            this.RemoveOldStatistics(evnt.EventSourceId);
+            //this.keysHash.Remove(evnt.EventSourceId);
+        }
+
         #endregion
+
+
 
         #region Methods
 

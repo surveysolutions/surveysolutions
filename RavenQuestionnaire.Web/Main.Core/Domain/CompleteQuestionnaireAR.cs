@@ -1,4 +1,5 @@
-﻿using Ncqrs.Domain;
+﻿using Main.Core.Domain.Exceptions;
+using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Main.Core.Domain
@@ -122,6 +123,8 @@ namespace Main.Core.Domain
                 this.SetAnswer(featuredAnswer.Id, null, featuredAnswer.Answer, featuredAnswer.Answers.ToList(),
                                clock.UtcNow());
             }
+            #warning Madagaskar fix. Should be discussed
+            this.ChangeStatus(SurveyStatus.Unassign, responsible);
         }
 
         #endregion
@@ -183,18 +186,7 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
 
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        public void Delete()
-        {
-            this.ApplyEvent(
-                new CompleteQuestionnaireDeleted
-                    {
-                       CompletedQuestionnaireId = this.doc.PublicKey, TemplateId = this.doc.TemplateId 
-                    });
-        }
-
+        
         /// <summary>
         /// The delete propagate group.
         /// </summary>
@@ -298,6 +290,8 @@ namespace Main.Core.Domain
             else
             {
                 var answerList = new List<string>();
+                if (completeAnswers == null)
+                    throw new InterviewException("optiona are absent");
                 foreach (Guid answerGuid in completeAnswers)
                 {
                     var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
@@ -309,6 +303,8 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+
+            question.ThrowDomainExceptionIfAnswerInvalid(completeAnswers, completeAnswerValue);
             ///////////////
 
             // handle propagation
@@ -322,8 +318,8 @@ namespace Main.Core.Domain
                 new AnswerSet
                     {
                         QuestionPublicKey = questionPublicKey, 
-                        PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = completeAnswers  != null ? new List<Guid>(completeAnswers) : null, 
+                        PropogationPublicKey = propogationPublicKey,
+                        AnswerKeys = completeAnswers, 
                         AnswerValue = completeAnswerValue, 
                         AnswerDate = answerDate,
                         Featured = question.Featured, 
@@ -351,6 +347,23 @@ namespace Main.Core.Domain
                             ResultGroupsStatus = resultGroupsStatus,
                             ResultQuestionsStatus = resultQuestionsStatus
                         });
+            }
+        }
+
+        public void DeleteInterview(Guid deletedBy)
+        {
+            if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
+                this.doc.Status == SurveyStatus.Initial)
+            {
+                this.ApplyEvent(
+                    new InterviewDeleted()
+                    {
+                        DeletedBy = deletedBy
+                    });
+            }
+            else
+            {
+                throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
             }
         }
 
@@ -585,6 +598,7 @@ namespace Main.Core.Domain
                         PreviousResponsible = prevResponsible,
                         Responsible = new UserLight(userId, string.Empty)
                     });
+            this.ChangeStatus(SurveyStatus.Initial, new UserLight(userId, string.Empty));
         }
 
         /// <summary>
@@ -659,19 +673,7 @@ namespace Main.Core.Domain
         {
             this.doc.Status = e.Status;
         }
-
-        /// <summary>
-        /// The on complete questionnaire deleted.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
-        {
-#warning implement proper way of deleting questionnaries
-            this.doc = new CompleteQuestionnaireDocument();
-        }
-
+        
         /// <summary>
         /// The on new questionnaire created.
         /// </summary>
@@ -836,6 +838,13 @@ namespace Main.Core.Domain
 
             question.IsFlaged = e.IsFlaged;
         }
+
+        protected void OnInterviewDeleted(InterviewDeleted e)
+        {
+            this.doc.IsDeleted = true;
+            this.doc.DeletedBy = e.DeletedBy;
+        }
+
         #endregion
     }
 }

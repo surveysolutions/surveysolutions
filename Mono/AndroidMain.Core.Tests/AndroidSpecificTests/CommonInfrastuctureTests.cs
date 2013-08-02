@@ -128,21 +128,9 @@ namespace AndroidMain.Core.Tests.CommonTests
         }
     }
 
-    public class TestsRegistry : CoreRegistry
-    {
-        public TestsRegistry()
-            : base(null, false)
-        {
-        }
-    }
+    public class TestsRegistry : CoreRegistry {}
 
-    internal class FakeCore : CoreRegistry
-    {
-        public FakeCore()
-            : base(null, false)
-        {
-        }
-    }
+    internal class FakeCore : CoreRegistry {}
 
     public class FakeFileStorage : IFileStorageService
     {

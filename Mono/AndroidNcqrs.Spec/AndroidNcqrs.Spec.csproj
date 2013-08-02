@@ -90,6 +90,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\JsonEventSerializationFixture.cs">
       <Link>JsonEventSerializationFixture.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\ObliviousEventContext.cs">
+      <Link>ObliviousEventContext.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\OneEventTestFixture.cs">
       <Link>OneEventTestFixture.cs</Link>
     </Compile>
@@ -121,7 +124,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="aa90754b-ca47-429e-bdc8-2a83e94179b7" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="aa90754b-ca47-429e-bdc8-2a83e94179b7" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

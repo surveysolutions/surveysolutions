@@ -41,55 +41,18 @@
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The get answer object.
-        /// </summary>
-        /// <returns>
-        /// The System.Object.
-        /// </returns>
         object GetAnswerObject();
 
-        /// <summary>
-        /// The is answered.
-        /// </summary>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
         bool IsAnswered();
 
-        /// <summary>
-        /// The get answer string.
-        /// </summary>
-        /// <returns>
-        /// The System.String.
-        /// </returns>
         string GetAnswerString();
 
-        /// <summary>
-        /// The set answer.
-        /// </summary>
-        /// <param name="answerKeys">
-        /// The answer keys.
-        /// </param>
-        /// <param name="answerValue">
-        /// The answer value.
-        /// </param>
         void SetAnswer(List<Guid> answerKeys, string answerValue);
 
-        /// <summary>
-        /// The set comments.
-        /// </summary>
-        /// <param name="comments">
-        ///   The comments.
-        /// </param>
-        /// <param name="date">
-        /// The date
-        /// </param>
-        /// <param name="user">
-        /// The user
-        /// </param>
         void SetComments(string comments, DateTime date, UserLight user);
-        
-       #endregion
+
+        void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue);
+
+        #endregion
     }
 }

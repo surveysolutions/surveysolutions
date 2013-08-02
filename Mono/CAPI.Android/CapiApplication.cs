@@ -10,7 +10,10 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Platform;
+using Cirrious.MvvmCross.Platform;
+using Cirrious.MvvmCross.ViewModels;
 using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
@@ -132,7 +135,7 @@ namespace CAPI.Android
                                           kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
+            
         }
 
         private void InitChangeLog(InProcessEventBus bus)
@@ -151,15 +154,14 @@ namespace CAPI.Android
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             RestoreAppState();
 
-            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
+             // initialize app if necessary
+            MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
+            MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
-            // initialize app if necessary
-            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
-            {
-                _setup.Initialize();
-            }
-
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule(), new AndroidLoggingModule());
+            kernel = new StandardKernel(
+                new AndroidCoreRegistry(),
+                new AndroidModelModule(),
+                new AndroidLoggingModule());
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
@@ -196,7 +198,7 @@ namespace CAPI.Android
         }
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
-            this.ClearAllBackStack<SplashScreenActivity>();
+            this.ClearAllBackStack<SplashScreen>();
 
             var questionnarieDenormalizer =
                 kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as

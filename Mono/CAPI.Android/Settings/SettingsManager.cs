@@ -1,25 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SettingsManager.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The settings manager.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Android.App;
 using Android.Content;
 using Java.Util;
 
 namespace CAPI.Android.Settings
 {
-    /// <summary>
-    /// The settings manager.
-    /// </summary>
     public static class SettingsManager
     {
         #region Constants
@@ -29,17 +14,15 @@ namespace CAPI.Android.Settings
             return GetSetting(SettingsNames.RegistrationKeyName);
         }
 
-
         /// <summary>
         /// The remote sync node.
         /// </summary>
-        private const string RemoteSyncNode = // "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
-            "http://192.168.173.1:8000/";
-
+        private const string RemoteSyncNode = 
+            "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
+        //"http://192.168.173.1:8000/";
         // "http://217.12.197.135/DEV-Supervisor/";
-        // "http://192.168.173.1:8084/";
-        // "http://192.168.173.1:9089/";
-        // "http://10.0.2.2:8084";
+        
+        // "http://10.0.2.2";  //access to attached computer by cord
 
         
         #endregion

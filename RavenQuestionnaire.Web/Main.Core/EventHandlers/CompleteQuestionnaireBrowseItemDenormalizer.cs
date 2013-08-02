@@ -1,5 +1,4 @@
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
@@ -13,19 +12,18 @@ namespace Main.Core.EventHandlers
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Question;
-    using Main.DenormalizerStorage;
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
-                                                               IEventHandler<CompleteQuestionnaireDeleted>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>
+                                                               IEventHandler<QuestionnaireAssignmentChanged>,
+                                                               IEventHandler<InterviewDeleted>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
-        private readonly IReadSideRepositoryReader<UserDocument> users;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore, IReadSideRepositoryReader<UserDocument> users)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore, IReadSideRepositoryWriter<UserDocument> users)
         {
             this.documentItemStore = documentItemStore;
             this.users = users;
@@ -59,16 +57,11 @@ namespace Main.Core.EventHandlers
                 this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
             }
         }
-
-        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
-        {
-            this.documentItemStore.Remove(evnt.Payload.CompletedQuestionnaireId);
-        }
-
+        
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
-                this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentItemStore.GetById(evnt.EventSourceId);
 
             item.Status = evnt.Payload.Status;
             item.LastEntryDate = evnt.EventTimeStamp;
@@ -77,14 +70,35 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
-            CompleteQuestionnaireBrowseItem item =
-                this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem item = 
+                this.documentItemStore.GetById(evnt.EventSourceId);
 
-            item.Responsible = evnt.Payload.Responsible;
+            item.Responsible = responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            CompleteQuestionnaireBrowseItem item =
+                this.documentItemStore.GetById(evnt.EventSourceId);
+
+            item.IsDeleted = true;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
+        }
+
+        private UserLight FillResponsiblesName(UserLight responsible)
+        {
+            var user = this.users.GetById(responsible.Id);
+            return new UserLight
+                {
+                    Id = responsible.Id,
+                    Name = string.IsNullOrWhiteSpace(responsible.Name)
+                               ? user == null ? "" : user.UserName
+                               : responsible.Name
+                };
         }
 
         #region Methods

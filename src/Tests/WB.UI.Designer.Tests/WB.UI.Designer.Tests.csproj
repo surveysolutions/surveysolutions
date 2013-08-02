@@ -37,13 +37,13 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications, Version=0.5.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications, Version=0.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.dll</HintPath>
+      <HintPath>..\..\..\packages\Machine.Specifications.0.5.14\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.5.12.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications.Clr4, Version=0.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+      <HintPath>..\..\..\packages\Machine.Specifications.0.5.14\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -52,6 +52,9 @@
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -116,7 +119,7 @@
     <Compile Include="CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__DeleteQuestion__with_questionnaire_id_and_question_id.cs" />
-    <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup__with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition.cs" />
+    <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Integration\ZipUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

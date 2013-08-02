@@ -4,7 +4,6 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -19,8 +18,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
@@ -65,9 +62,10 @@ namespace CAPI.Android
                 intent.PutExtra("publicKey", publicKey.ToString());
                 StartActivity(intent);
             }
-            catch
+            catch (Exception exc)
             {
-                
+                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                logger.Error("Rebuild Error", exc);
             }
         }
 #warning remove after eluminating ncqrs
@@ -77,11 +75,9 @@ namespace CAPI.Android
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
             var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
 
+            //loading from sync cache 
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
-            //todo: load from sync cache
-
             var item = syncCacher.LoadItem(publicKey);
-
             if (!string.IsNullOrWhiteSpace(item))
             {
                 string content = PackageHelper.DecompressString(item);

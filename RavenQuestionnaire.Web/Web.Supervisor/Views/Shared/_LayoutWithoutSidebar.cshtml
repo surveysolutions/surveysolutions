@@ -1,5 +1,4 @@
-﻿@using System.Web.Optimization
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles
@@ -18,6 +17,6 @@
 <div id="content" class="no-menu">
     <div class="innerLR">
         @Html.Partial("_alerts")
-        @RenderBody()
     </div>
+    @RenderBody()
 </div>

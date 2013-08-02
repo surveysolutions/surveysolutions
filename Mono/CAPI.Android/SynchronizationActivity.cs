@@ -1,30 +1,22 @@
-
-using System.IO;
-using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model.ChangeLog;
+using CAPI.Android.Core.Model;
+using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Extensions;
 using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
 using Main.Core.Utility;
+using Microsoft.Practices.ServiceLocation;
 using Ninject;
+using System;
+using System.Text;
+using System.Threading;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
-using Environment = Android.OS.Environment;
 
 namespace CAPI.Android
 {
@@ -255,7 +247,11 @@ namespace CAPI.Android
 
         private void synchronizer_ProcessFinished(object sender, EventArgs e)
         {
-            this.RunOnUiThread(DestroyDialog);
+            this.RunOnUiThread(() =>
+                {
+                    DestroyDialog();
+                    tvSyncResult.Text = "Sync is finished.";
+                });
             DestroySynchronizer();
         }
 

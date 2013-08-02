@@ -29,6 +29,7 @@
         /// <summary>
         /// Gets or sets the status.
         /// </summary>
+        [Obsolete("are you sure you need this? get it from read model")]
         public SurveyStatus PreviousStatus { get; set; }
 
         /// <summary>

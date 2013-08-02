@@ -1,6 +1,8 @@
-﻿DocumentListViewModel = function (listViewUrl, commandUrl, users) {
+﻿DocumentListViewModel = function (listViewUrl, deleteInterviewUrl, commandUrl, users) {
     var self = this;
-
+    
+    self.deleteInterviewUrl = deleteInterviewUrl;
+    
     self.ListView = new ListViewModel(listViewUrl);
 
     self.ListView.mappingOptions = {
@@ -67,6 +69,7 @@
                         item.IsSelected(false);
                         item.Responsible.Id(user.UserId);
                         item.Responsible.Name(user.UserName);
+                        item.Status("Initial");
                     });
                 }
                 if (data.status == "error") {
@@ -91,15 +94,13 @@
     self.SelectedTemplate = ko.observable('');
     self.SelectedResponsible = ko.observable('');
     self.SelectedStatus = ko.observable('');
-    self.OnlyAssigned = ko.observable(false);
 
     self.load = function () {
         self.ListView.GetFilterMethod = function () {
             return {
                 TemplateId: self.SelectedTemplate,
                 ResponsibleId: self.SelectedResponsible,
-                StatusId: self.SelectedStatus,
-                OnlyAssigned: self.OnlyAssigned
+                StatusId: self.SelectedStatus
             };
         };
         
@@ -109,8 +110,34 @@
         self.SelectedTemplate.subscribe(self.ListView.filter);
         self.SelectedResponsible.subscribe(self.ListView.filter);
         self.SelectedStatus.subscribe(self.ListView.filter);
-        self.OnlyAssigned.subscribe(self.ListView.filter);
 
         self.ListView.search();
+    };
+
+    self.deleteInterview = function () {
+        self.ListView.CheckForRequestComplete();
+
+        var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
+            return item.IsSelected();
+        });
+
+        var request = { Interviews: [] };
+        for (var i = 0; i < selectedRawInterviews.length; i++) {
+            request.Interviews.push(selectedRawInterviews[i]["InterviewId"]());
+        }
+
+        self.ListView.IsAjaxComplete(false);
+
+        $.post(self.deleteInterviewUrl, request, null, "json")
+            .done(function (data) {
+                var deletedInterviews = ko.utils.arrayFilter(selectedRawInterviews, function (item) {
+                    return $.inArray(item["InterviewId"](), data["BlockedInterviews"]) == -1;
+                });
+                for (var i = 0; i < deletedInterviews.length; i++) {
+                    self.ListView.Items.remove(deletedInterviews[i]);
+                }
+                self.ListView.TotalCount(self.ListView.TotalCount() - deletedInterviews.length);
+                self.ListView.IsAjaxComplete(true);
+            });
     };
 };

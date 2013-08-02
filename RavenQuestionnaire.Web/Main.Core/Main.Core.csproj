@@ -157,8 +157,8 @@
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\DeleteInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
@@ -181,7 +181,6 @@
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
-    <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ChangeStatusDocument.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
@@ -217,6 +216,7 @@
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
+    <Compile Include="Domain\Exceptions\InterviewException.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\SyncActivityAR.cs" />
@@ -443,9 +443,6 @@
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -455,6 +452,7 @@
     <Compile Include="Events\Questionnaire\Completed\FlagSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\Completed\InterviewDeleted.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -543,9 +541,7 @@
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
-    <Compile Include="PackageHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="PackageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />

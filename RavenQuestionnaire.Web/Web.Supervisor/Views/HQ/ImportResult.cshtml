@@ -1,0 +1,73 @@
+﻿@using Core.Supervisor.Views.Survey
+@using Main.Core.Entities.SubEntities
+@model WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO.ImportResult
+
+@if (Model.IsSuccessed)
+{
+    <h4>@(Model.IsCompleted ? "Parsing is completed" : "Parsing is in process...")</h4>
+    if (Model.Header != null)
+    {
+        <div  style="height: 500px; overflow-y: scroll;">
+        <table class="table table-striped table-bordered table-condensed table-break-words">
+            <thead>
+                <tr>
+                    @foreach (var item in Model.Header)
+                    {
+                        <th>@Html.DisplayFor(modelItem => item)</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Values != null)
+                {
+                    for (int i = 0; i < Model.Values.Length; i++)
+                    {
+                        <tr>
+                            @foreach (var item in Model.Values[i])
+                            {
+                                <th>@item</th>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+            </div>
+    }
+}
+else
+{
+    <h4>Parsing error</h4>
+    <div>@Model.ErrorMessage</div>
+}
+
+@if (Model.IsCompleted || !Model.IsSuccessed)
+{
+    <script>
+        isStopMarker = true;
+    </script>
+}
+@if (Model.IsCompleted && Model.IsSuccessed)
+{
+    using (Html.BeginForm("CreateSample", "HQ", new {id = Model.Id}, FormMethod.Post, new {id = "createSampleForm"}))
+    {
+        <fieldset class="form-horizontal">
+            <div class="control-group">
+                <div class="control-label">Select responsible</div>
+                <div class="controls">
+                    <select name="responsibleSupervisor" class="input-block-level">
+                        @foreach (SurveyUsersViewItem item in ViewBag.SupervisorList)
+                        {
+                            <option value="@item.UserId" >@item.UserName</option>
+                        }
+                    </select>        
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-large btn-primary pull-right" type="submit">Create sample from this data</button>
+            </div>
+        </fieldset>
+    }
+    
+
+}

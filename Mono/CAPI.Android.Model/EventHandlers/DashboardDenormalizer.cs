@@ -11,8 +11,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, 
-                                         IEventHandler<QuestionnaireStatusChanged>, 
-                                         IEventHandler<CompleteQuestionnaireDeleted>
+                                         IEventHandler<QuestionnaireStatusChanged>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> _surveyDTOdocumentStorage;
@@ -104,10 +103,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
             return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
                    status == SurveyStatus.Reinit || status == SurveyStatus.Error;
         }
-
-        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
+        
+        public void RemoveItem(Guid itemId)
         {
-            _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
+            _questionnaireDTOdocumentStorage.Remove(itemId);
         }
     }
 }

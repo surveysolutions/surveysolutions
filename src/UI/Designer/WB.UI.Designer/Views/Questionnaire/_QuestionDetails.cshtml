@@ -1,0 +1,94 @@
+﻿<div class="title">
+    <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+    <span data-bind="text: title"></span>
+</div>
+<div class="body container-fluid">
+    <div class="row-fluid control-group" data-bind="validationElement: title">
+        <label class="control-label required">Title</label>
+        <div class="note">
+            <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
+        </div>
+    </div>
+    <div class="form-horizontal">
+        <div class="row-fluid">
+            <div class="control-group" data-bind="validationElement: alias">
+                <label class="control-label required">Variable</label>
+                <div class="controls">
+                    <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="control-group">
+                <label class="control-label">Type</label>
+                <div class="controls">
+                    <select class="span12" data-bind="options: typeOptions, optionsValue: 'key', optionsText: 'value', value: qtype"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="template: { name: qtype(), data: $data }"></div>
+    <div class="row-fluid">
+        <div class="btn-group">
+            <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory, popover: { content: 'A mandatory question without an answer is an error. It is shown as an error on the interface and in the questionnaire statistics.', title: 'Mandatory question', placement: 'right', trigger: 'hover' }" class="btn btn-small"><i class="icon-exclamation"></i>&nbsp;mandatory</button>
+            <!-- ko if : $data.parent().gtype()=='None' -->
+            <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>&nbsp;featured</button>
+            <!-- /ko -->
+            <!-- ko ifnot : $data.parent().gtype()=='None' -->
+            <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-male"></i>&nbsp;head</button>
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <label>
+        <a href="#" class="btn btn-info btn-small btn-help"
+            data-content="A logical expression that validates an answer to the current question. Might include values of other questions."
+            data-original-title="Validation expression"
+            data-trigger="hover"
+            data-html="true"
+            data-placement="right"
+            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Validation expression</label>
+    <div class="editor-container">
+        <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
+    </div>
+    
+    <div class="row-fluid">
+        <label>
+            <a href="#" class="btn btn-info btn-small btn-help"
+            data-content="Validation message is shown when an answer to the current question fails a validation condition."
+            data-original-title="Validation message"
+            data-trigger="hover"
+            data-html="true"
+            data-placement="right"
+            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Validation message
+        </label>
+        <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+    </div>
+
+    <label>
+        <a href="#" class="btn btn-info btn-small btn-help"
+            data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+            data-original-title="Condition expression"
+            data-html="true"
+            data-trigger="hover"
+            data-placement="right"
+            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+    <div class="editor-container">
+        <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
+    </div>
+
+    <div class="row-fluid">
+        <label>Instructions</label>
+        <div class="note">
+            <textarea rows="1" data-bind="autoGrowArea: instruction, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="pane-bottom">
+    <div class="inner">
+        <button class="btn btn-success" data-bind="click: $root.saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+        <button class="btn btn-link cancel-edit" data-bind="click: revert, visible: dirtyFlag().isDirty() && !isNew()"><i class="icon-remove"></i></button>
+    </div>
+</div>

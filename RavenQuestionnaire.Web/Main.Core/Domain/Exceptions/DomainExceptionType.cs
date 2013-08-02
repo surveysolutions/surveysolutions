@@ -124,6 +124,12 @@
 
         MoreThanOneGroupsWithSuchIdExists,
 
-        TemplateIsInvalid
+        TemplateIsInvalid,
+
+        VariableNameShouldNotMatchWithKeywords,
+
+        TooFewOptionsInCategoryQuestion,
+
+        CouldNotDeleteInterview
     }
 }

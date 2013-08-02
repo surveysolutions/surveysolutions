@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Cirrious.MvvmCross.ViewModels;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public interface IQuestionnaireViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel,
+    public interface IQuestionnaireViewModel : IMvxViewModel,
                                                INotifyPropertyChanged
     {
         Guid QuestionnaireId { get; }

@@ -1,27 +1,18 @@
 using System;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Backup;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>,
-        IEventHandler<ConditionalStatusChanged>,
-    IEventHandler<CommentSet>, 
-                                                    /* IEventHandler<SnapshootLoaded>,*/
-                                                     /*IEventHandler<CompleteQuestionnaireDeleted>, */
-                                                     IEventHandler<AnswerSet>, 
-                                                     IEventHandler<PropagatableGroupAdded>, 
-                                                     IEventHandler<PropagatableGroupDeleted>, /*
-                                                     IEventHandler<QuestionnaireAssignmentChanged>, */
-                                                     IEventHandler<QuestionnaireStatusChanged>
+    public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>, 
+                                                         IEventHandler<ConditionalStatusChanged>, 
+                                                         IEventHandler<CommentSet>,
+                                                         IEventHandler<AnswerSet>,
+                                                         IEventHandler<PropagatableGroupAdded>,
+                                                         IEventHandler<PropagatableGroupDeleted>,
+                                                         IEventHandler<QuestionnaireStatusChanged>
     {
         /// <summary>
         /// The _document storage.
@@ -141,6 +132,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         #endregion
-
+        
     }
 }

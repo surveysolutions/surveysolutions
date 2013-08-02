@@ -4,18 +4,15 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class TextQuestionView : AbstractQuestionView
     {
-      /*  public TextQuestionView(Context context, QuestionViewModel model) : base(context, model)
-        {
-        }*/
 
-        public TextQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public TextQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context, bindingActivity, source,questionnairePublicKey)
         {
         }

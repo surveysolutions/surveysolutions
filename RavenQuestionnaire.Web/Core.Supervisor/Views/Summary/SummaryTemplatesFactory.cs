@@ -30,7 +30,8 @@ namespace Core.Supervisor.Views.Summary
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        _ =
+                            _.Where(x => x.ResponsibleSupervisorId == input.ViewerId || x.ResponsibleId == input.ViewerId);
                     }
                     return new SummaryTemplatesView()
                     {

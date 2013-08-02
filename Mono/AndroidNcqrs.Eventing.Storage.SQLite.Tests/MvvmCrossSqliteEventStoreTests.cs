@@ -1,9 +1,6 @@
 ﻿using AndroidNcqrs.Eventing.Storage.SQLite;
-using Cirrious.MvvmCross.Droid.Platform;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.Plugins;
-using Cirrious.MvvmCross.IoC;
-using Cirrious.MvvmCross.Platform;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Plugins;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using Moq;
 using Ncqrs.Eventing.Sourcing;
@@ -29,16 +26,16 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
         public void Setup()
         {
             Teardown();
-           
-            if (MvxServiceProvider.Instance == null)
+    
+        /*    if (MvxServiceProvider.Instance == null)
             {
                 Mock<IMvxPluginManager> pluginManagerCache = new Mock<IMvxPluginManager>();
                 var provider= new MvxServiceProvider(new MvxSimpleIoCServiceProvider());
                 provider.RegisterServiceInstance<IMvxPluginManager>(pluginManagerCache.Object);
                 
-            }
+            }*/
             Mock<ISQLiteConnectionFactory> sqlFactoryMock = new Mock<ISQLiteConnectionFactory>();
-            MvxServiceProvider.Instance.RegisterServiceInstance<ISQLiteConnectionFactory>(sqlFactoryMock.Object);
+            Mvx.RegisterSingleton(sqlFactoryMock.Object);
             ISQLiteConnection sqlConnection = new SQLiteConnection(DBPath);
             sqlFactoryMock.Setup(x => x.Create(It.IsAny<string>())).Returns(sqlConnection);
             _store = new MvvmCrossSqliteEventStore(TestDataBaseName);

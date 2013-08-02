@@ -137,6 +137,7 @@
     <Compile Include="BigBangTestFixture.cs" />
     <Compile Include="EventSerializationFixture.cs" />
     <Compile Include="ExceptionTestFixture.cs" />
+    <Compile Include="ObliviousEventContext.cs" />
     <Compile Include="OneEventTestFixture.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="Fakes\EnvironmentConfigurationWrapper.cs" />

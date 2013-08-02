@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
@@ -32,10 +33,12 @@ namespace LoadTestDataGenerator
 
         public static StandardKernel Wire(INinjectModule module)
         {
+            var ravenSettings = new RavenConnectionSettings(ConfigurationManager.AppSettings["Raven.DocumentStore"]);
+
             kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
-                new RavenInfrastructureModule(),
-                new SynchronizationModule(),
+                new RavenReadSideInfrastructureModule(ravenSettings),
+                new SynchronizationModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
                 new NLogLoggingModule(),
                 new DesignerBoundedContextModule()
             );
@@ -53,9 +56,12 @@ namespace LoadTestDataGenerator
 
             ConditionExecuterFactory.Creator = doc => new FakeCompleteQuestionnaireConditionExecuteCollector();
 
-            kernel.Load(new LoadTestDataGeneratorRegistry(repositoryPath: ConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
+            kernel.Load(new LoadTestDataGeneratorRegistry());
 
-            NcqrsInit.InitializeEventStore = (store, pageSize) => new BatchedRavenDBEventStore(store, pageSize);
+            var store = new BatchedRavenDBEventStore(kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore());
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
+            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
+            kernel.Bind<IStreamableEventStore>().ToConstant(store);
 
             NcqrsInit.Init(kernel);
             

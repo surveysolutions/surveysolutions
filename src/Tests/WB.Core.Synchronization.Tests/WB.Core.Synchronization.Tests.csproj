@@ -51,7 +51,8 @@
   <ItemGroup>
     <Compile Include="DefaultBackupManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadSideChunkStorageTests.cs" />
+    <Compile Include="ReadSideChunkReaderTests.cs" />
+    <Compile Include="ReadSideChunkWriterTests.cs" />
     <Compile Include="SimpleSynchronizationDataStorageTests.cs" />
     <Compile Include="SyncManagerTests\SyncManagerTests.cs" />
     <Compile Include="SyncProviderTests\SyncProviderTests.cs" />

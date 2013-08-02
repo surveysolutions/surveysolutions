@@ -1,4 +1,5 @@
-﻿using Main.Core.Domain;
+﻿using System.Web.Routing;
+using Main.Core.Domain;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 
 namespace WB.UI.Designer.Controllers
@@ -63,10 +64,12 @@ namespace WB.UI.Designer.Controllers
                 }
                 try
                 {
+                    var questionnaireId = Guid.NewGuid();
                     this.commandService.Execute(
-                        new CloneQuestionnaireCommand(
-                            Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId, sourceModel.Source));
-                    return this.RedirectToAction("Index");
+                        new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId,
+                            model.IsPublic, sourceModel.Source));
+
+                    return this.RedirectToAction("Edit", new {id = questionnaireId});
                 }
                 catch (Exception e)
                 {
@@ -95,13 +98,14 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
+                var questionnaireId = Guid.NewGuid();
                 this.commandService.Execute(
                     new CreateQuestionnaireCommand(
-                        questionnaireId: Guid.NewGuid(),
+                        questionnaireId: questionnaireId,
                         text: model.Title,
                         createdBy: UserHelper.WebUser.UserId,
                         isPublic: model.IsPublic));
-                return this.RedirectToActionPermanent("Index");
+                return this.RedirectToAction("Edit", new {id = questionnaireId});
             }
 
             return View(model);
@@ -140,11 +144,6 @@ namespace WB.UI.Designer.Controllers
             }
 
             return View(model);
-        }
-
-        public ActionResult Export(Guid id)
-        {
-            return this.RedirectToAction("PreviewQuestionnaire", "Pdf", new { id });
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)

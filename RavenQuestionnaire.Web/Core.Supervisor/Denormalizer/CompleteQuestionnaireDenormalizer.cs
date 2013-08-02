@@ -14,34 +14,37 @@ namespace Core.Supervisor.Denormalizer
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>
-    public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
+    public class CompleteQuestionnaireDenormalizer : UserBaseDenormalizer,
+                                                     IEventHandler<NewCompleteQuestionnaireCreated>,
                                                      IEventHandler<CommentSet>,
-                                                     IEventHandler<FlagSet>, 
-                                                     IEventHandler<CompleteQuestionnaireDeleted>, 
+                                                     IEventHandler<FlagSet>,
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<ConditionalStatusChanged>, 
                                                      IEventHandler<PropagatableGroupAdded>, 
                                                      IEventHandler<PropagateGroupCreated>, 
                                                      IEventHandler<PropagatableGroupDeleted>, 
                                                      IEventHandler<QuestionnaireAssignmentChanged>, 
-                                                     IEventHandler<QuestionnaireStatusChanged>
+                                                     IEventHandler<QuestionnaireStatusChanged>,
+                                                     IEventHandler<InterviewDeleted>
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
-        private readonly IReadSideRepositoryReader<UserDocument> users;
 
-        public CompleteQuestionnaireDenormalizer(ISynchronizationDataStorage syncStorage, IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, IReadSideRepositoryReader<UserDocument> users)
+        public CompleteQuestionnaireDenormalizer(ISynchronizationDataStorage syncStorage, 
+            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage,
+            IReadSideRepositoryWriter<UserDocument> users)
+            :base(users)
         {
             this.syncStorage = syncStorage;
             this.documentStorage = documentStorage;
-            this.users = users;
         }
 
         public CompleteQuestionnaireDenormalizer(
-            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, IReadSideRepositoryReader<UserDocument> users)
+            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, 
+            IReadSideRepositoryWriter<UserDocument> users)
+            : base(users)
         {
             this.documentStorage = documentStorage;
-            this.users = users;
         }
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
@@ -85,12 +88,7 @@ namespace Core.Supervisor.Denormalizer
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
         }
-
-        public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
-        {
-            this.documentStorage.Remove(evnt.Payload.CompletedQuestionnaireId);
-        }
-
+        
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
             CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
@@ -143,12 +141,12 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            evnt.Payload.Responsible.Name = users.GetById(evnt.Payload.Responsible.Id).UserName;
+            var responsible = this.FillResponsiblesName(evnt.Payload.Responsible);
 
             CompleteQuestionnaireStoreDocument item =
-                this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentStorage.GetById(evnt.EventSourceId);
 
-            item.Responsible = evnt.Payload.Responsible;
+            item.Responsible = responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
 
@@ -158,22 +156,25 @@ namespace Core.Supervisor.Denormalizer
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireStoreDocument item =
-                this.documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
+                this.documentStorage.GetById(evnt.EventSourceId);
             item.Status = evnt.Payload.Status;
             item.StatusChangeComments.Add(
                 new ChangeStatusDocument
                     {
-                        Status = evnt.Payload.Status, 
-                        Responsible = evnt.Payload.Responsible, 
+                        Status = evnt.Payload.Status,
+                        Responsible = item.Responsible, 
                         ChangeDate = evnt.EventTimeStamp
                     });
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
 
             if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
-                syncStorage.SaveInterview(item, evnt.Payload.Responsible.Id);
+                syncStorage.SaveInterview(item, item.Responsible.Id);
             else
-                syncStorage.DeleteInterview(evnt.EventSourceId, evnt.Payload.Responsible.Id);
+                syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, item.Responsible.Id);
+
+            //when deleting logic is implemented call syncStorage.DeleteInterview(id) in apropriate place    
+
         }
 
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
@@ -202,6 +203,18 @@ namespace Core.Supervisor.Denormalizer
             }
 
             this.documentStorage.Store(doc, doc.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+
+            item.IsDeleted = true;
+            item.DeletedBy = evnt.Payload.DeletedBy;
+
+            this.documentStorage.Store(item, item.PublicKey);
+
+            syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
         }
     }
 }

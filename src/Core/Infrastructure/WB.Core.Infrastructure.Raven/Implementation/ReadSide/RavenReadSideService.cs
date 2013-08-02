@@ -235,14 +235,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
-            int allEventsCount = this.eventStore.CountOfAllEventsIncludingSnapshots();
+            int allEventsCount = this.eventStore.CountOfAllEvents();
 
             DateTime republishStarted = DateTime.Now;
             UpdateStatusMessage(
                 "Acquiring first portion of events. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEventsIncludingSnapshots())
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEvents())
             {
                 foreach (CommittedEvent @event in eventBulk)
                 {
