@@ -44,7 +44,7 @@
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\IQuerableReadSideRepositoryWriter.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />
     <Compile Include="ReadSide\Repository\IReadSideRepositoryEntity.cs" />
