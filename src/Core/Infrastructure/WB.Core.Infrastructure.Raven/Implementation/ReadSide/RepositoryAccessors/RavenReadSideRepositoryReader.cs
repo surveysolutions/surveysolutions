@@ -59,19 +59,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
               }
         }
 
-        public int Count(Expression<Func<TEntity, bool>> query)
-        {
-            this.ThrowIfRepositoryIsNotAccessible();
-
-            using (IDocumentSession session = this.OpenSession())
-            {
-                return
-                    session
-                        .Query<TEntity>()
-                        .Count(query);
-            }
-        }
-
         public IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query)
         {
             this.ThrowIfRepositoryIsNotAccessible();
@@ -83,16 +70,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
             }
             return retval;
-        }
-
-        public IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query)
-        {
-           // return GetPagedDocuments(query, start, pageSize);
-            using (IDocumentSession session = this.OpenSession())
-            {
-                return session.Query<TEntity>()
-                              .Where(query);
-            }
         }
 
         private void ThrowIfRepositoryIsNotAccessible()
