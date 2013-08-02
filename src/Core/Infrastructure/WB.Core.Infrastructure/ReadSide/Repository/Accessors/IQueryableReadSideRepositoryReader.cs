@@ -14,6 +14,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     {
         TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
 
+        #warning this method is here only because of our problems with Raven
         IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query);
     }
 }

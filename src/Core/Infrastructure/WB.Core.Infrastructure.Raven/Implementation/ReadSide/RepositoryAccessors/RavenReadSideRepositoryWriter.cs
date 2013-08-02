@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Linq.Expressions;
 using Raven.Client;
 using Raven.Client.Document;
-
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -37,6 +37,20 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             : base(ravenStore)
         {
             writerRegistry.Register(this);
+        }
+
+        protected override TResult QueryImpl<TResult>(Func<IRavenQueryable<TEntity>, TResult> query)
+        {
+            if (this.isCacheEnabled)
+                this.StoreAllCachedEntitiesToRepository();
+
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return query.Invoke(
+                    session
+                        .Query<TEntity>()
+                        .Customize(customization => customization.WaitForNonStaleResultsAsOfNow()));
+            }
         }
 
         public TEntity GetById(Guid id)
@@ -141,7 +155,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 var result = session.Load<TEntity>(id: ravenId);
 
                 return result;
-
             }
         }
 
@@ -254,15 +267,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private void ClearCache()
         {
             this.cache.Clear();
-        }
-
-        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
-        {
-            using (IDocumentSession session = this.OpenSession())
-            {
-                return query.Invoke(
-                    session.Query<TEntity>().Customize(c => c.WaitForNonStaleResultsAsOfNow()));
-            }
         }
     }
 }
