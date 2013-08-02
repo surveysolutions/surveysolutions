@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -25,6 +26,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
+        private void Apply(TextQuestionAnswered @event) {}
+
+        private void Apply(NumericQuestionAnswered @event) {}
+
+        private void Apply(DateTimeQuestionAnswered @event) {}
+
+        private void Apply(SingleOptionQuestionAnswered @event) {}
+
+        private void Apply(MultipleOptionsQuestionAnswered @event) {}
+
         #endregion
 
         #region Dependencies
@@ -46,20 +57,79 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Interview(Guid questionnaireId, Guid userId)
         {
-            IQuestionnaire questionnaire = GetQuestionnaireOrThrowInterviewException(questionnaireId);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
 
-
-        private IQuestionnaire GetQuestionnaireOrThrowInterviewException(Guid questionnaireId)
+        public void AnswerTextQuestion(Guid userId, Guid questionId, DateTime answerTime, string answer)
         {
-            IQuestionnaire questionnaire = this.QuestionnaireRepository.GetQuestionnaire(questionnaireId);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
+
+            this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
+        }
+
+        public void AnswerNumericQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal answer)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
+
+            this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, answerTime, answer));
+        }
+
+        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
+
+            this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, answerTime, answer));
+        }
+
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, Guid selectedOption)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
+
+            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedOption));
+        }
+
+        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, Guid[] selectedOptions)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
+
+            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedOptions));
+        }
+
+        private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
+        {
+            IQuestionnaire questionnaire = this.QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
 
             if (questionnaire == null)
-                throw new InterviewException(string.Format("Questionnaire with id '{0}' is not found.", questionnaireId));
+                throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version));
 
             return questionnaire;
+        }
+
+        private IQuestionnaire GetQuestionnaireOrThrow(Guid id)
+        {
+            IQuestionnaire questionnaire = this.QuestionnaireRepository.GetQuestionnaire(id);
+
+            if (questionnaire == null)
+                throw new InterviewException(string.Format("Questionnaire with id '{0}' is not found.", id));
+
+            return questionnaire;
+        }
+
+        private static void ThrowIfQuestionTypeIsNotOneOfExpected(IQuestionnaire questionnaire, Guid questionId, params QuestionType[] expectedQuestionTypes)
+        {
+            QuestionType questionType = questionnaire.GetQuestionType(questionId);
+
+            if (!expectedQuestionTypes.Contains(questionType))
+                throw new InterviewException(string.Format(
+                    "Question with id '{0}' has type {1}. But one of the following types was expected: {2}.",
+                    questionId, questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
         }
     }
 }
