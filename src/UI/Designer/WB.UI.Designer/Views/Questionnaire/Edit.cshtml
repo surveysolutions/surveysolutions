@@ -91,7 +91,11 @@
 }
 
 <div id="busyindicator"></div>
-
+<div id="unsavedWarningMessageContainer" class="statistics" data-bind="with: statistics">
+    <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
+        <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+    </div>
+</div>
 <div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
 
     <div id="footer">
@@ -118,11 +122,7 @@
                             <li><a>Questions: <span class="badge" data-bind="text: questions"></span></a></li>
                         </ul>
                     </div>
-                    <div class="statistics" data-bind="with: statistics">
-                        <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
-                            <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="span2">
                     <div id="footer-buttons" class="pull-right">
@@ -155,11 +155,11 @@
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
                         <button id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
-                            <span data-bind="visible: $root.isAllChaptersExpanded" ><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
+                            <span data-bind="visible: $root.isAllChaptersExpanded"><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
                             <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="icon-plus icon-white"></i></sup><sub><i class="icon-plus icon-white"></i></sub></span>
                         </button>
                         <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
-                            
+
                             <div class="q-item">
                                 <div class="group-actions  pull-right">
                                     <div class="btn-group">
