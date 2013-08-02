@@ -312,7 +312,7 @@
                             question.commit();
                         },
                         error: function(d) {
-                            isOutputVisible(true);
+                            showError(d);
                             question.canUpdate(true);
                         }
                     });
@@ -331,7 +331,7 @@
                             questionnaire.canUpdate(true);
                         },
                         error: function(d) {
-                            isOutputVisible(true);
+                            showError(d);
                             questionnaire.canUpdate(true);
                         }
                     });
