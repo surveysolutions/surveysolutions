@@ -1,4 +1,5 @@
-﻿using AndroidNcqrs.Eventing.Storage.SQLite;
+﻿using System.IO;
+using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
@@ -6,12 +7,8 @@ using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
-using Core.Supervisor.Denormalizer;
-using Core.Supervisor.Views;
 using Main.Core;
 using Main.Core.Documents;
-using Main.Core.EventHandlers;
-using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Microsoft.Practices.ServiceLocation;
@@ -19,17 +16,14 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
-using Raven.Client.Document;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Tools.CapiDataGenerator.Models;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
@@ -50,6 +44,8 @@ namespace CapiDataGenerator
             var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var changeLogStore = new FileChangeLogStore();
+
+            ClearCapiDb(capiEvenStore, denormalizerStore, changeLogStore);
 
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
                 new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
@@ -94,6 +90,25 @@ namespace CapiDataGenerator
 
             #endregion
 
+        }
+
+        private void ClearCapiDb(params IBackupable[] stores)
+        {
+            foreach (var store in stores)
+            {
+                var storePath = store.GetPathToBakupFile();
+                FileAttributes attr = File.GetAttributes(storePath);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    Directory.Delete(storePath, true);
+                    Directory.CreateDirectory(storePath);
+                }
+                else
+                {
+                    File.Delete(storePath);
+                    File.Create(storePath);
+                }
+            }
         }
 
         private void InitSupervisorStorage(InProcessEventBus bus)
