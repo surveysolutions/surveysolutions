@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public string Answer { get; private set; }
 
-        public AnswerTextQuestionCommand(Guid interviewId, Guid questionId, DateTime answerTime, string answer)
-            : base(interviewId, questionId, answerTime)
+        public AnswerTextQuestionCommand(Guid interviewId, Guid userId, Guid questionId, DateTime answerTime, string answer)
+            : base(interviewId, userId, questionId, answerTime)
         {
             this.Answer = answer;
         }
