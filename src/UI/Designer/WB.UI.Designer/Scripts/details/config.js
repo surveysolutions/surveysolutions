@@ -128,6 +128,10 @@
                     title: 'Cant move',
                     text: "You can't move unsaved items"
                 },
+                cantMoveIntoUnsavedItem : {
+                    title: 'Cant move',
+                    text: "You can't move items to unsaved groups or chapters"
+                },
                 saveParentFirst: {
                     title: 'Cant save',
                     text: "Save parent item first"
