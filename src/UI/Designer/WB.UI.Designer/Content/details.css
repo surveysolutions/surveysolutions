@@ -750,11 +750,11 @@ a.btn.btn-help {
     visibility: hidden;
 }
 #details-question .form-horizontal .control-label {
-    width: 75px;
+    width: 115px;
     text-align: left;
 }
 #details-question .form-horizontal .controls {
-    margin-left: 85px;
+    margin-left: 125px;
 }
 .cancel-edit {
     color: #113950;
