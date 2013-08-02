@@ -51,6 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCreated(questionnaireId, questionnaire.Version));
         }
 
+
         private IQuestionnaire GetQuestionnaireOrThrowInterviewException(Guid questionnaireId)
         {
             IQuestionnaire questionnaire = this.QuestionnaireRepository.GetQuestionnaire(questionnaireId);

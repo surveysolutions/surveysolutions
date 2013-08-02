@@ -56,7 +56,14 @@
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
+    <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerTextQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\Base\AnswerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
