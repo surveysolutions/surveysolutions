@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public Guid[] SelectedOptions { get; private set; }
 
-        public AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid questionId, DateTime answerTime, Guid[] selectedOptions)
-            : base(interviewId, questionId, answerTime)
+        public AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, Guid questionId, DateTime answerTime, Guid[] selectedOptions)
+            : base(interviewId, userId, questionId, answerTime)
         {
             this.SelectedOptions = selectedOptions;
         }

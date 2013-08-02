@@ -13,8 +13,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public Guid QuestionnaireId { get; private set; }
 
-        public CreateInterviewCommand(Guid interviewId, Guid questionnaireId)
-            : base(interviewId)
+        public CreateInterviewCommand(Guid interviewId, Guid userId, Guid questionnaireId)
+            : base(interviewId, userId)
         {
             this.QuestionnaireId = questionnaireId;
         }
