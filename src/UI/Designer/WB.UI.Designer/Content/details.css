@@ -85,7 +85,7 @@ body.loading .loading-backdrop {
     bottom: 0;
     left: 0;
     right: 0;
-    top: 40px;
+    top: 43px;
     overflow: hidden;
     position: absolute;
 }
@@ -100,9 +100,9 @@ body.loading .loading-backdrop {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    bottom: 43px;
+    top: 33px;
     right: -50%;
-    top: 0;
+    bottom: 0;
     width: 50%;
     padding: 9px;
 }
@@ -175,7 +175,7 @@ body.loading .loading-backdrop {
     left: 0;
     width: 100%;
     z-index: 40;
-    padding-bottom: 43px;
+    padding-bottom: 0;
     padding-top: 0;
     height: 200px;
     top: auto;
@@ -227,12 +227,11 @@ body.loading .loading-backdrop {
 }
 
 #questionnaire {
-    bottom: 43px;
+    bottom: 0;
     left: 0;
     right: 10px;
-    top: 0;
-    padding: 9px;
-    padding-bottom: 0;
+    top: 33px;
+    padding: 0 9px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -292,7 +291,9 @@ h1 {
     padding: 0;
     text-shadow: 0 1px 0 rgba(0,0,0,0.2);
 }
-
+#search-form {
+    margin-top: 2px;
+}
 #search-form.form-horizontal .control-label {
      width: 110px;
     text-align: left;
@@ -321,7 +322,7 @@ h1 {
     position: relative;
     margin: 0;
     border-top: 1px solid rgba(0,0,0,0.4);
-    padding: 5px 7px;
+    padding: 2px 7px 3px;
 }
 
     #filter input {
@@ -355,7 +356,7 @@ h1 {
     #filter .close {
         position: absolute;
         right: 5px;
-        top: 5px;
+        top: 3px;
         color: #333;
         text-shadow: 0 1px 2px #fff;
     }
@@ -628,7 +629,7 @@ h1 {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    top: 0;
     background: #E9E9E9;
     border-top: 1px solid lightGrey;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -636,13 +637,16 @@ h1 {
     -ms-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     -o-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    height: 42px;
+    height: 32px;
     z-index: 50;
 }
 
     #footer .inner {
-        padding: 6px 8px 0 8px;
+        padding: 0 8px;
     }
+#footer-buttons {
+    margin-top: 3px;   
+}
 .control-group.error .controls input,
 .controls .error input{
     margin-bottom: 0;
@@ -677,9 +681,16 @@ h1 {
 .statistics {
     display: inline-block;
 }
+.statistics  ul {
+    margin: 3px;
+}
 .statistics .nav-pills > li > a {
     margin-top: 0;
+    padding: 4px;
+    margin-bottom: 0;
+    color: #333333;
 }
+
 
 .q-item-wrap .handler {
     background: rgba(0,0,0,0.3);
@@ -771,6 +782,9 @@ a.btn.btn-help {
 }
 #questionnaire ul#chapters-list.list {
     margin-left: 28px;
+}
+#questionnaire ul#chapters-list.list > li:last-child {
+    margin-bottom: 25px;
 }
 #details-question label,
 #details-group label,
