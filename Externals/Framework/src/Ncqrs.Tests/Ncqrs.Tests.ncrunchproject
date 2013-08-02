@@ -21,7 +21,7 @@
   <BuildProcessArchitecture>x86</BuildProcessArchitecture>
   <IgnoredTests>
     <RegexTestSelector>
-      <RegularExpression>.*</RegularExpression>
+      <RegularExpression>Ncqrs\.Tests\.Eventing\.Storage\.SQL\.MsSqlServerEventStoreTests\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>
