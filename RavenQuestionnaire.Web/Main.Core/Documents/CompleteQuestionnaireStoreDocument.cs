@@ -117,6 +117,10 @@ namespace Main.Core.Documents
             }
         }
 
+        public bool IsDeleted { get; set; }
+
+        public Guid? DeletedBy { get; set; }
+
         #endregion
 
         #region Properties

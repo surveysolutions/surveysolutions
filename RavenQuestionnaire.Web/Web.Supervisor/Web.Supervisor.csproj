@@ -592,6 +592,7 @@
     <Content Include="Views\HQ\ImportResult.cshtml" />
     <Content Include="Views\HQ\ImportSample.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
+    <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

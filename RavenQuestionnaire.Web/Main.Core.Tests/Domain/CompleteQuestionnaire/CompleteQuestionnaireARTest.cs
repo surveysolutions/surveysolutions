@@ -239,7 +239,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The ar event raising on status change.
         /// </summary>
         [Test]
@@ -272,7 +272,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
                     Assert.Fail("Unexpected event was raised.");
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// The ar event raising on status change.

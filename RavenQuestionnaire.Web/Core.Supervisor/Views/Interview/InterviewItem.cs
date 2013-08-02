@@ -24,5 +24,7 @@ namespace Core.Supervisor.Views.Interview
         public string Title { get; set; }
 
         public DateTime LastEntryDate { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

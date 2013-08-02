@@ -12,5 +12,6 @@ namespace Core.Supervisor.Views.Interview
         public string Status { get; set; }
         public string Title { get; set; }
         public string LastEntryDate { get; set; }
+        public bool CanDelete { get; set; }
     }
 }

@@ -190,6 +190,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tools.CapiDataGenerator"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Backup", "Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj", "{A134F8E7-42C7-4804-8177-D11178600CAA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56284AE8-857A-41EA-9FC3-1CD9E381C882}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -443,8 +448,8 @@ Global
 		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Release|x86.ActiveCfg = Release|Any CPU
-		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -1013,8 +1018,8 @@ Global
 		{F0DB4D2A-A47A-4268-A688-91D097A93237}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F0DB4D2A-A47A-4268-A688-91D097A93237}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F0DB4D2A-A47A-4268-A688-91D097A93237}.Release|x86.ActiveCfg = Release|Any CPU
-		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{F0476C33-6F4F-4524-9CEA-37E87D55E67E}.Debug|x86.ActiveCfg = Debug|Any CPU

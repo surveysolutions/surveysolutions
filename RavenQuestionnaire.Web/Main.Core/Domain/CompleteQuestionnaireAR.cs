@@ -186,18 +186,7 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
 
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        public void Delete()
-        {
-            this.ApplyEvent(
-                new CompleteQuestionnaireDeleted
-                    {
-                       CompletedQuestionnaireId = this.doc.PublicKey, TemplateId = this.doc.TemplateId 
-                    });
-        }
-
+        
         /// <summary>
         /// The delete propagate group.
         /// </summary>
@@ -361,14 +350,21 @@ namespace Main.Core.Domain
             }
         }
 
-        public void DeleteInterview(Guid deletedById)
+        public void DeleteInterview(Guid deletedBy)
         {
-            this.ApplyEvent(
+            if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
+                this.doc.Status == SurveyStatus.Initial)
+            {
+                this.ApplyEvent(
                     new InterviewDeleted()
                     {
-                        InterviewId = this.EventSourceId,
-                        DeletedBy = deletedById,
+                        DeletedBy = deletedBy
                     });
+            }
+            else
+            {
+                throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
+            }
         }
 
         #endregion
@@ -677,20 +673,7 @@ namespace Main.Core.Domain
         {
             this.doc.Status = e.Status;
         }
-
-        /// <summary>
-        /// The on complete questionnaire deleted.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
-        {
-#warning implement proper way of deleting questionnaries
-            this.doc = new CompleteQuestionnaireDocument();
-            this.doc.IsDeleted = true;
-        }
-
+        
         /// <summary>
         /// The on new questionnaire created.
         /// </summary>
