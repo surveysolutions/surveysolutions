@@ -9,9 +9,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
         [AggregateRootId]
         public Guid InterviewId { get; private set; }
 
-        protected InterviewCommand(Guid interviewId)
+        public Guid UserId { get; private set; }
+
+        protected InterviewCommand(Guid interviewId, Guid userId)
         {
             this.InterviewId = interviewId;
+            this.UserId = userId;
         }
     }
 }

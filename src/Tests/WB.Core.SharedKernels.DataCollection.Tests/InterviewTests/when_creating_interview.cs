@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             eventContext = new EventContext();
 
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
+            userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaireVersion = 18;
 
             var questionaire = Mock.Of<IQuestionnaire>(_
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(questionnaireId);
+            new Interview(questionnaireId, userId);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.Events.ShouldContain(@event => @event.Payload is InterviewCreated);
@@ -54,5 +55,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static EventContext eventContext;
         private static Guid questionnaireId;
         private static long questionnaireVersion;
+        private static Guid userId;
     }
 }

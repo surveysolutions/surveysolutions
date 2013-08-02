@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public DateTime Answer { get; private set; }
 
-        public AnswerDateTimeQuestionCommand(Guid interviewId, Guid questionId, DateTime answerTime, DateTime answer)
-            : base(interviewId, questionId, answerTime)
+        public AnswerDateTimeQuestionCommand(Guid interviewId, Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
+            : base(interviewId, userId, questionId, answerTime)
         {
             this.Answer = answer;
         }

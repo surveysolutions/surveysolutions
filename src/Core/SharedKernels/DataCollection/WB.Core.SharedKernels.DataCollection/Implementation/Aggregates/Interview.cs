@@ -44,11 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() {}
 
-        public Interview(Guid questionnaireId)
+        public Interview(Guid questionnaireId, Guid userId)
         {
             IQuestionnaire questionnaire = GetQuestionnaireOrThrowInterviewException(questionnaireId);
 
-            this.ApplyEvent(new InterviewCreated(questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
 
 
