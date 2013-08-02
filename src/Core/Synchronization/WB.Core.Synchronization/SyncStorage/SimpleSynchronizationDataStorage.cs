@@ -14,18 +14,20 @@ namespace WB.Core.Synchronization.SyncStorage
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
 
-        private readonly IChunkStorage chunkStorage;
+        private readonly IChunkWriter chunkStorageWriter;
+        private readonly IChunkReader chunkStorageReader;
 
         private const bool UseCompression = true;
         private const bool UseCompressionForFiles = false;
 
         public SimpleSynchronizationDataStorage(
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
-            IChunkStorage chunkStorage
+            IQueryableReadSideRepositoryReader<UserDocument> userStorage,
+            IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader
             )
         {
             this.userStorage = userStorage;
-            this.chunkStorage = chunkStorage;
+            this.chunkStorageWriter = chunkStorageWriter;
+            this.chunkStorageReader = chunkStorageReader;
         }
 
         public void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId)
@@ -41,10 +43,10 @@ namespace WB.Core.Synchronization.SyncStorage
                     Content = GetItemAsContent(interview),
                     MetaInfo = GetItemAsContent(new MetaInfoBuilder().GetInterviewMetaInfo(interview)) 
                 };
-            chunkStorage.StoreChunk(syncItem, responsibleId);
+            chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
-        public void DeleteInterview(Guid id, Guid responsibleId)
+        public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId)
         {
             var syncItem = new SyncItem
             {
@@ -53,7 +55,12 @@ namespace WB.Core.Synchronization.SyncStorage
                 IsCompressed = UseCompression,
                 Content = id.ToString()
             };
-            chunkStorage.StoreChunk(syncItem, responsibleId);
+            chunkStorageWriter.StoreChunk(syncItem, responsibleId);
+        }
+
+        public void DeleteInterview(Guid id)
+        {
+            chunkStorageWriter.RemoveChunk(id);
         }
 
         public void SaveImage(Guid publicKey, string title, string desc, string origData)
@@ -72,7 +79,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 IsCompressed = UseCompressionForFiles,
                 Content = GetItemAsContent(fileDescription)
             };
-            chunkStorage.StoreChunk(syncItem, null);
+            chunkStorageWriter.StoreChunk(syncItem, null);
         }
 
         public void SaveUser(UserDocument doc)
@@ -85,7 +92,7 @@ namespace WB.Core.Synchronization.SyncStorage
        
         public SyncItem GetLatestVersion(Guid id)
         {
-            var result = chunkStorage.ReadChunk(id);
+            var result = chunkStorageReader.ReadChunk(id);
             return result;
         }
 
@@ -93,14 +100,14 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             var users = GetUserTeamates(userId);
             return
-                chunkStorage.GetChunksCreatedAfterForUsers(sequence, users);
+                chunkStorageReader.GetChunksCreatedAfterForUsers(sequence, users);
         }
 
         public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, Guid userId)
         {
             var users = GetUserTeamates(userId);
             return
-                chunkStorage.GetChunkPairsCreatedAfter(sequence, users);
+                chunkStorageReader.GetChunkPairsCreatedAfter(sequence, users);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)
@@ -129,7 +136,7 @@ namespace WB.Core.Synchronization.SyncStorage
                 Content = GetItemAsContent(doc)
             };
 
-            chunkStorage.StoreChunk(syncItem, doc.PublicKey);
+            chunkStorageWriter.StoreChunk(syncItem, doc.PublicKey);
         }
 
        

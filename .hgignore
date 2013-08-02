@@ -41,3 +41,5 @@ RavenQuestionnaire.Web/Web.Supervisor/App_Data/Elmah/*
 
 scaffolding.config
 RavenQuestionnaire.Web/Web.Supervisor/App_Data/SyncData/*
+RavenQuestionnaire.Web/Web.Supervisor/App_Data/SampleCreationStatus/*
+RavenQuestionnaire.Web/Web.Supervisor/App_Data/TempFileImportData/*

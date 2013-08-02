@@ -4,7 +4,12 @@
 @using WB.UI.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.Title 
+        @Model.ItemNumber &nbsp;&nbsp; <i>@Model.Variable</i>&nbsp;&nbsp; @Model.Title 
+        @if (Model.HasCodition)
+        {
+            <i class="icon-warning-sign"></i>
+            <sup>@Model.Condition</sup>
+        }
     </span>
 
     @if (Model.Answers.Count > 0) {
@@ -39,6 +44,15 @@
                         <span class="answer-placeholder date-answer-day"></span>/
                         <span class="answer-placeholder date-answer-month"></span>/
                         <span class="answer-placeholder date-answer-year" ></span>
+                    </span>
+                    break;
+                }
+            case QuestionType.Numeric:
+                {
+                    <span class="no-line-break">
+                        @for (int i = 0; i < 10; i++) {
+                            <span class="square-placeholder">&nbsp;</span>
+                        }
                     </span>
                     break;
                 }

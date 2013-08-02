@@ -11,10 +11,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     #warning TLK: make string identifiers here after switch to new storage
-    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
+    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQuerableReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private const int MaxCountOfCachedEntities = 512;
+        private const int MaxCountOfCachedEntities = 256;
         private const int MaxCountOfEntitiesInOneStoreOperation = 16;
 
         private class CachedEntity
@@ -33,7 +33,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private bool isCacheEnabled = false;
         private readonly Dictionary<Guid, CachedEntity> cache = new Dictionary<Guid, CachedEntity>();
 
-        internal RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+        public RavenReadSideRepositoryWriter(DocumentStore ravenStore, IRavenReadSideRepositoryWriterRegistry writerRegistry)
             : base(ravenStore)
         {
             writerRegistry.Register(this);
@@ -254,6 +254,15 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private void ClearCache()
         {
             this.cache.Clear();
+        }
+
+        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        {
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return query.Invoke(
+                    session.Query<TEntity>().Customize(c => c.WaitForNonStaleResultsAsOfNow()));
+            }
         }
     }
 }
