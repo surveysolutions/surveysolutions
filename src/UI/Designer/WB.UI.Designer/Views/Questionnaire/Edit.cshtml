@@ -1,11 +1,12 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Script.Serialization
 @using Newtonsoft.Json
+@using WB.UI.Designer
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit " + Model.Title;
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 @section Styles{
@@ -25,44 +26,117 @@
                         })) ;
             return {
                 questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)'
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
+                settings : { unhandledExceptionMessage : 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
             };
         }(document));
         
         window.input = input;
     </script>
     @Scripts.Render("~/designer")
-    
+    <script type="text/javascript">
+        (function () {
+            var root = this;
+
+            define3rdPartyModules();
+            loadPluginsAndBoot();
+
+            function define3rdPartyModules() {
+                // These are already loaded via bundles. 
+                // We define them and put them in the root object.
+                define('jquery', [], function () { return root.jQuery; });
+                define('ko', [], function () { return root.ko; });
+                define('amplify', [], function () { return root.amplify; });
+                define('infuser', [], function () { return root.infuser; });
+                define('moment', [], function () { return root.moment; });
+                define('sammy', [], function () { return root.Sammy; });
+                define('pnotify', [], function () { return root.jQuery.pnotify; });
+                define('underscore', [], function () { return root._; });
+                define('bootbox', [], function () { return root.bootbox; });
+                define('input', [], function () { return root.input; });
+            }
+
+            function loadPluginsAndBoot() {
+                requirejs.config({
+                    baseUrl: '@Url.Content("~/Scripts/lib/")',
+                    paths: {
+                        'ace/mode/ncalc': '/ace/mode-ncalc'
+                    }
+                });
+                requirejs([
+                        'ko.bindingHandlers',
+                        'ko.debug.helpers'
+                ], boot);
+            }
+
+            function boot() {
+                require(['jquery', 'config', 'presenter', 'dataprimer', 'binder', 'route-config'],
+                    function ($, config, presenter, dataprimer, binder, routeConfig) {
+              
+                        $.fn.activity.defaults.color = "#fff";
+
+                        presenter.toggleActivity(true);
+
+                        $.when(dataprimer.fetch())
+                            .done(binder.bind)
+                            .done(routeConfig.register)
+                            .always(function() {
+                                presenter.toggleActivity(false);
+                            });
+                    });
+            }
+        })();
+    </script>
+
 }
 
 <div id="busyindicator"></div>
 
-<div id="stacks">
-    
+<div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
+
     <div id="footer">
         <div class="inner">
-
-            <div class="statistics">
-                <ul class="nav nav-pills" data-bind="with: statistics">
-                    <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
-                    <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
-                </ul>
-            </div>
-            <div class="statistics" data-bind="with: statistics">
-                <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
-                    <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+            <div class="row-fluid">
+                <div class="span5">
+                    <div class="form-horizontal" id="search-form">
+                        <div class="control-group">
+                            <label class="control-label">Search question</label>
+                            <div class="controls">
+                                <div id="filter">
+                                    <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
+                                    <input type="text" class="transparent" maxlength="255" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="pull-right">
-                <button class="btn btn-info" data-bind="click: $root.showOutput">Show errors</button>
+                <div class="span3">
+                    <div class="statistics">
+                        <ul class="nav nav-pills" data-bind="with: statistics">
+                            <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
+                            <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="statistics" data-bind="with: statistics">
+                        <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
+                            <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="pull-right">
+                        <button class="btn btn-info" data-bind="click: $root.toggleOutput">
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div id="output" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: $root.hideOutput">&times</button>
+                <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
                 <span>Errors log</span>
             </div>
             <div class="body">
@@ -77,13 +151,14 @@
     <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
-                <div id="filter">
-                    <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
-                    <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
-                </div>
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
+                        <button id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
+                            <span data-bind="visible: $root.isAllChaptersExpanded" ><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
+                            <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="icon-plus icon-white"></i></sup><sub><i class="icon-plus icon-white"></i></sub></span>
+                        </button>
                         <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
+                            
                             <div class="q-item">
                                 <div class="group-actions  pull-right">
                                     <div class="btn-group">
@@ -101,7 +176,7 @@
                     </li>
                 </ul>
                 <!-- ko ifnot: isFilterMode -->
-                <ul data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
+                <ul id="chapters-list" data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
                 <!-- /ko -->
@@ -115,181 +190,31 @@
     </div>
     <div id="details-questionnaire" class="details stack" data-bind="with: questionnaire ">
         <div class="inner">
-            <div class="title">
-                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
-                <span data-bind="text: title"></span>
-            </div>
-            <div class="body container-fluid">
-                <div class="row-fluid">
-                    <div class="control-group" data-bind="validationElement: title">
-                        <label class="control-label required">Title</label>
-                        <div class="controls">
-                            <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <label class="checkbox">
-                        <input type="checkbox" data-bind="checked: isPublic" />Make public
-                    </label>
-                </div>
-            </div>
-            <div class="pane-bottom">
-                <div class="inner">
-                    <button class="btn btn-success" data-bind="click: $root.saveQuestionnaire, visible: dirtyFlag().isDirty(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
-                </div>
-            </div>
+            @{
+                this.Html.RenderPartial("_QuestionnaireDetails");
+            }
         </div>
     </div>
     <div id="details-group" class="details stack" data-bind="with:selectedGroup ">
         <div class="inner">
-            <div class="title">
-                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
-                <span data-bind="text: title"></span>
-            </div>
-            <div class="body container-fluid">
-                <div class="row-fluid">
-                    <div class="control-group" data-bind="validationElement: title">
-                        <label class="control-label required">Title</label>
-                        <div class="controls">
-                            <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
-                        </div>
-                    </div>
-                </div>
-                <!-- ko if : level() != 0 -->
-                <div class="row-fluid">
-                    <label class="required">
-                        <a href="#" class="btn btn-info btn-small btn-help"
-                           data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
-                           data-original-title="Kind of propagation"
-                           data-html="true"
-                           data-trigger="hover"
-                           data-placement="right"
-                           data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
-                        Kind of propagation</label>
-                    <div class="btn-group">
-                        <button
-                            data-value="None" data-bind="checkedButtons: gtype" class="btn btn-small">
-                            None</button>
-                        <button data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
-                    </div>
-
-
-                </div>
-                <!-- /ko -->
-                <div class="row-fluid">
-                    <label>Description</label>
-                    <div class="note">
-                        <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
-                    </div>
-                </div>
-
-                <label>
-                    <a href="#" class="btn btn-info btn btn-help"
-                       data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-                       data-original-title="Condition expression"
-                       data-html="true"
-                       data-trigger="hover"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
-                <div class="editor-container">
-                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
-                </div>
-
-            </div>
-            <div class="pane-bottom">
-                <div class="inner">
-                    <button class="btn btn-success" data-bind="click: $root.saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
-                </div>
-            </div>
+            @{
+                this.Html.RenderPartial("_GroupDetails");
+            }
         </div>
     </div>
     <div id="details-question" class="details stack" data-bind="with:selectedQuestion ">
         <div class="inner">
-            <div class="title">
-                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
-                <span data-bind="text: title"></span>
-            </div>
-            <div class="body container-fluid">
-                <div class="row-fluid control-group" data-bind="validationElement: title">
-                    <label class="control-label required">Title</label>
-                    <div class="note">
-                        <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="control-group" data-bind="validationElement: alias">
-                        <label class="control-label required">Variable</label>
-                        <div class="controls">
-                            <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <label class="control-label required">Type</label>
-                    <select class="span12" data-bind="options: typeOptions, value: qtype"></select>
-                </div>
-                <div data-bind="template: { name: qtype(), data: $data}"></div>
-                <div class="row-fluid">
-                    <div class="btn-group">
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
-                        <!-- ko if : $data.parent().gtype()=='None' -->
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
-                        <!-- /ko -->
-                        <!-- ko ifnot : $data.parent().gtype()=='None' -->
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
-                        <!-- /ko -->
-                    </div>
-                </div>
-                <label>
-                    <a href="#" class="btn btn-info btn-small btn-help"
-                       data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-                       data-original-title="Condition expression"
-                       data-html="true"
-                       data-trigger="hover"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
-                <div class="editor-container">
-                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
-                </div>
-
-                <label>
-                    <a href="#" class="btn btn-info btn-small btn-help"
-                       data-content="A logical expression that validates an answer to the current question. Might include values of other questions."
-                       data-original-title="Validation expression"
-                       data-trigger="hover"
-                       data-html="true"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Validation expression</label>
-                <div class="editor-container">
-                    <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
-                </div>
-
-                <div class="row-fluid">
-                    <label>Validation message</label>
-                    <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
-                </div>
-                <div class="row-fluid">
-                    <label>Instruction</label>
-                    <div class="note">
-                        <textarea rows="1" data-bind="autoGrowArea: instruction, valueUpdate: 'afterkeydown'" class="span12"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pane-bottom">
-                <div class="inner">
-                    <button class="btn btn-success" data-bind="click: $root.saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
-                </div>
-            </div>
+            @{
+                this.Html.RenderPartial("_QuestionDetails");
+            }
         </div>
     </div>
-    
+
 </div>
 
 <script type="text/html" id="GroupView">
-    <div class="ui-expander" data-bind="expand: true">
-        <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-minus icon-white"></i></button>
+    <div class="ui-expander" data-bind="expand: isExpanded">
+        <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-plus icon-white"></i><i class="icon-minus icon-white"></i></button>
         <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
             <div class="handler"></div>
             <div class="q-item">
@@ -300,7 +225,7 @@
                         <ul class="dropdown-menu">
                             <li><a data-bind="click: $root.addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
                             <li><a data-bind="click: $root.addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
-                            <li data-bind="css: {disabled: isNew()}"><a data-bind="click: $root.cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
+                            <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: $root.cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
                             <li><a data-bind="click: $root.deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
@@ -325,7 +250,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a data-bind="click: $root.deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
-                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: $root.cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: $root.cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>
