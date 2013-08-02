@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors
 {
     #warning TLK: make string identifiers here after switch to new storage
-    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQuerableReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
+    public class RavenReadSideRepositoryWriter<TEntity> : RavenReadSideRepositoryAccessor<TEntity>, IQueryableReadSideRepositoryWriter<TEntity>, IRavenReadSideRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
         private const int MaxCountOfCachedEntities = 256;
