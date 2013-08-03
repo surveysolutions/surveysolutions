@@ -50,6 +50,7 @@
         <thead>
             <tr>
                 <th data-bind='sortby: "ResponsibleName"'>Interviewers</th>
+                <th data-bind='sortby: "UnassignedCount"'>Unassigned</th>
                 <th data-bind='sortby: "InitialCount"'>Initial</th>
                 <th data-bind='sortby: "RedoCount"'>Redo</th>
                 <th data-bind='sortby: "CompletedCount"'>Completed</th>
@@ -64,6 +65,7 @@
                 <td>
                     <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + User.Id() }, text: User.Name"></a>
                 </td>
+                <td data-bind="template: { name: 'unassignedTemplate' }"></td>
                 <td data-bind="template: { name: 'initialTemplate' }"></td>
                 <td data-bind="template: { name: 'redoTemplate' }"></td>
                 <td data-bind="template: { name: 'completedTemplate' }"></td>

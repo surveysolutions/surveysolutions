@@ -15,7 +15,7 @@ namespace Core.Supervisor.RavenIndexes
         public SummaryItemByTemplate()
         {
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId!=null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                         {
                                             doc.ResponsibleId,
@@ -37,7 +37,7 @@ namespace Core.Supervisor.RavenIndexes
                                         select new
                                         {
                                             ResponsibleId = Guid.Empty,
-                                            ResponsibleName ="",
+                                            ResponsibleName = "",
                                             doc.TemplateId,
                                             doc.TemplateName,
                                             doc.UnassignedCount,
@@ -52,6 +52,7 @@ namespace Core.Supervisor.RavenIndexes
 
             Reduce = results => from result in results
                                 group result by new { result.ResponsibleId, result.TemplateId, result.ResponsibleSupervisorId } into g
+                                where g.Sum(x => x.TotalCount) > 0
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,
@@ -67,7 +68,6 @@ namespace Core.Supervisor.RavenIndexes
                                     TotalCount = g.Sum(x => x.TotalCount),
                                     ResponsibleSupervisorId = g.Key.ResponsibleSupervisorId
                                 };
-
             Index(x => x.ResponsibleSupervisorId, FieldIndexing.Analyzed);
             Index(x => x.TemplateId, FieldIndexing.Analyzed);
         }

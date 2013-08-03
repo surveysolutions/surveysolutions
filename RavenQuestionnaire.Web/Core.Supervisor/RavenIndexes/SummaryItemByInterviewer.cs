@@ -52,6 +52,7 @@ namespace Core.Supervisor.RavenIndexes
             
             Reduce = results => from result in results
                                 group result by new {result.ResponsibleId, result.TemplateId} into g
+                                where g.Sum(x => x.TotalCount) > 0 
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,

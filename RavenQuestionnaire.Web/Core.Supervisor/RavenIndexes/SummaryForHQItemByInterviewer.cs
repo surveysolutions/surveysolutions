@@ -14,11 +14,11 @@ namespace Core.Supervisor.RavenIndexes
         public SummaryForHQItemByInterviewer()
         {
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId == null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                             {
-                                                doc.ResponsibleId,
-                                                doc.ResponsibleName,
+                                                ResponsibleId = doc.ResponsibleSupervisorId,
+                                                ResponsibleName = doc.ResponsibleSupervisorName,
                                                 doc.TemplateId,
                                                 doc.UnassignedCount,
                                                 doc.InitialCount,
@@ -31,11 +31,11 @@ namespace Core.Supervisor.RavenIndexes
                                             });
 
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId == null
+                                        where doc.ResponsibleSupervisorId != null 
                                         select new
                                             {
-                                                doc.ResponsibleId,
-                                                doc.ResponsibleName,
+                                                ResponsibleId = doc.ResponsibleSupervisorId,
+                                                ResponsibleName = doc.ResponsibleSupervisorName,
                                                 TemplateId = Guid.Empty,
                                                 doc.UnassignedCount,
                                                 doc.InitialCount,
@@ -50,6 +50,7 @@ namespace Core.Supervisor.RavenIndexes
             
             Reduce = results => from result in results
                                 group result by new {result.ResponsibleId, result.TemplateId} into g
+                                where g.Sum(x => x.TotalCount) > 0 
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,

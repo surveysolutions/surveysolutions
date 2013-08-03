@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Supervisor.DenormalizerStorageItem;
+using Core.Supervisor.RavenIndexes;
 
 namespace Core.Supervisor.Views.Survey
 {
@@ -12,11 +13,14 @@ namespace Core.Supervisor.Views.Survey
 
     public class SurveyUsersViewFactory : IViewFactory<SurveyUsersViewInputModel, SurveyUsersView>
     {
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+
         private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
 
-        public SurveyUsersViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SurveyUsersViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary, IReadSideRepositoryIndexAccessor indexAccessor)
         {
             this.summary = summary;
+            this.indexAccessor = indexAccessor;
         }
 
         public SurveyUsersView Load(SurveyUsersViewInputModel input)
@@ -27,11 +31,11 @@ namespace Core.Supervisor.Views.Survey
             IEnumerable<SummaryItem> items=Enumerable.Empty<SummaryItem>();
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        items = this.summary.QueryAll(x => x.ResponsibleSupervisorId == null);
+                        items = indexAccessor.Query<SummaryItem>(typeof (SummaryItemForHQByTemplate).Name).Where(x => x.ResponsibleId != Guid.Empty);
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        items = this.summary.QueryAll(x => x.ResponsibleSupervisorId == input.ViewerId || x.ResponsibleId == input.ViewerId);
+                        items = indexAccessor.Query<SummaryItem>(typeof(SummaryItemByTemplate).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId && x.ResponsibleId != Guid.Empty);
                     }
 
                     return new SurveyUsersView()

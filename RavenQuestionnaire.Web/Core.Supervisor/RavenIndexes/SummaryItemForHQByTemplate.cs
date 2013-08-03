@@ -14,11 +14,11 @@ namespace Core.Supervisor.RavenIndexes
         public SummaryItemForHQByTemplate()
         {
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId==null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                         {
-                                            doc.ResponsibleId,
-                                            doc.ResponsibleName,
+                                            ResponsibleId = doc.ResponsibleSupervisorId,
+                                            ResponsibleName = doc.ResponsibleSupervisorName,
                                             doc.TemplateId,
                                             doc.TemplateName,
                                             doc.UnassignedCount,
@@ -32,11 +32,10 @@ namespace Core.Supervisor.RavenIndexes
                                         });
 
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId == null
                                         select new
                                         {
                                             ResponsibleId = Guid.Empty,
-                                            doc.ResponsibleName,
+                                            ResponsibleName = string.Empty,
                                             doc.TemplateId,
                                             doc.TemplateName,
                                             doc.UnassignedCount,
@@ -51,6 +50,7 @@ namespace Core.Supervisor.RavenIndexes
 
             Reduce = results => from result in results
                                 group result by new { result.ResponsibleId, result.TemplateId } into g
+                                where g.Sum(x => x.TotalCount) > 0
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,
@@ -66,7 +66,7 @@ namespace Core.Supervisor.RavenIndexes
                                     TotalCount = g.Sum(x => x.TotalCount),
                                     ResponsibleSupervisorId = g.First().ResponsibleSupervisorId
                                 };
-
+            Index(x => x.TotalCount, FieldIndexing.Analyzed);
             Index(x => x.ResponsibleSupervisorId, FieldIndexing.Analyzed);
             Index(x => x.TemplateId, FieldIndexing.Analyzed);
         }

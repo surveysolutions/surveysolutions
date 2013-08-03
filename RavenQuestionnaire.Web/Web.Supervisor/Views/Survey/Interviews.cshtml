@@ -15,7 +15,7 @@
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })',commandExecutionUrl, users);
+            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })','',commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });

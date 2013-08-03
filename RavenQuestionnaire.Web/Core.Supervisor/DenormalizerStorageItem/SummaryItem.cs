@@ -17,8 +17,6 @@
             this.TotalCount = 0;
         }
 
-        #region Public Properties
-
         public int UnassignedCount { get; set; }
 
         public int ApprovedCount { get; set; }
@@ -39,12 +37,12 @@
 
         public Guid ResponsibleId { get; set; }
 
-        public Guid? ResponsibleSupervisorId { get; set; }
-
         public string ResponsibleName { get; set; }
 
-        public Guid QuestionnaireStatus { get; set; }
+        public Guid? ResponsibleSupervisorId { get; set; }
 
-        #endregion
+        public string ResponsibleSupervisorName { get; set; }
+
+        public Guid QuestionnaireStatus { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace Core.Supervisor.Views.Summary
                 {
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
+                        _ = _;
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
