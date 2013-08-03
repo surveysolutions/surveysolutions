@@ -17,7 +17,7 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly string path;
         private const string FolderName = "IncomigData";
         private const string FileExtension = "sync";
-
+        private bool inProcess = false;
         public IncomePackagesRepository(string folderPath)
         {
             this.path = Path.Combine(folderPath, FolderName);
@@ -49,16 +49,23 @@ namespace WB.Core.Synchronization.SyncStorage
             var incomeDir = new DirectoryInfo(path);
             var incomingPackages =
                 incomeDir.GetFiles(string.Format("*.{0}", FileExtension));
-
-            foreach (FileInfo incomingPackage in incomingPackages)
-            {
-                var packageId = Guid.Parse(Path.GetFileNameWithoutExtension(incomingPackage.Name));
-                Task.Factory.StartNew(() => ProcessItemAsync(packageId));
-            }
+            if(!incomingPackages.Any())
+                return;
+            
+            FileInfo incomingPackage = incomingPackages.First();
+            /* foreach (FileInfo incomingPackage in incomingPackages)
+             {*/
+            var packageId = Guid.Parse(Path.GetFileNameWithoutExtension(incomingPackage.Name));
+            Task.Factory.StartNew(() => ProcessItemAsync(packageId));
+            //   }
         }
 
         protected void ProcessItemAsync(Guid id)
         {
+            if(inProcess)
+                return;
+            inProcess = true;
+            
             var fileName = GetItemFileName(id);
             if (!File.Exists(fileName))
                 return;
@@ -74,7 +81,9 @@ namespace WB.Core.Synchronization.SyncStorage
             processor.Process(items);
 
             File.Delete(fileName);
-
+            
+            inProcess = false;
+            ProccessStoredItems();
         }
 
         private T GetContentAsItem<T>(string syncItemContent)
