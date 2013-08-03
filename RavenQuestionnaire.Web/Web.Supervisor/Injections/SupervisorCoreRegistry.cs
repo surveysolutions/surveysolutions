@@ -92,7 +92,7 @@ namespace Web.Supervisor.Injections
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
 
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
-            this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
         }
     }
 }
