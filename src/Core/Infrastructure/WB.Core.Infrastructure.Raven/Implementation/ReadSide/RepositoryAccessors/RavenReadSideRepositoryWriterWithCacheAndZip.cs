@@ -26,14 +26,23 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(
-                                                            IReadSideRepositoryWriter<ZipView> internalImplementationOfWriter, IReadSideRepositoryReader<ZipView> internalImplementationOfReader,
+            IReadSideRepositoryWriter<ZipView> internalImplementationOfWriter,
+            IReadSideRepositoryReader<ZipView> internalImplementationOfReader,
             IStringCompressor comperessor)
         {
             this.internalImplementationOfWriter = internalImplementationOfWriter;
             this.internalImplementationOfReader = internalImplementationOfReader;
             this.compressor = comperessor;
             this.memcache = new Dictionary<Guid, TEntity>();
+            
+         
         }
+
+      /*  void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            if (previousViewId.HasValue)
+                PersistItem(previousViewId.Value);
+        }*/
 
         public int Count()
         {
@@ -69,28 +78,41 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
         {
             lock (locker)
             {
-                
-                Task.Factory.StartNew(() => internalImplementationOfWriter.Remove(id));
+                internalImplementationOfWriter.Remove(id);
                 memcache.Remove(id);
             }
         }
 
+        private Guid? previousViewId = null;
+
         public void Store(TEntity view, Guid id)
         {
-            lock (locker)
-            {
-                if (memcache.Count >= memcacheItemsSizeLimit)
-                    memcache.Clear();
 
-                Task.Factory.StartNew(() =>
-                    {
-                        internalImplementationOfWriter.Store(
-                            new ZipView(id, compressor.CompressObject(view)), id);
-                    });
-                memcache[id] = view;
+            if (memcache.Count >= memcacheItemsSizeLimit)
+            {
+                if (previousViewId.HasValue)
+                    PersistItem(previousViewId.Value);
+                memcache.Clear();
             }
+
+            memcache[id] = view;
+
+            if (previousViewId.HasValue && previousViewId.Value != id)
+                PersistItem(previousViewId.Value);
+            previousViewId = id;
         }
-      
+
+        private void PersistItem(Guid id)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                if (!memcache.ContainsKey(id))
+                    return;
+                var zipView = new ZipView(id, compressor.CompressObject(memcache[id]));
+                internalImplementationOfWriter.Store(zipView, id);
+            });
+        }
+
     }
     public class ZipView : IView
     {
