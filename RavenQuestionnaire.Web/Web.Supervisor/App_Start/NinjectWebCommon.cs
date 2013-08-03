@@ -100,7 +100,7 @@ namespace Web.Supervisor.App_Start
             var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username, password: password, defaultDatabase: defaultDatabase);
 
             var kernel = new StandardKernel(
-                new NinjectSettings { InjectNonPublic = true },
+                new NinjectSettings {InjectNonPublic = true},
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
@@ -110,17 +110,9 @@ namespace Web.Supervisor.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
-                new SupervisorCommandDeserializationModule());
+                new SupervisorCommandDeserializationModule()/*, new CompleteQuestionnarieDenormalizerModule()*/);
 
 #warning dirty hack for register ziped read side
-        /*    kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
-            kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();*/
-
-            //midnigth fixx
-            //both services have to share the same cache
-            //they have to have two different implementations and _maybe_ share single cache
-            kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
-                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
             
             //kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
 
