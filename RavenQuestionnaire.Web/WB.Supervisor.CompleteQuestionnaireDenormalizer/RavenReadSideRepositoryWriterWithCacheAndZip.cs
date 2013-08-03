@@ -124,7 +124,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             var view = viewItem == null ? null : compressor.DecompressString<CompleteQuestionnaireStoreDocument>(viewItem.Payload);
             if (!events.IsEmpty)
             {
-                using (var entityWriter = new TemporaryViewWriter(view, hiddentDenormalizer))
+                using (var entityWriter = new TemporaryViewWriter(events.SourceId, view, hiddentDenormalizer))
                 {   
                     foreach (var @event in events)
                     {

@@ -15,9 +15,9 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         private readonly CompleteQuestionnaireDenormalizer denormalizer;
         private CompleteQuestionnaireStoreDocument tempView;
 
-        public TemporaryViewWriter(CompleteQuestionnaireStoreDocument view, CompleteQuestionnaireDenormalizer denormalizer)
+        public TemporaryViewWriter(Guid id, CompleteQuestionnaireStoreDocument view, CompleteQuestionnaireDenormalizer denormalizer)
         {
-            this.tempViewId = view.PublicKey;
+            this.tempViewId = id;
             this.tempView = view;
             this.denormalizer = denormalizer;
             denormalizer.SetStorage(this);

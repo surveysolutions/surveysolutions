@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -10,6 +12,7 @@ using Main.Core.Documents;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
@@ -21,6 +24,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.Synchronization;
+using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
 using Web.Supervisor.CommandDeserialization;
@@ -110,7 +114,7 @@ namespace Web.Supervisor.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
-                new SupervisorCommandDeserializationModule()/*, new CompleteQuestionnarieDenormalizerModule()*/);
+                new SupervisorCommandDeserializationModule(), new CompleteQuestionnarieDenormalizerModule());
 
 #warning dirty hack for register ziped read side
             
@@ -123,6 +127,25 @@ namespace Web.Supervisor.App_Start
 
 
             NcqrsInit.Init(kernel);
+
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            var handler = new InterviewSynchronizationEventHandler(kernel.Get<ISynchronizationDataStorage>(),
+                                                                   kernel
+                                                                       .Get
+                                                                       <
+                                                                       IReadSideRepositoryWriter
+                                                                       <CompleteQuestionnaireStoreDocument>>());
+            IEnumerable<Type> ieventHandlers =
+                typeof (InterviewSynchronizationEventHandler).GetInterfaces()
+                                                             .Where(
+                                                                 type =>
+                                                                 type.IsInterface && type.IsGenericType &&
+                                                                 type.GetGenericTypeDefinition() ==
+                                                                 typeof (IEventHandler<>));
+            foreach (Type ieventHandler in ieventHandlers)
+            {
+                bus.RegisterHandler(handler, ieventHandler.GetGenericArguments()[0]);
+            }
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
