@@ -195,6 +195,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Supervisor.CompleteQuestionnaireDenormalizer", "..\RavenQuestionnaire.Web\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj", "{60C152BE-F926-4289-BE28-89207F2C12C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1255,6 +1257,21 @@ Global
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|x86.ActiveCfg = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1321,6 +1338,7 @@ Global
 		{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB} = {DD4501E2-D187-4D35-BE5E-6B2D859468BF}
 		{AD672732-3D12-48BC-8612-09547F0065D3} = {DD4501E2-D187-4D35-BE5E-6B2D859468BF}
 		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7} = {DD4501E2-D187-4D35-BE5E-6B2D859468BF}
+		{60C152BE-F926-4289-BE28-89207F2C12C7} = {DD4501E2-D187-4D35-BE5E-6B2D859468BF}
 		{75D70EB8-1E56-4BFE-816C-5231112F64C0} = {BA40870E-C180-4BE6-9FDA-A202A042D018}
 		{AE5B9E45-0758-47AA-AFB4-E2795F09F850} = {FBFD46B7-1521-42C1-BE95-043ADCF88A61}
 		{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A} = {FBFD46B7-1521-42C1-BE95-043ADCF88A61}
