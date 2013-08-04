@@ -23,7 +23,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         private IEventStore eventStore;
         private InProcessEventBus eventEventBus;
         private IStringCompressor compressor;
-        private Dictionary<Guid, CompleteQuestionnaireStoreDocument> memcache; 
+        private Dictionary<Guid, QuestionnarieWithSequence> memcache; 
 
 
         private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
@@ -37,7 +37,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             this.zipWriter = zipWriter;
             this.compressor = comperessor;
 
-            this.memcache = new Dictionary<Guid, CompleteQuestionnaireStoreDocument>();
+            this.memcache = new Dictionary<Guid, QuestionnarieWithSequence>();
             this.eventEventBus = new InProcessEventBus();
             this.hiddentDenormalizer = new CompleteQuestionnaireDenormalizer(users);
             
@@ -64,27 +64,33 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             throw new NotImplementedException();
         }
 
-        public CompleteQuestionnaireStoreDocument GetById(Guid id)
+        CompleteQuestionnaireStoreDocument IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>.GetById(Guid id)
         {
             if (!memcache.ContainsKey(id))
             {
-         /*       lock (locker)
-                {
-                    if (!memcache.ContainsKey(id))
-                    {*/
-                        RestoreFromPersistantStorage(id);
-                 /*   }
-                }*/
+                RestoreFromPersistantStorage(id);
             }
             try
             {
-                return memcache[id];
+                return memcache[id].Document;
             }
             catch (KeyNotFoundException)
             {
                 return null;
             }
-           
+
+        }
+
+        CompleteQuestionnaireStoreDocument IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>.GetById(Guid id)
+        {
+            if (!memcache.ContainsKey(id))
+            {
+                return ((IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>) this).GetById(id);
+            }
+
+            var view = memcache[id];
+            UpdateViewFromEventStrean(view);
+            return view.Document;
         }
 
         public void Remove(Guid id)
@@ -108,11 +114,24 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             if (viewItem == null && events.IsEmpty)
                 return;
 
+            var maxSequence = viewItem == null ? events.Last().EventSequence : viewItem.Sequence;
+
             ClearCacheIfLimitExcided();
 
-            var view = RestoreFromEventStream(events, viewItem);
-            
-            memcache.Add(id, view);
+            var view = viewItem == null ? null : compressor.DecompressString<CompleteQuestionnaireStoreDocument>(viewItem.Payload);
+            var updatedView= RestoreFromEventStream(events, view);
+
+            memcache.Add(id, new QuestionnarieWithSequence(updatedView, maxSequence));
+        }
+
+        private void UpdateViewFromEventStrean(QuestionnarieWithSequence viewItem)
+        {
+            var events = eventStore.ReadFrom(viewItem.Document.PublicKey, viewItem.Sequence, long.MaxValue);
+            if (events.IsEmpty)
+                return;
+            var updatedView = RestoreFromEventStream(events, viewItem.Document);
+            memcache[updatedView.PublicKey] = new QuestionnarieWithSequence(updatedView,
+                                                                                  events.Last().EventSequence);
         }
 
         private void ClearCacheIfLimitExcided()
@@ -123,23 +142,23 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             }
         }
 
-        private CompleteQuestionnaireStoreDocument RestoreFromEventStream(CommittedEventStream events, ZipView viewItem)
+        private CompleteQuestionnaireStoreDocument RestoreFromEventStream(CommittedEventStream events, CompleteQuestionnaireStoreDocument view)
         {
-            var view = viewItem == null ? null : compressor.DecompressString<CompleteQuestionnaireStoreDocument>(viewItem.Payload);
+            CompleteQuestionnaireStoreDocument updatedView = view;
             if (!events.IsEmpty)
             {
-                using (var entityWriter = new TemporaryViewWriter(events.SourceId, view, hiddentDenormalizer))
+                using (var entityWriter = new TemporaryViewWriter(events.SourceId, updatedView, hiddentDenormalizer))
                 {   
                     foreach (var @event in events)
                     {
                         eventEventBus.Publish(@event);
                     }
-                    view = entityWriter.GetById(events.SourceId);
+                    updatedView = entityWriter.GetById(events.SourceId);
 
-                    PersistItem(view, events.SourceId, events.Last().EventSequence);
+                    PersistItem(updatedView, events.SourceId, events.Last().EventSequence);
                 }
             }
-            return view;
+            return updatedView;
         }
 
         private void PersistItem(CompleteQuestionnaireStoreDocument view, Guid id, long sequence)
@@ -150,6 +169,17 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
                     zipWriter.Store(zipView, id);
                 });
         }
-        
+
+        class QuestionnarieWithSequence
+        {
+            public QuestionnarieWithSequence(CompleteQuestionnaireStoreDocument document, long sequence)
+            {
+                Document = document;
+                Sequence = sequence;
+            }
+
+            public CompleteQuestionnaireStoreDocument Document { get; private set; }
+            public long Sequence { get; private set; }
+        }
     }
 }
