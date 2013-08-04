@@ -128,25 +128,6 @@ namespace Web.Supervisor.App_Start
 
             NcqrsInit.Init(kernel);
 
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            var handler = new InterviewSynchronizationEventHandler(kernel.Get<ISynchronizationDataStorage>(),
-                                                                   kernel
-                                                                       .Get
-                                                                       <
-                                                                       IReadSideRepositoryWriter
-                                                                       <CompleteQuestionnaireStoreDocument>>());
-            IEnumerable<Type> ieventHandlers =
-                typeof (InterviewSynchronizationEventHandler).GetInterfaces()
-                                                             .Where(
-                                                                 type =>
-                                                                 type.IsInterface && type.IsGenericType &&
-                                                                 type.GetGenericTypeDefinition() ==
-                                                                 typeof (IEventHandler<>));
-            foreach (Type ieventHandler in ieventHandlers)
-            {
-                bus.RegisterHandler(handler, ieventHandler.GetGenericArguments()[0]);
-            }
-
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
 
