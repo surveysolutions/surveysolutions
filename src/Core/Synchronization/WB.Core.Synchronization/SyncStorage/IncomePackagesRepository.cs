@@ -18,6 +18,7 @@ namespace WB.Core.Synchronization.SyncStorage
         private const string FolderName = "IncomigData";
         private const string FileExtension = "sync";
         private bool inProcess = false;
+
         public IncomePackagesRepository(string folderPath)
         {
             this.path = Path.Combine(folderPath, FolderName);
@@ -37,6 +38,13 @@ namespace WB.Core.Synchronization.SyncStorage
 
             File.WriteAllText(GetItemFileName(item.Id), item.Content);
             Task.Factory.StartNew(() => ProcessItemAsync(item.Id));
+        }
+
+        public int GetIncomingItemsCount()
+        {
+            var incomeDir = new DirectoryInfo(path);
+            return
+                incomeDir.GetFiles(string.Format("*.{0}", FileExtension)).Count();
         }
 
         private string GetItemFileName(Guid id)
