@@ -664,6 +664,10 @@
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj">
+      <Project>{60c152be-f926-4289-be28-89207f2c12c7}</Project>
+      <Name>WB.Supervisor.CompleteQuestionnaireDenormalizer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Survey\Index.cshtml" />

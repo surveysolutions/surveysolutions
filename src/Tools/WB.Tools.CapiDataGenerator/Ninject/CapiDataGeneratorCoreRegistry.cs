@@ -22,7 +22,7 @@ namespace CapiDataGenerator
                 Enumerable.Concat(base.GetAssembliesForRegistration(), new[]
                 {
                     GetType().Assembly,
-                    typeof (CompleteQuestionnaireDenormalizer).Assembly,
+                    typeof (UserDenormalizer).Assembly,
                     typeof(ImportQuestionnaireCommand).Assembly
                 });
         }

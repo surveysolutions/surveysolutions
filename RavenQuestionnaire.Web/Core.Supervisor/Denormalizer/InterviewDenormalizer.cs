@@ -15,7 +15,15 @@ namespace Core.Supervisor.Denormalizer
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<InterviewDeleted>
+                                                               IEventHandler<InterviewDeleted>/*,
+
+          IEventHandler<CommentSet>,
+                                                     IEventHandler<FlagSet>,
+                                                     
+                                                     IEventHandler<ConditionalStatusChanged>,
+                                                     IEventHandler<PropagatableGroupAdded>,
+                                                     IEventHandler<PropagateGroupCreated>,
+                                                     IEventHandler<PropagatableGroupDeleted>*/
     {
         private readonly IReadSideRepositoryWriter<InterviewItem> interviews;
 
@@ -111,5 +119,35 @@ namespace Core.Supervisor.Denormalizer
         }
 
         #endregion
+        /*
+        public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<CommentSet> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<FlagSet> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<PropagateGroupCreated> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
+        {
+            
+        }*/
     }
 }

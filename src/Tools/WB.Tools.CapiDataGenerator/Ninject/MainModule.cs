@@ -90,30 +90,8 @@ namespace CapiDataGenerator
 
             InitChangeLog(bus);
 
-            InitSupervisorStorage(bus);
-
             #endregion
 
-        }
-
-        private void InitSupervisorStorage(InProcessEventBus bus)
-        {
-            this.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
-            this.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-            this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
-                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
-            
-/*
-            var usereventHandler = Kernel.Get<Core.Supervisor.Denormalizer.UserDenormalizer>();
-            bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
-
-            var completeQuestionnaireHandler = Kernel.Get<CompleteQuestionnaireDenormalizer>();
-            bus.RegisterHandler(completeQuestionnaireHandler, typeof(NewCompleteQuestionnaireCreated));
-            bus.RegisterHandler(completeQuestionnaireHandler, typeof(QuestionnaireStatusChanged));
-            bus.RegisterHandler(completeQuestionnaireHandler, typeof(QuestionnaireAssignmentChanged));
-
-            var questionnaireHandler = Kernel.Get<QuestionnaireDenormalizer>();
-            bus.RegisterHandler(questionnaireHandler, typeof(TemplateImported));*/
         }
 
         private void InitUserStorage(InProcessEventBus bus)

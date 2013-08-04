@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
 using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.Synchronization.Views;
 
 namespace Web.Supervisor.Controllers
 {
@@ -34,6 +35,7 @@ namespace Web.Supervisor.Controllers
     public class HQController : BaseController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
+        private readonly IViewFactory<IncomeSyncPackagesInputModel, IncomeSyncPackagesView> incomeSyncPackagesViewFactory;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
         private readonly IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory;
@@ -49,7 +51,10 @@ namespace Web.Supervisor.Controllers
             IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, ISampleImportService sampleImportService)
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, 
+            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, 
+            IViewFactory<IncomeSyncPackagesInputModel, IncomeSyncPackagesView> incomeSyncPackagesViewFactory,
+            ISampleImportService sampleImportService)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -61,6 +66,7 @@ namespace Web.Supervisor.Controllers
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.supervisorsFactory = supervisorsFactory;
+            this.incomeSyncPackagesViewFactory = incomeSyncPackagesViewFactory;
         }
 
         public ActionResult Index()
@@ -149,6 +155,11 @@ namespace Web.Supervisor.Controllers
                         ViewerStatus.Headquarter)).Items);
         }
 
+        public int GetIncomingItemsCount()
+        {
+            return
+                this.incomeSyncPackagesViewFactory.Load(new IncomeSyncPackagesInputModel()).AvalibleIncomPackagesCount;
+        }
 
         public ActionResult Assign(Guid id)
         {
