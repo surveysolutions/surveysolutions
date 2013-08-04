@@ -18,14 +18,13 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
     internal class RavenReadSideRepositoryWriterWithCacheAndZip : IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>
 
     {
-        private readonly CompleteQuestionnaireDenormalizer hiddentDenormalizer;
-        private readonly IReadSideRepositoryWriter<ZipView> zipWriter;
-        private readonly IEventStore eventStore;
-        private readonly InProcessEventBus eventEventBus;
-        private readonly IStringCompressor compressor;
-        private readonly Dictionary<Guid, CompleteQuestionnaireStoreDocument> memcache; 
+        private CompleteQuestionnaireDenormalizer hiddentDenormalizer;
+        private IReadSideRepositoryWriter<ZipView> zipWriter;
+        private IEventStore eventStore;
+        private InProcessEventBus eventEventBus;
+        private IStringCompressor compressor;
+        private Dictionary<Guid, CompleteQuestionnaireStoreDocument> memcache; 
 
-       // private object locker = new object();
 
         private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
@@ -39,20 +38,25 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             this.compressor = comperessor;
 
             this.memcache = new Dictionary<Guid, CompleteQuestionnaireStoreDocument>();
-            this.eventEventBus=new InProcessEventBus();
-            hiddentDenormalizer = new CompleteQuestionnaireDenormalizer(users);
+            this.eventEventBus = new InProcessEventBus();
+            this.hiddentDenormalizer = new CompleteQuestionnaireDenormalizer(users);
             
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(NewCompleteQuestionnaireCreated));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(CommentSet));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(FlagSet));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(AnswerSet));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(ConditionalStatusChanged));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(PropagatableGroupAdded));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(PropagateGroupCreated));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(PropagatableGroupDeleted));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(QuestionnaireAssignmentChanged));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(QuestionnaireStatusChanged));
-            eventEventBus.RegisterHandler(hiddentDenormalizer, typeof(InterviewDeleted));
+            RegisterCompleteQuestionnarieDenormalizerAtProcessBus();
+        }
+
+        private void RegisterCompleteQuestionnarieDenormalizerAtProcessBus()
+        {
+            IEnumerable<Type> ieventHandlers =
+                hiddentDenormalizer.GetType()
+                                   .GetInterfaces()
+                                   .Where(
+                                       type =>
+                                       type.IsInterface && type.IsGenericType &&
+                                       type.GetGenericTypeDefinition() == typeof (IEventHandler<>));
+            foreach (Type ieventHandler in ieventHandlers)
+            {
+                eventEventBus.RegisterHandler(hiddentDenormalizer, ieventHandler.GetGenericArguments()[0]);
+            }
         }
 
         public int Count()
