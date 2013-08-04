@@ -69,10 +69,15 @@
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\Base\AnswerActiveEvent.cs" />
+    <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\AnswerDeclaredValid.cs" />
+    <Compile Include="Events\Interview\Base\InterviewActiveEvent.cs" />
+    <Compile Include="Events\Interview\Base\AnswerPassiveEvent.cs" />
+    <Compile Include="Events\Interview\Base\InterviewPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionAnswered.cs" />
     <Compile Include="Events\Interview\DateTimeQuestionAnswered.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
-    <Compile Include="Events\Interview\Base\InterviewEvent.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
     <Compile Include="Events\Interview\SingleOptionQuestionAnswered.cs" />

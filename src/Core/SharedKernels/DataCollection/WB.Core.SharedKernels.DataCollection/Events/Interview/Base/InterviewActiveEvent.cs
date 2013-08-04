@@ -2,11 +2,11 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
-    public abstract class InterviewEvent
+    public abstract class InterviewActiveEvent
     {
         public Guid UserId { get; private set; }
 
-        protected InterviewEvent(Guid userId)
+        protected InterviewActiveEvent(Guid userId)
         {
             this.UserId = userId;
         }
