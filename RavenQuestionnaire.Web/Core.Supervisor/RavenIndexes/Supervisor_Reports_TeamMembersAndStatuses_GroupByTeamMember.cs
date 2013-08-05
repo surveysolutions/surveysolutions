@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Supervisor.DenormalizerStorageItem;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Commanding.CommandExecution.Mapping.Fluent;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
 namespace Core.Supervisor.RavenIndexes
 {
-    public class SummaryForHQItemByInterviewer : AbstractMultiMapIndexCreationTask<SummaryItem>
+    public class Supervisor_Reports_TeamMembersAndStatuses_GroupByTeamMember : AbstractMultiMapIndexCreationTask<SummaryItem>
     {
-        public SummaryForHQItemByInterviewer()
+        public Supervisor_Reports_TeamMembersAndStatuses_GroupByTeamMember()
         {
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId == null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                             {
                                                 doc.ResponsibleId,
@@ -31,7 +33,7 @@ namespace Core.Supervisor.RavenIndexes
                                             });
 
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId == null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                             {
                                                 doc.ResponsibleId,
@@ -50,6 +52,7 @@ namespace Core.Supervisor.RavenIndexes
             
             Reduce = results => from result in results
                                 group result by new {result.ResponsibleId, result.TemplateId} into g
+                                where g.Sum(x => x.TotalCount) > 0 
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,
@@ -67,5 +70,6 @@ namespace Core.Supervisor.RavenIndexes
             Index(x => x.ResponsibleSupervisorId, FieldIndexing.Analyzed);
             Index(x => x.TemplateId, FieldIndexing.Analyzed);
         }
+
     }
 }

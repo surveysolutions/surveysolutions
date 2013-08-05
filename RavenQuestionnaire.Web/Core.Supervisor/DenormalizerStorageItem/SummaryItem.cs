@@ -17,8 +17,6 @@
             this.TotalCount = 0;
         }
 
-        #region Public Properties
-
         public int UnassignedCount { get; set; }
 
         public int ApprovedCount { get; set; }
@@ -39,12 +37,18 @@
 
         public Guid ResponsibleId { get; set; }
 
-        public Guid? ResponsibleSupervisorId { get; set; }
-
+        /// <summary>
+        /// Name of resposible, which is a supervisor or an interviewer.
+        /// </summary>
         public string ResponsibleName { get; set; }
 
-        public Guid QuestionnaireStatus { get; set; }
+        public Guid? ResponsibleSupervisorId { get; set; }
 
-        #endregion
+        /// <summary>
+        /// Name of supervisor (which is a team lead), needed for team-based reports.
+        /// </summary>
+        public string ResponsibleSupervisorName { get; set; }
+
+        public Guid QuestionnaireStatus { get; set; }
     }
 }
