@@ -10,9 +10,9 @@ using Raven.Client.Indexes;
 
 namespace Core.Supervisor.RavenIndexes
 {
-    public class Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember : AbstractMultiMapIndexCreationTask<SummaryItem>
+    public class SupervisorReportsSurveysAndStatusesGroupByTeamMember : AbstractMultiMapIndexCreationTask<SummaryItem>
     {
-        public Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember()
+        public SupervisorReportsSurveysAndStatusesGroupByTeamMember()
         {
             AddMap<SummaryItem>(docs => from doc in docs
                                         where doc.ResponsibleSupervisorId != null
