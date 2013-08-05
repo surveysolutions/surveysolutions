@@ -171,6 +171,8 @@ namespace Core.Supervisor.Views.Survey
                 var screen = screenList.First();
                 foreach (var surveyScreen in screenList.Skip(1))
                 {
+                    if (screen.Captions.ContainsKey(surveyScreen.Captions.Keys.First()))
+                        continue;
                     for (int i = 0; i < surveyScreen.Questions.Count; i++)
                     {
                         screen.Questions[i].Answers.Add(surveyScreen.Questions[i].Answers[0]);
