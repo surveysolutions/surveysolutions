@@ -92,7 +92,7 @@ namespace Core.Supervisor.Denormalizer
             if (summaryUser == null)
                 return;
 
-            this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+            this.DecreaseByStatus(summaryUser, questionnaire.Status.PublicId);
             this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 
