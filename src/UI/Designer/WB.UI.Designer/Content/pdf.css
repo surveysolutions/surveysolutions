@@ -72,6 +72,14 @@ sup {
     width: 100px;
 }
 
+.variable-name {
+    background-color: #A38F8F;
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
+    padding: 4px 6px;
+    white-space: nowrap;
+}
+
 [class^="icon-"],
 [class*=" icon-"] {
   display: inline-block;
