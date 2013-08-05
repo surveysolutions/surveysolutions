@@ -48,7 +48,5 @@
         /// Name of supervisor (which is a team lead), needed for team-based reports.
         /// </summary>
         public string ResponsibleSupervisorName { get; set; }
-
-        public Guid QuestionnaireStatus { get; set; }
     }
 }

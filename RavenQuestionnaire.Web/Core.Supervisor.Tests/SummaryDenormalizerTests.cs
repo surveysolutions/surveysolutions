@@ -411,6 +411,27 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
+        public void HandleQuestionnaireStatusChanged_When_deleted_interview_status_change_from_Initial_to_Complete_Then_initial_count_is_the_same_and_complete_count_increment_and_total_equals_1()
+        {
+            // Arrange
+            var summaryStore = CreateInmemorySummaryStore();
+            var itemId = GetStoreItemId(this.supervisorId, templateId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId), itemId);
+
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, isDeleted: true);
+
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Initial, SurveyStatus.Complete);
+            // Act
+            target.Handle(statusChangeEvent);
+
+            // Assert
+            var item = summaryStore.GetById(itemId);
+            Assert.That(item.InitialCount, Is.EqualTo(0));
+            Assert.That(item.CompletedCount, Is.EqualTo(1));
+            Assert.That(item.TotalCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Initial_to_CompleteWithError_Then_initial_count_decrement_and_error_count_increment_and_total_equals_1()
         {
             // Arrange
@@ -507,7 +528,7 @@ namespace Core.Supervisor.Tests
             var itemId = supervisorId.Combine(templateId);
             var summaryStore = new InMemoryReadSideRepositoryAccessor<SummaryItem>();
 
-            summaryStore.Store(new SummaryItem() { UnassignedCount = 1, ResponsibleId = supervisorId, QuestionnaireStatus = SurveyStatus.Unassign.PublicId }, itemId);
+            summaryStore.Store(new SummaryItem() { UnassignedCount = 1, ResponsibleId = supervisorId}, itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
@@ -552,8 +573,7 @@ namespace Core.Supervisor.Tests
                 {
                     UnassignedCount = 1,
                     ResponsibleId = interviewerId,
-                    ResponsibleSupervisorId = supervisorId,
-                    QuestionnaireStatus = SurveyStatus.Unassign.PublicId
+                    ResponsibleSupervisorId = supervisorId
                 }, interviewerItemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, null, false);
@@ -600,7 +620,6 @@ namespace Core.Supervisor.Tests
                     TotalCount = total, 
                     ResponsibleId = responsibleId, 
                     ResponsibleSupervisorId = responsibleSupervisorId, 
-                    QuestionnaireStatus = status, 
                     TemplateId = templateId,
                 };
 
@@ -613,7 +632,7 @@ namespace Core.Supervisor.Tests
         }
 
         private SummaryDenormalizer CreateSummaryDenormalizer(IReadSideRepositoryWriter<SummaryItem> summaryStore,
-                                                              Guid questionnarieId, Guid? tempalteId = null, SurveyStatus? status = null, bool isSupervisorOwner = true)
+                                                              Guid questionnarieId, Guid? tempalteId = null, SurveyStatus? status = null, bool isSupervisorOwner = true, bool isDeleted = false)
         {
             var questionnarieStore = CreateInmemoryQuestionnarieStore();
             var userStore = this.CreateInmemoryUserStoreWithAllUsers();
@@ -623,7 +642,8 @@ namespace Core.Supervisor.Tests
                     {
                         TemplateId = tempalteId ?? Guid.NewGuid(),
                         Responsible = new UserLight(isSupervisorOwner ? supervisorId : interviewerId, "test"),
-                        Status = status ?? SurveyStatus.Unassign
+                        Status = status ?? SurveyStatus.Unassign,
+                        IsDeleted = isDeleted
                     },
                 questionnarieId);
 
