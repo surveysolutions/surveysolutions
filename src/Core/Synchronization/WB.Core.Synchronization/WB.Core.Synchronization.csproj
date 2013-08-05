@@ -90,6 +90,9 @@
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
     <Compile Include="SyncStorage\IChunkWriter.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
+    <Compile Include="Views\IncomeSyncPackagesInputModel.cs" />
+    <Compile Include="Views\IncomeSyncPackagesView.cs" />
+    <Compile Include="Views\IncomeSyncPackagesViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
