@@ -41,7 +41,21 @@ namespace Core.Supervisor.Denormalizer
 
             var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
 
-            this.UpdateCountersForItemAndReturnIt(questionnaire.TemplateId, questionnaire.Responsible.Id, evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
+            Guid newStatus = evnt.Payload.Status.PublicId;
+            var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
+            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+
+            if (summaryUser == null)
+            {
+                return;
+            }
+
+            this.DecreaseByStatus(summaryUser, evnt.Payload.PreviousStatus.PublicId);
+
+            summaryUser.QuestionnaireStatus = newStatus;
+
+            this.IncreaseByStatus(summaryUser, newStatus);
+            this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
@@ -75,27 +89,10 @@ namespace Core.Supervisor.Denormalizer
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
             var summaryUser = this.summaryItem.GetById(summmaryUserId);
 
-            if (summaryUser == null) return;
+            if (summaryUser == null)
+                return;
 
             this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
-            this.summaryItem.Store(summaryUser, summmaryUserId);
-        }
-
-        private void UpdateCountersForItemAndReturnIt(Guid template, Guid responsible, Guid newStatus, Guid oldStatus)
-        {
-            var summmaryUserId = responsible.Combine(template);
-            var summaryUser = this.summaryItem.GetById(summmaryUserId);
-
-            if (summaryUser == null)
-            {
-                return;
-            }
-
-            this.DecreaseByStatus(summaryUser, oldStatus);
-
-            summaryUser.QuestionnaireStatus = newStatus;
-
-            this.IncreaseByStatus(summaryUser, newStatus);
             this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 

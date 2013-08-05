@@ -31,11 +31,16 @@ namespace Core.Supervisor.Views.Survey
             IEnumerable<SummaryItem> items=Enumerable.Empty<SummaryItem>();
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        items = indexAccessor.Query<SummaryItem>(typeof (SummaryItemForHQByTemplate).Name).Where(x => x.ResponsibleId != Guid.Empty);
+                        items = indexAccessor
+                            .Query<SummaryItem>(typeof (Headquarter_Reports_SurveysAndStatuses_GroupByTeam).Name)
+                            .Where(x => x.ResponsibleId != Guid.Empty);
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        items = indexAccessor.Query<SummaryItem>(typeof(SummaryItemByTemplate).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId && x.ResponsibleId != Guid.Empty);
+                        items = indexAccessor
+                            .Query<SummaryItem>(typeof(Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember).Name)
+                            .Where(x => x.ResponsibleSupervisorId == input.ViewerId
+                                && x.ResponsibleId != Guid.Empty);
                     }
 
                     return new SurveyUsersView()

@@ -130,7 +130,7 @@ namespace Web.Supervisor.App_Start
 
 #warning dirty index registrations
             var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFormAssembly(typeof (SummaryItemByTemplate).Assembly);
+            indexccessor.RegisterIndexesFormAssembly(typeof (Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

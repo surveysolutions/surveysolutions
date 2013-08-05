@@ -76,6 +76,7 @@ namespace Core.Supervisor.Tests
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
             var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -92,6 +93,7 @@ namespace Core.Supervisor.Tests
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
             var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -110,6 +112,7 @@ namespace Core.Supervisor.Tests
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
             var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -130,6 +133,7 @@ namespace Core.Supervisor.Tests
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
             var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -147,6 +151,7 @@ namespace Core.Supervisor.Tests
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
             var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -296,7 +301,7 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
-        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Unassign_to_Initial_Then_unassigned_count_desrement_and_initial_count_increment_and_total_equals_1()
+        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Unassign_to_Initial_Then_unassigned_count_decrement_and_initial_count_increment_and_total_equals_1()
         {
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
@@ -317,7 +322,7 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
-        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Initial_to_Complete_Then_initial_count_desrement_and_complete_count_increment_and_total_equals_1()
+        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Initial_to_Complete_Then_initial_count_decrement_and_complete_count_increment_and_total_equals_1()
         {
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
@@ -338,7 +343,7 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
-        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Initial_to_CompleteWithError_Then_initial_count_desrement_and_error_count_increment_and_total_equals_1()
+        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Initial_to_CompleteWithError_Then_initial_count_decrement_and_error_count_increment_and_total_equals_1()
         {
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
@@ -359,7 +364,7 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
-        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Complete_to_Redo_Then_complete_count_desrement_and_redo_count_increment_and_total_equals_1()
+        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Complete_to_Redo_Then_complete_count_decrement_and_redo_count_increment_and_total_equals_1()
         {
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
@@ -380,7 +385,7 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
-        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Complete_to_Approve_Then_complete_count_desrement_and_approve_count_increment_and_total_equals_1()
+        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Complete_to_Approve_Then_complete_count_decrement_and_approve_count_increment_and_total_equals_1()
         {
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
@@ -401,7 +406,7 @@ namespace Core.Supervisor.Tests
         }
 
         [Test]
-        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Redo_to_Complete_Then_redo_count_desrement_and_complete_count_increment_and_total_equals_1()
+        public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Redo_to_Complete_Then_redo_count_decrement_and_complete_count_increment_and_total_equals_1()
         {
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
@@ -421,23 +426,9 @@ namespace Core.Supervisor.Tests
             Assert.That(item.TotalCount, Is.EqualTo(1));
         }
 
-
-        private SummaryItem CreateSummaryItem(Guid responsibleId , Guid responsibleSupervisorId, Guid status, Guid templateId, int total = 0, int unassigned = 0, int initial = 0, int completed = 0, int error = 0, int redo = 0, int approved = 0)
-        {
-            return new SummaryItem {
-                UnassignedCount = unassigned,
-                InitialCount = initial,
-                CompletedCount = completed,
-                CompletedWithErrorsCount = error,
-                RedoCount = redo,
-                ApprovedCount = approved,
-                TotalCount = total,
-                ResponsibleId = responsibleId,
-                ResponsibleSupervisorId = responsibleSupervisorId,
-                QuestionnaireStatus = status,
-                TemplateId = templateId,
-            };
-        }
+        ///////////////////
+        //// Misc 
+        ///////////////////
 
         [Test]
         public void Handle_When_New_assigment_event_is_arrived_summary_Store_is_not_empty_Then_update_record_with_Responsible_interviewer()
@@ -514,6 +505,24 @@ namespace Core.Supervisor.Tests
 
             Assert.That(queryForInterviewerItem.UnassignedCount, Is.EqualTo(0));
             Assert.That(queryForInterviewerItem.InitialCount, Is.EqualTo(1));
+        }
+
+        private SummaryItem CreateSummaryItem(Guid responsibleId, Guid responsibleSupervisorId, Guid status, Guid templateId, int total = 0, int unassigned = 0, int initial = 0, int completed = 0, int error = 0, int redo = 0, int approved = 0)
+        {
+            return new SummaryItem
+            {
+                UnassignedCount = unassigned,
+                InitialCount = initial,
+                CompletedCount = completed,
+                CompletedWithErrorsCount = error,
+                RedoCount = redo,
+                ApprovedCount = approved,
+                TotalCount = total,
+                ResponsibleId = responsibleId,
+                ResponsibleSupervisorId = responsibleSupervisorId,
+                QuestionnaireStatus = status,
+                TemplateId = templateId,
+            };
         }
 
         private static Guid GetStoreItemId(Guid supervisorId, Guid templateId)

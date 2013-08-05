@@ -29,13 +29,13 @@ namespace Core.Supervisor.Views.Survey
             if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
                 items =
-                    indexAccessor.Query<SummaryItem>(typeof(SummaryItemByTemplate).Name)
+                    indexAccessor.Query<SummaryItem>(typeof(Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember).Name)
                                  .Where(x => x.ResponsibleSupervisorId == input.ViewerId);
             }
             else
             {
 
-                items = indexAccessor.Query<SummaryItem>(typeof(SummaryItemForHQByTemplate).Name);
+                items = indexAccessor.Query<SummaryItem>(typeof(Headquarter_Reports_SurveysAndStatuses_GroupByTeam).Name);
             }
 
             if (input.UserId.HasValue)

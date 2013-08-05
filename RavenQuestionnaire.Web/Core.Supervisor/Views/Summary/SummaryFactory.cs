@@ -30,11 +30,11 @@ namespace Core.Supervisor.Views.Summary
 
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
-                items = indexAccessor.Query<SummaryItem>(typeof(SummaryForHQItemByInterviewer).Name);
+                items = indexAccessor.Query<SummaryItem>(typeof(Headquarter_Reports_TeamsAndStatuses_GroupByTeam).Name);
             }
             else if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
-                items = indexAccessor.Query<SummaryItem>(typeof(SummaryItemByInterviewer).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                items = indexAccessor.Query<SummaryItem>(typeof(Supervisor_Reports_TeamMembersAndStatuses_GroupByTeamMember).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId);
             }
             
             if (input.TemplateId.HasValue)

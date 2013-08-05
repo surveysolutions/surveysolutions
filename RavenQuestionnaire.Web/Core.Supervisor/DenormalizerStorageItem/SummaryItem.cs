@@ -37,10 +37,16 @@
 
         public Guid ResponsibleId { get; set; }
 
+        /// <summary>
+        /// Name of resposible, which is a supervisor or an interviewer.
+        /// </summary>
         public string ResponsibleName { get; set; }
 
         public Guid? ResponsibleSupervisorId { get; set; }
 
+        /// <summary>
+        /// Name of supervisor (which is a team lead), needed for team-based reports.
+        /// </summary>
         public string ResponsibleSupervisorName { get; set; }
 
         public Guid QuestionnaireStatus { get; set; }
