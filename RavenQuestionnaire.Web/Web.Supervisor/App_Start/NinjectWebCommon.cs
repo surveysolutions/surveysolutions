@@ -115,7 +115,8 @@ namespace Web.Supervisor.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
-                new SupervisorCommandDeserializationModule(), new CompleteQuestionnarieDenormalizerModule());
+                new SupervisorCommandDeserializationModule(),
+                new CompleteQuestionnarieDenormalizerModule());
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
