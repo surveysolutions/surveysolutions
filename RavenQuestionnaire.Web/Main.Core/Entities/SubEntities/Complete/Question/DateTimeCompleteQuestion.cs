@@ -148,7 +148,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
         {
             DateTime date;
-            if (!DateTime.TryParse(answerValue, out date))
+            if (!DateTime.TryParse(answerValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
                 throw new InterviewException("value must be date time");
         }
 
