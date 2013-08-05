@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Supervisor.DenormalizerStorageItem;
+using Main.Core.Entities.SubEntities;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
 namespace Core.Supervisor.RavenIndexes
 {
-    public class SummaryItemForHQByTemplate: AbstractMultiMapIndexCreationTask<SummaryItem>
+    public class Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember : AbstractMultiMapIndexCreationTask<SummaryItem>
     {
-        public SummaryItemForHQByTemplate()
+        public Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember()
         {
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId==null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                         {
                                             doc.ResponsibleId,
@@ -32,11 +33,11 @@ namespace Core.Supervisor.RavenIndexes
                                         });
 
             AddMap<SummaryItem>(docs => from doc in docs
-                                        where doc.ResponsibleSupervisorId == null
+                                        where doc.ResponsibleSupervisorId != null
                                         select new
                                         {
                                             ResponsibleId = Guid.Empty,
-                                            doc.ResponsibleName,
+                                            ResponsibleName = "",
                                             doc.TemplateId,
                                             doc.TemplateName,
                                             doc.UnassignedCount,
@@ -50,7 +51,8 @@ namespace Core.Supervisor.RavenIndexes
                                         });
 
             Reduce = results => from result in results
-                                group result by new { result.ResponsibleId, result.TemplateId } into g
+                                group result by new { result.ResponsibleId, result.TemplateId, result.ResponsibleSupervisorId } into g
+                                where g.Sum(x => x.TotalCount) > 0
                                 select new
                                 {
                                     ResponsibleId = g.Key.ResponsibleId,
@@ -64,11 +66,11 @@ namespace Core.Supervisor.RavenIndexes
                                     CompletedWithErrorsCount = g.Sum(x => x.CompletedWithErrorsCount),
                                     ApprovedCount = g.Sum(x => x.ApprovedCount),
                                     TotalCount = g.Sum(x => x.TotalCount),
-                                    ResponsibleSupervisorId = g.First().ResponsibleSupervisorId
+                                    ResponsibleSupervisorId = g.Key.ResponsibleSupervisorId
                                 };
-
             Index(x => x.ResponsibleSupervisorId, FieldIndexing.Analyzed);
             Index(x => x.TemplateId, FieldIndexing.Analyzed);
         }
+
     }
 }
