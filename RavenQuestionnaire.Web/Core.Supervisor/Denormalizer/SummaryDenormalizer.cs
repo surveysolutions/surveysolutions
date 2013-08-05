@@ -50,9 +50,10 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            this.DecreaseByStatus(summaryUser, evnt.Payload.PreviousStatus.PublicId);
-
-            summaryUser.QuestionnaireStatus = newStatus;
+            if (!questionnaire.IsDeleted)
+            {
+                this.DecreaseByStatus(summaryUser, evnt.Payload.PreviousStatus.PublicId);
+            }
 
             this.IncreaseByStatus(summaryUser, newStatus);
             this.summaryItem.Store(summaryUser, summmaryUserId);
@@ -92,7 +93,7 @@ namespace Core.Supervisor.Denormalizer
             if (summaryUser == null)
                 return;
 
-            this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+            this.DecreaseByStatus(summaryUser, questionnaire.Status.PublicId);
             this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 
@@ -131,9 +132,6 @@ namespace Core.Supervisor.Denormalizer
                 responsibleSupervisorName = user.Supervisor.Name;
             }
 
-            var status = questionnaire.Status.PublicId;
-            if (status == SurveyStatus.Unknown.PublicId && isUserIsSupervisor)
-                status = SurveyStatus.Unassign.PublicId;
             return
                 new SummaryItem()
                     {
@@ -142,8 +140,7 @@ namespace Core.Supervisor.Denormalizer
                         ResponsibleSupervisorId = responsibleSupervisorId,
                         ResponsibleSupervisorName = responsibleSupervisorName,
                         ResponsibleId = user.PublicKey,
-                        ResponsibleName = user.UserName,
-                        QuestionnaireStatus = status
+                        ResponsibleName = user.UserName
                     };
 
         }
