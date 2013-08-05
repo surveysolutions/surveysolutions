@@ -65,6 +65,7 @@ namespace Main.Core.EventHandlers
 
             item.Status = evnt.Payload.Status;
             item.LastEntryDate = evnt.EventTimeStamp;
+            item.IsDeleted = false;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 

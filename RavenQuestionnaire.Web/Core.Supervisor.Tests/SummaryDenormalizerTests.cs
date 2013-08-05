@@ -59,6 +59,7 @@ namespace Core.Supervisor.Tests
             Assert.That(item.CompletedWithErrorsCount, Is.EqualTo(0));
             Assert.That(item.ApprovedCount, Is.EqualTo(0));
             Assert.That(item.TotalCount, Is.EqualTo(0));
+            Assert.True(item.DeletedQuestionnaries.Contains(questionnarieId));
         }
 
         [TestCase("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555", "Approved")]
@@ -91,6 +92,7 @@ namespace Core.Supervisor.Tests
             Assert.That(item.CompletedWithErrorsCount, Is.EqualTo(1));
             Assert.That(item.ApprovedCount, Is.EqualTo(1));
             Assert.That(item.TotalCount, Is.EqualTo(6));
+            Assert.True(item.DeletedQuestionnaries.Contains(questionnarieId));
         }
 
         ///////////////////
@@ -416,9 +418,12 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId), itemId);
+            var summaryItemWithOneDeletedInterview = this.CreateSummaryItem(supervisorId, supervisorId,
+                                                                            SurveyStatus.Unassign.PublicId, templateId);
+            summaryItemWithOneDeletedInterview.DeletedQuestionnaries.Add(questionnarieId);
+            summaryStore.Store(summaryItemWithOneDeletedInterview, itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, isDeleted: true);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
             var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Initial, SurveyStatus.Complete);
             // Act
@@ -430,6 +435,8 @@ namespace Core.Supervisor.Tests
             Assert.That(item.CompletedCount, Is.EqualTo(1));
             Assert.That(item.TotalCount, Is.EqualTo(1));
         }
+
+
 
         [Test]
         public void HandleQuestionnaireStatusChanged_When_interview_status_change_from_Initial_to_CompleteWithError_Then_initial_count_decrement_and_error_count_increment_and_total_equals_1()
@@ -632,7 +639,7 @@ namespace Core.Supervisor.Tests
         }
 
         private SummaryDenormalizer CreateSummaryDenormalizer(IReadSideRepositoryWriter<SummaryItem> summaryStore,
-                                                              Guid questionnarieId, Guid? tempalteId = null, SurveyStatus? status = null, bool isSupervisorOwner = true, bool isDeleted = false)
+                                                              Guid questionnarieId, Guid? tempalteId = null, SurveyStatus? status = null, bool isSupervisorOwner = true)
         {
             var questionnarieStore = CreateInmemoryQuestionnarieStore();
             var userStore = this.CreateInmemoryUserStoreWithAllUsers();
@@ -642,8 +649,7 @@ namespace Core.Supervisor.Tests
                     {
                         TemplateId = tempalteId ?? Guid.NewGuid(),
                         Responsible = new UserLight(isSupervisorOwner ? supervisorId : interviewerId, "test"),
-                        Status = status ?? SurveyStatus.Unassign,
-                        IsDeleted = isDeleted
+                        Status = status ?? SurveyStatus.Unassign
                     },
                 questionnarieId);
 

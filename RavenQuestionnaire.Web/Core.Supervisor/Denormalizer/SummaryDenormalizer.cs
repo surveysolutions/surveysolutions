@@ -50,13 +50,23 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            if (!questionnaire.IsDeleted)
-            {
-                this.DecreaseByStatus(summaryUser, evnt.Payload.PreviousStatus.PublicId);
-            }
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(evnt.EventSourceId,
+                                                                 evnt.Payload.PreviousStatus.PublicId, summaryUser);
 
             this.IncreaseByStatus(summaryUser, newStatus);
             this.summaryItem.Store(summaryUser, summmaryUserId);
+        }
+
+        private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem summaryUser)
+        {
+            if (!summaryUser.DeletedQuestionnaries.Contains(interviewId))
+            {
+                this.DecreaseByStatus(summaryUser, previousStatusId);
+            }
+            else
+            {
+                summaryUser.DeletedQuestionnaries.Remove(interviewId);
+            }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
@@ -94,6 +104,9 @@ namespace Core.Supervisor.Denormalizer
                 return;
 
             this.DecreaseByStatus(summaryUser, questionnaire.Status.PublicId);
+
+            summaryUser.DeletedQuestionnaries.Add(evnt.EventSourceId);
+            
             this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 
