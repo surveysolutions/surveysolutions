@@ -442,6 +442,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
+        [Ignore("Validation about options count is temporary turned off. Should be turned on with new clone questionnaire feature implementation")]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
         public void NewUpdateQuestion_When_there_is_only_one_option_in_categorical_question_Then_DomainException_should_be_thrown(QuestionType questionType)
