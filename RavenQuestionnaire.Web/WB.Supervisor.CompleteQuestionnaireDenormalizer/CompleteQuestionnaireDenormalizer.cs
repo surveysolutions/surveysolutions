@@ -1,4 +1,5 @@
 using System.Linq;
+using Core.Supervisor.Denormalizer;
 using Main.Core.Documents;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
@@ -9,12 +10,12 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
 
-namespace Core.Supervisor.Denormalizer
+namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 {
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>
-    public class CompleteQuestionnaireDenormalizer : UserBaseDenormalizer,
+    internal class CompleteQuestionnaireDenormalizer : UserBaseDenormalizer,
                                                      IEventHandler<NewCompleteQuestionnaireCreated>,
                                                      IEventHandler<CommentSet>,
                                                      IEventHandler<FlagSet>,
@@ -27,24 +28,23 @@ namespace Core.Supervisor.Denormalizer
                                                      IEventHandler<QuestionnaireStatusChanged>,
                                                      IEventHandler<InterviewDeleted>
     {
-        private readonly ISynchronizationDataStorage syncStorage;
-        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
-
-        public CompleteQuestionnaireDenormalizer(ISynchronizationDataStorage syncStorage, 
-            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage,
-            IReadSideRepositoryWriter<UserDocument> users)
-            :base(users)
-        {
-            this.syncStorage = syncStorage;
-            this.documentStorage = documentStorage;
-        }
+        
+        private  IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
 
         public CompleteQuestionnaireDenormalizer(
-            IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage, 
             IReadSideRepositoryWriter<UserDocument> users)
             : base(users)
         {
+        }
+
+        public void SetStorage(IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage)
+        {
             this.documentStorage = documentStorage;
+        }
+
+        public void ClearStorage()
+        {
+            this.documentStorage = null;
         }
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
@@ -150,7 +150,6 @@ namespace Core.Supervisor.Denormalizer
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
 
-            syncStorage.SaveInterview(item, evnt.Payload.Responsible.Id);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
@@ -168,10 +167,6 @@ namespace Core.Supervisor.Denormalizer
             item.LastEntryDate = evnt.EventTimeStamp;
             this.documentStorage.Store(item, item.PublicKey);
 
-            if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
-                syncStorage.SaveInterview(item, item.Responsible.Id);
-            else
-                syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, item.Responsible.Id);
 
             //when deleting logic is implemented call syncStorage.DeleteInterview(id) in apropriate place    
 
@@ -214,7 +209,6 @@ namespace Core.Supervisor.Denormalizer
 
             this.documentStorage.Store(item, item.PublicKey);
 
-            syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
         }
     }
 }

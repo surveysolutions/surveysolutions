@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AssigmentGeneration")]
+[assembly: AssemblyTitle("WB.Supervisor.CompleteQuestionnaireDenormalizer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AssigmentGeneration")]
+[assembly: AssemblyProduct("WB.Supervisor.CompleteQuestionnaireDenormalizer")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("521fb854-9516-468c-9b18-71739c6e16dd")]
+[assembly: Guid("2718431e-454f-4571-abb1-fc2df716b6c8")]
 
 // Version information for an assembly consists of the following four values:
 //
