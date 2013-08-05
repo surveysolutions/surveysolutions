@@ -96,6 +96,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataCollection.Tests", "Tests\WB.Core.SharedKernels.DataCollection.Tests\WB.Core.SharedKernels.DataCollection.Tests.csproj", "{E797439A-61C1-4309-BF62-32E57EE0402A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Supervisor.CompleteQuestionnaireDenormalizer", "..\RavenQuestionnaire.Web\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj", "{60C152BE-F926-4289-BE28-89207F2C12C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -283,6 +285,12 @@ Global
 		{E797439A-61C1-4309-BF62-32E57EE0402A}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{E797439A-61C1-4309-BF62-32E57EE0402A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E797439A-61C1-4309-BF62-32E57EE0402A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C152BE-F926-4289-BE28-89207F2C12C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +321,7 @@ Global
 		{AD672732-3D12-48BC-8612-09547F0065D3} = {1F84C1AF-5C01-4D9F-8E0F-CFF34174564C}
 		{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB} = {1F84C1AF-5C01-4D9F-8E0F-CFF34174564C}
 		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7} = {1F84C1AF-5C01-4D9F-8E0F-CFF34174564C}
+		{60C152BE-F926-4289-BE28-89207F2C12C7} = {1F84C1AF-5C01-4D9F-8E0F-CFF34174564C}
 		{722F02E2-CCD3-4FD6-9837-3AA8AA878B65} = {FE69BF68-B1BD-4352-9F42-464568861B39}
 		{5F014003-50D8-49E0-8AFE-91D38DCCC97C} = {FE69BF68-B1BD-4352-9F42-464568861B39}
 		{01F84441-80D3-49B4-AB18-96894ACB2F90} = {FE69BF68-B1BD-4352-9F42-464568861B39}
