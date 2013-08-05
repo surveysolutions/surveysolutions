@@ -46,7 +46,7 @@ namespace Core.Supervisor.Denormalizer
                                     Id = x.PublicKey,
                                     Question = x.QuestionText,
                                     Answer = x.GetAnswerString()
-                                })
+                                }).ToList()
             };
 
             this.interviews.Store(interview, interview.InterviewId);
