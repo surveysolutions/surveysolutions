@@ -15,15 +15,8 @@ namespace Core.Supervisor.Denormalizer
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<InterviewDeleted>/*,
-
-          IEventHandler<CommentSet>,
-                                                     IEventHandler<FlagSet>,
-                                                     
-                                                     IEventHandler<ConditionalStatusChanged>,
-                                                     IEventHandler<PropagatableGroupAdded>,
-                                                     IEventHandler<PropagateGroupCreated>,
-                                                     IEventHandler<PropagatableGroupDeleted>*/
+                                                               IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<InterviewItem> interviews;
 
@@ -119,35 +112,15 @@ namespace Core.Supervisor.Denormalizer
         }
 
         #endregion
-        /*
-        public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
-        {
-            
-        }
 
-        public void Handle(IPublishedEvent<CommentSet> evnt)
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
-            
-        }
+            var item = this.interviews.GetById(evnt.EventSourceId);
+            var status = SurveyStatus.GetStatusByIdOrDefault(evnt.Payload.StatusId);
+            item.Status = new SurveyStatusLight() { Id = status.PublicId, Name = status.Name };
+            item.LastEntryDate = evnt.EventTimeStamp;
 
-        public void Handle(IPublishedEvent<FlagSet> evnt)
-        {
-            
+            this.interviews.Store(item, item.InterviewId);
         }
-
-        public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
-        {
-            
-        }
-
-        public void Handle(IPublishedEvent<PropagateGroupCreated> evnt)
-        {
-            
-        }
-
-        public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
-        {
-            
-        }*/
     }
 }

@@ -19,7 +19,7 @@ namespace Core.Supervisor.Denormalizer
     public class SummaryDenormalizer : UserBaseDenormalizer,
                                        IEventHandler<QuestionnaireStatusChanged>,
                                        IEventHandler<QuestionnaireAssignmentChanged>,
-                                       IEventHandler<InterviewDeleted>
+                                       IEventHandler<InterviewDeleted>, IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
@@ -36,12 +36,14 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            if (evnt.Payload.Status.PublicId == evnt.Payload.PreviousStatus.PublicId)
-                return;
+            HandleChangeStatus(evnt.EventSourceId,evnt.Payload.Status.PublicId);
+        }
 
-            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
+        private void HandleChangeStatus(Guid interviewId, Guid statusId)
+        {
 
-            Guid newStatus = evnt.Payload.Status.PublicId;
+            var questionnaire = this.questionnaires.GetById(interviewId);
+
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
             var summaryUser = this.summaryItem.GetById(summmaryUserId);
 
@@ -49,12 +51,16 @@ namespace Core.Supervisor.Denormalizer
             {
                 return;
             }
+            if (statusId == summaryUser.QuestionnaireStatus)
+                return;
 
-            this.DecreaseByStatus(summaryUser, evnt.Payload.PreviousStatus.PublicId);
 
-            summaryUser.QuestionnaireStatus = newStatus;
 
-            this.IncreaseByStatus(summaryUser, newStatus);
+            this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+
+            summaryUser.QuestionnaireStatus = statusId;
+
+            this.IncreaseByStatus(summaryUser, statusId);
             this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 
@@ -146,6 +152,11 @@ namespace Core.Supervisor.Denormalizer
                         QuestionnaireStatus = status
                     };
 
+        }
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId);
         }
     }
 }

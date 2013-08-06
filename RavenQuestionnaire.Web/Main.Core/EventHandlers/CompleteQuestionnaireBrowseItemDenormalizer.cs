@@ -18,7 +18,8 @@ namespace Main.Core.EventHandlers
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<InterviewDeleted>
+                                                               IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -209,5 +210,15 @@ namespace Main.Core.EventHandlers
         }
 
         #endregion
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            CompleteQuestionnaireBrowseItem item =
+             this.documentItemStore.GetById(evnt.EventSourceId);
+
+            item.Status = SurveyStatus.GetStatusByIdOrDefault(evnt.Payload.StatusId);
+            item.LastEntryDate = evnt.EventTimeStamp;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
+        }
     }
 }

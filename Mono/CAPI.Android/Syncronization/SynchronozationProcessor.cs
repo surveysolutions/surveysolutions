@@ -70,7 +70,7 @@ namespace CAPI.Android.Syncronization
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             pullDataProcessor = new PullDataProcessor(changelog, commandService);
-            pushDataProcessor = new PushDataProcessor(changelog, commandService);
+            pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }

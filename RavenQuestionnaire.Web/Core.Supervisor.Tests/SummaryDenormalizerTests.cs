@@ -250,7 +250,7 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, initial: 1), itemId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Initial.PublicId, templateId, total: 1, initial: 1), itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
@@ -327,7 +327,7 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, initial: 1), itemId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Initial.PublicId, templateId, total: 1, initial: 1), itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
@@ -348,7 +348,7 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, initial: 1), itemId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Initial.PublicId, templateId, total: 1, initial: 1), itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
@@ -369,7 +369,7 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, completed: 1), itemId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Complete.PublicId, templateId, total: 1, completed: 1), itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
@@ -390,7 +390,7 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, completed: 1), itemId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Complete.PublicId, templateId, total: 1, completed: 1), itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 
@@ -411,7 +411,7 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
             var itemId = GetStoreItemId(this.supervisorId, templateId);
-            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, redo: 1), itemId);
+            summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Redo.PublicId, templateId, total: 1, redo: 1), itemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
 

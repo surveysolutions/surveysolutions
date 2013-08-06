@@ -6,6 +6,7 @@ using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core;
@@ -50,7 +51,8 @@ namespace CapiDataGenerator
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
             var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
-            var changeLogStore = new FileChangeLogStore();
+            var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
+            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
 
             ClearCapiDb(capiEvenStore, denormalizerStore, changeLogStore);
 

@@ -1,6 +1,7 @@
 ﻿using Main.Core.Domain.Exceptions;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace Main.Core.Domain
 {
@@ -49,10 +50,10 @@ namespace Main.Core.Domain
         {
         }
 
-        public CompleteQuestionnaireAR(CompleteQuestionnaireDocument source)
-            : base(source.PublicKey)
+        public CompleteQuestionnaireAR(Guid publicKey, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredAnswers)
+            : base(publicKey)
         {
-            CreateNewAssigment(source);
+            UpdateInterviewMetaInfo(templateId, title, responsibleId, statusId, featuredAnswers);
         }
 
         /// <summary>
@@ -517,6 +518,11 @@ namespace Main.Core.Domain
             ApplyEvent(new NewAssigmentCreated() { Source = source });
         }
 
+        public void UpdateInterviewMetaInfo(Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredAnswers)
+        {
+            ApplyEvent(new InterviewMetaInfoUpdated() { FeaturedQuestionsMeta = featuredAnswers, ResponsibleId = responsibleId, StatusId = statusId, TemplateId = templateId, Title = title });
+        }
+
         /// <summary>
         /// The change assignment.
         /// </summary>
@@ -576,6 +582,18 @@ namespace Main.Core.Domain
         protected void OnNewAssigmentCreated(NewAssigmentCreated e)
         {
             this.doc = e.Source;
+        }
+
+        protected void OnInterviewMetaInfoUpdated(InterviewMetaInfoUpdated e)
+        {
+            if (doc == null)
+                doc = new CompleteQuestionnaireDocument();
+            doc.PublicKey = this.EventSourceId;
+            doc.Status = SurveyStatus.GetStatusByIdOrDefault(e.StatusId);
+            if (e.ResponsibleId.HasValue)
+                doc.Responsible = new UserLight(e.ResponsibleId.Value, "");
+            doc.TemplateId = e.TemplateId;
+            doc.Title = e.Title;
         }
 
         // Event handler for the AnswerSet event. This method
