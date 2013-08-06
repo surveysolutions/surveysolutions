@@ -93,7 +93,7 @@ namespace Core.Supervisor.Views.Interview
                             Title = x.Title,
                             CanDelete = x.Status.Id == SurveyStatus.Unknown.PublicId || 
                                         x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId,
-                            CanBeReassigned = x.Status.Id == SurveyStatus.Unknown.PublicId ||
+                            CanBeReassigned = x.Status.Id == SurveyStatus.Unknown.PublicId || x.Status.Id == SurveyStatus.Redo.PublicId ||
                                         x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId
                         })
                 };
