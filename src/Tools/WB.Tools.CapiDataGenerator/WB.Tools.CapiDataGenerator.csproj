@@ -116,6 +116,7 @@
     <Compile Include="MVVMCross\DebugTrace.cs" />
     <Compile Include="Converters\ElapsedTimeConverter.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Ninject\CustomInProcessEventBus.cs" />
     <Compile Include="Services\DefaultBackup.cs" />
     <Compile Include="Services\IOpenFileService.cs" />
     <Compile Include="Models\MainPageModel.cs" />
@@ -221,6 +222,10 @@
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>

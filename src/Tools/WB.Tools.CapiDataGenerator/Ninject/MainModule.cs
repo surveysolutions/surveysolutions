@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model;
@@ -8,17 +9,23 @@ using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core;
+using Main.Core.Commands;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
+using Main.Core.Services;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using Ncqrs.Commanding.CommandExecution.Mapping;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
@@ -60,25 +67,30 @@ namespace CapiDataGenerator
             this.Bind<IChangeLogManipulator>().ToConstant(new ChangeLogManipulator(null, draftStore, capiEvenStore,changeLogStore));
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
 
-            this.Bind<IReadSideRepositoryReader<UserDocument>>().To<RavenReadSideRepositoryReader<UserDocument>>();
-            this.Bind<IQueryableReadSideRepositoryReader<UserDocument>>().To<RavenReadSideRepositoryReader<UserDocument>>();
-            this.Bind<IReadSideRepositoryWriter<UserDocument>>().To<RavenReadSideRepositoryWriter<UserDocument>>();
-            this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireDocument>>().To<RavenReadSideRepositoryWriter<QuestionnaireDocument>>();
-
             this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, denormalizerStore));
 
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            NcqrsInit.InitPartial(Kernel);
+            NcqrsEnvironment.SetDefault(NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>()));
+            NcqrsEnvironment.SetDefault(Kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            var snpshotStore = new InMemoryEventStore();
+            // key param for storing im memory
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+
+            var bus = new CustomInProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            this.Bind<IEventBus>().ToConstant(bus);
+
+            NcqrsInit.RegisterEventHandlers(bus, Kernel);
+
             this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
             NcqrsEnvironment.SetDefault<IEventStore>(eventStore);
             
             #region register handlers
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
 
             InitUserStorage(bus);
 
@@ -95,17 +107,24 @@ namespace CapiDataGenerator
             foreach (var store in stores)
             {
                 var storePath = store.GetPathToBakupFile();
-                FileAttributes attr = File.GetAttributes(storePath);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                try
                 {
-                    Directory.Delete(storePath, true);
-                    Directory.CreateDirectory(storePath);
+                    FileAttributes attr = File.GetAttributes(storePath);
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        Directory.Delete(storePath, true);
+                        Directory.CreateDirectory(storePath);
+                    }
+                    else
+                    {
+                        File.Delete(storePath);
+                        File.Create(storePath);
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    File.Delete(storePath);
-                    File.Create(storePath);
                 }
+                
             }
         }
 
