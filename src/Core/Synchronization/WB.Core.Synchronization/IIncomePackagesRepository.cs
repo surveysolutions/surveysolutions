@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernel.Structures.Synchronization;
+﻿using System;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization
 {
@@ -6,5 +7,6 @@ namespace WB.Core.Synchronization
     {
         void StoreIncomingItem(SyncItem item);
         int GetIncomingItemsCount();
+        void ProcessItem(Guid id);
     }
 }
