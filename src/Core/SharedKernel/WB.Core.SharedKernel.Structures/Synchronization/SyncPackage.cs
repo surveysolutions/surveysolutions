@@ -3,17 +3,12 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
-    
-    public class SyncPackage
+
+    public class SyncPackage : BasePackage
     {
         public Guid Id;
-
         public Guid SyncProcessKey;
-
         public List<SyncItem> ItemsContainer;
-
-        public bool IsErrorOccured;
-        public string ErrorMessage;
 
         public SyncPackage()
         {

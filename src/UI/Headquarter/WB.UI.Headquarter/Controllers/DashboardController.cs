@@ -1,5 +1,7 @@
 ﻿using Main.Core.View;
-using Main.Core.View.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace WB.UI.Headquarter.Controllers
 {
@@ -11,7 +13,6 @@ namespace WB.UI.Headquarter.Controllers
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-    using Main.Core.Commands.Questionnaire.Completed;
 
     public class DashboardController : Controller
     {

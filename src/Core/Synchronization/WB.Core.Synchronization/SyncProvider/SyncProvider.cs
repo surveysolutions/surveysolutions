@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Main.Core.Commands.Sync;
 using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -22,19 +23,21 @@ namespace WB.Core.Synchronization.SyncProvider
         #warning ViewFactory should be used here
         private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
 
-        private ISynchronizationDataStorage storage;
+        private readonly ISynchronizationDataStorage storage;
+        private readonly IIncomePackagesRepository incomeRepository;
 
-        //private IQueryableReadSideRepositoryReader<SyncActivityDocument> syncActivities;
+        private readonly ILogger logger;
 
-        public SyncProvider(
-            IQueryableReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> questionnaires,
-            IQueryableReadSideRepositoryReader<UserDocument> users,
-            IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
-            ISynchronizationDataStorage storage)
+
+        public SyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
+            ISynchronizationDataStorage storage,IIncomePackagesRepository incomeRepository,
+            ILogger logger)
         {
             this.devices = devices;
-            //this.syncActivities = syncActivities;
+            this.incomeRepository = incomeRepository;
             this.storage = storage;
+            this.logger = logger;
+
         }
 
         public SyncItem GetSyncItem(Guid clientRegistrationKey, Guid id, long sequence)
@@ -43,10 +46,10 @@ namespace WB.Core.Synchronization.SyncProvider
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
+            // item could be changed on server and sequence would be different
+            
             var item = storage.GetLatestVersion(id);
-            //doing tricky thing
-            //we are saving old sequence even if new version was returned
-            commandService.Execute(new UpdateClientDeviceLastSyncItemCommand(clientRegistrationKey, sequence));
+            
             
             return item;
         }
@@ -73,14 +76,17 @@ namespace WB.Core.Synchronization.SyncProvider
             return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier, userId);
         }
 
-        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey)
+        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
             var device = devices.GetById(clientRegistrationKey);
 
             if (device == null)
                 throw new ArgumentException("Device was not found.");
 
-            return storage.GetChunkPairsCreatedAfter(device.LastSyncItemIdentifier, userId);
+            /*if (clientSequence != device.LastSyncItemIdentifier)
+                logger.Info(string.Format("Local [{0}] and remote [{1}] sequence number mismatch.", device.LastSyncItemIdentifier, clientSequence));*/
+
+            return storage.GetChunkPairsCreatedAfter(clientSequence, userId);
         }
 
 
@@ -118,39 +124,25 @@ namespace WB.Core.Synchronization.SyncProvider
 
             return new HandshakePackage(identifier.ClientInstanceKey, syncActivityKey, ClientRegistrationKey);
         }
-        
+
         public bool HandleSyncItem(SyncItem item, Guid syncActivityId)
         {
-            if (string.IsNullOrWhiteSpace(item.Content))
+            if (item == null)
                 throw new ArgumentException("Sync Item is not set.");
 
-            /*//check and validate sync activity
-            if (Guid.Empty == syncActivityId)
-                throw new ArgumentException("Sync Activity Identifier is not set.");*/
+            if (string.IsNullOrWhiteSpace(item.Content))
+                throw new ArgumentException("Sync Item content is not set.");
 
-            
-            var items = GetContentAsItem<AggregateRootEvent[]>(item);
+            if (item.Id == Guid.Empty)
+                throw new ArgumentException("Sync Item id is not set.");
 
-            var processor = new SyncEventHandler();
-            processor.Merge(items);
-            processor.Commit();
 
-            //commandService.Execute(new UpdateSyncActivityCommand(syncActivityId));
-
+            incomeRepository.StoreIncomingItem(item);
             return true;
+
         }
 
-        private T GetContentAsItem<T>(SyncItem syncItem)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            var item = JsonConvert.DeserializeObject<T>(
-                syncItem.IsCompressed ?
-                PackageHelper.DecompressString(syncItem.Content) :
-                syncItem.Content, 
-                settings);
 
-            return item;
-        }
 
     }
 }

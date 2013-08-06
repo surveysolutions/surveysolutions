@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -27,6 +28,7 @@ namespace WB.UI.Designer.Views.Tests
         public void Handle_When_SnapshotLoaded_event_template_is_absent_Then_new_document_is_added()
         {
             // arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
 
             Guid questionnaireId = Guid.NewGuid();
@@ -45,6 +47,7 @@ namespace WB.UI.Designer.Views.Tests
         public void Handle_When_SnapshotLoadedEventTemplateIsPresent_Then_OldTemplateReplaced()
         {
             // arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
 
             Guid questionnaireId = Guid.NewGuid();

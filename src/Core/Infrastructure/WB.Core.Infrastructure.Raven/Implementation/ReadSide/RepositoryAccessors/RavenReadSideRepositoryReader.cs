@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Raven.Client;
 using Raven.Client.Document;
-
+using Raven.Client.Indexes;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -72,7 +72,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public IEnumerable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query)
+        public IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query)
         {
             this.ThrowIfRepositoryIsNotAccessible();
 
@@ -85,9 +85,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             return retval;
         }
 
-        public IEnumerable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query, int start, int pageSize)
+        public IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query)
         {
-            return GetPagedDocuments(query, start, pageSize).ToList();
+           // return GetPagedDocuments(query, start, pageSize);
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return session.Query<TEntity>()
+                              .Where(query);
+            }
         }
 
         private void ThrowIfRepositoryIsNotAccessible()
@@ -99,15 +104,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         protected IEnumerable<IQueryable<TEntity>> GetAllDocuments(Expression<Func<TEntity, bool>> whereClause)
         {
-            const int elementTakeCount = 1024;
             int skipResults = 0;
 
             while (true)
             {
-                var nextGroupOfPoints = GetPagedDocuments(whereClause, skipResults, elementTakeCount);
+                var nextGroupOfPoints = GetPagedDocuments(whereClause, skipResults, MaxNumberOfRequestsPerSession);
                 if (!nextGroupOfPoints.Any())
                     yield break;
-                skipResults += elementTakeCount;
+                skipResults += MaxNumberOfRequestsPerSession;
                 yield return nextGroupOfPoints;
             }
         }
