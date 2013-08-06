@@ -86,20 +86,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, answerTime, answer));
         }
 
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, Guid selectedOption)
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal selectedValue)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
 
-            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedOption));
+            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedValue));
         }
 
-        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, Guid[] selectedOptions)
+        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal[] selectedValues)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
 
-            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedOptions));
+            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
         }
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)

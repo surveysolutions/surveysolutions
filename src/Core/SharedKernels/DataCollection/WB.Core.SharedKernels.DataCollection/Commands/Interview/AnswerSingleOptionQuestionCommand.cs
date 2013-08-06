@@ -7,12 +7,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "AnswerSingleOptionQuestion")]
     public class AnswerSingleOptionQuestionCommand : AnswerQuestionCommand
     {
-        public Guid SelectedOption { get; private set; }
+        public decimal SelectedValue { get; private set; }
 
-        public AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, Guid questionId, DateTime answerTime, Guid selectedOption)
+        public AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, Guid questionId, DateTime answerTime, decimal selectedValue)
             : base(interviewId, userId, questionId, answerTime)
         {
-            this.SelectedOption = selectedOption;
+            this.SelectedValue = selectedValue;
         }
     }
 }
