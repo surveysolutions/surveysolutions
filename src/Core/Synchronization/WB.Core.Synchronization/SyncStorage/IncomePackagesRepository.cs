@@ -39,17 +39,15 @@ namespace WB.Core.Synchronization.SyncStorage
                 throw new ArgumentException("Sync Item is not set.");
 
 
-            File.WriteAllText(GetItemFileName(item.Id), item.Content);
+            var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
 
-            var meta = GetContentAsItem<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
+            File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
 
-            NcqrsEnvironment.Get<ICommandService>().Execute(new UpdateInterviewMetaInfoCommand()
-                {
-                    PublicKey = meta.PublicKey,
-                    ResponsibleId = meta.ResponsibleId,
-                    StatusId = meta.Status.Id,
-                    TemplateId = meta.TemplateId
-                });
+
+            NcqrsEnvironment.Get<ICommandService>()
+                            .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId, meta.Title,
+                                                                        meta.ResponsibleId, meta.Status.Id,
+                                                                        null));
             //   Task.Factory.StartNew(() => ProcessItemAsync(item.Id));
         }
 
