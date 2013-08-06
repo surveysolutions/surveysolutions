@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,6 +91,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
+            ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedValue));
         }
@@ -98,6 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
+            this.ThrowIfSomeValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValues);
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
         }
@@ -126,10 +129,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             QuestionType questionType = questionnaire.GetQuestionType(questionId);
 
-            if (!expectedQuestionTypes.Contains(questionType))
+            bool typeIsNotExpected = !expectedQuestionTypes.Contains(questionType);
+            if (typeIsNotExpected)
                 throw new InterviewException(string.Format(
                     "Question with id '{0}' has type {1}. But one of the following types was expected: {2}.",
                     questionId, questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
+        }
+
+        private void ThrowIfValueIsNotOneOfAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal value)
+        {
+            IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
+
+            bool valueIsNotOneOfAvailable = !availableValues.Contains(value);
+            if (valueIsNotOneOfAvailable)
+                throw new InterviewException(string.Format(
+                    "For question with id '{0}' was provided selected value {1} as answer. But only following values are allowed: {2}.",
+                    questionId, value, JoinDecimalsWithComma(availableValues)));
+        }
+
+        private void ThrowIfSomeValueIsNotOneOfAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal[] values)
+        {
+            IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
+
+            bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
+            if (someValueIsNotOneOfAvailable)
+                throw new InterviewException(string.Format(
+                    "For question with id '{0}' were provided selected values {1} as answer. But only following values are allowed: {2}.",
+                    questionId, JoinDecimalsWithComma(values), JoinDecimalsWithComma(availableValues)));
+        }
+
+        private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
+        {
+            return string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
         }
     }
 }
