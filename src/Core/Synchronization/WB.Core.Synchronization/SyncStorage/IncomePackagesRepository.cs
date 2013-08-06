@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core;
+using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Events;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncProvider;
@@ -17,17 +20,17 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly string path;
         private const string FolderName = "IncomigData";
         private const string FileExtension = "sync";
-        private bool inProcess = false;
+    //    private bool inProcess = false;
 
         public IncomePackagesRepository(string folderPath)
         {
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            else
+            /*else
             {
                 ProccessStoredItems();
-            }
+            }*/
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -37,7 +40,17 @@ namespace WB.Core.Synchronization.SyncStorage
 
 
             File.WriteAllText(GetItemFileName(item.Id), item.Content);
-            Task.Factory.StartNew(() => ProcessItemAsync(item.Id));
+
+            var meta = GetContentAsItem<InterviewMetaInfo>(PackageHelper.DecompressString(item.MetaInfo));
+
+            NcqrsEnvironment.Get<ICommandService>().Execute(new UpdateInterviewMetaInfoCommand()
+                {
+                    PublicKey = meta.PublicKey,
+                    ResponsibleId = meta.ResponsibleId,
+                    StatusId = meta.Status.Id,
+                    TemplateId = meta.TemplateId
+                });
+            //   Task.Factory.StartNew(() => ProcessItemAsync(item.Id));
         }
 
         public int GetIncomingItemsCount()
@@ -64,16 +77,12 @@ namespace WB.Core.Synchronization.SyncStorage
             /* foreach (FileInfo incomingPackage in incomingPackages)
              {*/
             var packageId = Guid.Parse(Path.GetFileNameWithoutExtension(incomingPackage.Name));
-            Task.Factory.StartNew(() => ProcessItemAsync(packageId));
+            Task.Factory.StartNew(() => ProcessItem(packageId));
             //   }
         }
 
-        protected void ProcessItemAsync(Guid id)
+        public void ProcessItem(Guid id)
         {
-            if(inProcess)
-                return;
-            inProcess = true;
-            
             var fileName = GetItemFileName(id);
             if (!File.Exists(fileName))
                 return;
@@ -90,7 +99,6 @@ namespace WB.Core.Synchronization.SyncStorage
 
             File.Delete(fileName);
             
-            inProcess = false;
             ProccessStoredItems();
         }
 
