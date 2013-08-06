@@ -39,6 +39,9 @@ namespace Core.Supervisor.DenormalizerStorageItem
         public string TemplateName { get; set; }
 
         public Guid ResponsibleId { get; set; }
+
+        public Guid CurrentStatusId { get; set; }
+
         public HashSet<Guid> DeletedQuestionnaries { get; set; }
 
         /// <summary>

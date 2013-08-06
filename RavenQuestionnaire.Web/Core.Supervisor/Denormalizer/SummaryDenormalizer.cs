@@ -51,15 +51,12 @@ namespace Core.Supervisor.Denormalizer
             {
                 return;
             }
-            if (statusId == summaryUser.QuestionnaireStatus)
+            if (statusId == summaryUser.CurrentStatusId)
                 return;
 
-            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(evnt.EventSourceId,
-                                                                 evnt.Payload.PreviousStatus.PublicId, summaryUser);
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(interviewId, summaryUser.CurrentStatusId, summaryUser);
 
-            this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
-
-            summaryUser.QuestionnaireStatus = statusId;
+            summaryUser.CurrentStatusId = statusId;
 
             this.IncreaseByStatus(summaryUser, statusId);
             this.summaryItem.Store(summaryUser, summmaryUserId);

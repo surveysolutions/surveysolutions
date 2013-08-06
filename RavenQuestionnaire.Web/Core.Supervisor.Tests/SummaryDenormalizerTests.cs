@@ -580,7 +580,8 @@ namespace Core.Supervisor.Tests
                 {
                     UnassignedCount = 1,
                     ResponsibleId = interviewerId,
-                    ResponsibleSupervisorId = supervisorId
+                    ResponsibleSupervisorId = supervisorId,
+                    CurrentStatusId = SurveyStatus.Unassign.PublicId
                 }, interviewerItemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, null, false);
@@ -588,8 +589,7 @@ namespace Core.Supervisor.Tests
             var statusChangeEvent =
                 CreatePublishedEvent(new QuestionnaireStatusChanged()
                     {
-                        Status = SurveyStatus.Initial,
-                        PreviousStatus = SurveyStatus.Unassign
+                        Status = SurveyStatus.Initial
                     }, questionnarieId);
             //act
 
@@ -628,6 +628,7 @@ namespace Core.Supervisor.Tests
                     ResponsibleId = responsibleId, 
                     ResponsibleSupervisorId = responsibleSupervisorId, 
                     TemplateId = templateId,
+                    CurrentStatusId = status
                 };
 
             return summaryItem;

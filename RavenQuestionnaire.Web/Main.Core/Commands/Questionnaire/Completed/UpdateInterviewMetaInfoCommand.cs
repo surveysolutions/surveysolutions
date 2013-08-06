@@ -16,8 +16,22 @@ namespace Main.Core.Commands.Questionnaire.Completed
     [MapsToAggregateRootMethodOrConstructor(typeof(CompleteQuestionnaireAR), "UpdateInterviewMetaInfo")]
     public class UpdateInterviewMetaInfoCommand : CommandBase
     {
+        public UpdateInterviewMetaInfoCommand(Guid publicKey, Guid templateId, string title, Guid? responsibleId,
+                                              Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+            : base(publicKey)
+        {
+            Id = PublicKey = publicKey;
+            TemplateId = templateId;
+            Title = title;
+            ResponsibleId = responsibleId;
+            StatusId = statusId;
+            FeaturedQuestionsMeta = featuredQuestionsMeta;
+        }
+
         [AggregateRootId]
         public Guid PublicKey { get; set; }
+
+        public Guid Id { get; set; }
 
         public Guid TemplateId { get; set; }
 
@@ -27,6 +41,6 @@ namespace Main.Core.Commands.Questionnaire.Completed
 
         public Guid StatusId { get; set; }
 
-        public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
+        public List<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
     }
 }

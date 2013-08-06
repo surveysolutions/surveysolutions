@@ -128,16 +128,10 @@ namespace CAPI.Android.Syncronization.Pull
                 var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
                 syncCacher.SaveItem(item.Id, item.Content);
 
-                commandService.Execute(new UpdateInterviewMetaInfoCommand()
-                    {
-                        PublicKey = metaInfo.PublicKey,
-                        ResponsibleId = metaInfo.ResponsibleId,
-                        StatusId = metaInfo.Status.Id,
-                        Title = metaInfo.Title,
-                        TemplateId = metaInfo.TemplateId,
-                        FeaturedQuestionsMeta =
-                            metaInfo.FeaturedQuestionsMeta.ToList()
-                    });
+                commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
+                                                                          metaInfo.Title, metaInfo.ResponsibleId,
+                                                                          metaInfo.Status.Id,
+                                                                          metaInfo.FeaturedQuestionsMeta.ToList()));
 
 
             }

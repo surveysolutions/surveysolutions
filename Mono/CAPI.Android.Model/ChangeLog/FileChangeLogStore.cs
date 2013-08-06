@@ -27,7 +27,10 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId)
         {
+            if(recordData.Length==0)
+                return;
             var path = GetFileName(recordId);
+            var eventSourceId = recordData[0].EventSourceId;
             var syncItem = new SyncItem()
                 {
                     Content = PackageHelper.CompressString(JsonUtils.GetJsonData(recordData)),
@@ -36,8 +39,8 @@ namespace CAPI.Android.Core.Model.ChangeLog
                     MetaInfo =
                         PackageHelper.CompressString(
                             JsonUtils.GetJsonData(
-                                metaInfoFactory.Load(new InterviewMetaInfoInputModel(recordData[0].EventSourceId)))),
-                    Id = recordId
+                                metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId)))),
+                    Id = eventSourceId
                 };
             File.WriteAllText(path, JsonUtils.GetJsonData(syncItem));
         }

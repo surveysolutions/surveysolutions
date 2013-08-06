@@ -219,6 +219,7 @@ namespace Main.Core.EventHandlers
 
             item.Status = SurveyStatus.GetStatusByIdOrDefault(evnt.Payload.StatusId);
             item.LastEntryDate = evnt.EventTimeStamp;
+            item.IsDeleted = false;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
     }

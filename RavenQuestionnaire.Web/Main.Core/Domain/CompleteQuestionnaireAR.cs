@@ -50,10 +50,10 @@ namespace Main.Core.Domain
         {
         }
 
-        public CompleteQuestionnaireAR(Guid publicKey, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredAnswers)
-            : base(publicKey)
+        public CompleteQuestionnaireAR(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+            : base(id)
         {
-            UpdateInterviewMetaInfo(templateId, title, responsibleId, statusId, featuredAnswers);
+            UpdateInterviewMetaInfo(id, templateId, title, responsibleId, statusId, featuredQuestionsMeta);
         }
 
         /// <summary>
@@ -518,9 +518,9 @@ namespace Main.Core.Domain
             ApplyEvent(new NewAssigmentCreated() { Source = source });
         }
 
-        public void UpdateInterviewMetaInfo(Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredAnswers)
+        public void UpdateInterviewMetaInfo(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
         {
-            ApplyEvent(new InterviewMetaInfoUpdated() { FeaturedQuestionsMeta = featuredAnswers, ResponsibleId = responsibleId, StatusId = statusId, TemplateId = templateId, Title = title });
+            ApplyEvent(new InterviewMetaInfoUpdated() { FeaturedQuestionsMeta = featuredQuestionsMeta, ResponsibleId = responsibleId, StatusId = statusId, TemplateId = templateId, Title = title });
         }
 
         /// <summary>

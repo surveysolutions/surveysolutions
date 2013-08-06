@@ -128,11 +128,13 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
         private void UpdateViewFromEventStream(QuestionnarieWithSequence viewItem)
         {
+            incomePackages.ProcessItem(viewItem.Document.PublicKey);
+
             var events = eventStore.ReadFrom(viewItem.Document.PublicKey, viewItem.Sequence, long.MaxValue);
             if (events.IsEmpty)
                 return;
             var updatedView = RestoreFromEventStream(events, viewItem.Document);
-            incomePackages.ProcessItem(viewItem.Document.PublicKey);
+           
             memcache[updatedView.PublicKey] = new QuestionnarieWithSequence(updatedView,
                                                                                   events.Last().EventSequence);
         }
