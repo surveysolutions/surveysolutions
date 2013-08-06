@@ -27,7 +27,7 @@ namespace Core.Supervisor.Tests
         private readonly Guid interviewer1Id = Guid.Parse("33333333-3333-3333-3333-333333333333");
         private readonly Guid templateId = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF");
         private readonly Guid template1Id = Guid.Parse("EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE");
-        private readonly Guid questionnarieId = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-111111111111");
+        private readonly Guid interviewId = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-111111111111");
 
         [TestCase("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555", "Approved")]
         [TestCase("776C0DC1-23C4-4B03-A3ED-B24EF005559B", "Completed")]
@@ -44,9 +44,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, status.PublicId, templateId, increaseStatus: status.PublicId), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, status: status);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId, status: status);
 
-            var deleteInteviewEvent = this.CreatePublishedInterviewDeletedEvent(questionnarieId, headquarterId);
+            var deleteInteviewEvent = this.CreatePublishedInterviewDeletedEvent(this.interviewId, headquarterId);
             // Act
             target.Handle(deleteInteviewEvent);
 
@@ -59,7 +59,7 @@ namespace Core.Supervisor.Tests
             Assert.That(item.CompletedWithErrorsCount, Is.EqualTo(0));
             Assert.That(item.ApprovedCount, Is.EqualTo(0));
             Assert.That(item.TotalCount, Is.EqualTo(0));
-            Assert.True(item.DeletedQuestionnaries.Contains(questionnarieId));
+            Assert.True(item.DeletedInterviews.Contains(this.interviewId));
         }
 
         [TestCase("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555", "Approved")]
@@ -77,9 +77,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, status.PublicId, templateId, increaseStatus: status.PublicId, approved:1, completed:1, error: 1, initial: 1, redo: 1, unassigned: 1, total:6), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, status: status);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId, status: status);
 
-            var deleteInteviewEvent = this.CreatePublishedInterviewDeletedEvent(questionnarieId, headquarterId);
+            var deleteInteviewEvent = this.CreatePublishedInterviewDeletedEvent(this.interviewId, headquarterId);
             // Act
             target.Handle(deleteInteviewEvent);
 
@@ -92,7 +92,7 @@ namespace Core.Supervisor.Tests
             Assert.That(item.CompletedWithErrorsCount, Is.EqualTo(1));
             Assert.That(item.ApprovedCount, Is.EqualTo(1));
             Assert.That(item.TotalCount, Is.EqualTo(6));
-            Assert.True(item.DeletedQuestionnaries.Contains(questionnarieId));
+            Assert.True(item.DeletedInterviews.Contains(this.interviewId));
         }
 
         ///////////////////
@@ -107,9 +107,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, unassigned: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(supervisorId, "supervisor"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(supervisorId, "supervisor"));
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -125,9 +125,9 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, null, new UserLight(supervisorId, "supervisor"));
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -143,9 +143,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, template1Id);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, template1Id, total: 1, unassigned: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, null, new UserLight(supervisorId, "supervisor"));
 
             // Act
             target.Handle(assignmentChangeEvent);
@@ -160,9 +160,9 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, null, new UserLight(supervisorId, "supervisor"));
 
             // Act
             target.Handle(assignmentChangeEvent);
@@ -179,9 +179,9 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, null, new UserLight(supervisorId, "supervisor"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, null, new UserLight(supervisorId, "supervisor"));
 
             // Act
             target.Handle(assignmentChangeEvent);
@@ -200,9 +200,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, unassigned: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
 
             // Act
             target.Handle(assignmentChangeEvent);
@@ -218,9 +218,9 @@ namespace Core.Supervisor.Tests
             var summaryStore = CreateInmemorySummaryStore();
             summaryStore.Store(this.CreateSummaryItem(this.supervisorId, this.supervisorId, SurveyStatus.Unassign.PublicId, this.templateId, total: 1, unassigned: 1), GetStoreItemId(this.supervisorId, this.templateId));
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
 
             // Act
             target.Handle(assignmentChangeEvent);
@@ -238,9 +238,9 @@ namespace Core.Supervisor.Tests
             var summaryStore = CreateInmemorySummaryStore();
             summaryStore.Store(this.CreateSummaryItem(this.supervisorId, this.supervisorId, SurveyStatus.Unassign.PublicId, this.templateId, total: 1, unassigned: 1), GetStoreItemId(this.supervisorId, this.templateId));
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -257,9 +257,9 @@ namespace Core.Supervisor.Tests
             var summaryStore = CreateInmemorySummaryStore();
             summaryStore.Store(this.CreateSummaryItem(this.supervisorId, this.supervisorId, SurveyStatus.Unassign.PublicId, this.templateId, total: 1, unassigned: 1), GetStoreItemId(this.supervisorId, this.templateId));
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -278,9 +278,9 @@ namespace Core.Supervisor.Tests
             summaryStore.Store(this.CreateSummaryItem(this.interviewerId, this.supervisorId, SurveyStatus.Initial.PublicId, this.templateId, total: 1, initial: 1), GetStoreItemId(this.interviewerId, this.templateId));
 
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -297,9 +297,9 @@ namespace Core.Supervisor.Tests
             summaryStore.Store(this.CreateSummaryItem(this.interviewerId, this.supervisorId, SurveyStatus.Initial.PublicId, this.templateId, total: 1, initial: 1), GetStoreItemId(this.interviewerId, this.templateId));
 
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(questionnarieId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
+            var assignmentChangeEvent = this.CreatePublishedAssignmentChangedEvent(this.interviewId, new UserLight(supervisorId, "supervisor"), new UserLight(interviewerId, "interviewer"));
             // Act
             target.Handle(assignmentChangeEvent);
 
@@ -322,9 +322,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Initial.PublicId, templateId, total: 1, initial: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Initial, SurveyStatus.Initial);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Initial, SurveyStatus.Initial);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -340,9 +340,9 @@ namespace Core.Supervisor.Tests
             // Arrange
             var summaryStore = CreateInmemorySummaryStore();
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Unknown, SurveyStatus.Unassign);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Unknown, SurveyStatus.Unassign);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -358,9 +358,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, unassigned: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Unknown, SurveyStatus.Unassign);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Unknown, SurveyStatus.Unassign);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -378,9 +378,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Unassign.PublicId, templateId, total: 1, unassigned: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Unassign, SurveyStatus.Initial);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Unassign, SurveyStatus.Initial);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -399,9 +399,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Initial.PublicId, templateId, total: 1, initial: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Initial, SurveyStatus.Complete);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Initial, SurveyStatus.Complete);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -420,12 +420,12 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             var summaryItemWithOneDeletedInterview = this.CreateSummaryItem(supervisorId, supervisorId,
                                                                             SurveyStatus.Unassign.PublicId, templateId);
-            summaryItemWithOneDeletedInterview.DeletedQuestionnaries.Add(questionnarieId);
+            summaryItemWithOneDeletedInterview.DeletedInterviews.Add(this.interviewId);
             summaryStore.Store(summaryItemWithOneDeletedInterview, itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Initial, SurveyStatus.Complete);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Initial, SurveyStatus.Complete);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -446,9 +446,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Initial.PublicId, templateId, total: 1, initial: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Initial, SurveyStatus.Error);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Initial, SurveyStatus.Error);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -467,9 +467,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Complete.PublicId, templateId, total: 1, completed: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Complete, SurveyStatus.Redo);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Complete, SurveyStatus.Redo);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -488,9 +488,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Complete.PublicId, templateId, total: 1, completed: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Complete, SurveyStatus.Approve);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Complete, SurveyStatus.Approve);
             // Act
             target.Handle(statusChangeEvent);
 
@@ -509,9 +509,9 @@ namespace Core.Supervisor.Tests
             var itemId = GetStoreItemId(this.supervisorId, templateId);
             summaryStore.Store(this.CreateSummaryItem(supervisorId, supervisorId, SurveyStatus.Redo.PublicId, templateId, total: 1, redo: 1), itemId);
 
-            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId);
+            SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, this.interviewId, templateId);
 
-            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(questionnarieId, SurveyStatus.Redo, SurveyStatus.Complete);
+            var statusChangeEvent = this.CreatePublishedStatusChangedEvent(this.interviewId, SurveyStatus.Redo, SurveyStatus.Complete);
             // Act
             target.Handle(statusChangeEvent);
 

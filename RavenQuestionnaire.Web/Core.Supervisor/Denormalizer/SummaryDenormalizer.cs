@@ -45,9 +45,9 @@ namespace Core.Supervisor.Denormalizer
             var questionnaire = this.questionnaires.GetById(interviewId);
 
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
-            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+            var userSummary = this.summaryItem.GetById(summmaryUserId);
 
-            if (summaryUser == null)
+            if (userSummary == null)
             {
                 return;
             }
@@ -58,19 +58,21 @@ namespace Core.Supervisor.Denormalizer
 
             summaryUser.CurrentStatusId = statusId;
 
-            this.IncreaseByStatus(summaryUser, statusId);
-            this.summaryItem.Store(summaryUser, summmaryUserId);
+this.IncreaseByStatus(summaryUser, statusId);
+
+            this.summaryItem.Store(userSummary, summmaryUserId);
+            
         }
 
-        private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem summaryUser)
+        private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem userSummary)
         {
-            if (!summaryUser.DeletedQuestionnaries.Contains(interviewId))
+            if (!userSummary.DeletedInterviews.Contains(interviewId))
             {
-                this.DecreaseByStatus(summaryUser, previousStatusId);
+                this.DecreaseByStatus(userSummary, previousStatusId);
             }
             else
             {
-                summaryUser.DeletedQuestionnaries.Remove(interviewId);
+                userSummary.DeletedInterviews.Remove(interviewId);
             }
         }
 
@@ -85,9 +87,9 @@ namespace Core.Supervisor.Denormalizer
 
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
 
-            var summaryUser = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
+            var userSummary = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
 
-            if (evnt.Payload.PreviousResponsible != null && summaryUser.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
+            if (evnt.Payload.PreviousResponsible != null && userSummary.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
             {
                 var summaryPrevUserId = evnt.Payload.PreviousResponsible.Id.Combine(questionnaire.TemplateId);
                 var summaryPrevUser = this.summaryItem.GetById(summaryPrevUserId);
@@ -95,24 +97,24 @@ namespace Core.Supervisor.Denormalizer
                 this.DecreaseByStatus(summaryPrevUser, questionnaire.Status.PublicId);
                 this.summaryItem.Store(summaryPrevUser, summaryPrevUserId);
             }
-            this.IncreaseByStatus(summaryUser, questionnaire.Status.PublicId);
-            this.summaryItem.Store(summaryUser, summaryUserId);
+            this.IncreaseByStatus(userSummary, questionnaire.Status.PublicId);
+            this.summaryItem.Store(userSummary, summaryUserId);
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
-            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+            var userSummary = this.summaryItem.GetById(summmaryUserId);
 
-            if (summaryUser == null)
+            if (userSummary == null)
                 return;
 
-            this.DecreaseByStatus(summaryUser, questionnaire.Status.PublicId);
+            this.DecreaseByStatus(userSummary, questionnaire.Status.PublicId);
 
-            summaryUser.DeletedQuestionnaries.Add(evnt.EventSourceId);
+            userSummary.DeletedInterviews.Add(evnt.EventSourceId);
             
-            this.summaryItem.Store(summaryUser, summmaryUserId);
+            this.summaryItem.Store(userSummary, summmaryUserId);
         }
 
         private void DecreaseByStatus(SummaryItem summary, Guid statusId)

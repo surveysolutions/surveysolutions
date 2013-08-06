@@ -25,7 +25,7 @@
             questionnaire: q,
             url: '@Url.Action("Assign", "HQ", new { }, Request.Url.Scheme)',
             commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-            backUrl: '@Url.Action("Interviews", "HQ", new { templateId = "_______" }, Request.Url.Scheme)',
+            backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
         };
     });
 </script>
