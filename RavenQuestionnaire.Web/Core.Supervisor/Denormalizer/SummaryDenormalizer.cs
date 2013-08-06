@@ -54,7 +54,8 @@ namespace Core.Supervisor.Denormalizer
             if (statusId == summaryUser.QuestionnaireStatus)
                 return;
 
-
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(evnt.EventSourceId,
+                                                                 evnt.Payload.PreviousStatus.PublicId, summaryUser);
 
             this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
 
@@ -62,6 +63,18 @@ namespace Core.Supervisor.Denormalizer
 
             this.IncreaseByStatus(summaryUser, statusId);
             this.summaryItem.Store(summaryUser, summmaryUserId);
+        }
+
+        private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem summaryUser)
+        {
+            if (!summaryUser.DeletedQuestionnaries.Contains(interviewId))
+            {
+                this.DecreaseByStatus(summaryUser, previousStatusId);
+            }
+            else
+            {
+                summaryUser.DeletedQuestionnaries.Remove(interviewId);
+            }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
@@ -98,7 +111,10 @@ namespace Core.Supervisor.Denormalizer
             if (summaryUser == null)
                 return;
 
-            this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
+            this.DecreaseByStatus(summaryUser, questionnaire.Status.PublicId);
+
+            summaryUser.DeletedQuestionnaries.Add(evnt.EventSourceId);
+            
             this.summaryItem.Store(summaryUser, summmaryUserId);
         }
 
@@ -137,9 +153,6 @@ namespace Core.Supervisor.Denormalizer
                 responsibleSupervisorName = user.Supervisor.Name;
             }
 
-            var status = questionnaire.Status.PublicId;
-            if (status == SurveyStatus.Unknown.PublicId && isUserIsSupervisor)
-                status = SurveyStatus.Unassign.PublicId;
             return
                 new SummaryItem()
                     {
@@ -148,8 +161,7 @@ namespace Core.Supervisor.Denormalizer
                         ResponsibleSupervisorId = responsibleSupervisorId,
                         ResponsibleSupervisorName = responsibleSupervisorName,
                         ResponsibleId = user.PublicKey,
-                        ResponsibleName = user.UserName,
-                        QuestionnaireStatus = status
+                        ResponsibleName = user.UserName
                     };
 
         }

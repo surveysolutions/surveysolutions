@@ -28,7 +28,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
             var item = interviewWriter.GetById(evnt.EventSourceId);
-
+            item.Responsible = evnt.Payload.Responsible;
             syncStorage.SaveInterview(item, evnt.Payload.Responsible.Id);
         }
 
@@ -36,7 +36,10 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         {
             var item = interviewWriter.GetById(evnt.EventSourceId);
             if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
+            {
+                item.Status = evnt.Payload.Status;
                 syncStorage.SaveInterview(item, item.Responsible.Id);
+            }
             else
                 syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, item.Responsible.Id);
 
