@@ -1,5 +1,5 @@
 ﻿using System.Configuration;
-using Core.Supervisor.Views.Index;
+using Core.Supervisor.Denormalizer;
 using Main.Core;
 using System.Collections.Generic;
 using System.Linq;
