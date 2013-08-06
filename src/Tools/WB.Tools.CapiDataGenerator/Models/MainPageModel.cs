@@ -352,20 +352,21 @@ namespace CapiDataGenerator
                     int.TryParse(CommentsCount, out ccount);
                     int.TryParse(StatusesCount, out scount);
 
-                    var questionsCount = template.GetAllQuestions<IQuestion>().Count(x => !x.Featured);
+                    var questions = ((CompleteQuestionnaireDocument)template).GetQuestions().Where(x=>!x.Featured);
+                    var questionsCount = questions.Count();
 
                     acount = (int) (questionsCount*((double) acount/100));
                     ccount = (int) (questionsCount*((double) ccount/100));
                     scount = (int) (icount*qcount*((double) scount/100));
 
-                    TotalCount = icount + icount*qcount*(acount + ccount + scount + 1);
+                    TotalCount = icount + icount * qcount * (acount + ccount + 1) + scount;
 
                     try
                     {
                         var users = CreateUsers(icount);
                         var questionnaries = CreateQuestionnaires(template, qcount, users);
-                        CreateAnswers(template, acount, questionnaries);
-                        CreateComments(template, ccount, questionnaries);
+                        CreateAnswers(acount, questionnaries, questions);
+                        CreateComments(ccount, questionnaries, questions);
                         ChangeStatuses(scount, questionnaries);
                     }
                     catch (Exception e)
@@ -403,9 +404,8 @@ namespace CapiDataGenerator
             }
         }
 
-        private void CreateComments(QuestionnaireDocument template, int commentsCount, List<Guid> questionnaires)
+        private void CreateComments(int commentsCount, List<Guid> questionnaires, IEnumerable<ICompleteQuestion> questions)
         {
-            var questions = ((CompleteQuestionnaireDocument)template).GetQuestions().Where(x=>!x.Featured);
             for (int j = 0; j < questionnaires.Count; j++)
             {
                 var qId = questionnaires[j];
@@ -484,9 +484,8 @@ namespace CapiDataGenerator
             return questionnaires;
         }
 
-        private void CreateAnswers(QuestionnaireDocument template, int answersCount, List<Guid> questionnaires)
+        private void CreateAnswers(int answersCount, List<Guid> questionnaires, IEnumerable<ICompleteQuestion> questions)
         {
-            var questions = ((CompleteQuestionnaireDocument)template).GetQuestions().Where(x=>!x.Featured);
             for (int j = 0; j < questionnaires.Count; j++)
             {
                 var qId = questionnaires[j];
