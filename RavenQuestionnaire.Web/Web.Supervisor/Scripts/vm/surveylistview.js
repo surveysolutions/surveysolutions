@@ -1,25 +1,22 @@
-﻿SurveyListViewModel = function (templateApiUrl) {
+﻿SurveyListViewModel = function (listViewUrl) {
     var self = this;
 
-    self.ServiceUrl = templateApiUrl;
-
+    self.ListView = new ListViewModel(listViewUrl);
+    self.ToggleFilter = function () {
+        self.ListView.ToggleFilter();
+    };
     self.Users = ko.observableArray([]);
 
     self.SelectedUser = ko.observable('');
 
     self.load = function () {
-
-        $.ajax({
-            type: 'POST',
-            url: self.ServiceUrl,
-            data: {},
-            context: this,
-            success: function (data) {
-                self.Users(data);
-            },
-            dataType: 'json'
-        });
+        
+        self.ListView.GetFilterMethod = function () {
+            return { UserId: self.SelectedUser };
+        };
+        
+        self.SelectedUser(location.queryString['interviewerid']);
+        self.SelectedUser.subscribe(self.ListView.filter);
+        self.ListView.search();
     };
-
-    self.load();
 };

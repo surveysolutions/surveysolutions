@@ -5,7 +5,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Logging;
 namespace Ncqrs.Domain
 {
     /// <summary>

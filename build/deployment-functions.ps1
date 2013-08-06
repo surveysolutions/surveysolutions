@@ -54,20 +54,30 @@ function BuildWebPackage($Project, $BuildConfiguration) {
 
 function DeployFiles($SourceFolder, $TargetFolder) {
     Write-Host "##teamcity[blockOpened name='Deploying files']"
-    Write-Host "##teamcity[progressStart 'Deploying files']"
+    	
+	if ([string]::IsNullOrWhiteSpace($TargetFolder) ) {
 
-    Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
+        Write-Host "##teamcity[message status='ERROR' text='Target Path for deploy is incorrect']"
+
+    } else {
 	
-	#wait for unload Appdomain to avoid fault on directory clean up
-	Start-Sleep -s 10
+		Write-Host "##teamcity[progressStart 'Deploying files']"
+		Write-Host "##teamcity[message text='Deploing to $TargetFolder.']"
+
+		Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
 	
-    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude 'app_offline.htm'
+		#wait for unload Appdomain to avoid fault on directory clean up
+		Start-Sleep -s 10
+	
+		Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude 'app_offline.htm'
 
-    Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
+		Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
 
-    Remove-Item "$TargetFolder\app_offline.htm"
+		Remove-Item "$TargetFolder\app_offline.htm"
 
-    Write-Host "##teamcity[progressFinish 'Deploying files']"
+		Write-Host "##teamcity[progressFinish 'Deploying files']"
+    }		
+    
     Write-Host "##teamcity[blockClosed name='Deploying files']"
 }
 

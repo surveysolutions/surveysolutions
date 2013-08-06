@@ -42,6 +42,8 @@
 
             //// this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
+
+            this.IsDeleted = false;
         }
 
         #endregion
@@ -183,7 +185,7 @@
         /// </returns>
         public CompleteQuestionWrapper GetQuestionByKey(string key)
         {
-            return this.questionHash.GetQuestionByKey(key);
+            return this.GetQuestionHash().GetQuestionByKey(key);
         }
 
         /// <summary>
@@ -236,6 +238,10 @@
             {
             }
         }
+
+        public Guid? DeletedBy { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         /// <summary>
         /// Gets the wrapped questions.
@@ -534,7 +540,7 @@
 
 
             parent.Children.Remove(itemToDelete);
-            this.questionHash.RemoveGroup(itemToDelete);
+            this.GetQuestionHash().RemoveGroup(itemToDelete);
         }
 
         #endregion

@@ -1,4 +1,5 @@
-using WB.Core.SharedKernel.Utils.Logging;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core
 {
@@ -24,9 +25,6 @@ namespace Main.Core
 
 #if MONODROID
     using AndroidNcqrs.Eventing.Storage.SQLite;
-#else
-    using Ncqrs.Eventing.Storage.RavenDB;
-    using Raven.Client.Document;
 #endif
 
 
@@ -56,21 +54,11 @@ namespace Main.Core
 
         public static void Init(IKernel kernel)
         {
-            Init(kernel, 50);
-        }
-
-        public static void Init(IKernel kernel, int pageSize)
-        {
 #if MONODROID
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             
-            var store = InitializeEventStore(kernel.Get<DocumentStore>(), pageSize);
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
-            kernel.Bind<IStreamableEventStore>().ToConstant(store);
-
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
@@ -91,6 +79,21 @@ namespace Main.Core
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
+        }
+
+        public static void InitPartial(IKernel kernel)
+        {
+            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+
+            var snpshotStore = new InMemoryEventStore();
+            // key param for storing im memory
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+
+            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
         }
 
         public static void EnsureReadLayerIsBuilt()
@@ -114,7 +117,8 @@ namespace Main.Core
         /// </exception>
         public static void RebuildReadLayer()
         {
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding started.");
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Info("Read layer rebuilding started.");
 
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
@@ -137,7 +141,7 @@ namespace Main.Core
 
             isReadLayerBuilt = true;
 
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding finished.");
+            logger.Info("Read layer rebuilding finished.");
         }
 
 
@@ -158,7 +162,7 @@ namespace Main.Core
         private static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
             var mapper = new AttributeBasedCommandMapper();
-            var service = new ConcurrencyResolveCommandService();
+            var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             foreach (Type type in commandSupplier.GetCommandList())
             {
 
@@ -167,13 +171,6 @@ namespace Main.Core
 
             return service;
         }
-
-#if !MONODROID
-        
-        public static Func<DocumentStore, int, IStreamableEventStore> InitializeEventStore = (store, pageSize) => new RavenDBEventStore(store, pageSize);
-
-#endif
-
 
         /// <summary>
         /// The is i event handler interface.

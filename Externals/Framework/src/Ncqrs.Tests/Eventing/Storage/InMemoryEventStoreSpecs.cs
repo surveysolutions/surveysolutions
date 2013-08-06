@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
@@ -11,7 +13,13 @@ namespace Ncqrs.Tests.Eventing.Storage
 {
     [TestFixture]
     public class InMemoryEventStoreSpecs
-    {        
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class SomethingDoneEvent
         {
         }

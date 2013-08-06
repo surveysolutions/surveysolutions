@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
@@ -7,6 +9,12 @@ namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
     [TestFixture]
     public class when_getting_all_events_for_an_event_source : NoDBEventStoreTestFixture
     {
+        [SetUp]
+        public void SetUpTests()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         private object [] _returnedEvents;
 
         [TestFixtureSetUp]

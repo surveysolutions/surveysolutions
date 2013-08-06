@@ -20,23 +20,12 @@ using Main.Core;
 
 namespace CAPI.Android.Injections
 {
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class AndroidCoreRegistry : CoreRegistry
     {
-        public AndroidCoreRegistry(string repositoryPath, bool isEmbeded) : base(repositoryPath, isEmbeded)
-        {
-        }
-        /// <summary>
-        /// The get assweblys for register.
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return
-                Enumerable.Concat(base.GetAssweblysForRegister(), new[] {  GetType().Assembly });
+                Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { GetType().Assembly });
         }
     }
 }

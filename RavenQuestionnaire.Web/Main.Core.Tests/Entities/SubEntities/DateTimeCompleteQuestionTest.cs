@@ -1,4 +1,7 @@
-﻿namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +19,12 @@
     [TestFixture]
     public class DateTimeCompleteQuestionTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

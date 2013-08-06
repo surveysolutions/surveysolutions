@@ -1,0 +1,37 @@
+﻿@using System.Web.Optimization
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+}
+@section styles
+{
+    @Styles.Render("~/css/list")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/list")
+    @RenderSection("scripts", false)
+}
+<div class="innerLR">
+    @RenderSection("header", false)
+</div>
+
+@RenderSection("gridnavigation", false)
+<div id="list" class="innerLR">
+    <!-- ko if:ListView.IsPageLoaded()  -->
+    <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
+    <p class="text-center">
+        No results found
+    </p>
+    <!-- /ko -->
+    <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
+    @RenderSection("grid", true)
+    <!-- ko if:ListView.Pager().LastPage() > 1 -->
+    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- /ko -->
+</div>
+@this.RenderBody()
+
+@Html.Partial("_ListViewPagingScript")

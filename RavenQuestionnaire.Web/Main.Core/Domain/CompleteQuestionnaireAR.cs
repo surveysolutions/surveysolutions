@@ -1,4 +1,5 @@
-﻿using Ncqrs.Domain;
+﻿using Main.Core.Domain.Exceptions;
+using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Main.Core.Domain
@@ -28,28 +29,15 @@ namespace Main.Core.Domain
         /// <summary>
         /// The doc.
         /// </summary>
-        private CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-
-        /*/// <summary>
-        /// The condition question dependencies.
-        /// </summary>
-        private Dictionary<Guid, List<Guid>> conditionQuestionDependencies;
-
-        /// <summary>
-        /// The condition group dependencies.
-        /// </summary>
-        private Dictionary<Guid, List<Guid>> conditionGroupDependencies;*/
-
-        /*/// <summary>
-        /// The condition executor.
-        /// </summary>
-        private CompleteQuestionnaireConditionExecutor conditionExecutor;
-
-        /// <summary>
-        /// The validation executor.
-        /// </summary>
-        private CompleteQuestionnaireValidationExecutor validationExecutor;*/
-
+        private CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
+        
+        private CompleteQuestionnaireDocument doc
+        {
+            get { return document; }
+            set { document = value.Clone() as CompleteQuestionnaireDocument; }
+        }
+    
+        
         #endregion
 
         #region Constructors and Destructors
@@ -105,10 +93,25 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewCompleteQuestionnaireCreated
                     {
-                        Questionnaire = document, 
+                        Questionnaire = document, // to avoid pass as refecence 
                         CreationDate = clock.UtcNow(), 
                         TotalQuestionCount = document.Find<ICompleteQuestion>(q => true).Count()
                     });
+        }
+
+        public CompleteQuestionnaireAR(Guid interviewId, QuestionnaireDocument questionnaire, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
+            : this(interviewId, questionnaire, creator)
+        {
+            var clock = NcqrsEnvironment.Get<IClock>();
+
+            this.ChangeAssignment(responsible);
+            foreach (var featuredAnswer in featuredAnswers)
+            {
+                this.SetAnswer(featuredAnswer.Id, null, featuredAnswer.Answer, featuredAnswer.Answers.ToList(),
+                               clock.UtcNow());
+            }
+            #warning Madagaskar fix. Should be discussed
+            this.ChangeStatus(SurveyStatus.Unassign, responsible);
         }
 
         #endregion
@@ -128,32 +131,6 @@ namespace Main.Core.Domain
         {
             throw new InvalidOperationException("Is not supported any more.");
 
-
-            //// performe check before event raising
-            /*
-            var templateGroup = this.doc.Find<CompleteGroup>(publicKey);
-
-            this.ApplyEvent(
-                new PropagatableGroupAdded
-                    {
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (templateGroup.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in templateGroup.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupAdded
-                        {
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
         /// <summary>
@@ -170,18 +147,7 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
 
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        public void Delete()
-        {
-            this.ApplyEvent(
-                new CompleteQuestionnaireDeleted
-                    {
-                       CompletedQuestionnaireId = this.doc.PublicKey, TemplateId = this.doc.TemplateId 
-                    });
-        }
-
+        
         /// <summary>
         /// The delete propagate group.
         /// </summary>
@@ -194,32 +160,6 @@ namespace Main.Core.Domain
         public void DeletePropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported.");
-
-            /*var group = this.doc.Find<CompleteGroup>(publicKey);
-            
-            this.ApplyEvent(
-                new PropagatableGroupDeleted
-                    {
-                        CompletedQuestionnaireId = this.doc.PublicKey, 
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (group.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in group.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupDeleted
-                        {
-                            CompletedQuestionnaireId = this.doc.PublicKey, 
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
         /// <summary>
@@ -230,19 +170,7 @@ namespace Main.Core.Domain
         /// </param>
         public  void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
-            // Due to the storing snapshot in the memory
-            // to provide consistency of UoW we have to make copy of the memory structure.
-            // This method handles 2 situations: restore from Framework in memory snapshot
-            // and event of snapshot type.
-            var cached = snapshot.Clone() as CompleteQuestionnaireDocument;
-
-            if (cached != null)
-            {
-                this.doc = cached;
-            }
-
-            // moved to the OnDeserialized for object created from serialized event
-            // this.doc.ConnectChildsWithParent();
+            this.doc = snapshot;
         }
 
         /// <summary>
@@ -311,6 +239,8 @@ namespace Main.Core.Domain
             else
             {
                 var answerList = new List<string>();
+                if (completeAnswers == null)
+                    throw new InterviewException("optiona are absent");
                 foreach (Guid answerGuid in completeAnswers)
                 {
                     var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
@@ -322,6 +252,8 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+
+            question.ThrowDomainExceptionIfAnswerInvalid(completeAnswers, completeAnswerValue);
             ///////////////
 
             // handle propagation
@@ -335,8 +267,8 @@ namespace Main.Core.Domain
                 new AnswerSet
                     {
                         QuestionPublicKey = questionPublicKey, 
-                        PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = completeAnswers  != null ? new List<Guid>(completeAnswers) : null, 
+                        PropogationPublicKey = propogationPublicKey,
+                        AnswerKeys = completeAnswers, 
                         AnswerValue = completeAnswerValue, 
                         AnswerDate = answerDate,
                         Featured = question.Featured, 
@@ -364,6 +296,23 @@ namespace Main.Core.Domain
                             ResultGroupsStatus = resultGroupsStatus,
                             ResultQuestionsStatus = resultQuestionsStatus
                         });
+            }
+        }
+
+        public void DeleteInterview(Guid deletedBy)
+        {
+            if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
+                this.doc.Status == SurveyStatus.Initial)
+            {
+                this.ApplyEvent(
+                    new InterviewDeleted()
+                    {
+                        DeletedBy = deletedBy
+                    });
+            }
+            else
+            {
+                throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
             }
         }
 
@@ -588,6 +537,19 @@ namespace Main.Core.Domain
                     });
         }
 
+        public void AssignInterviewToUser(Guid userId)
+        {
+            var prevResponsible = this.doc.Responsible;
+            this.ApplyEvent(
+                new QuestionnaireAssignmentChanged
+                    {
+                        CompletedQuestionnaireId = this.doc.PublicKey,
+                        PreviousResponsible = prevResponsible,
+                        Responsible = new UserLight(userId, string.Empty)
+                    });
+            this.ChangeStatus(SurveyStatus.Initial, new UserLight(userId, string.Empty));
+        }
+
         /// <summary>
         /// The change status.
         /// </summary>
@@ -613,7 +575,7 @@ namespace Main.Core.Domain
 
         protected void OnNewAssigmentCreated(NewAssigmentCreated e)
         {
-            this.doc = e.Source.Clone() as CompleteQuestionnaireDocument;
+            this.doc = e.Source;
         }
 
         // Event handler for the AnswerSet event. This method
@@ -660,19 +622,7 @@ namespace Main.Core.Domain
         {
             this.doc.Status = e.Status;
         }
-
-        /// <summary>
-        /// The on complete questionnaire deleted.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
-        {
-#warning implement proper way of deleting questionnaries
-            this.doc = new CompleteQuestionnaireDocument();
-        }
-
+        
         /// <summary>
         /// The on new questionnaire created.
         /// </summary>
@@ -837,6 +787,13 @@ namespace Main.Core.Domain
 
             question.IsFlaged = e.IsFlaged;
         }
+
+        protected void OnInterviewDeleted(InterviewDeleted e)
+        {
+            this.doc.IsDeleted = true;
+            this.doc.DeletedBy = e.DeletedBy;
+        }
+
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Core.Supervisor.DenormalizerStorageItem;
+using Core.Supervisor.RavenIndexes;
 
 namespace Core.Supervisor.Views.Survey
 {
@@ -13,42 +13,51 @@ namespace Core.Supervisor.Views.Survey
 
     public class SurveyUsersViewFactory : IViewFactory<SurveyUsersViewInputModel, SurveyUsersView>
     {
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
+
         private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
 
-        public SurveyUsersViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SurveyUsersViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary, IReadSideRepositoryIndexAccessor indexAccessor)
         {
             this.summary = summary;
+            this.indexAccessor = indexAccessor;
         }
 
         public SurveyUsersView Load(SurveyUsersViewInputModel input)
         {
+           /* return this.summary.Query(
+                _ =>
+                {*/
+            IEnumerable<SummaryItem> items=Enumerable.Empty<SummaryItem>();
+                    if (input.ViewerStatus == ViewerStatus.Headquarter)
+                    {
+                        items = indexAccessor
+                            .Query<SummaryItem>(typeof(HeadquarterReportsSurveysAndStatusesGroupByTeam).Name)
+                            .Where(x => x.ResponsibleId != Guid.Empty);
+                    }
+                    else if (input.ViewerStatus == ViewerStatus.Supervisor)
+                    {
+                        items = indexAccessor
+                            .Query<SummaryItem>(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Name)
+                            .Where(x => x.ResponsibleSupervisorId == input.ViewerId
+                                && x.ResponsibleId != Guid.Empty);
+                    }
 
-            Expression<Func<SummaryItem, bool>> predicate = (s) => true;
-            if (input.ViewerStatus == ViewerStatus.Headquarter)
-            {
-                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == null);
-            }
-            else if (input.ViewerStatus == ViewerStatus.Supervisor)
-            {
-                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
-            }
-
-            return new SurveyUsersView()
-                {
-                    Items =
-                        summary.QueryEnumerable(predicate).ToList().Distinct(new SurveyItemByUserNameComparer())
-                               .Select(
-                                   x =>
-                                   new SurveyUsersViewItem()
-                                       {
-                                           UserId =
-                                               x.ResponsibleId,
-                                           UserName =
-                                               x.ResponsibleName
-                                       })
-                };
-
-
+                    return new SurveyUsersView()
+                    {
+                        Items =
+                            items.ToList().Distinct(new SurveyItemByUserNameComparer())
+                                .Select(
+                                    x =>
+                                        new SurveyUsersViewItem()
+                                        {
+                                            UserId =
+                                                x.ResponsibleId,
+                                            UserName =
+                                                x.ResponsibleName
+                                        })
+                    };
+              //  });
 
         }
     }

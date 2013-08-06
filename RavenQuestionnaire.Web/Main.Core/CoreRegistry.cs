@@ -19,43 +19,13 @@ using WB.Core.Infrastructure.ReadSide;
 
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-#if !MONODROID
-using Raven.Client;
-using Raven.Client.Document;
-
-#endif
-
 namespace Main.Core
 {
     using Ninject.Planning.Bindings;
 
-    /// <summary>
-    /// The core registry.
-    /// </summary>
     public abstract class CoreRegistry : NinjectModule
     {
-        private readonly bool isEmbeded;
-        private readonly string repositoryPath;
-        private readonly string username;
-        private readonly string password;
-        private readonly string defaultDatabase;
-
-        // private bool _isWeb;
-
-        public CoreRegistry(string repositoryPath, bool isEmbeded, string username = null, string password = null, string defaultDatabase = null)
-        {
-            this.repositoryPath = repositoryPath;
-            this.isEmbeded = isEmbeded;
-            this.username = username;
-            this.password = password;
-            this.defaultDatabase = defaultDatabase;
-
-            // _isWeb = isWeb;
-        }
-
-        #region Public Methods and Operators
-
-        public virtual IEnumerable<Assembly> GetAssweblysForRegister()
+        protected virtual IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return new[] {(typeof (CoreRegistry)).Assembly};
 
@@ -71,9 +41,6 @@ namespace Main.Core
             return Enumerable.Empty<KeyValuePair<Type, Type>>();
         }
 
-        /// <summary>
-        /// The load.
-        /// </summary>
         public override void Load()
         {
             RegisterDenormalizers();
@@ -82,32 +49,22 @@ namespace Main.Core
             RegisterAdditionalElements();
         }
 
-        #endregion
-
-        #region virtual methods
         protected virtual IEnumerable<Type> RegisteredCommandList()
         {
             var implementations =
-             GetAssweblysForRegister().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, typeof(ICommand)));
+             this.GetAssembliesForRegistration().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, typeof(ICommand)));
             return implementations;
         }
 
         protected virtual void RegisterAdditionalElements()
         {
-#if !MONODROID
-            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.defaultDatabase, this.isEmbeded, this.username, this.password);
-            this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-            this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
-#endif
-
-
             ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
 
             this.Kernel.Bind(
                 x =>
-                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
-                    new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
+                x.From(this.GetAssembliesForRegistration()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
+                    new RegisterFirstInstanceOfInterface(this.GetAssembliesForRegistration())));
 
             foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
             {
@@ -117,12 +74,12 @@ namespace Main.Core
 
         protected virtual void RegisterViewFactories()
         {
-            BindInterface(GetAssweblysForRegister(),typeof (IViewFactory<,>), (c) => Guid.NewGuid());
+            BindInterface(this.GetAssembliesForRegistration(),typeof (IViewFactory<,>), (c) => Guid.NewGuid());
         }
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(GetAssweblysForRegister(), typeof(IEventHandler<>), (c) => this.Kernel);
+            BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()
@@ -133,6 +90,7 @@ namespace Main.Core
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
+            this.Kernel.Bind(typeof(IQuerableReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
         }
 
         protected virtual object GetReadSideRepositoryReader(IContext context)
@@ -152,7 +110,6 @@ namespace Main.Core
             return this.Kernel.Get(typeof(InMemoryReadSideRepositoryAccessor<>).MakeGenericType(genericParameter));
         }
 
-        #endregion
         protected void BindInterface(IEnumerable<Assembly> assembyes,Type interfaceType, Func<IContext,object> scope)
         {
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using CAPI.Android.Syncronization.RestUtils;
+using RestSharp;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
@@ -23,16 +24,14 @@ namespace CAPI.Android.Syncronization.Pull
         {
             try
             {
-                                                                  var package = webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath,ct,
-                                                                       new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password", password),
-                                                                       new KeyValuePair<string, string>("aRKey", id.ToString()),
-                                                                       new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
-                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId));
+                var package = webExecutor.ExcecuteRestRequestAsync<SyncPackage>(getChunckPath, ct, null,
+                    new HttpBasicAuthenticator(login, password),
+                     new KeyValuePair<string, string>("aRKey", id.ToString()),
+                     new KeyValuePair<string, string>("aRSequence", sequence.ToString()),
+                     new KeyValuePair<string, string>("clientRegistrationId", deviceId));
 
-
-            if (package.IsErrorOccured || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
-                throw new SynchronizationException("Content is absent.");
+                if (package.IsErrorOccured || package.ItemsContainer == null || package.ItemsContainer.Count == 0)
+                    throw new SynchronizationException("Content is absent.");
                 return package.ItemsContainer[0];
             }
             catch (RestException)
@@ -41,24 +40,25 @@ namespace CAPI.Android.Syncronization.Pull
             }
         }
 
-        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, string deviceId, CancellationToken ct)
+        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, string deviceId, string sequence, CancellationToken ct)
         {
             try
             {
                 var syncItemsMetaContainer = webExecutor.ExcecuteRestRequestAsync<SyncItemsMetaContainer>(
-                    getARKeysPath, ct,
-                    new KeyValuePair<string, string>("login", login),
-                                                                       new KeyValuePair<string, string>("password", password),
-                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId));
+                                                                       getARKeysPath, ct, null,
+                                                                       new HttpBasicAuthenticator(login, password),
+                                                                       new KeyValuePair<string, string>("clientRegistrationId", deviceId),
+                                                                       new KeyValuePair<string, string>("sequence", sequence)
+                                                                       );
 
-            if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ARId == null)
-                throw new SynchronizationException("Error on item list receiving.");
+                if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ARId == null)
+                    throw new SynchronizationException("Error on item list receiving.");
 
                 return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
             }
             catch (RestException)
             {
-                throw new SynchronizationException("Data reciving was canceled.");
+                throw new SynchronizationException("Data receiving was canceled.");
             }
         }
 

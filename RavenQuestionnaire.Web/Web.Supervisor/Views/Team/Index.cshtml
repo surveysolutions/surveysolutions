@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 @{
-    Layout = "~/Views/Shared/_ListViewLayout.cshtml";
+    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
 
 @section scripts
@@ -11,9 +11,8 @@
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Interviewers", "Team")';
         $(function () {
-
-            var model = new ListViewMasterModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
-            model['UserList'] = new UserListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Lock" })');
+            var model = new UserListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Lock" })',
+                '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
             
             ko.applyBindings(model);
             model.load();
@@ -26,20 +25,12 @@
     <h2 class="sinle-line-header">Supervisors</h2>
 }
 
-@section filters
-{
-    <ul class="nav nav-list">
-        <li class="nav-header">FILTER</li>
-        <li class="divider"></li>
-    </ul>
-}
-
 @section gridnavigation
 {
-    <p>
-        <a class="btn btn-primary" href="@Url.Action("AddSupervisor", "Team")">
+    <div class="menubar">
+        <a class="btn" href="@Url.Action("AddSupervisor", "Team")">
             <i class="icon icon-user icon-white"></i> Add supervisor</a>
-    </p>
+    </div>
 }
 
 @section grid
@@ -48,9 +39,9 @@
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th data-bind='click: ListView.sort.bind($data, "UserName")'><span class="btn-link">Name</span></th>
-                <th data-bind='click: ListView.sort.bind($data, "CreationDate")'><span class="btn-link">Creation date</span></th>
-                <th data-bind='click: ListView.sort.bind($data, "Email")'><span class="btn-link">Email</span></th>
+                <th data-bind='sortby : "UserName"'>Name</th>
+                <th data-bind='sortby : "CreationDate"'>Creation date</th>
+                <th data-bind='sortby : "Email"'>Email</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -63,15 +54,15 @@
                 <td data-bind="text: Email"></td>
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
-                        <i class="icon icon-eye-open icon-white"></i> Interviewers</a>
+                        <i class="icon icon-group icon-white"></i> Interviewers</a>
                 </td>
                 <td>
                     <!-- ko if:IsLocked -->
-                    <a class="btn btn-info" data-bind="click: $root.UserList.lock">
+                    <a class="btn btn-info" data-bind="click: $root.lock">
                         <i class="icon icon-unlock icon-white"></i> Unlock</a>
                     <!-- /ko -->
                     <!-- ko ifnot:IsLocked -->
-                    <a class="btn btn-danger" data-bind="click: $root.UserList.lock">
+                    <a class="btn btn-danger" data-bind="click: $root.lock">
                         <i class="icon icon-lock icon-white"></i> Lock  </a>
                     <!-- /ko -->
                     

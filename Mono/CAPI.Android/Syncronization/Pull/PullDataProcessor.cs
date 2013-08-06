@@ -2,14 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.ChangeLog;
+using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ModelUtils;
+using CAPI.Android.Core.Model.SyncCacher;
+using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Services;
 using Main.Core;
 using Main.Core.Commands.File;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
+using Ninject;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
@@ -18,15 +25,21 @@ namespace CAPI.Android.Syncronization.Pull
     {
         private const string syncTemp = "sync_temp";
 
+        private ILogger logger;
+
         public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
             this.chuncksFroProccess=new List<SyncItem>();
+
+            cleanUpExecutor = new CleanUpExecutor(changelog);
         }
         private IList<SyncItem> chuncksFroProccess;
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
+        private CleanUpExecutor cleanUpExecutor;
 
         public void Save(SyncItem  data)
         {
@@ -35,77 +48,104 @@ namespace CAPI.Android.Syncronization.Pull
 
         public void Proccess(KeyValuePair<long,Guid> chunkId)
         {
-
             var item = chuncksFroProccess.FirstOrDefault(i => i.Id == chunkId.Value);
             if (item == null)
                 return;
-
-            string unzippedData = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
-        
-            if(string.IsNullOrEmpty(unzippedData))
-                return;
-
-            ExecuteCommand(unzippedData, item);
+            
+            HandleItem(item);
 
             changelog.CreatePublicRecord(item.Id);
 
             chuncksFroProccess.Remove(item);
         }
         
-        protected void ExecuteCommand(string content, SyncItem item)
+        protected void HandleItem(SyncItem item)
         {
             switch (item.ItemType)
             {
                 case SyncItemType.Questionnare:
-                    ExecuteQuestionnarie(content);
+                    ExecuteInterview(item);
                     break;
                 case SyncItemType.DeleteQuestionnare:
-                    ExecuteDeleteQuestionnarie(content);
+                    ExecuteDeleteQuestionnarie(item);
                     break;
                 case SyncItemType.User:
-                    ExecuteUser(content);
+                    ExecuteUser(item);
                     break;
                 case SyncItemType.File:
-                    ExecuteFile(content);
+                    ExecuteFile(item);
                     break;
                 default: break;
             }
         
         }
 
-        private void ExecuteFile(string content)
+        private void ExecuteFile(SyncItem item)
         {
+            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
+
             var file = JsonUtils.GetObject<FileSyncDescription>(content);
             commandService.Execute(new UploadFileCommand(file.PublicKey, file.Title, file.Description, file.OriginalFile));
         }
 
-        private void ExecuteDeleteQuestionnarie(string content)
+        private void ExecuteDeleteQuestionnarie(SyncItem item)
         {
+            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
             var questionnarieId = Guid.Parse(content);
 
             try
             {
-                commandService.Execute(new DeleteCompleteQuestionnaireCommand(questionnarieId));
+                cleanUpExecutor.DeleteInterveiw(questionnarieId);
             }
-#warning replace catch with propper handler of absent questionnaries
-            catch (Exception)
+
+            #warning replace catch with propper handler of absent questionnaries
+            catch (Exception ex)
             {
-                
+                logger.Error("Error on item deletion " + questionnarieId, ex);
+                //throw;
             }
           
         }
 
-        private void ExecuteUser(string content)
+        private void ExecuteUser(SyncItem item)
         {
+            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
             var user = JsonUtils.GetObject<UserDocument>(content);
             commandService.Execute(new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
                                                          user.Roles.ToArray(), user.IsLocked, user.Supervisor));
         }
 
-        private void ExecuteQuestionnarie(string content)
+        private void ExecuteInterview(SyncItem item)
         {
-            var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
-            commandService.Execute(new CreateNewAssigment(questionnarieContent));
+            if (!string.IsNullOrWhiteSpace(item.MetaInfo))
+            {
+                string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
+
+                var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
+                
+                ////todo: 
+                //save item to sync cache for handling on demand
+                var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
+                syncCacher.SaveItem(item.Id, item.Content);
+
+                //apply meta to make chanages on dashboard
+                //think about more elegant solution
+                //waiting for interview and template separation
+                var dashboard = new DashboardDenormalizer(CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
+                                          CapiApplication.Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
+
+                dashboard.ProcessInterviewMeta(metaInfo);
+
+            }
+            
+            else
+            {
+                string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
+
+                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
+                commandService.Execute(new CreateNewAssigment(questionnarieContent));    
+            }
+            
         }
     }
 }

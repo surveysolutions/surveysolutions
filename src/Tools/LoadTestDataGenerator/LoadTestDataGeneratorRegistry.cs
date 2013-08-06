@@ -4,48 +4,26 @@ using System.Linq;
 using System.Reflection;
 using Core.Supervisor.Denormalizer;
 using Main.Core;
-using Raven.Client.Document;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.SharedKernel.Utils.Logging;
-using WB.Core.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace LoadTestDataGenerator
 {
     using System.Web.Configuration;
-
-    using Main.DenormalizerStorage;
-
     using Ninject;
     using Ninject.Activation;
 
-    using WB.Core.Infrastructure.Raven.Implementation;
-
     public class LoadTestDataGeneratorRegistry : CoreRegistry
     {
-        public LoadTestDataGeneratorRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded)
+        protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
-        }
-
-        public override void Load()
-        {
-            base.Load();
-
-            this.Bind<ILogger>().ToMethod(
-                context => LogManager.GetLogger(context.Request.Target.Member.DeclaringType));
-        }
-
-        public override IEnumerable<Assembly> GetAssweblysForRegister()
-        {
-            return
-                base.GetAssweblysForRegister()
-                    .Concat(new[]
-                    {
-                        typeof(LoadTestDataGeneratorRegistry).Assembly,
-                        typeof(CompleteQuestionnaireDenormalizer).Assembly
-                    });
+            return base.GetAssembliesForRegistration().Concat(new[]
+            {
+                typeof(LoadTestDataGeneratorRegistry).Assembly,
+                typeof(UserDenormalizer).Assembly,
+                typeof(Questionnaire).Assembly,
+            });
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()

@@ -1,4 +1,6 @@
 using System;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
@@ -9,6 +11,12 @@ namespace Ncqrs.Tests.Eventing.Storage
     [TestFixture]
     public class PropertyBagConverterTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class TestEvent
         {
             public string SomeString { get; set; }

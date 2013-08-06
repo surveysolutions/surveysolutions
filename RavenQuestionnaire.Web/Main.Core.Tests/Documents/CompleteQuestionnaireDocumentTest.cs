@@ -1,4 +1,8 @@
-﻿namespace Main.Core.Tests.Documents
+﻿using Machine.Specifications.Model;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace Main.Core.Tests.Documents
 {
     using System;
     using System.Collections.Generic;
@@ -77,6 +81,7 @@
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             var doc = new QuestionnaireDocument();
             var mainGroup = new Group();
             var group1 = new Group();

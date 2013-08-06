@@ -10,7 +10,6 @@ using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
-using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
@@ -27,8 +26,10 @@ using System.Windows.Forms;
 
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace LoadTestDataGenerator
 {
@@ -612,6 +613,21 @@ namespace LoadTestDataGenerator
             this.UpdateStatus("create surveys", statistics.SurveysCount);
             var surveyIds = this.GenerateSurveys(int.Parse(this.surveys_amount.Text), template, hq).ToList();
 
+
+            if (featuredQuestions != null && statistics.hasFeaturedQuestions)
+            {
+                var startTime = DateTime.Now;
+                var total = surveyIds.Count;
+                var processed = 1;
+                this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
+                foreach (var surveyId in surveyIds)
+                {
+                    this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
+                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
+                    processed++;
+                }
+            }
+
             if (statistics.hasSupervisorEvents)
             {
                 var startTime = DateTime.Now;
@@ -644,20 +660,7 @@ namespace LoadTestDataGenerator
                     processed++;
                 }
             }
-
-            if (featuredQuestions != null && statistics.hasFeaturedQuestions)
-            {
-                var startTime = DateTime.Now;
-                var total = surveyIds.Count;
-                var processed = 1;
-                this.UpdateStatus("create featured questions", statistics.FeaturedQuestionsCount);
-                foreach (var surveyId in surveyIds)
-                {
-                    this.FillFeaturedAnswers(surveyId, featuredQuestions, hq);
-                    this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processed, total));
-                    processed++;
-                }
-            }
+            
         }
 
         private QuestionnaireDocument ReadTemplate(string path)
@@ -735,7 +738,7 @@ namespace LoadTestDataGenerator
                     UserName = string.Format("supervisor_{0}_{1}", i, DateTime.Now.Ticks),
                     Roles = new List<UserRoles> { UserRoles.Supervisor }
                 };
-                CommandService.Execute(new CreateUserCommand(supervisor.PublicKey, supervisor.UserName, SimpleHash.ComputeHash(supervisor.UserName), supervisor.UserName + "@worldbank.org", supervisor.Roles.ToArray(), false, null));
+                CommandService.Execute(new CreateUserCommand(supervisor.PublicKey, supervisor.UserName, SimpleHash.ComputeHash(supervisor.UserName), supervisor.UserName + "@example.com", supervisor.Roles.ToArray(), false, null));
                 result.Add(supervisor);
                 this.UpdateProgress();
             }

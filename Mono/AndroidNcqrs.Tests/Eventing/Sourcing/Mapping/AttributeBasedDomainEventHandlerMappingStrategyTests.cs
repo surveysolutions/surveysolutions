@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
 using NUnit.Framework;
@@ -11,6 +13,12 @@ namespace Ncqrs.Tests.Eventing.Sourcing.Mapping
     [TestFixture]
     public class AttributeBasedDomainEventHandlerMappingStrategyTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class IlligalStaticMethodTarget
             : AggregateRoot
         {

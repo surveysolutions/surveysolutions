@@ -14,6 +14,7 @@ using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing;
@@ -24,6 +25,12 @@ namespace CAPI.Androids.Core.Model.Tests
     [TestFixture]
     public class ChangeLogManipulatorTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void OpenDraftRecord_When_if_and_event_start_are_not_empty_Then_new_record_was_create_in_draft_storage()
         {
@@ -169,18 +176,18 @@ namespace CAPI.Androids.Core.Model.Tests
             draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, end);
 
             // act
-            var result =unitUnderTest.MarkDraftChangesetAsPublicAndReturnARId(recordId);
+            unitUnderTest.CleanUpChangeLogByRecordId(recordId);
 
             // assert
             Assert.That(draftStorage.Count,Is.EqualTo(0));
-            Assert.That(publicStorage.Count,Is.EqualTo(1));
-            Assert.That(publicStorage[recordId].Id, Is.EqualTo(recordId.ToString()));
-            Assert.That(result, Is.EqualTo(eventSourceId));
+            //Assert.That(publicStorage.Count,Is.EqualTo(1));
+            //Assert.That(publicStorage[recordId].Id, Is.EqualTo(recordId.ToString()));
+            //Assert.That(result, Is.EqualTo(eventSourceId));
             changeLogStoreMock.Verify(x => x.DeleteDraftChangeSet(recordId), Times.Once());
 
         }
 
-        [Test]
+/*        [Test]
         public void MarkDraftChangesetAsPublic_When_record_is_absent_Then_InvalidOperationException()
         {
             // arrange
@@ -191,13 +198,13 @@ namespace CAPI.Androids.Core.Model.Tests
 
             // act
             Assert.Throws<InvalidOperationException>(
-                  () => unitUnderTest.MarkDraftChangesetAsPublicAndReturnARId(recordId));
+                  () => unitUnderTest.CleanUpChangeLog(recordId));
 
             // assert
             
             Assert.That(draftStorage.Count, Is.EqualTo(0));
 
-        }
+        }*/
 
         [Test]
         public void CreatePublicRecord_When_parameter_are_correct_Then_public_record_is_saved()

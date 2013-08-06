@@ -12,17 +12,11 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public long ChangeTracker = 0;
 
+        public string MetaInfo;
+
         public SyncItem()
         {
         }
-
-        public SyncItem(Guid id, string content, string itemType, bool isCompressed, long changeTracker)
-        {
-            Id = id;
-            Content = content;
-            ItemType = itemType;
-            IsCompressed = isCompressed;
-            ChangeTracker = changeTracker;
-        }
+        
     }
 }

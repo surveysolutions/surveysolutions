@@ -1,5 +1,6 @@
-﻿using System.Linq.Expressions;
-using Core.Supervisor.Views.Survey;
+﻿using System.Collections.Generic;
+using Core.Supervisor.RavenIndexes;
+using Main.Core.Entities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Summary
@@ -15,68 +16,72 @@ namespace Core.Supervisor.Views.Summary
 
     public class SummaryFactory : IViewFactory<SummaryInputModel, SummaryView>
     {
-        private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        public SummaryFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary)
+        public SummaryFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.summary = summary;
+            this.indexAccessor = indexAccessor;
         }
 
         public SummaryView Load(SummaryInputModel input)
         {
-            Expression<Func<SummaryItem, bool>> predicate = (x) => true;
+            IQueryable<SummaryItem> items = Enumerable.Empty<SummaryItem>().AsQueryable();
+               
 
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
-                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == null);
+                items = indexAccessor.Query<SummaryItem>(typeof(HeadquarterReportsTeamsAndStatusesGroupByTeam).Name);
             }
             else if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
-                if (input.TemplateId.HasValue)
-                {
-                    predicate = predicate.AndCondition(x => x.TemplateId == input.TemplateId);
-                }
-                else
-                {
-                    predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ViewerId);
-                }
+                items = indexAccessor.Query<SummaryItem>(typeof(SupervisorReportsTeamMembersAndStatusesGroupByTeamMember).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+            }
+            
+            if (input.TemplateId.HasValue)
+            {
+                items = items.Where(x => x.TemplateId == input.TemplateId);
+            }
+            else
+            {
+                items = items.Where(x => x.TemplateId == Guid.Empty);
             }
 
-            
-
-            var all = summary.QueryEnumerable(predicate).GroupBy(
-                x => x.ResponsibleId,
-                y => y,
-                (x, y) =>
-                new SummaryViewItem()
-                    {
-                        User = new UserLight(x, y.FirstOrDefault().ResponsibleName),
-                        Approved = y.Sum(z => z.ApprovedCount),
-                        Completed = y.Sum(z => z.CompletedCount),
-                        Error = y.Sum(z => z.CompletedWithErrorsCount),
-                        Initial = y.Sum(z => z.InitialCount),
-                        Redo = y.Sum(z => z.RedoCount),
-                        Unassigned = y.Sum(z => z.UnassignedCount),
-                        Total = y.Sum(z => z.TotalCount)
-                    }).AsQueryable().OrderUsingSortExpression(input.Order);
+            var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
+                           .Take(input.PageSize).ToList().Select(y =>
+                                                                         new SummaryViewItem()
+                                                                             {
+                                                                                 User =
+                                                                                     new UserLight(y.ResponsibleId,
+                                                                                                   y.ResponsibleName),
+                                                                                 Template =
+                                                                                     new TemplateLight(y.TemplateId,
+                                                                                                       string.Empty),
+                                                                                 Approved = y.ApprovedCount,
+                                                                                 Completed = y.CompletedCount,
+                                                                                 Error = y.CompletedWithErrorsCount,
+                                                                                 Initial = y.InitialCount,
+                                                                                 Redo = y.RedoCount,
+                                                                                 Unassigned = y.UnassignedCount,
+                                                                                 Total = y.TotalCount
+                                                                             }).ToList();
 
             return new SummaryView()
                 {
                     TotalCount = all.Count(),
                     Items =
-                        all.Skip((input.Page - 1)*input.PageSize)
-                           .Take(input.PageSize),
-                    ItemsSummary = new SummaryViewItem(
-                        new UserLight(Guid.Empty, "Summary"),
-                        all.Sum(x => x.Total),
-                        all.Sum(x => x.Initial),
-                        all.Sum(x => x.Error),
-                        all.Sum(x => x.Completed),
-                        all.Sum(x => x.Approved),
-                        all.Sum(x => x.Redo),
-                        all.Sum(x => x.Unassigned))
+                        all,
+                    ItemsSummary = new SummaryViewItem()
+                        {
+                            User = new UserLight(Guid.Empty, "Summary"),
+                            Total = all.Sum(x => x.Total),
+                            Initial = all.Sum(x => x.Initial),
+                            Error = all.Sum(x => x.Error),
+                            Completed = all.Sum(x => x.Completed),
+                            Approved = all.Sum(x => x.Approved),
+                            Redo = all.Sum(x => x.Redo),
+                            Unassigned = all.Sum(x => x.Unassigned)
+                        }
                 };
-
         }
     }
 }

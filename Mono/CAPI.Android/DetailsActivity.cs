@@ -8,21 +8,20 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
-using CAPI.Android.Core;
-using CAPI.Android.Core.Model.SnapshotStore;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
-using Main.Core.Domain;
-using Ncqrs;
-using Ncqrs.Eventing.Storage;
+using CAPI.Android.Services;
+using Cirrious.MvvmCross.Droid.Fragging;
+using Ninject;
 
 
 namespace CAPI.Android
 {
     [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
-    public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>/*, View.IOnTouchListener*/
+    public class DetailsActivity : MvxFragmentActivity/*<CompleteQuestionnaireView>, View.IOnTouchListener*/
     {
         protected ItemPublicKey? ScreenId;
         protected FrameLayout FlDetails
@@ -33,6 +32,11 @@ namespace CAPI.Android
         {
             get { return Guid.Parse(Intent.GetStringExtra("publicKey")); }
         }
+
+        protected CompleteQuestionnaireView Model {
+            get { return ViewModel as CompleteQuestionnaireView; }
+        }
+
         protected ViewPager VpContent
         {
             get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
@@ -61,6 +65,8 @@ namespace CAPI.Android
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
 
+        protected CleanUpExecutor cleanUpExecutor { get; set; }
+
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -84,14 +90,14 @@ namespace CAPI.Android
             }
             else
             {
-                ScreenId = ViewModel.Chapters.FirstOrDefault().ScreenId;
+                ScreenId = Model.Chapters.FirstOrDefault().ScreenId;
             }
 
-            this.Title = ViewModel.Title;
+            this.Title = Model.Title;
 
             if (bundle == null)
             {
-                NavList = QuestionnaireNavigationFragment.NewInstance(ViewModel.PublicKey);
+                NavList = QuestionnaireNavigationFragment.NewInstance(Model.PublicKey);
                 this.SupportFragmentManager.BeginTransaction()
                     .Add(Resource.Id.llNavigationHolder, NavList, "navigation")
                     .Commit();
@@ -102,9 +108,11 @@ namespace CAPI.Android
             }
 
             btnNavigation.Click += llNavigationHolder_Click;
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, ScreenId);
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, ScreenId);
             VpContent.Adapter = Adapter;
             VpContent.PageSelected += VpContent_PageSelected;
+
+            cleanUpExecutor = new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>());
 
         }
 
@@ -225,11 +233,11 @@ namespace CAPI.Android
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
             if (e.ScreenId.HasValue)
             {
-                var screen = ViewModel.Screens[e.ScreenId.Value];
+                var screen = Model.Screens[e.ScreenId.Value];
                 var chapterKey = screen.Breadcrumbs.First();
-                for (int i = 0; i < ViewModel.Chapters.Count; i++)
+                for (int i = 0; i < Model.Chapters.Count; i++)
                 {
-                    if (ViewModel.Chapters[i].ScreenId == chapterKey)
+                    if (Model.Chapters[i].ScreenId == chapterKey)
                     {
                         NavList.SelectItem(i);
                     }
@@ -243,8 +251,8 @@ namespace CAPI.Android
         {
 
             if (Adapter.IsRoot)
-                NavList.SelectItem(e.P0);
-            var statistic = Adapter.GetItem(e.P0) as StatisticsContentFragment;
+                NavList.SelectItem(e.Position);
+            var statistic = Adapter.GetItem(e.Position) as StatisticsContentFragment;
             if (statistic != null)
                 statistic.RecalculateStatistics();
         }
@@ -259,9 +267,8 @@ namespace CAPI.Android
         public override void Finish()
         {
             base.Finish();
-            var storage = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
-            if (storage != null)
-                storage.Flush(QuestionnaireId);
+            
+            cleanUpExecutor.CleanUpInterviewCaches(QuestionnaireId);
         }
 
         public override void OnLowMemory()

@@ -1,29 +1,31 @@
 ﻿@using System.Runtime.Serialization.Formatters
-@using Main.Core.View.Question
 @using Newtonsoft.Json
-@using Questionnaire.Core.Web.Helpers
-@using Web.Supervisor.Models
 
 @model Core.Supervisor.Views.Assign.AssignSurveyView
 @{
     ViewBag.Title = "Assignment";
 }
-<script data-main="../../Scripts/assign/main.js" src="~/Scripts/lib/require.js"></script>
+@section styles{
 
-<script type="text/javascript">
-    define('input', [], function() {
-        var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+}
+@section scripts{
+    <script data-main="../../Scripts/assign/main.js" src="~/Scripts/lib/require.js"></script>
+    <script type="text/javascript">
+        define('input', [], function() {
+            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                         {
                             TypeNameHandling = TypeNameHandling.Objects,
                             TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
                         })) ;
-        return {
-            questionnaire: q,
-            url: '@Url.Action("Assign", "HQ", new { }, Request.Url.Scheme)'
-        };
-    });
-</script>
-<h2 data-bind="text: questionnaire().title"></h2>
+            return {
+                questionnaire: q,
+                url: '@Url.Action("Assign", "HQ", new { }, Request.Url.Scheme)'
+            };
+        });
+    </script>
+}
+
+<h3 data-bind="text: questionnaire().title"></h3>
 <div class="row-fluid">
     <div class="span12">
         <div id="featured-questions" class="form-horizontal">
@@ -61,7 +63,6 @@
 </div>
 
 <script type="text/html" id="SingleOption">
-
     <div class="control-group" data-bind="validationElement: selectedOption">
         <label class="control-label" data-bind="text: title"></label>
         <div class="controls">
@@ -74,16 +75,21 @@
             <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
         </div>
     </div>
-
-
 </script>
+
 <script type="text/html" id="MultyOption">
-    <!-- ko foreach: options -->
-    <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-        <input type='checkbox' data-bind="attr: { value: id, name: title, id: optionFor }, checked: $parent.selectedOptions" />
-        <span data-bind="text: title"></span>
-    </label>
-    <!-- /ko -->
+    <div class="control-group" data-bind="validationElement: selectedOptions">
+        <label class="control-label" data-bind="text: title"></label>
+        <div class="controls">
+            <!-- ko foreach: options -->
+            <label class="checkbox" data-bind='attr: { "for": optionFor }'>
+                <input type='checkbox' data-bind="attr: { value: id, name: title, id: optionFor }, checked: $parent.selectedOptions" />
+                <span data-bind="text: title"></span>
+            </label>
+            <!-- /ko -->
+            <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
+        </div>
+    </div>
 </script>
 <script type="text/html" id="Numeric">
     <div class="control-group" data-bind="validationElement: selectedOption">
@@ -99,7 +105,7 @@
     <div class="control-group" data-bind="validationElement: selectedOption">
         <label class="control-label" data-bind="text: title"></label>
         <div class="controls">
-            <input type="text" class="input-block-level" data-bind="datepicker: selectedOption, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
+            <input type="text" class="input-block-level" data-bind="datepicker: selectedOption, datepickerOptions: { date: selectedOption }" />
             <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
         </div>
     </div>

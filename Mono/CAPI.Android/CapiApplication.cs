@@ -1,47 +1,38 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
-using AndroidNcqrs.Eventing.Storage.SQLite;
-using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.Authorization;
-using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.EventHandlers;
-using CAPI.Android.Core.Model.FileStorage;
-using CAPI.Android.Core.Model.SnapshotStore;
+using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Platform;
+using Cirrious.MvvmCross.Platform;
+using Cirrious.MvvmCross.ViewModels;
+using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
-using Main.Core.EventHandlers;
 using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Main.Core.Services;
 using Main.Core.View;
-using Main.Core.View.User;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Mono.Android.Crasher;
 using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
@@ -78,6 +69,11 @@ namespace CAPI.Android
         {
             get { return Kernel.Get<IFileStorageService>(); }
         }
+
+        /*public static ISyncCacher SyncCacher
+        {
+            get { return Kernel.Get<ISyncCacher>(); }
+        }*/
 
         public static IKernel Kernel
         {
@@ -139,7 +135,7 @@ namespace CAPI.Android
                                           kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
+            
         }
 
         private void InitChangeLog(InProcessEventBus bus)
@@ -158,16 +154,17 @@ namespace CAPI.Android
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             RestoreAppState();
 
-            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
+             // initialize app if necessary
+            MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
+            MvxAndroidSetupSingleton.Instance.EnsureInitialized();
 
-            // initialize app if necessary
-            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
-            {
-                _setup.Initialize();
-            }
-
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false), new AndroidModelModule());
+            kernel = new StandardKernel(
+                new AndroidCoreRegistry(),
+                new AndroidModelModule(),
+                new AndroidLoggingModule());
             kernel.Bind<Context>().ToConstant(this);
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
+            this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
             NcqrsInit.Init(kernel);
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
@@ -201,7 +198,7 @@ namespace CAPI.Android
         }
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
-            this.ClearAllBackStack<SplashScreenActivity>();
+            this.ClearAllBackStack<SplashScreen>();
 
             var questionnarieDenormalizer =
                 kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as

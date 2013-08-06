@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -31,7 +25,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.SaveQuestionnarie(new CompleteQuestionnaireStoreDocument(){PublicKey = questionnarieId}, userId);
+            target.SaveInterview(new CompleteQuestionnaireStoreDocument(){PublicKey = questionnarieId}, userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -78,7 +72,7 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
             
             // act
-            target.DeleteQuestionnarie(questionnarieId, userId);
+            target.MarkInterviewForClientDeleting(questionnarieId, userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -100,7 +94,7 @@ namespace WB.Core.Synchronization.Tests
             var userStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
 
             var retval =
-                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage);
+                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage, inmemoryChunkStorage);
 
             retval.SaveUser(new UserDocument()
             {

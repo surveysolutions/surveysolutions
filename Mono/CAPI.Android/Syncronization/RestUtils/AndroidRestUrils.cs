@@ -4,25 +4,32 @@ using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using CAPI.Android.Core.Model.ModelUtils;
+using Microsoft.Practices.ServiceLocation;
 using RestSharp;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace CAPI.Android.Syncronization.RestUtils
 {
-    public class AndroidRestUrils:IRestUrils
+    public class AndroidRestUrils : IRestUrils
     {
         private readonly string baseAddress;
+
+        private readonly ILogger logger;
 
         public AndroidRestUrils(string baseAddress)
         {
             this.baseAddress = baseAddress;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
-        public void ExcecuteRestRequest(string url, params KeyValuePair<string, string>[] additionalParams)
+        public void ExcecuteRestRequest(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = BuildRequest(url, additionalParams);
+            var request = BuildRequest(url, additionalParams, null);
+
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
 
             var response = restClient.Execute(request);
 
@@ -32,31 +39,37 @@ namespace CAPI.Android.Syncronization.RestUtils
 
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("user wasn't authorized");
-
-                LogManager.GetLogger(GetType())
-                          .Error("Sync error. Responce status:" + response.StatusCode, exception);
+                
+                logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
             }
         }
 
-        public T ExcecuteRestRequest<T>(string url, params KeyValuePair<string, string>[] additionalParams)
+        public T ExcecuteRestRequest<T>(string url, IAuthenticator authenticator, params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = BuildRequest(url, additionalParams);
+            var request = BuildRequest(url, additionalParams, null);
+
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
 
             var response = restClient.Execute(request);
 
-            return HandlerResponce<T>(response);
+            return HandlerResponse<T>(response);
         }
 
-        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, params KeyValuePair<string, string>[] additionalParams)
+        public T ExcecuteRestRequestAsync<T>(string url, CancellationToken ct, string requestBody, IAuthenticator authenticator,
+            params KeyValuePair<string, string>[] additionalParams)
         {
             var restClient = new RestClient(this.baseAddress);
 
-            var request = BuildRequest(url, additionalParams);
+            var request = BuildRequest(url, additionalParams, requestBody);
 
+            if (authenticator != null)
+                restClient.Authenticator = authenticator;
+            
             IRestResponse response = null;
 
             var token = restClient.ExecuteAsync(request, (r) => { response = r; });
@@ -68,20 +81,19 @@ namespace CAPI.Android.Syncronization.RestUtils
                     token.Abort();
                     throw new RestException("Operation was canceled.");
                 }
-                Thread.Sleep(500);
             }
 
-            return HandlerResponce<T>(response);
+            return HandlerResponse<T>(response);
         }
 
-        private T HandlerResponce<T>(IRestResponse response)
+        private T HandlerResponse<T>(IRestResponse response)
         {
             if (response.ErrorException != null)
             {
-                LogManager.GetLogger(GetType())
+                this.logger
                           .Error("Sync error, response contains exception. Message:" + response.ErrorMessage, 
                                  response.ErrorException);
-                throw new Exception("Error occured on communication with target. Please, check settings.");
+                throw new Exception("Error occured on communication with target. Please, check settings or try again later.");
             }
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
@@ -91,8 +103,7 @@ namespace CAPI.Android.Syncronization.RestUtils
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     exception = new AuthenticationException("User is not authorized.");
 
-                LogManager.GetLogger(GetType())
-                          .Error("Sync error. Responce status:" + response.StatusCode, exception);
+                this.logger.Error("Sync error. Response status:" + response.StatusCode, exception);
 
                 throw exception;
             }
@@ -106,17 +117,27 @@ namespace CAPI.Android.Syncronization.RestUtils
 
             return syncItemsMetaContainer;
         }
-       
-        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams)
+
+        private RestRequest BuildRequest(string url, KeyValuePair<string, string>[] additionalParams, string requestBody)
         {
             var request = new RestRequest(url, Method.POST);
             request.RequestFormat = DataFormat.Json;
 
             request.AddHeader("Accept-Encoding", "gzip,deflate");
-            foreach (var additionalParam in additionalParams)
+
+            if (!string.IsNullOrWhiteSpace(requestBody))
             {
-                request.AddParameter(additionalParam.Key, additionalParam.Value);
+                //request.AddBody(requestBody);
+                request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
             }
+            else
+            {
+                foreach (var additionalParam in additionalParams)
+                {
+                    request.AddParameter(additionalParam.Key, additionalParam.Value);
+                }
+            }
+
             return request;
         }
     }

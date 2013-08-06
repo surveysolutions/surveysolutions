@@ -30,7 +30,6 @@ namespace WB.UI.Designer.Views.Questionnaire
             this.Parent = parent == null ? (Guid?)null : parent.PublicKey;
 
             this.Children = this.ConvertChildrenFromGroupDocument(doc, @group);
-            this.ParentView = parentView;
         }
 
         public string ConditionExpression { get; set; }
@@ -41,8 +40,6 @@ namespace WB.UI.Designer.Views.Questionnaire
         public string Description { get; set; }
 
         public Guid PublicKey { get; set; }
-
-        public ICompositeView ParentView { get; private set; }
 
         public string Title { get; set; }
 

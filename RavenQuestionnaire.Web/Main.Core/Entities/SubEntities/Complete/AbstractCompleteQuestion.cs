@@ -49,11 +49,6 @@
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the validated time.
-        /// </summary>
-        public DateTime ValidatedTime { get; set; }
-
-        /// <summary>
         /// Gets or sets the answer date.
         /// </summary>
         public DateTime? AnswerDate { get; set; }
@@ -384,6 +379,8 @@
 
             this.Comments.Add(new CommentDocument {CommentDate = date, Comment = comments, User = user});
         }
+
+        public abstract void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue);
 
         #endregion
     }

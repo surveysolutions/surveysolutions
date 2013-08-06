@@ -33,7 +33,7 @@ namespace Core.Supervisor.Views.Survey
 
             var doc = this.store.GetById(input.CompleteQuestionnaireId);
 
-            if (doc == null)
+            if (doc == null || doc.IsDeleted)
             {
                 return null;
             }

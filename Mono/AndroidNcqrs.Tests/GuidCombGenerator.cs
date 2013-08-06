@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Ncqrs.Tests
@@ -8,6 +10,12 @@ namespace Ncqrs.Tests
     [TestFixture]
     class GuidCombGeneratorTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Calling_generate_multiple_times_should_return_unique_results()
         {

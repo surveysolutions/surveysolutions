@@ -26,11 +26,11 @@ namespace Core.Supervisor.Views.Summary
                 {
                     if (input.ViewerStatus == ViewerStatus.Headquarter)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == null);
+                        // no additional filtering
                     }
                     else if (input.ViewerStatus == ViewerStatus.Supervisor)
                     {
-                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+                        _ = _.Where(x => x.ResponsibleSupervisorId == input.ViewerId || x.ResponsibleId == input.ViewerId);
                     }
                     return new SummaryTemplatesView()
                     {

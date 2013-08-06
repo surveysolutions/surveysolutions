@@ -1,25 +1,19 @@
-﻿SummaryListViewModel = function (templateApiUrl) {
+﻿SummaryListViewModel = function(listViewUrl) {
     var self = this;
 
-    self.ServiceUrl = templateApiUrl;
-
+    self.ListView = new ListViewModel(listViewUrl);
+    self.ToggleFilter = function () {
+        self.ListView.ToggleFilter();
+    };
     self.Templates = ko.observableArray([]);
-
     self.SelectedTemplate = ko.observable('');
 
-    self.load = function () {
+    self.load = function() {
+        self.SelectedTemplate.subscribe(self.ListView.filter);
 
-        $.ajax({
-            type: 'POST',
-            url: self.ServiceUrl,
-            data: {},
-            context: this,
-            success: function (data) {
-                self.Templates(data);
-            },
-            dataType: 'json'
-        });
+        self.ListView.GetFilterMethod = function() {
+            return { TemplateId: self.SelectedTemplate };
+        };
+        self.ListView.search();
     };
-
-    self.load();
 };

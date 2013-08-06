@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
@@ -12,6 +13,11 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping
     [TestFixture]
     public class MappingForCommandNotFoundExceptionTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
         [Test]
         public void Constructing_an_instance_should_initialize_the_message()
         {

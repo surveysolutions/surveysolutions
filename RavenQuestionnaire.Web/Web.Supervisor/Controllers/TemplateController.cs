@@ -1,5 +1,6 @@
 ﻿using Main.Core.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace Web.Supervisor.Controllers
 {
@@ -30,18 +31,6 @@ namespace Web.Supervisor.Controllers
         private readonly IStringCompressor zipUtils;
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TemplateController"/> class.
-        /// </summary>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        /// <param name="globalInfo">
-        /// The global info.
-        /// </param>
-        /// <param name="logger">
-        /// The logger.
-        /// </param>
         public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
@@ -77,14 +66,6 @@ namespace Web.Supervisor.Controllers
             }
         }
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The import.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         public ActionResult Import(QuestionnaireListInputModel model)
         {
             if (this.DesignerServiceClient == null)
@@ -143,15 +124,6 @@ namespace Web.Supervisor.Controllers
         }
 
 
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
         public ActionResult List(GridDataRequestModel data)
         {
             var list =
@@ -189,10 +161,8 @@ namespace Web.Supervisor.Controllers
                 this.CommandService.Execute(
                     new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
 
-                return this.RedirectToAction("Questionnaires", "Dashboard");    
+                return this.RedirectToAction("Index", "HQ");    
             }
         }
-
-        #endregion
     }
 }

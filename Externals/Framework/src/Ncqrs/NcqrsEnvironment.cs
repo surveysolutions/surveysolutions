@@ -12,7 +12,6 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Domain.Storage;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs
 {
@@ -61,6 +60,8 @@ namespace Ncqrs
         /// Hold the environment configuration. This is initialized by the <see cref="Configure"/> method.
         /// </summary>
         private static IEnvironmentConfiguration _instance;
+
+        private static readonly Dictionary<string, Type> KnownEventDataTypes = new Dictionary<string, Type>();
 
         /// <summary>
         /// Gets or create the requested instance specified by the parameter <typeparamref name="T"/>.
@@ -178,5 +179,32 @@ namespace Ncqrs
         /// </remarks>
         public static IEnvironmentConfiguration CurrentConfiguration { get { return _instance; } }
 
+        public static void RegisterEventDataType(Type eventDataType)
+        {
+            ThrowIfThereIsAnotherEventWithSameFullName(eventDataType);
+
+            KnownEventDataTypes[eventDataType.FullName] = eventDataType;
+        }
+
+        public static bool IsEventDataType(string typeFullName)
+        {
+            return KnownEventDataTypes.ContainsKey(typeFullName);
+        }
+
+        public static Type GetEventDataType(string typeFullName)
+        {
+            return KnownEventDataTypes[typeFullName];
+        }
+
+        private static void ThrowIfThereIsAnotherEventWithSameFullName(Type @event)
+        {
+            Type anotherEventWithSameName;
+            KnownEventDataTypes.TryGetValue(@event.FullName, out anotherEventWithSameName);
+
+            if (anotherEventWithSameName != null && anotherEventWithSameName != @event)
+                throw new ArgumentException(string.Format(
+                    "Two different events share same full type name:{0}{1}{0}{2}",
+                    Environment.NewLine, @event.AssemblyQualifiedName, anotherEventWithSameName.AssemblyQualifiedName));
+        }
     }
 }

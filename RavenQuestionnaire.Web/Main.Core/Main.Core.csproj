@@ -93,6 +93,9 @@
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -150,43 +153,15 @@
     <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
     <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Location\CreateLocationCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\AssignInterviewToUserCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\DeleteInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
-    <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\PushStatisticsCommand.cs" />
@@ -206,7 +181,6 @@
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
-    <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ChangeStatusDocument.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
@@ -224,6 +198,7 @@
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\LocationDocument.cs" />
     <Compile Include="Documents\ProcessedEventChunk.cs" />
+    <Compile Include="Documents\QuestionAnswer.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
@@ -241,9 +216,9 @@
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
+    <Compile Include="Domain\Exceptions\InterviewException.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
-    <Compile Include="Domain\QuestionnaireAR.cs" />
     <Compile Include="Domain\SyncActivityAR.cs" />
     <Compile Include="Domain\SyncProcessAR.cs" />
     <Compile Include="Domain\UserAR.cs" />
@@ -339,6 +314,7 @@
     <Compile Include="Entities\SubEntities\Complete\Question\TextCompleteQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\SurveyStatusLight.cs" />
     <Compile Include="Entities\SubEntities\FlowBlock.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -434,8 +410,6 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\AggregateRootEvent.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -469,9 +443,6 @@
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -481,6 +452,7 @@
     <Compile Include="Events\Questionnaire\Completed\FlagSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\Completed\InterviewDeleted.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -503,60 +475,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\GroupCloned.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\GroupDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\GroupUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\ImageDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\ImageUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\ImageUploaded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\NewGroupAdded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\NewQuestionAdded.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionChanged.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionCloned.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\Questionnaire\TemplateImported.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs">
@@ -623,9 +541,7 @@
     <Compile Include="ICommandListSupplier.cs" />
     <Compile Include="IRavenDBSettings.cs" />
     <Compile Include="NCQRSInit.cs" />
-    <Compile Include="PackageHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="PackageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
     <Compile Include="Services\RavenFileStorageService.cs" />
@@ -663,7 +579,6 @@
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
-    <Compile Include="View\CompositeViewExtensions.cs" />
     <Compile Include="View\Device\DeviceItemView.cs" />
     <Compile Include="View\Device\DeviceItemViewFactory.cs" />
     <Compile Include="View\Device\DeviceItemViewInputModel.cs" />
@@ -685,10 +600,6 @@
     <Compile Include="View\Group\ScreenNavigation.cs" />
     <Compile Include="View\ICompositeView.cs" />
     <Compile Include="View\IViewFactory.cs" />
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs" />
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="View\Question\AutoPropagateQuestionView.cs" />
     <Compile Include="View\Question\BaseQuestionView.cs" />
     <Compile Include="View\Question\CompleteQuestionView.cs" />
@@ -744,10 +655,6 @@
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
-      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
-      <Name>WB.Core.Questionnaire.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>

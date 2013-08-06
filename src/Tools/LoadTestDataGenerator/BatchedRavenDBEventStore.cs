@@ -1,10 +1,11 @@
 ﻿using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
 
 namespace LoadTestDataGenerator
 {
     using System.Net;
-    using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
     using Ncqrs.Eventing.Storage.RavenDB;
 
     using Raven.Client.Indexes;
@@ -19,8 +20,10 @@ namespace LoadTestDataGenerator
 
     using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
 
-    public class BatchedRavenDBEventStore: IStreamableEventStore
+    internal class BatchedRavenDBEventStore: RavenWriteSideStore, IStreamableEventStore
     {
+        private const string CollectionName = "Events";
+
         #region Fields
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace LoadTestDataGenerator
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ncqrs.Eventing.Storage.RavenDB.RavenDBEventStore"/> class.
+        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
         /// </summary>
         /// <param name="ravenUrl">
         /// The raven url.
@@ -56,7 +59,7 @@ namespace LoadTestDataGenerator
         /// <param name="pageSize"></param>
         public BatchedRavenDBEventStore(string ravenUrl, int pageSize)
         {
-            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions()}.Initialize();
+            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateStoreConventions(CollectionName)}.Initialize();
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
@@ -66,15 +69,15 @@ namespace LoadTestDataGenerator
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ncqrs.Eventing.Storage.RavenDB.RavenDBEventStore"/> class.
+        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
         /// </summary>
         /// <param name="externalDocumentStore">
         /// The external document store.
         /// </param>
         /// <param name="pageSize"></param>
-        public BatchedRavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
+        public BatchedRavenDBEventStore(DocumentStore externalDocumentStore, int pageSize = 50)
         {
-            externalDocumentStore.Conventions = CreateConventions();
+            externalDocumentStore.Conventions = CreateStoreConventions(CollectionName);
             this.DocumentStore = externalDocumentStore;
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
@@ -272,23 +275,6 @@ namespace LoadTestDataGenerator
             return result;
         }
 
-        /// <summary>
-        /// The create conventions.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="DocumentConvention"/>.
-        /// </returns>
-        public static DocumentConvention CreateConventions()
-        {
-           var docStore = new DocumentConvention
-               {
-                   JsonContractResolver = new PropertiesOnlyContractResolver(),
-                   FindTypeTagName = x => "Events"
-                   /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
-               };
-            return docStore;
-        }
-
 
         /// <summary>
         /// The to stored event.
@@ -365,23 +351,14 @@ namespace LoadTestDataGenerator
                              .Query<StoredEvent>()
                              .Customize(x => x.WaitForNonStaleResultsAsOfNow());
         }
-        public int CountOfAllEventsWithoutSnapshots()
-        {
-            return this.CountOfAllEvents(includeShapshots: false);
-        }
 
-        public int CountOfAllEventsIncludingSnapshots()
+        public int CountOfAllEvents()
         {
             return this.CountOfAllEvents(includeShapshots: true);
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
-        {
-            return this.GetAllEvents(bulkSize, includeShapshots: false);
-        }
-
         [Obsolete("because there are no snapshots in event stream now")]
-        public IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize)
+        public IEnumerable<CommittedEvent[]> GetAllEvents(int bulkSize)
         {
             return this.GetAllEvents(bulkSize, includeShapshots: true);
         }

@@ -1,4 +1,7 @@
-﻿namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
+namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
     using Main.Core.Documents;
     using Main.Core.Entities.Extensions;
@@ -15,6 +18,7 @@
     [TestFixture]
     public class CompleteQuestionnaireConditionExecutorTests
     {
+
         // public Mock<IIteratorContainer> iteratorContainerMock;
         #region Public Methods and Operators
 
@@ -24,6 +28,7 @@
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             // iteratorContainerMock = new Mock<IIteratorContainer>();
         }
 

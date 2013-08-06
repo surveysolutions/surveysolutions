@@ -13,7 +13,6 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
@@ -238,8 +237,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     if (i < rosterItem.Items.Count())
                     {
                         QuestionViewModel rowModel = rosterItem.Items[i] as QuestionViewModel;
-                        RosterQuestionView rowViewItem = new RosterQuestionView(context,
-                                                                                context as IMvxBindingActivity, rowModel);
+                        RosterQuestionView rowViewItem = new RosterQuestionView(context,rowModel);
                         rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
                         rosterQuestionViews.Add(rowViewItem);
                         rosterCell = rowViewItem;

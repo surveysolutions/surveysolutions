@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;
@@ -16,6 +17,12 @@ namespace WB.Core.Synchronization.Tests
     [TestFixture]
     public class DefaultBackupManagerTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Backup_When_eventstore_is_null_Then_InstanceNotFoundInEnvironmentConfigurationException()
         {
@@ -61,7 +68,7 @@ namespace WB.Core.Synchronization.Tests
                 eventList.Add(eventsPerAr);
             }
 
-            eventStore.Setup(x => x.GetAllEventsIncludingSnapshots(It.IsAny<int>())).Returns(eventList);
+            eventStore.Setup(x => x.GetAllEvents(It.IsAny<int>())).Returns(eventList);
             NcqrsEnvironment.SetDefault(eventStore.Object as IEventStore);
 
             DefaultBackupManager target = CreateDefaultBackupManager();

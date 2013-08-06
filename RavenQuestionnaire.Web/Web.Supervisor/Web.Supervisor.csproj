@@ -152,14 +152,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="ClientDependency.Core, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\ClientDependency.1.5.1.0\lib\ClientDependency.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ClientDependency.Core.Mvc, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -295,7 +287,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
+    <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
+    <Compile Include="Controllers\StatusApiController.cs" />
+    <Compile Include="Controllers\InterviewController.cs" />
+    <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\SurveysApiController.cs" />
     <Compile Include="Controllers\SummaryApiController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -306,7 +305,6 @@
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
@@ -328,9 +326,13 @@
     <Compile Include="Models\AssignSuveyData.cs" />
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
-    <Compile Include="Models\Chart\ChartModelBase.cs" />
-    <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\DeleteInterviewsModel.cs" />
+    <Compile Include="Models\StatusListViewModel.cs" />
+    <Compile Include="Models\StatusRequestModel.cs" />
+    <Compile Include="Models\DocumentFilter.cs" />
+    <Compile Include="Models\DocumentRequestModel.cs" />
+    <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\SurveyRequestModel.cs" />
     <Compile Include="Models\SurveyListViewModel.cs" />
@@ -340,9 +342,7 @@
     <Compile Include="Models\InterviewerListViewModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
-    <Compile Include="Models\Chart\SurveyChartModel.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
-    <Compile Include="Models\Chart\InterviewerChartModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
@@ -358,28 +358,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute .cs" />
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.icon-large.css" />
-    <Content Include="Content\bootstrap.icon-large.min.css" />
-    <Content Include="Content\bootstrap\bootstrap-editable.css" />
+    <Content Include="Content\bootstrap-mvc-validation.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.icon-large.css" />
+    <Content Include="Content\css\bootstrap-responsive.css" />
+    <Content Include="Content\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap\bootstrap.css" />
-    <Content Include="Content\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\font-awesome-ie7.css" />
+    <Content Include="Content\font-awesome-ie7.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\glyphicons.png" />
@@ -388,6 +390,7 @@
     <Content Include="Content\img\divider.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -395,6 +398,10 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\jquery.dataTables.css" />
+    <Content Include="Content\jquery.pnotify.default.css" />
+    <Content Include="Content\listview.css" />
+    <Content Include="Content\main-not-logged.css" />
+    <Content Include="Content\supervisor.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -457,15 +464,17 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Content\TimelineJS\css\loading.gif" />
-    <Content Include="Content\TimelineJS\css\timeline.css" />
-    <Content Include="Content\TimelineJS\css\timeline.png" />
-    <Content Include="Content\TimelineJS\js\locale\en.js" />
-    <Content Include="Content\TimelineJS\js\storyjs-embed.js" />
-    <Content Include="Content\TimelineJS\js\timeline-min.js" />
-    <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Configuration\Ira.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\lib\jquery.pnotify.js" />
+    <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
@@ -480,17 +489,14 @@
     <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\highcharts.js" />
-    <Content Include="Scripts\jquery-1.7.2.min.js" />
-    <Content Include="Scripts\jquery-1.9.0-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.9.0.js" />
-    <Content Include="Scripts\jquery-1.9.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.0.js" />
     <Content Include="Scripts\jquery-ui-1.10.0.min.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\assign\app\datacontext.js" />
@@ -513,9 +519,11 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\query-string.js" />
+    <Content Include="Scripts\vm\statuslistview.js" />
+    <Content Include="Scripts\vm\documentlistview.js" />
     <Content Include="Scripts\vm\userlistview.js" />
     <Content Include="Scripts\vm\surveylistview.js" />
-    <Content Include="Scripts\vm\listviewmaster.js" />
     <Content Include="Scripts\vm\summarylistview.js" />
     <Content Include="Scripts\vm\listview.js" />
     <Content Include="Scripts\plotSettings.js" />
@@ -536,7 +544,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
@@ -549,6 +556,10 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -566,9 +577,22 @@
     </Content>
     <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
-    <Content Include="Views\Shared\_ListViewLayout.cshtml" />
-    <Content Include="Views\Shared\_LayoutNew.cshtml" />
-    <Content Include="Views\HQ\_TableGroup.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\HQ\Interviews.cshtml" />
+    <Content Include="Views\Interview\Details.cshtml" />
+    <Content Include="Views\Survey\Interviews.cshtml" />
+    <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
+    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithSidebar.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithoutSidebar.cshtml" />
+    <Content Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
+    <Content Include="Views\Survey\Status.cshtml" />
+    <Content Include="Views\HQ\Status.cshtml" />
+    <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\HQ\ImportResult.cshtml" />
+    <Content Include="Views\HQ\ImportSample.cshtml" />
+    <Content Include="Views\HQ\SampleCreationResult.cshtml" />
+    <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -584,6 +608,10 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
+      <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
       <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
       <Name>WB.Core.Infrastructure.Raven</Name>
@@ -592,13 +620,13 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
-      <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
-      <Name>WB.Core.Questionnaire</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -636,30 +664,19 @@
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\Interviewers.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\Questionnaires.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\Survey.cshtml" />
+    <ProjectReference Include="..\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj">
+      <Project>{60c152be-f926-4289-be28-89207f2c12c7}</Project>
+      <Name>WB.Supervisor.CompleteQuestionnaireDenormalizer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Survey\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Documents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">
@@ -697,13 +714,9 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\Shared\Chart.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
-    <Content Include="Views\Survey\Status.cshtml" />
-    <Content Include="Views\ImportExport\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
-    <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
@@ -711,41 +724,20 @@
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
-    <Content Include="Views\Shared\_StatusHistory.cshtml" />
-    <Content Include="Views\Shared\_StatusTable.cshtml" />
+    <Content Include="Views\Interview\_StatusHistory.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
-    <Content Include="Views\Survey\_TableGroup.cshtml" />
-    <Content Include="Views\Shared\Approve.cshtml" />
-    <Content Include="Views\Shared\AssignPerson.cshtml" />
-    <Content Include="Views\Shared\ChangeState.cshtml" />
-    <Content Include="Views\Shared\Comments.cshtml" />
-    <Content Include="Views\HQ\Details.cshtml" />
-    <Content Include="Views\HQ\Documents.cshtml" />
+    <Content Include="Views\Interview\Approve.cshtml" />
+    <Content Include="Views\Interview\ChangeState.cshtml" />
     <Content Include="Views\HQ\Surveys.cshtml">
       <SubType>
       </SubType>
     </Content>
-    <Content Include="Views\Shared\IndexChart.cshtml" />
-    <Content Include="Views\Shared\Redo.cshtml" />
-    <Content Include="Views\HQ\Status.cshtml" />
-    <Content Include="Views\Shared\StatusChart.cshtml" />
+    <Content Include="Views\Interview\Redo.cshtml" />
     <Content Include="Views\HQ\Summary.cshtml" />
-    <Content Include="Views\Shared\SummaryChart.cshtml" />
-    <Content Include="Views\Shared\IndexChart.cshtml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Views\Shared\StatusChart.cshtml" />
-    <Content Include="Views\Shared\SummaryChart.cshtml">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
     <None Include="Service References\DesignerPublicService\PublicService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

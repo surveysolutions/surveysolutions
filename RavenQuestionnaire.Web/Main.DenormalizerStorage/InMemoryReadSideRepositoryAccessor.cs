@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, IReadSideRepositoryWriter<TView>
+    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, IQuerableReadSideRepositoryWriter<TView>
         where TView : class, IView
     {
         private readonly Dictionary<Guid, TView> repository;
@@ -46,16 +43,16 @@ namespace Main.DenormalizerStorage
            repository.Values.Where(query.Compile()).Count();
         }
 
-        public IEnumerable<TView> QueryEnumerable(Expression<Func<TView, bool>> query)
+        public IEnumerable<TView> QueryAll(Expression<Func<TView, bool>> query)
         {
             return 
             repository.Values.Where(query.Compile());
         }
 
-        public IEnumerable<TView> QueryEnumerable(Expression<Func<TView, bool>> query, int start, int pageSize)
+        public IQueryable<TView> QueryEnumerable(Expression<Func<TView, bool>> query)
         {
             return
-           repository.Values.Where(query.Compile()).Skip(start).Take(pageSize);
+           repository.Values.Where(query.Compile()).AsQueryable();
         }
 
         public void Remove(Guid id)
