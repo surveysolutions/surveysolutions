@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
@@ -71,12 +72,46 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         public QuestionType GetQuestionType(Guid questionId)
         {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return question.QuestionType;
+        }
+
+        public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return answer options for queston with id '{0}' because it's type {1} does not support answer options.",
+                    questionId, question.QuestionType));
+
+            return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
+        }
+
+        private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
+        {
+            decimal parsedValue;
+
+            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                throw new QuestionnaireException(string.Format(
+                    "Cannot parse answer option value '{0}' as decimal. Question id: '{1}'.",
+                    value, questionId));
+
+            return parsedValue;
+        }
+
+        private IQuestion GetQuestionOrThrow(Guid questionId)
+        {
             var question = this.innerDocument.Find<IQuestion>(questionId);
 
             if (question == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not found.", questionId));
 
-            return question.QuestionType;
+            return question;
         }
     }
 }

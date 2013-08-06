@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -11,5 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         long Version { get; }
 
         QuestionType GetQuestionType(Guid questionId);
+
+        IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
     }
 }
