@@ -1,14 +1,20 @@
-﻿@model Main.Core.View.Question.QuestionView
+﻿@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionView
 @using Main.Core.Entities.SubEntities
 @using Main.Core.View.Answer
+@using WB.UI.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.Title 
+        @Model.ItemNumber &nbsp;&nbsp; <i>@Model.Variable</i>&nbsp;&nbsp; @Model.Title 
+        @if (Model.HasCodition)
+        {
+            <i class="icon-warning-sign"></i>
+            <sup>@Model.Condition</sup>
+        }
     </span>
 
-    @if (this.Model.Answers != null && this.Model.Answers.Length > 0) {
+    @if (Model.Answers.Count > 0) {
         <ul class="answer-options">
-            @foreach (AnswerView answer in this.Model.Answers)
+            @foreach (PdfAnswerView answer in this.Model.Answers)
             {
                 <li>
                     <input type="@(Model.QuestionType == QuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
@@ -26,10 +32,6 @@
     else {
         switch (Model.QuestionType)
         {
-            case QuestionType.Numeric: {
-                <div class="answer-placeholder">&nbsp;</div>
-                    break;
-                }
             case QuestionType.Text: {
                 <div class="answer-placeholder">&nbsp;</div>
                 <div class="answer-placeholder">&nbsp;</div>
@@ -45,7 +47,17 @@
                     </span>
                     break;
                 }
+            case QuestionType.Numeric:
+                {
+                    <span class="no-line-break">
+                        @for (int i = 0; i < 10; i++) {
+                            <span class="square-placeholder">&nbsp;</span>
+                        }
+                    </span>
+                    break;
+                }
             default:
+                <div class="answer-placeholder">&nbsp;</div>
                 break;
         }
     }

@@ -1,19 +1,13 @@
 ﻿define('binder',
     ['jquery', 'ko', 'config', 'vm'],
     function ($, ko, config, vm) {
-        
-        var
-            ids = config.viewIds,
 
+        var ids = config.viewIds,
             bind = function () {
-                ko.applyBindings(vm.questionnaire, getView(ids.details));
-            },
-
-            getView = function (viewName) {
-                return $(viewName).get(0);
+                $(document).ready(function () {
+                    ko.applyBindings(vm.questionnaire);
+                });
             };
-
-            
         return {
             bind: bind
         };

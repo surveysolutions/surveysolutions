@@ -1,4 +1,5 @@
-﻿using Main.Core.Commands.Questionnaire;
+﻿using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -9,7 +10,6 @@ namespace WB.UI.Designer.Controllers
     using Main.Core.Documents;
 
     using Ncqrs.Commanding.ServiceModel;
-    using WB.Core.Questionnaire.ExportServices;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Shared.Web.Membership;
 
@@ -17,14 +17,14 @@ namespace WB.UI.Designer.Controllers
     public class SynchronizationController : BaseController
     {
         private readonly ICommandService commandService;
-        private readonly IExportService exportService;
+        private readonly IJsonExportService exportService;
         private readonly IStringCompressor zipUtils;
 
         public SynchronizationController(
             ICommandService commandService, 
             IMembershipUserService userHelper, 
             IStringCompressor zipUtils, 
-            IExportService exportService)
+            IJsonExportService exportService)
             : base(userHelper)
         {
             this.commandService = commandService;

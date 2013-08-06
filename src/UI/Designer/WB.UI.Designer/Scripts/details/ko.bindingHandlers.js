@@ -2,16 +2,31 @@
 ['jquery', 'ko'],
 function ($, ko) {
     var unwrap = ko.utils.unwrapObservable;
+    $('#toggleAllChapters').tooltip();
+
+    ko.bindingHandlers.tooltip = {
+        update: function(element, valueAccessor) {
+            var options = ko.utils.unwrapObservable(valueAccessor());
+            if (options) {
+                $(element).tooltip('destroy');
+                $(element).tooltip({ html: false, container: 'body', placement: options.placement, title: options.title || 'Title' });
+            } else {
+                $(element).removeAttr('data-placement');
+                $(element).tooltip('destroy');
+            }
+        }
+    };
+
 
     ko.bindingHandlers.popover = {
         update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var options = ko.utils.unwrapObservable(valueAccessor());
             if (options) {
-                //$(element).attr('data-content', options.content || '');
+                $(element).attr('data-content', options.content || '');
                 $(element).attr('data-title', options.title || 'Title');
                 $(element).attr('data-placement', options.placement || 'right');
                 $(element).attr('data-trigger', options.trigger || 'click');
-                $(element).popover({ html: false });
+                $(element).popover({ html: false, container: 'body' });
             } else {
                 $(element).removeAttr('data-title');
                 $(element).removeAttr('data-placement');
@@ -22,7 +37,7 @@ function ($, ko) {
     };
 
     ko.bindingHandlers.expand = {
-        init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        init: function (element, valueAccessor) {
             if ($(element).hasClass('ui-expander')) {
                 var expander = element;
                 var head = $(expander).find('.ui-expander-head');
@@ -31,7 +46,22 @@ function ($, ko) {
                 $(head).click(function () {
                     $(head).toggleClass('ui-expander-head-collapsed');
                     $(content).toggle();
+                    var value = valueAccessor();
+                    value(!ko.unwrap(value));
                 });
+            }
+        },
+        update: function (element, valueAccessor) {
+            value = ko.unwrap(valueAccessor());
+            var head = $(element).children('.ui-expander-head');
+            var content = $(element).children('.ui-expander-content');
+            if (value) {
+                $(head).removeClass('ui-expander-head-collapsed');
+                $(content).show();
+            } else {
+                $(head).addClass('ui-expander-head-collapsed');
+                $(content).hide();
+                
             }
         }
     };

@@ -55,8 +55,9 @@
                 sortOrder: sortOrder, 
                 filter: filter);
 
-            return model.Items.Select(this.GetQuestionnaire)
-                        .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
+            var result = model.Items.Select(this.GetQuestionnaire)
+                                    .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
+            return result;
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(Guid userId)
@@ -75,11 +76,12 @@
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
                            CanDelete =
-                               x.CreatedBy == this.userService.WebUser.UserId
-                               || this.userService.WebUser.IsAdmin, 
+                               (x.CreatedBy == this.userService.WebUser.UserId
+                               || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
                            CanExport = true, 
                            CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
+                           CanExportToPdf = true,
                            CreatorName =
                                x.CreatedBy == null
                                    ? GlobalHelper.EmptyString
@@ -97,7 +99,8 @@
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
-                           CanDelete = true, 
+                           CanExportToPdf = true,
+                           CanDelete = !x.IsDeleted, 
                            CanEdit = true, 
                            CanExport = true, 
                            CanSynchronize = this.userService.WebUser.IsAdmin

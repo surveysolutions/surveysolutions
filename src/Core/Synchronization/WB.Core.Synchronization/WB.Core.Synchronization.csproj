@@ -61,10 +61,13 @@
   <ItemGroup>
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="IBackupManager.cs" />
+    <Compile Include="IIncomePackagesRepository.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\SyncManager\SyncManager.cs" />
     <Compile Include="ISynchronizationDataStorage.cs" />
     <Compile Include="ISyncManager.cs" />
+    <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
+    <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SynchronizationModule.cs" />
     <Compile Include="SyncProvider\ISyncEventHandler.cs">
@@ -79,11 +82,17 @@
     <Compile Include="SyncProvider\SyncProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SyncStorage\IChunkReader.cs" />
+    <Compile Include="SyncStorage\IncomePackagesRepository.cs" />
     <Compile Include="SyncStorage\InMemoryChunkStorage.cs" />
-    <Compile Include="SyncStorage\ReadSideChunkStorage.cs" />
+    <Compile Include="SyncStorage\ReadSideChunkReader.cs" />
+    <Compile Include="SyncStorage\ReadSideChunkWriter.cs" />
     <Compile Include="SyncStorage\SimpleSynchronizationDataStorage.cs" />
-    <Compile Include="SyncStorage\IChunkStorage.cs" />
+    <Compile Include="SyncStorage\IChunkWriter.cs" />
     <Compile Include="SyncStorage\SynchronizationDelta.cs" />
+    <Compile Include="Views\IncomeSyncPackagesInputModel.cs" />
+    <Compile Include="Views\IncomeSyncPackagesView.cs" />
+    <Compile Include="Views\IncomeSyncPackagesViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -92,6 +101,10 @@
     <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using Main.Core.Commands.Questionnaire;
 using Main.Core.Documents;
 using Main.Core.View;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Questionnaire.ExportServices;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer.Tests
@@ -24,7 +25,7 @@ namespace WB.UI.Designer.Tests
     {
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IStringCompressor> ZipUtilsMock;
-        protected Mock<IExportService> ExportServiceMock;
+        protected Mock<IJsonExportService> ExportServiceMock;
         protected Mock<IMembershipUserService> UserHelperMock;
         
         [SetUp]
@@ -32,8 +33,9 @@ namespace WB.UI.Designer.Tests
         {
             CommandServiceMock=new Mock<ICommandService>();
             ZipUtilsMock = new Mock<IStringCompressor>();
-            ExportServiceMock = new Mock<IExportService>();
+            ExportServiceMock = new Mock<IJsonExportService>();
             UserHelperMock=new Mock<IMembershipUserService>();
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         [Test]
