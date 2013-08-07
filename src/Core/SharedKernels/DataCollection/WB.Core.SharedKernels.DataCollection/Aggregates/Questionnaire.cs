@@ -24,6 +24,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire
     {
+        #region State
+
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private Dictionary<Guid, IQuestion> questionCache = null;
 
@@ -39,6 +41,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                             question => question));
             }
         }
+
+        protected internal void OnTemplateImported(TemplateImported e)
+        {
+            this.innerDocument = e.Source;
+            this.questionCache = null;
+        }
+
+        #endregion
 
         #region Dependencies
 
@@ -92,11 +102,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
             new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
-        }
-
-        protected internal void OnTemplateImported(TemplateImported e)
-        {
-            this.innerDocument = e.Source;
         }
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
