@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors;
+﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Supervisor.Services;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
 {
     public class InMemoryTemporaryDataRepositoryAccessor : ITemporaryDataRepositoryAccessor
     {

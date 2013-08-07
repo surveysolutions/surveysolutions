@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.ServiceTests
+namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
 {
     public class SampleImportServiceTests
     {

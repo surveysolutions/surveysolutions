@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using CsvHelper;
 
-namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders
+namespace WB.Core.BoundedContexts.Supervisor.SampleRecordsAccessors
 {
     public class CsvSampleRecordsAccessor : ISampleRecordsAccessor
     {
