@@ -86,6 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(Guid questionnaireId, Guid userId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
+            ThrowIfSomeQuestionsHaveInvalidCustomValidationExpression(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
@@ -136,7 +137,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
-            this.ThrowIfSomeValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValues);
+            this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
         }
@@ -183,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     questionId, value, JoinDecimalsWithComma(availableValues)));
         }
 
-        private void ThrowIfSomeValueIsNotOneOfAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal[] values)
+        private void ThrowIfSomeValuesAreNotFromAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal[] values)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
@@ -192,6 +193,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "For question with id '{0}' were provided selected values {1} as answer. But only following values are allowed: {2}.",
                     questionId, JoinDecimalsWithComma(values), JoinDecimalsWithComma(availableValues)));
+        }
+
+        private static void ThrowIfSomeQuestionsHaveInvalidCustomValidationExpression(IQuestionnaire questionnaire, Guid questionnaireId)
+        {
+            IEnumerable<Guid> questionsWithInvalidValidationExpressions = questionnaire.GetQuestionsWithInvalidCustomValidationExpressions();
+
+            if (questionsWithInvalidValidationExpressions.Any())
+                throw new InterviewException(string.Format(
+                    "Cannot create interview from questionnaire '{1}' because following questions in it have invalid validation expressions:{0}{2}",
+                    Environment.NewLine, questionnaireId,
+                    string.Join(
+                        Environment.NewLine,
+                        questionsWithInvalidValidationExpressions.Select(questionId
+                            => string.Format("{0} : {1}", questionId, questionnaire.GetCustomValidationExpression(questionId))))));
         }
 
         private bool? PerformCustomValidationOfQuestionBeingAnswered(Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire)
