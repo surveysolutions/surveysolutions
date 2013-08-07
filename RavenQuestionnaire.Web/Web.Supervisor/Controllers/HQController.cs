@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
-using WB.Core.Synchronization.Views;
 
 namespace Web.Supervisor.Controllers
 {
@@ -35,7 +34,6 @@ namespace Web.Supervisor.Controllers
     public class HQController : BaseController
     {
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
-        private readonly IViewFactory<IncomeSyncPackagesInputModel, IncomeSyncPackagesView> incomeSyncPackagesViewFactory;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
         private readonly IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory;
@@ -53,7 +51,6 @@ namespace Web.Supervisor.Controllers
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, 
             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, 
-            IViewFactory<IncomeSyncPackagesInputModel, IncomeSyncPackagesView> incomeSyncPackagesViewFactory,
             ISampleImportService sampleImportService)
             : base(commandService, provider, logger)
         {
@@ -66,7 +63,6 @@ namespace Web.Supervisor.Controllers
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.supervisorsFactory = supervisorsFactory;
-            this.incomeSyncPackagesViewFactory = incomeSyncPackagesViewFactory;
         }
 
         public ActionResult Index()
@@ -153,12 +149,6 @@ namespace Web.Supervisor.Controllers
                 this.View(
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
                         ViewerStatus.Headquarter)).Items);
-        }
-
-        public int GetIncomingItemsCount()
-        {
-            return
-                this.incomeSyncPackagesViewFactory.Load(new IncomeSyncPackagesInputModel()).AvalibleIncomPackagesCount;
         }
 
         public ActionResult Assign(Guid id)

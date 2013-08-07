@@ -35,9 +35,6 @@
                         </li>
                     </ul>
                     <ul class="nav pull-right" role="menu">
-                        <li id="income_packageDiv_li" style="display: none;">
-                            <a href="#"><i class="icon-long-arrow-down"></i> Processing  <span id="income_packageDiv_span"></span> <i class="icon-long-arrow-down"></i></a>
-                        </li>
                         <li class="dropdown @(page == MenuItem.Administration ? "active" : "")">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -95,38 +92,6 @@
     @Scripts.Render("~/js/main")
     @RenderSection("scripts", false)
     
-         @if (User.IsInRole("Headquarter"))
-         {
-             <script>
-                 function updateIncomePackeges() {
-                     //   $("#income_packageDiv_li").html('Loading..');
-                     $.
-                         ajax(
-                             {
-                                 type:
-                                     'GET',
-                                 url:
-                                     '@Url.Action("GetIncomingItemsCount", "HQ")',
-                                 timeout:
-                                     2000,
-                                 success:
-                                     function(data) {
-                                         if (!data || data == 0) {
-                                             $("#income_packageDiv_li").css('display', 'none');
-                                             return;
-                                         }
-                                       
-                                         $("#income_packageDiv_span").html(data);
-                                         $("#income_packageDiv_li").css('display', 'block');
-                                         setTimeout(updateIncomePackeges, 3000);
-                                     }
-                             }
-                         );
-                 }
-
-                 setTimeout(updateIncomePackeges, 100);
-             </script>
-         }
   
 </body>
 </html>

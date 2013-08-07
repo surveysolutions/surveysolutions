@@ -6,7 +6,6 @@ namespace WB.Core.Synchronization
     public interface IIncomePackagesRepository
     {
         void StoreIncomingItem(SyncItem item);
-        int GetIncomingItemsCount();
         void ProcessItem(Guid id);
     }
 }
