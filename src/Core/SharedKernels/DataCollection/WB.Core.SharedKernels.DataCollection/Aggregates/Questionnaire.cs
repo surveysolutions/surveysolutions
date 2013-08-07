@@ -28,6 +28,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         #region Dependencies
 
+        private ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
         /// <remarks>
         /// All operations with expressions are time-consuming.
         /// So this processor may be used only in command handlers or in domain methods.
@@ -133,6 +138,37 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             return question.ValidationExpression;
+        }
+
+        public IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions()
+        {
+            var questionsWithInvalidValidationExpression = new List<Guid>();
+
+            foreach (IQuestion question in this.GetAllQuestions())
+            {
+                try
+                {
+                    this.GetQuestionsInvolvedInCustomValidation(question.PublicKey);
+                }
+                catch (Exception exception)
+                {
+                    questionsWithInvalidValidationExpression.Add(question.PublicKey);
+
+                    this.Logger.Info(
+                        string.Format(
+                            "Validation expression '{0}' for question '{1}' treated invalid " +
+                            "because exception occurred when tried to determine questions involved in validation expression.",
+                            question.ValidationExpression, question.PublicKey),
+                        exception);
+                }
+            }
+
+            return questionsWithInvalidValidationExpression;
+        }
+
+        private IEnumerable<IQuestion> GetAllQuestions()
+        {
+            return this.innerDocument.Find<IQuestion>(_ => true);
         }
 
         private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
