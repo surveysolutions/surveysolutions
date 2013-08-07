@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Main.Core.Documents;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
+using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 
-namespace WB.Core.SharedKernels.DataCollection.Services
+namespace WB.Core.BoundedContexts.Supervisor.Services
 {
     public interface ISampleImportService
     {

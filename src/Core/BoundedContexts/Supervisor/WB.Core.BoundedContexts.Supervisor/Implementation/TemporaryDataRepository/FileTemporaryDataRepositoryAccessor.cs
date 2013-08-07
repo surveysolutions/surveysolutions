@@ -2,9 +2,9 @@
 using System.IO;
 using WB.Core.SharedKernel.Utils.Serialization;
 
-namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataRepository
 {
-    public class FileTemporaryDataRepositoryAccessor : ITemporaryDataRepositoryAccessor
+    internal class FileTemporaryDataRepositoryAccessor : ITemporaryDataRepositoryAccessor
     {
         private readonly string rootPath;
         private readonly IJsonUtils jsonSerrializer;
