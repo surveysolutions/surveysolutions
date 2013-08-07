@@ -56,6 +56,8 @@ namespace CapiDataGenerator
 
             ClearCapiDb(capiEvenStore, denormalizerStore, changeLogStore);
 
+            ClearCapiDb(capiEvenStore, denormalizerStore, changeLogStore);
+
             var eventStore = new CapiDataGeneratorEventStore(capiEvenStore,
                 new RavenDBEventStore(this.Kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore(), 50));
 
