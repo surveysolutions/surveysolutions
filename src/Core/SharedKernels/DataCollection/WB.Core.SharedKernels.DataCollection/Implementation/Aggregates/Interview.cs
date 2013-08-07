@@ -84,6 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
+
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() {}
 
@@ -95,36 +96,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
 
+
         public void AnswerTextQuestion(Guid userId, Guid questionId, DateTime answerTime, string answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
 
-            bool? currentAnswerValidationResult
-                = this.PerformCustomValidationOfQuestionBeingAnswered(questionId, answer, questionnaire);
-
-            IEnumerable<Guid> dependentAnswersDeclaredValid;
-            IEnumerable<Guid> dependentAnswersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(questionnaire, questionId, answer,
-                out dependentAnswersDeclaredValid, out dependentAnswersDeclaredInvalid);
+            IEnumerable<Guid> answersDeclaredValid;
+            IEnumerable<Guid> answersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
+                out answersDeclaredValid, out answersDeclaredInvalid);
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
 
-            if (currentAnswerValidationResult.HasValue)
+            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
             {
-                this.ApplyEvent(currentAnswerValidationResult.Value
-                    ? new AnswerDeclaredValid(questionId) as object
-                    : new AnswerDeclaredInvalid(questionId) as object);
+                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
             }
 
-            foreach (Guid dependentAnswerDeclaredValidId in dependentAnswersDeclaredValid)
+            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
             {
-                this.ApplyEvent(new AnswerDeclaredValid(dependentAnswerDeclaredValidId));
-            }
-
-            foreach (Guid dependentAnswerDeclaredInvalidId in dependentAnswersDeclaredInvalid)
-            {
-                this.ApplyEvent(new AnswerDeclaredInvalid(dependentAnswerDeclaredInvalidId));
+                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
             }
         }
 
@@ -161,6 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
         }
+
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
@@ -229,6 +222,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             => string.Format("{0} : {1}", questionId, questionnaire.GetCustomValidationExpression(questionId))))));
         }
 
+        private void PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(
+            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
+            out IEnumerable<Guid> answersDeclaredValid, out IEnumerable<Guid> answersDeclaredInvalid)
+        {
+            bool? currentAnswerValidationResult
+                = this.PerformCustomValidationOfQuestionBeingAnswered(questionBeingAnsweredId, answerGivenForQuestionBeingAnswered, questionnaire);
+
+            bool wasCurrentAnswerDeclaredValid = currentAnswerValidationResult == true;
+            bool wasCurrentAnswerDeclaredInvalid = currentAnswerValidationResult == false;
+
+            IEnumerable<Guid> dependentAnswersDeclaredValid;
+            IEnumerable<Guid> dependentAnswersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered,
+                out dependentAnswersDeclaredValid, out dependentAnswersDeclaredInvalid);
+
+            answersDeclaredValid = wasCurrentAnswerDeclaredValid
+                ? Enumerable.Concat(new[] {questionBeingAnsweredId}, dependentAnswersDeclaredValid)
+                : dependentAnswersDeclaredValid;
+
+            answersDeclaredInvalid = wasCurrentAnswerDeclaredInvalid
+                ? Enumerable.Concat(new[] {questionBeingAnsweredId}, dependentAnswersDeclaredInvalid)
+                : dependentAnswersDeclaredInvalid;
+        }
+
         private bool? PerformCustomValidationOfQuestionBeingAnswered(
             Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire)
         {
@@ -237,7 +254,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(
-            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, string answerGivenForQuestionBeingAnswered,
+            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered,
             out IEnumerable<Guid> dependentAnswersDeclaredValid, out IEnumerable<Guid> dependentAnswersDeclaredInvalid)
         {
             var validAnswers = new List<Guid>();
