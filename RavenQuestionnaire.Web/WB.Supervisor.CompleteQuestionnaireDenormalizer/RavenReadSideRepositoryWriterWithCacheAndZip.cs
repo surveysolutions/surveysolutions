@@ -87,7 +87,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         {
             if (!memcache.ContainsKey(id))
             {
-                return ((IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>) this).GetById(id);
+                 ((IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>) this).GetById(id);
             }
 
             var view = memcache[id];
@@ -128,7 +128,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
         private void UpdateViewFromEventStream(QuestionnarieWithSequence viewItem)
         {
-            incomePackages.ProcessItem(viewItem.Document.PublicKey);
+            incomePackages.ProcessItem(viewItem.Document.PublicKey, viewItem.Sequence);
 
             var events = eventStore.ReadFrom(viewItem.Document.PublicKey, viewItem.Sequence, long.MaxValue);
             if (events.IsEmpty)
