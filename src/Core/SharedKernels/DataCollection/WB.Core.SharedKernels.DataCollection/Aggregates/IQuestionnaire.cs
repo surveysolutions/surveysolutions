@@ -14,5 +14,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         QuestionType GetQuestionType(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
+
+        bool IsCustomValidationDefined(Guid questionId);
+
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId);
+
+        string GetCustomValidationExpression(Guid questionId);
     }
 }
