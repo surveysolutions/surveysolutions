@@ -55,13 +55,6 @@ namespace WB.Core.Synchronization.SyncStorage
             //   Task.Factory.StartNew(() => ProcessItemAsync(item.Id));
         }
 
-        public int GetIncomingItemsCount()
-        {
-            var incomeDir = new DirectoryInfo(path);
-            return
-                incomeDir.GetFiles(string.Format("*.{0}", FileExtension)).Count();
-        }
-
         private string GetItemFileName(Guid id)
         {
             return Path.Combine(path, string.Format("{0}.{1}", id, FileExtension));
