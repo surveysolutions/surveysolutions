@@ -134,6 +134,7 @@ namespace CAPI.Android
                 new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
             
         }

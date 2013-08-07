@@ -41,7 +41,6 @@ namespace Core.Supervisor.DenormalizerStorageItem
         public Guid ResponsibleId { get; set; }
         
         public HashSet<Guid> DeletedInterviews { get; set; }
-
         /// <summary>
         /// Name of resposible, which is a supervisor or an interviewer.
         /// </summary>

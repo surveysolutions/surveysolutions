@@ -10,8 +10,8 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>, 
-                                         IEventHandler<QuestionnaireStatusChanged>
+    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>,
+                                         IEventHandler<QuestionnaireStatusChanged>, IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> _surveyDTOdocumentStorage;
@@ -54,17 +54,15 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 doc.PublicKey);
         }
 
-        
-        public void ProcessInterviewMeta(InterviewMetaInfo meta)
-        {
-            if(meta.PublicKey == Guid.Empty)
-                throw new ArgumentException("Invalid meta info.");
 
-            var status = SurveyStatus.GetStatusByIdOrDefault(meta.Status.Id);
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            var meta = evnt.Payload;
+            var status = SurveyStatus.GetStatusByIdOrDefault(meta.StatusId);
 
             if (!IsVisible(status))
             {
-                _questionnaireDTOdocumentStorage.Remove(meta.PublicKey);
+                _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
                 return;
             }
 
@@ -75,8 +73,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 _surveyDTOdocumentStorage.Store(new SurveyDto(meta.TemplateId, meta.Title), meta.TemplateId);
           
             _questionnaireDTOdocumentStorage.Store(
-                new QuestionnaireDTO(meta.PublicKey, meta.ResponsibleId.Value, meta.TemplateId, status,  items),
-                meta.PublicKey);
+                new QuestionnaireDTO(evnt.EventSourceId, meta.ResponsibleId.Value, meta.TemplateId, status, items),
+                evnt.EventSourceId);
         }
 
  

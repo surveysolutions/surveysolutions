@@ -32,8 +32,7 @@ namespace WB.Core.Synchronization
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();
             this.Bind<IChunkReader>().To<ReadSideChunkReader>();
-            var incomeStorage=new IncomePackagesRepository(currentFolderPath);
-            this.Bind<IIncomePackagesRepository>().ToConstant(incomeStorage);
+            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("folderPath", currentFolderPath);
             this.Bind<IViewFactory<IncomeSyncPackagesInputModel, IncomeSyncPackagesView>>()
                 .To<IncomeSyncPackagesViewFactory>();
         }

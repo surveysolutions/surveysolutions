@@ -11,11 +11,9 @@ namespace CAPI.Android.Syncronization.Push
     public class PushDataProcessor
     {
         private readonly IChangeLogManipulator changelog;
-        private readonly ICommandService commandService;
-        public PushDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
+        public PushDataProcessor(IChangeLogManipulator changelog)
         {
             this.changelog = changelog;
-            this.commandService = commandService;
         }
 
         public IList<SyncPackage> GetChuncks()
@@ -31,13 +29,7 @@ namespace CAPI.Android.Syncronization.Push
                         ItemsContainer =
                             new List<SyncItem>()
                                 {
-                                    new SyncItem()
-                                        {
-                                            Content = changelog.GetDraftRecordContent(chunk.Key),
-                                            IsCompressed = true,
-                                            ItemType = SyncItemType.Questionnare,
-                                            Id = chunk.Value
-                                        }
+                                    changelog.GetDraftRecordContent(chunk.Key)
                                 }
                     });
             }

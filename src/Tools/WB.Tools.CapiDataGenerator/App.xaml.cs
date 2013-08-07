@@ -9,6 +9,7 @@ using System.Windows;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Synchronization;
+using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 
 namespace CapiDataGenerator
 {
@@ -31,6 +32,7 @@ namespace CapiDataGenerator
                 new SynchronizationModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
                 new CapiDataGeneratorRegistry(),
                 new NLogLoggingModule(),
+                new CompleteQuestionnarieDenormalizerModule(),
                 new MainModelModule());
 
             var start = Mvx.Resolve<IMvxAppStart>();

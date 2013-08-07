@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.Synchronization;
 
 namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 {
@@ -23,20 +24,21 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         private IEventStore eventStore;
         private InProcessEventBus eventEventBus;
         private IStringCompressor compressor;
-        private Dictionary<Guid, QuestionnarieWithSequence> memcache; 
-
+        private Dictionary<Guid, QuestionnarieWithSequence> memcache;
+        private IIncomePackagesRepository incomePackages;
 
         private int memcacheItemsSizeLimit = 256; //avoid out of memory Exc
 
         public RavenReadSideRepositoryWriterWithCacheAndZip(
             IReadSideRepositoryWriter<ZipView> zipWriter,
             IReadSideRepositoryWriter<UserDocument> users,
-            IStringCompressor comperessor)
+            IStringCompressor comperessor,
+            IIncomePackagesRepository incomePackages)
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             this.zipWriter = zipWriter;
             this.compressor = comperessor;
-
+            this.incomePackages = incomePackages;
             this.memcache = new Dictionary<Guid, QuestionnarieWithSequence>();
             this.eventEventBus = new InProcessEventBus();
             this.hiddentDenormalizer = new CompleteQuestionnaireDenormalizer(users);
@@ -89,7 +91,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             }
 
             var view = memcache[id];
-            UpdateViewFromEventStrean(view);
+            UpdateViewFromEventStream(view);
             return view.Document;
         }
 
@@ -124,12 +126,15 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             memcache.Add(id, new QuestionnarieWithSequence(updatedView, maxSequence));
         }
 
-        private void UpdateViewFromEventStrean(QuestionnarieWithSequence viewItem)
+        private void UpdateViewFromEventStream(QuestionnarieWithSequence viewItem)
         {
+            incomePackages.ProcessItem(viewItem.Document.PublicKey);
+
             var events = eventStore.ReadFrom(viewItem.Document.PublicKey, viewItem.Sequence, long.MaxValue);
             if (events.IsEmpty)
                 return;
             var updatedView = RestoreFromEventStream(events, viewItem.Document);
+           
             memcache[updatedView.PublicKey] = new QuestionnarieWithSequence(updatedView,
                                                                                   events.Last().EventSequence);
         }

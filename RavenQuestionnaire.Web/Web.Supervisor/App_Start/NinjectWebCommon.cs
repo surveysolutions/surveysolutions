@@ -115,7 +115,8 @@ namespace Web.Supervisor.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
-                new SupervisorCommandDeserializationModule(), new CompleteQuestionnarieDenormalizerModule());
+                new SupervisorCommandDeserializationModule(),
+                new CompleteQuestionnarieDenormalizerModule());
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -130,7 +131,7 @@ namespace Web.Supervisor.App_Start
 
 #warning dirty index registrations
             var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFormAssembly(typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
+            indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

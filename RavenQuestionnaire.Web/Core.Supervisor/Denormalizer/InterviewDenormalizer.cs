@@ -15,7 +15,8 @@ namespace Core.Supervisor.Denormalizer
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<InterviewDeleted>
+                                                               IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<InterviewItem> interviews;
 
@@ -111,5 +112,15 @@ namespace Core.Supervisor.Denormalizer
         }
 
         #endregion
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            var item = this.interviews.GetById(evnt.EventSourceId);
+            var status = SurveyStatus.GetStatusByIdOrDefault(evnt.Payload.StatusId);
+            item.Status = new SurveyStatusLight() {Id = status.PublicId, Name = status.Name};
+            item.LastEntryDate = evnt.EventTimeStamp;
+            item.IsDeleted = false;
+            this.interviews.Store(item, item.InterviewId);
+        }
     }
 }
