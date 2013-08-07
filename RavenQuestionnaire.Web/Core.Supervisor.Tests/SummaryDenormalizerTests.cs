@@ -580,8 +580,7 @@ namespace Core.Supervisor.Tests
                 {
                     UnassignedCount = 1,
                     ResponsibleId = interviewerId,
-                    ResponsibleSupervisorId = supervisorId,
-                    CurrentStatusId = SurveyStatus.Unassign.PublicId
+                    ResponsibleSupervisorId = supervisorId
                 }, interviewerItemId);
 
             SummaryDenormalizer target = CreateSummaryDenormalizer(summaryStore, questionnarieId, templateId, null, false);
@@ -589,7 +588,8 @@ namespace Core.Supervisor.Tests
             var statusChangeEvent =
                 CreatePublishedEvent(new QuestionnaireStatusChanged()
                     {
-                        Status = SurveyStatus.Initial
+                        Status = SurveyStatus.Initial,
+                        PreviousStatus = SurveyStatus.Unassign
                     }, questionnarieId);
             //act
 
@@ -627,8 +627,7 @@ namespace Core.Supervisor.Tests
                     TotalCount = total, 
                     ResponsibleId = responsibleId, 
                     ResponsibleSupervisorId = responsibleSupervisorId, 
-                    TemplateId = templateId,
-                    CurrentStatusId = status
+                    TemplateId = templateId
                 };
 
             return summaryItem;
@@ -640,7 +639,8 @@ namespace Core.Supervisor.Tests
         }
 
         private SummaryDenormalizer CreateSummaryDenormalizer(IReadSideRepositoryWriter<SummaryItem> summaryStore,
-                                                              Guid questionnarieId, Guid? tempalteId = null, SurveyStatus? status = null, bool isSupervisorOwner = true)
+                                                              Guid questionnarieId, Guid? tempalteId = null,
+                                                              SurveyStatus? status = null, bool isSupervisorOwner = true)
         {
             var questionnarieStore = CreateInmemoryQuestionnarieStore();
             var userStore = this.CreateInmemoryUserStoreWithAllUsers();

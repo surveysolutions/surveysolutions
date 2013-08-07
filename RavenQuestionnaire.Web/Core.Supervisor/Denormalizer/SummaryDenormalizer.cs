@@ -36,12 +36,14 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            HandleChangeStatus(evnt.EventSourceId,evnt.Payload.Status.PublicId);
+            HandleChangeStatus(evnt.EventSourceId,evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
         }
 
-        private void HandleChangeStatus(Guid interviewId, Guid statusId)
+        private void HandleChangeStatus(Guid interviewId, Guid statusId, Guid previousStatus)
         {
-
+            if(statusId==previousStatus)
+                return;
+            
             var questionnaire = this.questionnaires.GetById(interviewId);
 
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
@@ -51,14 +53,10 @@ namespace Core.Supervisor.Denormalizer
             {
                 return;
             }
-            if (statusId == summaryUser.CurrentStatusId)
-                return;
 
-            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(interviewId, summaryUser.CurrentStatusId, summaryUser);
-
-            summaryUser.CurrentStatusId = statusId;
-
-this.IncreaseByStatus(summaryUser, statusId);
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(interviewId, previousStatus, userSummary);
+          
+            IncreaseByStatus(userSummary, statusId);
 
             this.summaryItem.Store(userSummary, summmaryUserId);
             
@@ -88,6 +86,7 @@ this.IncreaseByStatus(summaryUser, statusId);
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
 
             var userSummary = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
+
 
             if (evnt.Payload.PreviousResponsible != null && userSummary.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
             {
@@ -167,7 +166,7 @@ this.IncreaseByStatus(summaryUser, statusId);
 
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
-            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId);
+            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
         }
     }
 }

@@ -520,7 +520,15 @@ namespace Main.Core.Domain
 
         public void UpdateInterviewMetaInfo(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
         {
-            ApplyEvent(new InterviewMetaInfoUpdated() { FeaturedQuestionsMeta = featuredQuestionsMeta, ResponsibleId = responsibleId, StatusId = statusId, TemplateId = templateId, Title = title });
+            ApplyEvent(new InterviewMetaInfoUpdated()
+                {
+                    FeaturedQuestionsMeta = featuredQuestionsMeta,
+                    ResponsibleId = responsibleId,
+                    StatusId = statusId,
+                    TemplateId = templateId,
+                    Title = title,
+                    PreviousStatusId = doc == null ? SurveyStatus.Unknown.PublicId : doc.Status.PublicId
+                });
         }
 
         /// <summary>

@@ -19,6 +19,8 @@ namespace Main.Core.Events.Questionnaire.Completed
 
         public Guid StatusId { get; set; }
 
+        public Guid PreviousStatusId { get; set; }
+
         public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
     }
 }
