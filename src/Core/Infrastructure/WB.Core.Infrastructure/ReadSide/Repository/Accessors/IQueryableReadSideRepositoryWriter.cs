@@ -1,16 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
-    /// <summary>
-    /// Accessor for read-side repository which should be used to perform queries.
-    /// Also supports querying.
-    /// </summary>
-    public interface IQueryableReadSideRepositoryReader<TEntity> : IReadSideRepositoryReader<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity
+    public interface IQueryableReadSideRepositoryWriter<TEntity> : IReadSideRepositoryWriter<TEntity> where TEntity : class, IReadSideRepositoryEntity
     {
         TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
 
