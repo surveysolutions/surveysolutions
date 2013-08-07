@@ -54,6 +54,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answers[@event.QuestionId] = @event.SelectedValues;
         }
 
+        private void Apply(AnswerDeclaredValid @event) {}
+
+        private void Apply(AnswerDeclaredInvalid @event) {}
+
         #endregion
 
         #region Dependencies
