@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
+namespace WB.Core.BoundedContexts.Supervisor.Views.SampleImport
 {
-    public class TempFileImportData:IView
+    internal class TempFileImportData
     {
 
         public void CompleteImport()

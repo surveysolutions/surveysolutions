@@ -130,6 +130,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.DataC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Backup", "Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj", "{A134F8E7-42C7-4804-8177-D11178600CAA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Supervisor", "Supervisor", "{0B4D4014-BC76-4852-900B-EA0F88A7B1F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Supervisor", "Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj", "{755CA607-6B50-487F-98A0-34A98973593D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -389,6 +393,12 @@ Global
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A134F8E7-42C7-4804-8177-D11178600CAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{755CA607-6B50-487F-98A0-34A98973593D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{755CA607-6B50-487F-98A0-34A98973593D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{755CA607-6B50-487F-98A0-34A98973593D}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{755CA607-6B50-487F-98A0-34A98973593D}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{755CA607-6B50-487F-98A0-34A98973593D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{755CA607-6B50-487F-98A0-34A98973593D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -450,6 +460,8 @@ Global
 		{F4A36E3A-6AB6-48BE-B6E9-6F43FFD6F72F} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{89B14B50-5305-45E2-9835-7A05BD0B97A9} = {F4A36E3A-6AB6-48BE-B6E9-6F43FFD6F72F}
 		{3CE769D4-F89B-4805-A71C-339194DFE610} = {E3404571-E3D0-47E8-94FC-001982D11D59}
+		{0B4D4014-BC76-4852-900B-EA0F88A7B1F5} = {E3404571-E3D0-47E8-94FC-001982D11D59}
 		{DCBFC3F0-8E8C-4529-B474-B6A79225450E} = {3CE769D4-F89B-4805-A71C-339194DFE610}
+		{755CA607-6B50-487F-98A0-34A98973593D} = {0B4D4014-BC76-4852-900B-EA0F88A7B1F5}
 	EndGlobalSection
 EndGlobal

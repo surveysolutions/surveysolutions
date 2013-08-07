@@ -15,7 +15,6 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
