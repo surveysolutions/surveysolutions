@@ -102,10 +102,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
 
-            IEnumerable<Guid> answersDeclaredValid;
-            IEnumerable<Guid> answersDeclaredInvalid;
+            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
 
@@ -125,7 +125,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
 
+            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
+                out answersDeclaredValid, out answersDeclaredInvalid);
+
+
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, answerTime, answer));
+
+            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
+            {
+                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
+            }
+
+            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
+            {
+                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
+            }
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
@@ -133,7 +148,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
 
+            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
+                out answersDeclaredValid, out answersDeclaredInvalid);
+
+
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, answerTime, answer));
+
+            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
+            {
+                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
+            }
+
+            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
+            {
+                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
+            }
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal selectedValue)
@@ -142,7 +172,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
 
+            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
+                out answersDeclaredValid, out answersDeclaredInvalid);
+
+
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedValue));
+
+            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
+            {
+                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
+            }
+
+            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
+            {
+                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
+            }
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal[] selectedValues)
@@ -151,7 +196,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
 
+            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
+                out answersDeclaredValid, out answersDeclaredInvalid);
+
+
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
+
+            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
+            {
+                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
+            }
+
+            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
+            {
+                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
+            }
         }
 
 
