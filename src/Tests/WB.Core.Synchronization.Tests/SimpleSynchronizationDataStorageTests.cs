@@ -91,7 +91,7 @@ namespace WB.Core.Synchronization.Tests
             var inmemoryChunkStorage = new InMemoryChunkStorage();
           
            
-            var userStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
+            var userStorageMock = new Mock<IQueryableReadSideRepositoryWriter<UserDocument>>();
 
             var retval =
                 new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage, inmemoryChunkStorage);
