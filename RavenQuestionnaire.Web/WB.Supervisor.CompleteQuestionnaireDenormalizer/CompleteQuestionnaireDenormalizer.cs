@@ -165,6 +165,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
                         ChangeDate = evnt.EventTimeStamp
                     });
             item.LastEntryDate = evnt.EventTimeStamp;
+            item.IsDeleted = false;
             this.documentStorage.Store(item, item.PublicKey);
 
 

@@ -82,11 +82,11 @@ namespace Web.Supervisor.Controllers
 
         }
 
-        public ActionResult Interviews(Guid? templateId)
+        public ActionResult Interviews(Guid? questionnaireId)
         {
-            if (templateId.HasValue)
+            if (questionnaireId.HasValue)
             {
-                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = templateId.Value })));
+                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
             }
             ViewBag.ActivePage = MenuItem.Docs;
             return this.View(Filters());

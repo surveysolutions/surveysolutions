@@ -64,7 +64,7 @@
             <!-- ko foreach:ListView.Items -->
             <tr>
                 <td>
-                    <input type="checkbox" data-bind="checked: IsSelected" />
+                    <input type="checkbox" data-bind="checked: IsSelected, enable: CanBeReassigned" />
                 </td>
                 <!-- ko if:$root.SelectedTemplate() == '' -->
                 <td data-bind="text: FeaturedQuestions().joinArrayOfObjects('Question', 'Answer')"></td>

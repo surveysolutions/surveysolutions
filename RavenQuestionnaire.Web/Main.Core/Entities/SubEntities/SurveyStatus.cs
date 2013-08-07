@@ -276,7 +276,7 @@
 
         public static Guid[] StatusAllowDownSupervisorSync()
         {
-            return new Guid[] {Initial.PublicId, Approve.PublicId, Redo.PublicId};
+            return new Guid[] {Initial.PublicId, Redo.PublicId};
         }
 
         /// <summary>

@@ -186,12 +186,12 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="Denormalizer\UserDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
-    <Compile Include="RavenIndexes\Headquarter_Reports_TeamsAndStatuses_GroupByTeam.cs" />
-    <Compile Include="RavenIndexes\Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember.cs" />
-    <Compile Include="RavenIndexes\Supervisor_Reports_TeamMembersAndStatuses_GroupByTeamMember.cs">
+    <Compile Include="RavenIndexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RavenIndexes\Headquarter_Reports_SurveysAndStatuses_GroupByTeam.cs" />
+    <Compile Include="RavenIndexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
