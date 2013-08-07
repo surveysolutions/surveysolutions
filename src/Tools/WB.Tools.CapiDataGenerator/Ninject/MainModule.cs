@@ -32,6 +32,8 @@ using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Utils.Compression;
+using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Tools.CapiDataGenerator.Models;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
@@ -45,6 +47,8 @@ namespace CapiDataGenerator
 
         public override void Load()
         {
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
             var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
@@ -87,12 +91,12 @@ namespace CapiDataGenerator
             var bus = new CustomInProcessEventBus(true);
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             this.Bind<IEventBus>().ToConstant(bus);
-
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
+            NcqrsEnvironment.SetDefault<IEventStore>(eventStore);
+           
             NcqrsInit.RegisterEventHandlers(bus, Kernel);
 
             this.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
-            NcqrsEnvironment.SetDefault<IEventStore>(eventStore);
             
             #region register handlers
 

@@ -219,6 +219,10 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj">
+      <Project>{60c152be-f926-4289-be28-89207f2c12c7}</Project>
+      <Name>WB.Supervisor.CompleteQuestionnaireDenormalizer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{AFED8C20-0E91-4605-ADB5-35A7F0C0DD0A}</Project>
       <Name>WB.Core.GenericSubdomains.Logging.NLog</Name>
@@ -250,6 +254,10 @@
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
