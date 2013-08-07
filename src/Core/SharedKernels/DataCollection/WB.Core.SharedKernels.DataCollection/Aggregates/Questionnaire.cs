@@ -18,12 +18,27 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
     public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+
+        #region Dependencies
+
+        /// <remarks>
+        /// All operations with expressions are time-consuming.
+        /// So this processor may be used only in command handlers or in domain methods.
+        /// And should never be used in event handlers!!
+        /// </remarks>
+        private IExpressionProcessor ExpressionProcessor
+        {
+            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
+        }
+
+        #endregion
 
         public Questionnaire(){}
 
@@ -92,6 +107,34 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
+        public bool IsCustomValidationDefined(Guid questionId)
+        {
+            var validationExpression = this.GetCustomValidationExpression(questionId);
+
+            return IsExpressionDefined(validationExpression);
+        }
+
+        public IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId)
+        {
+            string validationExpression = this.GetCustomValidationExpression(questionId);
+
+            if (!IsExpressionDefined(validationExpression))
+                return Enumerable.Empty<Guid>();
+
+            IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
+
+            return identifiersUsedInExpression
+                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdOrThrow(identifier, questionId, validationExpression))
+                .ToList();
+        }
+
+        public string GetCustomValidationExpression(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return question.ValidationExpression;
+        }
+
         private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
         {
             decimal parsedValue;
@@ -104,14 +147,53 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return parsedValue;
         }
 
+        private Guid ParseExpressionIdentifierToExistingQuestionIdOrThrow(string identifier, Guid contextQuestionId, string expression)
+        {
+            if (IsSpecialThisIdentifier(identifier))
+                return contextQuestionId;
+
+            Guid parsedId;
+            if (!Guid.TryParse(identifier, out parsedId))
+                throw new QuestionnaireException(string.Format(
+                    "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
+                    identifier, expression));
+
+            if (!this.HasQuestionWithId(parsedId))
+                throw new QuestionnaireException(string.Format(
+                    "Identifier '{0}' from expression '{1}' is a valid guid '{2}' but questionnaire has no questions with such id.",
+                    identifier, expression, parsedId));
+
+            return parsedId;
+        }
+
+        private static bool IsSpecialThisIdentifier(string identifier)
+        {
+            return identifier.ToLower() == "this";
+        }
+
+        private static bool IsExpressionDefined(string expression)
+        {
+            return !string.IsNullOrWhiteSpace(expression);
+        }
+
+        private bool HasQuestionWithId(Guid questionId)
+        {
+            return this.GetQuestion(questionId) != null;
+        }
+
         private IQuestion GetQuestionOrThrow(Guid questionId)
         {
-            var question = this.innerDocument.Find<IQuestion>(questionId);
+            IQuestion question = this.GetQuestion(questionId);
 
             if (question == null)
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not found.", questionId));
 
             return question;
+        }
+
+        private IQuestion GetQuestion(Guid questionId)
+        {
+            return this.innerDocument.Find<IQuestion>(questionId);
         }
     }
 }

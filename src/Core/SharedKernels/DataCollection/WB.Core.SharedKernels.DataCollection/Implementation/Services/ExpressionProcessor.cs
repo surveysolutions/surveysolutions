@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.ExpressionExecutors.ExpressionExtentions;
 using NCalc;
 using NCalc.Domain;
 
@@ -17,6 +18,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             parsedExpression.Accept(identifierCollector);
 
             return identifierCollector.GetCollectedIdentifiers();
+        }
+
+        public bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier)
+        {
+            var evaluatableExpression = new Expression(expression);
+
+            AddSupportForMultipleOptionsAnswerFunction(evaluatableExpression);
+
+            evaluatableExpression.EvaluateParameter += (name, args) =>
+            {
+                args.Result = getValueForIdentifier(name);
+            };
+
+            return (bool) evaluatableExpression.Evaluate();
+        }
+
+        private static void AddSupportForMultipleOptionsAnswerFunction(Expression evaluatableExpression)
+        {
+            evaluatableExpression.EvaluateFunction += ExtensionFunctions.EvaluateFunctionContains;
         }
 
         private static LogicalExpression ParseExpressionOrThrow(string stringExpression)
