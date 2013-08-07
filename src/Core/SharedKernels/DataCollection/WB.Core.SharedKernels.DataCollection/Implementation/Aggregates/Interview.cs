@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -20,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Guid questionnaireId;
         private long questionnaireVersion;
+        private readonly Dictionary<Guid, object> answers = new Dictionary<Guid, object>();
 
         private void Apply(InterviewCreated @event)
         {
@@ -27,28 +29,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
-        private void Apply(TextQuestionAnswered @event) {}
+        private void Apply(TextQuestionAnswered @event)
+        {
+            this.answers[@event.QuestionId] = @event.Answer;
+        }
 
-        private void Apply(NumericQuestionAnswered @event) {}
+        private void Apply(NumericQuestionAnswered @event)
+        {
+            this.answers[@event.QuestionId] = @event.Answer;
+        }
 
-        private void Apply(DateTimeQuestionAnswered @event) {}
+        private void Apply(DateTimeQuestionAnswered @event)
+        {
+            this.answers[@event.QuestionId] = @event.Answer;
+        }
 
-        private void Apply(SingleOptionQuestionAnswered @event) {}
+        private void Apply(SingleOptionQuestionAnswered @event)
+        {
+            this.answers[@event.QuestionId] = @event.SelectedValue;
+        }
 
-        private void Apply(MultipleOptionsQuestionAnswered @event) {}
+        private void Apply(MultipleOptionsQuestionAnswered @event)
+        {
+            this.answers[@event.QuestionId] = @event.SelectedValues;
+        }
 
         #endregion
 
         #region Dependencies
 
-        /// <summary>
-        /// Repository which allows to get questionnaire.
-        /// Should be used only in command handlers.
-        /// And never in event handlers!!
-        /// </summary>
+        /// <remarks>
+        /// Repository operations are time-consuming.
+        /// So this repository may be used only in command handlers.
+        /// And should never be used in event handlers!!
+        /// </remarks>
         private IQuestionnaireRepository QuestionnaireRepository
         {
             get { return ServiceLocator.Current.GetInstance<IQuestionnaireRepository>(); }
+        }
+
+        /// <remarks>
+        /// All operations with expressions are time-consuming.
+        /// So this processor may be used only in command handlers.
+        /// And should never be used in event handlers!!
+        /// </remarks>
+        private IExpressionProcessor ExpressionProcessor
+        {
+            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
 
         #endregion
@@ -68,7 +95,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
 
+            bool? customValidationResult = this.PerformCustomValidationOfQuestionBeingAnswered(questionId, answer, questionnaire);
+
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
+
+            if (customValidationResult.HasValue)
+            {
+                this.ApplyEvent(customValidationResult.Value
+                    ? new AnswerDeclaredValid(questionId) as object
+                    : new AnswerDeclaredInvalid(questionId) as object);
+            }
         }
 
         public void AnswerNumericQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal answer)
@@ -156,6 +192,75 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "For question with id '{0}' were provided selected values {1} as answer. But only following values are allowed: {2}.",
                     questionId, JoinDecimalsWithComma(values), JoinDecimalsWithComma(availableValues)));
+        }
+
+        private bool? PerformCustomValidationOfQuestionBeingAnswered(Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire)
+        {
+            if (!questionnaire.IsCustomValidationDefined(questionBeingAnsweredId))
+                return true;
+
+            IEnumerable<Guid> questionsInvolvedInCustomValidation = questionnaire.GetQuestionsInvolvedInCustomValidation(questionBeingAnsweredId);
+
+            bool someOfAnswersNeededForCustomValidationAreNotDefined
+                = questionsInvolvedInCustomValidation
+                    .Any(questionId => !this.IsAnswerDefined(questionId) && questionId != questionBeingAnsweredId);
+
+            if (someOfAnswersNeededForCustomValidationAreNotDefined)
+                return null;
+
+            Dictionary<Guid, object> answersInvolvedInCustomValidation
+                = this.GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
+                    questionsInvolvedInCustomValidation, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+
+            string validationExpression = questionnaire.GetCustomValidationExpression(questionBeingAnsweredId);
+
+            return this.EvaluateValidationExpression(validationExpression, questionBeingAnsweredId, answersInvolvedInCustomValidation);
+        }
+
+        private bool EvaluateValidationExpression(string expression, Guid contextQuestionId, Dictionary<Guid, object> involvedAnswers)
+        {
+            return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
+                getValueForIdentifier: identifier => involvedAnswers[MapExpressionIdentifierToQuestionId(contextQuestionId, identifier)]);
+        }
+
+        private static Guid MapExpressionIdentifierToQuestionId(Guid contextQuestionId, string identifier)
+        {
+            return identifier.ToLower() == "this"
+                ? contextQuestionId
+                : Guid.Parse(identifier);
+        }
+
+        private Dictionary<Guid, object> GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
+            IEnumerable<Guid> questions, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        {
+            Dictionary<Guid, object> answersForSpecifiedQuestions = this.GetAnswersForSpecifiedQuestions(questions);
+
+            if (answersForSpecifiedQuestions.ContainsKey(questionBeingAnsweredId))
+                answersForSpecifiedQuestions[questionBeingAnsweredId] = answerGivenForQuestionBeingAnswered;
+
+            return answersForSpecifiedQuestions;
+        }
+
+        private Dictionary<Guid, object> GetAnswersForSpecifiedQuestions(IEnumerable<Guid> questions)
+        {
+            return questions.ToDictionary(
+                questionId => questionId,
+                questionId => this.GetAnswerForQuestionOrThrow(questionId));
+        }
+
+        private object GetAnswerForQuestionOrThrow(Guid questionId)
+        {
+            if (!this.IsAnswerDefined(questionId))
+                throw new InterviewException(string.Format(
+                    "Cannot get answer for question with id '{0}' because it was not yet answered.",
+                    questionId));
+
+            return this.answers[questionId];
+        }
+
+        private bool IsAnswerDefined(Guid questionId)
+        {
+            return this.answers.ContainsKey(questionId);
         }
 
         private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
