@@ -100,15 +100,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
 
-            bool? customValidationResult = this.PerformCustomValidationOfQuestionBeingAnswered(questionId, answer, questionnaire);
+            bool? currentAnswerValidationResult
+                = this.PerformCustomValidationOfQuestionBeingAnswered(questionId, answer, questionnaire);
+
+            IEnumerable<Guid> dependentAnswersDeclaredValid;
+            IEnumerable<Guid> dependentAnswersDeclaredInvalid;
+            this.PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(questionnaire, questionId, answer,
+                out dependentAnswersDeclaredValid, out dependentAnswersDeclaredInvalid);
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
 
-            if (customValidationResult.HasValue)
+            if (currentAnswerValidationResult.HasValue)
             {
-                this.ApplyEvent(customValidationResult.Value
+                this.ApplyEvent(currentAnswerValidationResult.Value
                     ? new AnswerDeclaredValid(questionId) as object
                     : new AnswerDeclaredInvalid(questionId) as object);
+            }
+
+            foreach (Guid dependentAnswerDeclaredValidId in dependentAnswersDeclaredValid)
+            {
+                this.ApplyEvent(new AnswerDeclaredValid(dependentAnswerDeclaredValidId));
+            }
+
+            foreach (Guid dependentAnswerDeclaredInvalidId in dependentAnswersDeclaredInvalid)
+            {
+                this.ApplyEvent(new AnswerDeclaredInvalid(dependentAnswerDeclaredInvalidId));
             }
         }
 
@@ -213,12 +229,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             => string.Format("{0} : {1}", questionId, questionnaire.GetCustomValidationExpression(questionId))))));
         }
 
-        private bool? PerformCustomValidationOfQuestionBeingAnswered(Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire)
+        private bool? PerformCustomValidationOfQuestionBeingAnswered(
+            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire)
         {
-            if (!questionnaire.IsCustomValidationDefined(questionBeingAnsweredId))
+            return this.PerformCustomValidationOfQuestion(
+                questionBeingAnsweredId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+        }
+
+        private void PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(
+            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, string answerGivenForQuestionBeingAnswered,
+            out IEnumerable<Guid> dependentAnswersDeclaredValid, out IEnumerable<Guid> dependentAnswersDeclaredInvalid)
+        {
+            var validAnswers = new List<Guid>();
+            var invalidAnswers = new List<Guid>();
+
+            IEnumerable<Guid> dependentQuestions = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionBeingAnsweredId);
+
+            foreach (Guid dependentQuestionId in dependentQuestions)
+            {
+                bool? validationResult = this.PerformCustomValidationOfQuestion(
+                    dependentQuestionId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+
+                if (validationResult.HasValue)
+                {
+                    if (validationResult.Value)
+                    {
+                        validAnswers.Add(dependentQuestionId);
+                    }
+                    else
+                    {
+                        invalidAnswers.Add(dependentQuestionId);
+                    }
+                }
+            }
+
+            dependentAnswersDeclaredValid = validAnswers;
+            dependentAnswersDeclaredInvalid = invalidAnswers;
+        }
+
+        private bool? PerformCustomValidationOfQuestion(Guid questionToValidateId,
+            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        {
+            if (!questionnaire.IsCustomValidationDefined(questionToValidateId))
                 return true;
 
-            IEnumerable<Guid> questionsInvolvedInCustomValidation = questionnaire.GetQuestionsInvolvedInCustomValidation(questionBeingAnsweredId);
+            IEnumerable<Guid> questionsInvolvedInCustomValidation = questionnaire.GetQuestionsInvolvedInCustomValidation(questionToValidateId);
 
             bool someOfAnswersNeededForCustomValidationAreNotDefined
                 = questionsInvolvedInCustomValidation
@@ -231,7 +286,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 = this.GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
                     questionsInvolvedInCustomValidation, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
 
-            string validationExpression = questionnaire.GetCustomValidationExpression(questionBeingAnsweredId);
+            string validationExpression = questionnaire.GetCustomValidationExpression(questionToValidateId);
 
             return this.EvaluateValidationExpression(validationExpression, questionBeingAnsweredId, answersInvolvedInCustomValidation);
         }

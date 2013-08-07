@@ -69,6 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         #endregion
 
+
         public Questionnaire(){}
 
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
@@ -76,6 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             ImportQuestionnaire(createdBy, source);
         }
+
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
@@ -103,6 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             // Do we need Saga here?
             new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
+
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
@@ -185,6 +188,18 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return questionsWithInvalidValidationExpression;
         }
 
+        public IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
+        {
+            this.ThrowIfQuestionDoesNotExist(questionId);
+
+            return this
+                .GetAllQuestions()
+                .Where(question => this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId))
+                .Select(question => question.PublicKey)
+                .ToList();
+        }
+
+
         private IEnumerable<IQuestion> GetAllQuestions()
         {
             return this.QuestionCache.Values;
@@ -231,9 +246,23 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return !string.IsNullOrWhiteSpace(expression);
         }
 
+        private bool DoesQuestionCustomValidationDependOnSpecifiedQuestion(Guid questionId, Guid specifiedQuestionId)
+        {
+            IEnumerable<Guid> questionsInvolvedInCustomValidation = this.GetQuestionsInvolvedInCustomValidation(questionId);
+
+            bool isSpecifiedQuestionInvolvedInCustomValidation = questionsInvolvedInCustomValidation.Contains(specifiedQuestionId);
+
+            return isSpecifiedQuestionInvolvedInCustomValidation;
+        }
+
         private bool HasQuestionWithId(Guid questionId)
         {
             return this.GetQuestion(questionId) != null;
+        }
+
+        private void ThrowIfQuestionDoesNotExist(Guid questionId)
+        {
+            this.GetQuestionOrThrow(questionId);
         }
 
         private IQuestion GetQuestionOrThrow(Guid questionId)
