@@ -25,6 +25,20 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
     public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        private Dictionary<Guid, IQuestion> questionCache = null;
+
+        private Dictionary<Guid, IQuestion> QuestionCache
+        {
+            get
+            {
+                return this.questionCache ?? (this.questionCache
+                    = this.innerDocument
+                        .Find<IQuestion>(_ => true)
+                        .ToDictionary(
+                            question => question.PublicKey,
+                            question => question));
+            }
+        }
 
         #region Dependencies
 
@@ -168,7 +182,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private IEnumerable<IQuestion> GetAllQuestions()
         {
-            return this.innerDocument.Find<IQuestion>(_ => true);
+            return this.QuestionCache.Values;
         }
 
         private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
@@ -229,7 +243,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private IQuestion GetQuestion(Guid questionId)
         {
-            return this.innerDocument.Find<IQuestion>(questionId);
+            return this.QuestionCache.ContainsKey(questionId)
+                ? this.QuestionCache[questionId]
+                : null;
         }
     }
 }
