@@ -24,17 +24,12 @@ namespace WB.Core.Synchronization.SyncStorage
         private readonly string path;
         private const string FolderName = "IncomigData";
         private const string FileExtension = "sync";
-    //    private bool inProcess = false;
 
         public IncomePackagesRepository(string folderPath)
         {
             this.path = Path.Combine(folderPath, FolderName);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            /*else
-            {
-                ProccessStoredItems();
-            }*/
         }
 
         public void StoreIncomingItem(SyncItem item)
@@ -52,7 +47,6 @@ namespace WB.Core.Synchronization.SyncStorage
                             .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId, meta.Title,
                                                                         meta.ResponsibleId, meta.Status.Id,
                                                                         null));
-            //   Task.Factory.StartNew(() => ProcessItemAsync(item.Id));
         }
 
         private string GetItemFileName(Guid id)
@@ -60,23 +54,7 @@ namespace WB.Core.Synchronization.SyncStorage
             return Path.Combine(path, string.Format("{0}.{1}", id, FileExtension));
         }
 
-        protected void ProccessStoredItems()
-        {
-            var incomeDir = new DirectoryInfo(path);
-            var incomingPackages =
-                incomeDir.GetFiles(string.Format("*.{0}", FileExtension));
-            if(!incomingPackages.Any())
-                return;
-            
-            FileInfo incomingPackage = incomingPackages.First();
-            /* foreach (FileInfo incomingPackage in incomingPackages)
-             {*/
-            var packageId = Guid.Parse(Path.GetFileNameWithoutExtension(incomingPackage.Name));
-            Task.Factory.StartNew(() => ProcessItem(packageId));
-            //   }
-        }
-
-        public void ProcessItem(Guid id)
+        public void ProcessItem(Guid id, long sequence)
         {
             var fileName = GetItemFileName(id);
             if (!File.Exists(fileName))
@@ -85,11 +63,10 @@ namespace WB.Core.Synchronization.SyncStorage
             var fileContent = File.ReadAllText(fileName);
 
             var items = GetContentAsItem<AggregateRootEvent[]>(fileContent);
-            Merge(items);
+
+            StoreEvents(id, items, sequence);
 
             File.Delete(fileName);
-
-            //  ProccessStoredItems();
         }
 
         private T GetContentAsItem<T>(string syncItemContent)
@@ -101,34 +78,25 @@ namespace WB.Core.Synchronization.SyncStorage
             return item;
         }
 
-        private void Merge(IEnumerable<AggregateRootEvent> stream)
+        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
         {
-            var incomeEvents = new List<UncommittedEventStream>();
-            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            if (myEventStore == null)
-            {
-                throw new Exception("IEventBus is not properly initialized.");
-            }
-            if (stream != null)
-            {
-                incomeEvents.AddRange(this.BuildEventStreams(stream, myEventStore));
-            }
-
-            // check for events with null Payload
-            if (incomeEvents.SelectMany(eventStream => eventStream).Any(c => c.Payload == null))
-            {
-                throw new Exception("Event is wrong");
-            }
-            foreach (UncommittedEventStream uncommittedEventStream in incomeEvents)
-            {
-                myEventStore.Store(uncommittedEventStream);
-            }
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var events = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
+            var latestEventSequence = events.IsEmpty ? sequence : events.Last().EventSequence;
+            var incomeEvents = this.BuildEventStreams(stream, latestEventSequence);
+            eventStore.Store(incomeEvents);
         }
-        protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream, IEventStore eventBus)
+
+        protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
         {
-            return
-                stream.GroupBy(x => x.EventSourceId).Select(
-                    g => g.CreateUncommittedEventStream(eventBus.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
+            var uncommitedStream = new UncommittedEventStream(Guid.NewGuid());
+            var i = sequence + 1;
+            foreach (var aggregateRootEvent in stream)
+            {
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i,0));
+                i++;
+            }
+            return uncommitedStream;
         }
     }
 }
