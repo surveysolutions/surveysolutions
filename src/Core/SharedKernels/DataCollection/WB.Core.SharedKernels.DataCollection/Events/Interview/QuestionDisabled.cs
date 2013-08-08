@@ -3,9 +3,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class AnswerDeclaredValid : QuestionPassiveEvent
+    public class QuestionDisabled : QuestionPassiveEvent
     {
-        public AnswerDeclaredValid(Guid questionId)
+        public QuestionDisabled(Guid questionId)
             : base(questionId) {}
     }
 }
