@@ -16,6 +16,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
