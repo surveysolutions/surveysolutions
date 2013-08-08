@@ -59,6 +59,8 @@
     <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextQuestionCommand.cs" />
     <Compile Include="Commands\Interview\Base\AnswerQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\Base\QuestionCommand.cs" />
+    <Compile Include="Commands\Interview\CommentAnswerCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
     <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\AnswerCommented.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionActiveEvent.cs" />
     <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />

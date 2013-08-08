@@ -80,6 +80,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledGroups.Remove(@event.QuestionId);
         }
 
+        private void Apply(AnswerCommented @event) {}
+
         #endregion
 
         #region Dependencies
@@ -124,6 +126,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextQuestion(Guid userId, Guid questionId, DateTime answerTime, string answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
@@ -152,6 +155,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerNumericQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
@@ -180,6 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
@@ -208,6 +213,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal selectedValue)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
@@ -237,6 +243,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal[] selectedValues)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
@@ -263,6 +270,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
+        public void CommentAnswer(Guid userId, Guid questionId, string comment)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
+
+            this.ApplyEvent(new AnswerCommented(userId, questionId, comment));
+        }
+
 
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
@@ -282,6 +297,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Questionnaire with id '{0}' is not found.", id));
 
             return questionnaire;
+        }
+
+        private void ThrowIfQuestionDoesNotExist(IQuestionnaire questionnaire, Guid questionId)
+        {
+            if (!questionnaire.HasQuestion(questionId))
+                throw new InterviewException(string.Format("Question with id '{0}' is not found.", questionId));
         }
 
         private static void ThrowIfQuestionTypeIsNotOneOfExpected(IQuestionnaire questionnaire, Guid questionId, params QuestionType[] expectedQuestionTypes)
