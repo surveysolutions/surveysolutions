@@ -63,6 +63,8 @@
     <Compile Include="Commands\Interview\CommentAnswerCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
     <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
+    <Compile Include="Commands\Interview\RemoveFlagFromAnswerCommand.cs" />
+    <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="Events\Interview\Base\InterviewPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionAnswered.cs" />
     <Compile Include="Events\Interview\DateTimeQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\FlagRemovedFromAnswer.cs" />
+    <Compile Include="Events\Interview\FlagSetToAnswer.cs" />
     <Compile Include="Events\Interview\GroupDisabled.cs" />
     <Compile Include="Events\Interview\GroupEnabled.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
