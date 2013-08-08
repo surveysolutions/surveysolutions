@@ -1,6 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Supervisor
+﻿namespace WB.Core.BoundedContexts.Supervisor.Implementation
 {
-    public interface ITemporaryDataRepositoryAccessor
+    internal interface ITemporaryDataRepositoryAccessor
     {
         void Store<T>(T payload, string name) where T : class;
         T GetByName<T>(string name) where T :class;

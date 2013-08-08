@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services
