@@ -11,6 +11,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         private static Regex conditionRegex = new Regex(@"\[([^\]]*)\]", RegexOptions.Compiled);
 
         private string _condition;
+        private string _validationExpression;
 
         public PdfQuestionView()
         {
@@ -21,6 +22,20 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public List<PdfAnswerView> Answers { get; set; }
 
+        public string ValidationExpression
+        {
+            get
+            {
+                if (_validationExpression == null)
+                {
+                    return null;
+                }
+
+                return ReplaceGuidsWithQuestionNumbers(_validationExpression);
+            }
+            set { _validationExpression = value; }
+        }
+
         public string Condition
         {
             get
@@ -30,21 +45,26 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                     return null;
                 }
 
-                return conditionRegex.Replace(_condition, match => {
-                    Guid matchId = Guid.Empty;
-                    if (Guid.TryParse(match.Groups[1].Value, out matchId))
-                    {
-                        var question = Root.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.Id == matchId);
-                        return "[question " + question.ItemNumber +"]";
-                    }
-
-                    return match.Value;
-                });
+                return ReplaceGuidsWithQuestionNumbers(_condition);
             }
             set
             {
                 _condition = value;
             }
+        }
+
+        private string ReplaceGuidsWithQuestionNumbers(string expression)
+        {
+            return conditionRegex.Replace(expression, match => {
+                Guid matchId = Guid.Empty;
+                if (Guid.TryParse(match.Groups[1].Value, out matchId))
+                {
+                    var question = Root.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.Id == matchId);
+                    return "[question " + question.ItemNumber +"]";
+                }
+
+                return match.Value;
+            });
         }
 
         public string Variable { get; set; }
