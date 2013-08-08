@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
-    public abstract class QuestionAnswered : AnswerActiveEvent
+    public abstract class QuestionAnswered : QuestionActiveEvent
     {
         public DateTime AnswerTime { get; private set; }
 
