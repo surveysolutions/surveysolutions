@@ -23,6 +23,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Guid questionnaireId;
         private long questionnaireVersion;
         private readonly Dictionary<Guid, object> answers = new Dictionary<Guid, object>();
+        private readonly HashSet<Guid> disabledGroups = new HashSet<Guid>();
+        private readonly HashSet<Guid> disabledQuestions = new HashSet<Guid>();
 
         private void Apply(InterviewCreated @event)
         {
@@ -58,6 +60,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(AnswerDeclaredValid @event) {}
 
         private void Apply(AnswerDeclaredInvalid @event) {}
+
+        private void Apply(GroupDisabled @event)
+        {
+            this.disabledGroups.Add(@event.GroupId);
+        }
+
+        private void Apply(GroupEnabled @event)
+        {
+            this.disabledGroups.Remove(@event.GroupId);
+        }
+
+        private void Apply(QuestionDisabled @event)
+        {
+            this.disabledGroups.Add(@event.QuestionId);
+        }
+
+        private void Apply(QuestionEnabled @event)
+        {
+            this.disabledGroups.Remove(@event.QuestionId);
+        }
 
         #endregion
 
@@ -112,6 +134,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
+            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
             IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
@@ -135,6 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
+            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
             IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
@@ -158,6 +182,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
+            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
             IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
@@ -182,6 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
+            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
             IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
@@ -206,6 +232,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
+            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
             IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
@@ -291,6 +318,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         Environment.NewLine,
                         questionsWithInvalidValidationExpressions.Select(questionId
                             => string.Format("{0} : {1}", questionId, questionnaire.GetCustomValidationExpression(questionId))))));
+        }
+
+        private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Guid questionId)
+        {
+            bool questionIsDisabled = this.disabledQuestions.Contains(questionId);
+            if (questionIsDisabled)
+                throw new InterviewException(string.Format(
+                    "Question '{1}' is disabled by it's following enablement condition:{0}{2}",
+                    Environment.NewLine, questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId)));
+
+            IEnumerable<Guid> parentGroups = questionnaire.GetAllParentGroupsForQuestion(questionId);
+            foreach (Guid parentGroupId in parentGroups)
+            {
+                bool groupIsDisabled = this.disabledGroups.Contains(parentGroupId);
+                if (groupIsDisabled)
+                    throw new InterviewException(string.Format(
+                        "Question '{1}' is disabled because parent group '{2}' is disabled by it's following enablement condition:{0}{3}",
+                        Environment.NewLine, questionId, parentGroupId, questionnaire.GetCustomEnablementConditionForGroup(parentGroupId)));
+            }
         }
 
         private void PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(

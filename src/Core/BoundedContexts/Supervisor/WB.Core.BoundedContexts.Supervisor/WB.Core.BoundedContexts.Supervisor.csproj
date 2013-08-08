@@ -51,10 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="SupervisorBoundedContextModule.cs" />
-    <Compile Include="Implementation\TemporaryDataRepository\FileTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
-    <Compile Include="Implementation\ITemporaryDataRepositoryAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
