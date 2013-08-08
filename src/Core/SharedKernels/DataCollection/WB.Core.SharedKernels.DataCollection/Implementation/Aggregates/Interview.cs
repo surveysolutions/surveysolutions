@@ -113,7 +113,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview(Guid questionnaireId, Guid userId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
-            ThrowIfSomeQuestionsHaveInvalidCustomValidationExpression(questionnaire, questionnaireId);
+            ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(questionnaire, questionnaireId);
+            ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
+            ThrowIfSomeQuestionsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
@@ -315,18 +317,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     questionId, JoinDecimalsWithComma(values), JoinDecimalsWithComma(availableValues)));
         }
 
-        private static void ThrowIfSomeQuestionsHaveInvalidCustomValidationExpression(IQuestionnaire questionnaire, Guid questionnaireId)
+        private static void ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(IQuestionnaire questionnaire, Guid questionnaireId)
         {
-            IEnumerable<Guid> questionsWithInvalidValidationExpressions = questionnaire.GetQuestionsWithInvalidCustomValidationExpressions();
+            IEnumerable<Guid> invalidQuestions = questionnaire.GetQuestionsWithInvalidCustomValidationExpressions();
 
-            if (questionsWithInvalidValidationExpressions.Any())
+            if (invalidQuestions.Any())
                 throw new InterviewException(string.Format(
                     "Cannot create interview from questionnaire '{1}' because following questions in it have invalid validation expressions:{0}{2}",
                     Environment.NewLine, questionnaireId,
                     string.Join(
                         Environment.NewLine,
-                        questionsWithInvalidValidationExpressions.Select(questionId
+                        invalidQuestions.Select(questionId
                             => string.Format("{0} : {1}", questionId, questionnaire.GetCustomValidationExpression(questionId))))));
+        }
+
+        private static void ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(IQuestionnaire questionnaire, Guid questionnaireId)
+        {
+            IEnumerable<Guid> invalidGroups = questionnaire.GetGroupsWithInvalidCustomEnablementConditions();
+
+            if (invalidGroups.Any())
+                throw new InterviewException(string.Format(
+                    "Cannot create interview from questionnaire '{1}' because following groups in it have invalid enablement conditions:{0}{2}",
+                    Environment.NewLine, questionnaireId,
+                    string.Join(
+                        Environment.NewLine,
+                        invalidGroups.Select(groupId
+                            => string.Format("{0} : {1}", groupId, questionnaire.GetCustomEnablementConditionForGroup(groupId))))));
+        }
+
+        private static void ThrowIfSomeQuestionsHaveInvalidCustomEnablementConditions(IQuestionnaire questionnaire, Guid questionnaireId)
+        {
+            IEnumerable<Guid> invalidQuestions = questionnaire.GetQuestionsWithInvalidCustomEnablementConditions();
+
+            if (invalidQuestions.Any())
+                throw new InterviewException(string.Format(
+                    "Cannot create interview from questionnaire '{1}' because following questions in it have invalid enablement conditions:{0}{2}",
+                    Environment.NewLine, questionnaireId,
+                    string.Join(
+                        Environment.NewLine,
+                        invalidQuestions.Select(questionId
+                            => string.Format("{0} : {1}", questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId))))));
         }
 
         private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Guid questionId)
