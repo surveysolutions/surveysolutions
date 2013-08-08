@@ -20,16 +20,8 @@ namespace Main.Core.Domain
 
     using Ncqrs;
 
-    /// <summary>
-    /// CompleteQuestionnaire Aggregate Root.
-    /// </summary>
     public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
-        #region Fields
-
-        /// <summary>
-        /// The doc.
-        /// </summary>
         private CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
         
         private CompleteQuestionnaireDocument doc
@@ -37,15 +29,6 @@ namespace Main.Core.Domain
             get { return document; }
             set { document = value.Clone() as CompleteQuestionnaireDocument; }
         }
-    
-        
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
-        /// </summary>
         public CompleteQuestionnaireAR()
         {
         }
@@ -56,16 +39,6 @@ namespace Main.Core.Domain
             UpdateInterviewMetaInfo(id, templateId, title, responsibleId, statusId, featuredQuestionsMeta);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
-        /// </summary>
-        /// <param name="completeQuestionnaireId">
-        ///   The complete questionnaire id.
-        /// </param>
-        /// <param name="questionnaire">
-        ///   The questionnaire.
-        /// </param>
-        /// <param name="creator"></param>
         public CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
             QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
@@ -115,77 +88,28 @@ namespace Main.Core.Domain
             this.ChangeStatus(SurveyStatus.Unassign, responsible);
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The add propagate group.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported any more.");
 
         }
 
-        /// <summary>
-        /// The create snapshot.
-        /// </summary>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Documents.CompleteQuestionnaireDocument.
-        /// </returns>
         public  CompleteQuestionnaireDocument CreateSnapshot()
         {
             return this.doc;
         }
 
-        // Event handler for the NewQuestionnaireCreated event. This method
-        // is automaticly wired as event handler based on convension.
-
         
-        /// <summary>
-        /// The delete propagate group.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
         public void DeletePropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported.");
         }
 
-        /// <summary>
-        /// The restore from snapshot.
-        /// </summary>
-        /// <param name="snapshot">
-        /// The snapshot.
-        /// </param>
         public  void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
             this.doc = snapshot;
         }
 
-        /// <summary>
-        /// The set comment.
-        /// </summary>
-        /// <param name="questionPublickey">
-        /// The question public key.
-        /// </param>
-        /// <param name="comments">
-        /// The comments.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propagation public key.
-        /// </param>
         public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey, UserLight user)
         {
             this.ApplyEvent(
@@ -197,6 +121,7 @@ namespace Main.Core.Domain
                     QuestionPublickey = questionPublickey
                 });
         }
+
         public void SetFlag(Guid questionPublickey, Guid? propogationPublicKey, bool isFlaged)
         {
             this.ApplyEvent(
@@ -208,24 +133,6 @@ namespace Main.Core.Domain
                 });
         }
         
-        /// <summary>
-        /// The set answer.
-        /// </summary>
-        /// <param name="questionPublicKey">
-        /// The question public key.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propagation public key.
-        /// </param>
-        /// <param name="completeAnswerValue">
-        /// The complete answer value.
-        /// </param>
-        /// <param name="completeAnswers">
-        /// The complete answers.
-        /// </param>
-        /// <param name="answerDate">
-        /// The answer date.
-        /// </param>
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers, DateTime answerDate)
         {
             ////performe check before event raising!!
@@ -317,23 +224,6 @@ namespace Main.Core.Domain
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The add remove propagated group.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="completeAnswerValue">
-        /// The complete answer value.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// </exception>
         public void AddRemovePropagatedGroup(AutoPropagateCompleteQuestion question, string completeAnswerValue)
         {
             int count;
@@ -367,20 +257,6 @@ namespace Main.Core.Domain
             this.HandlePropagation(question, currentAnswer, count);
         }
 
-        /// <summary>
-        /// The handle propagation.
-        /// </summary>
-        /// <param name="autoQuestion">
-        /// The auto question.
-        /// </param>
-        /// <param name="currentAnswer">
-        /// The current answer.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        /// </exception>
         private void HandlePropagation(AutoPropagateCompleteQuestion autoQuestion, int currentAnswer, int count)
         {
             if (currentAnswer < count)
@@ -531,12 +407,6 @@ namespace Main.Core.Domain
                 });
         }
 
-        /// <summary>
-        /// The change assignment.
-        /// </summary>
-        /// <param name="responsible">
-        /// The responsible.
-        /// </param>
         public void ChangeAssignment(UserLight responsible)
         {
             var prevResponsible = this.doc.Responsible;
@@ -564,15 +434,6 @@ namespace Main.Core.Domain
             this.ChangeStatus(SurveyStatus.Initial, new UserLight(userId, string.Empty));
         }
 
-        /// <summary>
-        /// The change status.
-        /// </summary>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="responsible">
-        /// The responsible.
-        /// </param>
         public void ChangeStatus(SurveyStatus status, UserLight responsible)
         {
             var prevStatus = this.doc.Status;
@@ -604,15 +465,6 @@ namespace Main.Core.Domain
             doc.Title = e.Title;
         }
 
-        // Event handler for the AnswerSet event. This method
-        // is automaticly wired as event handler based on convension.
-
-        /// <summary>
-        /// The on answer set.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnAnswerSet(AnswerSet e)
         {
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublicKey, e.PropogationPublicKey);
@@ -624,37 +476,16 @@ namespace Main.Core.Domain
             question.SetAnswer(e.AnswerKeys, e.AnswerValue);
         }
 
-        // Event handler for the PropagatableGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
-
-        /// <summary>
-        /// On Change Assignment.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnChangeAssignment(QuestionnaireAssignmentChanged e)
         {
             this.doc.Responsible = e.Responsible;
         }
 
-        /// <summary>
-        /// The on change status.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnChangeStatus(QuestionnaireStatusChanged e)
         {
             this.doc.Status = e.Status;
         }
         
-        /// <summary>
-        /// The on new questionnaire created.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
             this.doc = e.Questionnaire;
@@ -662,12 +493,6 @@ namespace Main.Core.Domain
             ////this.conditionDependencies = ExpressionDependencyBuilder.Build(this.doc);
         }
 
-        /// <summary>
-        /// The on propagate group added.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
             /*
@@ -686,12 +511,6 @@ namespace Main.Core.Domain
             this.doc.Add(newGroup, e.ParentKey, e.ParentPropagationKey);
         }
 
-        /// <summary>
-        /// The on propagate group created.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnConditionalStatusChanged(ConditionalStatusChanged e)
         {
             // to do the serching and set status. 
@@ -716,26 +535,11 @@ namespace Main.Core.Domain
             }
         }
 
-        /// <summary>
-        /// The on propagate group created.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnPropagateGroupCreated(PropagateGroupCreated e)
         {
             this.doc.Add(e.Group, e.ParentKey, e.ParentPropagationKey);
         }
 
-        /// <summary>
-        /// The get root for question.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IComposite"/>.
-        /// </returns>
         private IComposite GetRootForQuestion(ICompleteQuestion question)
         {
             //// question doesn't belog to propagate group
@@ -767,25 +571,11 @@ namespace Main.Core.Domain
             return parent;
         }
 
-        /// <summary>
-        /// The on propagatable group deleted.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
             this.doc.Remove(e.PublicKey, e.PropagationKey, e.ParentKey, e.ParentPropagationKey);
         }
 
-        /// <summary>
-        /// The on set comment command.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnSetCommentCommand(CommentSet e)
         {
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropagationPublicKey);
@@ -797,12 +587,6 @@ namespace Main.Core.Domain
             question.SetComments(e.Comments, DateTime.Now, e.User);
         }
 
-        /// <summary>
-        /// The on set comment command.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnSetFlagCommand(FlagSet e)
         {
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropagationPublicKey);
@@ -819,7 +603,5 @@ namespace Main.Core.Domain
             this.doc.IsDeleted = true;
             this.doc.DeletedBy = e.DeletedBy;
         }
-
-        #endregion
     }
 }

@@ -53,17 +53,41 @@
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
+    <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerTextQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\Base\AnswerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="Events\Interview\Base\AnswerActiveEvent.cs" />
+    <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\AnswerDeclaredValid.cs" />
+    <Compile Include="Events\Interview\Base\InterviewActiveEvent.cs" />
+    <Compile Include="Events\Interview\Base\AnswerPassiveEvent.cs" />
+    <Compile Include="Events\Interview\Base\InterviewPassiveEvent.cs" />
+    <Compile Include="Events\Interview\Base\QuestionAnswered.cs" />
+    <Compile Include="Events\Interview\DateTimeQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\InterviewCreated.cs" />
+    <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\SingleOptionQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\TextQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Exceptions\InterviewException.cs" />
+    <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Services\ExpressionProcessor.cs" />
+    <Compile Include="Implementation\Services\IdentifierCollector.cs" />
+    <Compile Include="Implementation\Services\IExpressionProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
@@ -83,6 +107,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>

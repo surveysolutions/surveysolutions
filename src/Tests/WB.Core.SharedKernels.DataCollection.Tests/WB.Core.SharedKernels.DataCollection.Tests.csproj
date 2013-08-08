@@ -59,7 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
+    <Compile Include="ExpressionProcessorTests\ExpressionProcessorTestsContext.cs" />
+    <Compile Include="ExpressionProcessorTests\when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
+    <Compile Include="InterviewTests\when_creating_interview.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_does_not_exist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
