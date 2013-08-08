@@ -124,7 +124,7 @@ namespace WB.Core.Synchronization.Tests
             Assert.That(result.Count(), Is.EqualTo(1));
             Assert.IsTrue(result.Contains(chunkId));
         }
-        private ReadSideChunkReader CreateRavenChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> writeStorage)
+        private ReadSideChunkReader CreateRavenChunkReader(IQueryableReadSideRepositoryWriter<SynchronizationDelta> writeStorage)
         {
             return new ReadSideChunkReader(writeStorage);
         }

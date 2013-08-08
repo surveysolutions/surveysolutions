@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders
+namespace WB.Core.BoundedContexts.Supervisor
 {
     public interface ISampleRecordsAccessor
     {

@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
+        public void NewUpdateQuestion_When_Title_is_not_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
         {
             using (var eventContext = new EventContext())
             {
@@ -442,6 +442,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
+        [Ignore("Validation about options count is temporary turned off. Should be turned on with new clone questionnaire feature implementation")]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
         public void NewUpdateQuestion_When_there_is_only_one_option_in_categorical_question_Then_DomainException_should_be_thrown(QuestionType questionType)
@@ -515,7 +516,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    options: options);
 
                 // assert
-                var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                var raisedEvent = GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.That(raisedEvent.Answers.Length, Is.EqualTo(answerOptionsCount));
             }
         }

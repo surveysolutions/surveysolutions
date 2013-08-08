@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
+namespace WB.Core.BoundedContexts.Supervisor.Views.SampleImport
 {
     public  class SampleCreationStatus
     {

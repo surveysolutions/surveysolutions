@@ -852,9 +852,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (options.Length < 2)
             {
-                throw new DomainException(DomainExceptionType.TooFewOptionsInCategoryQuestion,
-                                          string.Format(
-                                              "Categorical questions should contains two or more answer options"));
+                //throw new DomainException(DomainExceptionType.TooFewOptionsInCategoryQuestion,
+                //                          string.Format(
+                //                              "Categorical questions should contains two or more answer options"));
             }
         }
 
