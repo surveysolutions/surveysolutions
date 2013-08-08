@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
@@ -177,7 +177,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
@@ -202,7 +202,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
