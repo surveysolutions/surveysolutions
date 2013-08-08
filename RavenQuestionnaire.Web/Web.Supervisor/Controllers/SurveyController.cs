@@ -98,6 +98,11 @@ namespace Web.Supervisor.Controllers
                 {
                     new SurveyStatusViewItem()
                         {
+                            StatusId = SurveyStatus.Unassign.PublicId,
+                            StatusName = SurveyStatus.Unassign.Name
+                        },
+                    new SurveyStatusViewItem()
+                        {
                             StatusId = SurveyStatus.Initial.PublicId,
                             StatusName = SurveyStatus.Initial.Name
                         },

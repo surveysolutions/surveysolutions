@@ -17,69 +17,103 @@ namespace Core.Supervisor.Denormalizer
     using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
     public class SummaryDenormalizer : UserBaseDenormalizer,
-                                       IEventHandler<QuestionnaireStatusChanged>, 
-                                       IEventHandler<QuestionnaireAssignmentChanged>
+                                       IEventHandler<QuestionnaireStatusChanged>,
+                                       IEventHandler<QuestionnaireAssignmentChanged>,
+                                       IEventHandler<InterviewDeleted>, IEventHandler<InterviewMetaInfoUpdated>
     {
-        #region Constants and Fields
-
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
-
-        #endregion
-
-        #region Constructors and Destructors
 
         public SummaryDenormalizer(
             IReadSideRepositoryWriter<SummaryItem> summaryItem,
             IReadSideRepositoryWriter<UserDocument> users,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires)
-            :base(users)
+            : base(users)
         {
             this.summaryItem = summaryItem;
             this.questionnaires = questionnaires;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
+            HandleChangeStatus(evnt.EventSourceId,evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
+        }
 
-            SummaryItem summaryUser = UpdateCountersForItemAndReturnIt(questionnaire.TemplateId, questionnaire.Responsible.Id, evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
-            if (summaryUser == null) return;
+        private void HandleChangeStatus(Guid interviewId, Guid statusId, Guid previousStatus)
+        {
+            if(statusId==previousStatus)
+                return;
+            
+            var questionnaire = this.questionnaires.GetById(interviewId);
 
-            if (!summaryUser.ResponsibleSupervisorId.HasValue)
+            var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
+            var userSummary = this.summaryItem.GetById(summmaryUserId);
+
+            if (userSummary == null)
             {
                 return;
             }
 
-            UpdateCountersForItemAndReturnIt(questionnaire.TemplateId, summaryUser.ResponsibleSupervisorId.Value,
-                                             evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(interviewId, previousStatus, userSummary);
+          
+            IncreaseByStatus(userSummary, statusId);
 
+            this.summaryItem.Store(userSummary, summmaryUserId);
+            
         }
 
-        private SummaryItem UpdateCountersForItemAndReturnIt(Guid template, Guid responsible, Guid newStatus, Guid oldStatus)
+        private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem userSummary)
         {
-            var summmaryUserId = responsible.Combine(template);
-            var summaryUser = this.summaryItem.GetById(summmaryUserId);
-
-            if (summaryUser == null)
+            if (!userSummary.DeletedInterviews.Contains(interviewId))
             {
-                return null;
+                this.DecreaseByStatus(userSummary, previousStatusId);
             }
+            else
+            {
+                userSummary.DeletedInterviews.Remove(interviewId);
+            }
+        }
 
-            if (oldStatus == newStatus)
-                return null;
+        public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
+        {
+            if (evnt.Payload.PreviousResponsible != null &&
+                evnt.Payload.Responsible.Id == evnt.Payload.PreviousResponsible.Id)
+            {
+                return;
+            }
+            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
 
-            this.DecreaseByStatus(summaryUser, oldStatus);
+            var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
 
-          //  summaryUser.QuestionnaireStatus = newStatus;
+            var userSummary = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
 
-            this.IncreaseByStatus(summaryUser, newStatus);
-            this.summaryItem.Store(summaryUser, summmaryUserId);
-            return summaryUser;
+
+            if (evnt.Payload.PreviousResponsible != null && userSummary.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
+            {
+                var summaryPrevUserId = evnt.Payload.PreviousResponsible.Id.Combine(questionnaire.TemplateId);
+                var summaryPrevUser = this.summaryItem.GetById(summaryPrevUserId);
+
+                this.DecreaseByStatus(summaryPrevUser, questionnaire.Status.PublicId);
+                this.summaryItem.Store(summaryPrevUser, summaryPrevUserId);
+            }
+            this.IncreaseByStatus(userSummary, questionnaire.Status.PublicId);
+            this.summaryItem.Store(userSummary, summaryUserId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
+            var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
+            var userSummary = this.summaryItem.GetById(summmaryUserId);
+
+            if (userSummary == null)
+                return;
+
+            this.DecreaseByStatus(userSummary, questionnaire.Status.PublicId);
+
+            userSummary.DeletedInterviews.Add(evnt.EventSourceId);
+            
+            this.summaryItem.Store(userSummary, summmaryUserId);
         }
 
         private void DecreaseByStatus(SummaryItem summary, Guid statusId)
@@ -100,73 +134,39 @@ namespace Core.Supervisor.Denormalizer
             summary.TotalCount += incCount;
         }
 
-        public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
-        {
-            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
-
-            var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
-
-            var summaryUser = this.summaryItem.GetById(summaryUserId) ?? CreateNewSummaryUser(evnt.Payload.Responsible.Id,questionnaire);
-
-            if (evnt.Payload.PreviousResponsible!=null && summaryUser.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
-            {
-                var summaryPrevUserId = evnt.Payload.PreviousResponsible.Id.Combine(questionnaire.TemplateId);
-                var summaryPrevUser = this.summaryItem.GetById(summaryPrevUserId);
-
-                if (IsSupervisorTeamChanged(summaryUser, summaryPrevUser))
-                {
-                    var summarySupervisorId =
-                        summaryUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
-                    var summaryPrevSupervisorId =
-                        summaryPrevUser.ResponsibleSupervisorId.Value.Combine(questionnaire.TemplateId);
-                    var summarySupervisor = this.summaryItem.GetById(summarySupervisorId);
-                    var summaryPrevSupervisor = this.summaryItem.GetById(summaryPrevSupervisorId);
-
-                    this.DecreaseByStatus(summaryPrevSupervisor, summaryUser.QuestionnaireStatus);
-                    this.IncreaseByStatus(summarySupervisor, summaryUser.QuestionnaireStatus);
-
-                    this.summaryItem.Store(summarySupervisor, summarySupervisorId);
-                    this.summaryItem.Store(summaryPrevSupervisor, summaryPrevSupervisorId);
-
-                }
-
-                if (summaryPrevUser.ResponsibleId != summaryUser.ResponsibleSupervisorId)
-                {
-                    this.DecreaseByStatus(summaryPrevUser, summaryUser.QuestionnaireStatus);
-                    this.summaryItem.Store(summaryPrevUser, summaryPrevUserId);
-                }
-            }
-            this.IncreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
-            this.summaryItem.Store(summaryUser, summaryUserId);
-        }
-
-        private bool IsSupervisorTeamChanged(SummaryItem summaryUser, SummaryItem summaryPrevUser)
-        {
-            return summaryUser.ResponsibleSupervisorId.HasValue && summaryPrevUser.ResponsibleSupervisorId.HasValue &&
-                   summaryUser.ResponsibleSupervisorId != summaryPrevUser.ResponsibleSupervisorId;
-        }
-
-        private SummaryItem CreateNewSummaryUser(Guid responsibleId,
-                                                 CompleteQuestionnaireBrowseItem questionnaire)
+        private SummaryItem CreateNewSummaryUser(Guid responsibleId, CompleteQuestionnaireBrowseItem questionnaire)
         {
             var user = this.users.GetById(responsibleId);
-            var status = questionnaire.Status.PublicId;
-            if (status == SurveyStatus.Unknown.PublicId && user.Roles.Contains(UserRoles.Supervisor))
-                status = SurveyStatus.Unassign.PublicId;
+            var isUserIsSupervisor = user.Roles.Contains(UserRoles.Supervisor);
+            var responsibleSupervisorId = (Guid?)null;
+            var responsibleSupervisorName = string.Empty;
+            if (isUserIsSupervisor)
+            {
+                responsibleSupervisorId = user.PublicKey;
+                responsibleSupervisorName = user.UserName;
+            }
+            else if (user.Supervisor != null)
+            {
+                responsibleSupervisorId = user.Supervisor.Id;
+                responsibleSupervisorName = user.Supervisor.Name;
+            }
+
             return
                 new SummaryItem()
                     {
                         TemplateId = questionnaire.TemplateId,
                         TemplateName = questionnaire.QuestionnaireTitle,
-                        ResponsibleSupervisorId =
-                            user.Supervisor == null ? (Guid?) null : user.Supervisor.Id,
+                        ResponsibleSupervisorId = responsibleSupervisorId,
+                        ResponsibleSupervisorName = responsibleSupervisorName,
                         ResponsibleId = user.PublicKey,
-                        ResponsibleName = user.UserName,
-                        QuestionnaireStatus = status
+                        ResponsibleName = user.UserName
                     };
 
         }
 
-        #endregion
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
+        }
     }
 }

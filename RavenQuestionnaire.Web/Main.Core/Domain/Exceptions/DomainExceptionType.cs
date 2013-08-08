@@ -128,6 +128,8 @@
 
         VariableNameShouldNotMatchWithKeywords,
 
-        TooFewOptionsInCategoryQuestion
+        TooFewOptionsInCategoryQuestion,
+
+        CouldNotDeleteInterview
     }
 }

@@ -6,6 +6,7 @@ using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
@@ -34,7 +35,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             return records.ToDictionary(d => Guid.Parse(d.Id), d => Guid.Parse(d.EventSourceId));
         }
 
-        public string GetDraftRecordContent(Guid recordId)
+        public SyncItem GetDraftRecordContent(Guid recordId)
         {
             return fileChangeLogStore.GetChangesetContent(recordId);
         }

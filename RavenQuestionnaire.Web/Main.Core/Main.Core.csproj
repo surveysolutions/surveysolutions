@@ -159,9 +159,9 @@
     <Compile Include="Commands\Questionnaire\Completed\CreateNewAssigment.cs" />
     <Compile Include="Commands\Questionnaire\Completed\DeleteInterviewCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
@@ -444,9 +444,6 @@
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -457,6 +454,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Questionnaire\Completed\InterviewDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <SubType>Code</SubType>
     </Compile>

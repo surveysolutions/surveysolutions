@@ -7,6 +7,7 @@ using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
@@ -18,6 +19,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model
 {
@@ -38,7 +40,8 @@ namespace CAPI.Android.Core.Model
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var fileSystem = new FileStorageService();
-            var changeLogStore = new FileChangeLogStore();
+            var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
+            var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
             var syncCacher = new FileSyncCacher();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
 
@@ -61,11 +64,14 @@ namespace CAPI.Android.Core.Model
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
             this.Bind<ISyncCacher>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
-            this.Bind<IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>>().To<QuestionnaireScreenViewFactory>();
+            this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
+            this.Bind<IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>>()
+                .To<QuestionnaireScreenViewFactory>();
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore, snapshotStore,
-                bigSurveyStore, syncCacher, sharedPreferencesBackup));
+            this.Bind<IBackup>()
+                .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore, snapshotStore,
+                                              bigSurveyStore, syncCacher, sharedPreferencesBackup));
         }
     }
 }

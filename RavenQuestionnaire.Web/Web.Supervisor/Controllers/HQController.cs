@@ -7,10 +7,10 @@ using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
+using WB.Core.BoundedContexts.Supervisor.SampleRecordsAccessors;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
@@ -49,7 +49,9 @@ namespace Web.Supervisor.Controllers
             IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
             IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, ISampleImportService sampleImportService)
+            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, 
+            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, 
+            ISampleImportService sampleImportService)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -76,11 +78,11 @@ namespace Web.Supervisor.Controllers
 
         }
 
-        public ActionResult Interviews(Guid? templateId)
+        public ActionResult Interviews(Guid? questionnaireId)
         {
-            if (templateId.HasValue)
+            if (questionnaireId.HasValue)
             {
-                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = templateId.Value })));
+                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
             }
             ViewBag.ActivePage = MenuItem.Docs;
             return this.View(Filters());
@@ -148,7 +150,6 @@ namespace Web.Supervisor.Controllers
                     this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
                         ViewerStatus.Headquarter)).Items);
         }
-
 
         public ActionResult Assign(Guid id)
         {

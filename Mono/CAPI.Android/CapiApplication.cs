@@ -111,7 +111,6 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
             bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
             bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
-            //bus.RegisterHandler(eventHandler, typeof(CompleteQuestionnaireDeleted));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
@@ -135,8 +134,9 @@ namespace CAPI.Android
                 new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
-            //bus.RegisterHandler(dashboardeventHandler, typeof(CompleteQuestionnaireDeleted));
+            
         }
 
         private void InitChangeLog(InProcessEventBus bus)

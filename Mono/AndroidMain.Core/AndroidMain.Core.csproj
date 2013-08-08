@@ -107,9 +107,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\CreateNewAssigment.cs">
       <Link>Commands\Questionnaire\Completed\CreateNewAssigment.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\DeleteInterviewCommand.cs">
       <Link>Commands\Questionnaire\Completed\DeleteInterviewCommand.cs</Link>
     </Compile>
@@ -121,6 +118,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetFlagCommand.cs">
       <Link>Commands\Questionnaire\Completed\SetFlagCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs">
+      <Link>Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
       <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
@@ -529,9 +529,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\CommentSeted.cs">
       <Link>Events\Questionnaire\Completed\CommentSeted.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs">
-      <Link>Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ConditionalStatusChanged.cs">
       <Link>Events\Questionnaire\Completed\ConditionalStatusChanged.cs</Link>
     </Compile>
@@ -543,6 +540,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
       <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs">
+      <Link>Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <Link>Events\Questionnaire\Completed\NewAssigmentCreated.cs</Link>

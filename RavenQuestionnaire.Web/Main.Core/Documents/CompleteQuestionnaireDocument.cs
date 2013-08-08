@@ -185,7 +185,7 @@
         /// </returns>
         public CompleteQuestionWrapper GetQuestionByKey(string key)
         {
-            return this.questionHash.GetQuestionByKey(key);
+            return this.GetQuestionHash().GetQuestionByKey(key);
         }
 
         /// <summary>
@@ -540,7 +540,7 @@
 
 
             parent.Children.Remove(itemToDelete);
-            this.questionHash.RemoveGroup(itemToDelete);
+            this.GetQuestionHash().RemoveGroup(itemToDelete);
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace LoadTestDataGenerator
             return base.GetAssembliesForRegistration().Concat(new[]
             {
                 typeof(LoadTestDataGeneratorRegistry).Assembly,
-                typeof(CompleteQuestionnaireDenormalizer).Assembly,
+                typeof(UserDenormalizer).Assembly,
                 typeof(Questionnaire).Assembly,
             });
         }

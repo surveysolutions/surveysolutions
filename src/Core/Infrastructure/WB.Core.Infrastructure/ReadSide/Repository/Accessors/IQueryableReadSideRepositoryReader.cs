@@ -14,15 +14,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     {
         TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
 
-
-        #region aditional query functions
-
-        int Count(Expression<Func<TEntity, bool>> query);
+        #warning this method is here only because of our problems with Raven
         IEnumerable<TEntity> QueryAll(Expression<Func<TEntity, bool>> query);
-        
-        IQueryable<TEntity> QueryEnumerable(Expression<Func<TEntity, bool>> query);
-
-        #endregion
-
     }
 }

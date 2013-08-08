@@ -1,6 +1,8 @@
-﻿DocumentListViewModel = function (listViewUrl, commandUrl, users) {
+﻿DocumentListViewModel = function (listViewUrl, deleteInterviewUrl, commandUrl, users) {
     var self = this;
-
+    
+    self.deleteInterviewUrl = deleteInterviewUrl;
+    
     self.ListView = new ListViewModel(listViewUrl);
 
     self.ListView.mappingOptions = {
@@ -110,5 +112,32 @@
         self.SelectedStatus.subscribe(self.ListView.filter);
 
         self.ListView.search();
+    };
+
+    self.deleteInterview = function () {
+        self.ListView.CheckForRequestComplete();
+
+        var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
+            return item.IsSelected();
+        });
+
+        var request = { Interviews: [] };
+        for (var i = 0; i < selectedRawInterviews.length; i++) {
+            request.Interviews.push(selectedRawInterviews[i]["InterviewId"]());
+        }
+
+        self.ListView.IsAjaxComplete(false);
+
+        $.post(self.deleteInterviewUrl, request, null, "json")
+            .done(function (data) {
+                var deletedInterviews = ko.utils.arrayFilter(selectedRawInterviews, function (item) {
+                    return $.inArray(item["InterviewId"](), data["BlockedInterviews"]) == -1;
+                });
+                for (var i = 0; i < deletedInterviews.length; i++) {
+                    self.ListView.Items.remove(deletedInterviews[i]);
+                }
+                self.ListView.TotalCount(self.ListView.TotalCount() - deletedInterviews.length);
+                self.ListView.IsAjaxComplete(true);
+            });
     };
 };

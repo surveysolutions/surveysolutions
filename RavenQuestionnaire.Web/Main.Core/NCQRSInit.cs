@@ -81,21 +81,6 @@ namespace Main.Core
 #endif
         }
 
-        public static void InitPartial(IKernel kernel)
-        {
-            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
-
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-
-            var snpshotStore = new InMemoryEventStore();
-            // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
-
-            var bus = new InProcessEventBus(true);
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            kernel.Bind<IEventBus>().ToConstant(bus);
-        }
-
         public static void EnsureReadLayerIsBuilt()
         {
             if (!IsReadLayerBuilt)
@@ -159,7 +144,7 @@ namespace Main.Core
         /// <returns>
         /// The <see cref="ICommandService"/>.
         /// </returns>
-        private static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
+        internal static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
@@ -195,7 +180,7 @@ namespace Main.Core
         /// <param name="kernel">
         /// The kernel.
         /// </param>
-        private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
+        internal static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
             IEnumerable<object> handlers = kernel.GetAll(typeof(IEventHandler<>)).Distinct();
             foreach (object handler in handlers)

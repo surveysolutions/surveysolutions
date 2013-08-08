@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
+﻿using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
@@ -26,7 +22,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         protected IDocumentSession OpenSession()
         {
-            this.ravenStore.DatabaseCommands.EnsureDatabaseExists(Database);
+            this.EnsureDatabaseExists();
             return this.ravenStore.OpenSession(Database);
         }
 
@@ -38,10 +34,16 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             }
         }
 
-        public void RegisterIndexesFormAssembly(Assembly assembly)
+        public void RegisterIndexesFromAssembly(Assembly assembly)
         {
             var catalog = new CompositionContainer(new AssemblyCatalog(assembly));
-            IndexCreation.CreateIndexes(catalog, ravenStore.DatabaseCommands.ForDatabase(Database), ravenStore.Conventions);
+            this.EnsureDatabaseExists();
+            IndexCreation.CreateIndexes(catalog, this.ravenStore.DatabaseCommands.ForDatabase(Database), ravenStore.Conventions);
+        }
+
+        private void EnsureDatabaseExists()
+        {
+            this.ravenStore.DatabaseCommands.EnsureDatabaseExists(Database);
         }
     }
 }

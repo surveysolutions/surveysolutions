@@ -136,7 +136,7 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
                     LastSyncItemIdentifier = 2
                 };
 
-            var devices = new Mock<IQueryableReadSideRepositoryReader<ClientDeviceDocument>>();
+            var devices = new Mock<IQueryableReadSideRepositoryWriter<ClientDeviceDocument>>();
             devices.Setup(d => d.GetById(clientDevice.PublicKey)).Returns(clientDevice);
 
             var syncStoredItem = new SyncItem()
@@ -182,7 +182,7 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
                 LastSyncItemIdentifier = 2
             };
 
-            var devices = new Mock<IQueryableReadSideRepositoryReader<ClientDeviceDocument>>();
+            var devices = new Mock<IQueryableReadSideRepositoryWriter<ClientDeviceDocument>>();
             devices.Setup(d => d.GetById(clientDevice.PublicKey)).Returns(clientDevice);
 
             var userId = Guid.NewGuid();
@@ -206,14 +206,14 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
 
         private SyncProvider CreateDefaultSyncProvider()
         {
-            var devices = new Mock<IQueryableReadSideRepositoryReader<ClientDeviceDocument>>();
+            var devices = new Mock<IQueryableReadSideRepositoryWriter<ClientDeviceDocument>>();
             var storage = new Mock<ISynchronizationDataStorage>();
             var incomeStorage = new Mock<IIncomePackagesRepository>();
             var logger = new Mock<ILogger>();
 
             return CreateDefaultSyncProvider(devices.Object, storage.Object, incomeStorage.Object, logger.Object);
         }
-        private SyncProvider CreateDefaultSyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices, ISynchronizationDataStorage storage, IIncomePackagesRepository incomeRepository, ILogger logger)
+        private SyncProvider CreateDefaultSyncProvider(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices, ISynchronizationDataStorage storage, IIncomePackagesRepository incomeRepository, ILogger logger)
         {
             return new SyncProvider(devices, storage, incomeRepository, logger);
         }

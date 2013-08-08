@@ -120,6 +120,8 @@
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
     <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
     <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
+    <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
+    <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />

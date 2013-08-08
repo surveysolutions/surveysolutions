@@ -2,8 +2,10 @@ using System;
 using System.Linq.Expressions;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Entities;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Raven.Client.Linq;
+using Raven.Database.Linq.PrivateExtensions;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Interview
@@ -27,7 +29,7 @@ namespace Core.Supervisor.Views.Interview
         {
             /*  return this.interviews.Query(_ =>
               {*/
-            Expression<Func<InterviewItem, bool>> predicate = (s) => true;
+            Expression<Func<InterviewItem, bool>> predicate = (s) => !s.IsDeleted;
 
             if (input.StatusId.HasValue)
             {
@@ -73,14 +75,14 @@ namespace Core.Supervisor.Views.Interview
             //    .Skip((input.Page - 1)*input.PageSize)
             //    .Take(input.PageSize);
 
-            var interviewItems = DefineOrderBy(this.interviews.QueryEnumerable(predicate),input)
+            var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)),input)
                             .Skip((input.Page - 1)*input.PageSize)
                             .Take(input.PageSize).ToList();
 
            
             return new InterviewView()
                 {
-                    TotalCount = this.interviews.Count(predicate),
+                    TotalCount = this.interviews.Query(_ => _.Count(predicate)),
                     Items = interviewItems.Select(x => new InterviewViewItem()
                         {
                             FeaturedQuestions = x.FeaturedQuestions,
@@ -88,7 +90,11 @@ namespace Core.Supervisor.Views.Interview
                             LastEntryDate = x.LastEntryDate.ToShortDateString(),
                             Responsible = x.Responsible,
                             Status = x.Status.Name,
-                            Title = x.Title
+                            Title = x.Title,
+                            CanDelete = x.Status.Id == SurveyStatus.Unknown.PublicId || 
+                                        x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId,
+                            CanBeReassigned = x.Status.Id == SurveyStatus.Unknown.PublicId || x.Status.Id == SurveyStatus.Redo.PublicId ||
+                                        x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId
                         })
                 };
             //  });

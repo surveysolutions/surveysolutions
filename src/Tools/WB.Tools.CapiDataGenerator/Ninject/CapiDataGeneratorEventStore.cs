@@ -27,21 +27,27 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            return capiEventStore.ReadFrom(id, minVersion, maxVersion);
+            return supevisorEventStore.ReadFrom(id, minVersion, maxVersion);
         }
 
         public void Store(UncommittedEventStream eventStream)
         {
             var eventstream = new UncommittedEventStream(eventStream.CommitId);
 
-            Func<object, bool> supervisorExpression = (o) => o is NewUserCreated || o is NewCompleteQuestionnaireCreated ||
-                o is TemplateImported || o is QuestionnaireAssignmentChanged ||
-                (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId || 
-                ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId));
+            Func<object, bool> supervisorExpression =
+                (o) => o is NewUserCreated || o is NewCompleteQuestionnaireCreated ||
+                       o is TemplateImported || o is QuestionnaireAssignmentChanged ||
+                       (o is QuestionnaireStatusChanged &&
+                        (((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
+                         ((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Initial.PublicId));
 
-            Func<object, bool> capiExpression = (o) => !(o is NewCompleteQuestionnaireCreated || o is TemplateImported || o is QuestionnaireAssignmentChanged ||
-                 (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
-                 ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId)));
+            Func<object, bool> capiExpression =
+                (o) =>
+                    !(o is NewCompleteQuestionnaireCreated || o is TemplateImported ||
+                      o is QuestionnaireAssignmentChanged ||
+                      (o is QuestionnaireStatusChanged &&
+                       (((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
+                        ((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Initial.PublicId)));
 
             
             IDictionary<Guid, long> eventsequences = null;

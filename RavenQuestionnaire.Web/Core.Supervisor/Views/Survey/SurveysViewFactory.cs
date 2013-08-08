@@ -29,13 +29,13 @@ namespace Core.Supervisor.Views.Survey
             if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
                 items =
-                    indexAccessor.Query<SummaryItem>(typeof(SummaryItemByTemplate).Name)
+                    indexAccessor.Query<SummaryItem>(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Name)
                                  .Where(x => x.ResponsibleSupervisorId == input.ViewerId);
             }
             else
             {
 
-                items = indexAccessor.Query<SummaryItem>(typeof(SummaryItemForHQByTemplate).Name);
+                items = indexAccessor.Query<SummaryItem>(typeof(HeadquarterReportsSurveysAndStatusesGroupByTeam).Name);
             }
 
             if (input.UserId.HasValue)
@@ -55,17 +55,22 @@ namespace Core.Supervisor.Views.Survey
                 items = items.Where(x => x.ResponsibleId == Guid.Empty);
             }
 
-            var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList().Select(y => new SurveysViewItem()
-        {
-            Template = new TemplateLight(y.TemplateId, y.TemplateName),
-            Approved = y.ApprovedCount,
-            Completed = y.CompletedCount,
-            Error = y.CompletedWithErrorsCount,
-            Initial = y.InitialCount,
-            Redo = y.RedoCount,
-            Unassigned = y.UnassignedCount,
-            Total = y.TotalCount
-        });
+            var all =
+                items.OrderUsingSortExpression(input.Order)
+                     .Skip((input.Page - 1)*input.PageSize)
+                     .Take(input.PageSize)
+                     .ToList()
+                     .Select(y => new SurveysViewItem()
+                         {
+                             Template = new TemplateLight(y.TemplateId, y.TemplateName),
+                             Approved = y.ApprovedCount,
+                             Completed = y.CompletedCount,
+                             Error = y.CompletedWithErrorsCount,
+                             Initial = y.InitialCount,
+                             Redo = y.RedoCount,
+                             Unassigned = y.UnassignedCount,
+                             Total = y.TotalCount
+                         });
 
             return new SurveysView()
             {

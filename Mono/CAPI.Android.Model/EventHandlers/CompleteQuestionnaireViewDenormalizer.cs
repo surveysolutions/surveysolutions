@@ -12,8 +12,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                                          IEventHandler<AnswerSet>,
                                                          IEventHandler<PropagatableGroupAdded>,
                                                          IEventHandler<PropagatableGroupDeleted>,
-                                                         IEventHandler<QuestionnaireStatusChanged>/*, 
-                                                         IEventHandler<CompleteQuestionnaireDeleted>*/
+                                                         IEventHandler<QuestionnaireStatusChanged>
     {
         /// <summary>
         /// The _document storage.
@@ -133,11 +132,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         #endregion
-
-        /*public void Handle(IPublishedEvent<CompleteQuestionnaireDeleted> evnt)
-        {
-            _documentStorage.Remove(evnt.EventSourceId);
-        }*/
-
+        
     }
 }

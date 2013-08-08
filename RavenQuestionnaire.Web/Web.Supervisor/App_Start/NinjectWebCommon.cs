@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -10,10 +12,12 @@ using Main.Core.Documents;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
+using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
@@ -21,6 +25,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.Synchronization;
+using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
 using Web.Supervisor.CommandDeserialization;
@@ -72,9 +77,9 @@ namespace Web.Supervisor.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            #warning TLK: delete this when NCQRS initialization moved to Global.asax
+#warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
-            
+
             bool isEmbeded;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
             {
@@ -93,14 +98,15 @@ namespace Web.Supervisor.App_Start
             string username = WebConfigurationManager.AppSettings["Raven.Username"];
             string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
-            string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+            string defaultDatabase = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
 
             int? pageSize = GetEventStorePageSize();
 
-            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username, password: password, defaultDatabase: defaultDatabase);
+            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username,
+                                                            password: password, defaultDatabase: defaultDatabase);
 
             var kernel = new StandardKernel(
-                new NinjectSettings { InjectNonPublic = true },
+                new NinjectSettings {InjectNonPublic = true},
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
@@ -110,19 +116,9 @@ namespace Web.Supervisor.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
-                new SupervisorCommandDeserializationModule());
-
-#warning dirty hack for register ziped read side
-            kernel.Unbind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>>();
-            kernel.Unbind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>();
-
-            //midnigth fixx
-            //both services have to share the same cache
-            //they have to have two different implementations and _maybe_ share single cache
-            kernel.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
-                .To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
-            
-            //kernel.Bind<IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>().To<RavenReadSideRepositoryWriterWithCacheAndZip<CompleteQuestionnaireStoreDocument>>().InSingletonScope();
+                new SupervisorCommandDeserializationModule(),
+                new SupervisorBoundedContextModule(),
+                new CompleteQuestionnarieDenormalizerModule());
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -137,7 +133,7 @@ namespace Web.Supervisor.App_Start
 
 #warning dirty index registrations
             var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFormAssembly(typeof(SummaryItemByTemplate).Assembly);
+            indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

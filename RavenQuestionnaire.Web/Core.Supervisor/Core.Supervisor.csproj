@@ -179,7 +179,6 @@
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\InterviewDenormalizer.cs" />
-    <Compile Include="Denormalizer\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
     <Compile Include="Denormalizer\SummaryDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
@@ -187,12 +186,12 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="Denormalizer\UserDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
-    <Compile Include="RavenIndexes\SummaryForHQItemByInterviewer.cs" />
-    <Compile Include="RavenIndexes\SummaryItemByTemplate.cs" />
-    <Compile Include="RavenIndexes\SummaryItemByInterviewer.cs">
+    <Compile Include="RavenIndexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
+    <Compile Include="RavenIndexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RavenIndexes\SummaryItemForHQByTemplate.cs" />
+    <Compile Include="RavenIndexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />

@@ -1,6 +1,7 @@
 ﻿using Main.Core.Domain.Exceptions;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace Main.Core.Domain
 {
@@ -21,16 +22,21 @@ namespace Main.Core.Domain
 
     public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
-        private CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-
+        private CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
+        
+        private CompleteQuestionnaireDocument doc
+        {
+            get { return document; }
+            set { document = value.Clone() as CompleteQuestionnaireDocument; }
+        }
         public CompleteQuestionnaireAR()
         {
         }
 
-        public CompleteQuestionnaireAR(CompleteQuestionnaireDocument source)
-            : base(source.PublicKey)
+        public CompleteQuestionnaireAR(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+            : base(id)
         {
-            CreateNewAssigment(source);
+            UpdateInterviewMetaInfo(id, templateId, title, responsibleId, statusId, featuredQuestionsMeta);
         }
 
         public CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
@@ -61,7 +67,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewCompleteQuestionnaireCreated
                     {
-                        Questionnaire = document, 
+                        Questionnaire = document, // to avoid pass as refecence 
                         CreationDate = clock.UtcNow(), 
                         TotalQuestionCount = document.Find<ICompleteQuestion>(q => true).Count()
                     });
@@ -86,32 +92,6 @@ namespace Main.Core.Domain
         {
             throw new InvalidOperationException("Is not supported any more.");
 
-
-            //// performe check before event raising
-            /*
-            var templateGroup = this.doc.Find<CompleteGroup>(publicKey);
-
-            this.ApplyEvent(
-                new PropagatableGroupAdded
-                    {
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (templateGroup.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in templateGroup.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupAdded
-                        {
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
         public  CompleteQuestionnaireDocument CreateSnapshot()
@@ -119,15 +99,7 @@ namespace Main.Core.Domain
             return this.doc;
         }
 
-        public void Delete()
-        {
-            this.ApplyEvent(
-                new CompleteQuestionnaireDeleted
-                    {
-                       CompletedQuestionnaireId = this.doc.PublicKey, TemplateId = this.doc.TemplateId 
-                    });
-        }
-
+        
         public void DeletePropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported.");
@@ -135,19 +107,7 @@ namespace Main.Core.Domain
 
         public  void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
-            // Due to the storing snapshot in the memory
-            // to provide consistency of UoW we have to make copy of the memory structure.
-            // This method handles 2 situations: restore from Framework in memory snapshot
-            // and event of snapshot type.
-            var cached = snapshot.Clone() as CompleteQuestionnaireDocument;
-
-            if (cached != null)
-            {
-                this.doc = cached;
-            }
-
-            // moved to the OnDeserialized for object created from serialized event
-            // this.doc.ConnectChildsWithParent();
+            this.doc = snapshot;
         }
 
         public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey, UserLight user)
@@ -247,14 +207,21 @@ namespace Main.Core.Domain
             }
         }
 
-        public void DeleteInterview(Guid deletedById)
+        public void DeleteInterview(Guid deletedBy)
         {
-            this.ApplyEvent(
+            if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
+                this.doc.Status == SurveyStatus.Initial)
+            {
+                this.ApplyEvent(
                     new InterviewDeleted()
                     {
-                        InterviewId = this.EventSourceId,
-                        DeletedBy = deletedById,
+                        DeletedBy = deletedBy
                     });
+            }
+            else
+            {
+                throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
+            }
         }
 
         public void AddRemovePropagatedGroup(AutoPropagateCompleteQuestion question, string completeAnswerValue)
@@ -427,6 +394,19 @@ namespace Main.Core.Domain
             ApplyEvent(new NewAssigmentCreated() { Source = source });
         }
 
+        public void UpdateInterviewMetaInfo(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+        {
+            ApplyEvent(new InterviewMetaInfoUpdated()
+                {
+                    FeaturedQuestionsMeta = featuredQuestionsMeta,
+                    ResponsibleId = responsibleId,
+                    StatusId = statusId,
+                    TemplateId = templateId,
+                    Title = title,
+                    PreviousStatusId = doc == null ? SurveyStatus.Unknown.PublicId : doc.Status.PublicId
+                });
+        }
+
         public void ChangeAssignment(UserLight responsible)
         {
             var prevResponsible = this.doc.Responsible;
@@ -470,7 +450,19 @@ namespace Main.Core.Domain
 
         protected void OnNewAssigmentCreated(NewAssigmentCreated e)
         {
-            this.doc = e.Source.Clone() as CompleteQuestionnaireDocument;
+            this.doc = e.Source;
+        }
+
+        protected void OnInterviewMetaInfoUpdated(InterviewMetaInfoUpdated e)
+        {
+            if (doc == null)
+                doc = new CompleteQuestionnaireDocument();
+            doc.PublicKey = this.EventSourceId;
+            doc.Status = SurveyStatus.GetStatusByIdOrDefault(e.StatusId);
+            if (e.ResponsibleId.HasValue)
+                doc.Responsible = new UserLight(e.ResponsibleId.Value, "");
+            doc.TemplateId = e.TemplateId;
+            doc.Title = e.Title;
         }
 
         protected void OnAnswerSet(AnswerSet e)
@@ -493,14 +485,7 @@ namespace Main.Core.Domain
         {
             this.doc.Status = e.Status;
         }
-
-        protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
-        {
-#warning implement proper way of deleting questionnaries
-            this.doc = new CompleteQuestionnaireDocument();
-            this.doc.IsDeleted = true;
-        }
-
+        
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
             this.doc = e.Questionnaire;

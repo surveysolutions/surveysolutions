@@ -66,9 +66,9 @@
       <Project>{9268D360-154C-46C9-9B56-924DE80306A6}</Project>
       <Name>AndroidMain.Core.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNCalc.Tests\AndroidNCalc.Tests.csproj">
+    <ProjectReference Include="..\AndroidNcalc.Tests\AndroidNcalc.Tests.csproj">
       <Project>{9F3A0A7A-471A-43CC-8E12-F465B413623D}</Project>
-      <Name>AndroidNCalc.Tests</Name>
+      <Name>AndroidNcalc.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite.Tests\AndroidNcqrs.Eventing.Storage.SQLite.Tests.csproj">
       <Project>{5DEEE833-95C4-4D28-AAA7-E281FF1569D8}</Project>

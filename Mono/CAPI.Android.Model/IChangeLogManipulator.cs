@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model
 {
@@ -10,7 +11,7 @@ namespace CAPI.Android.Core.Model
         void ReopenDraftRecord(Guid eventSourceId);
 
         IDictionary<Guid, Guid> GetClosedDraftChunksIds();
-        string GetDraftRecordContent(Guid recordId);
+        SyncItem GetDraftRecordContent(Guid recordId);
 
         void CreatePublicRecord(Guid recordId);
         void CleanUpChangeLogByRecordId(Guid recordId);

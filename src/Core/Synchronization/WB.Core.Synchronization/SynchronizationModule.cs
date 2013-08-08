@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.View;
 using Ninject.Modules;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.Implementation.SyncManager;
@@ -30,8 +31,7 @@ namespace WB.Core.Synchronization
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();
             this.Bind<IChunkReader>().To<ReadSideChunkReader>();
-            var incomeStorage=new IncomePackagesRepository(currentFolderPath);
-            this.Bind<IIncomePackagesRepository>().ToConstant(incomeStorage);
+            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("folderPath", currentFolderPath);
         }
     }
 }

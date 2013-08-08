@@ -592,6 +592,7 @@
     <Content Include="Views\HQ\ImportResult.cshtml" />
     <Content Include="Views\HQ\ImportSample.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
+    <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -606,6 +607,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>
@@ -662,6 +667,10 @@
     <ProjectReference Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj">
+      <Project>{60c152be-f926-4289-be28-89207f2c12c7}</Project>
+      <Name>WB.Supervisor.CompleteQuestionnaireDenormalizer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
