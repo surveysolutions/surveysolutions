@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        bool HasQuestion(Guid questionId);
+
         QuestionType GetQuestionType(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
