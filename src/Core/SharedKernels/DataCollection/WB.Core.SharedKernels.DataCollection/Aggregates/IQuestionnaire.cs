@@ -24,5 +24,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions();
 
         IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
+
+        string GetCustomEnablementConditionForQuestion(Guid questionId);
+
+        string GetCustomEnablementConditionForGroup(Guid groupId);
     }
 }
