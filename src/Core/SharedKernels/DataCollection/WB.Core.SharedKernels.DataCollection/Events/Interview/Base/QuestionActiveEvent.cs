@@ -2,11 +2,12 @@
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
-    public abstract class AnswerPassiveEvent : InterviewPassiveEvent
+    public abstract class QuestionActiveEvent : InterviewActiveEvent
     {
         public Guid QuestionId { get; private set; }
 
-        protected AnswerPassiveEvent(Guid questionId)
+        protected QuestionActiveEvent(Guid userId, Guid questionId)
+            : base(userId)
         {
             this.QuestionId = questionId;
         }
