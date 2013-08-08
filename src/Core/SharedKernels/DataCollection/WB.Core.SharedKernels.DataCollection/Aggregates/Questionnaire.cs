@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
 
             return identifiersUsedInExpression
-                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdOrThrow(identifier, questionId, validationExpression))
+                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdResolvingThisIdentifierOrThrow(identifier, questionId, validationExpression))
                 .ToList();
         }
 
@@ -207,11 +207,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             this.ThrowIfQuestionDoesNotExist(questionId);
 
-            return this
-                .GetAllQuestions()
-                .Where(question => this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId))
-                .Select(question => question.PublicKey)
-                .ToList();
+            return Enumerable.ToList(
+                from question in this.GetAllQuestions()
+                where this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId)
+                select question.PublicKey
+            );
         }
 
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
@@ -246,10 +246,65 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return group.ConditionExpression;
         }
 
+        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForGroup(Guid groupId)
+        {
+            string enablementCondition = this.GetCustomEnablementConditionForGroup(groupId);
+
+            return this.GetQuestionsInvolvedInCustomEnablementCondition(enablementCondition);
+        }
+
+        public IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForQuestion(Guid questionId)
+        {
+            string enablementCondition = this.GetCustomEnablementConditionForQuestion(questionId);
+
+            return this.GetQuestionsInvolvedInCustomEnablementCondition(enablementCondition);
+        }
+
+        public IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
+        {
+            this.ThrowIfQuestionDoesNotExist(questionId);
+
+            return Enumerable.ToList(
+                from @group in this.GetAllGroups()
+                let enablementCondition = this.GetCustomEnablementConditionForGroup(@group.PublicKey)
+                where this.DoesCustomEnablementConditionDependOnSpecifiedQuestion(enablementCondition, questionId)
+                select @group.PublicKey
+            );
+        }
+
+        public IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId)
+        {
+            this.ThrowIfQuestionDoesNotExist(questionId);
+
+            return Enumerable.ToList(
+                from question in this.GetAllQuestions()
+                let enablementCondition = this.GetCustomEnablementConditionForQuestion(question.PublicKey)
+                where this.DoesCustomEnablementConditionDependOnSpecifiedQuestion(enablementCondition, questionId)
+                select question.PublicKey
+            );
+        }
+
+
+        private IEnumerable<IGroup> GetAllGroups()
+        {
+            return this.GroupCache.Values;
+        }
 
         private IEnumerable<IQuestion> GetAllQuestions()
         {
             return this.QuestionCache.Values;
+        }
+
+        private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementCondition(string enablementCondition)
+        {
+            if (!IsExpressionDefined(enablementCondition))
+                return Enumerable.Empty<Guid>();
+
+            IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
+
+            return identifiersUsedInExpression
+                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, enablementCondition))
+                .ToList();
         }
 
         private decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
@@ -264,7 +319,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return parsedValue;
         }
 
-        private Guid ParseExpressionIdentifierToExistingQuestionIdOrThrow(string identifier, Guid contextQuestionId, string expression)
+        private Guid ParseExpressionIdentifierToExistingQuestionIdResolvingThisIdentifierOrThrow(string identifier, Guid contextQuestionId, string expression)
         {
             if (IsSpecialThisIdentifier(identifier))
                 return contextQuestionId;
@@ -275,12 +330,30 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
                     identifier, expression));
 
+            this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId);
+
+            return parsedId;
+        }
+
+        private Guid ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier, string expression)
+        {
+            Guid parsedId;
+            if (!Guid.TryParse(identifier, out parsedId))
+                throw new QuestionnaireException(string.Format(
+                    "Identifier '{0}' from expression '{1}' is not a valid guid.",
+                    identifier, expression));
+
+            this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId);
+
+            return parsedId;
+        }
+
+        private void ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(string identifier, string expression, Guid parsedId)
+        {
             if (!this.HasQuestionWithId(parsedId))
                 throw new QuestionnaireException(string.Format(
                     "Identifier '{0}' from expression '{1}' is a valid guid '{2}' but questionnaire has no questions with such id.",
                     identifier, expression, parsedId));
-
-            return parsedId;
         }
 
         private static bool IsSpecialThisIdentifier(string identifier)
@@ -295,11 +368,20 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private bool DoesQuestionCustomValidationDependOnSpecifiedQuestion(Guid questionId, Guid specifiedQuestionId)
         {
-            IEnumerable<Guid> questionsInvolvedInCustomValidation = this.GetQuestionsInvolvedInCustomValidation(questionId);
+            IEnumerable<Guid> involvedQuestions = this.GetQuestionsInvolvedInCustomValidation(questionId);
 
-            bool isSpecifiedQuestionInvolvedInCustomValidation = questionsInvolvedInCustomValidation.Contains(specifiedQuestionId);
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
-            return isSpecifiedQuestionInvolvedInCustomValidation;
+            return isSpecifiedQuestionInvolved;
+        }
+
+        private bool DoesCustomEnablementConditionDependOnSpecifiedQuestion(string enablementCondition, Guid specifiedQuestionId)
+        {
+            IEnumerable<Guid> involvedQuestions = this.GetQuestionsInvolvedInCustomEnablementCondition(enablementCondition);
+
+            bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
+
+            return isSpecifiedQuestionInvolved;
         }
 
         private IGroup GetGroupOrThrow(Guid groupId)
