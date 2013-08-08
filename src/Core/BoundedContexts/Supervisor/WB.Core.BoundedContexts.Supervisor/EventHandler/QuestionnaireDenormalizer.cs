@@ -1,10 +1,10 @@
-﻿using Main.Core.Documents;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
 
-namespace WB.Core.SharedKernels.DataCollection.EventHandler
+namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>
     {

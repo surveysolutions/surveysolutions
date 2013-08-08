@@ -41,43 +41,169 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\EventHandler\UserDenormalizer.cs">
-      <Link>EventHandler\UserDenormalizer.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\IQuestionnaire.cs">
+      <Link>Aggregates\IQuestionnaire.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Implementation\ISampleRecordsAccessor.cs">
-      <Link>Implementation\ISampleRecordsAccessor.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\Questionnaire.cs">
+      <Link>Aggregates\Questionnaire.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Implementation\ITemporaryDataRepositoryAccessor.cs">
-      <Link>Implementation\ITemporaryDataRepositoryAccessor.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerDateTimeQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerDateTimeQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs">
-      <Link>Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Implementation\Services\SampleImportService.cs">
-      <Link>Implementation\Services\SampleImportService.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerNumericQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerNumericQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Implementation\TemporaryDataRepository\FileTemporaryDataRepositoryAccessor.cs">
-      <Link>Implementation\TemporaryDataRepository\FileTemporaryDataRepositoryAccessor.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerSingleOptionQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerSingleOptionQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Services\ISampleImportService.cs">
-      <Link>Services\ISampleImportService.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerTextQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerTextQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\SupervisorBoundedContextModule.cs">
-      <Link>SupervisorBoundedContextModule.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\Base\AnswerQuestionCommand.cs">
+      <Link>Commands\Interview\Base\AnswerQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Views\SampleImport\ImportResult.cs">
-      <Link>Views\SampleImport\ImportResult.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\Base\InterviewCommand.cs">
+      <Link>Commands\Interview\Base\InterviewCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Views\SampleImport\SampleCreationStatus.cs">
-      <Link>Views\SampleImport\SampleCreationStatus.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\CreateInterviewCommand.cs">
+      <Link>Commands\Interview\CreateInterviewCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\Views\SampleImport\TempFileImportData.cs">
-      <Link>Views\SampleImport\TempFileImportData.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs">
+      <Link>Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportQuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\ImportQuestionnaireCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataCollectionSharedKernelModule.cs">
+      <Link>DataCollectionSharedKernelModule.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs">
+      <Link>DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs">
+      <Link>DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\EventHandler\QuestionnaireBrowseItemDenormalizer.cs">
+      <Link>EventHandler\QuestionnaireBrowseItemDenormalizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswerDeclaredInvalid.cs">
+      <Link>Events\Interview\AnswerDeclaredInvalid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\AnswerDeclaredValid.cs">
+      <Link>Events\Interview\AnswerDeclaredValid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\GroupPassiveEvent.cs">
+      <Link>Events\Interview\Base\GroupPassiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\InterviewActiveEvent.cs">
+      <Link>Events\Interview\Base\InterviewActiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\InterviewPassiveEvent.cs">
+      <Link>Events\Interview\Base\InterviewPassiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionActiveEvent.cs">
+      <Link>Events\Interview\Base\QuestionActiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionAnswered.cs">
+      <Link>Events\Interview\Base\QuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\Base\QuestionPassiveEvent.cs">
+      <Link>Events\Interview\Base\QuestionPassiveEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\DateTimeQuestionAnswered.cs">
+      <Link>Events\Interview\DateTimeQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GroupDisabled.cs">
+      <Link>Events\Interview\GroupDisabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GroupEnabled.cs">
+      <Link>Events\Interview\GroupEnabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewCreated.cs">
+      <Link>Events\Interview\InterviewCreated.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewSynchronized.cs">
+      <Link>Events\Interview\InterviewSynchronized.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\MultipleOptionsQuestionAnswered.cs">
+      <Link>Events\Interview\MultipleOptionsQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericQuestionAnswered.cs">
+      <Link>Events\Interview\NumericQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionDisabled.cs">
+      <Link>Events\Interview\QuestionDisabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionEnabled.cs">
+      <Link>Events\Interview\QuestionEnabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SingleOptionQuestionAnswered.cs">
+      <Link>Events\Interview\SingleOptionQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\TextQuestionAnswered.cs">
+      <Link>Events\Interview\TextQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Questionnaire\TemplateImported.cs">
+      <Link>Events\Questionnaire\TemplateImported.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\InterviewException.cs">
+      <Link>Exceptions\InterviewException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireException.cs">
+      <Link>Exceptions\QuestionnaireException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Interview.cs">
+      <Link>Implementation\Aggregates\Interview.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Repositories\IQuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\IQuestionnaireRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
+      <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\ExpressionProcessor.cs">
+      <Link>Implementation\Services\ExpressionProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IdentifierCollector.cs">
+      <Link>Implementation\Services\IdentifierCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IExpressionProcessor.cs">
+      <Link>Implementation\Services\IExpressionProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\FeaturedQuestionItem.cs">
+      <Link>Views\Questionnaire\FeaturedQuestionItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireBrowseInputModel.cs">
+      <Link>Views\Questionnaire\QuestionnaireBrowseInputModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireBrowseItem.cs">
+      <Link>Views\Questionnaire\QuestionnaireBrowseItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireBrowseView.cs">
+      <Link>Views\Questionnaire\QuestionnaireBrowseView.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireBrowseViewFactory.cs">
+      <Link>Views\Questionnaire\QuestionnaireBrowseViewFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireItemInputModel.cs">
+      <Link>Views\Questionnaire\QuestionnaireItemInputModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireItemViewFactory.cs">
+      <Link>Views\Questionnaire\QuestionnaireItemViewFactory.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\packages.config">
+    <None Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Interview.cs.orig">
+      <Link>Implementation\Aggregates\Interview.cs.orig</Link>
+    </None>
+    <None Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
@@ -90,13 +216,21 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
-      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
-      <Name>WB.Core.Synchronization</Name>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
+      <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
+      <Name>AndroidAntlr3.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
+      <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
+      <Name>AndroidNCalc</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
@@ -106,7 +240,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="755ca607-6b50-487f-98a0-34a98973593d" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
