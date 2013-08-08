@@ -76,8 +76,9 @@ sup {
     background-color: #A38F8F;
     border-radius: 2px 2px 2px 2px;
     color: #FFFFFF;
-    padding: 4px 6px;
+    padding: 2px 4px;
     white-space: nowrap;
+    font-size: 80%;
 }
 
 [class^="icon-"],
