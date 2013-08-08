@@ -67,7 +67,6 @@
     <Compile Include="DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionActiveEvent.cs" />
     <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />
@@ -134,10 +133,6 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
-      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
-      <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
