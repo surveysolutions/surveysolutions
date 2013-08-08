@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Guid questionnaireId;
         private long questionnaireVersion;
         private readonly Dictionary<Guid, object> answers = new Dictionary<Guid, object>();
+        private readonly HashSet<Guid> disabledGroups = new HashSet<Guid>();
+        private readonly HashSet<Guid> disabledQuestions = new HashSet<Guid>();
 
         private void Apply(InterviewCreated @event)
         {
@@ -57,6 +59,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(AnswerDeclaredValid @event) {}
 
         private void Apply(AnswerDeclaredInvalid @event) {}
+
+        private void Apply(GroupDisabled @event)
+        {
+            this.disabledGroups.Add(@event.GroupId);
+        }
+
+        private void Apply(GroupEnabled @event)
+        {
+            this.disabledGroups.Remove(@event.GroupId);
+        }
+
+        private void Apply(QuestionDisabled @event)
+        {
+            this.disabledGroups.Add(@event.QuestionId);
+        }
+
+        private void Apply(QuestionEnabled @event)
+        {
+            this.disabledGroups.Remove(@event.QuestionId);
+        }
 
         #endregion
 
