@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
