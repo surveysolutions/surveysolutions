@@ -17,12 +17,12 @@ namespace CAPI.Android.Settings
         /// <summary>
         /// The remote sync node.
         /// </summary>
-        private const string RemoteSyncNode = 
-            "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
+        private const string RemoteSyncNode = "";
+        //  "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
         //"http://192.168.173.1:8000/";
         // "http://217.12.197.135/DEV-Supervisor/";
         
-        // "http://10.0.2.2";  //access to attached computer by cord
+        // "http://10.0.2.2";  //access to hosted computer from emulator
 
         
         #endregion
