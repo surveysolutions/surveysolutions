@@ -20,7 +20,7 @@ namespace Main.Core.Domain
 
     using Ncqrs;
 
-    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
+    public class _CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
         private CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
         
@@ -29,17 +29,17 @@ namespace Main.Core.Domain
             get { return document; }
             set { document = value.Clone() as CompleteQuestionnaireDocument; }
         }
-        public CompleteQuestionnaireAR()
+        public _CompleteQuestionnaireAR()
         {
         }
 
-        public CompleteQuestionnaireAR(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+        public _CompleteQuestionnaireAR(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
             : base(id)
         {
             UpdateInterviewMetaInfo(id, templateId, title, responsibleId, statusId, featuredQuestionsMeta);
         }
 
-        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
+        public _CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
             QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
         {

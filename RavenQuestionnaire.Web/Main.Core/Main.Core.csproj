@@ -213,7 +213,7 @@
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Domain\ClientDeviceAR.cs" />
     <Compile Include="Domain\CollectionAR.cs" />
-    <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
+    <Compile Include="Domain\_CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />

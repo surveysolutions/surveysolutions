@@ -13,10 +13,10 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 namespace Main.Core.Commands.Questionnaire.Completed
 {
     [Serializable]
-    [MapsToAggregateRootMethodOrConstructor(typeof(CompleteQuestionnaireAR), "UpdateInterviewMetaInfo")]
-    public class UpdateInterviewMetaInfoCommand : CommandBase
+    [MapsToAggregateRootMethodOrConstructor(typeof(_CompleteQuestionnaireAR), "UpdateInterviewMetaInfo")]
+    public class _UpdateInterviewMetaInfoCommand : CommandBase
     {
-        public UpdateInterviewMetaInfoCommand(Guid publicKey, Guid templateId, string title, Guid? responsibleId,
+        public _UpdateInterviewMetaInfoCommand(Guid publicKey, Guid templateId, string title, Guid? responsibleId,
                                               Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
             : base(publicKey)
         {

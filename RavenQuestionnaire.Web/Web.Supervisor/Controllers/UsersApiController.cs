@@ -46,10 +46,7 @@ namespace Web.Supervisor.Controllers
             {
                 var input = new InterviewersInputModel(viewerId.Value)
                 {
-                    Orders
-                        =
-                        data
-                            .SortOrder
+                    Orders = data.SortOrder
                 };
                 if (data.Pager != null)
                 {
@@ -68,10 +65,7 @@ namespace Web.Supervisor.Controllers
             var input = new UserListViewInputModel
             {
                 Role = UserRoles.Supervisor,
-                Orders
-                    =
-                    data
-                        .SortOrder
+                Orders = data.SortOrder
             };
 
             if (data.Pager != null)
