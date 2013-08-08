@@ -19,7 +19,7 @@ namespace Core.Supervisor.Denormalizer
     public class SummaryDenormalizer : UserBaseDenormalizer,
                                        IEventHandler<QuestionnaireStatusChanged>,
                                        IEventHandler<QuestionnaireAssignmentChanged>,
-                                       IEventHandler<InterviewDeleted>
+                                       IEventHandler<InterviewDeleted>, IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
@@ -36,26 +36,42 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            if (evnt.Payload.Status.PublicId == evnt.Payload.PreviousStatus.PublicId)
+            HandleChangeStatus(evnt.EventSourceId,evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
+        }
+
+        private void HandleChangeStatus(Guid interviewId, Guid statusId, Guid previousStatus)
+        {
+            if(statusId==previousStatus)
                 return;
+            
+            var questionnaire = this.questionnaires.GetById(interviewId);
 
-            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
-
-            Guid newStatus = evnt.Payload.Status.PublicId;
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
-            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+            var userSummary = this.summaryItem.GetById(summmaryUserId);
 
-            if (summaryUser == null)
+            if (userSummary == null)
             {
                 return;
             }
 
-            this.DecreaseByStatus(summaryUser, evnt.Payload.PreviousStatus.PublicId);
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(interviewId, previousStatus, userSummary);
+          
+            IncreaseByStatus(userSummary, statusId);
 
-            summaryUser.QuestionnaireStatus = newStatus;
+            this.summaryItem.Store(userSummary, summmaryUserId);
+            
+        }
 
-            this.IncreaseByStatus(summaryUser, newStatus);
-            this.summaryItem.Store(summaryUser, summmaryUserId);
+        private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem userSummary)
+        {
+            if (!userSummary.DeletedInterviews.Contains(interviewId))
+            {
+                this.DecreaseByStatus(userSummary, previousStatusId);
+            }
+            else
+            {
+                userSummary.DeletedInterviews.Remove(interviewId);
+            }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
@@ -69,9 +85,10 @@ namespace Core.Supervisor.Denormalizer
 
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
 
-            var summaryUser = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
+            var userSummary = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
 
-            if (evnt.Payload.PreviousResponsible != null && summaryUser.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
+
+            if (evnt.Payload.PreviousResponsible != null && userSummary.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
             {
                 var summaryPrevUserId = evnt.Payload.PreviousResponsible.Id.Combine(questionnaire.TemplateId);
                 var summaryPrevUser = this.summaryItem.GetById(summaryPrevUserId);
@@ -79,21 +96,24 @@ namespace Core.Supervisor.Denormalizer
                 this.DecreaseByStatus(summaryPrevUser, questionnaire.Status.PublicId);
                 this.summaryItem.Store(summaryPrevUser, summaryPrevUserId);
             }
-            this.IncreaseByStatus(summaryUser, questionnaire.Status.PublicId);
-            this.summaryItem.Store(summaryUser, summaryUserId);
+            this.IncreaseByStatus(userSummary, questionnaire.Status.PublicId);
+            this.summaryItem.Store(userSummary, summaryUserId);
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
-            var summaryUser = this.summaryItem.GetById(summmaryUserId);
+            var userSummary = this.summaryItem.GetById(summmaryUserId);
 
-            if (summaryUser == null)
+            if (userSummary == null)
                 return;
 
-            this.DecreaseByStatus(summaryUser, summaryUser.QuestionnaireStatus);
-            this.summaryItem.Store(summaryUser, summmaryUserId);
+            this.DecreaseByStatus(userSummary, questionnaire.Status.PublicId);
+
+            userSummary.DeletedInterviews.Add(evnt.EventSourceId);
+            
+            this.summaryItem.Store(userSummary, summmaryUserId);
         }
 
         private void DecreaseByStatus(SummaryItem summary, Guid statusId)
@@ -131,9 +151,6 @@ namespace Core.Supervisor.Denormalizer
                 responsibleSupervisorName = user.Supervisor.Name;
             }
 
-            var status = questionnaire.Status.PublicId;
-            if (status == SurveyStatus.Unknown.PublicId && isUserIsSupervisor)
-                status = SurveyStatus.Unassign.PublicId;
             return
                 new SummaryItem()
                     {
@@ -142,10 +159,14 @@ namespace Core.Supervisor.Denormalizer
                         ResponsibleSupervisorId = responsibleSupervisorId,
                         ResponsibleSupervisorName = responsibleSupervisorName,
                         ResponsibleId = user.PublicKey,
-                        ResponsibleName = user.UserName,
-                        QuestionnaireStatus = status
+                        ResponsibleName = user.UserName
                     };
 
+        }
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
         }
     }
 }

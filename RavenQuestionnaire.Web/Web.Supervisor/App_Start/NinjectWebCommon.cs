@@ -17,6 +17,7 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
+using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
@@ -116,6 +117,7 @@ namespace Web.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
+                new SupervisorBoundedContextModule(),
                 new CompleteQuestionnarieDenormalizerModule());
 
 
@@ -131,7 +133,7 @@ namespace Web.Supervisor.App_Start
 
 #warning dirty index registrations
             var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
-            indexccessor.RegisterIndexesFormAssembly(typeof (Supervisor_Reports_SurveysAndStatuses_GroupByTeamMember).Assembly);
+            indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

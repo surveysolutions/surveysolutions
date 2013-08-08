@@ -70,7 +70,7 @@ namespace CAPI.Android.Syncronization
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             pullDataProcessor = new PullDataProcessor(changelog, commandService);
-            pushDataProcessor = new PushDataProcessor(changelog, commandService);
+            pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
@@ -129,8 +129,9 @@ namespace CAPI.Android.Syncronization
                     //save last handled item
                     lastSequence = chunckId.Key.ToString();
                 }
-                catch
+                catch(Exception e)
                 {
+                    logger.Error(string.Format("chunk {0} wasn't processed",chunckId), e);
                     //in case of exception we stop pulling but without exception 
                     //in order to move forward and proccess uploaded data
                     //but in case of fault we do not request next item
@@ -160,9 +161,9 @@ namespace CAPI.Android.Syncronization
                     {
                         ExitIfCanceled();
 
-                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription, ct);
+                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription.Content, ct);
                         //fix method
-                        pushDataProcessor.DeleteInterview(chunckDescription.Id, chunckDescription.ItemsContainer[0].Id);
+                        pushDataProcessor.DeleteInterview(chunckDescription.EventSourceId);
 
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;

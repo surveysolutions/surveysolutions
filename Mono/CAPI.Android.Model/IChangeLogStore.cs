@@ -1,6 +1,7 @@
 using System;
 using Main.Core.Events;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model
 {

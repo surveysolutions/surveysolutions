@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
+            userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
@@ -31,12 +32,13 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                new Interview(questionnaireId));
+                new Interview(questionnaireId, userId));
 
         It should_throw_interview_exception = () =>
             exception.ShouldBeOfType<InterviewException>();
 
         private static Exception exception;
         private static Guid questionnaireId;
+        private static Guid userId;
     }
 }

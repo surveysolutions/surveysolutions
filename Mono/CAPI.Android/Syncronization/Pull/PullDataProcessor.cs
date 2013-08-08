@@ -128,13 +128,11 @@ namespace CAPI.Android.Syncronization.Pull
                 var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
                 syncCacher.SaveItem(item.Id, item.Content);
 
-                //apply meta to make chanages on dashboard
-                //think about more elegant solution
-                //waiting for interview and template separation
-                var dashboard = new DashboardDenormalizer(CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                                          CapiApplication.Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
+                commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
+                                                                          metaInfo.Title, metaInfo.ResponsibleId,
+                                                                          metaInfo.Status.Id,
+                                                                          metaInfo.FeaturedQuestionsMeta.ToList()));
 
-                dashboard.ProcessInterviewMeta(metaInfo);
 
             }
             

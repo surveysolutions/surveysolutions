@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.DenormalizerStorageItem
+﻿using System.Collections.Generic;
+
+namespace Core.Supervisor.DenormalizerStorageItem
 {
     using System;
 
@@ -15,6 +17,7 @@
             this.InitialCount = 0;
             this.RedoCount = 0;
             this.TotalCount = 0;
+            this.DeletedInterviews = new HashSet<Guid>();
         }
 
         public int UnassignedCount { get; set; }
@@ -36,7 +39,8 @@
         public string TemplateName { get; set; }
 
         public Guid ResponsibleId { get; set; }
-
+        
+        public HashSet<Guid> DeletedInterviews { get; set; }
         /// <summary>
         /// Name of resposible, which is a supervisor or an interviewer.
         /// </summary>
@@ -48,7 +52,5 @@
         /// Name of supervisor (which is a team lead), needed for team-based reports.
         /// </summary>
         public string ResponsibleSupervisorName { get; set; }
-
-        public Guid QuestionnaireStatus { get; set; }
     }
 }

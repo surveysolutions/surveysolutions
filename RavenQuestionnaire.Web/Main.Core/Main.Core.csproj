@@ -161,6 +161,7 @@
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
@@ -453,6 +454,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Questionnaire\Completed\InterviewDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <SubType>Code</SubType>
     </Compile>
