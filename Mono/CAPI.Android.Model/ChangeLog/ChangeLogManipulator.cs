@@ -29,13 +29,16 @@ namespace CAPI.Android.Core.Model.ChangeLog
             fileChangeLogStore = changeLogStore;
         }
 
-        public IDictionary<Guid, Guid> GetClosedDraftChunksIds()
+        public IList<ChangeLogShortRecord> GetClosedDraftChunksIds()
         {
-            var records= draftChangeLog.Filter(c => c.End != null).ToList();
-            return records.ToDictionary(d => Guid.Parse(d.Id), d => Guid.Parse(d.EventSourceId));
+            return
+                draftChangeLog.Filter(c => c.End != null)
+                              .Select(d => new ChangeLogShortRecord(Guid.Parse(d.Id), Guid.Parse(d.EventSourceId)))
+                              .ToList();
+
         }
 
-        public SyncItem GetDraftRecordContent(Guid recordId)
+        public string GetDraftRecordContent(Guid recordId)
         {
             return fileChangeLogStore.GetChangesetContent(recordId);
         }
