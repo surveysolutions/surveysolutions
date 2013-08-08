@@ -38,5 +38,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
         IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions();
+
+        IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions();
     }
 }
