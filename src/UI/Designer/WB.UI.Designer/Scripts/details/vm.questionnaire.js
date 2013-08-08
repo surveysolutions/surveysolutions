@@ -143,6 +143,7 @@
                 datacontext.groups.add(group);
                 datacontext.questionnaire.childrenID.push({ type: group.type(), id: group.id() });
                 chapters.push(group);
+                group.children.id = group.id();
                 router.navigateTo(group.getHref());
                 calcStatistics();
             },
@@ -312,7 +313,7 @@
                             question.commit();
                         },
                         error: function(d) {
-                            isOutputVisible(true);
+                            showError(d);
                             question.canUpdate(true);
                         }
                     });
@@ -331,7 +332,7 @@
                             questionnaire.canUpdate(true);
                         },
                         error: function(d) {
-                            isOutputVisible(true);
+                            showError(d);
                             questionnaire.canUpdate(true);
                         }
                     });
@@ -353,6 +354,7 @@
                 var fromId = arg.sourceParent.id;
                 var toId = arg.targetParent.id;
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
+                var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
 
@@ -362,13 +364,19 @@
                     return;
                 }
 
-                if (isDropedInChapter && moveItemType == "question") {
+                if (isDropedOutsideAnyChapter && moveItemType == "question") {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveQuestionOutsideGroup);
                     return;
                 }
                 var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
+
+                if (target.isNew()) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveIntoUnsavedItem);
+                    return;
+                }
 
                 if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
                     arg.cancelDrop = true;
@@ -451,8 +459,6 @@
                         }
                     }
                 };
-                
-
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {

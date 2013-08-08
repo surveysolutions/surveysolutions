@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO
+namespace WB.Core.BoundedContexts.Supervisor.Views.SampleImport
 {
     public class ImportResult
     {

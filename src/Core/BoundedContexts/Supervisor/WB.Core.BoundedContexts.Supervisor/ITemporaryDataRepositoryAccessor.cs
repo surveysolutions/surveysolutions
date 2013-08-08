@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors
+﻿namespace WB.Core.BoundedContexts.Supervisor
 {
     public interface ITemporaryDataRepositoryAccessor
     {

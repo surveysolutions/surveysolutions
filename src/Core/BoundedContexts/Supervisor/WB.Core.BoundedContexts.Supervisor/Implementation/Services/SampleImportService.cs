@@ -1,36 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CsvHelper;
-using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events;
-using Main.Core.Events.User;
-using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.DTO;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.SampleDataReaders;
-using WB.Core.SharedKernels.DataCollection.Services.SampleImport.TemporaryDataAccessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Core.SharedKernels.DataCollection.Services
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 {
-    public class SampleImportService : ISampleImportService
+    internal class SampleImportService : ISampleImportService
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;

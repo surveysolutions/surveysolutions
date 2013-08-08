@@ -93,7 +93,7 @@ namespace WB.Core.Synchronization.Tests
         }
         
 
-        private ReadSideChunkWriter CreateRavenChunkWriter(IQuerableReadSideRepositoryWriter<SynchronizationDelta> writeStorage)
+        private ReadSideChunkWriter CreateRavenChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> writeStorage)
         {
             return new ReadSideChunkWriter(writeStorage);
         }
