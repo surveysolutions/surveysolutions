@@ -127,6 +127,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
         }
 
+        public bool HasQuestion(Guid questionId)
+        {
+            return this.GetQuestion(questionId) != null;
+        }
+
         public QuestionType GetQuestionType(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -402,7 +407,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private void ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(string identifier, string expression, Guid parsedId)
         {
-            if (!this.HasQuestionWithId(parsedId))
+            if (!this.HasQuestion(parsedId))
                 throw new QuestionnaireException(string.Format(
                     "Identifier '{0}' from expression '{1}' is a valid guid '{2}' but questionnaire has no questions with such id.",
                     identifier, expression, parsedId));
@@ -451,11 +456,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.GroupCache.ContainsKey(groupId)
                 ? this.GroupCache[groupId]
                 : null;
-        }
-
-        private bool HasQuestionWithId(Guid questionId)
-        {
-            return this.GetQuestion(questionId) != null;
         }
 
         private void ThrowIfQuestionDoesNotExist(Guid questionId)
