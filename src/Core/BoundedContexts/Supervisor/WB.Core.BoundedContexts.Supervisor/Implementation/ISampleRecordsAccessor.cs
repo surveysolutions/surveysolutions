@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WB.Core.BoundedContexts.Supervisor
+namespace WB.Core.BoundedContexts.Supervisor.Implementation
 {
     public interface ISampleRecordsAccessor
     {
