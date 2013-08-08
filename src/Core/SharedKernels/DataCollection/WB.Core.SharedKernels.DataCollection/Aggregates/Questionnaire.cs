@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         public IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions()
         {
-            var questionsWithInvalidValidationExpression = new List<Guid>();
+            var invalidQuestions = new List<Guid>();
 
             foreach (IQuestion question in this.GetAllQuestions())
             {
@@ -189,7 +189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 }
                 catch (Exception exception)
                 {
-                    questionsWithInvalidValidationExpression.Add(question.PublicKey);
+                    invalidQuestions.Add(question.PublicKey);
 
                     this.Logger.Info(
                         string.Format(
@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 }
             }
 
-            return questionsWithInvalidValidationExpression;
+            return invalidQuestions;
         }
 
         public IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
@@ -282,6 +282,58 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 where this.DoesCustomEnablementConditionDependOnSpecifiedQuestion(enablementCondition, questionId)
                 select question.PublicKey
             );
+        }
+
+        public IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions()
+        {
+            var invalidGroups = new List<Guid>();
+
+            foreach (IGroup @group in this.GetAllGroups())
+            {
+                try
+                {
+                    this.GetQuestionsInvolvedInCustomEnablementConditionForGroup(@group.PublicKey);
+                }
+                catch (Exception exception)
+                {
+                    invalidGroups.Add(@group.PublicKey);
+
+                    this.Logger.Info(
+                        string.Format(
+                            "Enablement condition '{0}' for group '{1}' treated invalid " +
+                            "because exception occurred when tried to determine questions involved in enablement condition.",
+                            @group.ConditionExpression, @group.PublicKey),
+                        exception);
+                }
+            }
+
+            return invalidGroups;
+        }
+
+        public IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions()
+        {
+            var invalidQuestions = new List<Guid>();
+
+            foreach (IQuestion question in this.GetAllQuestions())
+            {
+                try
+                {
+                    this.GetQuestionsInvolvedInCustomEnablementConditionForQuestion(question.PublicKey);
+                }
+                catch (Exception exception)
+                {
+                    invalidQuestions.Add(question.PublicKey);
+
+                    this.Logger.Info(
+                        string.Format(
+                            "Enablement condition '{0}' for question '{1}' treated invalid " +
+                            "because exception occurred when tried to determine questions involved in enablement condition.",
+                            question.ConditionExpression, question.PublicKey),
+                        exception);
+                }
+            }
+
+            return invalidQuestions;
         }
 
 
