@@ -72,6 +72,12 @@ sup {
     width: 100px;
 }
 
+.page-break {
+    page-break-after: always;
+    page-break-inside: auto;
+    page-break-before: always;
+}
+
 .variable-name {
     background-color: #A38F8F;
     border-radius: 2px 2px 2px 2px;
@@ -79,23 +85,4 @@ sup {
     padding: 2px 4px;
     white-space: nowrap;
     font-size: 80%;
-}
-
-[class^="icon-"],
-[class*=" icon-"] {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-top: 1px;
-  *margin-right: .3em;
-  line-height: 14px;
-  vertical-align: text-top;
-  background-image: url("images/glyphicons-halflings.png");
-  background-position: 14px 14px;
-  background-repeat: no-repeat;
-}
-
-
-.icon-warning-sign {
-  background-position: -144px -120px;
 }
