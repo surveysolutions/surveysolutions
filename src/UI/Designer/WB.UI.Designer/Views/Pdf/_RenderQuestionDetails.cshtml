@@ -4,11 +4,14 @@
 @using WB.UI.Designer.Views.Questionnaire.Pdf
 <div class="question no-page-break">
     <span>
-        @Model.ItemNumber &nbsp;&nbsp; <i>@Model.Variable</i>&nbsp;&nbsp; @Model.Title 
+        @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.Variable</span>
         @if (Model.HasCodition)
         {
-            <i class="icon-warning-sign"></i>
-            <sup>@Model.Condition</sup>
+            <a href="#@("c" + Model.ItemNumber)">[c @Model.ItemNumber]</a>
+        }
+        @if (!string.IsNullOrEmpty(Model.ValidationExpression))
+        {
+            <a href="#@("v" + Model.ItemNumber)">[v @Model.ItemNumber]</a>
         }
     </span>
 
