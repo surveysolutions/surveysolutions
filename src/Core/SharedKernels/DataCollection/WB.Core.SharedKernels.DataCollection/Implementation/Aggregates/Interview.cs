@@ -123,72 +123,84 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
-            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
+            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
+                out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
+                out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
 
-            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
-            {
-                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
-            }
+            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
+            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
 
-            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
-            {
-                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
-            }
+            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
+            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
+            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
+            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
         public void AnswerNumericQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
-            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
+            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
+                out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
+                out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, answerTime, answer));
 
-            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
-            {
-                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
-            }
+            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
+            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
 
-            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
-            {
-                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
-            }
+            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
+            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
+            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
+            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
-            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
+            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
+                out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
+                out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, answerTime, answer));
 
-            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
-            {
-                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
-            }
+            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
+            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
 
-            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
-            {
-                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
-            }
+            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
+            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
+            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
+            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal selectedValue)
@@ -196,49 +208,57 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
-            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
+            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, selectedValue, questionnaire,
+                out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, selectedValue, questionnaire,
+                out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedValue));
 
-            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
-            {
-                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
-            }
+            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
+            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
 
-            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
-            {
-                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
-            }
+            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
+            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
+            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
+            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal[] selectedValues)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
-            this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
-            ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
-            IEnumerable<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
+
+            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, selectedValues, questionnaire,
+                out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, selectedValues, questionnaire,
+                out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
 
-            foreach (Guid answerDeclaredValidId in answersDeclaredValid)
-            {
-                this.ApplyEvent(new AnswerDeclaredValid(answerDeclaredValidId));
-            }
+            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
+            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
 
-            foreach (Guid answerDeclaredInvalidId in answersDeclaredInvalid)
-            {
-                this.ApplyEvent(new AnswerDeclaredInvalid(answerDeclaredInvalidId));
-            }
+            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
+            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
+            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
+            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
 
@@ -273,7 +293,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     questionId, questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
         }
 
-        private void ThrowIfValueIsNotOneOfAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal value)
+        private static void ThrowIfValueIsNotOneOfAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal value)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
@@ -284,7 +304,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     questionId, value, JoinDecimalsWithComma(availableValues)));
         }
 
-        private void ThrowIfSomeValuesAreNotFromAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal[] values)
+        private static void ThrowIfSomeValuesAreNotFromAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal[] values)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
@@ -311,8 +331,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Guid questionId)
         {
-            bool questionIsDisabled = this.disabledQuestions.Contains(questionId);
-            if (questionIsDisabled)
+            if (this.IsQuestionDisabled(questionId))
                 throw new InterviewException(string.Format(
                     "Question '{1}' is disabled by it's following enablement condition:{0}{2}",
                     Environment.NewLine, questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId)));
@@ -320,17 +339,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Guid> parentGroups = questionnaire.GetAllParentGroupsForQuestion(questionId);
             foreach (Guid parentGroupId in parentGroups)
             {
-                bool groupIsDisabled = this.disabledGroups.Contains(parentGroupId);
-                if (groupIsDisabled)
+                if (this.IsGroupDisabled(parentGroupId))
                     throw new InterviewException(string.Format(
                         "Question '{1}' is disabled because parent group '{2}' is disabled by it's following enablement condition:{0}{3}",
                         Environment.NewLine, questionId, parentGroupId, questionnaire.GetCustomEnablementConditionForGroup(parentGroupId)));
             }
         }
 
+
         private void PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(
             Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
-            out IEnumerable<Guid> answersDeclaredValid, out IEnumerable<Guid> answersDeclaredInvalid)
+            out List<Guid> answersDeclaredValid, out List<Guid> answersDeclaredInvalid)
         {
             bool? currentAnswerValidationResult
                 = this.PerformCustomValidationOfQuestionBeingAnswered(questionBeingAnsweredId, answerGivenForQuestionBeingAnswered, questionnaire);
@@ -344,12 +363,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 out dependentAnswersDeclaredValid, out dependentAnswersDeclaredInvalid);
 
             answersDeclaredValid = wasCurrentAnswerDeclaredValid
-                ? Enumerable.Concat(new[] {questionBeingAnsweredId}, dependentAnswersDeclaredValid)
-                : dependentAnswersDeclaredValid;
+                ? new List<Guid> { questionBeingAnsweredId }
+                : new List<Guid>();
+            answersDeclaredValid.AddRange(dependentAnswersDeclaredValid);
 
             answersDeclaredInvalid = wasCurrentAnswerDeclaredInvalid
-                ? Enumerable.Concat(new[] {questionBeingAnsweredId}, dependentAnswersDeclaredInvalid)
-                : dependentAnswersDeclaredInvalid;
+                ? new List<Guid> { questionBeingAnsweredId }
+                : new List<Guid>();
+            answersDeclaredInvalid.AddRange(dependentAnswersDeclaredInvalid);
         }
 
         private bool? PerformCustomValidationOfQuestionBeingAnswered(
@@ -396,35 +417,144 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!questionnaire.IsCustomValidationDefined(questionToValidateId))
                 return true;
 
-            IEnumerable<Guid> questionsInvolvedInCustomValidation = questionnaire.GetQuestionsInvolvedInCustomValidation(questionToValidateId);
+            IEnumerable<Guid> involvedQuestions = questionnaire.GetQuestionsInvolvedInCustomValidation(questionToValidateId);
 
-            bool someOfAnswersNeededForCustomValidationAreNotDefined
-                = questionsInvolvedInCustomValidation
-                    .Any(questionId => !this.IsAnswerDefined(questionId) && questionId != questionBeingAnsweredId);
+            bool someOfNeededAnswersAreNotDefined
+                = involvedQuestions.Any(questionId => !this.IsAnswerDefined(questionId) && questionId != questionBeingAnsweredId);
 
-            if (someOfAnswersNeededForCustomValidationAreNotDefined)
+            if (someOfNeededAnswersAreNotDefined)
                 return null;
 
-            Dictionary<Guid, object> answersInvolvedInCustomValidation
+            Dictionary<Guid, object> involvedAnswers
                 = this.GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
-                    questionsInvolvedInCustomValidation, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+                    involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
 
             string validationExpression = questionnaire.GetCustomValidationExpression(questionToValidateId);
 
-            return this.EvaluateValidationExpression(validationExpression, questionBeingAnsweredId, answersInvolvedInCustomValidation);
+            return this.EvaluateValidationExpression(validationExpression, questionBeingAnsweredId, involvedAnswers);
         }
 
-        private bool EvaluateValidationExpression(string expression, Guid contextQuestionId, Dictionary<Guid, object> involvedAnswers)
+
+        private void DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(
+            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
+            out List<Guid> groupsToBeDisabled, out List<Guid> groupsToBeEnabled)
         {
-            return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
-                getValueForIdentifier: identifier => involvedAnswers[MapExpressionIdentifierToQuestionId(contextQuestionId, identifier)]);
+            groupsToBeDisabled = new List<Guid>();
+            groupsToBeEnabled = new List<Guid>();
+
+            IEnumerable<Guid> dependentGroups = questionnaire.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBeingAnsweredId);
+
+            foreach (Guid dependentGroupId in dependentGroups)
+            {
+                bool? enablementState = this.DetermineCustomEnablementStateOfGroup(
+                    dependentGroupId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+
+                bool shouldGroupBeDisabled = enablementState == false;
+                bool shouldGroupBeEnabled = enablementState == true;
+
+                if (shouldGroupBeDisabled && !this.IsGroupDisabled(dependentGroupId))
+                {
+                    groupsToBeDisabled.Add(dependentGroupId);
+                }
+
+                if (shouldGroupBeEnabled && this.IsGroupDisabled(dependentGroupId))
+                {
+                    groupsToBeEnabled.Add(dependentGroupId);
+                }
+            }
         }
 
-        private static Guid MapExpressionIdentifierToQuestionId(Guid contextQuestionId, string identifier)
+        private void DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(
+            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
+            out List<Guid> questionsToBeDisabled, out List<Guid> questionsToBeEnabled)
         {
-            return identifier.ToLower() == "this"
-                ? contextQuestionId
-                : Guid.Parse(identifier);
+            questionsToBeDisabled = new List<Guid>();
+            questionsToBeEnabled = new List<Guid>();
+
+            IEnumerable<Guid> dependentQuestions = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBeingAnsweredId);
+
+            foreach (Guid dependentQuestionId in dependentQuestions)
+            {
+                bool? enablementState = this.DetermineCustomEnablementStateOfQuestion(
+                    dependentQuestionId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+
+                bool shouldQuestionBeDisabled = enablementState == false;
+                bool shouldQuestionBeEnabled = enablementState == true;
+
+                if (shouldQuestionBeDisabled && !this.IsQuestionDisabled(dependentQuestionId))
+                {
+                    questionsToBeDisabled.Add(dependentQuestionId);
+                }
+
+                if (shouldQuestionBeEnabled && this.IsQuestionDisabled(dependentQuestionId))
+                {
+                    questionsToBeEnabled.Add(dependentQuestionId);
+                }
+            }
+        }
+
+        private bool? DetermineCustomEnablementStateOfGroup(Guid groupId,
+            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        {
+            IEnumerable<Guid> involvedQuestions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForGroup(groupId);
+
+            string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(groupId);
+
+            return this.DetermineCustomEnablementState(enablementCondition,
+                involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+        }
+
+        private bool? DetermineCustomEnablementStateOfQuestion(Guid questionId,
+            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        {
+            IEnumerable<Guid> involvedQuestions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForQuestion(questionId);
+
+            string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(questionId);
+
+            return this.DetermineCustomEnablementState(enablementCondition,
+                involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+        }
+
+        private bool? DetermineCustomEnablementState(string enablementCondition, IEnumerable<Guid> involvedQuestions,
+            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        {
+            bool someOfNeededAnswersAreNotDefined
+                = involvedQuestions.Any(questionId => !this.IsAnswerDefined(questionId) && questionId != questionBeingAnsweredId);
+
+            if (someOfNeededAnswersAreNotDefined)
+                return null;
+
+            Dictionary<Guid, object> involvedAnswers
+                = this.GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
+                    involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+
+            return this.EvaluateEnablementCondition(enablementCondition, involvedAnswers);
+        }
+
+
+        private bool EvaluateValidationExpression(string validationExpression, Guid contextQuestionId, Dictionary<Guid, object> involvedAnswers)
+        {
+            return this.ExpressionProcessor.EvaluateBooleanExpression(validationExpression,
+                getValueForIdentifier: identifier => involvedAnswers[GetQuestionIdByExpressionIdentifierIncludingThis(identifier, contextQuestionId)]);
+        }
+
+        private bool EvaluateEnablementCondition(string enablementCondition, Dictionary<Guid, object> involvedAnswers)
+        {
+            return this.ExpressionProcessor.EvaluateBooleanExpression(enablementCondition,
+                getValueForIdentifier: identifier => involvedAnswers[GetQuestionIdByExpressionIdentifierExcludingThis(identifier)]);
+        }
+
+        private static Guid GetQuestionIdByExpressionIdentifierIncludingThis(string identifier, Guid contextQuestionId)
+        {
+            if (identifier.ToLower() == "this")
+                return contextQuestionId;
+
+            return GetQuestionIdByExpressionIdentifierExcludingThis(identifier);
+        }
+
+        private static Guid GetQuestionIdByExpressionIdentifierExcludingThis(string identifier)
+        {
+            return Guid.Parse(identifier);
         }
 
         private Dictionary<Guid, object> GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
@@ -443,6 +573,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questions.ToDictionary(
                 questionId => questionId,
                 questionId => this.GetAnswerForQuestionOrThrow(questionId));
+        }
+
+        private bool IsGroupDisabled(Guid groupId)
+        {
+            return this.disabledGroups.Contains(groupId);
+        }
+
+        private bool IsQuestionDisabled(Guid questionId)
+        {
+            return this.disabledQuestions.Contains(questionId);
         }
 
         private object GetAnswerForQuestionOrThrow(Guid questionId)
