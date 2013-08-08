@@ -105,9 +105,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
         {
             var doc = _documentStorage.GetById(publicKey);
-        /*    if (doc == null || doc.IsRestored)
-                return doc;
-            _projectionStorage.RestoreProjection(doc);*/
             return doc;
         }
 

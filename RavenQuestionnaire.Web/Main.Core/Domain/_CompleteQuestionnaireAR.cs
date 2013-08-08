@@ -73,7 +73,7 @@ namespace Main.Core.Domain
                     });
         }
 
-        public CompleteQuestionnaireAR(Guid interviewId, QuestionnaireDocument questionnaire, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
+        public _CompleteQuestionnaireAR(Guid interviewId, QuestionnaireDocument questionnaire, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
             : this(interviewId, questionnaire, creator)
         {
             var clock = NcqrsEnvironment.Get<IClock>();

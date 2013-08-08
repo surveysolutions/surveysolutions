@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -94,6 +95,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsHaveInvalidCustomValidationExpression(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
+        }
+
+        public Interview(InterviewSynchronizationDto sycnhronizedInterview)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(sycnhronizedInterview.QuestionnaireId);
+            ThrowIfSomeQuestionsHaveInvalidCustomValidationExpression(questionnaire, questionnaireId);
+            this.ApplyEvent(new InterviewSynchronized(sycnhronizedInterview.UserId,
+                                                      sycnhronizedInterview.QuestionnaireId,
+                                                      sycnhronizedInterview.StatusId, questionnaire.Version,
+                                                      sycnhronizedInterview.Answers));
         }
 
 

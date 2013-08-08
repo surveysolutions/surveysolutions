@@ -75,6 +75,9 @@ namespace CAPI.Android.Syncronization.Pull
                 case SyncItemType.File:
                     ExecuteFile(item);
                     break;
+                case SyncItemType.Template:
+                    ExecuteTemplate(item);
+                    break;
                 default: break;
             }
         
@@ -144,6 +147,13 @@ namespace CAPI.Android.Syncronization.Pull
                 commandService.Execute(new CreateNewAssigment(questionnarieContent));    
             }
             
+        }
+
+        private void ExecuteTemplate(SyncItem item)
+        {
+            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
+            var template = JsonUtils.GetObject<QuestionnaireDocument>(content);
+            commandService.Execute(new ImportQuestionnaireCommand(null, template));
         }
     }
 }
