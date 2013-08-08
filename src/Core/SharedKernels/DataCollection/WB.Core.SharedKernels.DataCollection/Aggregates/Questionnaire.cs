@@ -28,6 +28,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private Dictionary<Guid, IQuestion> questionCache = null;
+        private Dictionary<Guid, IGroup> groupCache = null;
+
+        protected internal void OnTemplateImported(TemplateImported e)
+        {
+            this.innerDocument = e.Source;
+            this.questionCache = null;
+            this.groupCache = null;
+        }
 
         private Dictionary<Guid, IQuestion> QuestionCache
         {
@@ -42,10 +50,17 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             }
         }
 
-        protected internal void OnTemplateImported(TemplateImported e)
+        private Dictionary<Guid, IGroup> GroupCache
         {
-            this.innerDocument = e.Source;
-            this.questionCache = null;
+            get
+            {
+                return this.groupCache ?? (this.groupCache
+                    = this.innerDocument
+                        .Find<IGroup>(_ => true)
+                        .ToDictionary(
+                            group => group.PublicKey,
+                            group => group));
+            }
         }
 
         #endregion
@@ -199,6 +214,38 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .ToList();
         }
 
+        public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            this.innerDocument.ConnectChildsWithParent();
+
+            var parentGroups = new List<Guid>();
+
+            IComposite parent = question.GetParent();
+            while (parent != innerDocument)
+            {
+                parentGroups.Add(parent.PublicKey);
+                parent = parent.GetParent();
+            }
+
+            return parentGroups;
+        }
+
+        public string GetCustomEnablementConditionForQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return question.ConditionExpression;
+        }
+
+        public string GetCustomEnablementConditionForGroup(Guid groupId)
+        {
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            return group.ConditionExpression;
+        }
+
 
         private IEnumerable<IQuestion> GetAllQuestions()
         {
@@ -253,6 +300,23 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             bool isSpecifiedQuestionInvolvedInCustomValidation = questionsInvolvedInCustomValidation.Contains(specifiedQuestionId);
 
             return isSpecifiedQuestionInvolvedInCustomValidation;
+        }
+
+        private IGroup GetGroupOrThrow(Guid groupId)
+        {
+            IGroup group = this.GetGroup(groupId);
+
+            if (group == null)
+                throw new QuestionnaireException(string.Format("Group with id '{0}' is not found.", groupId));
+
+            return group;
+        }
+
+        private IGroup GetGroup(Guid groupId)
+        {
+            return this.GroupCache.ContainsKey(groupId)
+                ? this.GroupCache[groupId]
+                : null;
         }
 
         private bool HasQuestionWithId(Guid questionId)
