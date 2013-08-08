@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataRepository;
 using WB.Core.BoundedContexts.Supervisor.Services;

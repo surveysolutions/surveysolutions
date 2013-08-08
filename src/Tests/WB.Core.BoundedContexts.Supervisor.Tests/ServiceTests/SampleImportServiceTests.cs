@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
