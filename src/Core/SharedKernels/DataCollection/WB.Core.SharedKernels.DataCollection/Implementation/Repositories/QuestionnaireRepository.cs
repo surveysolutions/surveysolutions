@@ -25,7 +25,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
-            return this.GetQuestionnaireImpl(id, version);
+            IQuestionnaire historicalQuestionnaire = this.GetQuestionnaireImpl(id, version);
+
+            if (historicalQuestionnaire.Version != version)
+                return null;
+
+            return historicalQuestionnaire;
         }
 
         private IQuestionnaire GetQuestionnaireImpl(Guid id, long? version = null)
