@@ -82,6 +82,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(AnswerCommented @event) {}
 
+        private void Apply(FlagSetToAnswer @event) {}
+
+        private void Apply(FlagRemovedFromAnswer @event) {}
+
         #endregion
 
         #region Dependencies
@@ -276,6 +280,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, comment));
+        }
+
+        public void SetFlagToAnswer(Guid userId, Guid questionId)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
+
+            this.ApplyEvent(new FlagSetToAnswer(userId, questionId));
+        }
+
+        public void RemoveFlagFromAnswer(Guid userId, Guid questionId)
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
+
+            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId));
         }
 
 
