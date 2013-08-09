@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        bool HasQuestion(Guid questionId);
+
         QuestionType GetQuestionType(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
@@ -30,5 +32,17 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
+
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForGroup(Guid groupId);
+
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions();
+
+        IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions();
     }
 }
