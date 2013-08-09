@@ -124,6 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(questionnaire, questionnaireId);
             ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
             ThrowIfSomeQuestionsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
+            ThrowIfSomePropagatingQuestionsReferToNotExistingGroups(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
@@ -411,6 +412,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         Environment.NewLine,
                         invalidQuestions.Select(questionId
                             => string.Format("{0} : {1}", questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId))))));
+        }
+
+        private static void ThrowIfSomePropagatingQuestionsReferToNotExistingGroups(IQuestionnaire questionnaire, Guid questionnaireId)
+        {
+            IEnumerable<Guid> invalidQuestions = questionnaire.GetPropagatingQuestionsWhichReferToMissingGroups();
+
+            if (invalidQuestions.Any())
+                throw new InterviewException(string.Format(
+                    "Cannot create interview from questionnaire '{1}' because following questions in it are propagating and reference not existing groups:{0}{2}",
+                    Environment.NewLine, questionnaireId,
+                    string.Join(
+                        Environment.NewLine,
+                        invalidQuestions.Select(questionId
+                            => string.Format("{0}", questionId)))));
         }
 
         private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Guid questionId)

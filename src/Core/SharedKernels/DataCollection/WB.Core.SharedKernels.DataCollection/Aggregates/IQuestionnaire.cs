@@ -50,5 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId);
 
         int GetMaxAnswerValueForPropagatingQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingGroups();
     }
 }
