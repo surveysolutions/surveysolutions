@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -36,8 +37,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
 
             //arrange
             Guid tempFileId = Guid.NewGuid();
-            var tempFileStorageMock = new Mock<ITemporaryDataRepositoryAccessor>();
-            tempFileStorageMock.Setup(x => x.GetByName<TempFileImportData>(tempFileId.ToString()))
+            var tempFileStorageMock = new Mock<ITemporaryDataStorage<TempFileImportData>>();
+            tempFileStorageMock.Setup(x => x.GetByName(tempFileId.ToString()))
                                .Returns(new TempFileImportData() {ErrorMassage = "some error", PublicKey = tempFileId});
 
             SampleImportService target = CreateSampleImportService(tempFileStorageMock.Object);
@@ -251,13 +252,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
         }
 
         private SampleImportService CreateSampleImportService(
-            ITemporaryDataRepositoryAccessor tempStorage = null,
+            ITemporaryDataStorage<TempFileImportData> tempStorage = null,
             IReadSideRepositoryWriter<QuestionnaireBrowseItem> smallTemplateRepository = null)
         {
             return new SampleImportService(new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>().Object,
                                            smallTemplateRepository ??
                                            new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>(),
-                                           tempStorage ?? new InMemoryTemporaryDataRepositoryAccessor());
+                                           tempStorage ?? new InMemoryTemporaryDataRepositoryAccessor<TempFileImportData>(),
+                                             new InMemoryTemporaryDataRepositoryAccessor<SampleCreationStatus>());
         }
     }
 }
