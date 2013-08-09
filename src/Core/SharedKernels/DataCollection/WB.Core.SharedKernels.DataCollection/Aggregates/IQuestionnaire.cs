@@ -44,5 +44,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions();
 
         IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions();
+
+        bool ShouldQuestionPropagateGroups(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId);
+
+        int GetMaxAnswerValueForPropagatingQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingGroups();
     }
 }

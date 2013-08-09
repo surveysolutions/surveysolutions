@@ -258,6 +258,7 @@
     <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs">
       <SubType>Code</SubType>
     </Compile>

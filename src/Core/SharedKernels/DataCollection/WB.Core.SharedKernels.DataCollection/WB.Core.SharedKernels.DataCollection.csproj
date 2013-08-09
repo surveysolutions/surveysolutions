@@ -84,6 +84,7 @@
     <Compile Include="Events\Interview\FlagSetToAnswer.cs" />
     <Compile Include="Events\Interview\GroupDisabled.cs" />
     <Compile Include="Events\Interview\GroupEnabled.cs" />
+    <Compile Include="Events\Interview\GroupPropagated.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
