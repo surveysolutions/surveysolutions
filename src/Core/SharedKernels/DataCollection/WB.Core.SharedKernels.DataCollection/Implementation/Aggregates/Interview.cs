@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        public void AnswerTextQuestion(Guid userId, Guid questionId, DateTime answerTime, string answer)
+        public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
-        public void AnswerNumericQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal answer)
+        public void AnswerNumericQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -199,7 +199,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBePropagated.ForEach(propagatedGroupId => this.ApplyEvent(new GroupPropagated(propagatedGroupId, propagationCount)));
         }
 
-        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
+        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -228,7 +228,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal selectedValue)
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal selectedValue)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -258,7 +258,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
-        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, DateTime answerTime, decimal[] selectedValues)
+        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal[] selectedValues)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
         }
 
-        public void CommentAnswer(Guid userId, Guid questionId, string comment)
+        public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, string comment)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -296,7 +296,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerCommented(userId, questionId, comment));
         }
 
-        public void SetFlagToAnswer(Guid userId, Guid questionId)
+        public void SetFlagToAnswer(Guid userId, Guid questionId, int[] propagationVector)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
@@ -304,7 +304,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId));
         }
 
-        public void RemoveFlagFromAnswer(Guid userId, Guid questionId)
+        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, int[] propagationVector)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
