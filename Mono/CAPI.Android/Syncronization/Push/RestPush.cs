@@ -25,7 +25,8 @@ namespace CAPI.Android.Syncronization.Push
 
             try
             {
-                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct, 
+                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, 
+                    ct, 
                     JsonConvert.SerializeObject(item), 
                     new HttpBasicAuthenticator(login, password));
 

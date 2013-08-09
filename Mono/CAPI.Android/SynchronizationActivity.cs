@@ -53,6 +53,8 @@ namespace CAPI.Android
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
+        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+
         #endregion
 
         private int clickCount = 0;
@@ -123,7 +125,7 @@ namespace CAPI.Android
             alertWarningAboutRestore.SetTitle("Warning");
             alertWarningAboutRestore.SetMessage(
                 string.Format(
-                    "All current data will be erased. Are you sure you want proceed to restore. If Yes, please make sure restore data is presented at {0}",
+                    "All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}",
                     backupManager.RestorePath));
             alertWarningAboutRestore.SetPositiveButton("Yes", btnRestoreConfirmed_Click);
             alertWarningAboutRestore.SetNegativeButton("No", btnRestoreDeclined_Click);
@@ -161,7 +163,7 @@ namespace CAPI.Android
             }
             catch (Exception ex)
             {
-                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                
                 logger.Error("Error on Sync: " + ex.Message, ex);
                 tvSyncResult.Text = ex.Message;
                 return;
