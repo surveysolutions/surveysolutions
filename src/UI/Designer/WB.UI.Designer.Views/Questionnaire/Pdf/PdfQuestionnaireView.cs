@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -181,6 +182,16 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                     }
                 }
             }
+        }
+
+        public IEnumerable<PdfQuestionView> GetQuestionsWithConditions()
+        {
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => x.HasCodition);
+        }
+
+        public IEnumerable<PdfQuestionView> GetQuestionsWithValidation()
+        {
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.ValidationExpression));
         }
     }
 
