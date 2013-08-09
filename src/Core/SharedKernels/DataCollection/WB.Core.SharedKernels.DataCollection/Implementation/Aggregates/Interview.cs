@@ -138,6 +138,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
+        #region Types
+
+        /// <summary>
+        /// Full identity of group or question.
+        /// </summary>
+        /// <remarks>
+        /// Is used only internally to simplify return of id and propagation vector as return value.
+        /// Should not be made public or be used in any form in events or commands.
+        /// </remarks>
+        private class Identity
+        {
+            public Guid Id { get; private set; }
+            public int[] PropagationVector { get; private set; }
+
+            public Identity(Guid id, int[] propagationVector)
+            {
+                this.Id = id;
+                this.PropagationVector = propagationVector;
+            }
+        }
+
+        #endregion
+
 
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() {}
@@ -163,26 +186,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
 
-            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
 
 
-            this.ApplyEvent(new TextQuestionAnswered(userId, questionId, answerTime, answer));
+            this.ApplyEvent(new TextQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
 
-            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
-            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
+            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
+            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
-            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
-            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
-            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
+            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
         public void AnswerNumericQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal answer)
@@ -199,31 +222,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
 
-            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
 
-            List<Guid> groupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId).ToList();
+            List<Identity> groupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId).ToList();
             int propagationCount = groupsToBePropagated.Any() ? ToPropagationCount(answer) : 0;
 
 
-            this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, answerTime, answer));
+            this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
 
-            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
-            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
+            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
+            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
-            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
-            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
-            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
+            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
 
-            groupsToBePropagated.ForEach(propagatedGroupId => this.ApplyEvent(new GroupPropagated(propagatedGroupId, propagationCount)));
+            groupsToBePropagated.ForEach(group => this.ApplyEvent(new GroupPropagated(group.Id, group.PropagationVector, propagationCount)));
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
@@ -235,26 +258,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
 
-            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
 
 
-            this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, answerTime, answer));
+            this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
 
-            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
-            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
+            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
+            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
-            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
-            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
-            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
+            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal selectedValue)
@@ -267,26 +290,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
 
-            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, selectedValue, questionnaire,
                 out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, selectedValue, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
 
 
-            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, answerTime, selectedValue));
+            this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValue));
 
-            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
-            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
+            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
+            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
-            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
-            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
-            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
+            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal[] selectedValues)
@@ -299,26 +322,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
 
-            List<Guid> answersDeclaredValid, answersDeclaredInvalid;
+            List<Identity> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Guid> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, selectedValues, questionnaire,
                 out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, selectedValues, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
 
 
-            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, answerTime, selectedValues));
+            this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValues));
 
-            answersDeclaredValid.ForEach(validQuestionId => this.ApplyEvent(new AnswerDeclaredValid(validQuestionId)));
-            answersDeclaredInvalid.ForEach(invalidQuestionId => this.ApplyEvent(new AnswerDeclaredInvalid(invalidQuestionId)));
+            answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
+            answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            groupsToBeDisabled.ForEach(disabledGroupId => this.ApplyEvent(new GroupDisabled(disabledGroupId)));
-            groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
-            questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
-            questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
+            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, string comment)
