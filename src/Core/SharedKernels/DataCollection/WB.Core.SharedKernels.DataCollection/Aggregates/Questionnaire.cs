@@ -353,7 +353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 return Enumerable.Empty<Guid>();
 
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            var autoPropagatingQuestion = (IAutoPropagate) question;
+            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
 
             foreach (Guid groupId in autoPropagatingQuestion.Triggers)
             {
@@ -367,9 +367,19 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportPropagation(question.PublicKey);
-            var autoPropagatingQuestion = (IAutoPropagate) question;
+            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
 
             return autoPropagatingQuestion.MaxValue;
+        }
+
+        public IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingGroups()
+        {
+            return (
+                from question in this.GetAllPropagatingQuestions()
+                let questionHasMissingGroup = question.Triggers.Any(groupId => !this.HasGroup(groupId))
+                where questionHasMissingGroup
+                select question.PublicKey
+            ).ToList();
         }
 
 
@@ -381,6 +391,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private IEnumerable<IQuestion> GetAllQuestions()
         {
             return this.QuestionCache.Values;
+        }
+
+        private IEnumerable<IAutoPropagateQuestion> GetAllPropagatingQuestions()
+        {
+            return this
+                .GetAllQuestions()
+                .Where(DoesQuestionSupportPropagation)
+                .Cast<IAutoPropagateQuestion>();
         }
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementCondition(string enablementCondition)
@@ -476,8 +494,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
+            return DoesQuestionSupportPropagation(question);
+        }
+
+        private static bool DoesQuestionSupportPropagation(IQuestion question)
+        {
             return (question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate)
-                && (question is IAutoPropagate);
+                && (question is IAutoPropagateQuestion);
         }
 
         private void ThrowIfQuestionDoesNotSupportPropagation(Guid questionId)
@@ -489,6 +512,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private void ThrowIfGroupDoesNotExist(Guid groupId)
         {
             this.GetGroupOrThrow(groupId);
+        }
+
+        private bool HasGroup(Guid groupId)
+        {
+            return this.GetGroup(groupId) != null;
         }
 
         private IGroup GetGroupOrThrow(Guid groupId)
