@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.View;
-using Ncqrs.Commanding.ServiceModel;
+﻿using WB.Core.GenericSubdomains.Logging;
+using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -17,75 +8,49 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Security;
     using System.Web.UI;
 
-    using Postal;
+    using Main.Core.Utility;
 
     using Recaptcha;
 
     using WB.UI.Designer.Extensions;
+    using WB.UI.Designer.Mailers;
     using WB.UI.Designer.Models;
     using WB.UI.Shared.Web.Membership;
 
     using WebMatrix.WebData;
 
-    /// <summary>
-    ///     The account controller.
-    /// </summary>
     [CustomAuthorize]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
     [RequireHttps]
     public class AccountController : BaseController
     {
-        #region Public Methods and Operators
+        private readonly ISystemMailer mailer;
+        private readonly ILogger logger;
 
-        public AccountController(IViewRepository repository, ICommandService commandService, IMembershipUserService userHelper) : base(repository, commandService, userHelper)
+        public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger) : base(userHelper)
         {
+            this.mailer = mailer;
+            this.logger = logger;
         }
 
-        /// <summary>
-        ///     The confirmation failure.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         [AllowAnonymous]
         public ActionResult ConfirmationFailure()
         {
             return this.View();
         }
 
-        /// <summary>
-        ///     The index.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         public ActionResult Index()
         {
             return this.RedirectToAction("Index", "Questionnaire");
         }
 
-        /// <summary>
-        ///     The log off.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         public ActionResult LogOff()
         {
-            UserHelper.Logout();
+            this.UserHelper.Logout();
 
             return this.RedirectToAction("login", "account");
         }
 
-        /// <summary>
-        /// The login.
-        /// </summary>
-        /// <param name="returnUrl">
-        /// The return url.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [AllowAnonymous]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
@@ -94,18 +59,6 @@ namespace WB.UI.Designer.Controllers
             return this.View(new LoginModel());
         }
 
-        /// <summary>
-        /// The login.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <param name="returnUrl">
-        /// The return url.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -123,15 +76,6 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// The manage.
-        /// </summary>
-        /// <param name="message">
-        /// The message.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Manage(AccountManageMessageId? message)
         {
@@ -144,15 +88,6 @@ namespace WB.UI.Designer.Controllers
             return this.View(new LocalPasswordModel());
         }
 
-        /// <summary>
-        /// The manage.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
@@ -165,7 +100,7 @@ namespace WB.UI.Designer.Controllers
                 bool changePasswordSucceeded;
                 try
                 {
-                    changePasswordSucceeded = UserHelper.WebUser.MembershipUser.ChangePassword(
+                    changePasswordSucceeded = this.UserHelper.WebUser.MembershipUser.ChangePassword(
                         model.OldPassword, model.Password);
                 }
                 catch (Exception)
@@ -189,14 +124,6 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        /// <summary>
-        ///     The password reset.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [AllowAnonymous]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult PasswordReset()
@@ -209,17 +136,6 @@ namespace WB.UI.Designer.Controllers
             return this.View(new ResetPasswordModel());
         }
 
-        /// <summary>
-        /// The password reset.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// </exception>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -240,13 +156,15 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    string token = WebSecurity.GeneratePasswordResetToken(user.UserName);
+                    string confirmationToken = WebSecurity.GeneratePasswordResetToken(user.UserName);
 
-                    dynamic email = new Email("ResetPasswordEmail");
-                    email.To = user.Email;
-                    email.UserName = model.UserName;
-                    email.ResetPasswordToken = token;
-                    email.Send();
+                    this.mailer.ResetPasswordEmail(
+                        new EmailConfirmationModel()
+                            {
+                                Email = user.Email.ToWBEmailAddress(),
+                                UserName = model.UserName,
+                                ConfirmationToken = confirmationToken
+                            }).SendAsync();
 
                     this.Attention("To complete the reset password process look for an email in your inbox that provides further instructions.");
                     return this.RedirectToAction("Login");
@@ -256,12 +174,6 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        ///     The register.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -270,18 +182,6 @@ namespace WB.UI.Designer.Controllers
 
         // POST: /Account/Register
 
-        /// <summary>
-        /// The register.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <param name="captchaValid">
-        /// The captcha valid.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -289,6 +189,7 @@ namespace WB.UI.Designer.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Register(RegisterModel model, bool captchaValid)
         {
+            var isUserRegisterSuccessfully = false;
             if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
             {
                 this.Error("You did not type the verification word correctly. Please try again.");
@@ -297,6 +198,7 @@ namespace WB.UI.Designer.Controllers
             {
                 if (this.ModelState.IsValid)
                 {
+
                     // Attempt to register the user
                     try
                     {
@@ -305,12 +207,17 @@ namespace WB.UI.Designer.Controllers
 
                         if (!string.IsNullOrEmpty(confirmationToken))
                         {
-                            Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
+                            Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { this.UserHelper.USERROLENAME });
 
-                            this.SendConfirmationEmail(
-                                to: model.Email, userName: model.UserName, token: confirmationToken);
+                            isUserRegisterSuccessfully = true;
 
-                            return this.RegisterStepTwo();
+                            this.mailer.ConfirmationEmail(
+                                new EmailConfirmationModel()
+                                    {
+                                        Email = model.Email.ToWBEmailAddress(),
+                                        UserName = model.UserName,
+                                        ConfirmationToken = confirmationToken
+                                    }).SendAsync();
                         }
                     }
                     catch (MembershipCreateUserException e)
@@ -319,24 +226,14 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        this.Error(e.Message);
+                        logger.Error("Unexpected error occurred", e);
                     }
                 }
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return isUserRegisterSuccessfully ? this.RegisterStepTwo() : this.View(model);
         }
 
-        /// <summary>
-        /// The register confirmation.
-        /// </summary>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [AllowAnonymous]
         public ActionResult RegisterConfirmation(string token)
         {
@@ -349,15 +246,6 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("ConfirmationFailure");
         }
 
-        /// <summary>
-        /// The resend confirmation.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [AllowAnonymous]
         public ActionResult ResendConfirmation(string id)
         {
@@ -370,7 +258,14 @@ namespace WB.UI.Designer.Controllers
                         ((DesignerMembershipProvider)Membership.Provider).GetConfirmationTokenByUserName(model.UserName);
                     if (!string.IsNullOrEmpty(token))
                     {
-                        this.SendConfirmationEmail(to: model.Email, userName: model.UserName, token: token);
+                        this.mailer.ConfirmationEmail(
+                            new EmailConfirmationModel()
+                                {
+                                    Email = model.Email.ToWBEmailAddress(),
+                                    UserName = model.UserName,
+                                    ConfirmationToken = token
+                                }).SendAsync();
+
                         return this.RegisterStepTwo();
                     }
                     else
@@ -391,30 +286,12 @@ namespace WB.UI.Designer.Controllers
             return this.RedirectToAction("Login");
         }
 
-        /// <summary>
-        /// The reset password confirmation.
-        /// </summary>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation(string token)
         {
             return this.View(new ResetPasswordConfirmationModel { Token = token });
         }
 
-        /// <summary>
-        /// The reset password confirmation.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -437,31 +314,12 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        ///     The reset password confirmation failure.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmationFailure()
         {
             return this.View();
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The redirect to local.
-        /// </summary>
-        /// <param name="returnUrl">
-        /// The return url.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (this.Url.IsLocalUrl(returnUrl))
@@ -474,40 +332,11 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        /// <summary>
-        ///     The register step two.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
         private ActionResult RegisterStepTwo()
         {
             this.Attention(
                 "To complete the registration process look for an email in your inbox that provides further instructions.");
             return this.RedirectToAction("Login");
         }
-
-        /// <summary>
-        /// The send confirmation email.
-        /// </summary>
-        /// <param name="to">
-        /// The to.
-        /// </param>
-        /// <param name="userName">
-        /// The user name.
-        /// </param>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        private async void SendConfirmationEmail(string to, string userName, string token)
-        {
-            dynamic email = new Email("ConfirmationEmail");
-            email.To = to;
-            email.UserName = userName;
-            email.ConfirmationToken = token;
-            await email.SendAsync();
-        }
-
-        #endregion
     }
 }

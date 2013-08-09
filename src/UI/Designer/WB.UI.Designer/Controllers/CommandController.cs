@@ -1,15 +1,18 @@
-﻿namespace WB.UI.Designer.Controllers
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.UI.Shared.Web;
+using WB.UI.Shared.Web.CommandDeserialization;
+
+namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Web.Mvc;
-
-    using Main.Core.Commands.Questionnaire.Base;
     using Main.Core.Domain;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
-    using WB.Core.SharedKernel.Utils.Logging;
     using WB.UI.Designer.Code.Helpers;
     using WB.UI.Designer.Exceptions;
     using WB.UI.Designer.Utils;
@@ -20,16 +23,17 @@
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
+        private readonly ILogger logger;
 
         public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.expressionReplacer = expressionReplacer;
+            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         [HttpPost]
-        [CustomHandleErrorFilter]
         public JsonResult Execute(string type, string command)
         {
             string error = string.Empty;
@@ -44,11 +48,7 @@
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    LogManager.GetLogger(this.GetType()).Error(e);
-                    error =
-                        string.Format(
-                            "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",
-                            AppSettings.Instance.AdminEmail);
+                    throw e;
                 }
                 else
                 {

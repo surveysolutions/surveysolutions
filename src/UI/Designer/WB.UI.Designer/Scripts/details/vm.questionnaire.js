@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
-    function(ko, _, config, utils, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox'],
+    function (ko, _, config, utils, datacontext, router, model, bootbox) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -47,7 +47,7 @@
                 calcStatistics();
             },
             activate = function(routeData, callback) {
-                messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
+
 
                 if (!isInitialized) {
                     getChapters();
@@ -79,9 +79,6 @@
                     .click(function(e) {
                         e.preventDefault();
                     });
-            },
-            canLeave = function() {
-                return true;
             },
             getChapters = function() {
                 if (!chapters().length) {
@@ -123,11 +120,9 @@
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').removeClass('detail-visible');
             },
-            showOutput = function() {
-                $('#stacks').addClass('output-visible');
-            },
-            hideOutput = function() {
-                $('#stacks').removeClass('output-visible');
+            isOutputVisible = ko.observable(false),
+            toggleOutput = function() {
+                isOutputVisible(!isOutputVisible());
             },
             addQuestion = function(parent) {
                 var question = new model.Question();
@@ -148,6 +143,7 @@
                 datacontext.groups.add(group);
                 datacontext.questionnaire.childrenID.push({ type: group.type(), id: group.id() });
                 chapters.push(group);
+                group.children.id = group.id();
                 router.navigateTo(group.getHref());
                 calcStatistics();
             },
@@ -176,9 +172,7 @@
                                     deleteGroupSuccessCallback(item);
                                 },
                                 error: function(d) {
-                                    errors.removeAll();
-                                    errors.push(d);
-                                    showOutput();
+                                    showError(d);
                                 }
                             });
                     }
@@ -206,7 +200,7 @@
                     router.navigateTo(config.hashes.details);
                 }
                 calcStatistics();
-                hideOutput();
+                isOutputVisible(false);
             },
             deleteQuestion = function(item) {
                 bootbox.confirm("Are you sure you want to delete this question?", function(result) {
@@ -225,9 +219,7 @@
 
                                 },
                                 error: function(d) {
-                                    errors.removeAll();
-                                    errors.push(d);
-                                    showOutput();
+                                    showError(d);
                                 }
                             });
                     }
@@ -248,7 +240,7 @@
                     router.navigateTo(parent.getHref());
                 }
 
-                hideOutput();
+                isOutputVisible(false);
             },
             saveGroup = function(group) {
 
@@ -278,13 +270,12 @@
                             group.isNew(false);
                             group.dirtyFlag().reset();
                             calcStatistics();
-                            hideOutput();
+                            isOutputVisible(false);
                             group.canUpdate(true);
+                            group.commit();
                         },
                         error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                             group.canUpdate(true);
                         }
                     });
@@ -317,40 +308,38 @@
                             question.isNew(false);
                             question.dirtyFlag().reset();
                             calcStatistics();
-                            hideOutput();
+                            isOutputVisible(false);
                             question.canUpdate(true);
+                            question.commit();
                         },
                         error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                             question.canUpdate(true);
                         }
                     });
             },
-            saveQuestionnaire = function (questionnaire) {
-                
+            saveQuestionnaire = function(questionnaire) {
+
                 questionnaire.canUpdate(false);
-                
+
                 datacontext.sendCommand(
                     config.commands.updateQuestionnaire,
                     questionnaire,
                     {
                         success: function() {
                             questionnaire.dirtyFlag().reset();
-                            hideOutput();
+                            isOutputVisible(false);
                             questionnaire.canUpdate(true);
                         },
                         error: function(d) {
-                            errors.removeAll();
-                            errors.push(d);
-                            showOutput();
+                            showError(d);
                             questionnaire.canUpdate(true);
                         }
                     });
             },
             clearFilter = function() {
                 filter('');
+                focusOnSearch();
             },
             filterContent = function() {
                 var query = filter().trim().toLowerCase();
@@ -365,6 +354,7 @@
                 var fromId = arg.sourceParent.id;
                 var toId = arg.targetParent.id;
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
+                var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
 
@@ -374,13 +364,19 @@
                     return;
                 }
 
-                if (isDropedInChapter && moveItemType == "question") {
+                if (isDropedOutsideAnyChapter && moveItemType == "question") {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveQuestionOutsideGroup);
                     return;
                 }
                 var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
+
+                if (target.isNew()) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveIntoUnsavedItem);
+                    return;
+                }
 
                 if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
                     arg.cancelDrop = true;
@@ -436,9 +432,10 @@
 
                             chapters(datacontext.groups.getChapters());
 
+                            showError(d);
                             errors.removeAll();
                             errors.push(d);
-                            showOutput();
+                            isOutputVisible(true);
                         }
                     });
             },
@@ -454,6 +451,46 @@
             },
             init = function() {
                 filter.subscribe(filterContent);
+                ko.bindingHandlers.sortable.options.start = function(arg, ui) {
+                    if ($(ui.item).children('.ui-expander').length > 0) {
+                        var button = $(ui.item).children('.ui-expander').children('.ui-expander-head');
+                        if ($(button).hasClass('ui-expander-head-collapsed') == false) {
+                            button.click();
+                        }
+                    }
+                };
+            },
+            isAllChaptersExpanded = ko.computed(function() {
+                return _.some(chapters(), function(chapter) {
+                    return chapter.isExpanded();
+                });
+            }),
+            toggleAllChapters = function () {
+                if (isAllChaptersExpanded()) {
+                    _.each(chapters(), function (chapter) {
+                        chapter.isExpanded(false);
+                    });
+                } else {
+                    _.each(chapters(), function (chapter) {
+                        chapter.isExpanded(true);
+                    });
+                }
+            },
+            toggleAllChaptersTooltip = ko.computed(function () {
+                var tooltip = {
+                    title: (isAllChaptersExpanded() == true ? 'Collapse' : 'Expand') + ' all chapters',
+                    placement: 'right'
+                };
+                return tooltip;
+            }).extend({throttle: 400}),
+            focusOnSearch = function() {
+                $('#filter input').get(0).focus();
+            },
+            showError = function(message) {
+                errors.removeAll();
+                errors.push(message);
+                isOutputVisible(true);
+
             };
 
         init();
@@ -478,12 +515,14 @@
             deleteGroup: deleteGroup,
             saveQuestion: saveQuestion,
             deleteQuestion: deleteQuestion,
-            showOutput: showOutput,
-            hideOutput: hideOutput,
+            isOutputVisible: isOutputVisible,
+            toggleOutput: toggleOutput,
             errors: errors,
             statistics: statistics,
             searchResult: searchResult,
-            questionnaire: questionnaire,
-            saveQuestionnaire: saveQuestionnaire
+            saveQuestionnaire: saveQuestionnaire,
+            isAllChaptersExpanded: isAllChaptersExpanded,
+            toggleAllChapters: toggleAllChapters,
+            toggleAllChaptersTooltip: toggleAllChaptersTooltip
         };
     });

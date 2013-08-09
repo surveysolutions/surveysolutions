@@ -1,40 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
     <style type="text/css">
         body {
             background-color: #f5f5f5;
-        }
-
-        .form-signin {
-            max-width: 650px;
-            padding: 19px 29px 29px;
-            margin: 0 auto 20px;
-            background-color: #fff;
-            border: 1px solid #e5e5e5;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-            box-shadow: 0 1px 2px rgba(0,0,0,.05);
-        }
-
-        .form-actions {
-            margin-top: 20px;
-            margin-bottom: 0px;
-        }
-
-        .form-horizontal .form-actions {
-            padding-left: 30px;
-        }
-
-        p {
-            margin: 10px 0 0 0;
         }
     </style>
     @* to avoid cross-frame scripting *@
@@ -48,6 +22,8 @@
     @RenderSection("Styles", required: false)
     @RenderSection("Scripts", required: false)
     @Html.Partial("_html5shiv")
+    @Html.Partial("_trackers")
+
     @* favicons and touch icons go here *@
 </head>
 <body onload="FrameCheck();">

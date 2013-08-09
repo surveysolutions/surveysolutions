@@ -3,14 +3,18 @@ using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 namespace WB.UI.Designer.Views.Questionnaire
 {
     public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>,
         IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView>
     {
-        private readonly IDenormalizerStorage<QuestionnaireDocument> _questionnaireStorage;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> _questionnaireStorage;
 
-        public QuestionnaireViewFactory(IDenormalizerStorage<QuestionnaireDocument> questionnaireStorage)
+        public QuestionnaireViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> questionnaireStorage)
         {
             this._questionnaireStorage = questionnaireStorage;
         }
