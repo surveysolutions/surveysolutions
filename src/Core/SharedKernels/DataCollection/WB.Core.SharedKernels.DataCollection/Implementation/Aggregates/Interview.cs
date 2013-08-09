@@ -86,6 +86,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(FlagRemovedFromAnswer @event) {}
 
+        private void Apply(GroupPropagated @event) {}
+
         #endregion
 
         #region Dependencies
@@ -163,6 +165,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
+            if (questionnaire.ShouldQuestionPropagateGroups(questionId))
+            {
+                ThrowIfAnswerCannotBeUsedAsPropagationCount(questionnaire, questionId, answer);
+            }
+
+
             List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
@@ -172,6 +180,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
+
+            List<Guid> groupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId);
+            int propagationCount = groupsToBePropagated.Any() ? ToPropagationCount(answer) : 0;
 
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, answerTime, answer));
@@ -183,6 +194,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBeEnabled.ForEach(enabledGroupId => this.ApplyEvent(new GroupEnabled(enabledGroupId)));
             questionsToBeDisabled.ForEach(disabledQuestionId => this.ApplyEvent(new QuestionDisabled(disabledQuestionId)));
             questionsToBeEnabled.ForEach(enabledQuestionId => this.ApplyEvent(new QuestionEnabled(enabledQuestionId)));
+
+            groupsToBePropagated.ForEach(propagatedGroupId => this.ApplyEvent(new GroupPropagated(propagatedGroupId, propagationCount)));
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, DateTime answerTime, DateTime answer)
@@ -415,6 +428,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         "Question '{1}' is disabled because parent group '{2}' is disabled by it's following enablement condition:{0}{3}",
                         Environment.NewLine, questionId, parentGroupId, questionnaire.GetCustomEnablementConditionForGroup(parentGroupId)));
             }
+        }
+
+        private static void ThrowIfAnswerCannotBeUsedAsPropagationCount(IQuestionnaire questionnaire, Guid questionId, decimal answer)
+        {
+            int maxValue = questionnaire.GetMaxAnswerValueForPropagatingQuestion(questionId);
+
+            bool answerIsNotInteger = answer != (int) answer;
+            bool answerIsNegative = answer < 0;
+            bool answerExceedsMaxValue = answer > maxValue;
+
+            if (answerIsNotInteger)
+                throw new InterviewException(string.Format(
+                    "Answer '{0}' for question with id '{1}' is incorrect because question should propagate groups and answer is not a valid integer.",
+                    answer, questionId));
+
+            if (answerIsNegative)
+                throw new InterviewException(string.Format(
+                    "Answer '{0}' for question with id '{1}' is incorrect because question should propagate groups and answer is negative.",
+                    answer, questionId));
+
+            if (answerExceedsMaxValue)
+                throw new InterviewException(string.Format(
+                    "Answer '{0}' for question with id '{1}' is incorrect because question should propagate groups and answer is greater than max value '{2}'.",
+                    answer, questionId, maxValue));
         }
 
 
@@ -669,6 +706,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool IsAnswerDefined(Guid questionId)
         {
             return this.answers.ContainsKey(questionId);
+        }
+
+        private static int ToPropagationCount(decimal decimalValue)
+        {
+            return (int) decimalValue;
         }
 
         private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
