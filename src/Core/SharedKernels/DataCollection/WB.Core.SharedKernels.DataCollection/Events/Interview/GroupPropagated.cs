@@ -5,10 +5,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class GroupPropagated : GroupPassiveEvent
     {
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
-        public GroupPropagated(Guid groupId, int count)
-            : base(groupId)
+        public GroupPropagated(Guid groupId, int[] propagationVector, int count)
+            : base(groupId, propagationVector)
         {
             this.Count = count;
         }
