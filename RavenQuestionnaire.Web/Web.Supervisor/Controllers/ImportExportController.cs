@@ -74,7 +74,7 @@ namespace Web.Supervisor.Controllers
         {
             if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
             {
-                throw new HttpException(404, "Invalid quesry string parameters");
+                throw new HttpException(404, "Invalid query string parameters");
             }
 
             AsyncQuestionnaireUpdater.Update(

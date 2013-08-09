@@ -198,6 +198,8 @@
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
+    <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
+    <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>

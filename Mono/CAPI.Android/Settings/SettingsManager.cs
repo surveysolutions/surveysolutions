@@ -39,6 +39,23 @@ namespace CAPI.Android.Settings
             }
         }
 
+        
+        public static string AppVersionName()
+        {
+            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
+        }
+
+        public static int AppVersionCode()
+        {
+            return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
+        }
+
+
+        public static string AndroidVersion()
+        {
+            return global::Android.OS.Build.VERSION.Release;
+        }
+
         /// <summary>
         /// The get sync address point.
         /// </summary>
