@@ -3,27 +3,42 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>, 
-                                                         IEventHandler<ConditionalStatusChanged>, 
                                                          IEventHandler<CommentSet>,
-                                                         IEventHandler<AnswerSet>,
                                                          IEventHandler<PropagatableGroupAdded>,
                                                          IEventHandler<PropagatableGroupDeleted>,
-                                                         IEventHandler<QuestionnaireStatusChanged>
+                                                         IEventHandler<QuestionnaireStatusChanged>,
+        IEventHandler<CommentAnswer>, 
+        IEventHandler<InterviewSynchronized>, 
+        IEventHandler<MultipleOptionsQuestionAnswered>
+        , IEventHandler<NumericQuestionAnswered>
+        , IEventHandler<TextQuestionAnswered>
+        , IEventHandler<SingleOptionQuestionAnswered>
+        , IEventHandler<DateTimeQuestionAnswered>
+         , IEventHandler<GroupDisabled>
+         , IEventHandler<GroupEnabled>
+         , IEventHandler<QuestionDisabled>
+         , IEventHandler<QuestionEnabled>
+         , IEventHandler<AnswerDeclaredInvalid>
+         , IEventHandler<AnswerDeclaredValid>
     {
-        /// <summary>
-        /// The _document storage.
-        /// </summary>
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> _documentStorage;
-
 
         public CompleteQuestionnaireViewDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
         {
             _documentStorage = documentStorage;
         }
+
+        private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
+        {
+            var doc = _documentStorage.GetById(publicKey);
+            return doc;
+        }
+
         #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
 
         public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
@@ -38,17 +53,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         #endregion
 
-        #region Implementation of IEventHandler<in AnswerSet>
-
-        public void Handle(IPublishedEvent<AnswerSet> evnt)
-        {
-            var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetAnswer(new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey),
-                          evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
-        }
-
-        #endregion
-
         #region Implementation of IEventHandler<in CommentSeted>
 
         public void Handle(IPublishedEvent<CommentSet> evnt)
@@ -59,27 +63,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         #endregion
-
-        #region Implementation of IEventHandler<in ConditionalStatusChanged>
-
-        public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
-        {
-            var doc = GetStoredObject(evnt.EventSourceId);
-            foreach (var item in evnt.Payload.ResultQuestionsStatus)
-            {
-                if (!item.Value.HasValue)
-                    continue;
-                doc.SetQuestionStatus(ParseCrap(item.Key), item.Value.Value);
-            }
-            foreach (var item in evnt.Payload.ResultGroupsStatus)
-            {
-                if (!item.Value.HasValue)
-                    continue;
-                doc.SetScreenStatus(ParseCrap(item.Key), item.Value.Value);
-            }
-        }
-        #endregion
-        
 
         #region Implementation of IEventHandler<in PropagatableGroupAdded>
 
@@ -102,22 +85,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         #endregion
 
-        private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
-        {
-            var doc = _documentStorage.GetById(publicKey);
-            return doc;
-        }
-
-        private ItemPublicKey ParseCrap(string key)
-        {
-            Guid publicKey;
-            if (Guid.TryParse(key, out publicKey))
-                return new ItemPublicKey(publicKey, null);
-            var pkString = key.Substring(0, key.Length / 2);
-            var prKey = key.Substring(key.Length / 2);
-            return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
-        }
-
         #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
@@ -129,6 +96,78 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         #endregion
+
+        #region Implementation of set answer
+
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        {
+            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues);
+        }
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        {
+            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, new decimal[] { evnt.Payload.SelectedValue });
+        }
+        public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+        }
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+        }
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+        }
+        private void SetSelectableAnswer(Guid interviewId, Guid questionId, decimal[] answers)
+        {
+            var doc = GetStoredObject(interviewId);
+            doc.SetAnswer(new ItemPublicKey(questionId, null), answers);
+        }
+        private void SetValueAnswer(Guid interviewId, Guid questionId, object answer)
+        {
+            var doc = GetStoredObject(interviewId);
+            doc.SetAnswer(new ItemPublicKey(questionId, null), answer);
+        }
+
+        #endregion
+
+        #region Implementation of conditions
+
+        public void Handle(IPublishedEvent<GroupDisabled> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetScreenStatus(new ItemPublicKey(evnt.Payload.GroupId,null), false);
+        }
+
+        public void Handle(IPublishedEvent<GroupEnabled> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetScreenStatus(new ItemPublicKey(evnt.Payload.GroupId, null), true);
+        }
+        public void Handle(IPublishedEvent<QuestionDisabled> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionStatus(new ItemPublicKey(evnt.Payload.QuestionId, null), false);
+        }
+        public void Handle(IPublishedEvent<QuestionEnabled> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionStatus(new ItemPublicKey(evnt.Payload.QuestionId, null), true);
+        }
+
+        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionValidity(new ItemPublicKey(evnt.Payload.QuestionId, null), false);
+        }
+        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionValidity(new ItemPublicKey(evnt.Payload.QuestionId, null), true);
+        }
+        #endregion
+ 
         
     }
 }
