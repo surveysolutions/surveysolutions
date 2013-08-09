@@ -21,10 +21,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Guid questionnaireId;
         private long questionnaireVersion;
-        private readonly Dictionary<Guid, object> answers = new Dictionary<Guid, object>();
-        private readonly HashSet<Guid> disabledGroups = new HashSet<Guid>();
-        private readonly HashSet<Guid> disabledQuestions = new HashSet<Guid>();
-        private readonly Dictionary<Guid, int> propagatedGroupInstanceCounts = new Dictionary<Guid, int>();
+        private readonly Dictionary<string, object> answers = new Dictionary<string, object>();
+        private readonly HashSet<string> disabledGroups = new HashSet<string>();
+        private readonly HashSet<string> disabledQuestions = new HashSet<string>();
+        private readonly Dictionary<string, int> propagatedGroupInstanceCounts = new Dictionary<string, int>();
 
         private void Apply(InterviewCreated @event)
         {
@@ -34,27 +34,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(TextQuestionAnswered @event)
         {
-            this.answers[@event.QuestionId] = @event.Answer;
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answers[questionKey] = @event.Answer;
         }
 
         private void Apply(NumericQuestionAnswered @event)
         {
-            this.answers[@event.QuestionId] = @event.Answer;
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answers[questionKey] = @event.Answer;
         }
 
         private void Apply(DateTimeQuestionAnswered @event)
         {
-            this.answers[@event.QuestionId] = @event.Answer;
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answers[questionKey] = @event.Answer;
         }
 
         private void Apply(SingleOptionQuestionAnswered @event)
         {
-            this.answers[@event.QuestionId] = @event.SelectedValue;
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answers[questionKey] = @event.SelectedValue;
         }
 
         private void Apply(MultipleOptionsQuestionAnswered @event)
         {
-            this.answers[@event.QuestionId] = @event.SelectedValues;
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answers[questionKey] = @event.SelectedValues;
         }
 
         private void Apply(AnswerDeclaredValid @event) {}
@@ -63,22 +73,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(GroupDisabled @event)
         {
-            this.disabledGroups.Add(@event.GroupId);
+            string groupKey = ConvertIdAndPropagationVectorToString(@event.GroupId, @event.PropagationVector);
+
+            this.disabledGroups.Add(groupKey);
         }
 
         private void Apply(GroupEnabled @event)
         {
-            this.disabledGroups.Remove(@event.GroupId);
+            string groupKey = ConvertIdAndPropagationVectorToString(@event.GroupId, @event.PropagationVector);
+
+            this.disabledGroups.Remove(groupKey);
         }
 
         private void Apply(QuestionDisabled @event)
         {
-            this.disabledGroups.Add(@event.QuestionId);
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.disabledQuestions.Add(questionKey);
         }
 
         private void Apply(QuestionEnabled @event)
         {
-            this.disabledGroups.Remove(@event.QuestionId);
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.disabledQuestions.Remove(questionKey);
         }
 
         private void Apply(AnswerCommented @event) {}
@@ -89,7 +107,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(GroupPropagated @event)
         {
-            this.propagatedGroupInstanceCounts[@event.GroupId] = @event.Count;
+            string groupKey = ConvertIdAndPropagationVectorToString(@event.GroupId, @event.PropagationVector);
+
+            this.propagatedGroupInstanceCounts[groupKey] = @event.Count;
         }
 
         #endregion
@@ -141,6 +161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+
 
             List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
@@ -213,6 +234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
+
             List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
@@ -243,6 +265,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+
 
             List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
@@ -275,6 +298,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
             this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
 
+
             List<Guid> answersDeclaredValid, answersDeclaredInvalid;
             this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
                 out answersDeclaredValid, out answersDeclaredInvalid);
@@ -303,7 +327,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
 
-            this.ApplyEvent(new AnswerCommented(userId, questionId, comment));
+            this.ApplyEvent(new AnswerCommented(userId, questionId, propagationVector, comment));
         }
 
         public void SetFlagToAnswer(Guid userId, Guid questionId, int[] propagationVector)
@@ -312,7 +336,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
 
-            this.ApplyEvent(new FlagSetToAnswer(userId, questionId));
+            this.ApplyEvent(new FlagSetToAnswer(userId, questionId, propagationVector));
         }
 
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, int[] propagationVector)
@@ -321,7 +345,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
 
-            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId));
+            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, propagationVector));
         }
 
 
@@ -804,6 +828,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
         {
             return string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
+        }
+
+        /// <remarks>
+        /// The opposite operation (get id or vector from string) should never be performed!
+        /// This is one-way transformation. Opposite operation is too slow.
+        /// If you need to compactify data and get it back, you should use another datatype, not a string.
+        /// </remarks>
+        private static string ConvertIdAndPropagationVectorToString(Guid id, int[] propagationVector)
+        {
+            return string.Format("{0:N}:{1}", id, string.Join("-", propagationVector));
         }
     }
 }
