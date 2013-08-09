@@ -1,24 +1,15 @@
 using System;
 using System.Web;
-using System.Web.Configuration;
 using Main.Core;
-using Main.Core.Documents;
-using Main.DenormalizerStorage;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
-using WB.UI.Shared.Web.CommandDeserialization;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -26,10 +17,6 @@ using WebActivator;
 
 namespace WB.UI.Designer.App_Start
 {
-    using Microsoft.Practices.ServiceLocation;
-
-    using NinjectAdapter;
-
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -90,8 +77,8 @@ namespace WB.UI.Designer.App_Start
             #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);
 
-            kernel.Load<MembershipModule>();
             kernel.Load<MainModule>();
+            kernel.Load<MembershipModule>();
         }
     }
 }
