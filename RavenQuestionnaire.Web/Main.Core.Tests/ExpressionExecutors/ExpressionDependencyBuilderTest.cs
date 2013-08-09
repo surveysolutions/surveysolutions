@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExpressionDependencyBuilderTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The expression dependency builder test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace Main.Core.Tests.ExpressionExecutors
 {
@@ -33,6 +27,7 @@ namespace Main.Core.Tests.ExpressionExecutors
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         /// <summary>

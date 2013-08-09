@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="ScreenNavigationView.cs" company="The World Bank">
-// The World Bank
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Survey
 {
     using System.Collections.Generic;

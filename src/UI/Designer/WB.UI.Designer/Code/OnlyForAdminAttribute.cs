@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OnlyForAdminAttribute.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The only for admin attribute.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using System;
 

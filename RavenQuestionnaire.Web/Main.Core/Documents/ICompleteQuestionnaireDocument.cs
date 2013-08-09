@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestionnaireDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CompleteQuestionnaireDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Documents
 {
     using System;
@@ -94,6 +86,9 @@ namespace Main.Core.Documents
         /// </returns>
         IEnumerable<ICompleteQuestion> GetFeaturedQuestions();
 
+        bool IsDeleted { get; set; }
+
+        Guid? DeletedBy { get; set; }
 
         #endregion
     }

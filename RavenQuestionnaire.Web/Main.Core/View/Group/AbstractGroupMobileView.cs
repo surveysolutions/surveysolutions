@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractGroupMobileView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The abstract group mobile view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.View.Group
 {
     using System;

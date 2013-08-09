@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The text complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities.Complete.Question
+﻿namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
@@ -115,6 +107,11 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
             this.Answer = answerValue;
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            
         }
 
         #endregion

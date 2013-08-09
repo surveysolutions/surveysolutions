@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeUserCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The change user command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.User
+﻿namespace Main.Core.Commands.User
 {
     using System;
 

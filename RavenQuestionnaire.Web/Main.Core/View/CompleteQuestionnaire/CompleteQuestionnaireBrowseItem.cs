@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireBrowseItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire browse item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Main.Core.Documents;
 using Main.Core.Documents.Statistics;
@@ -14,12 +5,15 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Question;
 
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+
 namespace Main.Core.View.CompleteQuestionnaire
 {
     /// <summary>
     /// The complete questionnaire browse item.
     /// </summary>
-    public class CompleteQuestionnaireBrowseItem
+    public class CompleteQuestionnaireBrowseItem : IView
     {
         #region Constructors and Destructors
 
@@ -131,6 +125,8 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// Gets or sets the total question count.
         /// </summary>
         public int TotalQuestionCount { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         #endregion
     }

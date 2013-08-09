@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangePasswordResetTokenCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The change password reset token command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
+﻿namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
 {
     using System;
 

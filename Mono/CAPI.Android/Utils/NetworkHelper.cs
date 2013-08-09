@@ -1,3 +1,5 @@
+using CAPI.Android.Settings;
+
 namespace CAPI.Android.Utils
 {
     using System.Linq;
@@ -13,5 +15,6 @@ namespace CAPI.Android.Utils
 
             return connectivityMAnager.GetAllNetworkInfo().ToList().Select(n => n.IsConnected).Any();
         }
+       
     }
 }

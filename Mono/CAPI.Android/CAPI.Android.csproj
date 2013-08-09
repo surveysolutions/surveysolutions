@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
-    <MandroidI18n />
+    <MandroidI18n>West</MandroidI18n>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,57 +49,51 @@
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.dll</HintPath>
+    <Reference Include="Cirrious.CrossCore">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.CrossCore.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Binding.dll</HintPath>
+    <Reference Include="Cirrious.CrossCore.Droid">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.CrossCore.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Binding.Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Binding.Android.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Binding">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Localization.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache">
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.DownloadCache.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Droid">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache.Droid">
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.DownloadCache.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Droid.Fragging">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.File">
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.File.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Localization">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.File.Droid">
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.File.Droid.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.ResourceLoader.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Json.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.ResourceLoader.Droid">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.ResourceLoader.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid">
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ExternalsMonodroid\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
@@ -114,22 +108,26 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\System.Net.dll</HintPath>
+      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Net.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\System.Windows.dll</HintPath>
+    <Reference Include="System.Windows">
+      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization">
+      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\HtmlBinding.cs" />
     <Compile Include="Bindings\CustomImageGetter.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
+    <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
     <Compile Include="Controls\DashboardAdapter.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
@@ -169,7 +167,6 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
-    <Compile Include="Converters\Converters.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
@@ -178,32 +175,42 @@
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
+    <Compile Include="NinjectServiceLocator.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Services\CleanUpExecutor.cs" />
     <Compile Include="SettingsActivity.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="SplashScreenActivity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="SplashScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="StartApplicationObject.cs" />
-    <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
-    <Compile Include="Syncronization\RemoteServiceEventStreamRestProvider.cs" />
-    <Compile Include="Syncronization\RemoteCollector.cs" />
+    <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
+    <Compile Include="Syncronization\Pull\PullDataProcessor.cs" />
+    <Compile Include="Syncronization\Pull\RestPull.cs" />
+    <Compile Include="Syncronization\Push\PushDataProcessor.cs" />
+    <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />
+    <Compile Include="Syncronization\RestUtils\AndroidRestUrils.cs" />
+    <Compile Include="Syncronization\RestUtils\IRestUrils.cs" />
+    <Compile Include="Syncronization\RestUtils\RestException.cs" />
+    <Compile Include="Syncronization\SynchronizationCanceledEventArgs.cs" />
+    <Compile Include="Syncronization\SynchronizationEventArgs.cs" />
+    <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
+    <Compile Include="Syncronization\SynchronizationException.cs" />
+    <Compile Include="Syncronization\SynchronozationProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\Drawable\navigateRightIcon.png" />
     <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
       <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml">
-      <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml">
       <SubType>AndroidResource</SubType>
@@ -251,9 +258,17 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.AndroidLogger\WB.Core.GenericSubdomains.Logging.AndroidLogger.csproj">
+      <Project>{a3369307-fdfa-4cd2-9ff4-6a7e23c47dd6}</Project>
+      <Name>WB.Core.GenericSubdomains.Logging.AndroidLogger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
+      <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging\WB.Core.GenericSubdomains.Logging.csproj">
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
-      <Name>WB.Core.SharedKernel.Logger</Name>
+      <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
@@ -263,14 +278,6 @@
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
-      <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
-      <Name>AndroidCore.Capi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
-      <Project>{2da6c60d-cb06-40b4-91af-a903451e3db4}</Project>
-      <Name>AndroidCommon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
@@ -279,25 +286,13 @@
       <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
       <Name>AndroidMain.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidMain.Synchronization\AndroidMain.Synchronization.csproj">
-      <Project>{613558d5-9ab8-4908-b904-3b8ea86ffb96}</Project>
-      <Name>AndroidMain.Synchronization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
       <Name>AndroidNCalc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidMain.Synchronization\AndroidMain.Synchronization.csproj">
-      <Project>{613558d5-9ab8-4908-b904-3b8ea86ffb96}</Project>
-      <Name>AndroidMain.Synchronization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
-      <Project>{30be60c9-980f-40e1-a8fd-c2a5959827d3}</Project>
-      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
@@ -311,14 +306,6 @@
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
-      <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
-      <Name>AndroidSynchronizationMessages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
-      <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
-      <Name>AndroidSynchronizationMessages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>
       <Name>CAPI.Android.Core.Model</Name>
@@ -326,6 +313,10 @@
     <ProjectReference Include="..\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>
       <Name>Mono.Android.Crasher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -355,9 +346,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
-    <EmbeddedResource Include="researchDeptSurvey.txt" />
-    <EmbeddedResource Include="userEvent.txt" />
-    <EmbeddedResource Include="initEvent.txt" />
+    <AndroidResource Include="Resources\Drawable\navigateLeftIcon.png" />
+    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
@@ -376,6 +366,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Synchroniation\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

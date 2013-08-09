@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyStatus.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey status.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
@@ -105,7 +97,20 @@ namespace Main.Core.Entities.SubEntities
                     };
             }
         }
-
+        /// <summary>
+        /// Gets the initial.
+        /// </summary>
+        public static SurveyStatus Reinit
+        {
+            get
+            {
+                return new SurveyStatus
+                {
+                    PublicId = new Guid("67e7ec3e-66d3-40ff-995a-94b8b5d0583c"),
+                    Name = "Reinit"
+                };
+            }
+        }
         /// <summary>
         /// Gets Redo.
         /// </summary>
@@ -172,7 +177,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Unassign, Initial, Error, Complete, Approve, Redo, Unknown };
+            return new[] { Unassign, Initial, Error, Complete, Approve, Redo, Unknown, Reinit };
         }
 
         /// <summary>
@@ -266,8 +271,12 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
         {
-            return status.PublicId == Initial.PublicId || status.PublicId == Approve.PublicId
-                   || status.PublicId == Redo.PublicId;
+            return StatusAllowDownSupervisorSync().Contains(status.PublicId);
+        }
+
+        public static Guid[] StatusAllowDownSupervisorSync()
+        {
+            return new Guid[] {Initial.PublicId, Redo.PublicId};
         }
 
         /// <summary>

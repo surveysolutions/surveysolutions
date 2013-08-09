@@ -1,92 +1,87 @@
-﻿namespace Core.Supervisor.Views.Summary
+﻿using System.Collections.Generic;
+using Core.Supervisor.RavenIndexes;
+using Main.Core.Entities;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
+namespace Core.Supervisor.Views.Summary
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
-    using Main.Core.Documents;
-    using Main.Core.Entities;
+    using Core.Supervisor.DenormalizerStorageItem;
+
     using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
     using Main.Core.View;
-    using Main.Core.View.CompleteQuestionnaire;
-    using Main.Core.View.Questionnaire;
-    using Main.DenormalizerStorage;
 
-    public class SummaryFactory : BaseUserViewFactory, IViewFactory<SummaryInputModel, SummaryView>
+    public class SummaryFactory : IViewFactory<SummaryInputModel, SummaryView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
-
-        public SummaryFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
-            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
+        public SummaryFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.survey = survey;
-            this.templates = templates;
+            this.indexAccessor = indexAccessor;
         }
-        
+
         public SummaryView Load(SummaryInputModel input)
         {
-            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
-            TemplateLight template = null;
+            IQueryable<SummaryItem> items = Enumerable.Empty<SummaryItem>().AsQueryable();
+               
+
+            if (input.ViewerStatus == ViewerStatus.Headquarter)
+            {
+                items = indexAccessor.Query<SummaryItem>(typeof(HeadquarterReportsTeamsAndStatusesGroupByTeam).Name);
+            }
+            else if (input.ViewerStatus == ViewerStatus.Supervisor)
+            {
+                items = indexAccessor.Query<SummaryItem>(typeof(SupervisorReportsTeamMembersAndStatusesGroupByTeamMember).Name).Where(x => x.ResponsibleSupervisorId == input.ViewerId);
+            }
+            
             if (input.TemplateId.HasValue)
             {
-                var tbi = this.templates.GetById(input.TemplateId.Value);
-                template = new TemplateLight(tbi.QuestionnaireId, tbi.Title);
+                items = items.Where(x => x.TemplateId == input.TemplateId);
+            }
+            else
+            {
+                items = items.Where(x => x.TemplateId == Guid.Empty);
             }
 
-            return this.survey.Query(queryableSurveys =>
-            {
-                var groupedSurveys = queryableSurveys
-                    .Where(x =>
-                        !input.TemplateId.HasValue
-                        ? (x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                        : (x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
-                    .ToList()
-                    .GroupBy(x => x.Responsible);
+            var all = items.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
+                           .Take(input.PageSize).ToList().Select(y =>
+                                                                         new SummaryViewItem()
+                                                                             {
+                                                                                 User =
+                                                                                     new UserLight(y.ResponsibleId,
+                                                                                                   y.ResponsibleName),
+                                                                                 Template =
+                                                                                     new TemplateLight(y.TemplateId,
+                                                                                                       string.Empty),
+                                                                                 Approved = y.ApprovedCount,
+                                                                                 Completed = y.CompletedCount,
+                                                                                 Error = y.CompletedWithErrorsCount,
+                                                                                 Initial = y.InitialCount,
+                                                                                 Redo = y.RedoCount,
+                                                                                 Unassigned = y.UnassignedCount,
+                                                                                 Total = y.TotalCount
+                                                                             }).ToList();
 
-                var items = this.BuildItems(groupedSurveys).AsQueryable();
-
-                var retval = new SummaryView(input.Page, input.PageSize, 0, template);
-                if (input.Orders.Count > 0)
+            return new SummaryView()
                 {
-                    items = input.Orders[0].Direction == OrderDirection.Asc
-                                                          ? items.OrderBy(input.Orders[0].Field)
-                                                          : items.OrderByDescending(input.Orders[0].Field);
-                }
-
-                retval.Summary = new SummaryViewItem(
-                    new UserLight(Guid.Empty, "Summary"),
-                    items.Sum(x => x.Total),
-                    items.Sum(x => x.Initial),
-                    items.Sum(x => x.Error),
-                    items.Sum(x => x.Completed),
-                    items.Sum(x => x.Approved),
-                    items.Sum(x => x.Redo));
-
-                retval.TotalCount = items.Count();
-
-                retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-                return retval;
-            });
-        }
-
-        protected IEnumerable<SummaryViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
-        {
-            foreach (var templateGroup in grouped)
-            {
-                yield
-                    return new SummaryViewItem(templateGroup.Key,
-                                            templateGroup.Count(),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Initial.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Error.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Complete.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId), templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
-            }
+                    TotalCount = all.Count(),
+                    Items =
+                        all,
+                    ItemsSummary = new SummaryViewItem()
+                        {
+                            User = new UserLight(Guid.Empty, "Summary"),
+                            Total = all.Sum(x => x.Total),
+                            Initial = all.Sum(x => x.Initial),
+                            Error = all.Sum(x => x.Error),
+                            Completed = all.Sum(x => x.Completed),
+                            Approved = all.Sum(x => x.Approved),
+                            Redo = all.Sum(x => x.Redo),
+                            Unassigned = all.Sum(x => x.Unassigned)
+                        }
+                };
         }
     }
 }

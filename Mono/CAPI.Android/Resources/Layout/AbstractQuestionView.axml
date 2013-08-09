@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" android:padding="10px" android:layout_marginBottom="10px"
-              local:MvxBind="{'Background':{'Path':'Status'}}"
+              local:MvxBind="Background Status"
               >
   <Button
       android:id="@+id/btnInstructions"
@@ -24,19 +24,19 @@
     android:textColor="#FF0000"
     android:id="@+id/tvError"
     android:textSize="20dip"
-    local:MvxBind="{'Text':{'Path':'ValidationMessage'},'ValidationMessage':{'Path':'Status'}}"/>
+    local:MvxBind="Text ValidationMessage; ValidationMessage Status"/>
     <TextView
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:id="@+id/tvTitle"
      android:textSize="20dip"
-     local:MvxBind="{'Html':{'Path':'Text'}}"/>
+     local:MvxBind="Html Text"/>
   </LinearLayout>
   <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:id="@+id/tvComments" android:textStyle="italic"
-    android:textSize="15dip" local:MvxBind="{'Text':{'Path':'Comments'}}"/>
+    android:textSize="15dip" local:MvxBind="Text Comments"/>
   <TextView
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"

@@ -1,0 +1,51 @@
+﻿@using WB.Core.BoundedContexts.Supervisor.Views.SampleImport
+@model WB.Core.SharedKernels.DataCollection.Views.Questionnaire.QuestionnaireBrowseItem
+@{
+    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
+    ViewBag.Title = "Index";
+}
+<div class="row-fluid">
+    <h3>@Model.Title</h3>
+    <div id="resultField"> @Html.Partial("ImportResult", new ImportResult(ViewBag.ImportId,false,"",null,null))
+        
+        
+    @section scripts
+    {
+
+
+        <script type="text/javascript">
+            var isStopMarker = false;
+            function updateImportStatus() {
+                return $.ajax({
+                    url: '@Url.Action("ImportResult", new {id = ViewBag.ImportId})',
+                    data: { timestamp: new Date().getMilliseconds() }
+                }).done(function (result) {
+                    $('#resultField').html(result);
+                }).fail(function (xhr, status, error) {
+                    $('#resultField').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+                });
+            }
+
+            function ImportStatussNeverending() {
+                $.when(updateImportStatus()).always(function () {
+                    if (isStopMarker===false)
+                    setTimeout(ImportStatussNeverending, 5000);
+                });
+            }
+        </script>
+
+        
+
+            <script type="text/javascript">
+
+                $(function () {
+                    ImportStatussNeverending();
+                });
+
+            </script>
+        
+
+
+    }
+    </div>
+</div>

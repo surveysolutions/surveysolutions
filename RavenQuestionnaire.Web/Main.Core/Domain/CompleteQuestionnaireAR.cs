@@ -1,11 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireAR.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   CompleteQuestionnaire Aggregate Root.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Main.Core.Domain.Exceptions;
+using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace Main.Core.Domain
 {
@@ -23,62 +19,28 @@ namespace Main.Core.Domain
     using Main.Core.ExpressionExecutors;
 
     using Ncqrs;
-    using Ncqrs.Restoring.EventStapshoot;
 
-    /// <summary>
-    /// CompleteQuestionnaire Aggregate Root.
-    /// </summary>
-    public class CompleteQuestionnaireAR : SnapshootableAggregateRoot<CompleteQuestionnaireDocument>
+    public class CompleteQuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<CompleteQuestionnaireDocument>
     {
-        #region Fields
-
-        /// <summary>
-        /// The doc.
-        /// </summary>
-        private CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
-
-        /*/// <summary>
-        /// The condition question dependencies.
-        /// </summary>
-        private Dictionary<Guid, List<Guid>> conditionQuestionDependencies;
-
-        /// <summary>
-        /// The condition group dependencies.
-        /// </summary>
-        private Dictionary<Guid, List<Guid>> conditionGroupDependencies;*/
-
-        /*/// <summary>
-        /// The condition executor.
-        /// </summary>
-        private CompleteQuestionnaireConditionExecutor conditionExecutor;
-
-        /// <summary>
-        /// The validation executor.
-        /// </summary>
-        private CompleteQuestionnaireValidationExecutor validationExecutor;*/
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
-        /// </summary>
+        private CompleteQuestionnaireDocument document = new CompleteQuestionnaireDocument();
+        
+        private CompleteQuestionnaireDocument doc
+        {
+            get { return document; }
+            set { document = value.Clone() as CompleteQuestionnaireDocument; }
+        }
         public CompleteQuestionnaireAR()
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
-        /// </summary>
-        /// <param name="completeQuestionnaireId">
-        ///   The complete questionnaire id.
-        /// </param>
-        /// <param name="questionnaire">
-        ///   The questionnaire.
-        /// </param>
-        /// <param name="creator"></param>
-        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire, UserLight creator)
+        public CompleteQuestionnaireAR(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+            : base(id)
+        {
+            UpdateInterviewMetaInfo(id, templateId, title, responsibleId, statusId, featuredQuestionsMeta);
+        }
+
+        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
+            QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -93,7 +55,7 @@ namespace Main.Core.Domain
 
             document.PublicKey = completeQuestionnaireId;
             document.Creator = creator;
-            document.Status = SurveyStatus.Unassign;
+            document.Status = SurveyStatus.Unknown;
             document.Responsible = null;
 
             ////document.ConnectChildsWithParent();
@@ -105,158 +67,49 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewCompleteQuestionnaireCreated
                     {
-                        Questionnaire = document, 
+                        Questionnaire = document, // to avoid pass as refecence 
                         CreationDate = clock.UtcNow(), 
                         TotalQuestionCount = document.Find<ICompleteQuestion>(q => true).Count()
                     });
         }
 
-        #endregion
+        public CompleteQuestionnaireAR(Guid interviewId, QuestionnaireDocument questionnaire, UserLight creator, UserLight responsible, List<QuestionAnswer> featuredAnswers)
+            : this(interviewId, questionnaire, creator)
+        {
+            var clock = NcqrsEnvironment.Get<IClock>();
 
-        #region Public Methods and Operators
+            this.ChangeAssignment(responsible);
+            foreach (var featuredAnswer in featuredAnswers)
+            {
+                this.SetAnswer(featuredAnswer.Id, null, featuredAnswer.Answer, featuredAnswer.Answers.ToList(),
+                               clock.UtcNow());
+            }
+            #warning Madagaskar fix. Should be discussed
+            this.ChangeStatus(SurveyStatus.Unassign, responsible);
+        }
 
-        /// <summary>
-        /// The add propagate group.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported any more.");
 
-
-            //// performe check before event raising
-            /*
-            var templateGroup = this.doc.Find<CompleteGroup>(publicKey);
-
-            this.ApplyEvent(
-                new PropagatableGroupAdded
-                    {
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (templateGroup.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in templateGroup.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupAdded
-                        {
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
-        /// <summary>
-        /// The create snapshot.
-        /// </summary>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Documents.CompleteQuestionnaireDocument.
-        /// </returns>
-        public override CompleteQuestionnaireDocument CreateSnapshot()
+        public  CompleteQuestionnaireDocument CreateSnapshot()
         {
             return this.doc;
         }
 
-        // Event handler for the NewQuestionnaireCreated event. This method
-        // is automaticly wired as event handler based on convension.
-
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        public void Delete()
-        {
-            this.ApplyEvent(
-                new CompleteQuestionnaireDeleted
-                    {
-                       CompletedQuestionnaireId = this.doc.PublicKey, TemplateId = this.doc.TemplateId 
-                    });
-        }
-
-        /// <summary>
-        /// The delete propagate group.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
+        
         public void DeletePropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             throw new InvalidOperationException("Is not supported.");
-
-            /*var group = this.doc.Find<CompleteGroup>(publicKey);
-            
-            this.ApplyEvent(
-                new PropagatableGroupDeleted
-                    {
-                        CompletedQuestionnaireId = this.doc.PublicKey, 
-                        PublicKey = publicKey, 
-                        PropagationKey = propagationKey
-                    });
-
-            if (group.Triggers.Count <= 0)
-            {
-                return;
-            }
-
-            foreach (Guid trigger in group.Triggers)
-            {
-                this.ApplyEvent(
-                    new PropagatableGroupDeleted
-                        {
-                            CompletedQuestionnaireId = this.doc.PublicKey, 
-                            PublicKey = trigger, 
-                            PropagationKey = propagationKey
-                        });
-            }*/
         }
 
-        /// <summary>
-        /// The restore from snapshot.
-        /// </summary>
-        /// <param name="snapshot">
-        /// The snapshot.
-        /// </param>
-        public override void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
+        public  void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
-            // Due to the storing snapshot in the memory
-            // to provide consistency of UoW we have to make copy of the memory structure.
-            // This method handles 2 situations: restore from Framework in memory snapshot
-            // and event of snapshot type.
-            var cached = snapshot.Clone() as CompleteQuestionnaireDocument;
-
-            if (cached != null)
-            {
-                this.doc = cached;
-            }
-
-            // moved to the OnDeserialized for object created from serialized event
-            // this.doc.ConnectChildsWithParent();
+            this.doc = snapshot;
         }
 
-        /// <summary>
-        /// The set comment.
-        /// </summary>
-        /// <param name="questionPublickey">
-        /// The question public key.
-        /// </param>
-        /// <param name="comments">
-        /// The comments.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propagation public key.
-        /// </param>
         public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey, UserLight user)
         {
             this.ApplyEvent(
@@ -269,18 +122,6 @@ namespace Main.Core.Domain
                 });
         }
 
-        /// <summary>
-        /// The set comment.
-        /// </summary>
-        /// <param name="questionPublickey">
-        /// The question public key.
-        /// </param>
-        /// <param name="comments">
-        /// The comments.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propagation public key.
-        /// </param>
         public void SetFlag(Guid questionPublickey, Guid? propogationPublicKey, bool isFlaged)
         {
             this.ApplyEvent(
@@ -292,24 +133,6 @@ namespace Main.Core.Domain
                 });
         }
         
-        /// <summary>
-        /// The set answer.
-        /// </summary>
-        /// <param name="questionPublicKey">
-        /// The question public key.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propagation public key.
-        /// </param>
-        /// <param name="completeAnswerValue">
-        /// The complete answer value.
-        /// </param>
-        /// <param name="completeAnswers">
-        /// The complete answers.
-        /// </param>
-        /// <param name="answerDate">
-        /// The answer date.
-        /// </param>
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers, DateTime answerDate)
         {
             ////performe check before event raising!!
@@ -324,6 +147,8 @@ namespace Main.Core.Domain
             else
             {
                 var answerList = new List<string>();
+                if (completeAnswers == null)
+                    throw new InterviewException("optiona are absent");
                 foreach (Guid answerGuid in completeAnswers)
                 {
                     var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
@@ -335,6 +160,8 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+
+            question.ThrowDomainExceptionIfAnswerInvalid(completeAnswers, completeAnswerValue);
             ///////////////
 
             // handle propagation
@@ -348,8 +175,8 @@ namespace Main.Core.Domain
                 new AnswerSet
                     {
                         QuestionPublicKey = questionPublicKey, 
-                        PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = completeAnswers  != null ? new List<Guid>(completeAnswers) : null, 
+                        PropogationPublicKey = propogationPublicKey,
+                        AnswerKeys = completeAnswers, 
                         AnswerValue = completeAnswerValue, 
                         AnswerDate = answerDate,
                         Featured = question.Featured, 
@@ -364,7 +191,7 @@ namespace Main.Core.Domain
             var resultQuestionsStatus = new Dictionary<string, bool?>();
             var resultGroupsStatus = new Dictionary<string, bool?>();
 
-            var collector = new CompleteQuestionnaireConditionExecuteCollector(this.doc);
+            var collector = ConditionExecuterFactory.GetConditionExecuter(this.doc);
 
             collector.ExecuteConditionAfterAnswer(question, resultQuestionsStatus, resultGroupsStatus);
 
@@ -379,24 +206,24 @@ namespace Main.Core.Domain
                         });
             }
         }
-        
-        #endregion
 
-        #region Methods
+        public void DeleteInterview(Guid deletedBy)
+        {
+            if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
+                this.doc.Status == SurveyStatus.Initial)
+            {
+                this.ApplyEvent(
+                    new InterviewDeleted()
+                    {
+                        DeletedBy = deletedBy
+                    });
+            }
+            else
+            {
+                throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
+            }
+        }
 
-        /// <summary>
-        /// The add remove propagated group.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="completeAnswerValue">
-        /// The complete answer value.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// </exception>
         public void AddRemovePropagatedGroup(AutoPropagateCompleteQuestion question, string completeAnswerValue)
         {
             int count;
@@ -430,20 +257,6 @@ namespace Main.Core.Domain
             this.HandlePropagation(question, currentAnswer, count);
         }
 
-        /// <summary>
-        /// The handle propagation.
-        /// </summary>
-        /// <param name="autoQuestion">
-        /// The auto question.
-        /// </param>
-        /// <param name="currentAnswer">
-        /// The current answer.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        /// </exception>
         private void HandlePropagation(AutoPropagateCompleteQuestion autoQuestion, int currentAnswer, int count)
         {
             if (currentAnswer < count)
@@ -468,7 +281,7 @@ namespace Main.Core.Domain
                     var resultQuestionsStatus = new Dictionary<string, bool?>();
                     var resultGroupsStatus = new Dictionary<string, bool?>();
 
-                    var collector = new CompleteQuestionnaireConditionExecuteCollector(this.doc);
+                    var collector = ConditionExecuterFactory.GetConditionExecuter(this.doc);
                     
                     ////iterate over all triggers for question
                     foreach (var trigger in triggers)
@@ -576,13 +389,24 @@ namespace Main.Core.Domain
             }
         }
 
+        public void CreateNewAssigment(CompleteQuestionnaireDocument source)
+        {
+            ApplyEvent(new NewAssigmentCreated() { Source = source });
+        }
 
-        /// <summary>
-        /// The change assignment.
-        /// </summary>
-        /// <param name="responsible">
-        /// The responsible.
-        /// </param>
+        public void UpdateInterviewMetaInfo(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+        {
+            ApplyEvent(new InterviewMetaInfoUpdated()
+                {
+                    FeaturedQuestionsMeta = featuredQuestionsMeta,
+                    ResponsibleId = responsibleId,
+                    StatusId = statusId,
+                    TemplateId = templateId,
+                    Title = title,
+                    PreviousStatusId = doc == null ? SurveyStatus.Unknown.PublicId : doc.Status.PublicId
+                });
+        }
+
         public void ChangeAssignment(UserLight responsible)
         {
             var prevResponsible = this.doc.Responsible;
@@ -597,15 +421,19 @@ namespace Main.Core.Domain
                     });
         }
 
-        /// <summary>
-        /// The change status.
-        /// </summary>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="responsible">
-        /// The responsible.
-        /// </param>
+        public void AssignInterviewToUser(Guid userId)
+        {
+            var prevResponsible = this.doc.Responsible;
+            this.ApplyEvent(
+                new QuestionnaireAssignmentChanged
+                    {
+                        CompletedQuestionnaireId = this.doc.PublicKey,
+                        PreviousResponsible = prevResponsible,
+                        Responsible = new UserLight(userId, string.Empty)
+                    });
+            this.ChangeStatus(SurveyStatus.Initial, new UserLight(userId, string.Empty));
+        }
+
         public void ChangeStatus(SurveyStatus status, UserLight responsible)
         {
             var prevStatus = this.doc.Status;
@@ -619,17 +447,24 @@ namespace Main.Core.Domain
                         Responsible = responsible
                     });
         }
-        
 
-        // Event handler for the AnswerSet event. This method
-        // is automaticly wired as event handler based on convension.
+        protected void OnNewAssigmentCreated(NewAssigmentCreated e)
+        {
+            this.doc = e.Source;
+        }
 
-        /// <summary>
-        /// The on answer set.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
+        protected void OnInterviewMetaInfoUpdated(InterviewMetaInfoUpdated e)
+        {
+            if (doc == null)
+                doc = new CompleteQuestionnaireDocument();
+            doc.PublicKey = this.EventSourceId;
+            doc.Status = SurveyStatus.GetStatusByIdOrDefault(e.StatusId);
+            if (e.ResponsibleId.HasValue)
+                doc.Responsible = new UserLight(e.ResponsibleId.Value, "");
+            doc.TemplateId = e.TemplateId;
+            doc.Title = e.Title;
+        }
+
         protected void OnAnswerSet(AnswerSet e)
         {
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublicKey, e.PropogationPublicKey);
@@ -641,52 +476,16 @@ namespace Main.Core.Domain
             question.SetAnswer(e.AnswerKeys, e.AnswerValue);
         }
 
-        // Event handler for the PropagatableGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
-
-        /// <summary>
-        /// On Change Assignment.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnChangeAssignment(QuestionnaireAssignmentChanged e)
         {
-            if (this.doc.Status.PublicId == SurveyStatus.Unassign.PublicId)
-            {
-                this.doc.Status = SurveyStatus.Initial;
-            }
             this.doc.Responsible = e.Responsible;
         }
 
-        /// <summary>
-        /// The on change status.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnChangeStatus(QuestionnaireStatusChanged e)
         {
             this.doc.Status = e.Status;
         }
-
-        /// <summary>
-        /// The on complete questionnaire deleted.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnCompleteQuestionnaireDeleted(CompleteQuestionnaireDeleted e)
-        {
-            this.doc = null;
-        }
-
-        /// <summary>
-        /// The on new questionnaire created.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
+        
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
             this.doc = e.Questionnaire;
@@ -694,12 +493,6 @@ namespace Main.Core.Domain
             ////this.conditionDependencies = ExpressionDependencyBuilder.Build(this.doc);
         }
 
-        /// <summary>
-        /// The on propagate group added.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
             /*
@@ -718,12 +511,6 @@ namespace Main.Core.Domain
             this.doc.Add(newGroup, e.ParentKey, e.ParentPropagationKey);
         }
 
-        /// <summary>
-        /// The on propagate group created.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnConditionalStatusChanged(ConditionalStatusChanged e)
         {
             // to do the serching and set status. 
@@ -748,26 +535,11 @@ namespace Main.Core.Domain
             }
         }
 
-        /// <summary>
-        /// The on propagate group created.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnPropagateGroupCreated(PropagateGroupCreated e)
         {
             this.doc.Add(e.Group, e.ParentKey, e.ParentPropagationKey);
         }
 
-        /// <summary>
-        /// The get root for question.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IComposite"/>.
-        /// </returns>
         private IComposite GetRootForQuestion(ICompleteQuestion question)
         {
             //// question doesn't belog to propagate group
@@ -799,25 +571,11 @@ namespace Main.Core.Domain
             return parent;
         }
 
-        /// <summary>
-        /// The on propagatable group deleted.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
             this.doc.Remove(e.PublicKey, e.PropagationKey, e.ParentKey, e.ParentPropagationKey);
         }
 
-        /// <summary>
-        /// The on set comment command.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnSetCommentCommand(CommentSet e)
         {
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropagationPublicKey);
@@ -829,12 +587,6 @@ namespace Main.Core.Domain
             question.SetComments(e.Comments, DateTime.Now, e.User);
         }
 
-        /// <summary>
-        /// The on set comment command.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected void OnSetFlagCommand(FlagSet e)
         {
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropagationPublicKey);
@@ -845,6 +597,11 @@ namespace Main.Core.Domain
 
             question.IsFlaged = e.IsFlaged;
         }
-        #endregion
+
+        protected void OnInterviewDeleted(InterviewDeleted e)
+        {
+            this.doc.IsDeleted = true;
+            this.doc.DeletedBy = e.DeletedBy;
+        }
     }
 }

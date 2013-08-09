@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountViewInputModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Providers.CQRS.Accounts.View
+﻿namespace WB.UI.Designer.Providers.CQRS.Accounts.View
 {
     /// <summary>
     /// The account view input model.

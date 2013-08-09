@@ -1,8 +1,5 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SyncDeviceRegisterDocument.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
@@ -13,7 +10,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SyncDeviceRegisterDocument
+    public class SyncDeviceRegisterDocument : IView
     {
         #region Fields
 

@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The auto propagate complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Main.Core.Domain.Exceptions;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
@@ -157,6 +150,28 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                     this.Answer = value;
                 }
             }
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            if (string.IsNullOrWhiteSpace(answerValue))
+            {
+                return;
+            }
+
+            int value;
+            if (int.TryParse(answerValue.Trim(), out value))
+            {
+                if (value > this.MaxValue)
+                    throw new InterviewException("max value is reached");
+
+
+            }
+            else
+            {
+                throw new InterviewException("value must be numeric");
+            }
+
         }
 
         #endregion

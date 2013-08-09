@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonNewSerializerContractBehaviorAttribute.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The json new serializer contract behavior attribute.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.CompleteQuestionnaire
+﻿namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System;
     using System.Collections.Generic;

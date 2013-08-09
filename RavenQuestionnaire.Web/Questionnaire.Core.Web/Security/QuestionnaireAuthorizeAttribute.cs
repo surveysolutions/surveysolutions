@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireAuthorizeAttribute.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire authorize attribute.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Security
+﻿namespace Questionnaire.Core.Web.Security
 {
     using System;
     using System.Linq;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DomainExceptionType.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The domain exception type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     /// <summary>
     /// The domain exception type.
@@ -133,6 +124,12 @@ namespace Main.Core.Domain
 
         MoreThanOneGroupsWithSuchIdExists,
 
-        TemplateIsInvalid
+        TemplateIsInvalid,
+
+        VariableNameShouldNotMatchWithKeywords,
+
+        TooFewOptionsInCategoryQuestion,
+
+        CouldNotDeleteInterview
     }
 }

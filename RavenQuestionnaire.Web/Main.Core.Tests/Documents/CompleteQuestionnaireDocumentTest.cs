@@ -1,11 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDocumentTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire document test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Machine.Specifications.Model;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
+
 namespace Main.Core.Tests.Documents
 {
     using System;
@@ -85,6 +81,7 @@ namespace Main.Core.Tests.Documents
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             var doc = new QuestionnaireDocument();
             var mainGroup = new Group();
             var group1 = new Group();

@@ -1,20 +1,22 @@
 @using WB.UI.Designer
 @using WB.UI.Shared.Web.Membership
+@using WB.UI.Designer.Code
 @{
     IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>@this.ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
     @this.RenderSection("Styles", required: false)
     @this.RenderSection("Scripts", required: false)
     @this.Html.Partial("_html5shiv")
-    @* favicons and touch icons go here *@
-</head>
+    @Html.Partial("_trackers")
+    @* favicons and touch icons go here *@</head>
 <body class="loading">
     <div class="loading-backdrop"></div>
     <div class="navbar  navbar-fixed-top">
@@ -63,7 +65,7 @@
             @this.Html.Partial("_alerts")
             @this.RenderBody()
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid" id="footer-block">
             <hr>
             <footer class="text-center">
                 © 2013 <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://web.worldbank.org/WBSITE/EXTERNAL/0,,contentMDK:20146401~pagePK:50016803~piPK:50016805~theSitePK:13,00.html">Legal</a>.

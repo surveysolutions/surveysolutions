@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    @RenderSection("styles", false)
+}
+@section scripts
+{
+    @RenderSection("scripts", false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#umbrella').hide();
+        });
+    </script>
+}
+<div id="content" class="no-menu">
+    <div class="innerLR">
+        @Html.Partial("_alerts")
+    </div>
+    @RenderBody()
+</div>

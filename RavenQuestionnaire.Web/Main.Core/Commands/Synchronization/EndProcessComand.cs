@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EndProcessComand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The end process comand.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Synchronization
+﻿namespace Main.Core.Commands.Synchronization
 {
     using System;
 

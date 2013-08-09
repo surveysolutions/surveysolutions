@@ -1,24 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire.Completed;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>{
-        private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
-        private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
+    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>,
+                                         IEventHandler<QuestionnaireStatusChanged>, IEventHandler<InterviewMetaInfoUpdated>
+    {
+        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<SurveyDto> _surveyDTOdocumentStorage;
 
-        public DashboardDenormalizer(IDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
+        public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
+            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage
             )
         {
             _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;
@@ -27,24 +26,21 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-                return;
-          
-            PropeedCompleteQuestionnaire(document);
+            var document = evnt.Payload.Source;
+            ProcessCompleteQuestionnaire(document);
         }
 
         #endregion
-        protected void PropeedCompleteQuestionnaire( CompleteQuestionnaireDocument doc)
+        protected void ProcessCompleteQuestionnaire( CompleteQuestionnaireDocument doc)
         {
             if (!IsVisible(doc.Status))
             {
                 _questionnaireDTOdocumentStorage.Remove(doc.PublicKey);
                 return;
             }
-            var featuredItems = doc.Find<ICompleteQuestion>(q => q.Featured);
+            var featuredItems = doc.GetFeaturedQuestions();
             var items = featuredItems.Select(
                 q =>
                 new FeaturedItem(q.PublicKey, q.QuestionText,
@@ -56,6 +52,29 @@ namespace CAPI.Android.Core.Model.EventHandlers
             _questionnaireDTOdocumentStorage.Store(
                 new QuestionnaireDTO(doc.PublicKey, doc.Responsible.Id, doc.TemplateId, doc.Status, items),
                 doc.PublicKey);
+        }
+
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            var meta = evnt.Payload;
+            var status = SurveyStatus.GetStatusByIdOrDefault(meta.StatusId);
+
+            if (!IsVisible(status))
+            {
+                _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
+                return;
+            }
+
+            var items = meta.FeaturedQuestionsMeta.Select(q => new FeaturedItem(q.PublicKey, q.Title, q.Value)).ToList();
+            var survey = _surveyDTOdocumentStorage.GetById(meta.TemplateId);
+            
+            if (survey == null)
+                _surveyDTOdocumentStorage.Store(new SurveyDto(meta.TemplateId, meta.Title), meta.TemplateId);
+          
+            _questionnaireDTOdocumentStorage.Store(
+                new QuestionnaireDTO(evnt.EventSourceId, meta.ResponsibleId.Value, meta.TemplateId, status, items),
+                evnt.EventSourceId);
         }
 
  
@@ -80,7 +99,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
         protected bool IsVisible(SurveyStatus status)
         {
             return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Error;
+                   status == SurveyStatus.Reinit || status == SurveyStatus.Error;
+        }
+        
+        public void RemoveItem(Guid itemId)
+        {
+            _questionnaireDTOdocumentStorage.Remove(itemId);
         }
     }
 }

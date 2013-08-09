@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -7,16 +7,14 @@ using System.Reflection;
 #if !MONODROID
 using System.Transactions;
 #endif
-
-using WB.Core.SharedKernel.Logger;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public class InProcessEventBus : IEventBus
     {
         private readonly Dictionary<Type, List<Action<PublishedEvent>>> _handlerRegister = new Dictionary<Type, List<Action<PublishedEvent>>>();
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly bool _useTransactionScope;
 
         /// <summary>
@@ -132,11 +130,15 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             var eventDataType = typeof(TEvent);
 
-            Action<PublishedEvent> act = evnt => handler.Handle((IPublishedEvent<TEvent>)evnt);
-            RegisterHandler(eventDataType, act);
+            RegisterHandler(eventDataType, this.DoActionForHandler(handler));
         }
 
-        public void RegisterHandler(Type eventDataType, Action<PublishedEvent> handler)
+        protected virtual Action<PublishedEvent> DoActionForHandler<TEvent>(IEventHandler<TEvent> handler)
+        {
+            return evnt => handler.Handle((IPublishedEvent<TEvent>)evnt);
+        }
+
+        private void RegisterHandler(Type eventDataType, Action<PublishedEvent> handler)
         {
             List<Action<PublishedEvent>> handlers = null;
             if (!_handlerRegister.TryGetValue(eventDataType, out handlers))

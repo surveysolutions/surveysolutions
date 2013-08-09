@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringUtil.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The string util.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility
+﻿namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +14,21 @@ namespace Main.Core.Utility
     public static class StringUtil
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The get order request string.
+        /// </summary>
+        /// <param name="orders">
+        /// The orders.
+        /// </param>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        public static string GetOrderRequestString(IEnumerable<OrderRequestItem> orders)
+        {
+            return orders == null ? string.Empty : string.Join(
+                ",", orders.Select(o => o.Field + (o.Direction == OrderDirection.Asc ? string.Empty : " Desc")));
+        }
 
         /// <summary>
         /// The get order request string.
@@ -102,6 +109,8 @@ namespace Main.Core.Utility
         /// </returns>
         public static bool ContainsIgnoreCaseSensitive(this string source, string dest)
         {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(dest)) return false;
+
             return source.ToLower().Contains(dest.ToLower());
         }
 
@@ -137,6 +146,25 @@ namespace Main.Core.Utility
         {
             return JsonConvert.DeserializeObject<T>(
                 json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+        }
+
+        public static string ToWBEmailAddress(this string source)
+        {
+            return string.Concat("<", source, ">");
+        }
+
+
+        public static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+        public static string GetString(byte[] bytes)
+        {
+            char[] chars = new char[bytes.Length / sizeof(char)];
+            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
         }
 
         #endregion

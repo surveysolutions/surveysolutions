@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete question view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Linq;
 using Main.Core.Documents;

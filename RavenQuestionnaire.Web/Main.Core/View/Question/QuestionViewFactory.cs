@@ -1,15 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The question view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Question
 {
@@ -25,7 +20,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// The _document session.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireDocument> _documentSession;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> _documentSession;
 
         #endregion
 
@@ -37,7 +32,7 @@ namespace Main.Core.View.Question
         /// <param name="documentSession">
         /// The document session.
         /// </param>
-        public QuestionViewFactory(IDenormalizerStorage<QuestionnaireDocument> documentSession)
+        public QuestionViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> documentSession)
         {
             this._documentSession = documentSession;
         }

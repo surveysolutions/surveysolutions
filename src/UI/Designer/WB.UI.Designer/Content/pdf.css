@@ -1,13 +1,88 @@
-﻿.pdf-preview .content {
-    width: 855px;
-    margin: 0 auto;
-    padding: 60px 55px 60px 50px;
-
-    border: 1px solid black;
-    box-shadow: 5px 5px 3px #888;
+﻿body {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1em;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.pdf-preview .buttons {
-    padding: 15px;
-    text-align: center;
+header {
+    font-weight: bold; 
+    font-size: 140%; 
+    text-align: center; 
+    padding-bottom: 10px;
+}
+h1 {
+    font-weight: bold;
+    font-size: 120%;
+    page-break-after: avoid;
+}
+h2 {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 100%;
+    page-break-after: avoid;
+}
+h3, h4 {
+    font-weight: normal;
+    font-size: 100%;
+    page-break-after: avoid;
+}
+sup {
+    font-size: 70%;
+}
+.answer-options {
+    list-style-type: none;
+}
+.answer-value {
+    font-weight: bold;
+}
+.answer-placeholder {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    border-bottom-color: #000000;
+}
+.question {
+    margin: 0;
+    padding: 0;
+    padding-top: 15px;
+}
+.no-page-break {
+    page-break-inside: avoid;
+}
+.no-line-break{
+    white-space: nowrap;
+}
+.square-placeholder {
+    display: inline-block;
+    border: 1px solid black;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    width: 20px;
+    font-size: 130%;
+}
+
+.date-answer-day, .date-answer-month, .date-answer-year {
+    display: inline-block
+}
+.date-answer-day, .date-answer-month {
+    width: 50px;
+}
+.date-answer-year {
+    width: 100px;
+}
+
+.page-break {
+    page-break-after: always;
+    page-break-inside: auto;
+    page-break-before: always;
+}
+
+.variable-name {
+    background-color: #A38F8F;
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
+    padding: 2px 4px;
+    white-space: nowrap;
+    font-size: 80%;
 }

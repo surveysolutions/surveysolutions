@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtentionFunctions.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The extension functions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.ExpressionExecutors.ExpressionExtentions
+﻿namespace Main.Core.ExpressionExecutors.ExpressionExtentions
 {
     using System;
     using System.Collections;

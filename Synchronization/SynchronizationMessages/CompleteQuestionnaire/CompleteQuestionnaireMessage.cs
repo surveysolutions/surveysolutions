@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireMessage.cs" company="World bank">
-//   2012 
-// </copyright>
-// <summary>
-//   The event sync message.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System;

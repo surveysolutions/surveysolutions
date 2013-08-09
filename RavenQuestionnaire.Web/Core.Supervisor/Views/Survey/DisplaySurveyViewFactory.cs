@@ -1,3 +1,7 @@
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 namespace Core.Supervisor.Views.Survey
 {
     using System;
@@ -9,11 +13,11 @@ namespace Core.Supervisor.Views.Survey
 
     public class DisplaySurveyViewFactory : IViewFactory<DisplayViewInputModel, SurveyScreenView>
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store;
 
         private readonly ISurveyScreenSupplier surveyScreenSupplier;
 
-        public DisplaySurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store,
+        public DisplaySurveyViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> store,
                                         ISurveyScreenSupplier surveyScreenSupplier)
         {
             this.store = store;
@@ -29,7 +33,7 @@ namespace Core.Supervisor.Views.Survey
 
             var doc = this.store.GetById(input.CompleteQuestionnaireId);
 
-            if (doc == null)
+            if (doc == null || doc.IsDeleted)
             {
                 return null;
             }

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RegisterFirstInstanceOfInterface.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The register first instance of interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Conventions
+﻿namespace Main.Core.Conventions
 {
     using System;
     using System.Collections.Generic;
@@ -83,8 +75,9 @@ namespace Main.Core.Conventions
                 return y;
             }
 
-            Type matchedType =
-                assemblyes.SelectMany(a=>a.GetTypes()).FirstOrDefault(
+            Type matchedType = assemblyes
+                .SelectMany(a=>a.GetTypes().Where(t => t.IsVisible))
+                .FirstOrDefault(
                     x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
             if (matchedType == null)
             {

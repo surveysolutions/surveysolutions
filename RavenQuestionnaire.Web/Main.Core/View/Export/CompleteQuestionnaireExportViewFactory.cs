@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireExportViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire export view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +7,10 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.DenormalizerStorage;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Export
 {
@@ -29,9 +24,9 @@ namespace Main.Core.View.Export
         /// <summary>
         /// The document session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession;
+        private readonly IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> documentSession;
 
-        private readonly IDenormalizerStorage<QuestionnaireDocument> templateSession;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> templateSession;
         #endregion
 
         #region Constructors and Destructors
@@ -43,7 +38,7 @@ namespace Main.Core.View.Export
         /// The document session.
         /// </param>
         public CompleteQuestionnaireExportViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession, IDenormalizerStorage<QuestionnaireDocument> templateSession)
+            IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument> documentSession, IReadSideRepositoryReader<QuestionnaireDocument> templateSession)
         {
             this.documentSession = documentSession;
             this.templateSession = templateSession;

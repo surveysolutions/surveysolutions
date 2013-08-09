@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ICompleteQuestionnaireDocument type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Documents
+﻿namespace Main.Core.Documents
 {
     using System;
     using System.Collections.Generic;
@@ -50,6 +42,8 @@ namespace Main.Core.Documents
 
             //// this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
+
+            this.IsDeleted = false;
         }
 
         #endregion
@@ -191,7 +185,7 @@ namespace Main.Core.Documents
         /// </returns>
         public CompleteQuestionWrapper GetQuestionByKey(string key)
         {
-            return this.questionHash.GetQuestionByKey(key);
+            return this.GetQuestionHash().GetQuestionByKey(key);
         }
 
         /// <summary>
@@ -244,6 +238,10 @@ namespace Main.Core.Documents
             {
             }
         }
+
+        public Guid? DeletedBy { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         /// <summary>
         /// Gets the wrapped questions.
@@ -542,7 +540,7 @@ namespace Main.Core.Documents
 
 
             parent.Children.Remove(itemToDelete);
-            this.questionHash.RemoveGroup(itemToDelete);
+            this.GetQuestionHash().RemoveGroup(itemToDelete);
         }
 
         #endregion

@@ -1,21 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Main.Core.View.User;
-using Main.DenormalizerStorage;
-using Main.Synchronization.Credentials;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.Authorization
 {
     public class AndroidAuthentication : IAuthentication
     {
-        private readonly IFilterableDenormalizerStorage<LoginDTO> _documentStorage;
-        public AndroidAuthentication(IFilterableDenormalizerStorage<LoginDTO> documentStorage)
+        #warning ViewFactory should be used here
+        private readonly IFilterableReadSideRepositoryReader<LoginDTO> documentStorage;
+
+        public AndroidAuthentication(IFilterableReadSideRepositoryReader<LoginDTO> documentStorage)
         {
-            _documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
         }
 
         private UserLight currentUser;
@@ -27,13 +26,13 @@ namespace CAPI.Android.Core.Model.Authorization
         }
 
 
-        public SyncCredentials RequestSyncCredentials()
+        public SyncCredentials? RequestSyncCredentials()
         {
             if(!IsLoggedIn)
-                throw new InvalidOperationException("please logoin first");
+                throw new InvalidOperationException("Please login first.");
 
             LoginDTO user =
-                 _documentStorage.Query(
+                 this.documentStorage.Filter(
                      u =>
                      u.Login == CurrentUser.Name)
                                  .FirstOrDefault();
@@ -46,13 +45,13 @@ namespace CAPI.Android.Core.Model.Authorization
         public bool LogOn(string userName, string password)
         {
             if (currentUser != null)
-                throw new InvalidOperationException("please logoff first");
+                throw new InvalidOperationException("Please logoff first.");
             try
             {
                 var hash = SimpleHash.ComputeHash(password);
 
                 LoginDTO user =
-                    _documentStorage.Query(
+                    this.documentStorage.Filter(
                         u =>
                         u.Login == userName/* && u.Password == hash && !u.IsLocked*/)
                                     .FirstOrDefault();

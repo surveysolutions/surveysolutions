@@ -813,6 +813,21 @@ Date.prototype.mmddyyyy = function () {
     };
 
     $(document).ready(function () {
+        
+        var setMinHeight = function () {
+            var windowHeight = $(window).height();
+            var navigationHeight = $('.navbar.navbar-fixed-top').height();
+            $('#stacks').css('min-height', (windowHeight - navigationHeight) + 'px');
+            $('#wrapper').css('margin-top', navigationHeight + 'px');
+            $('#umbrella').css('top', navigationHeight + 'px');
+
+        };
+        
+        setMinHeight();
+        $(window).resize(function () {
+            setMinHeight();
+        });
+        
         // bind a new instance of our view model to the page
         viewModel = new SurveyModel(questionnaire || {});
         ko.applyBindings(viewModel);
@@ -850,6 +865,8 @@ Date.prototype.mmddyyyy = function () {
                 }
             }
         }).init();
+
+        $('#umbrella').hide();
     });
 
 } ());

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionType.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The question type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 
 namespace Main.Core.Entities.SubEntities
 {

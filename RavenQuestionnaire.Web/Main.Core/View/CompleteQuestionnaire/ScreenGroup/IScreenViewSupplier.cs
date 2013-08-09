@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IScreenViewSupplier.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
+﻿namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;

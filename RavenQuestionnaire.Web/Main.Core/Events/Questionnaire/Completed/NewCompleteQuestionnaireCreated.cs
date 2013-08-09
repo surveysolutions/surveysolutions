@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewCompleteQuestionnaireCreated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The new complete questionnaire created.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire.Completed
+﻿namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
     using Main.Core.Documents;

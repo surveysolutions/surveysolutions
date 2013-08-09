@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ZipFileData.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The zip file data.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace SynchronizationMessages.Export
 {
     using System;
@@ -64,15 +55,6 @@ namespace SynchronizationMessages.Export
 
         #endregion
 
-        /// <summary>
-        /// The make valid file name.
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <returns>
-        /// The make valid file name.
-        /// </returns>
         public static string MakeValidFileName(string name)
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
@@ -80,53 +62,6 @@ namespace SynchronizationMessages.Export
             return Regex.Replace(name, invalidReStr, "_");
         }
 
-        /// <summary>
-        /// The events to string.
-        /// </summary>
-        /// <param name="clientGuid">
-        /// The client guid.
-        /// </param>
-        /// <param name="events">
-        /// The events.
-        /// </param>
-        /// <returns>
-        /// The events to string
-        /// </returns>
-        public static string EventsToString(Guid? clientGuid, IEnumerable<AggregateRootEvent> events)
-        {
-            var data = new ZipFileData
-                {
-                    ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value,
-                    Events = events
-                };
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
-        }
-
-        /// <summary>
-        /// The export internal.
-        /// </summary>
-        /// <param name="files">
-        /// The files.
-        /// </param>
-        /// <param name="entryFileName">
-        /// The entry file name.
-        /// </param>
-        /// <returns>
-        /// Byte array
-        /// </returns>
-        public static byte[] ExportInternal(Dictionary<string, string> files, string entryFileName)
-        {
-            return ExportInternal(
-                (zip) =>
-                {
-                    foreach (var file in files)
-                    {
-                        zip.AddEntry(MakeValidFileName(file.Key), file.Value);
-                    }
-                },
-                entryFileName);
-        }
 
         /// <summary>
         /// The export internal.
@@ -153,39 +88,7 @@ namespace SynchronizationMessages.Export
                 entryFileName);
         }
 
-        /// <summary>
-        /// The export internal.
-        /// </summary>
-        /// <param name="data">
-        /// The events.
-        /// </param>
-        /// <param name="fileName">
-        /// The file Name.
-        /// </param>
-        /// <returns>
-        /// Zip file as array of bytes
-        /// </returns>
-        public static byte[] ExportInternal(string data, string fileName)
-        {
-            return ExportInternal((zip) => zip.AddEntry(MakeValidFileName(fileName), data), fileName);
-        }
 
-        /// <summary>
-        /// The export internal.
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <param name="fileName">
-        /// The file name.
-        /// </param>
-        /// <returns>
-        /// Byte array
-        /// </returns>
-        public static byte[] ExportInternal(Stream data, string fileName)
-        {
-            return ExportInternal((zip) => zip.AddEntry(MakeValidFileName(fileName), data), fileName);
-        }
 
         /// <summary>
         /// The export internal.

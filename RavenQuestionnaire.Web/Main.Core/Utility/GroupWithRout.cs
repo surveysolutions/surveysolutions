@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GroupWithRout.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Utility
+﻿namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;

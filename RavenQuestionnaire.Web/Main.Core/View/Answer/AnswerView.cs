@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnswerView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The answer view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
@@ -18,8 +9,6 @@ namespace Main.Core.View.Answer
     /// </summary>
     public class AnswerView : ICompositeView
     {
-        #region Constructors and Destructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AnswerView"/> class.
         /// </summary>
@@ -58,10 +47,6 @@ namespace Main.Core.View.Answer
         {
             this.Parent = questionPublicKey;
         }
-
-        #endregion
-
-        #region Public Properties
 
         /// <summary>
         /// Gets or sets the answer image.
@@ -112,7 +97,5 @@ namespace Main.Core.View.Answer
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
-
-        #endregion
     }
 }

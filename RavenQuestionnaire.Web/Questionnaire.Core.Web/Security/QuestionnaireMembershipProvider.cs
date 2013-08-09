@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireMembershipProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire membership provider.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Questionnaire.Core.Web.Security
+﻿namespace Questionnaire.Core.Web.Security
 {
     using System;
     using System.Data;
@@ -25,28 +17,16 @@ namespace Questionnaire.Core.Web.Security
 
     using Questionnaire.Core.Web.Helpers;
 
-    /// <summary>
-    /// The questionnaire membership provider.
-    /// </summary>
     public class QuestionnaireMembershipProvider : MembershipProvider
     {
-        #region Static Fields
-
-        /// <summary>
-        /// The person to request.
-        /// </summary>
         private static readonly string PERSON_TO_REQUEST = "FEF8050CBFAC46edBDF6B73C5C14DF0B.";
 
-        #endregion
-
-        #region Fields
-
-        /// <summary>
-        /// The _application name.
-        /// </summary>
         private string applicationName = "Questionnaire";
 
-        #endregion
+        private IViewFactory<UserViewInputModel, UserView> ViewFactory
+        {
+            get { return ServiceLocator.Current.GetInstance<IViewFactory<UserViewInputModel, UserView>>(); }
+        }
 
         #region Public Properties
 
@@ -66,16 +46,9 @@ namespace Questionnaire.Core.Web.Security
             }
         }
 
-        /// <summary>
-        /// Gets the command invoker.
-        /// </summary>
         public ICommandService CommandInvoker
         {
-            get
-            {
-                return NcqrsEnvironment.Get<ICommandService>(); /*KernelLocator.Kernel.Get<ICommandInvoker>()*/
-                ;
-            }
+            get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
         /// <summary>
@@ -191,17 +164,6 @@ namespace Questionnaire.Core.Web.Security
             get
             {
                 return true;
-            }
-        }
-
-        /// <summary>
-        /// Gets the view repository.
-        /// </summary>
-        public IViewRepository ViewRepository
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IViewRepository>();
             }
         }
 
@@ -445,7 +407,7 @@ namespace Questionnaire.Core.Web.Security
             if (retval == null)
             {
                 UserView person =
-                    this.ViewRepository.Load<UserViewInputModel, UserView>(
+                    this.ViewFactory.Load(
                         new UserViewInputModel((Guid)providerUserKey));
                 if (person == null)
                 {
@@ -484,7 +446,7 @@ namespace Questionnaire.Core.Web.Security
             if (retval == null)
             {
                 UserView person =
-                    this.ViewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(username, null));
+                    this.ViewFactory.Load(new UserViewInputModel(username, null));
                 if (person == null)
                 {
                     return null;
@@ -575,7 +537,7 @@ namespace Questionnaire.Core.Web.Security
         public override bool ValidateUser(string username, string password)
         {
             UserView user =
-                this.ViewRepository.Load<UserViewInputModel, UserView>(
+                this.ViewFactory.Load(
                     new UserViewInputModel(
                         username.ToLower(), 
                         // bad hack due to key insensitivity of login

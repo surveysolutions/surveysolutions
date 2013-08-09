@@ -1,11 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TestDataConfigurator.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The test data configurator.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
+
 namespace Main.Core.Tests.Domain
 {
     using System;
@@ -76,6 +71,8 @@ namespace Main.Core.Tests.Domain
         /// </summary>
         public TestDataConfigurator()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+            
             this.Document = this.GenerateQuestionnaireDocument();
         }
 

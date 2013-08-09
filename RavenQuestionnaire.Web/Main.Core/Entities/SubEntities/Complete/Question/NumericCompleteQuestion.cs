@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumericCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The numeric complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Main.Core.Domain.Exceptions;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
@@ -15,7 +8,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     /// <summary>
     /// The numeric complete question.
     /// </summary>
-    public sealed class NumericCompleteQuestion : AbstractCompleteQuestion, INumericQuestion, ICompelteValueQuestion<double?>
+    public sealed class NumericCompleteQuestion : AbstractCompleteQuestion, INumericQuestion,
+                                                  ICompelteValueQuestion<double?>
     {
 
         #region Constructors and Destructors
@@ -45,13 +39,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         // get { return new List<IComposite>(); }
         // set { }
         // }
+
         #region Public Properties
 
         /// <summary>
         /// Gets or sets the add numeric attr.
         /// </summary>
         public string AddNumericAttr { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the int attr.
         /// </summary>
@@ -87,7 +82,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// The get answer object.
         /// </summary>
@@ -120,7 +115,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
-        
+
         /// <summary>
         /// The set answer.
         /// </summary>
@@ -146,11 +141,27 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
         }
 
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            if (string.IsNullOrWhiteSpace(answerValue))
+            {
+                return;
+            }
+            double value;
+            if (!double.TryParse(answerValue.Trim(), out value))
+            {
+                throw new InterviewException("value must be numeric");
+            }
+
+        }
+
+
         #endregion
 
         #region Implementation of ICompelteValueQuestion<int>
 
-        public double? Answer { get; set; }
+        public
+            double? Answer { get; set; }
 
         #endregion
     }

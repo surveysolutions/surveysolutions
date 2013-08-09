@@ -1,26 +1,27 @@
 using System;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.View;
+using Android.Util;
+using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
-using CAPI.Android.Core;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
-using Main.Core.Domain;
-using Ncqrs.Restoring.EventStapshoot;
+using CAPI.Android.Services;
+using Cirrious.MvvmCross.Droid.Fragging;
+using Ninject;
 
-/*
-using FragmentTransaction = Android.App.FragmentTransaction;
-using Orientation = Android.Content.Res.Orientation;*/
 
 namespace CAPI.Android
 {
     [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
-    public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
+    public class DetailsActivity : MvxFragmentActivity/*<CompleteQuestionnaireView>, View.IOnTouchListener*/
     {
         protected ItemPublicKey? ScreenId;
         protected FrameLayout FlDetails
@@ -31,29 +32,44 @@ namespace CAPI.Android
         {
             get { return Guid.Parse(Intent.GetStringExtra("publicKey")); }
         }
+
+        protected CompleteQuestionnaireView Model {
+            get { return ViewModel as CompleteQuestionnaireView; }
+        }
+
         protected ViewPager VpContent
         {
             get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
         }
-        protected LinearLayout llContainer
+        protected LinearLayout llNavigationHolder
         {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llNavigationHolder); }
         }
-     /*   protected LinearLayout llNavigationContainer
+
+        protected FrameLayout flSpaceFiller
         {
-            get
-            {
-                return
-                    this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
-            }
-        }*/
-        
+            get { return this.FindViewById<FrameLayout>(Resource.Id.flSpaceFiller); }
+        }
+        protected RelativeLayout lNavigationContainer
+        {
+            get { return this.FindViewById<RelativeLayout>(Resource.Id.lNavigationContainer); }
+        }
+        protected RelativeLayout llContainer
+        {
+            get { return this.FindViewById<RelativeLayout>(Resource.Id.llContainer); }
+        }
+        protected TextView btnNavigation
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.btnNavigation); }
+        }
         protected ContentFrameAdapter Adapter { get; set; }
         protected QuestionnaireNavigationFragment NavList { get; set; }
 
+        protected CleanUpExecutor cleanUpExecutor { get; set; }
+
         protected override void OnCreate(Bundle bundle)
         {
-          
+
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                 new QuestionnaireScreenInput(QuestionnaireId));
 
@@ -61,8 +77,9 @@ namespace CAPI.Android
 
             if (this.FinishIfNotLoggedIn())
                 return;
-
             SetContentView(Resource.Layout.Details);
+
+
             if (bundle != null)
             {
                 var savedScreen = bundle.GetString("ScreenId");
@@ -73,28 +90,114 @@ namespace CAPI.Android
             }
             else
             {
-                ScreenId = ViewModel.Chapters.FirstOrDefault().ScreenId;
+                ScreenId = Model.Chapters.FirstOrDefault().ScreenId;
             }
 
-            this.Title = ViewModel.Title;
+            this.Title = Model.Title;
 
             if (bundle == null)
             {
-                NavList = QuestionnaireNavigationFragment.NewInstance(ViewModel.PublicKey);
+                NavList = QuestionnaireNavigationFragment.NewInstance(Model.PublicKey);
                 this.SupportFragmentManager.BeginTransaction()
-                    .Add(Resource.Id.llNavigationContainer, NavList, "navigation")
+                    .Add(Resource.Id.llNavigationHolder, NavList, "navigation")
                     .Commit();
-                //  NavList.NewInstance(ViewModel.PublicKey);
-                //NavList.Model = ViewModel;
             }
             else
             {
                 NavList = this.SupportFragmentManager.FindFragmentByTag("navigation") as QuestionnaireNavigationFragment;
             }
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, ScreenId);
+
+            btnNavigation.Click += llNavigationHolder_Click;
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, ScreenId);
             VpContent.Adapter = Adapter;
             VpContent.PageSelected += VpContent_PageSelected;
 
+            cleanUpExecutor = new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>());
+
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            UpdateLayout(false);
+        }
+        public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            isChaptersVisible = false;
+            UpdateLayout(false);
+        }
+
+        private void UpdateLayout(bool isNavigationVisible)
+        {
+
+            var  point = GetScreenSizePoint();
+            var vpContentParams =
+                new RelativeLayout.LayoutParams(
+                    isNavigationVisible
+                        ? (point.X / 2 + btnNavigation.LayoutParameters.Width)
+                        : point.X,
+                    ViewGroup.LayoutParams.FillParent);
+
+            vpContentParams.LeftMargin = point.X - vpContentParams.Width;
+            VpContent.LayoutParameters = vpContentParams;
+
+            var lNavigationContainerParams =
+               new RelativeLayout.LayoutParams(point.X / 2,
+                                               ViewGroup.LayoutParams.FillParent);
+
+            lNavigationContainerParams.LeftMargin = isNavigationVisible
+                                                        ? 0 : btnNavigation.LayoutParameters.Width - lNavigationContainerParams.Width;
+
+            lNavigationContainer.LayoutParameters = lNavigationContainerParams;
+
+            flSpaceFiller.LayoutParameters = new LinearLayout.LayoutParams(40, point.Y - 100);
+        }
+
+        protected Point GetScreenSizePoint()
+        {
+            var rectSize = new Rect();
+            this.WindowManager.DefaultDisplay.GetRectSize(rectSize);
+
+            TypedValue tv = new TypedValue();
+            int actionBarHeight = 0;
+
+            if (this.Theme.ResolveAttribute(global::Android.Resource.Attribute.ActionBarSize, tv, true))
+            {
+                actionBarHeight = TypedValue.ComplexToDimensionPixelSize(tv.Data, this.Resources.DisplayMetrics);
+                
+            }
+            return new Point(rectSize.Width(), rectSize.Height() - actionBarHeight);
+        }
+
+        private bool isChaptersVisible = false;
+
+        private void llNavigationHolder_Click(object sender, EventArgs e)
+        {
+            var point = GetScreenSizePoint();
+            int right, left;
+            if (isChaptersVisible)
+            {
+                right = btnNavigation.LayoutParameters.Width;
+                left = btnNavigation.LayoutParameters.Width - point.X / 2;
+             
+                isChaptersVisible = false;
+            }
+            else
+            {
+                right = point.X / 2;
+                left = 0;
+
+                isChaptersVisible = true;
+            }
+
+            UpdateLayout(isChaptersVisible);
+
+            lNavigationContainer.Layout(left, lNavigationContainer.Top, right, lNavigationContainer.Bottom);
+
+            VpContent.Layout(right, VpContent.Top, right + VpContent.Width, VpContent.Bottom);
+
+            VpContent.RequestLayout();
         }
 
         protected override void OnSaveInstanceState(Bundle outState)
@@ -115,11 +218,6 @@ namespace CAPI.Android
             }
             base.OnAttachFragment(p0);
         }
-        public override void Finish()
-        {
-            CapiApplication.CommandService.Execute(new CreateSnapshotForAR(QuestionnaireId, typeof(CompleteQuestionnaireAR)));
-            base.Finish();
-        }
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
 
@@ -135,11 +233,11 @@ namespace CAPI.Android
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
             if (e.ScreenId.HasValue)
             {
-                var screen = ViewModel.Screens[e.ScreenId.Value];
+                var screen = Model.Screens[e.ScreenId.Value];
                 var chapterKey = screen.Breadcrumbs.First();
-                for (int i = 0; i < ViewModel.Chapters.Count; i++)
+                for (int i = 0; i < Model.Chapters.Count; i++)
                 {
-                    if (ViewModel.Chapters[i].ScreenId == chapterKey)
+                    if (Model.Chapters[i].ScreenId == chapterKey)
                     {
                         NavList.SelectItem(i);
                     }
@@ -153,8 +251,8 @@ namespace CAPI.Android
         {
 
             if (Adapter.IsRoot)
-                NavList.SelectItem(e.P0);
-            var statistic = Adapter.GetItem(e.P0) as StatisticsContentFragment;
+                NavList.SelectItem(e.Position);
+            var statistic = Adapter.GetItem(e.Position) as StatisticsContentFragment;
             if (statistic != null)
                 statistic.RecalculateStatistics();
         }
@@ -166,6 +264,12 @@ namespace CAPI.Android
             GC.Collect();
         }
 
+        public override void Finish()
+        {
+            base.Finish();
+            
+            cleanUpExecutor.CleanUpInterviewCaches(QuestionnaireId);
+        }
 
         public override void OnLowMemory()
         {

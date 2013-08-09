@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileUploaded.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The file uploaded.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.File
+﻿namespace Main.Core.Events.File
 {
     using System;
 

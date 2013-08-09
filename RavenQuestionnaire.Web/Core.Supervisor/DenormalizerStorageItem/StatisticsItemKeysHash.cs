@@ -1,8 +1,5 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="StatisticsItemKeysHash.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.DenormalizerStorageItem
 {
@@ -14,7 +11,7 @@ namespace Core.Supervisor.DenormalizerStorageItem
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class StatisticsItemKeysHash
+    public class StatisticsItemKeysHash : IView
     {
         /// <summary>
         /// Gets or sets StorageGuid.

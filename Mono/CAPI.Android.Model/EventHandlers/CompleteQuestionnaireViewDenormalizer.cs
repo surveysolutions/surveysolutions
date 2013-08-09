@@ -1,40 +1,35 @@
 using System;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, */
-        IEventHandler<ConditionalStatusChanged>,
-    IEventHandler<CommentSet>, 
-                                                     IEventHandler<SnapshootLoaded>,
-                                                     /*IEventHandler<CompleteQuestionnaireDeleted>, */
-                                                     IEventHandler<AnswerSet>, 
-                                                     IEventHandler<PropagatableGroupAdded>, 
-                                                     IEventHandler<PropagatableGroupDeleted>, /*
-                                                     IEventHandler<QuestionnaireAssignmentChanged>, */
-                                                     IEventHandler<QuestionnaireStatusChanged>
+    public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>, 
+                                                         IEventHandler<ConditionalStatusChanged>, 
+                                                         IEventHandler<CommentSet>,
+                                                         IEventHandler<AnswerSet>,
+                                                         IEventHandler<PropagatableGroupAdded>,
+                                                         IEventHandler<PropagatableGroupDeleted>,
+                                                         IEventHandler<QuestionnaireStatusChanged>
     {
         /// <summary>
         /// The _document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
-        #region Implementation of IEventHandler<in SnapshootLoaded>
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> _documentStorage;
 
-        public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+
+        public CompleteQuestionnaireViewDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
         {
             _documentStorage = documentStorage;
         }
+        #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-                return;
+            var document = evnt.Payload.Source;
+            
             var view = new CompleteQuestionnaireView(document);
 
             _documentStorage.Store(view, document.PublicKey);
@@ -137,5 +132,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         #endregion
+        
     }
 }

@@ -33,11 +33,11 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExternalLibs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
@@ -90,6 +90,9 @@
     <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\JsonEventSerializationFixture.cs">
       <Link>JsonEventSerializationFixture.cs</Link>
     </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\ObliviousEventContext.cs">
+      <Link>ObliviousEventContext.cs</Link>
+    </Compile>
     <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\OneEventTestFixture.cs">
       <Link>OneEventTestFixture.cs</Link>
     </Compile>
@@ -105,6 +108,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
+      <Name>AndroidMoq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
@@ -117,7 +124,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="aa90754b-ca47-429e-bdc8-2a83e94179b7" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="aa90754b-ca47-429e-bdc8-2a83e94179b7" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,20 +1,14 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
+
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
-    public class QuestionnaireListViewItem
+    public class QuestionnaireListViewItem : IView
     {
         #region Constructors and Destructors
         public QuestionnaireListViewItem()

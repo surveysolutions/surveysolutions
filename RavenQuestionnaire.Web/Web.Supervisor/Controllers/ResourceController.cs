@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResourceController.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ResourceController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Services;
+﻿using Main.Core.Services;
 
 namespace Web.Supervisor.Controllers
 {

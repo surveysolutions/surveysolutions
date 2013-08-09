@@ -1,14 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceDiscover.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The service discover.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-using WB.Core.SharedKernel.Utils.Logging;
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Questionnaire.Core.Web.WCF
 {
@@ -78,7 +69,8 @@ namespace Questionnaire.Core.Web.WCF
                 }
                 catch (Exception e)
                 {
-                    LogManager.GetLogger(this.GetType()).Fatal(e);
+                    var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                    logger.Fatal("Unexpected error occurred", e);
                 }
                 finally
                 {

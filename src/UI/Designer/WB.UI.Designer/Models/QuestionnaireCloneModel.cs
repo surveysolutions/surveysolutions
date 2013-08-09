@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireCloneModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire clone model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System;
     using System.ComponentModel;

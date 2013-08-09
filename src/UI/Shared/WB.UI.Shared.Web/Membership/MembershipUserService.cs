@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipUserService.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Shared.Web.Membership
+﻿namespace WB.UI.Shared.Web.Membership
 {
     using WebMatrix.WebData;
 

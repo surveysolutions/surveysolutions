@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The single complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Main.Core.Domain.Exceptions;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
@@ -155,6 +148,23 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             {
                 (item as ICompleteAnswer).Selected = selecteAnswer == item.PublicKey;
             }
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            if (answerKeys == null)
+            {
+                return;
+            }
+
+            Guid selecteAnswer = answerKeys.First();
+
+            foreach (var item in this.Answers)
+            {
+                if (selecteAnswer == item.PublicKey)
+                    return;
+            }
+            throw new InterviewException(string.Format("value {0} is absent", selecteAnswer));
         }
 
         #endregion

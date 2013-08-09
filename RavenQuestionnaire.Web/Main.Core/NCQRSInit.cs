@@ -1,13 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NCQRSInit.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The ncqrs init.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.SharedKernel.Utils.Logging;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core
 {
@@ -30,14 +22,9 @@ namespace Main.Core
 
     using Main.Core.Entities.Extensions;
     using Ncqrs.Domain.Storage;
-    using Ncqrs.Restoring.EventStapshoot;
-    using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 #if MONODROID
     using AndroidNcqrs.Eventing.Storage.SQLite;
-#else
-    using Ncqrs.Eventing.Storage.RavenDB;
-    using Raven.Client.Document;
 #endif
 
 
@@ -56,6 +43,8 @@ namespace Main.Core
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
 
+        
+
         public static bool IsReadLayerBuilt
         {
             get { return isReadLayerBuilt; }
@@ -65,20 +54,11 @@ namespace Main.Core
 
         public static void Init(IKernel kernel)
         {
-            Init(kernel, 50);
-        }
-
-        public static void Init(IKernel kernel, int pageSize)
-        {
 #if MONODROID
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             
-            var store = InitializeEventStore(kernel.Get<DocumentStore>(), pageSize);
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
-
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
@@ -88,19 +68,17 @@ namespace Main.Core
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
-            var snpshotStore = new InMemorySnapshootStore(NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore,
-                                                          new InMemoryEventStore());
+            var snpshotStore = new InMemoryEventStore();
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new  InProcessEventBus(true);
+            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
 
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
-            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
-                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
         public static void EnsureReadLayerIsBuilt()
@@ -124,7 +102,8 @@ namespace Main.Core
         /// </exception>
         public static void RebuildReadLayer()
         {
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding started.");
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Info("Read layer rebuilding started.");
 
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
@@ -142,11 +121,12 @@ namespace Main.Core
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
+            IEnumerable<IPublishableEvent> events = eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent);
+            eventBus.Publish(events);
 
             isReadLayerBuilt = true;
 
-            LogManager.GetLogger(typeof(NcqrsInit)).Info("Read layer rebuilding finished.");
+            logger.Info("Read layer rebuilding finished.");
         }
 
 
@@ -164,39 +144,18 @@ namespace Main.Core
         /// <returns>
         /// The <see cref="ICommandService"/>.
         /// </returns>
-        private static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
+        internal static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
             var mapper = new AttributeBasedCommandMapper();
-            var service = new ConcurrencyResolveCommandService();
+            var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             foreach (Type type in commandSupplier.GetCommandList())
             {
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
-            service.RegisterExecutor(typeof(CreateSnapshotForAR),
-                                    new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
-        
             return service;
         }
-
-#if !MONODROID
-        /// <summary>
-        /// The initialize event store.
-        /// </summary>
-        /// <param name="store">
-        /// The store.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IStreamableEventStore"/>.
-        /// </returns>
-        private static IStreamableEventStore InitializeEventStore(DocumentStore store, int pageSize)
-        {
-            return new RavenDBEventStore(store, pageSize);
-        }
-
-#endif
-
 
         /// <summary>
         /// The is i event handler interface.
@@ -221,7 +180,7 @@ namespace Main.Core
         /// <param name="kernel">
         /// The kernel.
         /// </param>
-        private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
+        internal static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
             IEnumerable<object> handlers = kernel.GetAll(typeof(IEventHandler<>)).Distinct();
             foreach (object handler in handlers)

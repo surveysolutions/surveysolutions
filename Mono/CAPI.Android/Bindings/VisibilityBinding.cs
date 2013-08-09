@@ -1,14 +1,14 @@
 using System;
 using Android.Views;
+using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using Cirrious.MvvmCross.Binding.Interfaces;
 
 namespace CAPI.Android.Bindings
 {
-    public class VisibilityBinding: MvxBaseAndroidTargetBinding
+    public class VisibilityBinding : MvxAndroidTargetBinding
     {
         private readonly View _control;
-        public VisibilityBinding(View control)
+        public VisibilityBinding(View control):base(control)
         {
             _control = control;
         }

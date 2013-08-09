@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileMetaUpdated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The file meta updated.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.File
+﻿namespace Main.Core.Events.File
 {
     using System;
 
