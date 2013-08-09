@@ -221,20 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            this.innerDocument.ConnectChildsWithParent();
-
-            var parentGroups = new List<Guid>();
-
-            IComposite parent = question.GetParent();
-            while (parent != innerDocument)
-            {
-                parentGroups.Add(parent.PublicKey);
-                parent = parent.GetParent();
-            }
-
-            return parentGroups;
+            return this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
         }
 
         public string GetCustomEnablementConditionForQuestion(Guid questionId)
@@ -382,6 +369,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             ).ToList();
         }
 
+        public IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId)
+        {
+            return this
+                .GetAllParentGroupsForQuestionStartingFromBottom(questionId)
+                .Where(this.IsPropogatableGroup)
+                .Reverse()
+                .ToList();
+        }
+
 
         private IEnumerable<IGroup> GetAllGroups()
         {
@@ -399,6 +395,24 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .GetAllQuestions()
                 .Where(DoesQuestionSupportPropagation)
                 .Cast<IAutoPropagateQuestion>();
+        }
+
+        private IEnumerable<Guid> GetAllParentGroupsForQuestionStartingFromBottom(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            this.innerDocument.ConnectChildsWithParent();
+
+            var parentGroups = new List<Guid>();
+
+            IComposite parent = question.GetParent();
+            while (parent != this.innerDocument)
+            {
+                parentGroups.Add(parent.PublicKey);
+                parent = parent.GetParent();
+            }
+
+            return parentGroups;
         }
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementCondition(string enablementCondition)
@@ -507,6 +521,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             if (!this.DoesQuestionSupportPropagation(questionId))
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not a propagating question.", questionId));
+        }
+
+        private bool IsPropogatableGroup(Guid groupId)
+        {
+            IGroup @group = this.GetGroupOrThrow(groupId);
+
+            return @group.Propagated == Propagate.AutoPropagated;
         }
 
         private void ThrowIfGroupDoesNotExist(Guid groupId)
