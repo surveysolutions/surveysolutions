@@ -341,6 +341,37 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return invalidQuestions;
         }
 
+        public bool ShouldQuestionPropagateGroups(Guid questionId)
+        {
+            return this.DoesQuestionSupportPropagation(questionId)
+                && this.GetGroupsPropagatedByQuestion(questionId).Any();
+        }
+
+        public IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId)
+        {
+            if (!this.DoesQuestionSupportPropagation(questionId))
+                return Enumerable.Empty<Guid>();
+
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var autoPropagatingQuestion = (IAutoPropagate) question;
+
+            foreach (Guid groupId in autoPropagatingQuestion.Triggers)
+            {
+                this.ThrowIfGroupDoesNotExist(groupId);
+            }
+
+            return autoPropagatingQuestion.Triggers.ToList();
+        }
+
+        public int GetMaxAnswerValueForPropagatingQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            this.ThrowIfQuestionDoesNotSupportPropagation(question.PublicKey);
+            var autoPropagatingQuestion = (IAutoPropagate) question;
+
+            return autoPropagatingQuestion.MaxValue;
+        }
+
 
         private IEnumerable<IGroup> GetAllGroups()
         {
@@ -439,6 +470,25 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
+        }
+
+        private bool DoesQuestionSupportPropagation(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return (question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate)
+                && (question is IAutoPropagate);
+        }
+
+        private void ThrowIfQuestionDoesNotSupportPropagation(Guid questionId)
+        {
+            if (!this.DoesQuestionSupportPropagation(questionId))
+                throw new QuestionnaireException(string.Format("Question with id '{0}' is not a propagating question.", questionId));
+        }
+
+        private void ThrowIfGroupDoesNotExist(Guid groupId)
+        {
+            this.GetGroupOrThrow(groupId);
         }
 
         private IGroup GetGroupOrThrow(Guid groupId)
