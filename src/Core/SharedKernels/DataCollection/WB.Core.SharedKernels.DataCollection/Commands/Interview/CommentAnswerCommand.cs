@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public string Comment { get; private set; }
 
-        public CommentAnswerCommand(Guid interviewId, Guid userId, Guid questionId, string comment)
-            : base(interviewId, userId, questionId)
+        public CommentAnswerCommand(Guid interviewId, Guid userId, Guid questionId, int[] propagationVector, string comment)
+            : base(interviewId, userId, questionId, propagationVector)
         {
             this.Comment = comment;
         }
