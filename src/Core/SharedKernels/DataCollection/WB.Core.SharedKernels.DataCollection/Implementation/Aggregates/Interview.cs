@@ -181,7 +181,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
                 out questionsToBeDisabled, out questionsToBeEnabled);
 
-            List<Guid> groupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId);
+            List<Guid> groupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId).ToList();
             int propagationCount = groupsToBePropagated.Any() ? ToPropagationCount(answer) : 0;
 
 
