@@ -1,5 +1,7 @@
 ﻿using Main.Core.View;
-using Main.Core.View.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace WB.UI.Headquarter.Controllers
 {
@@ -11,20 +13,19 @@ namespace WB.UI.Headquarter.Controllers
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-    using Main.Core.Commands.Questionnaire.Completed;
 
     public class DashboardController : Controller
     {
-        private readonly IViewRepository viewRepository;
+        private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory;
 
-        public DashboardController(IViewRepository viewRepository)
+        public DashboardController(IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> viewFactory)
         {
-            this.viewRepository = viewRepository;
+            this.viewFactory = viewFactory;
         }
 
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
-             var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+             var model = this.viewFactory.Load(input);
              return this.View(model);
         }
 

@@ -1,16 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomHandleErrorAttribute.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.UI.Designer.Exceptions
 {
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
-
-    using WB.Core.SharedKernel.Utils.Logging;
 
     /// <summary>
     /// The custom handle error attribute.
@@ -71,7 +66,8 @@ namespace WB.UI.Designer.Exceptions
             }
 
             // log the error 
-            LogManager.GetLogger(this.GetType()).Error(filterContext.Exception.Message, filterContext.Exception);
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Error(filterContext.Exception.Message, filterContext.Exception);
 
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();

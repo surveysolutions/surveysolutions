@@ -1,8 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipProviderSettings.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using WB.UI.Shared.Web;
 
 namespace WB.UI.Designer
 {
@@ -40,6 +36,7 @@ namespace WB.UI.Designer
         const string MAXINVALIDPASSWORDATTEMPTS = "maxInvalidPasswordAttempts";
         const string PASSWORDATTEMPTWINDOW = "passwordAttemptWindow";
         const string PASSWORDSTRENGTHREGULAREXPRESSION = "passwordStrengthRegularExpression";
+        private const string REQUIRESUNIQUEEMAIL = "requiresUniqueEmail";
 
         public bool EnablePasswordRetrieval { get; private set; }
         public bool EnablePasswordReset { get; private set; }
@@ -49,6 +46,7 @@ namespace WB.UI.Designer
         public int MaxInvalidPasswordAttempts { get; private set; }
         public int PasswordAttemptWindow { get; private set; }
         public string PasswordStrengthRegularExpression { get; private set; }
+        public bool RequiresUniqueEmail { get; private set; }
 
         #region Constructors and Destructors
 
@@ -69,6 +67,7 @@ namespace WB.UI.Designer
             this.MaxInvalidPasswordAttempts = GetInt(MAXINVALIDPASSWORDATTEMPTS, 5);
             this.PasswordAttemptWindow = GetInt(PASSWORDATTEMPTWINDOW, 10);
             this.PasswordStrengthRegularExpression = GetString(PASSWORDSTRENGTHREGULAREXPRESSION, string.Empty);
+            this.RequiresUniqueEmail = GetBoolean(REQUIRESUNIQUEEMAIL, true);
         }
 
         #endregion

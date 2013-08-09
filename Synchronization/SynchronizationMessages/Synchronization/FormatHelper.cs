@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FormatHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The format helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.Synchronization
+﻿namespace SynchronizationMessages.Synchronization
 {
     using System;
     using System.IO;

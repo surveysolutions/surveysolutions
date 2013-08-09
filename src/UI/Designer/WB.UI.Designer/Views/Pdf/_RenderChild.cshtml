@@ -1,25 +1,25 @@
-﻿@using Main.Core.View
-@using Main.Core.View.Question
-@model Main.Core.View.ICompositeView
+﻿@using WB.UI.Designer.Views.Questionnaire.Pdf
+@model PdfEntityView
 
-<p>
-
-    @this.Model.Title
-    <br/>
-
-    @if (this.Model is QuestionView)
+<div>
+    
+    @if (this.Model is PdfQuestionView)
     {
-        Html.RenderPartial("_RenderQuestionDetails", (QuestionView) this.Model);
+        Html.RenderPartial("_RenderQuestionDetails", (PdfQuestionView) this.Model);
+    }
+    else
+    {
+        @Html.Raw(string.Format("<h{0}><span>{2} &nbsp;&nbsp;&nbsp;</span>{1}</h{0}>", Math.Min(4, Model.Depth), Html.Encode(Model.Title), Html.Encode(Model.ItemNumber)))
     }
 
-    @if (this.Model.Children != null && this.Model.Children.Count > 0)
+    @if (this.Model.Children.Count > 0)
     {
         <div style="margin-left: 20px;">
-            @foreach (ICompositeView child in this.Model.Children)
+            @foreach (var child in this.Model.Children)
             {
                 Html.RenderPartial("_RenderChild", child);
             }
         </div>
     }
 
-</p>
+</div>

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeleteQuestionnaireModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The delete questionnaire model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System;
     using System.ComponentModel;
