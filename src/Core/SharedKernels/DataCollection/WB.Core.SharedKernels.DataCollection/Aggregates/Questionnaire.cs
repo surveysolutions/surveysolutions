@@ -359,11 +359,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return autoPropagatingQuestion.MaxValue;
         }
 
-        public IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingGroups()
+        public IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups()
         {
             return (
                 from question in this.GetAllPropagatingQuestions()
-                let questionHasMissingGroup = question.Triggers.Any(groupId => !this.HasGroup(groupId))
+                let questionHasMissingGroup = question.Triggers.Any(groupId => !this.HasGroup(groupId) || !this.IsGroupPropagatable(groupId))
                 where questionHasMissingGroup
                 select question.PublicKey
             ).ToList();
@@ -373,7 +373,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             return this
                 .GetAllParentGroupsForQuestionStartingFromBottom(questionId)
-                .Where(this.IsPropogatableGroup)
+                .Where(this.IsGroupPropagatable)
                 .Reverse()
                 .ToList();
         }
@@ -523,7 +523,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not a propagating question.", questionId));
         }
 
-        private bool IsPropogatableGroup(Guid groupId)
+        private bool IsGroupPropagatable(Guid groupId)
         {
             IGroup @group = this.GetGroupOrThrow(groupId);
 

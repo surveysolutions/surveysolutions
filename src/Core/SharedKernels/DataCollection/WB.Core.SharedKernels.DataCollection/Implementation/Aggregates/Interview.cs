@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(questionnaire, questionnaireId);
             ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
             ThrowIfSomeQuestionsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
-            ThrowIfSomePropagatingQuestionsReferToNotExistingGroups(questionnaire, questionnaireId);
+            ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
         }
@@ -480,13 +480,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             => string.Format("{0} : {1}", questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId))))));
         }
 
-        private static void ThrowIfSomePropagatingQuestionsReferToNotExistingGroups(IQuestionnaire questionnaire, Guid questionnaireId)
+        private static void ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(IQuestionnaire questionnaire, Guid questionnaireId)
         {
-            IEnumerable<Guid> invalidQuestions = questionnaire.GetPropagatingQuestionsWhichReferToMissingGroups();
+            IEnumerable<Guid> invalidQuestions = questionnaire.GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups();
 
             if (invalidQuestions.Any())
                 throw new InterviewException(string.Format(
-                    "Cannot create interview from questionnaire '{1}' because following questions in it are propagating and reference not existing groups:{0}{2}",
+                    "Cannot create interview from questionnaire '{1}' because following questions in it are propagating and reference not existing or not propagatable groups:{0}{2}",
                     Environment.NewLine, questionnaireId,
                     string.Join(
                         Environment.NewLine,
