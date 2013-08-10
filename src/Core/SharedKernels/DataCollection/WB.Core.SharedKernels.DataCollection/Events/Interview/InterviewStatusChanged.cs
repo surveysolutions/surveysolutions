@@ -1,15 +1,13 @@
-﻿using System;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+﻿using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class InterviewStatusChanged : InterviewActiveEvent
+    public class InterviewStatusChanged : InterviewPassiveEvent
     {
         public InterviewStatus Status { get; private set; }
 
-        public InterviewStatusChanged(Guid userId, InterviewStatus status)
-            : base(userId)
+        public InterviewStatusChanged(InterviewStatus status)
         {
             this.Status = status;
         }
