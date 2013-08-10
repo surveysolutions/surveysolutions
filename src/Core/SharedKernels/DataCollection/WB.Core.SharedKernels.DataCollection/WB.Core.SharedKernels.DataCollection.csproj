@@ -95,6 +95,8 @@
     <Compile Include="Events\Interview\GroupPropagated.cs" />
     <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
+    <Compile Include="Events\Interview\InterviewDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\InterviewDeclaredValid.cs" />
     <Compile Include="Events\Interview\InterviewDeleted.cs" />
     <Compile Include="Events\Interview\InterviewCompleted.cs" />
     <Compile Include="Events\Interview\InterviewerAssigned.cs" />

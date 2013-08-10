@@ -18,6 +18,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class Interview : AggregateRootMappedByConvention
     {
+        #region Constants
+
+        private static readonly int[] EmptyPropagationVector = {};
+
+        #endregion
+
         #region State
 
         private Guid questionnaireId;
@@ -27,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private readonly HashSet<string> disabledGroups = new HashSet<string>();
         private readonly HashSet<string> disabledQuestions = new HashSet<string>();
         private readonly Dictionary<string, int> propagatedGroupInstanceCounts = new Dictionary<string, int>();
+        private readonly HashSet<string> invalidAnsweredQuestions = new HashSet<string>();
 
         private void Apply(InterviewCreated @event)
         {
@@ -69,9 +76,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answers[questionKey] = @event.SelectedValues;
         }
 
-        private void Apply(AnswerDeclaredValid @event) {}
+        private void Apply(AnswerDeclaredValid @event)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
-        private void Apply(AnswerDeclaredInvalid @event) {}
+            this.invalidAnsweredQuestions.Remove(questionKey);
+        }
+
+        private void Apply(AnswerDeclaredInvalid @event)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.invalidAnsweredQuestions.Add(questionKey);
+        }
 
         private void Apply(GroupDisabled @event)
         {
@@ -134,6 +151,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(InterviewApproved @event) {}
 
         private void Apply(InterviewRejected @event) {}
+
+        private void Apply(InterviewDeclaredValid @event) {}
+
+        private void Apply(InterviewDeclaredInvalid @event) {}
 
         #endregion
 
@@ -452,11 +473,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Complete(Guid userId)
         {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
+            bool isInterviewValid = this.HasInvalidAnswers() || this.HasNotAnsweredMandatoryQuestions(questionnaire);
+
             this.ApplyEvent(new InterviewCompleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed));
+
+            this.ApplyEvent(isInterviewValid
+                ? new InterviewDeclaredValid() as object
+                : new InterviewDeclaredInvalid() as object);
         }
 
         public void Restart(Guid userId)
@@ -984,6 +1012,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : 0;
         }
 
+        private bool HasInvalidAnswers()
+        {
+            return this.invalidAnsweredQuestions.Any();
+        }
+
+        private bool HasNotAnsweredMandatoryQuestions(IQuestionnaire questionnaire)
+        {
+            IEnumerable<Guid> mandatoryQuestionIds = questionnaire.GetAllMandatoryQuestions();
+            IEnumerable<Identity> mandatoryQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                mandatoryQuestionIds, EmptyPropagationVector, questionnaire);
+
+            return mandatoryQuestions.Any(
+                question => this.GetAnswerOrNull(question) == null && !this.IsQuestionOrParentGroupDisabled(question, questionnaire));
+        }
+
+        private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire)
+        {
+            if (this.IsQuestionDisabled(question))
+                return true;
+
+            IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
+            IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperPropagationLevelOrThrow(parentGroupIds, question.PropagationVector, questionnaire);
+
+            return parentGroups.Any(this.IsGroupDisabled);
+        }
+
         private bool IsGroupDisabled(Identity group)
         {
             string groupKey = ConvertIdAndPropagationVectorToString(group.Id, group.PropagationVector);
@@ -1007,7 +1061,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-        private static readonly int[] EmptyPropagationVector = {};
 
         private static int[] ShrinkPropagationVector(int[] propagationVector, int length)
         {

@@ -420,6 +420,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .Count(this.IsGroupPropagatable);
         }
 
+        public IEnumerable<Guid> GetAllMandatoryQuestions()
+        {
+            return
+                from question in this.GetAllQuestions()
+                where question.Mandatory
+                select question.PublicKey;
+        }
+
 
         private IEnumerable<IGroup> GetAllGroups()
         {
