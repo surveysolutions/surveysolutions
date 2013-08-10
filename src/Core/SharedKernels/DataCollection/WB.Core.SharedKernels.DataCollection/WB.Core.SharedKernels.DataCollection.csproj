@@ -58,6 +58,8 @@
     <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AssignInterviewerCommand.cs" />
+    <Compile Include="Commands\Interview\AssignSupervisorCommand.cs" />
     <Compile Include="Commands\Interview\Base\AnswerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\Base\QuestionCommand.cs" />
     <Compile Include="Commands\Interview\CommentAnswerCommand.cs" />
@@ -86,11 +88,14 @@
     <Compile Include="Events\Interview\GroupEnabled.cs" />
     <Compile Include="Events\Interview\GroupPropagated.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
+    <Compile Include="Events\Interview\InterviewerAssigned.cs" />
+    <Compile Include="Events\Interview\InterviewStatusChanged.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionDisabled.cs" />
     <Compile Include="Events\Interview\QuestionEnabled.cs" />
     <Compile Include="Events\Interview\SingleOptionQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\SupervisorAssigned.cs" />
     <Compile Include="Events\Interview\TextQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Exceptions\InterviewException.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="Implementation\Services\IExpressionProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataCollectionSharedKernelModule.cs" />
+    <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
