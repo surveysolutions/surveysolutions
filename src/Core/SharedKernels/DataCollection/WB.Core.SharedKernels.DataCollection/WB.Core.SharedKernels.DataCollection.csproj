@@ -58,6 +58,7 @@
     <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\ApproveInterviewCommand.cs" />
     <Compile Include="Commands\Interview\AssignInterviewerCommand.cs" />
     <Compile Include="Commands\Interview\AssignSupervisorCommand.cs" />
     <Compile Include="Commands\Interview\Base\AnswerQuestionCommand.cs" />
@@ -65,7 +66,12 @@
     <Compile Include="Commands\Interview\CommentAnswerCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewCommand.cs" />
     <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
+    <Compile Include="Commands\Interview\DeleteInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\CompleteInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\RejectInterviewCommand.cs" />
     <Compile Include="Commands\Interview\RemoveFlagFromAnswerCommand.cs" />
+    <Compile Include="Commands\Interview\RestartInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\RestoreInterviewCommand.cs" />
     <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
@@ -87,8 +93,14 @@
     <Compile Include="Events\Interview\GroupDisabled.cs" />
     <Compile Include="Events\Interview\GroupEnabled.cs" />
     <Compile Include="Events\Interview\GroupPropagated.cs" />
+    <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
+    <Compile Include="Events\Interview\InterviewDeleted.cs" />
+    <Compile Include="Events\Interview\InterviewCompleted.cs" />
     <Compile Include="Events\Interview\InterviewerAssigned.cs" />
+    <Compile Include="Events\Interview\InterviewRejected.cs" />
+    <Compile Include="Events\Interview\InterviewRestarted.cs" />
+    <Compile Include="Events\Interview\InterviewRestored.cs" />
     <Compile Include="Events\Interview\InterviewStatusChanged.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />

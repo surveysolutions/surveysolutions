@@ -119,9 +119,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.status = @event.Status;
         }
 
+        private void Apply(SupervisorAssigned @event) {}
+
         private void Apply(InterviewerAssigned @event) {}
 
-        private void Apply(SupervisorAssigned @event) {}
+        private void Apply(InterviewDeleted @event) {}
+
+        private void Apply(InterviewRestored @event) {}
+
+        private void Apply(InterviewCompleted @event) {}
+
+        private void Apply(InterviewRestarted @event) {}
+
+        private void Apply(InterviewApproved @event) {}
+
+        private void Apply(InterviewRejected @event) {}
 
         #endregion
 
@@ -186,7 +198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(userId, InterviewStatus.Created));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created));
         }
 
 
@@ -409,7 +421,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(userId, InterviewStatus.SupervisorAssigned));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
         public void AssignInterviewer(Guid userId, Guid interviewerId)
@@ -418,7 +430,57 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
-            this.ApplyEvent(new InterviewStatusChanged(userId, InterviewStatus.InterviewerAssigned));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+        }
+
+        public void Delete(Guid userId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restored);
+
+            this.ApplyEvent(new InterviewDeleted(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted));
+        }
+
+        public void Restore(Guid userId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Deleted);
+
+            this.ApplyEvent(new InterviewRestored(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored));
+        }
+
+        public void Complete(Guid userId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+
+            this.ApplyEvent(new InterviewCompleted(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed));
+        }
+
+        public void Restart(Guid userId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
+
+            this.ApplyEvent(new InterviewRestarted(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted));
+        }
+
+        public void Approve(Guid userId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor);
+
+            this.ApplyEvent(new InterviewApproved(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor));
+        }
+
+        public void Reject(Guid userId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor);
+
+            this.ApplyEvent(new InterviewRejected(userId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor));
         }
 
 
