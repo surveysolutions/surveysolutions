@@ -183,10 +183,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, propagationVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerOrNull(question);
@@ -218,14 +218,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, propagationVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
             if (questionnaire.ShouldQuestionPropagateGroups(questionId))
             {
-                ThrowIfAnswerCannotBeUsedAsPropagationCount(questionnaire, questionId, answer);
+                ThrowIfAnswerCannotBeUsedAsPropagationCount(questionId, answer, questionnaire);
             }
 
 
@@ -263,10 +263,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, propagationVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerOrNull(question);
@@ -298,11 +298,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, propagationVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
-            ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValue : this.GetAnswerOrNull(question);
@@ -334,11 +334,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, propagationVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
-            ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetAnswerOrNull(question);
@@ -368,8 +368,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, string comment)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, propagationVector, comment));
         }
@@ -377,8 +377,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SetFlagToAnswer(Guid userId, Guid questionId, int[] propagationVector)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, propagationVector));
         }
@@ -386,8 +386,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, int[] propagationVector)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
-            ThrowIfQuestionDoesNotExist(questionnaire, questionId);
-            this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, propagationVector));
         }
@@ -413,43 +413,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire;
         }
 
-        private static void ThrowIfQuestionDoesNotExist(IQuestionnaire questionnaire, Guid questionId)
+        private static void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)
         {
             if (!questionnaire.HasQuestion(questionId))
                 throw new InterviewException(string.Format("Question with id '{0}' is not found.", questionId));
         }
 
-        private void ThrowIfPropagationVectorIsIncorrect(IQuestionnaire questionnaire, Guid questionId, int[] propagationVector)
+        private void ThrowIfPropagationVectorIsIncorrect(Guid questionId, int[] propagationVector, IQuestionnaire questionnaire)
         {
-            ThrowIfPropagationVectorIsNull(questionId, propagationVector);
+            ThrowIfPropagationVectorIsNull(questionId, propagationVector, questionnaire);
 
             Guid[] parentPropagatableGroupIdsStartingFromTop = questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
 
-            ThrowIfPropagationVectorLengthDoesNotCorrespondToParentPropagatableGroupsCount(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop);
+            ThrowIfPropagationVectorLengthDoesNotCorrespondToParentPropagatableGroupsCount(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop, questionnaire);
 
-            this.ThrowIfSomeOfPropagationVectorValuesAreInvalid(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop);
+            this.ThrowIfSomeOfPropagationVectorValuesAreInvalid(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop, questionnaire);
         }
 
-        private static void ThrowIfPropagationVectorIsNull(Guid questionId, int[] propagationVector)
+        private static void ThrowIfPropagationVectorIsNull(Guid questionId, int[] propagationVector, IQuestionnaire questionnaire)
         {
             if (propagationVector == null)
                 throw new InterviewException(string.Format(
-                    "Propagation information for question with id '{0}' is missing. Propagation vector cannot be null.",
-                    questionId));
+                    "Propagation information for question {0} is missing. Propagation vector cannot be null.",
+                    FormatQuestionForException(questionId, questionnaire)));
         }
 
         private static void ThrowIfPropagationVectorLengthDoesNotCorrespondToParentPropagatableGroupsCount(
-            Guid questionId, int[] propagationVector, Guid[] parentPropagatableGroups)
+            Guid questionId, int[] propagationVector, Guid[] parentPropagatableGroups, IQuestionnaire questionnaire)
         {
             if (propagationVector.Length != parentPropagatableGroups.Length)
                 throw new InterviewException(string.Format(
-                    "Propagation information for question with id '{0}' is incorrect. " +
+                    "Propagation information for question {0} is incorrect. " +
                     "Propagation vector has {1} elements, but parent propagatable groups count is {2}.",
-                    questionId, propagationVector.Length, parentPropagatableGroups.Length));
+                    FormatQuestionForException(questionId, questionnaire), propagationVector.Length, parentPropagatableGroups.Length));
         }
 
         private void ThrowIfSomeOfPropagationVectorValuesAreInvalid(
-            Guid questionId, int[] propagationVector, Guid[] parentPropagatableGroupIdsStartingFromTop)
+            Guid questionId, int[] propagationVector, Guid[] parentPropagatableGroupIdsStartingFromTop, IQuestionnaire questionnaire)
         {
             for (int indexOfPropagationVectorElement = 0; indexOfPropagationVectorElement < propagationVector.Length; indexOfPropagationVectorElement++)
             {
@@ -464,50 +464,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (propagatableGroupInstanceIndex < 0)
                     throw new InterviewException(string.Format(
-                        "Propagation information for question with id '{0}' is incorrect. " +
+                        "Propagation information for question {0} is incorrect. " +
                         "Propagation vector element with index [{1}] is negative.",
-                        questionId, indexOfPropagationVectorElement));
+                        FormatQuestionForException(questionId, questionnaire), indexOfPropagationVectorElement));
 
                 if (propagatableGroupInstanceIndex >= countOfPropagatableGroupInstances)
                     throw new InterviewException(string.Format(
-                        "Propagation information for question with id '{0}' is incorrect. " +
-                        "Propagation vector element with index [{1}] refers to instance of propagatable group '{2}' by index [{3}]" +
+                        "Propagation information for question {0} is incorrect. " +
+                        "Propagation vector element with index [{1}] refers to instance of propagatable group {2} by index [{3}]" +
                         "but propagatable group has only {4} propagated instances.",
-                        questionId, indexOfPropagationVectorElement, propagatableGroupId, propagatableGroupInstanceIndex, countOfPropagatableGroupInstances));
+                        FormatQuestionForException(questionId, questionnaire), indexOfPropagationVectorElement,
+                        FormatGroupForException(propagatableGroupId, questionnaire), propagatableGroupInstanceIndex, countOfPropagatableGroupInstances));
             }
         }
 
-        private static void ThrowIfQuestionTypeIsNotOneOfExpected(IQuestionnaire questionnaire, Guid questionId, params QuestionType[] expectedQuestionTypes)
+        private static void ThrowIfQuestionTypeIsNotOneOfExpected(Guid questionId, IQuestionnaire questionnaire, params QuestionType[] expectedQuestionTypes)
         {
             QuestionType questionType = questionnaire.GetQuestionType(questionId);
 
             bool typeIsNotExpected = !expectedQuestionTypes.Contains(questionType);
             if (typeIsNotExpected)
                 throw new InterviewException(string.Format(
-                    "Question with id '{0}' has type {1}. But one of the following types was expected: {2}.",
-                    questionId, questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
+                    "Question {0} has type {1}. But one of the following types was expected: {2}.",
+                    FormatQuestionForException(questionId, questionnaire), questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
         }
 
-        private static void ThrowIfValueIsNotOneOfAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal value)
+        private static void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
             bool valueIsNotOneOfAvailable = !availableValues.Contains(value);
             if (valueIsNotOneOfAvailable)
                 throw new InterviewException(string.Format(
-                    "For question with id '{0}' was provided selected value {1} as answer. But only following values are allowed: {2}.",
-                    questionId, value, JoinDecimalsWithComma(availableValues)));
+                    "For question {0} was provided selected value {1} as answer. But only following values are allowed: {2}.",
+                    FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues)));
         }
 
-        private static void ThrowIfSomeValuesAreNotFromAvailableOptions(IQuestionnaire questionnaire, Guid questionId, decimal[] values)
+        private static void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(questionId);
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)
                 throw new InterviewException(string.Format(
-                    "For question with id '{0}' were provided selected values {1} as answer. But only following values are allowed: {2}.",
-                    questionId, JoinDecimalsWithComma(values), JoinDecimalsWithComma(availableValues)));
+                    "For question {0} were provided selected values {1} as answer. But only following values are allowed: {2}.",
+                    FormatQuestionForException(questionId, questionnaire), JoinDecimalsWithComma(values), JoinDecimalsWithComma(availableValues)));
         }
 
         private static void ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(IQuestionnaire questionnaire, Guid questionnaireId)
@@ -521,7 +522,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Join(
                         Environment.NewLine,
                         invalidQuestions.Select(questionId
-                            => string.Format("{0} : {1}", questionId, questionnaire.GetCustomValidationExpression(questionId))))));
+                            => string.Format("{0} : {1}", FormatQuestionForException(questionId, questionnaire), questionnaire.GetCustomValidationExpression(questionId))))));
         }
 
         private static void ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(IQuestionnaire questionnaire, Guid questionnaireId)
@@ -535,7 +536,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Join(
                         Environment.NewLine,
                         invalidGroups.Select(groupId
-                            => string.Format("{0} : {1}", groupId, questionnaire.GetCustomEnablementConditionForGroup(groupId))))));
+                            => string.Format("{0} : {1}", FormatGroupForException(groupId, questionnaire), questionnaire.GetCustomEnablementConditionForGroup(groupId))))));
         }
 
         private static void ThrowIfSomeQuestionsHaveInvalidCustomEnablementConditions(IQuestionnaire questionnaire, Guid questionnaireId)
@@ -549,7 +550,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Join(
                         Environment.NewLine,
                         invalidQuestions.Select(questionId
-                            => string.Format("{0} : {1}", questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId))))));
+                            => string.Format("{0} : {1}", FormatQuestionForException(questionId, questionnaire), questionnaire.GetCustomEnablementConditionForQuestion(questionId))))));
         }
 
         private static void ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(IQuestionnaire questionnaire, Guid questionnaireId)
@@ -563,10 +564,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Join(
                         Environment.NewLine,
                         invalidQuestions.Select(questionId
-                            => string.Format("{0}", questionId)))));
+                            => string.Format("{0}", FormatQuestionForException(questionId, questionnaire))))));
         }
 
-        private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Identity question)
+        private void ThrowIfQuestionOrParentGroupIsDisabled(Identity question, IQuestionnaire questionnaire)
         {
             if (this.IsQuestionDisabled(question))
                 throw new InterviewException(string.Format(
@@ -590,7 +591,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static void ThrowIfAnswerCannotBeUsedAsPropagationCount(IQuestionnaire questionnaire, Guid questionId, decimal answer)
+        private static void ThrowIfAnswerCannotBeUsedAsPropagationCount(Guid questionId, decimal answer, IQuestionnaire questionnaire)
         {
             int maxValue = questionnaire.GetMaxAnswerValueForPropagatingQuestion(questionId);
 
@@ -600,18 +601,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (answerIsNotInteger)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question with id '{1}' is incorrect because question should propagate groups and answer is not a valid integer.",
-                    answer, questionId));
+                    "Answer '{0}' for question {1} is incorrect because question should propagate groups and answer is not a valid integer.",
+                    answer, FormatQuestionForException(questionId, questionnaire)));
 
             if (answerIsNegative)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question with id '{1}' is incorrect because question should propagate groups and answer is negative.",
-                    answer, questionId));
+                    "Answer '{0}' for question {1} is incorrect because question should propagate groups and answer is negative.",
+                    answer, FormatQuestionForException(questionId, questionnaire)));
 
             if (answerExceedsMaxValue)
                 throw new InterviewException(string.Format(
-                    "Answer '{0}' for question with id '{1}' is incorrect because question should propagate groups and answer is greater than max value '{2}'.",
-                    answer, questionId, maxValue));
+                    "Answer '{0}' for question {1} is incorrect because question should propagate groups and answer is greater than max value '{2}'.",
+                    answer, FormatQuestionForException(questionId, questionnaire), maxValue));
         }
 
 
@@ -975,22 +976,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static string FormatQuestionForException(Identity question, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1})'", question.Id, string.Join("-", question.PropagationVector));
+            return string.Format("'{0} ({1:N} [{2}])'",
+                GetQuestionTitleForException(question.Id, questionnaire),
+                question.Id,
+                string.Join("-", question.PropagationVector));
         }
 
         private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0}'", questionId);
+            return string.Format("'{0} ({1:N})'",
+                GetQuestionTitleForException(questionId, questionnaire),
+                questionId);
         }
 
         private static string FormatGroupForException(Identity group, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1})'", group.Id, string.Join("-", group.PropagationVector));
+            return string.Format("'{0} ({1:N} [{2}])'",
+                GetGroupTitleForException(group.Id, questionnaire),
+                group.Id,
+                string.Join("-", group.PropagationVector));
         }
 
         private static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0}'", groupId);
+            return string.Format("'{0} ({1:N})'",
+                GetGroupTitleForException(groupId, questionnaire),
+                groupId);
+        }
+
+        private static string GetQuestionTitleForException(Guid questionId, IQuestionnaire questionnaire)
+        {
+            return questionnaire.HasQuestion(questionId)
+                ? questionnaire.GetQuestionTitle(questionId) ?? "<<NO QUESTION TITLE>>"
+                : "<<MISSING QUESTION>>";
+        }
+
+        private static string GetGroupTitleForException(Guid groupId, IQuestionnaire questionnaire)
+        {
+            return questionnaire.HasGroup(groupId)
+                ? questionnaire.GetGroupTitle(groupId) ?? "<<NO GROUP TITLE>>"
+                : "<<MISSING GROUP>>";
         }
 
         /// <remarks>

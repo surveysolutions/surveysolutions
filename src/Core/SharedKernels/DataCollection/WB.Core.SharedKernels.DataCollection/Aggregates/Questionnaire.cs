@@ -134,11 +134,24 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.GetQuestion(questionId) != null;
         }
 
+        public bool HasGroup(Guid groupId)
+        {
+            return this.GetGroup(groupId) != null;
+        }
+
         public QuestionType GetQuestionType(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return this.GetQuestionOrThrow(questionId).QuestionType;
+        }
 
-            return question.QuestionType;
+        public string GetQuestionTitle(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).QuestionText;
+        }
+
+        public string GetGroupTitle(Guid groupId)
+        {
+            return this.GetGroupOrThrow(groupId).Title;
         }
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
@@ -575,11 +588,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private void ThrowIfGroupDoesNotExist(Guid groupId)
         {
             this.GetGroupOrThrow(groupId);
-        }
-
-        private bool HasGroup(Guid groupId)
-        {
-            return this.GetGroup(groupId) != null;
         }
 
         private IGroup GetGroupOrThrow(Guid groupId)
