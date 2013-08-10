@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Guid questionnaireId;
         private long questionnaireVersion;
+        private InterviewStatus status;
         private readonly Dictionary<string, object> answers = new Dictionary<string, object>();
         private readonly HashSet<string> disabledGroups = new HashSet<string>();
         private readonly HashSet<string> disabledQuestions = new HashSet<string>();
@@ -112,6 +114,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.propagatedGroupInstanceCounts[propagatableGroupKey] = @event.Count;
         }
 
+        private void Apply(InterviewStatusChanged @event)
+        {
+            this.status = @event.Status;
+        }
+
+        private void Apply(InterviewerAssigned @event) {}
+
+        private void Apply(SupervisorAssigned @event) {}
+
         #endregion
 
         #region Dependencies
@@ -175,6 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(questionnaire, questionnaireId);
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewStatusChanged(userId, InterviewStatus.Created));
         }
 
 
@@ -390,6 +402,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, propagationVector));
+        }
+
+        public void AssignSupervisor(Guid userId, Guid supervisorId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
+
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(userId, InterviewStatus.SupervisorAssigned));
+        }
+
+        public void AssignInterviewer(Guid userId, Guid interviewerId)
+        {
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
+            this.ApplyEvent(new InterviewStatusChanged(userId, InterviewStatus.InterviewerAssigned));
         }
 
 
@@ -613,6 +642,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "Answer '{0}' for question {1} is incorrect because question should propagate groups and answer is greater than max value '{2}'.",
                     answer, FormatQuestionForException(questionId, questionnaire), maxValue));
+        }
+
+        private void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
+        {
+            if (!expectedStatuses.Contains(this.status))
+                throw new InterviewException(string.Format(
+                    "Interview status is {0}. But one of the following statuses was expected: {1}.",
+                    this.status, string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString()))));
         }
 
 
