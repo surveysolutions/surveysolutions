@@ -13,7 +13,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasQuestion(Guid questionId);
 
+        bool HasGroup(Guid groupId);
+
         QuestionType GetQuestionType(Guid questionId);
+
+        string GetQuestionTitle(Guid questionId);
+
+        string GetGroupTitle(Guid groupId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
