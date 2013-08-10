@@ -107,9 +107,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(GroupPropagated @event)
         {
-            string groupKey = ConvertIdAndPropagationVectorToString(@event.GroupId, @event.PropagationVector);
+            string propagatableGroupKey = ConvertIdAndPropagationVectorToString(@event.GroupId, @event.OuterScopePropagationVector);
 
-            this.propagatedGroupInstanceCounts[groupKey] = @event.Count;
+            this.propagatedGroupInstanceCounts[propagatableGroupKey] = @event.Count;
         }
 
         #endregion
@@ -141,10 +141,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region Types
 
         /// <summary>
-        /// Full identity of group or question.
+        /// Full identity of group or question: id and propagation vector.
         /// </summary>
         /// <remarks>
-        /// Is used only internally to simplify return of id and propagation vector as return value.
+        /// Is used only internally to simplify return of id and propagation vector as return value
+        /// and to reduce parameters count in calculation methods.
         /// Should not be made public or be used in any form in events or commands.
         /// </remarks>
         private class Identity
@@ -179,22 +180,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
         {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.Text);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
 
+
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerOrNull(question);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+            this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentGroups(
+                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -210,11 +215,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerNumericQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal answer)
         {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.AutoPropagate, QuestionType.Numeric);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
 
             if (questionnaire.ShouldQuestionPropagateGroups(questionId))
             {
@@ -222,18 +229,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
 
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerOrNull(question);
+
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+            this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentGroups(
+                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
 
-            List<Identity> groupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId).ToList();
-            int propagationCount = groupsToBePropagated.Any() ? ToPropagationCount(answer) : 0;
+            List<Guid> idsOfGroupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId).ToList();
+            int propagationCount = idsOfGroupsToBePropagated.Any() ? ToPropagationCount(answer) : 0;
 
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -246,27 +255,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
 
-            groupsToBePropagated.ForEach(group => this.ApplyEvent(new GroupPropagated(group.Id, group.PropagationVector, propagationCount)));
+            idsOfGroupsToBePropagated.ForEach(groupId => this.ApplyEvent(new GroupPropagated(groupId, propagationVector, propagationCount)));
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
         {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.DateTime);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
 
+
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerOrNull(question);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, answer, questionnaire,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+            this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, answer, questionnaire,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentGroups(
+                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -282,23 +295,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal selectedValue)
         {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionnaire, questionId, selectedValue);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
 
+
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValue : this.GetAnswerOrNull(question);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValue, questionnaire,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+            this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, selectedValue, questionnaire,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, selectedValue, questionnaire,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentGroups(
+                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValue));
@@ -314,23 +331,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal[] selectedValues)
         {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionnaire, questionId);
             this.ThrowIfPropagationVectorIsIncorrect(questionnaire, questionId, propagationVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionnaire, questionId, QuestionType.MultyOption);
             ThrowIfSomeValuesAreNotFromAvailableOptions(questionnaire, questionId, selectedValues);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, questionId);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(questionnaire, answeredQuestion);
 
+
+            Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? selectedValues : this.GetAnswerOrNull(question);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(questionId, selectedValues, questionnaire,
-                out answersDeclaredValid, out answersDeclaredInvalid);
+            this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
-            this.DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(questionId, selectedValues, questionnaire,
-                out groupsToBeDisabled, out groupsToBeEnabled);
-            this.DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(questionId, selectedValues, questionnaire,
-                out questionsToBeDisabled, out questionsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentGroups(
+                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfDependentQuestions(
+                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValues));
@@ -392,7 +413,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire;
         }
 
-        private void ThrowIfQuestionDoesNotExist(IQuestionnaire questionnaire, Guid questionId)
+        private static void ThrowIfQuestionDoesNotExist(IQuestionnaire questionnaire, Guid questionId)
         {
             if (!questionnaire.HasQuestion(questionId))
                 throw new InterviewException(string.Format("Question with id '{0}' is not found.", questionId));
@@ -402,11 +423,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             ThrowIfPropagationVectorIsNull(questionId, propagationVector);
 
-            Guid[] parentPropagatableGroupsStartingFromTop = questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
+            Guid[] parentPropagatableGroupIdsStartingFromTop = questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
 
-            ThrowIfPropagationVectorLengthDoesNotCorrespondToParentPropagatableGroupsCount(questionId, propagationVector, parentPropagatableGroupsStartingFromTop);
+            ThrowIfPropagationVectorLengthDoesNotCorrespondToParentPropagatableGroupsCount(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop);
 
-            this.ThrowIfSomeOfPropagationVectorValuesAreInvalid(questionId, propagationVector, parentPropagatableGroupsStartingFromTop);
+            this.ThrowIfSomeOfPropagationVectorValuesAreInvalid(questionId, propagationVector, parentPropagatableGroupIdsStartingFromTop);
         }
 
         private static void ThrowIfPropagationVectorIsNull(Guid questionId, int[] propagationVector)
@@ -428,27 +449,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void ThrowIfSomeOfPropagationVectorValuesAreInvalid(
-            Guid questionId, int[] propagationVector, Guid[] parentPropagatableGroupsStartingFromTop)
+            Guid questionId, int[] propagationVector, Guid[] parentPropagatableGroupIdsStartingFromTop)
         {
-            for (int indexOfPropagationElement = 0; indexOfPropagationElement < propagationVector.Length; indexOfPropagationElement++)
+            for (int indexOfPropagationVectorElement = 0; indexOfPropagationVectorElement < propagationVector.Length; indexOfPropagationVectorElement++)
             {
-                int propagatableGroupInstanceIndex = propagationVector[indexOfPropagationElement];
-                Guid propagatableGroupId = parentPropagatableGroupsStartingFromTop[indexOfPropagationElement];
+                int propagatableGroupInstanceIndex = propagationVector[indexOfPropagationVectorElement];
+                Guid propagatableGroupId = parentPropagatableGroupIdsStartingFromTop[indexOfPropagationVectorElement];
 
-                int countOfPropagatableGroupInstances = this.GetCountOfPropagatableGroupInstances(propagatableGroupId);
+                int propagatableGroupOuterScopePropagationLevel = indexOfPropagationVectorElement;
+                int[] propagatableGroupOuterScopePropagationVector = ShrinkPropagationVector(propagationVector, propagatableGroupOuterScopePropagationLevel);
+                int countOfPropagatableGroupInstances = this.GetCountOfPropagatableGroupInstances(
+                    propagatableGroupId: propagatableGroupId,
+                    outerScopePropagationVector: propagatableGroupOuterScopePropagationVector);
 
                 if (propagatableGroupInstanceIndex < 0)
                     throw new InterviewException(string.Format(
                         "Propagation information for question with id '{0}' is incorrect. " +
-                        "Propagation element with index [{1}] is negative.",
-                        questionId, indexOfPropagationElement));
+                        "Propagation vector element with index [{1}] is negative.",
+                        questionId, indexOfPropagationVectorElement));
 
                 if (propagatableGroupInstanceIndex >= countOfPropagatableGroupInstances)
                     throw new InterviewException(string.Format(
                         "Propagation information for question with id '{0}' is incorrect. " +
-                        "Propagation element with index [{1}] refers to instance of propagatable group '{2}' by index [{3}]" +
+                        "Propagation vector element with index [{1}] refers to instance of propagatable group '{2}' by index [{3}]" +
                         "but propagatable group has only {4} propagated instances.",
-                        questionId, indexOfPropagationElement, propagatableGroupId, propagatableGroupInstanceIndex, countOfPropagatableGroupInstances));
+                        questionId, indexOfPropagationVectorElement, propagatableGroupId, propagatableGroupInstanceIndex, countOfPropagatableGroupInstances));
             }
         }
 
@@ -541,20 +566,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             => string.Format("{0}", questionId)))));
         }
 
-        private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Guid questionId)
+        private void ThrowIfQuestionOrParentGroupIsDisabled(IQuestionnaire questionnaire, Identity question)
         {
-            if (this.IsQuestionDisabled(questionId))
+            if (this.IsQuestionDisabled(question))
                 throw new InterviewException(string.Format(
-                    "Question '{1}' is disabled by it's following enablement condition:{0}{2}",
-                    Environment.NewLine, questionId, questionnaire.GetCustomEnablementConditionForQuestion(questionId)));
+                    "Question {1} is disabled by it's following enablement condition:{0}{2}",
+                    Environment.NewLine, 
+                    FormatQuestionForException(question, questionnaire),
+                    questionnaire.GetCustomEnablementConditionForQuestion(question.Id)));
 
-            IEnumerable<Guid> parentGroups = questionnaire.GetAllParentGroupsForQuestion(questionId);
-            foreach (Guid parentGroupId in parentGroups)
+            IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
+            IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperPropagationLevelOrThrow(parentGroupIds, question.PropagationVector, questionnaire);
+
+            foreach (Identity parentGroup in parentGroups)
             {
-                if (this.IsGroupDisabled(parentGroupId))
+                if (this.IsGroupDisabled(parentGroup))
                     throw new InterviewException(string.Format(
-                        "Question '{1}' is disabled because parent group '{2}' is disabled by it's following enablement condition:{0}{3}",
-                        Environment.NewLine, questionId, parentGroupId, questionnaire.GetCustomEnablementConditionForGroup(parentGroupId)));
+                        "Question {1} is disabled because parent group {2} is disabled by it's following enablement condition:{0}{3}",
+                        Environment.NewLine,
+                        FormatQuestionForException(question, questionnaire),
+                        FormatGroupForException(parentGroup, questionnaire),
+                        questionnaire.GetCustomEnablementConditionForGroup(parentGroup.Id)));
             }
         }
 
@@ -583,201 +615,251 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private void PerformCustomValidationOfQuestionBeingAnsweredAndDependentQuestions(
-            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
-            out List<Guid> answersDeclaredValid, out List<Guid> answersDeclaredInvalid)
+        private void PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
+            Identity answeredQuestion, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+            out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
         {
-            bool? currentAnswerValidationResult
-                = this.PerformCustomValidationOfQuestionBeingAnswered(questionBeingAnsweredId, answerGivenForQuestionBeingAnswered, questionnaire);
+            questionsDeclaredValid = new List<Identity>();
+            questionsDeclaredInvalid = new List<Identity>();
 
-            bool wasCurrentAnswerDeclaredValid = currentAnswerValidationResult == true;
-            bool wasCurrentAnswerDeclaredInvalid = currentAnswerValidationResult == false;
-
-            IEnumerable<Guid> dependentAnswersDeclaredValid;
-            IEnumerable<Guid> dependentAnswersDeclaredInvalid;
-            this.PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered,
-                out dependentAnswersDeclaredValid, out dependentAnswersDeclaredInvalid);
-
-            answersDeclaredValid = wasCurrentAnswerDeclaredValid
-                ? new List<Guid> { questionBeingAnsweredId }
-                : new List<Guid>();
-            answersDeclaredValid.AddRange(dependentAnswersDeclaredValid);
-
-            answersDeclaredInvalid = wasCurrentAnswerDeclaredInvalid
-                ? new List<Guid> { questionBeingAnsweredId }
-                : new List<Guid>();
-            answersDeclaredInvalid.AddRange(dependentAnswersDeclaredInvalid);
-        }
-
-        private bool? PerformCustomValidationOfQuestionBeingAnswered(
-            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire)
-        {
-            return this.PerformCustomValidationOfQuestion(
-                questionBeingAnsweredId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
-        }
-
-        private void PerformCustomValidationOfQuestionsWhichDependOnQuestionBeingAnswered(
-            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered,
-            out IEnumerable<Guid> dependentAnswersDeclaredValid, out IEnumerable<Guid> dependentAnswersDeclaredInvalid)
-        {
-            var validAnswers = new List<Guid>();
-            var invalidAnswers = new List<Guid>();
-
-            IEnumerable<Guid> dependentQuestions = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(questionBeingAnsweredId);
-
-            foreach (Guid dependentQuestionId in dependentQuestions)
+            bool? answeredQuestionValidationResult = this.PerformCustomValidationOfQuestion(answeredQuestion, questionnaire, getAnswer);
+            switch (answeredQuestionValidationResult)
             {
-                bool? validationResult = this.PerformCustomValidationOfQuestion(
-                    dependentQuestionId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
-
-                if (validationResult.HasValue)
-                {
-                    if (validationResult.Value)
-                    {
-                        validAnswers.Add(dependentQuestionId);
-                    }
-                    else
-                    {
-                        invalidAnswers.Add(dependentQuestionId);
-                    }
-                }
+                case true: questionsDeclaredValid.Add(answeredQuestion); break;
+                case false: questionsDeclaredInvalid.Add(answeredQuestion); break;
             }
 
-            dependentAnswersDeclaredValid = validAnswers;
-            dependentAnswersDeclaredInvalid = invalidAnswers;
+            List<Identity> dependentQuestionsDeclaredValid;
+            List<Identity> dependentQuestionsDeclaredInvalid;
+            this.PerformCustomValidationOfDependentQuestions(answeredQuestion, questionnaire, getAnswer,
+                out dependentQuestionsDeclaredValid, out dependentQuestionsDeclaredInvalid);
+
+            questionsDeclaredValid.AddRange(dependentQuestionsDeclaredValid);
+            questionsDeclaredInvalid.AddRange(dependentQuestionsDeclaredInvalid);
         }
 
-        private bool? PerformCustomValidationOfQuestion(Guid questionToValidateId,
-            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        private void PerformCustomValidationOfDependentQuestions(
+            Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+            out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
         {
-            if (!questionnaire.IsCustomValidationDefined(questionToValidateId))
+            questionsDeclaredValid = new List<Identity>();
+            questionsDeclaredInvalid = new List<Identity>();
+
+            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(question.Id);
+            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(dependentQuestionIds, question.PropagationVector, questionnaire);
+
+            foreach (Identity dependentQuestion in dependentQuestions)
+            {
+                bool? dependentQuestionValidationResult = this.PerformCustomValidationOfQuestion(dependentQuestion, questionnaire, getAnswer);
+                switch (dependentQuestionValidationResult)
+                {
+                    case true: questionsDeclaredValid.Add(dependentQuestion); break;
+                    case false: questionsDeclaredInvalid.Add(dependentQuestion); break;
+                }
+            }
+        }
+
+        private bool? PerformCustomValidationOfQuestion(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        {
+            if (!questionnaire.IsCustomValidationDefined(question.Id))
                 return true;
 
-            IEnumerable<Guid> involvedQuestions = questionnaire.GetQuestionsInvolvedInCustomValidation(questionToValidateId);
+            string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);
 
-            bool someOfNeededAnswersAreNotDefined
-                = involvedQuestions.Any(questionId => !this.IsAnswerDefined(questionId) && questionId != questionBeingAnsweredId);
+            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
+            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
-            if (someOfNeededAnswersAreNotDefined)
-                return null;
-
-            Dictionary<Guid, object> involvedAnswers
-                = this.GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
-                    involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
-
-            string validationExpression = questionnaire.GetCustomValidationExpression(questionToValidateId);
-
-            return this.EvaluateValidationExpression(validationExpression, questionBeingAnsweredId, involvedAnswers);
+            return this.EvaluateBooleanExpressionIfEnoughAnswers(validationExpression, involvedQuestions, getAnswer, question.Id);
         }
 
 
-        private void DetermineCustomEnablementStateForGroupsWhichDependOnQuestionBeingAnswered(
-            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
-            out List<Guid> groupsToBeDisabled, out List<Guid> groupsToBeEnabled)
+        private void DetermineCustomEnablementStateOfDependentGroups(
+            Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+            out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
         {
-            groupsToBeDisabled = new List<Guid>();
-            groupsToBeEnabled = new List<Guid>();
+            groupsToBeDisabled = new List<Identity>();
+            groupsToBeEnabled = new List<Identity>();
 
-            IEnumerable<Guid> dependentGroups = questionnaire.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBeingAnsweredId);
+            IEnumerable<Guid> dependentGroupIds = questionnaire.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(question.Id);
+            IEnumerable<Identity> dependentGroups = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(dependentGroupIds, question.PropagationVector, questionnaire);
 
-            foreach (Guid dependentGroupId in dependentGroups)
+            foreach (Identity dependentGroup in dependentGroups)
             {
-                bool? enablementState = this.DetermineCustomEnablementStateOfGroup(
-                    dependentGroupId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+                bool? enablementState = this.DetermineCustomEnablementStateOfGroup(dependentGroup, questionnaire, getAnswer);
 
                 bool shouldGroupBeDisabled = enablementState == false;
                 bool shouldGroupBeEnabled = enablementState == true;
 
-                if (shouldGroupBeDisabled && !this.IsGroupDisabled(dependentGroupId))
+                if (shouldGroupBeDisabled && !this.IsGroupDisabled(dependentGroup))
                 {
-                    groupsToBeDisabled.Add(dependentGroupId);
+                    groupsToBeDisabled.Add(dependentGroup);
                 }
 
-                if (shouldGroupBeEnabled && this.IsGroupDisabled(dependentGroupId))
+                if (shouldGroupBeEnabled && this.IsGroupDisabled(dependentGroup))
                 {
-                    groupsToBeEnabled.Add(dependentGroupId);
+                    groupsToBeEnabled.Add(dependentGroup);
                 }
             }
         }
 
-        private void DetermineCustomEnablementStateForQuestionsWhichDependOnQuestionBeingAnswered(
-            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered, IQuestionnaire questionnaire,
-            out List<Guid> questionsToBeDisabled, out List<Guid> questionsToBeEnabled)
+        private void DetermineCustomEnablementStateOfDependentQuestions(
+            Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+            out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
-            questionsToBeDisabled = new List<Guid>();
-            questionsToBeEnabled = new List<Guid>();
+            questionsToBeDisabled = new List<Identity>();
+            questionsToBeEnabled = new List<Identity>();
 
-            IEnumerable<Guid> dependentQuestions = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(questionBeingAnsweredId);
+            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(question.Id);
+            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(dependentQuestionIds, question.PropagationVector, questionnaire);
 
-            foreach (Guid dependentQuestionId in dependentQuestions)
+            foreach (Identity dependentQuestion in dependentQuestions)
             {
-                bool? enablementState = this.DetermineCustomEnablementStateOfQuestion(
-                    dependentQuestionId, questionnaire, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+                bool? enablementState = this.DetermineCustomEnablementStateOfQuestion(dependentQuestion, questionnaire, getAnswer);
 
                 bool shouldQuestionBeDisabled = enablementState == false;
                 bool shouldQuestionBeEnabled = enablementState == true;
 
-                if (shouldQuestionBeDisabled && !this.IsQuestionDisabled(dependentQuestionId))
+                if (shouldQuestionBeDisabled && !this.IsQuestionDisabled(dependentQuestion))
                 {
-                    questionsToBeDisabled.Add(dependentQuestionId);
+                    questionsToBeDisabled.Add(dependentQuestion);
                 }
 
-                if (shouldQuestionBeEnabled && this.IsQuestionDisabled(dependentQuestionId))
+                if (shouldQuestionBeEnabled && this.IsQuestionDisabled(dependentQuestion))
                 {
-                    questionsToBeEnabled.Add(dependentQuestionId);
+                    questionsToBeEnabled.Add(dependentQuestion);
                 }
             }
         }
 
-        private bool? DetermineCustomEnablementStateOfGroup(Guid groupId,
-            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        private bool? DetermineCustomEnablementStateOfGroup(Identity group, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForGroup(groupId);
+            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForGroup(@group.Id);
+            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, @group.PropagationVector, questionnaire);
 
-            string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(groupId);
+            string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(group.Id);
 
-            return this.DetermineCustomEnablementState(enablementCondition,
-                involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
         }
 
-        private bool? DetermineCustomEnablementStateOfQuestion(Guid questionId,
-            IQuestionnaire questionnaire, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        private bool? DetermineCustomEnablementStateOfQuestion(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestions = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForQuestion(questionId);
+            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForQuestion(question.Id);
+            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
-            string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(questionId);
+            string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(question.Id);
 
-            return this.DetermineCustomEnablementState(enablementCondition,
-                involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
         }
 
-        private bool? DetermineCustomEnablementState(string enablementCondition, IEnumerable<Guid> involvedQuestions,
-            Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
-        {
-            bool someOfNeededAnswersAreNotDefined
-                = involvedQuestions.Any(questionId => !this.IsAnswerDefined(questionId) && questionId != questionBeingAnsweredId);
 
-            if (someOfNeededAnswersAreNotDefined)
+        private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
+            IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare)
+        {
+            int vectorPropagationLevel = propagationVector.Length;
+
+            foreach (Guid questionId in questionIds)
+            {
+                int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
+
+                if (questionPropagationLevel > vectorPropagationLevel)
+                    throw new InterviewException(string.Format(
+                        "Question {0} expected to have propagation level not deeper than {1} but it is {2}.",
+                        FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
+
+                int[] questionPropagationVector = ShrinkPropagationVector(propagationVector, questionPropagationLevel);
+
+                yield return new Identity(questionId, questionPropagationVector);
+            }
+        }
+
+        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+            IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare)
+        {
+            int vectorPropagationLevel = propagationVector.Length;
+
+            foreach (Guid questionId in questionIds)
+            {
+                int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
+
+                if (questionPropagationLevel < vectorPropagationLevel)
+                    throw new InterviewException(string.Format(
+                        "Question {0} expected to have propagation level not upper than {1} but it is {2}.",
+                        FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
+
+                Guid[] parentPropagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
+                IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop);
+
+                foreach (int[] questionPropagationVector in questionPropagationVectors)
+                {
+                    yield return new Identity(questionId, questionPropagationVector);
+                }
+            }
+        }
+
+        private static IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperPropagationLevelOrThrow(
+            IEnumerable<Guid> groupIds, int[] propagationVector, IQuestionnaire questionnare)
+        {
+            int vectorPropagationLevel = propagationVector.Length;
+
+            foreach (Guid groupId in groupIds)
+            {
+                int groupPropagationLevel = questionnare.GetPropagationLevelForGroup(groupId);
+
+                if (groupPropagationLevel > vectorPropagationLevel)
+                    throw new InterviewException(string.Format(
+                        "Group {0} expected to have propagation level not deeper than {1} but it is {2}.",
+                        FormatGroupForException(groupId, questionnare), vectorPropagationLevel, groupPropagationLevel));
+
+                int[] groupPropagationVector = ShrinkPropagationVector(propagationVector, groupPropagationLevel);
+
+                yield return new Identity(groupId, groupPropagationVector);
+            }
+        }
+
+        private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
+            IEnumerable<Guid> groupIds, int[] propagationVector, IQuestionnaire questionnare)
+        {
+            int vectorPropagationLevel = propagationVector.Length;
+
+            foreach (Guid groupId in groupIds)
+            {
+                int groupPropagationLevel = questionnare.GetPropagationLevelForGroup(groupId);
+
+                if (groupPropagationLevel < vectorPropagationLevel)
+                    throw new InterviewException(string.Format(
+                        "Group {0} expected to have propagation level not upper than {1} but it is {2}.",
+                        FormatGroupForException(groupId, questionnare), vectorPropagationLevel, groupPropagationLevel));
+
+                Guid[] parentPropagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsForGroupStartingFromTop(groupId).ToArray();
+                IEnumerable<int[]> groupPropagationVectors = this.ExtendPropagationVector(propagationVector, groupPropagationLevel, parentPropagatableGroupsStartingFromTop);
+
+                foreach (int[] groupPropagationVector in groupPropagationVectors)
+                {
+                    yield return new Identity(groupId, groupPropagationVector);
+                }
+            }
+        }
+
+
+        private bool? EvaluateBooleanExpressionIfEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
+            Func<Identity, object> getAnswer, Guid? thisIdentifierQuestionId = null)
+        {
+            Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
+                involvedQuestion => involvedQuestion.Id,
+                involvedQuestion => getAnswer(involvedQuestion));
+
+            bool someOfInvolvedQuestionsAreNotAnswered = involvedAnswers.Values.Any(answer => answer == null);
+            if (someOfInvolvedQuestionsAreNotAnswered)
                 return null;
 
-            Dictionary<Guid, object> involvedAnswers
-                = this.GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
-                    involvedQuestions, questionBeingAnsweredId, answerGivenForQuestionBeingAnswered);
+            bool isSpecialThisIdentifierSupportedByExpression = thisIdentifierQuestionId.HasValue;
 
-            return this.EvaluateEnablementCondition(enablementCondition, involvedAnswers);
-        }
+            var mapIdentifierToQuestionId = isSpecialThisIdentifierSupportedByExpression
+                ? (Func<string, Guid>) (identifier => GetQuestionIdByExpressionIdentifierIncludingThis(identifier, thisIdentifierQuestionId.Value))
+                : (Func<string, Guid>) (identifier => GetQuestionIdByExpressionIdentifierExcludingThis(identifier));
 
-
-        private bool EvaluateValidationExpression(string validationExpression, Guid contextQuestionId, Dictionary<Guid, object> involvedAnswers)
-        {
-            return this.ExpressionProcessor.EvaluateBooleanExpression(validationExpression,
-                getValueForIdentifier: identifier => involvedAnswers[GetQuestionIdByExpressionIdentifierIncludingThis(identifier, contextQuestionId)]);
-        }
-
-        private bool EvaluateEnablementCondition(string enablementCondition, Dictionary<Guid, object> involvedAnswers)
-        {
-            return this.ExpressionProcessor.EvaluateBooleanExpression(enablementCondition,
-                getValueForIdentifier: identifier => involvedAnswers[GetQuestionIdByExpressionIdentifierExcludingThis(identifier)]);
+            return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
+                getValueForIdentifier: idetifier => involvedAnswers[mapIdentifierToQuestionId(idetifier)]);
         }
 
         private static Guid GetQuestionIdByExpressionIdentifierIncludingThis(string identifier, Guid contextQuestionId)
@@ -793,54 +875,92 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return Guid.Parse(identifier);
         }
 
-        private Dictionary<Guid, object> GetAnswersForSpecifiedQuestionsUsingSeparateValueForQuestionWhichIsBeingAnswered(
-            IEnumerable<Guid> questions, Guid questionBeingAnsweredId, object answerGivenForQuestionBeingAnswered)
+        private int GetCountOfPropagatableGroupInstances(Guid propagatableGroupId, int[] outerScopePropagationVector)
         {
-            Dictionary<Guid, object> answersForSpecifiedQuestions = this.GetAnswersForSpecifiedQuestions(questions);
+            string propagatableGroupKey = ConvertIdAndPropagationVectorToString(propagatableGroupId, outerScopePropagationVector);
 
-            if (answersForSpecifiedQuestions.ContainsKey(questionBeingAnsweredId))
-                answersForSpecifiedQuestions[questionBeingAnsweredId] = answerGivenForQuestionBeingAnswered;
-
-            return answersForSpecifiedQuestions;
-        }
-
-        private Dictionary<Guid, object> GetAnswersForSpecifiedQuestions(IEnumerable<Guid> questions)
-        {
-            return questions.ToDictionary(
-                questionId => questionId,
-                questionId => this.GetAnswerForQuestionOrThrow(questionId));
-        }
-
-        private int GetCountOfPropagatableGroupInstances(Guid propagatableGroupId)
-        {
-            return this.propagatedGroupInstanceCounts.ContainsKey(propagatableGroupId)
-                ? this.propagatedGroupInstanceCounts[propagatableGroupId]
+            return this.propagatedGroupInstanceCounts.ContainsKey(propagatableGroupKey)
+                ? this.propagatedGroupInstanceCounts[propagatableGroupKey]
                 : 0;
         }
 
-        private bool IsGroupDisabled(Guid groupId)
+        private bool IsGroupDisabled(Identity group)
         {
-            return this.disabledGroups.Contains(groupId);
+            string groupKey = ConvertIdAndPropagationVectorToString(group.Id, group.PropagationVector);
+
+            return this.disabledGroups.Contains(groupKey);
         }
 
-        private bool IsQuestionDisabled(Guid questionId)
+        private bool IsQuestionDisabled(Identity question)
         {
-            return this.disabledQuestions.Contains(questionId);
+            string questionKey = ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector);
+
+            return this.disabledQuestions.Contains(questionKey);
         }
 
-        private object GetAnswerForQuestionOrThrow(Guid questionId)
+        private object GetAnswerOrNull(Identity question)
         {
-            if (!this.IsAnswerDefined(questionId))
-                throw new InterviewException(string.Format(
-                    "Cannot get answer for question with id '{0}' because it was not yet answered.",
-                    questionId));
+            string questionKey = ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector);
 
-            return this.answers[questionId];
+            return this.answers.ContainsKey(questionKey)
+                ? this.answers[questionKey]
+                : null;
         }
 
-        private bool IsAnswerDefined(Guid questionId)
+        private static readonly int[] EmptyPropagationVector = {};
+
+        private static int[] ShrinkPropagationVector(int[] propagationVector, int length)
         {
-            return this.answers.ContainsKey(questionId);
+            if (length == 0)
+                return EmptyPropagationVector;
+
+            if (length == propagationVector.Length)
+                return propagationVector;
+
+            if (length > propagationVector.Length)
+                throw new ArgumentException(string.Format("Cannot shrink vector with length {0} to bigger length {1}.", propagationVector.Length, length));
+
+            return propagationVector.Take(length).ToArray();
+        }
+
+        /// <remarks>
+        /// If propagation vector should be extended, result will be a set of vectors depending on propagation count of correspondifg groups.
+        /// </remarks>
+        private IEnumerable<int[]> ExtendPropagationVector(int[] propagationVector, int length, Guid[] parentPropagatableGroupsStartingFromTop)
+        {
+            if (length < propagationVector.Length)
+                throw new ArgumentException(string.Format("Cannot extend vector with length {0} to smaller length {1}.", propagationVector.Length, length));
+
+            if (length == propagationVector.Length)
+            {
+                yield return propagationVector;
+                yield break;
+            }
+
+            if (length == propagationVector.Length + 1)
+            {
+                int countOfInstances = this.GetCountOfPropagatableGroupInstances(
+                    propagatableGroupId: parentPropagatableGroupsStartingFromTop.Last(),
+                    outerScopePropagationVector: propagationVector);
+
+                for (int instanceIndex = 0; instanceIndex < countOfInstances; instanceIndex++)
+                {
+                    yield return ExtendPropagationVectorWithOneValue(propagationVector, instanceIndex);
+                }
+            }
+
+            throw new NotImplementedException("This method doed not support propagated groups inside propagated groups, but may easily support it when needed.");
+        }
+
+        private static int[] ExtendPropagationVectorWithOneValue(int[] propagationVector, int value)
+        {
+            return new List<int>(propagationVector) { value }.ToArray();
+        }
+
+        private static bool AreEqual(Identity identityA, Identity identityB)
+        {
+            return identityA.Id == identityB.Id
+                && Enumerable.SequenceEqual(identityA.PropagationVector, identityB.PropagationVector);
         }
 
         private static int ToPropagationCount(decimal decimalValue)
@@ -851,6 +971,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
         {
             return string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
+        }
+
+        private static string FormatQuestionForException(Identity question, IQuestionnaire questionnaire)
+        {
+            return string.Format("'{0} ({1})'", question.Id, string.Join("-", question.PropagationVector));
+        }
+
+        private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
+        {
+            return string.Format("'{0}'", questionId);
+        }
+
+        private static string FormatGroupForException(Identity group, IQuestionnaire questionnaire)
+        {
+            return string.Format("'{0} ({1})'", group.Id, string.Join("-", group.PropagationVector));
+        }
+
+        private static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
+        {
+            return string.Format("'{0}'", groupId);
         }
 
         /// <remarks>
