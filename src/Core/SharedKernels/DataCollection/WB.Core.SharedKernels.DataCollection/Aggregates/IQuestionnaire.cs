@@ -13,7 +13,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasQuestion(Guid questionId);
 
+        bool HasGroup(Guid groupId);
+
         QuestionType GetQuestionType(Guid questionId);
+
+        string GetQuestionTitle(Guid questionId);
+
+        string GetGroupTitle(Guid groupId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
@@ -51,6 +57,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetMaxAnswerValueForPropagatingQuestion(Guid questionId);
 
-        IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingGroups();
+        IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups();
+
+        IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
+
+        IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId);
+
+        int GetPropagationLevelForQuestion(Guid questionId);
+
+        int GetPropagationLevelForGroup(Guid groupId);
     }
 }
