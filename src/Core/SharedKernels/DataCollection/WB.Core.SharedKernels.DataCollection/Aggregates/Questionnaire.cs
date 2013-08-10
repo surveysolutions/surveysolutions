@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
+            this.innerDocument.ConnectChildsWithParent();
+
             this.questionCache = null;
             this.groupCache = null;
         }
@@ -378,6 +380,33 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .ToList();
         }
 
+        public IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId)
+        {
+            return this
+                .GetAllParentGroupsForGroupStartingFromBottom(groupId)
+                .Where(this.IsGroupPropagatable)
+                .Reverse()
+                .ToList();
+        }
+
+        public int GetPropagationLevelForQuestion(Guid questionId)
+        {
+            this.ThrowIfQuestionDoesNotExist(questionId);
+
+            return this
+                .GetAllParentGroupsForQuestion(questionId)
+                .Count(this.IsGroupPropagatable);
+        }
+
+        public int GetPropagationLevelForGroup(Guid groupId)
+        {
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            return this
+                .GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(group)
+                .Count(this.IsGroupPropagatable);
+        }
+
 
         private IEnumerable<IGroup> GetAllGroups()
         {
@@ -401,15 +430,28 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            this.innerDocument.ConnectChildsWithParent();
+            var parentGroup = (IGroup) question.GetParent();
 
+            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private IEnumerable<Guid> GetAllParentGroupsForGroupStartingFromBottom(Guid groupId)
+        {
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            var parentGroup = (IGroup) group.GetParent();
+
+            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private IEnumerable<Guid> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group)
+        {
             var parentGroups = new List<Guid>();
 
-            IComposite parent = question.GetParent();
-            while (parent != this.innerDocument)
+            while (group != this.innerDocument)
             {
-                parentGroups.Add(parent.PublicKey);
-                parent = parent.GetParent();
+                parentGroups.Add(group.PublicKey);
+                group = (IGroup) group.GetParent();
             }
 
             return parentGroups;

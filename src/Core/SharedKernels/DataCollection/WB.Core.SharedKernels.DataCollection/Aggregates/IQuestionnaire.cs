@@ -54,5 +54,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups();
 
         IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
+
+        IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId);
+
+        int GetPropagationLevelForQuestion(Guid questionId);
+
+        int GetPropagationLevelForGroup(Guid groupId);
     }
 }
