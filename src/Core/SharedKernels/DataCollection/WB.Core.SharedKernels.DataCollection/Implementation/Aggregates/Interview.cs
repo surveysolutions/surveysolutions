@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() {}
 
-        public Interview(Guid questionnaireId, Guid userId)
+        public Interview(Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
             ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(questionnaire, questionnaireId);
@@ -220,6 +220,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created));
+
+            #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
+            foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            {
+                Guid questionId = answerToFeaturedQuestion.Key;
+                object answer = answerToFeaturedQuestion.Value;
+
+                ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+
+                QuestionType questionType = questionnaire.GetQuestionType(questionId);
+
+                switch (questionType)
+                {
+                    case QuestionType.Text:
+                        this.AnswerTextQuestion(userId, questionId, EmptyPropagationVector, answersTime, (string) answer);
+                        break;
+
+                    case QuestionType.AutoPropagate:
+                    case QuestionType.Numeric:
+                        this.AnswerNumericQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal) answer);
+                        break;
+
+                    case QuestionType.DateTime:
+                        this.AnswerDateTimeQuestion(userId, questionId, EmptyPropagationVector, answersTime, (DateTime) answer);
+                        break;
+
+                    case QuestionType.SingleOption:
+                        this.AnswerSingleOptionQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal) answer);
+                        break;
+
+                    case QuestionType.MultyOption:
+                        this.AnswerMultipleOptionsQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal[]) answer);
+                        break;
+
+                    default:
+                        throw new InterviewException(string.Format(
+                            "Question {0} has type {1} which is not supported as initial featured question.",
+                            questionId, questionType));
+                }
+            }
         }
 
 
