@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -12,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly IEventStore eventStore;
         private readonly IDomainRepository domainRepository;
 
-        public QuestionnaireRepository(IEventStore eventStore, IDomainRepository domainRepository)
+        public QuestionnaireRepository(IDomainRepository domainRepository, IEventStore eventStore)
         {
             this.eventStore = eventStore;
             this.domainRepository = domainRepository;
