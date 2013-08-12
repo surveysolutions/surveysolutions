@@ -13,6 +13,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -64,8 +65,7 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
-                        this.CommandService.Execute(new DeleteInterviewCommand(interviewId: interviewId,
-                            deletedBy: responsibleId));
+                        this.CommandService.Execute(new DeleteInterviewCommand(interviewId, responsibleId));
                     }
                     catch
                     {

@@ -47,8 +47,7 @@ namespace Web.Supervisor.Controllers
                         new UserViewInputModel(UserName: model.Name, UserEmail: null));
                 if (user == null)
                 {
-                    this.CommandService.Execute(
-                        new CreateUserCommand(
+                    this.CommandService.Execute(new CreateUserCommand(
                             publicKey: Guid.NewGuid(),
                             userName: model.Name,
                             password: SimpleHash.ComputeHash(model.Password),
@@ -85,8 +84,7 @@ namespace Web.Supervisor.Controllers
                         new UserViewInputModel(UserName: model.Name, UserEmail: null));
                 if (user == null)
                 {
-                    this.CommandService.Execute(
-                        new CreateUserCommand(
+                    this.CommandService.Execute(new CreateUserCommand(
                             publicKey: Guid.NewGuid(),
                             userName: model.Name,
                             password: SimpleHash.ComputeHash(model.Password),

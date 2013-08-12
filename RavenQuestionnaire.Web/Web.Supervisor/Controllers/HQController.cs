@@ -158,36 +158,6 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        [HttpPost]
-        public JsonResult Assign(AssignSuveyData data)
-        {
-            try
-            {
-                foreach (var answer in data.Answers)
-                {
-                    var answers = answer.Answers ?? new Guid[0];
-                    this.CommandService.Execute(new SetAnswerCommand(data.QuestionnaireId, answer.Id, answers.ToList(), answer.Answer, null));
-                }
-
-                this.CommandService.Execute(new ChangeAssignmentCommand(data.QuestionnaireId, data.Responsible));
-                this.CommandService.Execute(
-                    new ChangeStatusCommand()
-                        {
-                            CompleteQuestionnaireId = data.QuestionnaireId,
-                            Status = SurveyStatus.Unassign,
-                            Responsible = data.Responsible
-                        });
-            }
-            catch (Exception e)
-            {
-                Logger.Fatal("Unexpected error occurred", e);
-                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
-        }
-
-
-
         public ActionResult Summary()
         {
             ViewBag.ActivePage = MenuItem.Summary;

@@ -158,8 +158,7 @@ namespace Web.Supervisor.Controllers
             }
             else
             {
-                this.CommandService.Execute(
-                    new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
+                this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
 
                 return this.RedirectToAction("Index", "HQ");    
             }

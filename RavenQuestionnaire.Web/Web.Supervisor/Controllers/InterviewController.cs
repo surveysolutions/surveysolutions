@@ -67,13 +67,7 @@ namespace Web.Supervisor.Controllers
                 {
                     var status = SurveyStatus.Redo;
                     status.ChangeComment = model.Comment;
-                    this.CommandService.Execute(
-                        new ChangeStatusCommand()
-                        {
-                            CompleteQuestionnaireId = model.Id,
-                            Status = status,
-                            Responsible = this.GlobalInfo.GetCurrentUser()
-                        });
+                    this.CommandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.GlobalInfo.GetCurrentUser() });
                     return this.RedirectToInterviewList(model.TemplateId);
                 }
 
