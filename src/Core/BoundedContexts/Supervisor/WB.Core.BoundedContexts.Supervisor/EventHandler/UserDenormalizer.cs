@@ -5,15 +5,17 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class UserDenormalizer : IEventHandler<NewUserCreated>,
                                     IEventHandler<UserChanged>,
                                     IEventHandler<UserLocked>,
-                                    IEventHandler<UserUnlocked>
+                                    IEventHandler<UserUnlocked>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly ISynchronizationDataStorage syncStorage;
@@ -70,6 +72,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             item.IsLocked = false;
             this.users.Store(item, item.PublicKey);
+        }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (UserDocument), typeof (SynchronizationDelta)}; }
         }
     }
 }

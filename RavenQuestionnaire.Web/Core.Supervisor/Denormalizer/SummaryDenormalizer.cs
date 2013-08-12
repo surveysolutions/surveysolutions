@@ -1,3 +1,4 @@
+using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 
 namespace Core.Supervisor.Denormalizer
@@ -32,6 +33,16 @@ namespace Core.Supervisor.Denormalizer
         {
             this.summaryItem = summaryItem;
             this.questionnaires = questionnaires;
+        }
+
+        public override Type[] UsesViews
+        {
+            get { return base.UsesViews.Union(new Type[] { typeof(CompleteQuestionnaireBrowseItem) }).ToArray(); }
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (SummaryItem)}; }
         }
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)

@@ -9,11 +9,15 @@ using Core.Supervisor.RavenIndexes;
 using Core.Supervisor.Views;
 using Main.Core;
 using Main.Core.Documents;
+using Main.Core.Services;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
@@ -126,20 +130,41 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
-
-            NcqrsInit.Init(kernel);
-
-            kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
+            PrepareNcqrsInfrastucture(kernel);
 
             var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(repository);
-
 
 #warning dirty index registrations
             var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
             indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
+        }
+
+        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
+        {
+            var commandService = NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>());
+            NcqrsEnvironment.SetDefault(commandService);
+            kernel.Bind<ICommandService>().ToConstant(commandService);
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+
+            CreateAndRegisterEventBus(kernel);
+        }
+
+        private static void CreateAndRegisterEventBus(StandardKernel kernel)
+        {
+            var bus = new SmartEventBus();
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<ISmartEventBus>().ToConstant(bus);
+            foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
+            {
+                bus.AddHandler(handler as IEventHandler);
+            }
+
         }
 
         private static int? GetEventStorePageSize()

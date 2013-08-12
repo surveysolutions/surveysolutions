@@ -144,7 +144,7 @@ namespace Main.Core
         /// <returns>
         /// The <see cref="ICommandService"/>.
         /// </returns>
-        internal static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
+        public static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
