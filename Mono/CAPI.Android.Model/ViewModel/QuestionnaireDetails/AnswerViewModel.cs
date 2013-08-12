@@ -4,12 +4,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class AnswerViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, ICloneable
     {
-        public AnswerViewModel(Guid publicKey, string title, decimal value, bool selected, string imagePublicKey)
+        public AnswerViewModel(Guid publicKey, string title, string value, bool selected, string imagePublicKey)
         {
             PublicKey = publicKey;
             Title = title;
             Selected = selected;
-            Value = value;
+            Value = decimal.Parse(value);
             ImagePublicKey = imagePublicKey;
         }
 
@@ -23,7 +23,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public object Clone()
         {
-            return new AnswerViewModel(this.PublicKey, this.Title,this.Value, this.Selected, this.ImagePublicKey);
+            return new AnswerViewModel(this.PublicKey, this.Title, this.Value.ToString(), this.Selected, this.ImagePublicKey);
         }
 
         #endregion

@@ -7,12 +7,11 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>, 
-                                                         IEventHandler<CommentSet>,
+    public class CompleteQuestionnaireViewDenormalizer :
                                                          IEventHandler<PropagatableGroupAdded>,
                                                          IEventHandler<PropagatableGroupDeleted>,
                                                          IEventHandler<QuestionnaireStatusChanged>,
-        IEventHandler<CommentAnswer>, 
+        IEventHandler<AnswerCommented>, 
         IEventHandler<InterviewSynchronized>, 
         IEventHandler<MultipleOptionsQuestionAnswered>
         , IEventHandler<NumericQuestionAnswered>
@@ -26,56 +25,30 @@ namespace CAPI.Android.Core.Model.EventHandlers
          , IEventHandler<AnswerDeclaredInvalid>
          , IEventHandler<AnswerDeclaredValid>
     {
-        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> _documentStorage;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage;
 
         public CompleteQuestionnaireViewDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
         {
-            _documentStorage = documentStorage;
+            this.documentStorage = documentStorage;
         }
-
-        private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
-        {
-            var doc = _documentStorage.GetById(publicKey);
-            return doc;
-        }
-
-        #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
+      
+        #region old events
 
         public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
         {
             var document = evnt.Payload.Source;
-            
+
             var view = new CompleteQuestionnaireView(document);
 
-            _documentStorage.Store(view, document.PublicKey);
+            documentStorage.Store(view, document.PublicKey);
         }
-
-
-        #endregion
-
-        #region Implementation of IEventHandler<in CommentSeted>
-
-        public void Handle(IPublishedEvent<CommentSet> evnt)
-        {
-            var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetComment(new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey),
-                           evnt.Payload.Comments);
-        }
-
-        #endregion
-
-        #region Implementation of IEventHandler<in PropagatableGroupAdded>
 
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-                doc.PropagateGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
+            doc.PropagateGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
             //   doc.AddScreen(rout, current);
         }
-
-        #endregion
-
-        #region Implementation of IEventHandler<in PropagatableGroupDeleted>
 
         public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
         {
@@ -83,56 +56,52 @@ namespace CAPI.Android.Core.Model.EventHandlers
             doc.RemovePropagatedGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
-
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             var document = GetStoredObject(evnt.EventSourceId);
-            if(document==null)
+            if (document == null)
                 return;
             document.Status = evnt.Payload.Status;
         }
 
         #endregion
 
-        #region Implementation of set answer
+        public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Handle(IPublishedEvent<AnswerCommented> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetComment(new ItemPublicKey(evnt.Payload.QuestionId, null),
+                           evnt.Payload.Comment);
+        }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
             SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues);
         }
+
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
             SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, new decimal[] { evnt.Payload.SelectedValue });
         }
+
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
+
         public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
+
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
         }
-        private void SetSelectableAnswer(Guid interviewId, Guid questionId, decimal[] answers)
-        {
-            var doc = GetStoredObject(interviewId);
-            doc.SetAnswer(new ItemPublicKey(questionId, null), answers);
-        }
-        private void SetValueAnswer(Guid interviewId, Guid questionId, object answer)
-        {
-            var doc = GetStoredObject(interviewId);
-            doc.SetAnswer(new ItemPublicKey(questionId, null), answer);
-        }
-
-        #endregion
-
-        #region Implementation of conditions
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
@@ -145,11 +114,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var doc = GetStoredObject(evnt.EventSourceId);
             doc.SetScreenStatus(new ItemPublicKey(evnt.Payload.GroupId, null), true);
         }
+
         public void Handle(IPublishedEvent<QuestionDisabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
             doc.SetQuestionStatus(new ItemPublicKey(evnt.Payload.QuestionId, null), false);
         }
+
         public void Handle(IPublishedEvent<QuestionEnabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
@@ -161,13 +132,30 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var doc = GetStoredObject(evnt.EventSourceId);
             doc.SetQuestionValidity(new ItemPublicKey(evnt.Payload.QuestionId, null), false);
         }
+
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
             doc.SetQuestionValidity(new ItemPublicKey(evnt.Payload.QuestionId, null), true);
         }
-        #endregion
- 
-        
+
+        private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
+        {
+            var doc = documentStorage.GetById(publicKey);
+            return doc;
+        }
+
+        private void SetSelectableAnswer(Guid interviewId, Guid questionId, decimal[] answers)
+        {
+            var doc = GetStoredObject(interviewId);
+            doc.SetAnswer(new ItemPublicKey(questionId, null), answers);
+        }
+
+        private void SetValueAnswer(Guid interviewId, Guid questionId, object answer)
+        {
+            var doc = GetStoredObject(interviewId);
+            doc.SetAnswer(new ItemPublicKey(questionId, null), answer);
+        }
+
     }
 }

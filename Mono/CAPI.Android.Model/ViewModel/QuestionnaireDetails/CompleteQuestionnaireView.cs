@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.Validation;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -419,7 +418,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                             newType,
                             question.GetAnswerString(),
                             question.Enabled, question.Instructions, BuildComments(question.Comments),
-                            question.Valid, question.Capital, question.Mandatory, question.ValidationExpression,
+                            question.Valid, question.Capital, question.Mandatory,
                             question.ValidationMessage);
                 else
                     questionView =
@@ -430,8 +429,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                     a =>
                                     new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, a.Selected,a.AnswerImage))),
                             question.Enabled, question.Instructions, BuildComments(question.Comments),
-                            question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),
-                            question.ValidationExpression, question.ValidationMessage);
+                            question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),question.ValidationMessage);
 
                 var trigger = question as IAutoPropagate;
                 if (trigger!=null)
