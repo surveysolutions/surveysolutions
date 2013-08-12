@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.Validation;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -61,7 +60,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             var questionKEy = new ItemPublicKey(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
-                                                      false, false, "", "");
+                                                      false, false,  "");
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             target.SetQuestionStatus(questionKEy, false);
@@ -82,7 +81,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             var questionKEy = new ItemPublicKey(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
-                                                      false, false, "", "");
+                                                      false, false,  "");
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             target.SetComment(questionKEy, "comment");
@@ -95,7 +94,7 @@ namespace CAPI.Androids.Core.Model.Tests
 
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             Assert.Throws<KeyNotFoundException>(
-                () => target.SetAnswer(new ItemPublicKey(Guid.NewGuid(), null),null,null));
+                () => target.SetAnswer(new ItemPublicKey(Guid.NewGuid(), null),null));
         }
         [Test]
         public void SetAnswer_QuestionISPresent_AnswerSetAndValidationExecuted()
@@ -103,14 +102,12 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             var questionKEy = new ItemPublicKey(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
-                                                      false, false, "", "");
+                                                      false, false,  "");
 
-            Mock<IQuestionnaireValidationExecutor> validator = new Mock<IQuestionnaireValidationExecutor>();
             questions.Add(questionKEy, question);
-            CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions, validator.Object);
-            target.SetAnswer(questionKEy, null,"answer");
+            CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
+            target.SetAnswer(questionKEy, "answer");
             Assert.AreEqual(question.AnswerString, "answer");
-            validator.Verify(x => x.Execute(), Times.Once());
         }
         [Test]
         public void PropagateGroup_TemplateISAbsent_ExeptionThrown()
@@ -134,7 +131,7 @@ namespace CAPI.Androids.Core.Model.Tests
                                                                     new ValueQuestionViewModel(
                                                                 new ItemPublicKey(questionKey, null), "test",
                                                                 QuestionType.Text, "t", true, "", "", false,
-                                                                false, false, "", "")
+                                                                false, false,  "")
                                                                 }, null,
                                                             Enumerable.Empty<ItemPublicKey>());
             var grid = new QuestionnaireGridViewModel(template.QuestionnaireId, "t", "t", templateKey, true,
@@ -176,7 +173,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var question = new ValueQuestionViewModel(
                 new ItemPublicKey(Guid.NewGuid(), propagationKey), "test",
                 QuestionType.Text, "t", true, "", "", false,
-                false, false, "", "");
+                false, false, "");
             questions.Add(question.PublicKey, question);
             var templateKey = new ItemPublicKey(Guid.NewGuid(), null);
 
@@ -220,10 +217,6 @@ namespace CAPI.Androids.Core.Model.Tests
             : this(screents)
         {
             this.Questions = questions;
-        }
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, QuestionViewModel> questions, IQuestionnaireValidationExecutor mockValidator):this(questions)
-        {
-            this.validator = mockValidator;
         }
         public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents)
             : this(Guid.NewGuid().ToString())
