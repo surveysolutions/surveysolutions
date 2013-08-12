@@ -188,6 +188,7 @@
     <Compile Include="App_Start\ValidatorsConfig.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
+    <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
