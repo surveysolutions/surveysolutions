@@ -34,7 +34,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
@@ -103,14 +103,22 @@ namespace CAPI.Android
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
-            bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
-            bus.RegisterHandler(eventHandler, typeof (AnswerSet));
-            bus.RegisterHandler(eventHandler, typeof (CommentSet));
-            bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
-            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
-            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
-            bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
+                new CompleteQuestionnaireViewDenormalizer(
+                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
+
+            bus.RegisterHandler(eventHandler, typeof (AnswerCommented));
+            bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
+            bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (GroupDisabled));
+            bus.RegisterHandler(eventHandler, typeof (GroupEnabled));
+            bus.RegisterHandler(eventHandler, typeof (QuestionDisabled));
+            bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
+            bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
+            bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredValid));
         }
 
         private void InitFileStorage(InProcessEventBus bus)

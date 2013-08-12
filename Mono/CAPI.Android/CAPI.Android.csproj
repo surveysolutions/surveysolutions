@@ -275,10 +275,6 @@
       <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
       <Name>WB.Core.GenericSubdomains.Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
@@ -314,6 +310,10 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
+      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>

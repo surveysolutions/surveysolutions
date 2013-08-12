@@ -8,9 +8,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class CompleteQuestionnaireViewDenormalizer :
-                                                         IEventHandler<PropagatableGroupAdded>,
+                                                    /*     IEventHandler<PropagatableGroupAdded>,
                                                          IEventHandler<PropagatableGroupDeleted>,
-                                                         IEventHandler<QuestionnaireStatusChanged>,
+                                                         IEventHandler<QuestionnaireStatusChanged>,*/
         IEventHandler<AnswerCommented>, 
         IEventHandler<InterviewSynchronized>, 
         IEventHandler<MultipleOptionsQuestionAnswered>
