@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class FlagRemovedFromAnswer : QuestionActiveEvent
     {
-        public FlagRemovedFromAnswer(Guid userId, Guid questionId)
-            : base(userId, questionId) {}
+        public FlagRemovedFromAnswer(Guid userId, Guid questionId, int[] propagationVector)
+            : base(userId, questionId, propagationVector) {}
     }
 }

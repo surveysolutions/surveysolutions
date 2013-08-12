@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public decimal Answer { get; private set; }
 
-        public AnswerNumericQuestionCommand(Guid interviewId, Guid userId, Guid questionId, DateTime answerTime, decimal answer)
-            : base(interviewId, userId, questionId, answerTime)
+        public AnswerNumericQuestionCommand(Guid interviewId, Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal answer)
+            : base(interviewId, userId, questionId, propagationVector, answerTime)
         {
             this.Answer = answer;
         }

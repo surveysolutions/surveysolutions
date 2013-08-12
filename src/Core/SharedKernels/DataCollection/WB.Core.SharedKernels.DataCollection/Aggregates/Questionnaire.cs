@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
+            this.innerDocument.ConnectChildsWithParent();
+
             this.questionCache = null;
             this.groupCache = null;
         }
@@ -132,11 +134,24 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.GetQuestion(questionId) != null;
         }
 
+        public bool HasGroup(Guid groupId)
+        {
+            return this.GetGroup(groupId) != null;
+        }
+
         public QuestionType GetQuestionType(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
+            return this.GetQuestionOrThrow(questionId).QuestionType;
+        }
 
-            return question.QuestionType;
+        public string GetQuestionTitle(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).QuestionText;
+        }
+
+        public string GetGroupTitle(Guid groupId)
+        {
+            return this.GetGroupOrThrow(groupId).Title;
         }
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
@@ -221,20 +236,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            this.innerDocument.ConnectChildsWithParent();
-
-            var parentGroups = new List<Guid>();
-
-            IComposite parent = question.GetParent();
-            while (parent != innerDocument)
-            {
-                parentGroups.Add(parent.PublicKey);
-                parent = parent.GetParent();
-            }
-
-            return parentGroups;
+            return this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
         }
 
         public string GetCustomEnablementConditionForQuestion(Guid questionId)
@@ -341,6 +343,91 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return invalidQuestions;
         }
 
+        public bool ShouldQuestionPropagateGroups(Guid questionId)
+        {
+            return this.DoesQuestionSupportPropagation(questionId)
+                && this.GetGroupsPropagatedByQuestion(questionId).Any();
+        }
+
+        public IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId)
+        {
+            if (!this.DoesQuestionSupportPropagation(questionId))
+                return Enumerable.Empty<Guid>();
+
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
+
+            foreach (Guid groupId in autoPropagatingQuestion.Triggers)
+            {
+                this.ThrowIfGroupDoesNotExist(groupId);
+            }
+
+            return autoPropagatingQuestion.Triggers.ToList();
+        }
+
+        public int GetMaxAnswerValueForPropagatingQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            this.ThrowIfQuestionDoesNotSupportPropagation(question.PublicKey);
+            var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
+
+            return autoPropagatingQuestion.MaxValue;
+        }
+
+        public IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups()
+        {
+            return (
+                from question in this.GetAllPropagatingQuestions()
+                let questionHasMissingGroup = question.Triggers.Any(groupId => !this.HasGroup(groupId) || !this.IsGroupPropagatable(groupId))
+                where questionHasMissingGroup
+                select question.PublicKey
+            ).ToList();
+        }
+
+        public IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId)
+        {
+            return this
+                .GetAllParentGroupsForQuestionStartingFromBottom(questionId)
+                .Where(this.IsGroupPropagatable)
+                .Reverse()
+                .ToList();
+        }
+
+        public IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId)
+        {
+            return this
+                .GetAllParentGroupsForGroupStartingFromBottom(groupId)
+                .Where(this.IsGroupPropagatable)
+                .Reverse()
+                .ToList();
+        }
+
+        public int GetPropagationLevelForQuestion(Guid questionId)
+        {
+            this.ThrowIfQuestionDoesNotExist(questionId);
+
+            return this
+                .GetAllParentGroupsForQuestion(questionId)
+                .Count(this.IsGroupPropagatable);
+        }
+
+        public int GetPropagationLevelForGroup(Guid groupId)
+        {
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            return this
+                .GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(group)
+                .Count(this.IsGroupPropagatable);
+        }
+
+        public IEnumerable<Guid> GetAllMandatoryQuestions()
+        {
+            return
+                from question in this.GetAllQuestions()
+                where question.Mandatory
+                select question.PublicKey;
+        }
+
 
         private IEnumerable<IGroup> GetAllGroups()
         {
@@ -350,6 +437,45 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private IEnumerable<IQuestion> GetAllQuestions()
         {
             return this.QuestionCache.Values;
+        }
+
+        private IEnumerable<IAutoPropagateQuestion> GetAllPropagatingQuestions()
+        {
+            return this
+                .GetAllQuestions()
+                .Where(DoesQuestionSupportPropagation)
+                .Cast<IAutoPropagateQuestion>();
+        }
+
+        private IEnumerable<Guid> GetAllParentGroupsForQuestionStartingFromBottom(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var parentGroup = (IGroup) question.GetParent();
+
+            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private IEnumerable<Guid> GetAllParentGroupsForGroupStartingFromBottom(Guid groupId)
+        {
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            var parentGroup = (IGroup) group.GetParent();
+
+            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private IEnumerable<Guid> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group)
+        {
+            var parentGroups = new List<Guid>();
+
+            while (group != this.innerDocument)
+            {
+                parentGroups.Add(group.PublicKey);
+                group = (IGroup) group.GetParent();
+            }
+
+            return parentGroups;
         }
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementCondition(string enablementCondition)
@@ -439,6 +565,37 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             bool isSpecifiedQuestionInvolved = involvedQuestions.Contains(specifiedQuestionId);
 
             return isSpecifiedQuestionInvolved;
+        }
+
+        private bool DoesQuestionSupportPropagation(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return DoesQuestionSupportPropagation(question);
+        }
+
+        private static bool DoesQuestionSupportPropagation(IQuestion question)
+        {
+            return (question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate)
+                && (question is IAutoPropagateQuestion);
+        }
+
+        private void ThrowIfQuestionDoesNotSupportPropagation(Guid questionId)
+        {
+            if (!this.DoesQuestionSupportPropagation(questionId))
+                throw new QuestionnaireException(string.Format("Question with id '{0}' is not a propagating question.", questionId));
+        }
+
+        private bool IsGroupPropagatable(Guid groupId)
+        {
+            IGroup @group = this.GetGroupOrThrow(groupId);
+
+            return @group.Propagated == Propagate.AutoPropagated;
+        }
+
+        private void ThrowIfGroupDoesNotExist(Guid groupId)
+        {
+            this.GetGroupOrThrow(groupId);
         }
 
         private IGroup GetGroupOrThrow(Guid groupId)
