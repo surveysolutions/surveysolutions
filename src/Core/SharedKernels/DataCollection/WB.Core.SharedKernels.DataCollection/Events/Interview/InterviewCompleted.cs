@@ -3,9 +3,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class GroupEnabled : GroupPassiveEvent
+    public class InterviewCompleted : InterviewActiveEvent
     {
-        public GroupEnabled(Guid groupId, int[] propagationVector)
-            : base(groupId, propagationVector) {}
+        public InterviewCompleted(Guid userId)
+            : base(userId) {}
     }
 }
