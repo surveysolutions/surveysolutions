@@ -6,6 +6,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -56,9 +57,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string newValue = etAnswer.Text.Trim();
             if (newValue != this.Model.AnswerString)
             {
-                CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                     null, newValue,
-                                                     Model.PublicKey.PropagationKey));
+                CommandService.Execute(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.PublicKey,
+                                                     null,DateTime.Now, newValue));
             }
         
             base.SaveAnswer();

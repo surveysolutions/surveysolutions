@@ -9,6 +9,7 @@ using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -112,8 +113,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string newComments = etComments.Text.Trim();
             if (newComments != this.Model.Comments)
             {
-                CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey, newComments, this.Model.PublicKey.PropagationKey,
-                                                             CapiApplication.Membership.CurrentUser));
+                CommandService.Execute(new CommentAnswerCommand(this.QuestionnairePublicKey,
+                                                                CapiApplication.Membership.CurrentUser.Id,
+                                                                this.Model.PublicKey.PublicKey,
+                                                                /*this.Model.PublicKey.PropagationKey, */new int[0], 
+                                                                newComments));
             }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;

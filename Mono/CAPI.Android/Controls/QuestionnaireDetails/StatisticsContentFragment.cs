@@ -8,6 +8,8 @@ using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Extensions;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -140,18 +142,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         void btnComplete_Click(object sender, EventArgs e)
         {
-
-            var status = SurveyStatus.IsStatusAllowCapiSync(this.Model.Status)
-                             ? SurveyStatus.Reinit
-                             : Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
-            status.ChangeComment = etComments.Text;
-            var command = new ChangeStatusCommand()
-                {
-                    CompleteQuestionnaireId = Model.QuestionnaireId,
-                    Status = status,
-                    Responsible = CapiApplication.Membership.CurrentUser
-                };
-            CapiApplication.CommandService.Execute(command);
+            if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
+            {
+                CapiApplication.CommandService.Execute(new RestartInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id));
+            }
+            else
+            {
+                CapiApplication.CommandService.Execute(new CompleteInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id));
+            }
             this.Activity.Finish();
         }
 

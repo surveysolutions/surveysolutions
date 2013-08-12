@@ -8,6 +8,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -51,16 +52,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var cb = sender as CheckBox;
             var answerGuid = Guid.Parse(cb.GetTag(Resource.Id.AnswerId).ToString());
-            var answered = typedMode.Answers.Where(a => a.Selected).Select(a => a.PublicKey).ToList();
+            var answered = typedMode.Answers.Where(a => a.Selected).Select(a => a.Value).ToList();
+            var answerValue = typedMode.Answers.FirstOrDefault(a => a.PublicKey == answerGuid).Value;
             if(e.IsChecked)
-                answered.Add(answerGuid);
+                answered.Add(answerValue);
             else
             {
-                answered.Remove(answerGuid);
+                answered.Remove(answerValue);
             }
-            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                         answered, "",
-                                                         Model.PublicKey.PropagationKey));
+            CommandService.Execute(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
+                                                        null, DateTime.Now, answered.ToArray()));
             SaveAnswer();
 
         }

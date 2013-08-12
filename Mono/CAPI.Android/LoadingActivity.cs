@@ -83,7 +83,8 @@ namespace CAPI.Android
                 string content = PackageHelper.DecompressString(item);
                 var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new CreateNewAssigment(questionnarieContent));
+                throw new NotImplementedException("please uncomment line below");
+                //commandService.Execute(new CreateNewAssigment(questionnarieContent));
 
                 syncCacher.DeleteItem(publicKey);
             }

@@ -77,28 +77,6 @@ namespace CAPI.Android.Syncronization
 
         #region operations
 
-        private void Validate()
-        {
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true, 0));
-
-            CancelIfException(() =>
-                {
-                    int i = 1;
-                    foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value))
-                    {
-                        pullDataProcessor.Proccess(chunck.Key);
-                        //save last handled item
-                        lastSequence = chunck.Key.Key.ToString();
-
-                        OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,
-                                                                       (i * 100) / remoteChuncksForDownload.Count));
-                        i++;
-                    }
-                /*    if (remoteChuncksForDownload.Any(i => !i.Value))
-                        throw new OperationCanceledException("pull wasn't completed");*/
-                });
-        }
-
         private void Pull()
         {
             ExitIfCanceled();

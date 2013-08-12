@@ -18,28 +18,27 @@ using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace CAPI.Android.Syncronization.Pull
 {
     public class PullDataProcessor
     {
-        private const string syncTemp = "sync_temp";
-
-        private ILogger logger;
-
         public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
             this.chuncksFroProccess=new List<SyncItem>();
-
-            cleanUpExecutor = new CleanUpExecutor(changelog);
+            this.cleanUpExecutor = new CleanUpExecutor(changelog);
         }
         private IList<SyncItem> chuncksFroProccess;
+        private ILogger logger;
+        private CleanUpExecutor cleanUpExecutor;
+
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
-        private CleanUpExecutor cleanUpExecutor;
+       
 
         public void Save(SyncItem  data)
         {
@@ -120,7 +119,8 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-            if (!string.IsNullOrWhiteSpace(item.MetaInfo))
+            throw new NotImplementedException("please uncomment lines below me");
+           /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
             {
                 string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
@@ -145,7 +145,7 @@ namespace CAPI.Android.Syncronization.Pull
 
                 var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
                 commandService.Execute(new CreateNewAssigment(questionnarieContent));    
-            }
+            }*/
             
         }
 
@@ -153,7 +153,7 @@ namespace CAPI.Android.Syncronization.Pull
         {
             string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
             var template = JsonUtils.GetObject<QuestionnaireDocument>(content);
-            commandService.Execute(new ImportQuestionnaireCommand(null, template));
+            commandService.Execute(new ImportQuestionnaireCommand(template.CreatedBy.Value, template));
         }
     }
 }
