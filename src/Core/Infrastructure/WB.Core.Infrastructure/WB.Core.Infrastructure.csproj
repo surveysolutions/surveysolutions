@@ -41,6 +41,7 @@
     <Folder Include="Implementation\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandlerDescription.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
