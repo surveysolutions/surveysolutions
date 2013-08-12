@@ -7,14 +7,12 @@
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
-    /// <summary>
-    /// The set comment command.
-    /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "SetFlag")]
     public class _SetFlagCommand : CommandBase
     {
         public _SetFlagCommand(
+      
             Guid completeQuestionnaireId,
             Guid questionPublicKey,
             Guid? propogationPublicKey,

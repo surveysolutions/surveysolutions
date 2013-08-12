@@ -10,12 +10,24 @@ namespace CAPI.Android.Core.Model
         void CloseDraftRecord(Guid eventSourceId, long end);
         void ReopenDraftRecord(Guid eventSourceId);
 
-        IDictionary<Guid, Guid> GetClosedDraftChunksIds();
-        SyncItem GetDraftRecordContent(Guid recordId);
+        IList<ChangeLogShortRecord> GetClosedDraftChunksIds();
+        string GetDraftRecordContent(Guid recordId);
 
         void CreatePublicRecord(Guid recordId);
         void CleanUpChangeLogByRecordId(Guid recordId);
 
         void CleanUpChangeLogByEventSourceId(Guid eventSourceId);
+    }
+
+    public class ChangeLogShortRecord
+    {
+        public ChangeLogShortRecord(Guid recordId, Guid eventSourceId)
+        {
+            RecordId = recordId;
+            EventSourceId = eventSourceId;
+        }
+
+        public Guid RecordId { get; private set; }
+        public Guid EventSourceId { get; private set; }
     }
 }

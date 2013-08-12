@@ -45,12 +45,12 @@ namespace CAPI.Android.Core.Model.ChangeLog
             File.WriteAllText(path, JsonUtils.GetJsonData(syncItem));
         }
 
-        public SyncItem GetChangesetContent(Guid recordId)
+        public string GetChangesetContent(Guid recordId)
         {
             var path = GetFileName(recordId);
             if (!File.Exists(path))
                 return null;
-            return JsonUtils.GetObject<SyncItem>(File.ReadAllText(path));
+            return File.ReadAllText(path);
         }
 
         public void DeleteDraftChangeSet(Guid recordId)

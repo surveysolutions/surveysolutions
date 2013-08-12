@@ -1,32 +1,33 @@
 ﻿using System;
 using System.IO;
+using WB.Core.Infrastructure;
 using WB.Core.SharedKernel.Utils.Serialization;
 
-namespace WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataRepository
+namespace WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataStorage
 {
-    internal class FileTemporaryDataRepositoryAccessor : ITemporaryDataRepositoryAccessor
+    internal class FileTemporaryDataStorage<T> : ITemporaryDataStorage<T> where T : class
     {
         private readonly string rootPath;
         private readonly IJsonUtils jsonSerrializer;
 
-        public FileTemporaryDataRepositoryAccessor(IJsonUtils jsonSerrializer, string rootPath)
+        public FileTemporaryDataStorage(IJsonUtils jsonSerrializer, string rootPath)
         {
             this.rootPath = rootPath;
             this.jsonSerrializer = jsonSerrializer;
         }
-        public FileTemporaryDataRepositoryAccessor(IJsonUtils jsonSerrializer)
+        public FileTemporaryDataStorage(IJsonUtils jsonSerrializer)
             : this(jsonSerrializer, AppDomain.CurrentDomain.GetData("DataDirectory").ToString())
         {
         }
-        public void Store<T>(T payload, string name) where T : class 
+        public void Store(T payload, string name)
         {
-            var path = GetOrCreateObjectStoreFolder<T>();
+            var path = GetOrCreateObjectStoreFolder();
             File.WriteAllText(GetItemFileName(path, name), jsonSerrializer.GetItemAsContent(payload));
         }
 
-        public T GetByName<T>(string name) where T :class 
+        public T GetByName(string name)
         {
-            var path = GetOrCreateObjectStoreFolder<T>();
+            var path = GetOrCreateObjectStoreFolder();
             var fullFilePath = Path.Combine(path, name);
             if (!File.Exists(fullFilePath))
                 return null;
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataReposit
             return jsonSerrializer.Deserrialize<T>(fileContent);
         }
 
-        private string GetOrCreateObjectStoreFolder<T>()
+        private string GetOrCreateObjectStoreFolder()
         {
             var path = Path.Combine(rootPath, typeof (T).Name);
             if (!Directory.Exists(path))

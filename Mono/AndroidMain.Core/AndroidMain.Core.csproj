@@ -457,6 +457,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <Link>Entities\SubEntities\Question\GpsCoordinateQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagateQuestion.cs">
+      <Link>Entities\SubEntities\Question\IAutoPropagateQuestion.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
     </Compile>

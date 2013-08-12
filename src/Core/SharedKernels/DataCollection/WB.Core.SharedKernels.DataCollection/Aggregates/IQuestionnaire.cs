@@ -11,7 +11,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        bool HasQuestion(Guid questionId);
+
+        bool HasGroup(Guid groupId);
+
         QuestionType GetQuestionType(Guid questionId);
+
+        string GetQuestionTitle(Guid questionId);
+
+        string GetGroupTitle(Guid groupId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
 
@@ -24,5 +32,41 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions();
 
         IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
+
+        string GetCustomEnablementConditionForQuestion(Guid questionId);
+
+        string GetCustomEnablementConditionForGroup(Guid groupId);
+
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForGroup(Guid groupId);
+
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions();
+
+        IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions();
+
+        bool ShouldQuestionPropagateGroups(Guid questionId);
+
+        IEnumerable<Guid> GetGroupsPropagatedByQuestion(Guid questionId);
+
+        int GetMaxAnswerValueForPropagatingQuestion(Guid questionId);
+
+        IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups();
+
+        IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
+
+        IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId);
+
+        int GetPropagationLevelForQuestion(Guid questionId);
+
+        int GetPropagationLevelForGroup(Guid groupId);
+
+        IEnumerable<Guid> GetAllMandatoryQuestions();
     }
 }

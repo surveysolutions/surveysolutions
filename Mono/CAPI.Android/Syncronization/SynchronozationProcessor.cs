@@ -161,9 +161,9 @@ namespace CAPI.Android.Syncronization
                     {
                         ExitIfCanceled();
 
-                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription, ct);
+                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription.Content, ct);
                         //fix method
-                        pushDataProcessor.DeleteInterview(chunckDescription.Id, chunckDescription.ItemsContainer[0].Id);
+                        pushDataProcessor.DeleteInterview(chunckDescription.EventSourceId);
 
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;

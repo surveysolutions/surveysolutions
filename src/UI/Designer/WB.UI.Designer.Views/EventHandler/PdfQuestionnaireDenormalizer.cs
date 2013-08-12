@@ -136,7 +136,8 @@ namespace WB.UI.Designer.Views.EventHandler
                                             AnswerValue = x.AnswerValue
                                         }).ToList(),
                         Condition = @event.ConditionExpression,
-                        Variable = @event.StataExportCaption
+                        Variable = @event.StataExportCaption,
+                        ValidationExpression = @event.ValidationExpression
                     };
 
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
@@ -150,6 +151,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
                 existingQuestion.Condition = @event.ConditionExpression;
+                existingQuestion.ValidationExpression = @event.ValidationExpression;
 
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = @event.QuestionType;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Services;
 using Ncqrs.Commanding.ServiceModel;
@@ -16,30 +17,25 @@ namespace CAPI.Android.Syncronization.Push
             this.changelog = changelog;
         }
 
-        public IList<SyncPackage> GetChuncks()
+        public IList<ChangeLogRecordWithContent> GetChuncks()
         {
-            var chunks = changelog.GetClosedDraftChunksIds();
-            var retval = new List<SyncPackage>();
-            foreach (var chunk in chunks)
-            {
-                retval.Add(new SyncPackage()
-                    {
-                        Id = chunk.Key,
-                        IsErrorOccured = false,
-                        ItemsContainer =
-                            new List<SyncItem>()
-                                {
-                                    changelog.GetDraftRecordContent(chunk.Key)
-                                }
-                    });
-            }
-            return retval;
+            var records =  changelog.GetClosedDraftChunksIds();
+            return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
         }
 
-        public void DeleteInterview(Guid chunckId, Guid itemId)
+        public void DeleteInterview(Guid itemId)
         {
             new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>()).DeleteInterveiw(itemId);
         }
     }
 
+    public class ChangeLogRecordWithContent:ChangeLogShortRecord
+    {
+        public ChangeLogRecordWithContent(Guid recordId, Guid eventSourceId, string content) : base(recordId, eventSourceId)
+        {
+            Content = content;
+        }
+
+        public string Content { get; private set; }
+    }
 }

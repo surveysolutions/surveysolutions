@@ -8,9 +8,6 @@
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
-    /// <summary>
-    /// The set comment command.
-    /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "SetComment")]
     public class _SetCommentCommand : CommandBase
@@ -18,7 +15,7 @@
         public _SetCommentCommand(
             Guid completeQuestionnaireId,
             Guid questionPublicKey,
-            string questionComments,
+            string comments,
             Guid? propogationPublicKey,
             UserLight user)
         {
@@ -27,7 +24,7 @@
             this.User = user;
             this.QuestionPublickey = questionPublicKey;
             this.PropogationPublicKey = propogationPublicKey;
-            this.Comments = questionComments;
+            this.Comments = comments;
         }
 
         public UserLight User { get; set; }

@@ -17,16 +17,15 @@ namespace CAPI.Android.Syncronization.Push
         }
 
 
-        public void PushChunck(string login, string password, SyncPackage chunck, CancellationToken ct)
+        public void PushChunck(string login, string password, string content, CancellationToken ct)
         {
-            if (chunck.ItemsContainer == null || chunck.ItemsContainer.Count == 0)
+            if (string.IsNullOrEmpty(content))
                 throw new InvalidOperationException("container is empty");
-            var item = chunck.ItemsContainer[0];
 
             try
             {
-                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct, 
-                    JsonConvert.SerializeObject(item), 
+                var result = webExecutor.ExcecuteRestRequestAsync<bool>(getChunckPath, ct,
+                    content, 
                     new HttpBasicAuthenticator(login, password));
 
                 if (!result)

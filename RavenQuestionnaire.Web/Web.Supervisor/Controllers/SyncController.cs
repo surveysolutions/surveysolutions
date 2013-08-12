@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Http.Controllers;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -23,6 +23,10 @@ namespace Web.Supervisor.Controllers
         private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
+
+        private string CapiFileName = "wbcapi.apk";
+
+        private string pathToSearchVersions = HostingEnvironment.MapPath("/App_Data/Capi");
 
         public SyncController(ISyncManager syncManager, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory)
@@ -273,6 +277,65 @@ namespace Web.Supervisor.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [AllowAnonymous]
+        public ActionResult GetLatestVersion()
+        {
+            int maxVersion = GetLastVersionNumber(pathToSearchVersions);
+            
+            if (maxVersion != 0)
+            {
+                string path = Path.Combine(pathToSearchVersions, maxVersion.ToString());
+
+                string pathToFile = Path.Combine(path, CapiFileName);
+                if (System.IO.File.Exists(pathToFile))
+                    return File(path, "application/vnd.android.package-archive", CapiFileName);
+            }
+            
+            return null;
+        }
+
+        private int GetLastVersionNumber(string pathToSearchVersions)
+        {
+            int maxVersion = 0;
+
+            if (Directory.Exists(pathToSearchVersions))
+            {
+                var dirInfo = new DirectoryInfo(pathToSearchVersions);
+                foreach (DirectoryInfo directoryInfo in dirInfo.GetDirectories())
+                {
+                    int value;
+                    if (int.TryParse(directoryInfo.Name, out value))
+                        if (maxVersion < value)
+                            maxVersion = value;
+                }
+            }
+
+            return maxVersion;
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        [AllowAnonymous]
+        public ActionResult CheckNewVersion(string version, string versionCode, string androidId)
+        {
+            var newVwrsionExsists = false;
+
+            int versionValue;
+            if (int.TryParse(versionCode, out versionValue))
+            {
+                int maxVersion = GetLastVersionNumber(pathToSearchVersions);
+
+                if (maxVersion != 0 && maxVersion > versionValue)
+                {
+                    newVwrsionExsists = true;
+                }
+            }
+
+            return Json(newVwrsionExsists, JsonRequestBehavior.AllowGet);
+        }
+
 
         //move to filter
         //or change to web API

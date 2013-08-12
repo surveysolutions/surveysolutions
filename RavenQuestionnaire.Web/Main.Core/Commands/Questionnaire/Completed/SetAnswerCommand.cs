@@ -9,9 +9,6 @@
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
-    /// <summary>
-    /// The set answer command.
-    /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "SetAnswer")]
     public class _SetAnswerCommand : CommandBase
@@ -19,21 +16,19 @@
         public _SetAnswerCommand(
             Guid completeQuestionnaireId,
             Guid questionPublicKey,
-            List<Guid> answersList,
-            string answerValue,
+            List<Guid> сompleteAnswers,
+            string сompleteAnswerValue,
             Guid? propogationPublicKey)
         {
             this.CompleteQuestionnaireId = completeQuestionnaireId;
             this.PropogationPublicKey = propogationPublicKey;
             this.QuestionPublickey = questionPublicKey;
-            this.CompleteAnswers = answersList;
-            this.CompleteAnswerValue = answerValue;
+            this.CompleteAnswers = сompleteAnswers;
+            this.CompleteAnswerValue = сompleteAnswerValue;
             var clock = NcqrsEnvironment.Get<IClock>();
             this.AnswerDate = clock.UtcNow();
         }
 
-        
-   
         public string CompleteAnswerValue { get; private set; }
 
         public List<Guid> CompleteAnswers { get; private set; }
@@ -43,10 +38,7 @@
 
         public Guid? PropogationPublicKey { get; set; }
 
-   
         public Guid QuestionPublickey { get; set; }
 
-    
-        public DateTime AnswerDate { get; set; }
     }
 }
