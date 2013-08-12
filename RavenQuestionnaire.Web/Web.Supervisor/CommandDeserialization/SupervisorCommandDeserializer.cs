@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.Models;
@@ -16,7 +17,13 @@ namespace Web.Supervisor.CommandDeserialization
                 return new Dictionary<string, Type>
                     {
                         { "CreateInterviewWithFeaturedQuestionsCommand", typeof (CreateInterviewWithFeaturedQuestionsCommand) },
-                        { "AssignInterviewToUserCommand", typeof (AssignInterviewToUserCommand) }
+                        { "AssignInterviewToUserCommand", typeof (AssignInterviewToUserCommand) },
+                        /*{ "SetFlagToAnswer", typeof (SetFlagToAnswerCommand) },
+                        { "RemoveFlagFromAnswer ", typeof (RemoveFlagFromAnswerCommand ) },
+                        { "CommentAnswer", typeof (CommentAnswerCommand ) }*/
+                        { "SetFlagCommand", typeof (SetFlagCommand ) },
+                        { "SetCommentCommand", typeof (SetCommentCommand ) },
+                        { "SetAnswerCommand", typeof (SetAnswerCommand ) }
                     };
             }
         }

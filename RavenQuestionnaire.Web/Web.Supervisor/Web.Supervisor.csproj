@@ -471,6 +471,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\datacontext.js" />
+    <Content Include="Scripts\details\app\dataservice.js" />
+    <Content Include="Scripts\details\app\mapper.js" />
+    <Content Include="Scripts\details\app\model.js" />
+    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
@@ -478,14 +484,14 @@
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
-    <Content Include="Scripts\details.js" />
+    <Content Include="Scripts\details\app\viewmodel.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable-inline.js" />
     <Content Include="Scripts\bootstrap-editable-inline.min.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\director.min.js" />
+    <Content Include="Scripts\lib\director.js" />
     <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\highcharts.js" />

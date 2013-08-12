@@ -33,72 +33,6 @@ namespace Web.Supervisor.Controllers
             this.surveyScreenViewFactory = surveyScreenViewFactory;
         }
 
-        [HttpPost]
-        public JsonResult AnswerQuestion(Guid surveyKey, Guid questionKey, Guid questionPropagationKey, Guid[] answers, string answerValue)
-        {
-            try
-            {
-                this.CommandService.Execute(
-                    new SetAnswerCommand(
-                        surveyKey,
-                        questionKey,
-                        new List<Guid>(answers ?? (new Guid[0])),
-                        answerValue,
-                        questionPropagationKey));
-            }
-            catch (Exception e)
-            {
-                Logger.Fatal("Unexpected error occurred", e);
-                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public JsonResult AddComment(Guid surveyKey, Guid questionKey, Guid questionPropagationKey, string comment)
-        {
-            try
-            {
-                var user = this.GlobalInfo.GetCurrentUser();
-                this.CommandService.Execute(
-                    new SetCommentCommand(
-                        surveyKey,
-                        questionKey,
-                        comment,
-                        (questionPropagationKey == Guid.Empty) ? (Guid?)null : questionPropagationKey,
-                        user));
-            }
-            catch (Exception e)
-            {
-                Logger.Fatal("Unexpected error occurred", e);
-                return this.Json(new { status = "error", error = e.Message });
-            }
-
-            return this.Json(new { status = "ok" });
-        }
-
-        public JsonResult FlagQuestion(Guid surveyKey, Guid questionKey, Guid? questionPropagationKey, bool isFlaged)
-        {
-            try
-            {
-                this.CommandService.Execute(
-                    new SetFlagCommand(
-                        surveyKey,
-                        questionKey,
-                        (questionPropagationKey == Guid.Empty) ? (Guid?)null : questionPropagationKey,
-                         isFlaged)
-                       );
-            }
-            catch (Exception e)
-            {
-                Logger.Fatal("Unexpected error occurred", e);
-                return this.Json(new { status = "error", error = e.Message });
-            }
-
-            return this.Json(new { status = "ok" });
-        }
-
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
         {
             ViewBag.ActivePage = MenuItem.Docs;
@@ -110,6 +44,8 @@ namespace Web.Supervisor.Controllers
             }
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
+            var user = this.GlobalInfo.GetCurrentUser();
+            ViewBag.CurrentUser = user;
             return this.View(model);
         }
 
