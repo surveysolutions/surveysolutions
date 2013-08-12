@@ -416,7 +416,7 @@ namespace CapiDataGenerator
                     commandService.Execute(new SetCommentCommand(completeQuestionnaireId: qId,
                         questionPublicKey: question.PublicKey, 
                         propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey,
-                        questionComments: "auto comment",
+                        comments: "auto comment",
                         user: new UserLight(Guid.NewGuid(), string.Empty)));
 
                     UpdateProgress();
@@ -495,8 +495,8 @@ namespace CapiDataGenerator
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
                     var isAutoQuestion = question is IAutoPropagate;
                     commandService.Execute(new SetAnswerCommand(completeQuestionnaireId: qId,
-                        questionPublicKey: question.PublicKey, answersList: GetDummyCompleteAnswers(question),
-                        answerValue: GetDummyAnswer(question),
+                        questionPublicKey: question.PublicKey, сompleteAnswers: GetDummyCompleteAnswers(question),
+                        сompleteAnswerValue: GetDummyAnswer(question),
                         propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey));
 
                     UpdateProgress();

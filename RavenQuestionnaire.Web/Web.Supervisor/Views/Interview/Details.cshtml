@@ -1,7 +1,9 @@
-﻿@using System.Web.Optimization
+﻿@using System.Runtime.Serialization.Formatters
+@using System.Web.Optimization
 @using System.Web.Script.Serialization
 @using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Survey
+@using Newtonsoft.Json
 @model SurveyScreenView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,66 +13,32 @@
 @section styles{
     @Styles.Render("~/css/interview")
 }
+
+    <script data-main="../../Scripts/details/main.js" src="~/Scripts/lib/require.js"></script>
+
+    <script type="text/javascript">
+        define('input', [], function() {
+            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.Objects,
+                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                        })) ,
+                u= @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.None,
+                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                        })) ;
+            return {
+                questionnaire: q,
+                user : u,
+                url: '@Url.Action("Assign", "HQ", new { }, Request.Url.Scheme)',
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
+                backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
+            };
+        });
+    </script>
 @section scripts
 {
-    @Scripts.Render("~/js/interview")
-    <script type="text/javascript">
-        var dataHelper = null;
-        var questionnaire = @Html.Raw(serializer.Serialize(Model));
-        $(document).ready(function() {
-            $('[rel=tooltip]').tooltip();
-            $('.dropdown-toggle').dropdown();
-            $("a[rel=popover]")
-                .popover()
-                .click(function(e) {
-                    e.preventDefault();
-                });
-
-            dataHelper = new DataHelper('@Url.Action("Index", "Interview", new {}, Request.Url.Scheme)');
-        });
-        
-        var DataHelper = function(host) {
-            var self = this;
-            self.host = host;
-
-            self.createAddCommentRequest = function() {
-                var request = {
-                    url: self.host + "/addcomment",
-                    type: "POST",
-                    data: {},
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8'
-                };
-                return request;
-            };
-
-            self.createFlagQuestionRequest = function() {
-                var request = {
-                    url: self.host + "/FlagQuestion",
-                    type: "POST",
-                    data: {},
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8'
-                };
-                return request;
-            };
-
-            self.getImageUrl = function(id) {
-                return host + "Resource/Thumb/" + id;
-            };
-
-            self.createAnswerQuestionRequest = function() {
-                var request = {
-                    url: self.host + "/AnswerQuestion",
-                    type: "POST",
-                    data: {},
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8'
-                };
-                return request;
-            };
-        }
-    </script>
     <script type="text/html" id="SingleOption">
         <ul data-bind="foreach: answerOptions" class="answer-list">
             <li>
@@ -121,13 +89,13 @@
         <input type="number"  data-bind="value: selectedOption, disable: isReadonly" />
     </script>
     <script type="text/html" id="DateTime">
-        <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
+        <input type="text" data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
     </script>
     <script type="text/html" id="AutoPropagate">
-        <input data-bind="value: selectedOption, disable: isReadonly" />
+        <input type="number" data-bind="value: selectedOption, disable: isReadonly" />
     </script>
     <script type="text/html" id="Text">
-        <input data-bind="value: selectedOption, disable: isReadonly" />
+        <input type="text" data-bind="value: selectedOption, disable: isReadonly" />
     </script>
 }
 <div id="stacks">

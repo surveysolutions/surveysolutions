@@ -120,6 +120,9 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\HtmlBinding.cs" />
@@ -198,6 +201,8 @@
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
+    <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
+    <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
