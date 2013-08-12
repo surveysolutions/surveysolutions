@@ -1,12 +1,15 @@
+using System;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>
+    public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
@@ -23,6 +26,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 return;
             this.documentStorage.Store(document, document.PublicKey);
             this.synchronizationDataStorage.SaveQuestionnaire(document);
+        }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireDocument), typeof(SynchronizationDelta) }; }
         }
     }
 }
