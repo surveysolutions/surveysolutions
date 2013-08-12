@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>Is used to restore aggregate from event stream.</remarks>
         public Interview() {}
 
-        public Interview(Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime)
+        public Interview(Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid supervisorId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
             ThrowIfSomeQuestionsHaveInvalidCustomValidationExpressions(questionnaire, questionnaireId);
@@ -260,6 +260,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             questionId, questionType));
                 }
             }
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
+
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
 

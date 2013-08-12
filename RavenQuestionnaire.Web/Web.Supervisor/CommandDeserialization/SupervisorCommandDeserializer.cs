@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.CommandDeserialization;
-using Web.Supervisor.Models;
 
 namespace Web.Supervisor.CommandDeserialization
 {
@@ -16,14 +13,24 @@ namespace Web.Supervisor.CommandDeserialization
             {
                 return new Dictionary<string, Type>
                     {
-                        { "CreateInterviewWithFeaturedQuestionsCommand", typeof (CreateInterviewWithFeaturedQuestionsCommand) },
-                        { "AssignInterviewToUserCommand", typeof (AssignInterviewToUserCommand) },
-                        /*{ "SetFlagToAnswer", typeof (SetFlagToAnswerCommand) },
+                        { "CreateInterviewCommand", typeof (CreateInterviewCommand) },
+                        { "DeleteInterviewCommand", typeof (DeleteInterviewCommand) },
+                        //assign
+                        { "AssignInterviewerCommand", typeof (AssignInterviewerCommand) },
+                        { "AssignSupervisorCommand", typeof (AssignSupervisorCommand) },
+                        // flags and comments
+                        { "SetFlagToAnswer", typeof (SetFlagToAnswerCommand) },
                         { "RemoveFlagFromAnswer ", typeof (RemoveFlagFromAnswerCommand ) },
-                        { "CommentAnswer", typeof (CommentAnswerCommand ) }*/
-                        { "SetFlagCommand", typeof (SetFlagCommand ) },
-                        { "SetCommentCommand", typeof (SetCommentCommand ) },
-                        { "SetAnswerCommand", typeof (SetAnswerCommand ) }
+                        { "CommentAnswer", typeof (CommentAnswerCommand ) },
+                        // answer question
+                        { "AnswerDateTimeQuestionCommand", typeof (AnswerDateTimeQuestionCommand ) },
+                        { "AnswerMultipleOptionsQuestionCommand", typeof (AnswerMultipleOptionsQuestionCommand ) },
+                        { "AnswerNumericQuestionCommand", typeof (AnswerNumericQuestionCommand ) },
+                        { "AnswerSingleOptionQuestionCommand", typeof (AnswerSingleOptionQuestionCommand ) },
+                        { "AnswerTextQuestionCommand", typeof (AnswerTextQuestionCommand ) },
+                        // statuses
+                        { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
+                        { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },
                     };
             }
         }

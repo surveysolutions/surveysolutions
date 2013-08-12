@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         {
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
 
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
@@ -33,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                new Interview(userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now));
+                new Interview(userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId));
 
         It should_throw_interview_exception = () =>
             exception.ShouldBeOfType<InterviewException>();
@@ -41,6 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Exception exception;
         private static Guid questionnaireId;
         private static Guid userId;
+        private static Guid responsibleSupervisorId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
     }
 }
