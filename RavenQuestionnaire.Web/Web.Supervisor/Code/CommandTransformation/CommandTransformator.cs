@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Web;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Commanding;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+
+namespace Web.Supervisor.Code.CommandTransformation
+{
+    public class CommandTransformator
+    {
+        public ICommand TransformCommnadIfNeeded(string type, ICommand command)
+        {
+            switch (type)
+            {
+                case "CreateInterviewCommand":
+                    return GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
+                    break;
+                case "AnswerDateTimeQuestionCommand":
+                    break;
+                case "AnswerMultipleOptionsQuestionCommand":
+                    break;
+                case "AnswerNumericQuestionCommand":
+                    break;
+                case "AnswerSingleOptionQuestionCommand":
+                    break;
+                case "AnswerTextQuestionCommand":
+                    break;
+            }
+
+            return command;
+        }
+
+        private CreateInterviewCommand GetCreateInterviewCommand(CreateInterviewControllerCommand command)
+        {
+            var answers = command.AnswersToFeaturedQuestions
+                .Select(ParseQuestionAnswer)
+                .ToDictionary(a => a.Key, a => a.Value);
+
+            var resultCommand = new CreateInterviewCommand(command.InterviewId,
+                                                           command.UserId,
+                                                           command.QuestionnaireId,
+                                                           answers,
+                                                           DateTime.UtcNow,
+                                                           command.SupervisorId);
+            return resultCommand;
+        }
+
+        private static KeyValuePair<Guid, object> ParseQuestionAnswer(UntypedQuestionAnswer answer)
+        {
+            switch (answer.Type)
+            {
+                case QuestionType.Text:
+                    return new KeyValuePair<Guid, object>(answer.Id, answer.Answer);
+
+                case QuestionType.AutoPropagate:
+                case QuestionType.Numeric:
+                    return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
+
+                case QuestionType.DateTime:
+                    return new KeyValuePair<Guid, object>(answer.Id, DateTime.ParseExact(answer.Answer.ToString(), "d", CultureInfo.InvariantCulture));
+
+                case QuestionType.SingleOption:
+                    return new KeyValuePair<Guid, object>(answer.Id, Guid.Parse(answer.Answer.ToString()));
+
+                case QuestionType.MultyOption:
+                    var answerAsDecimalArray = ((string[])answer.Answer).Select(decimal.Parse);
+                    return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
+            }
+            throw new Exception("Unknown question type");
+        }
+    }
+}

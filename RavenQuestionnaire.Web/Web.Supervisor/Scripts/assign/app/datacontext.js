@@ -42,27 +42,29 @@
 
         var prepareQuestion = function () {
             var answers = _.map(questions.getAllLocal(), function (question) {
-                     
                 var answer = {};
-                    
-                if (question.hasOptions()) {
-                    if (question.type() == "SingleOption")
-                        answer[question.id()] = question.selectedOption();
-                    else
-                        answer[question.id()] = question.selectedOptions();
-                } else {
-                    answer[question.id()] = question.selectedOption();
+                switch(question.type()) {
+                    case "Text":
+                    case "AutoPropagate":
+                    case "Numeric":
+                    case "DateTime":
+                    case "SingleOption":
+                        answer =  {
+                            id: question.id(),
+                            answer: question.selectedOption(),
+                            type: question.type()
+                        };
+                        break;
+                    case "MultyOption":
+                        answer = {
+                            id: question.id(),
+                            answer: question.selectedOptions(),
+                            type: question.type()
+                        };
                 }
-                     
                 return answer;
             });
-            var dictionary = {};
-        
-            _.each(answers, function (answer) {
-                _.assign(dictionary, answer);
-            });
-            
-            return dictionary;
+            return answers;
         };
 
         var parseData = function (input) {

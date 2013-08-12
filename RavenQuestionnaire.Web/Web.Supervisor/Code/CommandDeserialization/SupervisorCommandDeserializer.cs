@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Shared.Web.CommandDeserialization;
+using Web.Supervisor.Code.CommandTransformation;
 
-namespace Web.Supervisor.CommandDeserialization
+namespace Web.Supervisor.Code.CommandDeserialization
 {
     internal class SupervisorCommandDeserializer : CommandDeserializer
     {
@@ -13,7 +14,7 @@ namespace Web.Supervisor.CommandDeserialization
             {
                 return new Dictionary<string, Type>
                     {
-                        { "CreateInterviewCommand", typeof (CreateInterviewCommand) },
+                        { "CreateInterviewCommand", typeof (CreateInterviewControllerCommand) },
                         { "DeleteInterviewCommand", typeof (DeleteInterviewCommand) },
                         //assign
                         { "AssignInterviewerCommand", typeof (AssignInterviewerCommand) },

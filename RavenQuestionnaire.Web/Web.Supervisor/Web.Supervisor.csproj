@@ -288,8 +288,12 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
-    <Compile Include="CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
-    <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
+    <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
+    <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializer.cs" />
+    <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
+    <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
+    <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
+    <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\StatusApiController.cs" />
