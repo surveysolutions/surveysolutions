@@ -16,10 +16,12 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CommitDenormalizer : IEventHandler<QuestionnaireStatusChanged>, IEventHandler<NewAssigmentCreated>
+    public class CommitDenormalizer : IEventHandler<InterviewCompleted>,
+                                      IEventHandler<InterviewRestarted>, IEventHandler<InterviewSynchronized>
     {
         public CommitDenormalizer(IChangeLogManipulator changeLog)
         {
@@ -28,21 +30,17 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         private readonly IChangeLogManipulator changeLog;
 
-        public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            if (evnt.Payload.Status == SurveyStatus.Complete || evnt.Payload.Status == SurveyStatus.Error)
-            {
-                changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence);
-                return;
-            }
-            if (evnt.Payload.Status == SurveyStatus.Reinit)
-            {
-                changeLog.ReopenDraftRecord(evnt.EventSourceId);
-                return;
-            }
+            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence);
         }
 
-        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
+        {
+            changeLog.ReopenDraftRecord(evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
             changeLog.OpenDraftRecord(evnt.EventSourceId, evnt.EventSequence + 1);
         }

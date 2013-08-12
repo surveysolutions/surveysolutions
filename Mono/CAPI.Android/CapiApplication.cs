@@ -151,8 +151,9 @@ namespace CAPI.Android
         {
            
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
-            bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
         }
 
         public override void OnCreate()
