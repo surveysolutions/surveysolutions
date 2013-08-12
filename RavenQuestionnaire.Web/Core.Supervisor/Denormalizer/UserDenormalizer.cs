@@ -5,18 +5,20 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace Core.Supervisor.Denormalizer
 {
     /// <summary>
     /// The user denormalizer.
     /// </summary>
-    public class UserDenormalizer : IEventHandler<NewUserCreated>, 
-                                    IEventHandler<UserChanged>, 
+    public class UserDenormalizer : IEventHandler<NewUserCreated>,
+                                    IEventHandler<UserChanged>,
                                     IEventHandler<UserLocked>,
-                                    IEventHandler<UserUnlocked>
+                                    IEventHandler<UserUnlocked>, IEventHandler
     {
         #region Constants and Fields
 
@@ -68,8 +70,8 @@ namespace Core.Supervisor.Denormalizer
                     Roles = new List<UserRoles>(evnt.Payload.Roles)
                 };
             this.users.Store(doc
-               , 
-                evnt.Payload.PublicKey);
+                             ,
+                             evnt.Payload.PublicKey);
 
             syncStorage.SaveUser(doc);
         }
@@ -94,7 +96,7 @@ namespace Core.Supervisor.Denormalizer
             UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = true;
-            users.Store(item,item.PublicKey);
+            users.Store(item, item.PublicKey);
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> @event)
@@ -106,5 +108,20 @@ namespace Core.Supervisor.Denormalizer
         }
 
         #endregion
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (UserDocument), typeof (SynchronizationDelta)}; }
+        }
     }
 }

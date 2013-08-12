@@ -1,3 +1,4 @@
+using System.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -31,12 +32,6 @@ namespace Core.Supervisor.Denormalizer
         IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
-
-        /// <summary>
-        /// Information, grouped by date
-        /// </summary>
-        private readonly IReadSideRepositoryWriter<HistoryStatusStatistics> history;
-
         /// <summary>
         /// Hash of statistics key to easier find previous CQ state
         /// </summary>
@@ -47,15 +42,24 @@ namespace Core.Supervisor.Denormalizer
         public SupervisorStatisticsDenormalizer(
             IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics,
             IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> surveys,
-            IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash,
-            IReadSideRepositoryWriter<HistoryStatusStatistics> history, 
+            IReadSideRepositoryWriter<StatisticsItemKeysHash> keysHash, 
             IReadSideRepositoryWriter<UserDocument> users)
              :base(users)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
-            this.history = history;
+        }
+
+
+        public override Type[] UsesViews
+        {
+            get { return base.UsesViews.Union(new Type[] { typeof(CompleteQuestionnaireBrowseItem) }).ToArray(); }
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (SupervisorStatisticsItem), typeof (StatisticsItemKeysHash)}; }
         }
 
         #region Public Methods and Operators

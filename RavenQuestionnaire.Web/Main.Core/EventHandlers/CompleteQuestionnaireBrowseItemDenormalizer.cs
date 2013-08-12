@@ -1,4 +1,5 @@
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
@@ -19,7 +20,9 @@ namespace Main.Core.EventHandlers
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
                                                                IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewMetaInfoUpdated>
+        IEventHandler<InterviewMetaInfoUpdated>,
+         IEventHandler
+
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> documentItemStore;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -221,6 +224,21 @@ namespace Main.Core.EventHandlers
             item.LastEntryDate = evnt.EventTimeStamp;
             item.IsDeleted = false;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
+        }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[] {typeof (UserDocument)}; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(CompleteQuestionnaireBrowseItem) }; }
         }
     }
 }

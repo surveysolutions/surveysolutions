@@ -7,14 +7,17 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 {
-    public class InterviewSynchronizationEventHandler : IEventHandler<QuestionnaireAssignmentChanged>,
+    internal class InterviewSynchronizationEventHandler : 
+                                                        IEventHandler<QuestionnaireAssignmentChanged>,
                                                         IEventHandler<QuestionnaireStatusChanged>,
-                                                        IEventHandler<InterviewDeleted>
+                                                        IEventHandler<InterviewDeleted>, IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> interviewWriter;
@@ -47,8 +50,22 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-
             syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
+        }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[] {typeof (ZipView)}; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(SynchronizationDelta) }; }
         }
     }
 }

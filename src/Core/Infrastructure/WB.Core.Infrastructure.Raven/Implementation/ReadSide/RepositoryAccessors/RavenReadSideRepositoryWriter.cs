@@ -108,6 +108,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 cachedEntitiesWhichNeedToBeStoredToRepository);
         }
 
+        public Type ViewType {
+            get { return typeof (TEntity); }
+        }
+
         private TEntity GetByIdUsingCache(Guid id)
         {
             if (!this.cache.ContainsKey(id))

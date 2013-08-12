@@ -1,3 +1,4 @@
+using System;
 using Core.Supervisor.Views.Interview;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -25,6 +26,11 @@ namespace Core.Supervisor.Denormalizer
             :base(users)
         {
             this.interviews = interviews;
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (InterviewItem)}; }
         }
 
         #region Public Methods and Operators
