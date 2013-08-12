@@ -22,7 +22,7 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private readonly string path;
-        private const string FolderName = "IncomigData";
+        private const string FolderName = "IncomingData";
         private const string FileExtension = "sync";
 
         public IncomePackagesRepository(string folderPath)
