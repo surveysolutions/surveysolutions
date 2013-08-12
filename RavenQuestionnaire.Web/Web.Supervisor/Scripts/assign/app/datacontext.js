@@ -33,38 +33,6 @@
                 getData: getData
             };
         },
-         save = function (args, callbacks) {
-             
-             return $.Deferred(function (def) {
-
-                 var answers = prepareQuestion();
-
-                 var data = {
-                     QuestionnaireId : questionnaire.id,
-                     Responsible: {
-                         Id:args.id,
-                         Name: args.name
-                     },
-                     Answers: answers
-                 };
-                 
-                 dataservice.sendAssingmentData({
-                     success: function (response) {
-                         if (callbacks && callbacks.success) {
-                             callbacks.success(response);
-                         }
-                         def.resolve(response);
-                     },
-                     error: function (response) {
-                         if (callbacks && callbacks.error) {
-                             callbacks.error(response);
-                         }
-                         def.reject(response);
-                         return;
-                     }
-                 }, data);
-             }).promise();
-         },
             questions = new EntitySet(mapper.question),
             supervisors = new EntitySet(mapper.user),
             status = {},
@@ -73,24 +41,28 @@
             currentUser = {};
 
         var prepareQuestion = function () {
-            return _.map(questions.getAllLocal(), function (question) {
+            var answers = _.map(questions.getAllLocal(), function (question) {
                      
-                var answer = {
-                    Id: question.id(),
-                    Type: question.type(),
-                    Answer: question.hasOptions() ? "" : question.selectedOption(),
-                    Answers: []
-                };
+                var answer = {};
                     
                 if (question.hasOptions()) {
                     if (question.type() == "SingleOption")
-                        answer.Answers.push(question.selectedOption());
+                        answer[question.id()] = question.selectedOption();
                     else
-                        answer.Answers = question.selectedOptions();
+                        answer[question.id()] = question.selectedOptions();
+                } else {
+                    answer[question.id()] = question.selectedOption();
                 }
                      
                 return answer;
             });
+            var dictionary = {};
+        
+            _.each(answers, function (answer) {
+                _.assign(dictionary, answer);
+            });
+            
+            return dictionary;
         };
 
         var parseData = function (input) {
@@ -109,16 +81,14 @@
         
         var commands = {};
 
-        commands["CreateInterviewWithFeaturedQuestionsCommand"] = function(args) {
+        
+        commands["CreateInterviewCommand"] = function (args) {
             return {
                 interviewId : questionnaire.id,
+                supervisorId: args.id,
+                userId: currentUser.Id,
                 questionnaireId: questionnaire.templateId,
-                featuredAnswers: prepareQuestion(),
-                responsible: {
-                    Id: args.id,
-                    Name: args.name
-                },
-                creator: currentUser
+                answersToFeaturedQuestions: prepareQuestion()
             };
         };
         
@@ -152,7 +122,6 @@
             questionnaire: questionnaire,
             status: status,
             supervisors: supervisors,
-            save: save,
             sendCommand: sendCommand,
             parseData: parseData
         };

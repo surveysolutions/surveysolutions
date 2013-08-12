@@ -25,8 +25,6 @@
             this.QuestionPublickey = questionPublicKey;
             this.CompleteAnswers = сompleteAnswers;
             this.CompleteAnswerValue = сompleteAnswerValue;
-            var clock = NcqrsEnvironment.Get<IClock>();
-            this.AnswerDate = clock.UtcNow();
         }
 
         public string CompleteAnswerValue { get; private set; }

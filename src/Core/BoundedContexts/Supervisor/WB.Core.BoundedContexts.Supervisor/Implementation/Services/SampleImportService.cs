@@ -237,11 +237,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
         {
+            /*
+   
             var featuredAnswers = CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption);
-
-            template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
+         template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
+ */
         }
         private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template, Guid headqarter, Guid supervisor)
         {

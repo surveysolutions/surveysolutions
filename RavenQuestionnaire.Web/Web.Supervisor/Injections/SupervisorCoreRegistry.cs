@@ -6,6 +6,7 @@ using Core.Supervisor.Views.Index;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
+using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
@@ -47,6 +48,7 @@ namespace Web.Supervisor.Injections
                 typeof(IndexViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
                 typeof(ImportQuestionnaireCommand).Assembly,
+                typeof(UserDenormalizer).Assembly
             });
         }
 

@@ -14,9 +14,9 @@ namespace Main.Core.Commands.Questionnaire.Completed
 {
     [Serializable]
     [MapsToAggregateRootMethodOrConstructor(typeof(_CompleteQuestionnaireAR), "UpdateInterviewMetaInfo")]
-    public class _UpdateInterviewMetaInfoCommand : CommandBase
+    public class UpdateInterviewMetaInfoCommand : CommandBase
     {
-        public _UpdateInterviewMetaInfoCommand(Guid publicKey, Guid templateId, string title, Guid? responsibleId,
+        public UpdateInterviewMetaInfoCommand(Guid publicKey, Guid templateId, string title, Guid? responsibleId,
                                               Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
             : base(publicKey)
         {
