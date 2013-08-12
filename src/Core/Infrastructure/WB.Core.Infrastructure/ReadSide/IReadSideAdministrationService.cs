@@ -1,4 +1,7 @@
-﻿namespace WB.Core.Infrastructure.ReadSide
+﻿using System;
+using System.Collections.Generic;
+
+namespace WB.Core.Infrastructure.ReadSide
 {
     public interface IReadSideAdministrationService
     {
@@ -6,6 +9,10 @@
 
         void RebuildAllViewsAsync();
 
+        void RebuildViewsAsync(string[] handlerNames);
+
         void StopAllViewsRebuilding();
+
+        IEnumerable<EventHandlerDescription> GetAllAvailableHandlers();
     }
 }
