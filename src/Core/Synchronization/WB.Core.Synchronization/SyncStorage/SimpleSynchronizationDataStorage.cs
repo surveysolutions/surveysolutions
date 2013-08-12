@@ -46,6 +46,18 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
+        public void SaveQuestionnaire(QuestionnaireDocument doc)
+        {
+            var syncItem = new SyncItem
+            {
+                Id = doc.PublicKey,
+                ItemType = SyncItemType.Template,
+                IsCompressed = UseCompression,
+                Content = GetItemAsContent(doc)
+            };
+            chunkStorageWriter.StoreChunk(syncItem, null);
+        }
+
         public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId)
         {
             var syncItem = new SyncItem

@@ -8,6 +8,7 @@ namespace WB.Core.Synchronization
     public interface ISynchronizationDataStorage
     {
         void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId);
+        void SaveQuestionnaire(QuestionnaireDocument doc);
         void DeleteInterview(Guid id);
         void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId);
         void SaveImage(Guid publicKey, string title, string desc, string origData);
