@@ -76,8 +76,9 @@
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionActiveEvent.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
     <Compile Include="Events\Interview\InterviewDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\InterviewSynchronized.cs" />
     <Compile Include="Events\Interview\InterviewDeclaredValid.cs" />
     <Compile Include="Events\Interview\InterviewDeleted.cs" />
     <Compile Include="Events\Interview\InterviewCompleted.cs" />

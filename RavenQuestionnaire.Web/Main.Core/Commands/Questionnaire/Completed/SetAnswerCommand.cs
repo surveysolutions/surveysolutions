@@ -38,5 +38,6 @@
 
         public Guid QuestionPublickey { get; set; }
 
+        public DateTime AnswerDate { get; set; }
     }
 }

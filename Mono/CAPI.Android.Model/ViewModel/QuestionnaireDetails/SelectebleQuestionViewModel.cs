@@ -18,11 +18,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments, 
             bool valid, 
             bool mandatory, 
-            bool capital, 
-            string answerString, 
-            string validationExpression,
+            bool capital,
+            object answerObject, 
             string validationMessage)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
         {
             Answers = answers;
         }
@@ -38,10 +37,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool mandatory,
             bool capital,
-            string answerString,
-            string validationExpression,
+            object answerObject,
             string validationMessage)
-            : base(publicKey, text, questionType, status, instructions, comments,  mandatory, capital, answerString, validationExpression, validationMessage)
+            : base(publicKey, text, questionType, status, instructions, comments, mandatory, capital, answerObject, validationMessage)
         {
             Answers = answers;
         }
@@ -57,31 +55,23 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                                    this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerString, this.ValidationExpression,this.ValidationMessage);
+                                                   this.Mandatory, this.Capital, this.AnswerString, this.ValidationMessage);
         }
 
-        public override string AnswerObject
-        {
-            get
-            {
-                var value = this.Answers.Where(a => a.Selected).Select(a => a.Value).FirstOrDefault();
-                if (value == null)
-                    return string.Empty;
-                return value;
-            }
-        }
-
-        public override void SetAnswer(List<Guid> answer, string answerString)
+        public override void SetAnswer(object answer)
         {
             if (answer == null)
             {
                 return;
             }
+            var typedAnswers = answer as decimal[];
+            if(typedAnswers==null)
+                return;
             foreach (var item in this.Answers)
             {
-                item.Selected = answer.Contains(item.PublicKey);
+                item.Selected = typedAnswers.Contains(item.Value);
             }
-            base.SetAnswer(answer, answerString);
+            base.SetAnswer(answer);
             if (QuestionType==QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a=>a.Selected))
             {
                 Status &= ~QuestionStatus.Answered;

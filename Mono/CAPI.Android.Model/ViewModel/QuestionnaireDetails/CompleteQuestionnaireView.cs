@@ -40,8 +40,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 Enumerable.OfType<QuestionnaireScreenViewModel>(document.Children.OfType<ICompleteGroup>().Select(
                     c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)])).ToList();
 
-            this.validator = new QuestionnaireValidationExecutor(this);
-            this.validator.Execute();
          
         }
 
@@ -132,7 +130,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected TemplateCollection Templates { get; set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
 
-        protected IQuestionnaireValidationExecutor validator;
 
         #endregion
 
@@ -173,12 +170,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return breadcrumbs.Select(b => this.Screens[b]);
         }
 
-        public void SetAnswer(ItemPublicKey key, List<Guid> answerKeys, string answerString)
+        public void SetAnswer(ItemPublicKey key, object  answer)
         {
             var question =
                 this.Questions[key];
-            question.SetAnswer(answerKeys, answerString);
-            this.validator.Execute();
+            question.SetAnswer(answer);
         }
 
         public void SetComment(ItemPublicKey key, string comment)
@@ -197,7 +193,15 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Questions[key];
             question.SetEnabled(enebled);
         }
+        public void SetQuestionValidity(ItemPublicKey key, bool valid)
+        {
+            if (!this.Questions.ContainsKey(key))
+                return;
 
+            var question =
+                this.Questions[key];
+            question.SetValid(valid);
+        }
         public void SetScreenStatus(ItemPublicKey key, bool enebled)
         {
             var screen =
