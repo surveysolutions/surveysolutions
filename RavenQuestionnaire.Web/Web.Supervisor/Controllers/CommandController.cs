@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Ncqrs.Commanding;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using System;
@@ -7,6 +9,7 @@ using System.Web.Mvc;
 using Main.Core.Domain;
 using Ncqrs.Commanding.ServiceModel;
 using Web.Supervisor.Code;
+using Web.Supervisor.Code.CommandTransformation;
 
 namespace Web.Supervisor.Controllers
 {
@@ -58,7 +61,8 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                this.commandService.Execute(concreteCommand);
+                var transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand);
+                this.commandService.Execute(transformedCommand);
             }
             catch (Exception e)
             {
@@ -75,10 +79,10 @@ namespace Web.Supervisor.Controllers
                 {
                     error = domainEx.Message;
                 }
-
             }
 
             return this.Json(string.IsNullOrEmpty(error) ? (object)new { } : new { error = error });
         }
+
     }
 }

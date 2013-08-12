@@ -1,7 +1,7 @@
 ﻿using Ninject.Modules;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace Web.Supervisor.CommandDeserialization
+namespace Web.Supervisor.Code.CommandDeserialization
 {
     public class SupervisorCommandDeserializationModule : NinjectModule
     {
