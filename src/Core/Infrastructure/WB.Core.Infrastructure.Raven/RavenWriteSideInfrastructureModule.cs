@@ -26,6 +26,7 @@ namespace WB.Core.Infrastructure.Raven
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
             this.Kernel.Bind<IStreamableEventStore>().ToConstant(store);
+            this.Kernel.Bind<IEventStore>().ToConstant(store);
         }
     }
 }

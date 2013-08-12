@@ -12,6 +12,7 @@ using Main.Core.Documents;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Web.Common;
@@ -129,6 +130,9 @@ namespace Web.Supervisor.App_Start
             NcqrsInit.Init(kernel);
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
+
+            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+            kernel.Bind<IDomainRepository>().ToConstant(repository);
 
 
 #warning dirty index registrations
