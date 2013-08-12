@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -20,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaireVersion = 18;
+            answersToFeaturedQuestions = new Dictionary<Guid, object>();
 
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
@@ -33,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(questionnaireId, userId);
+            new Interview(userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.Events.ShouldContain(@event => @event.Payload is InterviewCreated);
@@ -56,5 +58,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Guid questionnaireId;
         private static long questionnaireVersion;
         private static Guid userId;
+        private static Dictionary<Guid, object> answersToFeaturedQuestions;
     }
 }
