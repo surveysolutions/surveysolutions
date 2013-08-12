@@ -781,7 +781,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8012</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8000/</IISUrl>
+          <IISUrl>http://localhost/Supervisor</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
