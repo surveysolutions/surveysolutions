@@ -21,7 +21,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class CommitDenormalizer : IEventHandler<InterviewCompleted>,
-                                      IEventHandler<InterviewRestarted>, IEventHandler<InterviewSynchronized>
+                                      IEventHandler<InterviewRestarted>, 
+                                      IEventHandler<InterviewSynchronized>
     {
         public CommitDenormalizer(IChangeLogManipulator changeLog)
         {
