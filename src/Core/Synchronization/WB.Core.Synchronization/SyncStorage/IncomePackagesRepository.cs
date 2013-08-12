@@ -41,12 +41,14 @@ namespace WB.Core.Synchronization.SyncStorage
             var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
 
             File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
-
+            
+            throw new NotImplementedException("please uncomment line below me");
+            /*
 
             NcqrsEnvironment.Get<ICommandService>()
                             .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId, meta.Title,
                                                                         meta.ResponsibleId, meta.Status.Id,
-                                                                        null));
+                                                                        null));*/
         }
 
         private string GetItemFileName(Guid id)

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -156,6 +157,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewDeclaredInvalid @event) {}
 
+        private void Apply(InterviewSynchronized @event)
+        {
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+            this.status = @event.Status;
+        }
+
         #endregion
 
         #region Dependencies
@@ -266,6 +274,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
+        public Interview(InterviewSynchronizationDto sycnhronizedInterview)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(sycnhronizedInterview.QuestionnaireId);
+            this.ApplyEvent(new InterviewSynchronized(sycnhronizedInterview.UserId,
+                                                      sycnhronizedInterview.QuestionnaireId,
+                                                      sycnhronizedInterview.Status, questionnaire.Version,
+                                                      sycnhronizedInterview.Answers));
+        }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
         {
