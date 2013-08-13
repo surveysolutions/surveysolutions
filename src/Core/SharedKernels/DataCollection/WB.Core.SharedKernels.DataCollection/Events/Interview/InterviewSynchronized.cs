@@ -11,23 +11,30 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewSynchronized : InterviewActiveEvent
     {
-        public InterviewSynchronized(Guid userId, Guid questionnaireId, InterviewStatus status, long questionnaireVersion, IList<AnswerSynchronizationDto> answers, HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions, HashSet<ItemPublicKey> invalidAnsweredQuestions) : base(userId)
+        public InterviewSynchronized(Guid userId, Guid questionnaireId, InterviewStatus status,
+                                     long questionnaireVersion, IList<AnsweredQuestionSynchronizationDto> answeredQuestions,
+                                     HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions,
+                                     HashSet<ItemPublicKey> invalidAnsweredQuestions,
+                                     Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
+            : base(userId)
         {
             QuestionnaireId = questionnaireId;
             Status = status;
             QuestionnaireVersion = questionnaireVersion;
-            Answers = answers;
+            AnsweredQuestions = answeredQuestions;
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
+            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
         }
 
         public Guid QuestionnaireId { get; private set; }
         public InterviewStatus Status { get; private set; }
         public long QuestionnaireVersion { get; private set; }
-        public IList<AnswerSynchronizationDto> Answers { get; private set; }
+        public IList<AnsweredQuestionSynchronizationDto> AnsweredQuestions { get; private set; }
         public HashSet<ItemPublicKey> DisabledGroups { get; private set; }
         public HashSet<ItemPublicKey> DisabledQuestions { get; private set; }
         public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get; private set; }
+        public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get; private set; }
     }
 }

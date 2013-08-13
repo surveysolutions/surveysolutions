@@ -10,11 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
         }
 
-        public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId,
-                                           IList<AnswerSynchronizationDto> answers,
-                                           HashSet<ItemPublicKey> disabledGroups,
-                                           HashSet<ItemPublicKey> disabledQuestions,
-                                           HashSet<ItemPublicKey> invalidAnsweredQuestions)
+        public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, IList<AnsweredQuestionSynchronizationDto> answers, HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions, HashSet<ItemPublicKey> invalidAnsweredQuestions, Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
         {
             Id = id;
             Status = status;
@@ -24,17 +20,17 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
+            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
         }
 
         public Guid Id { get; private set; }
         public InterviewStatus Status { get; private set; }
         public Guid UserId { get; private set; }
         public Guid QuestionnaireId { get; private set; }
-        public IList<AnswerSynchronizationDto> Answers { get; private set; }
+        public IList<AnsweredQuestionSynchronizationDto> Answers { get; private set; }
         public HashSet<ItemPublicKey> DisabledGroups { get; private set; }
         public HashSet<ItemPublicKey> DisabledQuestions { get; private set; }
         public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get; private set; }
-        /*    
-        private readonly Dictionary<string, int> propagatedGroupInstanceCounts = new Dictionary<string, int>();*/
+        public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get; private set; }
     }
 }

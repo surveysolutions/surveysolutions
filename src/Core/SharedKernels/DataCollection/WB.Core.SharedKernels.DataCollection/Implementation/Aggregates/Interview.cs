@@ -283,7 +283,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       sycnhronizedInterview.Answers,
                                                       sycnhronizedInterview.DisabledGroups,
                                                       sycnhronizedInterview.DisabledQuestions,
-                                                      sycnhronizedInterview.InvalidAnsweredQuestions));
+                                                      sycnhronizedInterview.InvalidAnsweredQuestions,
+                                                      sycnhronizedInterview.PropagatedGroupInstanceCounts));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
