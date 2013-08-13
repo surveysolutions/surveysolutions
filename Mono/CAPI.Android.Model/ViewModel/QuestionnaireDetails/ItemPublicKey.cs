@@ -6,15 +6,32 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public struct ItemPublicKey
     {
-        [JsonConstructor]
-        public ItemPublicKey(Guid publicKey, Guid? propagationKey)
+        public ItemPublicKey(Guid publicKey, int[] propagationVector)
         {
             PublicKey = publicKey;
-            PropagationKey = propagationKey;
+            PropagationVector = propagationVector;
+        }
+        public ItemPublicKey(Guid publicKey)
+        {
+            PublicKey = publicKey;
+            PropagationVector = new int[0];
         }
         public readonly Guid PublicKey;
-        public readonly Guid? PropagationKey;
+        public readonly int[] PropagationVector;
 
+        public bool CompareWithVector(int[] vector)
+        {
+            if (PropagationVector == null && vector == null)
+                return true;
+            if ((PropagationVector != null && vector == null) || PropagationVector == null)
+                return false;
+
+            return PropagationVector.All(vector.Contains);
+        }
+
+        public bool IsTopLevel {
+            get { return this.PropagationVector.Length == 0; }
+        }
 
         public override bool Equals(object obj)
         {
@@ -22,36 +39,48 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
         public override int GetHashCode()
         {
-            return PublicKey.GetHashCode() ^ PropagationKey.GetHashCode();
+            var vectoreHashCode = PropagationVector.Aggregate(0, (current, i) => current ^ i.GetHashCode());
+            return PublicKey.GetHashCode() ^ vectoreHashCode;
         }
+
         public static bool operator ==(ItemPublicKey x, ItemPublicKey y)
         {
-            return x.PublicKey == y.PublicKey && (
-                                                     (!x.PropagationKey.HasValue && !y.PropagationKey.HasValue) ||
-                                                     (x.PropagationKey == y.PropagationKey)
-                                                 );
+            if (x.PublicKey != y.PublicKey)
+                return false;
+            return x.CompareWithVector(y.PropagationVector);
         }
 
         public static bool operator !=(ItemPublicKey x, ItemPublicKey y)
         {
             return !(x == y);
         }
+
         public override string ToString()
         {
-            if (PropagationKey.HasValue)
-                return string.Format("{0},{1}", PublicKey, PropagationKey);
+            if (!IsTopLevel)
+            {
+                string vector = PropagationVector.Aggregate(string.Empty, (current, i) => current + (i + ","));
+                return string.Format("{0},{1}", vector, PublicKey);
+            }
             return PublicKey.ToString();
         }
+
         public static explicit operator ItemPublicKey(string b)  // explicit byte to digit conversion operator
         {
             return Parse(b);
         }
+
         public static ItemPublicKey Parse(string value)
         {
             if (value.Contains(','))
             {
                 var items = value.Split(',');
-                return new ItemPublicKey(Guid.Parse(items[0]), Guid.Parse(items[1]));
+                var vector = new int[items.Length - 1];
+                for (int i = 0; i < items.Length - 1; i++)
+                {
+                    vector[i] = int.Parse(items[i]);
+                }
+                return new ItemPublicKey(Guid.Parse(items[items.Length - 1]), vector);
             }
             return new ItemPublicKey(Guid.Parse(value), null);
         }

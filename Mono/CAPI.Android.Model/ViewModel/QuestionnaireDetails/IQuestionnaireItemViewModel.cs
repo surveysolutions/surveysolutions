@@ -9,7 +9,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }
-        IQuestionnaireItemViewModel Clone(Guid propagationKey);
-        //   bool Enabled { get; }
+        IQuestionnaireItemViewModel Clone(int[] propagationVector);
     }
 }

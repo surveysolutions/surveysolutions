@@ -106,7 +106,6 @@ namespace CAPI.Android
                 new CompleteQuestionnaireViewDenormalizer(
                     kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
 
-            bus.RegisterHandler(eventHandler, typeof (AnswerCommented));
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
@@ -119,6 +118,10 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredValid));
+            bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
+            bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
+           
         }
 
         private void InitFileStorage(InProcessEventBus bus)

@@ -98,9 +98,10 @@ namespace CAPI.Android
                 var originalDoc = snapshot.Payload as CompleteQuestionnaireDocument;
                 if (originalDoc != null)
                 {
-                    documentStorage.Store(
+                    throw new NotImplementedException("please uncomment line below");
+                   /* documentStorage.Store(
                         new CompleteQuestionnaireView(originalDoc),
-                        publicKey);
+                        publicKey);*/
                     minVersion = snapshot.Version + 1;
                 }
             }
