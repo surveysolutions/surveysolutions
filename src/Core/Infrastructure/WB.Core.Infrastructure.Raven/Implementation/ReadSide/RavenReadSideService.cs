@@ -14,6 +14,7 @@ using Raven.Client.Document;
 using Raven.Client.Extensions;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
 {
@@ -35,19 +36,22 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
         private readonly DocumentStore ravenStore;
         private readonly ILogger logger;
         private readonly IRavenReadSideRepositoryWriterRegistry writerRegistry;
+        private readonly IReadSideRepositoryCleanerRegistry cleanerRegistry;
 
         static RavenReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILogger logger, IRavenReadSideRepositoryWriterRegistry writerRegistry)
+        public RavenReadSideService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILogger logger,
+            IRavenReadSideRepositoryWriterRegistry writerRegistry, IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.ravenStore = ravenStore;
             this.logger = logger;
             this.writerRegistry = writerRegistry;
+            this.cleanerRegistry = cleanerRegistry;
         }
 
         #region IReadLayerStatusService implementation
@@ -107,6 +111,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                 areViewsBeingRebuiltNow = true;
 
                 this.DeleteAllViews();
+                this.CleanUpAllWriters();
 
                 try
                 {
@@ -129,6 +134,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             finally
             {
                 areViewsBeingRebuiltNow = false;
+            }
+        }
+
+        private void CleanUpAllWriters()
+        {
+            foreach (var cleaner in this.cleanerRegistry.GetAll())
+            {
+                cleaner.Clear();
             }
         }
 

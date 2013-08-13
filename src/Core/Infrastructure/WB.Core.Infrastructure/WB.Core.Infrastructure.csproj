@@ -40,12 +40,15 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\ReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
+    <Compile Include="ReadSide\IReadSideRepositoryCleanerRegistry.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQuerableReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />
     <Compile Include="ReadSide\Repository\IReadSideRepositoryEntity.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryReader.cs" />
