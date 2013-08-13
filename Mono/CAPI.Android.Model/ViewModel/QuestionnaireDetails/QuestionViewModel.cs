@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {

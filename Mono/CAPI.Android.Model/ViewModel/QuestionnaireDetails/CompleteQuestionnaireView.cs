@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -21,9 +22,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             this.PublicKey = interviewData.QuestionnaireId;
             this.Title = string.Format("{0} - {1}", questionnarie.Title,
-                                       string.Concat(
-                                           (IEnumerable<string>) interviewData.Answers.Select(
-                                               q => q.Value.Answer + " ")));
+                                       string.Concat(interviewData.Answers.Select(
+                                               q => q.Answer + " ")));
             this.Status = interviewData.Status;
             this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
@@ -31,7 +31,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             foreach (var answer in interviewData.Answers)
             {
-                SetAnswer(new ItemPublicKey(answer.Key), answer.Value.Answer);
+                SetAnswer(new ItemPublicKey(answer.Id, answer.PropagationVector), answer.Answer);
             }
             this.Chapters =
                 Enumerable.OfType<QuestionnaireScreenViewModel>(questionnarie.Children.OfType<IGroup>().Select(

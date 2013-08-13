@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
 
-namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
+namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization
 {
     public struct ItemPublicKey
     {

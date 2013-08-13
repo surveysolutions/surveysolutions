@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {

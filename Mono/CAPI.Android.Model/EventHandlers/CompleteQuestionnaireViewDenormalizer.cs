@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

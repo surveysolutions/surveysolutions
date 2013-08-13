@@ -16,6 +16,7 @@ using CAPI.Android.Extensions;
 using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
 using Ninject;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 
 namespace CAPI.Android

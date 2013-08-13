@@ -1,6 +1,7 @@
 using System;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {

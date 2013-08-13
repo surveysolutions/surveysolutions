@@ -11,18 +11,23 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewSynchronized : InterviewActiveEvent
     {
-        public InterviewSynchronized(Guid userId, Guid questionnaireId, InterviewStatus status, long questionnaireVersion, Dictionary<Guid, AnswerSynchronizationDto> answers)
-            : base(userId)
+        public InterviewSynchronized(Guid userId, Guid questionnaireId, InterviewStatus status, long questionnaireVersion, IList<AnswerSynchronizationDto> answers, HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions, HashSet<ItemPublicKey> invalidAnsweredQuestions) : base(userId)
         {
             QuestionnaireId = questionnaireId;
             Status = status;
             QuestionnaireVersion = questionnaireVersion;
             Answers = answers;
+            DisabledGroups = disabledGroups;
+            DisabledQuestions = disabledQuestions;
+            InvalidAnsweredQuestions = invalidAnsweredQuestions;
         }
 
         public Guid QuestionnaireId { get; private set; }
         public InterviewStatus Status { get; private set; }
         public long QuestionnaireVersion { get; private set; }
-        public Dictionary<Guid, AnswerSynchronizationDto> Answers { get; private set; }
+        public IList<AnswerSynchronizationDto> Answers { get; private set; }
+        public HashSet<ItemPublicKey> DisabledGroups { get; private set; }
+        public HashSet<ItemPublicKey> DisabledQuestions { get; private set; }
+        public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get; private set; }
     }
 }

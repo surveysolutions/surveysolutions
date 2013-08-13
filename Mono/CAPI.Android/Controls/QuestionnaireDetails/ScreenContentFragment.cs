@@ -9,6 +9,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
