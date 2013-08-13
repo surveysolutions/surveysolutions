@@ -4,6 +4,7 @@ using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.Backup;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.FileStorage;
+using CAPI.Android.Core.Model.ReadSideStore;
 using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
@@ -13,6 +14,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Settings;
+using Main.Core.Documents;
 using Main.Core.Services;
 using Main.Core.View;
 using Ncqrs.Eventing.Storage;
@@ -45,9 +47,11 @@ namespace CAPI.Android.Core.Model
             var syncCacher = new FileSyncCacher();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
 
+            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocument>();
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
+            this.Bind<IReadSideRepositoryWriter<QuestionnaireDocument>>().ToConstant(templateStore);
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
@@ -71,7 +75,7 @@ namespace CAPI.Android.Core.Model
 
             this.Bind<IBackup>()
                 .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore, snapshotStore,
-                                              bigSurveyStore, syncCacher, sharedPreferencesBackup));
+                                              bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore));
         }
     }
 }

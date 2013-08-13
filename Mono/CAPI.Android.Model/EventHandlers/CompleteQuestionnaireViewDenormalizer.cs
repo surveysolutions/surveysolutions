@@ -1,5 +1,6 @@
 using System;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -28,18 +29,26 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>
     {
-        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage;
 
-        public CompleteQuestionnaireViewDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
+        public CompleteQuestionnaireViewDenormalizer(
+            IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage,
+            IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage)
         {
-            this.documentStorage = documentStorage;
+            this.interviewStorage = interviewStorage;
+            this.questionnarieStorage = questionnarieStorage;
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var view = new CompleteQuestionnaireView(null, evnt.Payload);
+            var questionnarie = questionnarieStorage.GetById(evnt.Payload.QuestionnaireId);
+            if (questionnarie == null)
+                return;
 
-            documentStorage.Store(view, evnt.EventSourceId);
+            var view = new CompleteQuestionnaireView(questionnarie, evnt.Payload);
+
+            interviewStorage.Store(view, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
@@ -57,6 +66,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 return;
             document.Status = InterviewStatus.Restarted;
         }
+
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
@@ -66,27 +76,32 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.SelectedValues);
+            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                                evnt.Payload.SelectedValues);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, new decimal[] { evnt.Payload.SelectedValue });
+            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                                new decimal[] {evnt.Payload.SelectedValue});
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.Answer);
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
         {
-            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.Answer);
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector, evnt.Payload.Answer);
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
@@ -127,7 +142,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
         {
-            var doc = documentStorage.GetById(publicKey);
+            var doc = interviewStorage.GetById(publicKey);
             return doc;
         }
 
@@ -146,7 +161,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<GroupPropagated> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.UpdatePropagateGroupsByTemplate(evnt.Payload.GroupId, evnt.Payload.OuterScopePropagationVector, evnt.Payload.Count);
+            doc.UpdatePropagateGroupsByTemplate(evnt.Payload.GroupId, evnt.Payload.OuterScopePropagationVector,
+                                                evnt.Payload.Count);
         }
     }
 }

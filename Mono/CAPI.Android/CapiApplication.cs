@@ -18,6 +18,7 @@ using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Events.File;
+using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Main.Core.Services;
@@ -104,7 +105,7 @@ namespace CAPI.Android
         {
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(
-                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
+                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>(), kernel.Get<IReadSideRepositoryWriter<QuestionnaireDocument>>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -122,6 +123,12 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
            
+        }
+
+        private void InitTemplateStorage(InProcessEventBus bus)
+        {
+            var fileSorage = new QuestionnaireDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDocument>>());
+            bus.RegisterHandler(fileSorage, typeof(TemplateImported));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
@@ -186,6 +193,8 @@ namespace CAPI.Android
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+
+            InitTemplateStorage(bus);
 
             InitQuestionnariesStorage(bus);
 
