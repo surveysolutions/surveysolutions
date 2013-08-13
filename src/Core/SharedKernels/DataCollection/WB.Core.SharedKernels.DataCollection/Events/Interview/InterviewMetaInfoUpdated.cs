@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -8,7 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewMetaInfoUpdated : InterviewActiveEvent
     {
-        public InterviewMetaInfoUpdated(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status, IEnumerable<FeaturedQuestionMeta> featuredQuestionsMeta) : base(userId)
+        public InterviewMetaInfoUpdated(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status, IEnumerable<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+            : base(userId)
         {
             QuestionnaireId = questionnaireId;
             QuestionnaireVersion = questionnaireVersion;
@@ -22,6 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public InterviewStatus Status { get; private set; }
 
-        public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; private set; }
+        public IEnumerable<AnsweredQuestionSynchronizationDto> FeaturedQuestionsMeta { get; private set; }
     }
 }

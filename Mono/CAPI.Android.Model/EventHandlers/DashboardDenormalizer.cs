@@ -38,7 +38,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 return;
             }
 
-            var items = meta.FeaturedQuestionsMeta.Select(q => new FeaturedItem(q.PublicKey, q.Title, q.Value)).ToList();
+            var items = meta.FeaturedQuestionsMeta.Select(q => new FeaturedItem(q.Id, q.Answer.ToString(), q.Answer.ToString())).ToList();
             var survey = surveyDtOdocumentStorage.GetById(meta.QuestionnaireId);
             
             if (survey == null)
