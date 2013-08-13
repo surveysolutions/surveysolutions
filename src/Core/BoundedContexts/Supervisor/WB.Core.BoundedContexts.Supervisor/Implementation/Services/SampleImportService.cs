@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -241,45 +243,54 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
    
             var featuredAnswers = CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption);
-         template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
+         template.CreateInterviewWithFeaturedQuestions(interviewId, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
  */
         }
-        private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template, Guid headqarter, Guid supervisor)
+        private void BuiltInterview(Guid interviewId, string[] values, string[] header, QuestionnaireDocument template, Guid headqarterId, Guid supervisorId)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+            var answersToFeaturedQuestions = CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: stataCaption => template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption));
 
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey, template.PublicKey,
-                                                                                   new UserLight(headqarter, ""),
-                                                                                   new UserLight(supervisor, ""),
-                                                                                   featuredAnswers));
+            commandInvoker.Execute(new CreateInterviewCommand(interviewId, headqarterId, template.PublicKey, answersToFeaturedQuestions, DateTime.UtcNow, supervisorId));
         }
-        private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
+        private Dictionary<Guid, object> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
         {
-            var featuredAnswers = new List<QuestionAnswer>();
+            var featuredAnswers = new Dictionary<Guid, object>();
             for (int i = 0; i < header.Length; i++)
             {
-                var question =
-                    getQuestionByStataCaption(header[i]);
+                var question = getQuestionByStataCaption(header[i]);
                 if (question == null)
                     continue;
 
-                var singleOption = question as SingleQuestion;
-                if (singleOption != null)
+                switch (question.QuestionType)
                 {
-                    var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
-                    featuredAnswers.Add(new QuestionAnswer() {Answers = new Guid[] {answer.PublicKey}, Id = question.PublicKey});
-                }
-                else
-                {
-                    featuredAnswers.Add(new QuestionAnswer()
+                    case QuestionType.Text:
+                        featuredAnswers.Add(question.PublicKey, values[i]);                        
+                        break;
+
+                    case QuestionType.AutoPropagate:
+                    case QuestionType.Numeric:
+                        featuredAnswers.Add(question.PublicKey, decimal.Parse(values[i]));
+                        break;
+
+                    case QuestionType.DateTime:
+                        featuredAnswers.Add(question.PublicKey, DateTime.ParseExact(values[i],"d", CultureInfo.InvariantCulture));
+                        break;
+
+                    case QuestionType.SingleOption:
+                        var singleOption = question as SingleQuestion;
+                        if (singleOption != null)
                         {
-                            Answer = values[i],
-                            Answers = new Guid[] {},
-                            Id = question.PublicKey
-                        });
+                            var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
+                            featuredAnswers.Add(question.PublicKey, answer.PublicKey);
+                        }
+                        break;
+
+                    case QuestionType.MultyOption:
+                        //throw new Exception("Unsupported featured question type in sample");
+                        break;
                 }
             }
             return featuredAnswers;

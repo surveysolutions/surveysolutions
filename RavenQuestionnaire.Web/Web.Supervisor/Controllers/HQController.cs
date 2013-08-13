@@ -112,8 +112,7 @@ namespace Web.Supervisor.Controllers
             {
 
                 ViewBag.SupervisorList =
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                                                                                   ViewerStatus.Headquarter)).Items;
+                    this.supervisorsFactory.Load(new UserListViewInputModel(){Role = UserRoles.Supervisor, PageSize = int.MaxValue }).Items;
             }
             return this.PartialView(result);
         }
