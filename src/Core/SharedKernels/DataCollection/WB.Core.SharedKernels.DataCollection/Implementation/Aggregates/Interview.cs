@@ -280,7 +280,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewSynchronized(sycnhronizedInterview.UserId,
                                                       sycnhronizedInterview.QuestionnaireId,
                                                       sycnhronizedInterview.Status, questionnaire.Version,
-                                                      sycnhronizedInterview.Answers));
+                                                      sycnhronizedInterview.Answers,
+                                                      sycnhronizedInterview.DisabledGroups,
+                                                      sycnhronizedInterview.DisabledQuestions,
+                                                      sycnhronizedInterview.InvalidAnsweredQuestions));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
