@@ -122,8 +122,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataCollectionSharedKernelModule.cs">
       <Link>DataCollectionSharedKernelModule.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs">
-      <Link>DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs">
+      <Link>DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs">
       <Link>DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs</Link>

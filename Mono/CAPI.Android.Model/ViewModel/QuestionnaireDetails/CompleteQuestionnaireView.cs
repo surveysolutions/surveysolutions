@@ -21,43 +21,55 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public CompleteQuestionnaireView(IQuestionnaireDocument questionnarie, InterviewSynchronized interviewData)
         {
             this.PublicKey = interviewData.QuestionnaireId;
-            this.Title = string.Format("{0} - {1}", questionnarie.Title,
-                                       string.Concat(interviewData.Answers.Select(
-                                               q => q.Answer + " ")));
             this.Status = interviewData.Status;
             this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             this.Templates = new TemplateCollection();
-
-            foreach (var answer in interviewData.Answers)
+            
+            FillQuestionnairePostOrder(questionnarie);
+            
+            foreach (var propagatedGroupInstanceCount in interviewData.PropagatedGroupInstanceCounts)
             {
-                SetAnswer(new ItemPublicKey(answer.Id, answer.PropagationVector), answer.Answer);
+                for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
+                {
+                    AddPropagateGroup(propagatedGroupInstanceCount.Key.PublicKey,
+                                      propagatedGroupInstanceCount.Key.PropagationVector, i);
+                }
             }
-            this.Chapters =
-                Enumerable.OfType<QuestionnaireScreenViewModel>(questionnarie.Children.OfType<IGroup>().Select(
-                    c => this.Screens[new ItemPublicKey(c.PublicKey)])).ToList();
+
+            foreach (var group in interviewData.DisabledGroups)
+            {
+                SetScreenStatus(new ItemPublicKey(group.PublicKey, group.PropagationVector), false);
+            }
+
+            foreach (var question in interviewData.DisabledQuestions)
+            {
+                SetQuestionStatus(new ItemPublicKey(question.PublicKey, question.PropagationVector), false);
+            }
+
+            foreach (var question in interviewData.InvalidAnsweredQuestions)
+            {
+                SetQuestionValidity(new ItemPublicKey(question.PublicKey, question.PropagationVector), false);
+            }
+
+            foreach (var answeredQuestion in interviewData.AnsweredQuestions)
+            {
+                var questionKey = new ItemPublicKey(answeredQuestion.Id, answeredQuestion.PropagationVector);
+                SetAnswer(questionKey, answeredQuestion.Answer);
+                SetComment(questionKey, answeredQuestion.Comments);
+            }
+
+            this.Chapters = questionnarie.Children.OfType<IGroup>().Select(
+                c => this.Screens[new ItemPublicKey(c.PublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
+
+            this.Title = string.Format("{0} - {1}", questionnarie.Title,
+                                       string.Join("",
+                                                   questionnarie.Find<IQuestion>(q => q.Featured)
+                                                                .Select(
+                                                                    q =>
+                                                                    this.Questions[new ItemPublicKey(q.PublicKey)]
+                                                                        .AnswerString)));
         }
-
-        /*  public CompleteQuestionnaireView(CompleteQuestionnaireDocument document)
-        {
-            this.PublicKey = document.PublicKey;
-            this.Title = string.Format("{0} - {1}", document.Title,
-                                       string.Concat(
-                                           (IEnumerable<string>)
-                                           document.Find<ICompleteQuestion>(q => q.Featured).Select(
-                                               q => q.GetAnswerString()+" ")));
-            this.Status = document.Status;
-            this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            this.Templates = new TemplateCollection();
-
-            FillQuestionnairePostOrder(document);
-            this.Chapters =
-                Enumerable.OfType<QuestionnaireScreenViewModel>(document.Children.OfType<ICompleteGroup>().Select(
-                    c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)])).ToList();
-
-         
-        }*/
 
         protected void FillQuestionnairePostOrder(IGroup document)
         {
@@ -88,22 +100,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
 
             CreateNextPrevious();
-          //  CreatePropagatedGroupd(propagatedPostOrder);
         }
-     /*   protected void CreatePropagatedGroupd(List<IGroup> propagatedPostOrder)
-        {
-            foreach (var completeGroup in propagatedPostOrder)
-            {
-                var key = new ItemPublicKey(completeGroup.PublicKey, completeGroup.PropagationPublicKey.Value);
-                var screenItems = BuildItems(completeGroup, true);
-                var template = this.Templates[completeGroup.PublicKey];
-                var screen = template.Clone(completeGroup.PropagationPublicKey.Value, screenItems);
-                this.Screens.Add(key, screen);
-                screen.PropertyChanged += screen_PropertyChanged;
-                UpdateGrid(completeGroup.PublicKey);
-                UpdatePropagatedGroupScreenName(completeGroup.PropagationPublicKey.Value);
-            }
-        }*/
 
         protected void CreateNextPrevious()
         {
@@ -136,7 +133,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         #region fields
 
         public Guid PublicKey { get; private set; }
-
         public string Title { get; private set; }
         public InterviewStatus Status { get; set; }
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
@@ -144,8 +140,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected TemplateCollection Templates { get; set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
-
-
+       
         #endregion
 
 
@@ -305,6 +300,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         #endregion
 
         #region protected helper methods
+
         protected void AddScreen(List<IGroup> rout, 
                             IGroup group)
         {
@@ -422,16 +418,15 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                                                                  ItemPublicKey key)
         {
             var parent = rout[rout.Count - 2];
-            return
-                Enumerable.ToList<ItemPublicKey>(parent.Children.OfType<IGroup>().Distinct(new PropagatedGroupEqualityComparer()).Select(
-                        g => new ItemPublicKey(g.PublicKey)));
+            return parent.Children.OfType<IGroup>().Select(
+                        g => new ItemPublicKey(g.PublicKey));
         }
-
     
         protected HeaderItem BuildHeader(IQuestion question)
         {
             return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
         }
+
         protected string BuildComments(IEnumerable<CommentDocument> comments)
         {
             if (comments == null)
@@ -504,33 +499,5 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         #endregion
-
-        #region comparer
-
-        private class PropagatedGroupEqualityComparer : IEqualityComparer<IGroup>
-        {
-
-            public bool Equals(IGroup b1, IGroup b2)
-            {
-                if (b1.PublicKey == b2.PublicKey)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-
-            public int GetHashCode(IGroup bx)
-            {
-                return bx.PublicKey.GetHashCode();
-            }
-
-        }
-
-        #endregion
-
     }
 }

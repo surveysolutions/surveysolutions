@@ -76,7 +76,7 @@
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
-    <Compile Include="DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\ItemPublicKey.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
