@@ -4,6 +4,7 @@ using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -95,7 +96,7 @@ namespace WB.Core.Synchronization.Tests
 
         private ReadSideChunkWriter CreateRavenChunkWriter(IQuerableReadSideRepositoryWriter<SynchronizationDelta> writeStorage)
         {
-            return new ReadSideChunkWriter(writeStorage);
+            return new ReadSideChunkWriter(writeStorage, new Mock<IReadSideRepositoryCleanerRegistry>().Object);
         }
 
     }
