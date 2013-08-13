@@ -19,6 +19,8 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android
 {
@@ -34,14 +36,8 @@ namespace CAPI.Android
             restore = Restore;
             base.OnCreate(bundle);
             ProgressBar pb=new ProgressBar(this);
-            
-           /* TextView tv=new TextView(this);
-            var img = this.Resources.GetDrawable(Android.Resource.Drawable.SpinnerDropDownBackground);
-            //img.SetBounds(0, 0, 45, 45);
-            tv.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);*/
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
             restore.BeginInvoke(Guid.Parse(Intent.GetStringExtra("publicKey")), Callback, restore);
-            // Create your application here
         }
         private void Callback(IAsyncResult asyncResult)
         {
@@ -73,7 +69,6 @@ namespace CAPI.Android
         {
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
 
             //loading from sync cache 
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
@@ -81,31 +76,15 @@ namespace CAPI.Android
             if (!string.IsNullOrWhiteSpace(item))
             {
                 string content = PackageHelper.DecompressString(item);
-                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
+                var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                throw new NotImplementedException("please uncomment line below");
-                //commandService.Execute(new CreateNewAssigment(questionnarieContent));
+
+                commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 
                 syncCacher.DeleteItem(publicKey);
             }
 
-
-            var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
-            long minVersion = 0;
-            var snapshot = snapshotStore.GetSnapshot(publicKey, long.MaxValue);
-            if (snapshot != null)
-            {
-                var originalDoc = snapshot.Payload as CompleteQuestionnaireDocument;
-                if (originalDoc != null)
-                {
-                    throw new NotImplementedException("please uncomment line below");
-                   /* documentStorage.Store(
-                        new CompleteQuestionnaireView(originalDoc),
-                        publicKey);*/
-                    minVersion = snapshot.Version + 1;
-                }
-            }
-            var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, minVersion, long.MaxValue);
+            var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, 0, long.MaxValue);
             foreach (CommittedEvent committedEvent in eventsAfterSnapshot)
             {
                 try

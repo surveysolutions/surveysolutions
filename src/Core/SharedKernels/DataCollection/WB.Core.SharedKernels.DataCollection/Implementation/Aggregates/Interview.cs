@@ -283,27 +283,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
-        public Interview(InterviewSynchronizationDto sycnhronizedInterview)
+        public Interview(Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(sycnhronizedInterview.QuestionnaireId);
-            this.ApplyEvent(new InterviewSynchronized(sycnhronizedInterview.UserId,
-                                                      sycnhronizedInterview.QuestionnaireId,
-                                                      sycnhronizedInterview.Status, questionnaire.Version,
-                                                      sycnhronizedInterview.Answers,
-                                                      sycnhronizedInterview.DisabledGroups,
-                                                      sycnhronizedInterview.DisabledQuestions,
-                                                      sycnhronizedInterview.InvalidAnsweredQuestions,
-                                                      sycnhronizedInterview.PropagatedGroupInstanceCounts));
+            UpdateInterviewMetaInfo(questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
         }
 
-        public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
-            : base(id)
+        public void SynchronizeInterview(InterviewSynchronizationDto synchronizedInterview)
         {
-            UpdateInterviewMetaInfo(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(synchronizedInterview.QuestionnaireId);
+            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview.UserId,
+                                                      synchronizedInterview.QuestionnaireId,
+                                                      synchronizedInterview.Status, questionnaire.Version,
+                                                      synchronizedInterview.Answers,
+                                                      synchronizedInterview.DisabledGroups,
+                                                      synchronizedInterview.DisabledQuestions,
+                                                      synchronizedInterview.InvalidAnsweredQuestions,
+                                                      synchronizedInterview.PropagatedGroupInstanceCounts));
         }
 
-
-        public void UpdateInterviewMetaInfo(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        public void UpdateInterviewMetaInfo(Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
 

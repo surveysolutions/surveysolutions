@@ -110,6 +110,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\SetFlagToAnswerCommand.cs">
       <Link>Commands\Interview\SetFlagToAnswerCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\SynchronizeInterviewCommand.cs">
+      <Link>Commands\Interview\SynchronizeInterviewCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\UpdateInterviewMetaInfoCommand.cs">
       <Link>Commands\Interview\UpdateInterviewMetaInfoCommand.cs</Link>
     </Compile>

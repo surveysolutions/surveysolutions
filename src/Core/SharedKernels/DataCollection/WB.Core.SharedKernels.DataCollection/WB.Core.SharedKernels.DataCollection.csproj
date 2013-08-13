@@ -73,6 +73,7 @@
     <Compile Include="Commands\Interview\RestartInterviewCommand.cs" />
     <Compile Include="Commands\Interview\RestoreInterviewCommand.cs" />
     <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
+    <Compile Include="Commands\Interview\SynchronizeInterviewCommand.cs" />
     <Compile Include="Commands\Interview\UpdateInterviewMetaInfoCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
