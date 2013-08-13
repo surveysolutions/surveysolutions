@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandler\InterviewDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
+    <Compile Include="Views\Interview\InterviewData.cs" />
     <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
     <Compile Include="Views\SampleImport\TempFileImportData.cs" />
