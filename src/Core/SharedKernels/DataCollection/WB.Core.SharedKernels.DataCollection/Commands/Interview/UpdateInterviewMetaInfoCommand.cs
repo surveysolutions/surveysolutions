@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Main.Core.Domain;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     public class UpdateInterviewMetaInfoCommand : InterviewCommand
     {
         public UpdateInterviewMetaInfoCommand(Guid interviewId, Guid questionnarieId, Guid userId,
-                                              InterviewStatus status, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+                                              InterviewStatus status, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
             : base(interviewId, userId)
         {
             Id = interviewId;
@@ -28,6 +28,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public InterviewStatus InterviewStatus { get; set; }
 
-        public List<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
+        public List<AnsweredQuestionSynchronizationDto> FeaturedQuestionsMeta { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -297,14 +296,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       sycnhronizedInterview.PropagatedGroupInstanceCounts));
         }
 
-        public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+        public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
             : base(id)
         {
             UpdateInterviewMetaInfo(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
         }
 
 
-        public void UpdateInterviewMetaInfo(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+        public void UpdateInterviewMetaInfo(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
 
