@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire.Completed;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using InterviewDeleted = WB.Core.SharedKernels.DataCollection.Events.Interview.InterviewDeleted;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -40,6 +43,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
+        }
+
+        private void Apply(InterviewMetaInfoUpdated @event)
+        {
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+            this.status = @event.Status;
         }
 
         private void Apply(TextQuestionAnswered @event)
@@ -285,6 +295,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       sycnhronizedInterview.DisabledQuestions,
                                                       sycnhronizedInterview.InvalidAnsweredQuestions,
                                                       sycnhronizedInterview.PropagatedGroupInstanceCounts));
+        }
+
+        public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+            : base(id)
+        {
+            UpdateInterviewMetaInfo(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
+        }
+
+
+        public void UpdateInterviewMetaInfo(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<FeaturedQuestionMeta> featuredQuestionsMeta)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
+
+            ApplyEvent(new InterviewMetaInfoUpdated(userId, questionnarieId, questionnaire.Version, interviewStatus, featuredQuestionsMeta));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
