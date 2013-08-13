@@ -18,11 +18,11 @@ namespace WB.Core.Synchronization.MetaInfo
             metaInfo.PublicKey = doc.PublicKey;
             metaInfo.TemplateId = doc.TemplateId;
             metaInfo.Title = doc.Title;
-            metaInfo.Status = new SurveyStatusMeta()
+        /*    metaInfo.Status = new SurveyStatusMeta()
                 {
                     Id = doc.Status.PublicId,
                     Name = doc.Status.Name
-                };
+                };*/
 
             metaInfo.FeaturedQuestionsMeta = doc.GetFeaturedQuestions()
                 .Select(q => new FeaturedQuestionMeta(q.PublicKey, q.QuestionText, q.GetAnswerString())).ToList();
