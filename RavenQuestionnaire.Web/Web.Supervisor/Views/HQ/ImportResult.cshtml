@@ -1,4 +1,5 @@
 ﻿@using Core.Supervisor.Views.Survey
+@using Core.Supervisor.Views.User
 @using Main.Core.Entities.SubEntities
 @model WB.Core.BoundedContexts.Supervisor.Views.SampleImport.ImportResult
 
@@ -56,7 +57,7 @@ else
                 <div class="control-label">Select responsible</div>
                 <div class="controls">
                     <select name="responsibleSupervisor" class="input-block-level">
-                        @foreach (SurveyUsersViewItem item in ViewBag.SupervisorList)
+                        @foreach (UserListItem item in ViewBag.SupervisorList)
                         {
                             <option value="@item.UserId" >@item.UserName</option>
                         }
