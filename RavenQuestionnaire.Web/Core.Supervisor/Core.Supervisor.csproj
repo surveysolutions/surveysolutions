@@ -178,7 +178,6 @@
     <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
-    <Compile Include="Denormalizer\InterviewDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
     <Compile Include="Denormalizer\SummaryDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
