@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
@@ -30,29 +31,29 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
             var meta = evnt.Payload;
-            var status = SurveyStatus.GetStatusByIdOrDefault(meta.StatusId);
 
-            if (!IsVisible(status))
+            if (!IsVisible(meta.Status))
             {
                 questionnaireDtOdocumentStorage.Remove(evnt.EventSourceId);
                 return;
             }
 
             var items = meta.FeaturedQuestionsMeta.Select(q => new FeaturedItem(q.PublicKey, q.Title, q.Value)).ToList();
-            var survey = surveyDtOdocumentStorage.GetById(meta.TemplateId);
+            var survey = surveyDtOdocumentStorage.GetById(meta.QuestionnaireId);
             
             if (survey == null)
-                surveyDtOdocumentStorage.Store(new SurveyDto(meta.TemplateId, meta.Title), meta.TemplateId);
+                surveyDtOdocumentStorage.Store(new SurveyDto(meta.QuestionnaireId, "test questionnarie"), meta.QuestionnaireId);
           
             questionnaireDtOdocumentStorage.Store(
-                new QuestionnaireDTO(evnt.EventSourceId, meta.ResponsibleId.Value, meta.TemplateId, status, items),
+                new QuestionnaireDTO(evnt.EventSourceId, meta.UserId, meta.QuestionnaireId, meta.Status.ToString(), items),
                 evnt.EventSourceId);
         }
 
-        protected bool IsVisible(SurveyStatus status)
+        protected bool IsVisible(InterviewStatus status)
         {
-            return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Reinit || status == SurveyStatus.Error;
+            return status == InterviewStatus.InterviewerAssigned || status == InterviewStatus.RejectedBySupervisor ||
+                   status == InterviewStatus.Completed ||
+                   status == InterviewStatus.Restarted;
         }
         
         public void RemoveItem(Guid itemId)

@@ -60,7 +60,10 @@ namespace Web.Supervisor.Code.CommandTransformation
                     return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
 
                 case QuestionType.DateTime:
-                    return new KeyValuePair<Guid, object>(answer.Id, DateTime.ParseExact(answer.Answer.ToString(), "d", CultureInfo.InvariantCulture));
+                    DateTime resultDate;
+                    if (DateTime.TryParse(answer.Answer.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out resultDate))
+                        return new KeyValuePair<Guid, object>(answer.Id, resultDate);
+                    break;
 
                 case QuestionType.SingleOption:
                     return new KeyValuePair<Guid, object>(answer.Id, Guid.Parse(answer.Answer.ToString()));

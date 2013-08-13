@@ -119,9 +119,8 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-            throw new NotImplementedException("please uncomment lines below me");
            /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
-            {
+            {*/
                 string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
                 var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
@@ -137,7 +136,7 @@ namespace CAPI.Android.Syncronization.Pull
                                                                           metaInfo.FeaturedQuestionsMeta.ToList()));
 
 
-            }
+        /*    }
             
             else
             {

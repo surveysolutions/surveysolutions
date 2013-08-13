@@ -9,10 +9,10 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, SurveyStatus status, IList<FeaturedItem> properties)
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, string status, IList<FeaturedItem> properties)
         {
             Id = id.ToString();
-            Status = status.PublicId.ToString();
+            Status = status;
             Properties = JsonUtils.GetJsonData(properties.ToArray());
             Responsible = responsible.ToString();
             Survey = survey.ToString();

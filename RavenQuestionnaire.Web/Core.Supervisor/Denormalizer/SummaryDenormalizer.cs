@@ -1,5 +1,6 @@
 using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -177,7 +178,7 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
-            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
+       //     HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
         }
     }
 }
