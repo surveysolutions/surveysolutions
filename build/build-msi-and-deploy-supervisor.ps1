@@ -195,7 +195,7 @@ function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfigurati
 	RunTests $BuildConfiguration
 
 	BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
-	
+			
 	BuildSolution 'Awesomium\Awesomium.NET Browser.sln' $BuildConfiguration | %{ if (-not $_) { Exit } }
 	
 	UpdateAndroidManifest $VersionPrefix $BuildNumber 
@@ -206,7 +206,7 @@ function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfigurati
 
 	CopyFilesForInstallation $PahToFinalCapi $SourceFolder $BuildNumber 
 	
-    #PublishZippedWebPackage $SourceFolder 'package.zip' | %{ if (-not $_) { Exit } }	
+    PublishZippedWebPackage $SourceFolder 'package.zip' | %{ if (-not $_) { Exit } }	
 	
 	#Build installation
 	BuildMSI "Installation\SupervisorInstallProj\Setup.sln" $BuildConfiguration $BuildNumber $VersionPrefix | %{ if (-not $_) { Exit } }	
