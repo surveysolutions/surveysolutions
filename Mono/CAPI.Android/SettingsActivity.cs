@@ -106,25 +106,25 @@ namespace CAPI.Android
 
                     if (newVersionExists.Value)
                     {
-                        alert.SetPositiveButton("Yes", btnRestoreConfirmed_Click);
-                        alert.SetNegativeButton("No", btnRestoreDeclined_Click);
+                        alert.SetPositiveButton("Yes", btnUpdateConfirmed_Click);
+                        alert.SetNegativeButton("No", btnUpdateDeclined_Click);
                         alert.SetMessage("New version exists. Would you like to update?");
                     }
                     else
                     {
                         alert.SetMessage("You have latest version");
-                        alert.SetNegativeButton("Close", btnRestoreDeclined_Click);
+                        alert.SetNegativeButton("Close", btnUpdateDeclined_Click);
                     }
 
                     alert.Show();
                 });
         }
 
-        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        private void btnUpdateDeclined_Click(object sender, DialogClickEventArgs e)
         {
         }
 
-        private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
+        private void btnUpdateConfirmed_Click(object sender, DialogClickEventArgs e)
         {
             var fileName = "wbcapi.apk";
             var updater = new UpdateProcessor();
