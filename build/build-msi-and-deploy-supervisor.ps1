@@ -161,15 +161,17 @@ function CopyFilesForInstallation($TargetCapiFileName, $SourceFolder, $BuildNumb
 	else{
 		New-Item -ItemType directory -Path "$SourceFolder\App_Data\Capi\$BuildNumber"
 	}	
-	Copy-Item "$PahToFinalCapi" "$SourceFolder\App_Data\Capi\$BuildNumber" -Recurse
+	Copy-Item "$TargetCapiFileName" "$SourceFolder\App_Data\Capi\$BuildNumber" -Recurse
 		
-	Write-Host "##teamcity[message text='Copy supervisor for install']"
+	Write-Host "##teamcity[message text='Copy supervisor to install folder']"
 	
 	If (Test-Path "Installation\SupervisorInstallProj\WebSiteToHarvest"){
 		Remove-Item "Installation\SupervisorInstallProj\WebSiteToHarvest\*" -Force -Recurse 
 	}
 	Copy-Item "$SourceFolder\*" "Installation\SupervisorInstallProj\WebSiteToHarvest" -Recurse
 
+	Write-Host "##teamcity[message text='Copy browser to install folder']"
+	
 	#Could be turned off later
 	#Do not forget to remove Shortcut for app from installation
 	If (Test-Path "Installation\SupervisorInstallProj\BrowserToHarvest"){
@@ -187,9 +189,7 @@ function CreateInstallation($Solution, $Project, $CapiProject, $BuildConfigurati
 	$PahToFinalCapi = (Join-Path (Get-Location).Path "Mono/CAPI.Android/bin/$BuildConfiguration/WBCapi.apk")
 	
     CleanBinAndObjFolders
-	
-	Write-Host "BuildConfiguration = $BuildConfiguration"
-	
+			
     BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunTests $BuildConfiguration
