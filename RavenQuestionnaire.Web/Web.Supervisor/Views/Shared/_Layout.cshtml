@@ -96,10 +96,9 @@
             <footer >
                 <div class="text-center">
                     © 2013 <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
-            
                 </div>
                 <div class="text-center">
-                @ViewContext.Controller.GetType().Assembly.GetName().Version (@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm"))
+                @ViewContext.Controller.GetType().Assembly.GetName().Version (@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) | <a href="@Url.Action("GetLatestVersion", "Sync")">Get CAPI</a>
                 </div>
             </footer>
     </div>
