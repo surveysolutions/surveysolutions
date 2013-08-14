@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace WB.Core.Synchronization
 {
     public interface ISynchronizationDataStorage
     {
-        void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId);
+        void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId);
         void SaveQuestionnaire(QuestionnaireDocument doc);
         void DeleteInterview(Guid id);
         void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId);
