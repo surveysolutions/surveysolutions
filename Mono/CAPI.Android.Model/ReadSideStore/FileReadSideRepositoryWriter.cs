@@ -21,6 +21,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
     public class FileReadSideRepositoryWriter<TEntity> : IReadSideRepositoryWriter<TEntity>, IBackupable
         where TEntity : class, IReadSideRepositoryEntity
     {
+        private Dictionary<Guid, TEntity> memcache = new Dictionary<Guid, TEntity>();
         public FileReadSideRepositoryWriter()
         {
             if (!Directory.Exists(StoreDirPath))
@@ -39,14 +40,20 @@ namespace CAPI.Android.Core.Model.ReadSideStore
 
         public TEntity GetById(Guid id)
         {
-            var filePath = GetFileName(id);
-            if (!File.Exists(filePath))
-                return null;
-            return JsonUtils.GetObject<TEntity>(File.ReadAllText(filePath));
+            if (!memcache.ContainsKey(id))
+            {
+                var filePath = GetFileName(id);
+                if (!File.Exists(filePath))
+                    return null;
+                memcache[id] = JsonUtils.GetObject<TEntity>(File.ReadAllText(filePath));
+            }
+            return memcache[id];
         }
 
         public void Remove(Guid id)
         {
+            if (memcache.ContainsKey(id))
+                memcache.Remove(id);
             File.Delete(GetFileName(id));
         }
 
@@ -54,6 +61,8 @@ namespace CAPI.Android.Core.Model.ReadSideStore
         {
             var path = GetFileName(id);
             File.WriteAllText(path, JsonUtils.GetJsonData(view));
+
+            memcache[id] = view;
         }
 
         public string GetPathToBakupFile()
@@ -75,6 +84,7 @@ namespace CAPI.Android.Core.Model.ReadSideStore
 
             foreach (var file in Directory.GetFiles(dirWithReadSide))
                 File.Copy(file, Path.Combine(StoreDirPath, Path.GetFileName(file)));
+            memcache = new Dictionary<Guid, TEntity>();
         }
     }
 }

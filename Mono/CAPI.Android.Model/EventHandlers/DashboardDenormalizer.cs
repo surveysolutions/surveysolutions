@@ -18,47 +18,37 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<InterviewRestarted>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtOdocumentStorage;
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage
+            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, IReadSideRepositoryWriter<QuestionnaireDocument> questionnaireStorage
             )
         {
-            questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
-            surveyDtOdocumentStorage = surveyDTOdocumentStorage;
+            this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
+            this.surveyDtOdocumentStorage = surveyDTOdocumentStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
             var meta = evnt.Payload;
-
-            if (!IsVisible(meta.Status))
-            {
-                questionnaireDtOdocumentStorage.Remove(evnt.EventSourceId);
+            var questionnarieTemplate = questionnaireStorage.GetById(evnt.Payload.QuestionnaireId);
+            if(questionnarieTemplate==null)
                 return;
-            }
-
-            var items = meta.FeaturedQuestionsMeta.Select(q => new FeaturedItem(q.Id, q.Answer.ToString(), q.Answer.ToString())).ToList();
+            var items =
+                meta.FeaturedQuestionsMeta.Select(
+                    q =>
+                    new FeaturedItem(q.Id, questionnarieTemplate.Find<IQuestion>(q.Id).QuestionText, q.Answer.ToString()))
+                    .ToList();
             var survey = surveyDtOdocumentStorage.GetById(meta.QuestionnaireId);
             
             if (survey == null)
-                surveyDtOdocumentStorage.Store(new SurveyDto(meta.QuestionnaireId, "test questionnarie"), meta.QuestionnaireId);
+                surveyDtOdocumentStorage.Store(new SurveyDto(meta.QuestionnaireId, questionnarieTemplate.Title), meta.QuestionnaireId);
           
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(evnt.EventSourceId, meta.UserId, meta.QuestionnaireId, meta.Status.ToString(), items),
                 evnt.EventSourceId);
-        }
-
-        protected bool IsVisible(InterviewStatus status)
-        {
-            return status == InterviewStatus.InterviewerAssigned || status == InterviewStatus.RejectedBySupervisor ||
-                   status == InterviewStatus.Completed ||
-                   status == InterviewStatus.Restarted;
-        }
-        
-        public void RemoveItem(Guid itemId)
-        {
-            questionnaireDtOdocumentStorage.Remove(itemId);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)

@@ -265,13 +265,6 @@ namespace CAPI.Android
             GC.Collect();
         }
 
-        public override void Finish()
-        {
-            base.Finish();
-            
-            cleanUpExecutor.CleanUpInterviewCaches(QuestionnaireId);
-        }
-
         public override void OnLowMemory()
         {
             base.OnLowMemory();
