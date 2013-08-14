@@ -5,8 +5,6 @@ param( [string]$DeployFolder,
 
 $ErrorActionPreference = "Stop"
 
-#$KeystorePassword =	'ACECC70A-91BA-4C15-B0F4-0575C667738A'
-
 $TargetDeployFolder = '\\192.168.3.113\Dev\Supervisor'
 
 if(-not [string]::IsNullOrWhiteSpace($DeployFolder))
@@ -14,18 +12,18 @@ if(-not [string]::IsNullOrWhiteSpace($DeployFolder))
 
 #do not allow empty prefix
 if([string]::IsNullOrWhiteSpace($VersionPrefix)){
-	Write-Host "##teamcity[message status='ERROR' text='VersionPrefix is not set']"
+	Write-Host "##teamcity[buildStatus status='FAILURE' text='VersionPrefix param is not set']"
 	Exit 
 }
 #do not allow empty build number	
 if(!$BuildNumber){
-	Write-Host "##teamcity[message status='ERROR' text='BuildNumber is not set']"
+	Write-Host "##teamcity[buildStatus status='FAILURE' text='BuildNumber param is not set']"
 	Exit 
 }
 
 #do not allow empty KeystorePassword
 if([string]::IsNullOrWhiteSpace($KeystorePassword)){
-	Write-Host "##teamcity[message status='ERROR' text='KeystorePassword is not set']"
+	Write-Host "##teamcity[buildStatus status='FAILURE' text='VersionPrefix param is not set']"
 	Exit 
 }
 
