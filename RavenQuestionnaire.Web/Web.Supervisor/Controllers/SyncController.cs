@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -26,7 +27,7 @@ namespace Web.Supervisor.Controllers
 
         private string CapiFileName = "wbcapi.apk";
 
-        private string pathToSearchVersions = HostingEnvironment.MapPath("/App_Data/Capi");
+        private string pathToSearchVersions = ("~/App_Data/Capi");
 
         public SyncController(ISyncManager syncManager, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory)
@@ -281,27 +282,28 @@ namespace Web.Supervisor.Controllers
         [AllowAnonymous]
         public ActionResult GetLatestVersion()
         {
-            int maxVersion = GetLastVersionNumber(pathToSearchVersions);
+            int maxVersion = GetLastVersionNumber();
             
             if (maxVersion != 0)
             {
-                string path = Path.Combine(pathToSearchVersions, maxVersion.ToString());
+                string path = Path.Combine(Server.MapPath(pathToSearchVersions), maxVersion.ToString(CultureInfo.InvariantCulture));
 
                 string pathToFile = Path.Combine(path, CapiFileName);
                 if (System.IO.File.Exists(pathToFile))
-                    return File(path, "application/vnd.android.package-archive", CapiFileName);
+                    return File(pathToFile, "application/vnd.android.package-archive", CapiFileName);
             }
             
             return null;
         }
 
-        private int GetLastVersionNumber(string pathToSearchVersions)
+        private int GetLastVersionNumber()
         {
             int maxVersion = 0;
 
-            if (Directory.Exists(pathToSearchVersions))
+            var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+            if (Directory.Exists(targetToSearchVersions))
             {
-                var dirInfo = new DirectoryInfo(pathToSearchVersions);
+                var dirInfo = new DirectoryInfo(targetToSearchVersions);
                 foreach (DirectoryInfo directoryInfo in dirInfo.GetDirectories())
                 {
                     int value;
@@ -327,7 +329,7 @@ namespace Web.Supervisor.Controllers
                 int versionValue;
                 if (int.TryParse(versionCode, out versionValue))
                 {
-                    int maxVersion = GetLastVersionNumber(pathToSearchVersions);
+                    int maxVersion = GetLastVersionNumber();
 
                     if (maxVersion != 0 && maxVersion > versionValue)
                     {
