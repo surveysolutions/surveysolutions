@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls
 {
@@ -48,7 +49,7 @@ namespace CAPI.Android.Controls
                     continue;
                 }
                 unhandledQuestionnariesKey.Remove(newQuestionnarie.PublicKey);
-                if (newQuestionnarie.Status.PublicId != questionnarie.Status.PublicId)
+                if (newQuestionnarie.Status != questionnarie.Status)
                 {
                     items.Remove(questionnarie.PublicKey);
                     isUpdated = true;
@@ -83,7 +84,7 @@ namespace CAPI.Android.Controls
                 view.SetTag(Resource.Id.QuestionnaireId, dataItem.PublicKey.ToString());
                 llQuestionnairie.Focusable = false;
                 var tvStatus = view.FindViewById<TextView>(Resource.Id.tvStatus);
-                tvStatus.Text = dataItem.Status.Name;
+                tvStatus.Text = dataItem.Status.ToString();
 
                 var llPropertyHolder = view.FindViewById<LinearLayout>(Resource.Id.llPropertyHolder);
                 foreach (var featuredItem in dataItem.Properties)

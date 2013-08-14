@@ -17,11 +17,13 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
 {
-    public class InterviewMetaInfoFactory : IViewFactory<InterviewMetaInfoInputModel, WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>
+    public class InterviewMetaInfoFactory :
+        IViewFactory<InterviewMetaInfoInputModel, WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo>
     {
         private readonly IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage;
 
-        public InterviewMetaInfoFactory(IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage)
+        public InterviewMetaInfoFactory(
+            IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage)
         {
             this.questionnaireDtoDocumentStorage = questionnaireDtoDocumentStorage;
         }
@@ -31,16 +33,13 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
             var interview = questionnaireDtoDocumentStorage.GetById(input.InterviewId);
             if (interview == null)
                 return null;
-            InterviewStatus status;
-
-            if (!Enum.TryParse(interview.Status, out status))
-                return null;
+            InterviewStatus status = (InterviewStatus) interview.Status;
             return new WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo()
                 {
                     PublicKey = input.InterviewId,
                     ResponsibleId =
                         Guid.Parse(interview.Responsible),
-                    Status = (int)status,
+                    Status = (int) status,
                     TemplateId = Guid.Parse(interview.Survey)
                 };
         }

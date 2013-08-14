@@ -35,16 +35,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             syncStorage.SaveInterview(new InterviewSynchronizationDto(), evnt.Payload.UserId);
         }
 
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
+        public void Handle(IPublishedEvent<InterviewRejected> evnt)
         {
             syncStorage.SaveInterview(new InterviewSynchronizationDto(), evnt.Payload.UserId);
         }
 
-        public void Handle(IPublishedEvent<InterviewRejected> evnt)
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
             syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
-        }
 
+        }
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);

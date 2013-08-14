@@ -156,6 +156,7 @@ namespace CAPI.Android
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             
         }
 

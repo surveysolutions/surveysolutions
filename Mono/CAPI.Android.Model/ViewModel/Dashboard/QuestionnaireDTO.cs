@@ -4,15 +4,16 @@ using System.Linq;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
 using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, string status, IList<FeaturedItem> properties)
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IList<FeaturedItem> properties)
         {
             Id = id.ToString();
-            Status = status;
+            Status = (int)status;
             Properties = JsonUtils.GetJsonData(properties.ToArray());
             Responsible = responsible.ToString();
             Survey = survey.ToString();
@@ -22,7 +23,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
         }
 
-        public string Status { get; set; }
+        public int Status { get; set; }
         public string Responsible { get; set; }
         public string Survey { get; set; }
         public string Properties { get; set; }
@@ -34,9 +35,9 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                 GetProperties(), title);
         }
 
-        private SurveyStatus GetTypedStatus()
+        private InterviewStatus GetTypedStatus()
         {
-            return SurveyStatus.GetStatusByIdOrDefault(Guid.Parse(Status));
+                return (InterviewStatus)Status;
         }
 
 
