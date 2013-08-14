@@ -18,8 +18,6 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
                 .To<RavenReadSideRepositoryWriterWithCacheAndZip>()
                 .InSingletonScope();
-            this.Bind(typeof (IEventHandler<>)).To<InterviewSynchronizationEventHandler>().InSingletonScope();
-            this.Bind(typeof(IEventHandler)).To<InterviewSynchronizationEventHandler>().InSingletonScope();
         }
     }
 }

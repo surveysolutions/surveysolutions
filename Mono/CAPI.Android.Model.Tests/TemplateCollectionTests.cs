@@ -5,6 +5,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Androids.Core.Model.Tests
 {

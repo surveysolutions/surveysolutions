@@ -18,14 +18,19 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class CompleteQuestionnaireView : MvxViewModel, IView
     {
-        public CompleteQuestionnaireView(IQuestionnaireDocument questionnarie, InterviewSynchronized interviewData)
+        public CompleteQuestionnaireView(Guid id)
         {
-            this.PublicKey = interviewData.QuestionnaireId;
-            this.Status = interviewData.Status;
+            this.PublicKey = id;
+            
             this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             this.Templates = new TemplateCollection();
-            
+         
+        }
+
+        public CompleteQuestionnaireView(IQuestionnaireDocument questionnarie, InterviewSynchronized interviewData):this(interviewData.QuestionnaireId)
+        {
+            this.Status = interviewData.Status;
             FillQuestionnairePostOrder(questionnarie);
             
             foreach (var propagatedGroupInstanceCount in interviewData.PropagatedGroupInstanceCounts)
