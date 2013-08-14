@@ -21,11 +21,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             QuestionnaireId = questionnaireId;
             Status = status;
             QuestionnaireVersion = questionnaireVersion;
-            AnsweredQuestions = answeredQuestions;
-            DisabledGroups = disabledGroups;
-            DisabledQuestions = disabledQuestions;
-            InvalidAnsweredQuestions = invalidAnsweredQuestions;
-            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
+            AnsweredQuestions = answeredQuestions?? new List<AnsweredQuestionSynchronizationDto>();
+            DisabledGroups = disabledGroups?? new HashSet<ItemPublicKey>();
+            DisabledQuestions = disabledQuestions?? new HashSet<ItemPublicKey>();
+            InvalidAnsweredQuestions = invalidAnsweredQuestions?? new HashSet<ItemPublicKey>();
+            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts?? new Dictionary<ItemPublicKey, int>();
         }
 
         public Guid QuestionnaireId { get; private set; }

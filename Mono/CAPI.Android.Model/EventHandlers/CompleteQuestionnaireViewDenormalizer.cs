@@ -46,7 +46,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             if (questionnarie == null)
                 return;
 
-            var view = new CompleteQuestionnaireView(questionnarie, evnt.Payload);
+            var view = new CompleteQuestionnaireView(evnt.EventSourceId, questionnarie, evnt.Payload);
 
             interviewStorage.Store(view, evnt.EventSourceId);
         }

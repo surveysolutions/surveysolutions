@@ -17,6 +17,7 @@ using CAPI.Android.Settings;
 using Main.Core.Documents;
 using Main.Core.Services;
 using Main.Core.View;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Backup;
@@ -46,9 +47,8 @@ namespace CAPI.Android.Core.Model
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
             var syncCacher = new FileSyncCacher();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
-
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocument>();
-
+         
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocument>>().ToConstant(templateStore);
@@ -76,6 +76,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IBackup>()
                 .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore, snapshotStore,
                                               bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore));
+
         }
     }
 }
