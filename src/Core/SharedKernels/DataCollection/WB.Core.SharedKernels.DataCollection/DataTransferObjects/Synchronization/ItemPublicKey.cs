@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                 }
                 return new ItemPublicKey(Guid.Parse(items[items.Length - 1]), vector);
             }
-            return new ItemPublicKey(Guid.Parse(value), null);
+            return new ItemPublicKey(Guid.Parse(value));
         }
     }
 
