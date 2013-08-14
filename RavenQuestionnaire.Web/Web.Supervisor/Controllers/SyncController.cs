@@ -322,15 +322,22 @@ namespace Web.Supervisor.Controllers
         {
             var newVwrsionExsists = false;
 
-            int versionValue;
-            if (int.TryParse(versionCode, out versionValue))
+            try
             {
-                int maxVersion = GetLastVersionNumber(pathToSearchVersions);
-
-                if (maxVersion != 0 && maxVersion > versionValue)
+                int versionValue;
+                if (int.TryParse(versionCode, out versionValue))
                 {
-                    newVwrsionExsists = true;
+                    int maxVersion = GetLastVersionNumber(pathToSearchVersions);
+
+                    if (maxVersion != 0 && maxVersion > versionValue)
+                    {
+                        newVwrsionExsists = true;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on version check.", e);
             }
 
             return Json(newVwrsionExsists, JsonRequestBehavior.AllowGet);
