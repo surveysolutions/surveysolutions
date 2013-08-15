@@ -470,7 +470,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
 
             return identifiersUsedInExpression
-                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, enablementCondition))
+                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, enablementCondition)).Distinct()
                 .ToList();
         }
 
