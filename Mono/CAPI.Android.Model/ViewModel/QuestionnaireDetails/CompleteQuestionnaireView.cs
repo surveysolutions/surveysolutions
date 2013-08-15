@@ -324,12 +324,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void screen_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "Answered" && e.PropertyName != "Total")
-                return;
             var propagatedScreen = sender as QuestionnaireScreenViewModel;
             if (propagatedScreen == null)
                 return;
-            if (!propagatedScreen.ScreenId.IsTopLevel)
+            if (propagatedScreen.ScreenId.IsTopLevel)
                 return;
             UpdateGrid(propagatedScreen.ScreenId.PublicKey);
         }
