@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                            QuestionnaireTitle = doc.QuestionnaireTitle,
 
                                                                            // Teamlead becomes responsible for all team
-                                                                           ResponsibleId = doc.TeamLeadId.Value,
+                                                                           ResponsibleId = (Guid)doc.TeamLeadId,
                                                                            ResponsibleName = doc.TeamLeadName,
                                                                            
                                                                            CreatedCount = doc.CreatedCount,
@@ -44,7 +44,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                            QuestionnaireTitle = "",
 
                                                                            // Teamlead becomes responsible for all team
-                                                                           ResponsibleId = doc.TeamLeadId.Value,
+                                                                           ResponsibleId = (Guid) doc.TeamLeadId,
                                                                            ResponsibleName = doc.TeamLeadName,
 
                                                                            TeamLeadId = doc.TeamLeadId,
