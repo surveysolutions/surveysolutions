@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire.Completed;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using InterviewDeleted = WB.Core.SharedKernels.DataCollection.Events.Interview.InterviewDeleted;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -40,6 +42,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
+        }
+
+        private void Apply(InterviewMetaInfoUpdated @event)
+        {
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+            this.status = @event.Status;
         }
 
         private void Apply(TextQuestionAnswered @event)
@@ -274,13 +283,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
-        public Interview(InterviewSynchronizationDto sycnhronizedInterview)
+        public Interview(Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(sycnhronizedInterview.QuestionnaireId);
-            this.ApplyEvent(new InterviewSynchronized(sycnhronizedInterview.UserId,
-                                                      sycnhronizedInterview.QuestionnaireId,
-                                                      sycnhronizedInterview.Status, questionnaire.Version,
-                                                      sycnhronizedInterview.Answers));
+            UpdateInterviewMetaInfo(questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
+        }
+
+        public void SynchronizeInterview(InterviewSynchronizationDto synchronizedInterview)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(synchronizedInterview.QuestionnaireId);
+            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview.UserId,
+                                                      synchronizedInterview.QuestionnaireId,
+                                                      synchronizedInterview.Status, questionnaire.Version,
+                                                      synchronizedInterview.Answers,
+                                                      synchronizedInterview.DisabledGroups,
+                                                      synchronizedInterview.DisabledQuestions,
+                                                      synchronizedInterview.InvalidAnsweredQuestions,
+                                                      synchronizedInterview.PropagatedGroupInstanceCounts));
+        }
+
+        public void UpdateInterviewMetaInfo(Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
+
+            ApplyEvent(new InterviewMetaInfoUpdated(userId, questionnarieId, questionnaire.Version, interviewStatus, featuredQuestionsMeta));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)

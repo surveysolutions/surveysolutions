@@ -8,7 +8,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
     {
         public InterviewMetaInfo()
         {
-            ResponsibleId = null;
         }
 
         public Guid PublicKey { get; set; }
@@ -17,9 +16,9 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public string Title { get; set; }
 
-        public Guid? ResponsibleId { get; set; }
+        public Guid ResponsibleId { get; set; }
 
-        public SurveyStatusMeta Status { get; set; }
+        public int Status { get; set; }
 
         public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
 

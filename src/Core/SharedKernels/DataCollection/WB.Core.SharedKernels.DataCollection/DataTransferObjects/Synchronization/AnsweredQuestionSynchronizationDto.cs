@@ -2,13 +2,13 @@ using System;
 
 namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization
 {
-    public class AnswerSynchronizationDto
+    public class AnsweredQuestionSynchronizationDto
     {
-        public AnswerSynchronizationDto()
+        public AnsweredQuestionSynchronizationDto()
         {
         }
 
-        public AnswerSynchronizationDto(Guid id, object answer, string comments)
+        public AnsweredQuestionSynchronizationDto(Guid id, object answer, string comments)
         {
             Id = id;
             Answer = answer;
@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         }
 
         public Guid Id { get; private set; }
+        public int[] PropagationVector { get; private set; }
         public object Answer { get; private set; }
         public string Comments { get; private set; }
     }
