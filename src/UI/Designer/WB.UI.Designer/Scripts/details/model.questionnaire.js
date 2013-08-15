@@ -1,6 +1,6 @@
 ﻿define('model.questionnaire',
-    ['ko', 'config', 'model.sharePerson'],
-    function(ko, config, sharePerson) {
+    ['ko', 'config', 'model.sharePerson', 'input'],
+    function(ko, config, sharePerson, input) {
         var _dc = null,
             Questionnaire = function() {
                 var self = this;
@@ -20,25 +20,22 @@
                 self.dirtyFlag().reset();
 
                 self.errors = ko.validation.group(self);
-                
-                self.currentUserName = ko.observable();
-                self.sharePersons = ko.observableArray([]);
 
-                self.addSharePerson = function() {
-                    var person = new sharePerson().id(Math.uuid()).userName(self.currentUserName());
-
-                    var result = ko.validation.group(person, { deep: true });
-                    if (!person.isValid()) {
-                        result.showAllMessages(true);
-                    } else {
-                        self.sharePersons.push(person);
-                        self.currentUserName('');
-                        $('#currentUserName').focus();
-                    }
+                self.addSharedPerson = function() {
+                    self.sharePersons.push(new sharePerson().userEmail(self.currentUserForSharing().userEmail()));
+                    self.currentUserForSharing(new sharePerson());
+                    $('#currentUserEmail').focus();
                 };
-                self.removeSharePerson = function (person) {
+
+                self.removeSharedPerson = function (person) {
                     self.sharePersons.remove(person);
                 };
+
+                self.currentUserForSharing = ko.observable(new sharePerson());
+                self.sharePersons = ko.observableArray([]);
+                input.sharedPersons.forEach(function (entry) {
+                    self.sharePersons.push((new sharePerson().userEmail(entry)));
+                });
 
                 return self;
             };
