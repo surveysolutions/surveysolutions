@@ -193,6 +193,7 @@
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
+    <Compile Include="Code\IQuestionnaireHelper.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="Code\PasswordStringLengthAttribute.cs" />
