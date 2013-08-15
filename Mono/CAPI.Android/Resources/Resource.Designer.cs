@@ -135,8 +135,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040004
 			public const int AnswerId = 2130968580;
 			
-			// aapt resource value: 0x7f040035
-			public const int ImageSwitcher01 = 2130968629;
+			// aapt resource value: 0x7f040037
+			public const int ImageSwitcher01 = 2130968631;
 			
 			// aapt resource value: 0x7f040005
 			public const int Index = 2130968581;
@@ -159,14 +159,14 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040002
 			public const int ScreenId = 2130968578;
 			
-			// aapt resource value: 0x7f040036
-			public const int btnAnswered = 2130968630;
+			// aapt resource value: 0x7f040038
+			public const int btnAnswered = 2130968632;
 			
-			// aapt resource value: 0x7f04003c
-			public const int btnBackup = 2130968636;
+			// aapt resource value: 0x7f04003e
+			public const int btnBackup = 2130968638;
 			
-			// aapt resource value: 0x7f04003f
-			public const int btnCancel = 2130968639;
+			// aapt resource value: 0x7f040041
+			public const int btnCancel = 2130968641;
 			
 			// aapt resource value: 0x7f040031
 			public const int btnCollect = 2130968625;
@@ -174,14 +174,14 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040032
 			public const int btnCollectMajor = 2130968626;
 			
-			// aapt resource value: 0x7f04003a
-			public const int btnComplete = 2130968634;
+			// aapt resource value: 0x7f04003c
+			public const int btnComplete = 2130968636;
 			
 			// aapt resource value: 0x7f040007
 			public const int btnInstructions = 2130968583;
 			
-			// aapt resource value: 0x7f040039
-			public const int btnInvalid = 2130968633;
+			// aapt resource value: 0x7f04003b
+			public const int btnInvalid = 2130968635;
 			
 			// aapt resource value: 0x7f040026
 			public const int btnLogin = 2130968614;
@@ -189,20 +189,23 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04001c
 			public const int btnNavigation = 2130968604;
 			
-			// aapt resource value: 0x7f04003d
-			public const int btnRestore = 2130968637;
+			// aapt resource value: 0x7f04003f
+			public const int btnRestore = 2130968639;
 			
-			// aapt resource value: 0x7f04003b
-			public const int btnSync = 2130968635;
+			// aapt resource value: 0x7f04003d
+			public const int btnSync = 2130968637;
 			
 			// aapt resource value: 0x7f040030
 			public const int btnSyncPoint = 2130968624;
 			
-			// aapt resource value: 0x7f040037
-			public const int btnUnanswered = 2130968631;
+			// aapt resource value: 0x7f040039
+			public const int btnUnanswered = 2130968633;
 			
 			// aapt resource value: 0x7f040033
 			public const int btnVersion = 2130968627;
+			
+			// aapt resource value: 0x7f040034
+			public const int btnWhereAmI = 2130968628;
 			
 			// aapt resource value: 0x7f04002f
 			public const int editSettingsSyncPoint = 2130968623;
@@ -276,11 +279,14 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040025
 			public const int tePassword = 2130968613;
 			
-			// aapt resource value: 0x7f040034
-			public const int textMem = 2130968628;
+			// aapt resource value: 0x7f040036
+			public const int textMem = 2130968630;
 			
 			// aapt resource value: 0x7f04002e
 			public const int textSyncPoint = 2130968622;
+			
+			// aapt resource value: 0x7f040035
+			public const int textWhereAmI = 2130968629;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvComments = 2130968587;
@@ -294,8 +300,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040009
 			public const int tvError = 2130968585;
 			
-			// aapt resource value: 0x7f040038
-			public const int tvErrorWarning = 2130968632;
+			// aapt resource value: 0x7f04003a
+			public const int tvErrorWarning = 2130968634;
 			
 			// aapt resource value: 0x7f040020
 			public const int tvITem = 2130968608;
@@ -303,8 +309,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040012
 			public const int tvStatus = 2130968594;
 			
-			// aapt resource value: 0x7f04003e
-			public const int tvSyncResult = 2130968638;
+			// aapt resource value: 0x7f040040
+			public const int tvSyncResult = 2130968640;
 			
 			// aapt resource value: 0x7f04000a
 			public const int tvTitle = 2130968586;

@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -7,10 +9,12 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Extensions;
+using CAPI.Android.GeolocationServices;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Update;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
+using Xamarin.Geolocation;
 
 namespace CAPI.Android
 {
@@ -22,8 +26,10 @@ namespace CAPI.Android
     public class SettingsActivity : Activity
     {
         private ProgressDialog progress;
-        protected EventHandler<EventArgs> versionCheckEventHandler;
+        private GeoService geoservice;
+        private CancellationTokenSource cancelSource;
 
+        protected EventHandler<EventArgs> versionCheckEventHandler;
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
         protected override void OnStart()
@@ -48,13 +54,73 @@ namespace CAPI.Android
             btnVersion.Click += this.btnVersion_Click;
             btnVersion.Text = string.Format("Version: {0}. Check for a new version.", SettingsManager.AppVersionName());
 
-            textMem.Click += textMem_Click;
+            btnWhereAmI.Click += btnWhereAmI_Click;
+
+            geoservice = new GeoService(this);
+
             textMem.Text = GetResourceUsage();
         }
 
-        private void textMem_Click(object sender, EventArgs e)
+        private void btnWhereAmI_Click(object sender, EventArgs e)
         {
-            textMem.Text = GetResourceUsage();
+            if (geoservice == null)
+                geoservice = new GeoService(this);
+
+            if (!this.geoservice.IsGeolocationAvailable || !this.geoservice.IsGeolocationEnabled)
+            {
+                Toast.MakeText(this, "Geolocation is unavailable", ToastLength.Long).Show();
+                return;
+            }
+            
+            progress = ProgressDialog.Show(this, "Determining location", "Please Wait...", true, true);
+            progress.CancelEvent += progressCoordinates_Cancel;
+            
+            Task.Factory.StartNew(GetLocation);
+        }
+
+        private void progressCoordinates_Cancel(object sender, EventArgs e)
+        {
+            CancellationTokenSource cancel = this.cancelSource;
+            if (cancel != null)
+                cancel.Cancel();
+        }
+        
+        private void GetLocation()
+        {
+            cancelSource = new CancellationTokenSource();
+            geoservice.GetPositionAsync(10000, cancelSource.Token).ContinueWith(t => RunOnUiThread(() =>
+                {
+                    if (progress != null)
+                        progress.Dismiss();
+
+                    string messageToShow = "";
+
+                    if (t.IsCanceled)
+                        messageToShow = "Canceled";
+                    else if (t.IsFaulted)
+                        messageToShow = "Error occured on version check. " + ((GeolocationException)t.Exception.InnerException).Error.ToString();
+                    else
+                    {
+                        StringBuilder infoMessageBuilder = new StringBuilder();
+                        string format = "{0} : {1}";
+                        infoMessageBuilder.AppendLine(String.Format(format, "Accuracy", t.Result.Accuracy.ToString("N2") + "m"));
+                        infoMessageBuilder.AppendLine(String.Format(format, "Latitude", t.Result.Latitude.ToString("N4")));
+                        infoMessageBuilder.AppendLine(String.Format(format, "Longitude", t.Result.Longitude.ToString("N4")));
+                        //infoMessageBuilder.AppendLine(String.Format(format, "Altitude", t.Result.Altitude.ToString("N4")));
+
+                        infoMessageBuilder.AppendLine(String.Format(format, "Time", t.Result.Timestamp.ToString("G")));
+
+                        messageToShow = infoMessageBuilder.ToString();
+                    }
+
+                    textWhereAmI.Text = messageToShow;
+
+                    /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.SetTitle("Position results:");
+                    alert.SetMessage(messageToShow);
+                    alert.Show();*/
+
+                }));
         }
 
         private string GetResourceUsage()
@@ -86,7 +152,7 @@ namespace CAPI.Android
             }
             catch (Exception exc)
             {
-                logger.Error("Error on version check.", exc);
+                logger.Error("Error on new version check.", exc);
             }
 
             RunOnUiThread(() =>
@@ -95,8 +161,8 @@ namespace CAPI.Android
                         progress.Dismiss();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-                    alert.SetTitle("Check for new version");
+                    //notify about error
+                    alert.SetTitle("Checking for a new version");
                     if (!newVersionExists.HasValue)
                     {
                         alert.SetMessage("Error occured on version check. Please, check settings or try again later.");
@@ -158,6 +224,9 @@ namespace CAPI.Android
             
             if (progress != null)
                 progress.Dismiss();
+
+            if(geoservice.IsListening)
+                geoservice.StopListening();
         }
 
         private void textSyncPoint_Click(object sender, EventArgs e)
@@ -169,7 +238,6 @@ namespace CAPI.Android
                 buttonCollectMajor.Visibility = buttonCollect.Visibility = buttonChange.Visibility = ViewStates.Visible;
             }
         }
-
 
         private int clickCount = 0;
         const int NUMBER_CLICK=10;
@@ -194,6 +262,12 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<TextView>(Resource.Id.textMem); }
         }
+
+        protected TextView textWhereAmI
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.textWhereAmI); }
+        }
+        
         protected EditText editSettingsSync
         {
             get { return this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint); }
@@ -207,16 +281,25 @@ namespace CAPI.Android
             get { return this.FindViewById<Button>(Resource.Id.btnVersion); }
         }
 
+        protected Button btnWhereAmI
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnWhereAmI); }
+        }
+
         private void buttonCollectMajor_Click(object sender, EventArgs e)
         {
             GC.Collect(GC.MaxGeneration);
             GC.Collect(GC.MaxGeneration);
+
+            textMem.Text = GetResourceUsage();
         }
 
         private void buttonCollect_Click(object sender, EventArgs e)
         {
             GC.Collect(0);
             GC.Collect(0);
+
+            textMem.Text = GetResourceUsage();
         }
 
         private void buttonChange_Click(object sender, EventArgs e)
@@ -244,10 +327,8 @@ namespace CAPI.Android
             buttonCollectMajor.Click -= this.buttonCollectMajor_Click;
             textSyncPoint.Click -= textSyncPoint_Click;
             llContainer.Click -= llContainer_Click;
-            textMem.Click -= textMem_Click;
-
             btnVersion.Click -= this.btnVersion_Click;
-
+            
             GC.Collect();
         }
     }
