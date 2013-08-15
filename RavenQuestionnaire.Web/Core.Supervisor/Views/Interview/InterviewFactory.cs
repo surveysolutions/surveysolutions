@@ -27,8 +27,6 @@ namespace Core.Supervisor.Views.Interview
 
         public InterviewView Load(InterviewInputModel input)
         {
-            /*  return this.interviews.Query(_ =>
-              {*/
             Expression<Func<InterviewItem, bool>> predicate = (s) => !s.IsDeleted;
 
             if (input.StatusId.HasValue)
@@ -43,43 +41,20 @@ namespace Core.Supervisor.Views.Interview
 
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
-                if (input.OnlyNotAssigned)
-                {
-                    predicate = predicate.AndCondition(t => t.ResponsibleSupervisorId == null);
-                }
-                else if (input.ResponsibleId.HasValue)
-                {
-                    predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ResponsibleId);
-                }
+                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ResponsibleId);
             }
             else
             {
-                if (input.OnlyNotAssigned)
-                {
-                    predicate = predicate.AndCondition(x => x.Responsible.Id == input.ViewerId);
-                }
-                else if (input.ResponsibleId.HasValue)
-                {
-                    predicate = predicate.AndCondition(x => x.Responsible.Id == input.ResponsibleId);
-                }
-                else
-                {
-
-                    predicate =
-                        predicate.AndCondition(
-                            x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
-                }
+                predicate = input.ResponsibleId.HasValue 
+                    ? predicate.AndCondition(x => x.Responsible.Id == input.ResponsibleId) 
+                    : predicate.AndCondition(x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
             }
 
-            //var items = DefineOrderBy(_.ToList().AsQueryable(), input)
-            //    .Skip((input.Page - 1)*input.PageSize)
-            //    .Take(input.PageSize);
-
-            var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)),input)
-                            .Skip((input.Page - 1)*input.PageSize)
+            var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
+                            .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize).ToList();
 
-           
+
             return new InterviewView()
                 {
                     TotalCount = this.interviews.Query(_ => _.Count(predicate)),
@@ -91,13 +66,12 @@ namespace Core.Supervisor.Views.Interview
                             Responsible = x.Responsible,
                             Status = x.Status.Name,
                             Title = x.Title,
-                            CanDelete = x.Status.Id == SurveyStatus.Unknown.PublicId || 
+                            CanDelete = x.Status.Id == SurveyStatus.Unknown.PublicId ||
                                         x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId,
                             CanBeReassigned = x.Status.Id == SurveyStatus.Unknown.PublicId || x.Status.Id == SurveyStatus.Redo.PublicId ||
                                         x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId
                         })
                 };
-            //  });
         }
 
         private IQueryable<InterviewItem> DefineOrderBy(IQueryable<InterviewItem> query,
@@ -108,24 +82,7 @@ namespace Core.Supervisor.Views.Interview
             {
                 return query;
             }
-            /*  List<string> o = query.SelectMany(t => t.FeaturedQuestions).Select(y => y.Question).Distinct().ToList();
-                if (o.Contains(orderBy.Field))
-                {
-                    query = orderBy.Direction == OrderDirection.Asc
-                        ? query.OrderBy(
-                            t =>
-                                t.FeaturedQuestions.Where(y => y.Question == orderBy.Field).Select(
-                                    x => x.Answer).FirstOrDefault())
-                        : query.OrderByDescending(
-                            t =>
-                                t.FeaturedQuestions.Where(y => y.Question == orderBy.Field).Select(
-                                    x => x.Answer).FirstOrDefault());
-                }
-                else
-                {
-                    query =*/
             return query.OrderUsingSortExpression(model.Order).AsQueryable();
-            //   }
         }
     }
 }

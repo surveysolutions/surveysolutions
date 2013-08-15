@@ -1,4 +1,6 @@
 ﻿using Core.Supervisor.Views;
+using Core.Supervisor.Views.Reposts.InputModels;
+using Core.Supervisor.Views.Reposts.Views;
 using Core.Supervisor.Views.Survey;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -16,23 +18,22 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class SurveysApiController : BaseApiController
     {
-        private readonly IViewFactory<SurveysInputModel, SurveysView> surveysViewFactory;
+        private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView> headquarterSurveysAndStatusesReport;
 
         public SurveysApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IViewFactory<SurveysInputModel, SurveysView> surveysViewFactory)
+            IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView> headquarterSurveysAndStatusesReport)
             : base(commandService, provider, logger)
         {
-            this.surveysViewFactory = surveysViewFactory;
+            this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
         }
 
-        public SurveysView Surveys(SurveyListViewModel data)
+        [HttpPost]
+        public HeadquarterSurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveyListViewModel data)
         {
-            var input = new SurveysInputModel(
-                this.GlobalInfo.GetCurrentUser().Id,
-                this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor);
+            var input = new HeadquarterSurveysAndStatusesReportInputModel(this.GlobalInfo.GetCurrentUser().Id);
 
             if (data != null)
             {
@@ -49,7 +50,7 @@ namespace Web.Supervisor.Controllers
                 }
             }
 
-            return this.surveysViewFactory.Load(input);
+            return this.headquarterSurveysAndStatusesReport.Load(input);
         }
     }
 }

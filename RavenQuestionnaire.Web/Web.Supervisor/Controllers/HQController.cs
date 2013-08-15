@@ -141,7 +141,7 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        public ActionResult Surveys()
+        public ActionResult SurveysAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
             return
@@ -157,7 +157,7 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        public ActionResult Summary()
+        public ActionResult SupervisorsAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Summary;
             return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(

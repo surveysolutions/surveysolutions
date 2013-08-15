@@ -742,12 +742,12 @@
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
     <Content Include="Views\Interview\Approve.cshtml" />
     <Content Include="Views\Interview\ChangeState.cshtml" />
-    <Content Include="Views\HQ\Surveys.cshtml">
+    <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>
       </SubType>
     </Content>
     <Content Include="Views\Interview\Redo.cshtml" />
-    <Content Include="Views\HQ\Summary.cshtml" />
+    <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />

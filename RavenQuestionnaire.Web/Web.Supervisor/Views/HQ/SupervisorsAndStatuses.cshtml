@@ -10,7 +10,7 @@
     @Html.Partial("_ListViewStatusesScript")
 
     <script type="text/javascript">
-        var $surveysUrl = '@Url.Action("Surveys", "HQ")';
+        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
         $(function () {
             var model = new SummaryListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SummaryApi", action = "Summary" })');
