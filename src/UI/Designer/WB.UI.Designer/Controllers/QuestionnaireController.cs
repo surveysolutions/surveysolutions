@@ -178,7 +178,7 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.WebUser.UserId);
+                viewerId: UserHelper.WebUser.UserId);
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
@@ -206,7 +206,7 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.WebUser.UserId);
+                viewerId: UserHelper.WebUser.UserId);
         }
 
         private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
