@@ -1,5 +1,4 @@
 ﻿using WB.Core.GenericSubdomains.Logging;
-using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -337,6 +336,15 @@ namespace WB.UI.Designer.Controllers
             this.Attention(
                 "To complete the registration process look for an email in your inbox that provides further instructions.");
             return this.RedirectToAction("Login");
+        }
+
+        [HttpPost]
+        public JsonResult FindByEmail(string email)
+        {
+            return Json(new
+            {
+                isUserExist = !string.IsNullOrEmpty(Membership.GetUserNameByEmail(email))
+            });
         }
     }
 }
