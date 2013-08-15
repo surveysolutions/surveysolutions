@@ -322,7 +322,7 @@ namespace Web.Supervisor.Controllers
         [AllowAnonymous]
         public ActionResult CheckNewVersion(string version, string versionCode, string androidId)
         {
-            var newVwrsionExsists = false;
+            var isNewVersionExsist = false;
 
             try
             {
@@ -333,7 +333,7 @@ namespace Web.Supervisor.Controllers
 
                     if (maxVersion != 0 && maxVersion > versionValue)
                     {
-                        newVwrsionExsists = true;
+                        isNewVersionExsist = true;
                     }
                 }
             }
@@ -342,7 +342,7 @@ namespace Web.Supervisor.Controllers
                 logger.Error("Error on version check.", e);
             }
 
-            return Json(newVwrsionExsists, JsonRequestBehavior.AllowGet);
+            return Json(isNewVersionExsist, JsonRequestBehavior.AllowGet);
         }
 
 

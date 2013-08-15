@@ -148,7 +148,7 @@ namespace CAPI.Android
             try
             {
                 var updater = new UpdateProcessor();
-                updater.CheckNewVersion();
+                newVersionExists = updater.CheckNewVersion();
             }
             catch (Exception exc)
             {
@@ -309,7 +309,7 @@ namespace CAPI.Android
             {
                 if (SettingsManager.SetSyncAddressPoint(editSettingsSync.Text))
                 {
-                    editSettingsSync.SetBackgroundColor(Color.Green);
+                    editSettingsSync.SetBackgroundColor(Color.LightGreen);
                 }
                 else
                 {
