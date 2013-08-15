@@ -18,7 +18,10 @@ using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Syncronization.Pull
 {
@@ -119,9 +122,8 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-            throw new NotImplementedException("please uncomment lines below me");
            /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
-            {
+            {*/
                 string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
                 var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
@@ -131,13 +133,17 @@ namespace CAPI.Android.Syncronization.Pull
                 var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
                 syncCacher.SaveItem(item.Id, item.Content);
 
-                commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
-                                                                          metaInfo.Title, metaInfo.ResponsibleId,
-                                                                          metaInfo.Status.Id,
-                                                                          metaInfo.FeaturedQuestionsMeta.ToList()));
+            commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
+                                                                      metaInfo.ResponsibleId,
+                                                                      (InterviewStatus) metaInfo.Status,
+                                                                      metaInfo.FeaturedQuestionsMeta.Select(
+                                                                          q =>
+                                                                          new AnsweredQuestionSynchronizationDto(
+                                                                              q.PublicKey, q.Value, string.Empty))
+                                                                              .ToList()));
 
 
-            }
+            /*    }
             
             else
             {
@@ -146,7 +152,7 @@ namespace CAPI.Android.Syncronization.Pull
                 var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
                 commandService.Execute(new CreateNewAssigment(questionnarieContent));    
             }*/
-            
+
         }
 
         private void ExecuteTemplate(SyncItem item)

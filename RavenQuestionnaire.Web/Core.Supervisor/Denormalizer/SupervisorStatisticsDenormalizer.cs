@@ -2,6 +2,7 @@ using System.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -248,7 +249,7 @@ namespace Core.Supervisor.Denormalizer
 
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
-            HandleStatusChange(evnt.EventSourceId, evnt.Payload.StatusId);
+         //   HandleStatusChange(evnt.EventSourceId, evnt.Payload.StatusId);
         }
     }
 }

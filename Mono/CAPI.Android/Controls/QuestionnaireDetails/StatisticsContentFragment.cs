@@ -10,6 +10,7 @@ using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -54,7 +55,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.Model =
                 CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(
                     new StatisticsInput(QuestionnaireKey));
-            if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
+            if (this.Model.Status == InterviewStatus.Completed)
             {
                 btnComplete.Text = "Reinit";
             }
@@ -142,7 +143,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         void btnComplete_Click(object sender, EventArgs e)
         {
-            if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
+            if (Model.Status == InterviewStatus.Completed)
             {
                 CapiApplication.CommandService.Execute(new RestartInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id));
             }

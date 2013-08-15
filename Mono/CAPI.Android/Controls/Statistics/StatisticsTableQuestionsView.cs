@@ -8,6 +8,8 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Events;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+
 namespace CAPI.Android.Controls.Statistics
 {
     public class StatisticsTableQuestionsView  : LinearLayout

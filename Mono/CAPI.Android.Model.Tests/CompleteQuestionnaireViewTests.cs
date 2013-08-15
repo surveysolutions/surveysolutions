@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Androids.Core.Model.Tests
 {
@@ -109,102 +110,11 @@ namespace CAPI.Androids.Core.Model.Tests
             target.SetAnswer(questionKEy, "answer");
             Assert.AreEqual(question.AnswerString, "answer");
         }
-        [Test]
-        public void PropagateGroup_TemplateISAbsent_ExeptionThrown()
-        {
-            var templates = new TemplateCollection();
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens,templates);
-            Assert.Throws<KeyNotFoundException>(
-                () => target.PropagateGroup(Guid.NewGuid(), Guid.NewGuid()));
-        }
-        [Test]
-        public void PropagateGroup_TemplateISPresent_QuestionAndScreenHashAreUpdated()
-        {
-            var templates = new TemplateCollection();
-            var templateKey = new ItemPublicKey(Guid.NewGuid(), null);
-            var questionKey = Guid.NewGuid();
-            var template = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "t", true,
-                                                            templateKey,
-                                                            new IQuestionnaireItemViewModel[1]
-                                                                {
-                                                                    new ValueQuestionViewModel(
-                                                                new ItemPublicKey(questionKey, null), "test",
-                                                                QuestionType.Text, "t", true, "", "", false,
-                                                                false, false,  "")
-                                                                }, null,
-                                                            Enumerable.Empty<ItemPublicKey>());
-            var grid = new QuestionnaireGridViewModel(template.QuestionnaireId, "t", "t", templateKey, true,
-                                                      Enumerable.Empty<ItemPublicKey>(),
-                                                      Enumerable.Empty<ItemPublicKey>(),
-                                                    //  Enumerable.Empty<QuestionnaireScreenViewModel>(),
-                                                      new List<HeaderItem>(),
-                                                      Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            screens.Add(templateKey, grid);
-            templates.Add(templateKey.PublicKey, template);
-            CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens,templates);
-            var propagationKey = Guid.NewGuid();
-            target.PropagateGroup(templateKey.PublicKey, propagationKey);
-            Assert.AreEqual(target.GetQuestionHash().Count, 1);
-            var questionFromHash = target.GetQuestionHash().Select(q => q.Value).First();
-            Assert.AreEqual(questionFromHash.PublicKey.PropagationKey, propagationKey);
-            Assert.AreEqual(questionFromHash.PublicKey.PublicKey, questionKey);
-
-            Assert.AreEqual(target.Screens.Count, 2);
-            Assert.AreEqual(target.Screens[new ItemPublicKey(templateKey.PublicKey, propagationKey)].Title, "t");
-        }
-        [Test]
-        public void RemovePropagatedGroup_GRoupISAbsent_ExeptionThrown()
-        {
-            var templates = new TemplateCollection();
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens, templates);
-            Assert.Throws<KeyNotFoundException>(
-                () => target.RemovePropagatedGroup(Guid.NewGuid(), Guid.NewGuid()));
-        }
-        [Test]
-        public void RemovePropagatedGroup_GRoupISPresent_GroupDeleted()
-        {
-            //   var templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            var propagationKey = Guid.NewGuid();
-            var question = new ValueQuestionViewModel(
-                new ItemPublicKey(Guid.NewGuid(), propagationKey), "test",
-                QuestionType.Text, "t", true, "", "", false,
-                false, false, "");
-            questions.Add(question.PublicKey, question);
-            var templateKey = new ItemPublicKey(Guid.NewGuid(), null);
-
-
-            var propagatedGroup = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "t", true,
-                                                                             new ItemPublicKey(templateKey.PublicKey,
-                                                                                               propagationKey),
-                                                                             new IQuestionnaireItemViewModel[1]
-                                                                                 {
-                                                                                     question
-                                                                                 },
-                                                                             (k) => Enumerable.Empty<ItemPublicKey>(),
-                                                                             Enumerable.Empty<ItemPublicKey>());
-            screens.Add(propagatedGroup.ScreenId, propagatedGroup);
-            var grid = new QuestionnaireGridViewModel(propagatedGroup.QuestionnaireId, "t", "t", templateKey, true,
-                                                      Enumerable.Empty<ItemPublicKey>(),
-                                                      Enumerable.Empty<ItemPublicKey>(),
-                                                      //Enumerable.Empty<QuestionnaireScreenViewModel>(),
-                                                      new List<HeaderItem>(),
-                                                      Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
-            screens.Add(templateKey, grid);
-            CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens, questions);
-            target.RemovePropagatedGroup(templateKey.PublicKey, propagationKey);
-            Assert.AreEqual(target.GetQuestionHash().Count, 0);
-            Assert.AreEqual(target.Screens.Count, 1);
-        }
     }
 
     public class CompleteQuestionnaireViewTestable : CompleteQuestionnaireView
     {
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, QuestionViewModel> questions):this(Guid.NewGuid().ToString())
+        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, QuestionViewModel> questions):this(Guid.NewGuid())
         {
             this.Questions = questions;
         }
@@ -219,20 +129,17 @@ namespace CAPI.Androids.Core.Model.Tests
             this.Questions = questions;
         }
         public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents)
-            : this(Guid.NewGuid().ToString())
+            : this(Guid.NewGuid())
         {
             this.Screens = screents;
         }
-        public CompleteQuestionnaireViewTestable(string publicKey) : base(publicKey)
+        public CompleteQuestionnaireViewTestable(Guid publicKey) : base(publicKey)
         {
             this.Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
             this.Templates = new TemplateCollection();
             this.Screens=new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
         }
 
-        public CompleteQuestionnaireViewTestable(CompleteQuestionnaireDocument document) : base(document)
-        {
-        }
         public IDictionary<ItemPublicKey, QuestionViewModel> GetQuestionHash()
         {
             return this.Questions;

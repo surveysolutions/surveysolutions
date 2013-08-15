@@ -18,6 +18,7 @@ using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Events.File;
+using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Main.Core.Services;
@@ -29,11 +30,13 @@ using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
@@ -104,9 +107,8 @@ namespace CAPI.Android
         {
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(
-                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
+                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>(), kernel.Get<IReadSideRepositoryWriter<QuestionnaireDocument>>());
 
-            bus.RegisterHandler(eventHandler, typeof (AnswerCommented));
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
@@ -119,6 +121,16 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
             bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredValid));
+            bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
+            bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
+           
+        }
+
+        private void InitTemplateStorage(InProcessEventBus bus)
+        {
+            var fileSorage = new QuestionnaireDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDocument>>());
+            bus.RegisterHandler(fileSorage, typeof(TemplateImported));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
@@ -140,11 +152,13 @@ namespace CAPI.Android
         {
             var dashboardeventHandler =
                 new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                                          kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
+                                          kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
+                                          kernel.Get<IReadSideRepositoryWriter<QuestionnaireDocument>>());
            
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             
         }
 
@@ -172,17 +186,23 @@ namespace CAPI.Android
             kernel = new StandardKernel(
                 new AndroidCoreRegistry(),
                 new AndroidModelModule(),
-                new AndroidLoggingModule());
+                new AndroidLoggingModule(),
+                new DataCollectionSharedKernelModule());
+
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
             NcqrsInit.Init(kernel);
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+            kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
 
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+
+            InitTemplateStorage(bus);
 
             InitQuestionnariesStorage(bus);
 

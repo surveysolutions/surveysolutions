@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -82,7 +83,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionStatus Status { get; protected set; }
         public string ValidationMessage { get; private set; }
 
-        public abstract IQuestionnaireItemViewModel Clone(Guid propagationKey);
+        public abstract IQuestionnaireItemViewModel Clone(int[] propagationVector);
 
         public virtual void SetAnswer(object answer)
         {

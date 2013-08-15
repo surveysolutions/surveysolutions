@@ -33,12 +33,6 @@ namespace Main.Core.Domain
         {
         }
 
-        public _CompleteQuestionnaireAR(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
-            : base(id)
-        {
-            UpdateInterviewMetaInfo(id, templateId, title, responsibleId, statusId, featuredQuestionsMeta);
-        }
-
         public _CompleteQuestionnaireAR(Guid completeQuestionnaireId, 
             QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
@@ -394,19 +388,6 @@ namespace Main.Core.Domain
             ApplyEvent(new NewAssigmentCreated() { Source = source });
         }
 
-        public void UpdateInterviewMetaInfo(Guid id, Guid templateId, string title, Guid? responsibleId, Guid statusId, List<FeaturedQuestionMeta> featuredQuestionsMeta)
-        {
-            ApplyEvent(new InterviewMetaInfoUpdated()
-                {
-                    FeaturedQuestionsMeta = featuredQuestionsMeta,
-                    ResponsibleId = responsibleId,
-                    StatusId = statusId,
-                    TemplateId = templateId,
-                    Title = title,
-                    PreviousStatusId = doc == null ? SurveyStatus.Unknown.PublicId : doc.Status.PublicId
-                });
-        }
-
         public void ChangeAssignment(UserLight responsible)
         {
             var prevResponsible = this.doc.Responsible;
@@ -451,18 +432,6 @@ namespace Main.Core.Domain
         protected void OnNewAssigmentCreated(NewAssigmentCreated e)
         {
             this.doc = e.Source;
-        }
-
-        protected void OnInterviewMetaInfoUpdated(InterviewMetaInfoUpdated e)
-        {
-            if (doc == null)
-                doc = new CompleteQuestionnaireDocument();
-            doc.PublicKey = this.EventSourceId;
-            doc.Status = SurveyStatus.GetStatusByIdOrDefault(e.StatusId);
-            if (e.ResponsibleId.HasValue)
-                doc.Responsible = new UserLight(e.ResponsibleId.Value, "");
-            doc.TemplateId = e.TemplateId;
-            doc.Title = e.Title;
         }
 
         protected void OnAnswerSet(AnswerSet e)

@@ -73,11 +73,14 @@
     <Compile Include="Commands\Interview\RestartInterviewCommand.cs" />
     <Compile Include="Commands\Interview\RestoreInterviewCommand.cs" />
     <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
+    <Compile Include="Commands\Interview\SynchronizeInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\UpdateInterviewMetaInfoCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
-    <Compile Include="DataTransferObjects\Synchronization\AnswerSynchronizationDto.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
+    <Compile Include="DataTransferObjects\Synchronization\ItemPublicKey.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
     <Compile Include="Events\Interview\InterviewDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\InterviewMetaInfoUpdated.cs" />
     <Compile Include="Events\Interview\InterviewSynchronized.cs" />
     <Compile Include="Events\Interview\InterviewDeclaredValid.cs" />
     <Compile Include="Events\Interview\InterviewDeleted.cs" />

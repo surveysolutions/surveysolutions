@@ -16,6 +16,7 @@ using CAPI.Android.Extensions;
 using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
 using Ninject;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 
 namespace CAPI.Android
@@ -262,13 +263,6 @@ namespace CAPI.Android
             base.OnDestroy();
             VpContent.PageSelected -= VpContent_PageSelected;
             GC.Collect();
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
-            
-            cleanUpExecutor.CleanUpInterviewCaches(QuestionnaireId);
         }
 
         public override void OnLowMemory()

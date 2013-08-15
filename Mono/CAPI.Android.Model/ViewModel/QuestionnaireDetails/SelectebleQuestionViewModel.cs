@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -44,14 +45,14 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Answers = answers;
         }
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
+        public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
         {
             IList<AnswerViewModel> newAnswers = new List<AnswerViewModel>();
             foreach (AnswerViewModel answerViewModel in Answers)
             {
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
-            return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
+            return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationVector),
                                                    this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),

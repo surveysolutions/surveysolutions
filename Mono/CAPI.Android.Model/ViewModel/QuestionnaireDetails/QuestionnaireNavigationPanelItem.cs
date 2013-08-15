@@ -1,4 +1,5 @@
 using System;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -17,9 +18,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public ItemPublicKey PublicKey { get; private set; }
 
 
-        public IQuestionnaireItemViewModel Clone(Guid propagationKey)
+        public IQuestionnaireItemViewModel Clone(int[] propagationVector)
         {
-            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
+            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationVector),
                                                         fullScreen);
         }
 

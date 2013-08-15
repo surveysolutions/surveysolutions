@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -64,7 +65,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 }
                 else
                 {
-                    tvITem.Text = SurveyStatus.IsStatusAllowCapiSync(model.Status) ? "Summary" : "Complete";
+                    tvITem.Text = model.Status == InterviewStatus.Completed ? "Summary" : "Complete";
                     tvCount.Visibility = ViewStates.Gone;
                 }
                 items[position] = view;

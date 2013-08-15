@@ -14,6 +14,8 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -91,7 +93,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             BuildEmptyLabelDescription(inflater.Context, ll);
             BuildTabels(inflater.Context, ll);
             sv.AddView(ll);
-            sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(Questionnaire.Status));
+            sv.EnableDisableView(Questionnaire.Status != InterviewStatus.Completed);
             top.AddView(sv);
 
 
@@ -265,15 +267,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
         {
-            var group = Model.Rows.FirstOrDefault(r => r.ScreenId.PropagationKey == e.Model.PublicKey.PropagationKey);
+            var group = Model.Rows.FirstOrDefault(r => r.ScreenId.CompareWithVector(e.Model.PublicKey.PropagationVector));
             if (group == null)
                 return;
             dialog =new RosterItemDialog(this.Activity, e.Model, group.ScreenName, Model.QuestionnaireId,
                                                         questionViewFactory);
         }
-
-
-
 
         void first_Click(object sender, EventArgs e)
         {

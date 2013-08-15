@@ -58,7 +58,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (newValue != this.Model.AnswerString)
             {
                 CommandService.Execute(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.PublicKey,
-                                                     null,DateTime.Now, newValue));
+                                                     this.Model.PublicKey.PropagationVector, DateTime.Now, newValue));
             }
         
             base.SaveAnswer();

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -9,7 +10,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }
-        IQuestionnaireItemViewModel Clone(Guid propagationKey);
-        //   bool Enabled { get; }
+        IQuestionnaireItemViewModel Clone(int[] propagationVector);
     }
 }

@@ -61,7 +61,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 answered.Remove(answerValue);
             }
             CommandService.Execute(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
-                                                        null, DateTime.Now, answered.ToArray()));
+                                                        this.Model.PublicKey.PropagationVector, DateTime.Now, answered.ToArray()));
             SaveAnswer();
 
         }
