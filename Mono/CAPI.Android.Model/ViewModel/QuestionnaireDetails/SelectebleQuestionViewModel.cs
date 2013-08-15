@@ -26,24 +26,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             Answers = answers;
         }
-
-        [JsonConstructor]
-        public SelectebleQuestionViewModel(
-            ItemPublicKey publicKey,
-            string text,
-            QuestionType questionType,
-            IEnumerable<AnswerViewModel> answers,
-            QuestionStatus status,
-            string instructions,
-            string comments,
-            bool mandatory,
-            bool capital,
-            object answerObject,
-            string validationMessage)
-            : base(publicKey, text, questionType, status, instructions, comments, mandatory, capital, answerObject, validationMessage)
-        {
-            Answers = answers;
-        }
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
         
         public override string AnswerString
@@ -66,7 +48,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                                    this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerString, this.ValidationMessage);
+                                                   this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
         }
 
         public override void SetAnswer(object answer)
