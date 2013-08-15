@@ -226,7 +226,11 @@ namespace CAPI.Android
             if (clickCount >= NUMBER_CLICK)
             {
                 editSettingsSync.Enabled = true;
-                buttonCollectMajor.Visibility = buttonCollect.Visibility = buttonChange.Visibility = ViewStates.Visible;
+                buttonCollectMajor.Visibility = 
+                    buttonCollect.Visibility = 
+                    buttonChange.Visibility = 
+                    textMem.Visibility =
+                    ViewStates.Visible;
             }
         }
 

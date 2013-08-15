@@ -168,11 +168,11 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040041
 			public const int btnCancel = 2130968641;
 			
-			// aapt resource value: 0x7f040031
-			public const int btnCollect = 2130968625;
+			// aapt resource value: 0x7f040034
+			public const int btnCollect = 2130968628;
 			
-			// aapt resource value: 0x7f040032
-			public const int btnCollectMajor = 2130968626;
+			// aapt resource value: 0x7f040035
+			public const int btnCollectMajor = 2130968629;
 			
 			// aapt resource value: 0x7f04003c
 			public const int btnComplete = 2130968636;
@@ -201,11 +201,11 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040039
 			public const int btnUnanswered = 2130968633;
 			
-			// aapt resource value: 0x7f040033
-			public const int btnVersion = 2130968627;
+			// aapt resource value: 0x7f040031
+			public const int btnVersion = 2130968625;
 			
-			// aapt resource value: 0x7f040034
-			public const int btnWhereAmI = 2130968628;
+			// aapt resource value: 0x7f040032
+			public const int btnWhereAmI = 2130968626;
 			
 			// aapt resource value: 0x7f04002f
 			public const int editSettingsSyncPoint = 2130968623;
@@ -285,8 +285,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04002e
 			public const int textSyncPoint = 2130968622;
 			
-			// aapt resource value: 0x7f040035
-			public const int textWhereAmI = 2130968629;
+			// aapt resource value: 0x7f040033
+			public const int textWhereAmI = 2130968627;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvComments = 2130968587;
