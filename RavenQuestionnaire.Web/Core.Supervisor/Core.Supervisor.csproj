@@ -185,8 +185,12 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />

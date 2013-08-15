@@ -53,17 +53,11 @@ namespace Core.Supervisor.Views.Reposts.Factories
                                    ResponsibleId = doc.ResponsibleId
                                });
 
-            var supervisors = indexAccessor.Query<StatisticsLineGroupedByUserAndTemplate>(indexName)
-                .Where(x => x.ResponsibleId != Guid.Empty)
-                .Select(x => new SurveyUsersViewItem{ UserId = x.ResponsibleId, UserName = x.ResponsibleName })
-                .ToList();
-
             var headquarterSurveysAndStatusesReportLines = all as IList<HeadquarterSurveysAndStatusesReportLine> ?? all.ToList();
             return new HeadquarterSurveysAndStatusesReportView
                 {
                     TotalCount = headquarterSurveysAndStatusesReportLines.Count(),
-                    Items = headquarterSurveysAndStatusesReportLines,
-                    Supervisors = supervisors
+                    Items = headquarterSurveysAndStatusesReportLines
                 };
         }
     }

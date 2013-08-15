@@ -12,7 +12,7 @@
     <script type="text/javascript">
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
         $(function () {
-            var model = new SurveyListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "SurveysApi", action = "HeadquarterSurveysAndStatusesReport" })');
+            var model = new SurveyListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })');
 
             ko.applyBindings(model);
             model.load();
