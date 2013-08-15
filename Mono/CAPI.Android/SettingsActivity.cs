@@ -88,17 +88,17 @@ namespace CAPI.Android
         private void GetLocation()
         {
             cancelSource = new CancellationTokenSource();
-            geoservice.GetPositionAsync(10000, cancelSource.Token).ContinueWith(t => RunOnUiThread(() =>
+            geoservice.GetPositionAsync(20000, cancelSource.Token).ContinueWith(t => RunOnUiThread(() =>
                 {
                     if (progress != null)
                         progress.Dismiss();
 
-                    string messageToShow = "";
-
+                    string messageToShow;
+                    
                     if (t.IsCanceled)
-                        messageToShow = "Canceled";
+                        messageToShow = "Canceled or Timeout.";
                     else if (t.IsFaulted)
-                        messageToShow = "Error occured on version check. " + ((GeolocationException)t.Exception.InnerException).Error.ToString();
+                        messageToShow = "Error occured on location retrieving. " + ((GeolocationException)t.Exception.InnerException).Error.ToString();
                     else
                     {
                         StringBuilder infoMessageBuilder = new StringBuilder();
@@ -114,12 +114,6 @@ namespace CAPI.Android
                     }
 
                     textWhereAmI.Text = messageToShow;
-
-                    /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                    alert.SetTitle("Position results:");
-                    alert.SetMessage(messageToShow);
-                    alert.Show();*/
-
                 }));
         }
 
@@ -161,16 +155,13 @@ namespace CAPI.Android
                         progress.Dismiss();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                    //notify about error
                     alert.SetTitle("Checking for a new version");
+
                     if (!newVersionExists.HasValue)
                     {
                         alert.SetMessage("Error occured on version check. Please, check settings or try again later.");
-                        alert.Show();
-                        return;
                     }
-
-                    if (newVersionExists.Value)
+                    else if (newVersionExists.Value)
                     {
                         alert.SetPositiveButton("Yes", btnUpdateConfirmed_Click);
                         alert.SetNegativeButton("No", btnUpdateDeclined_Click);
