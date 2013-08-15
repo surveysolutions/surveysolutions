@@ -6,7 +6,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Raven.Client.Linq;
 using Raven.Database.Linq.PrivateExtensions;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
@@ -17,37 +19,35 @@ namespace Core.Supervisor.Views.Interview
 
     public class InterviewFactory : IViewFactory<InterviewInputModel, InterviewView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewItem> interviews;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
-        public InterviewFactory(
-            IQueryableReadSideRepositoryReader<InterviewItem> interviews)
+        public InterviewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
         {
             this.interviews = interviews;
         }
 
         public InterviewView Load(InterviewInputModel input)
         {
-            Expression<Func<InterviewItem, bool>> predicate = (s) => !s.IsDeleted;
+            Expression<Func<InterviewSummary, bool>> predicate = (s) => !s.IsDeleted;
 
-            if (input.StatusId.HasValue)
+            if (input.Status.HasValue)
             {
-                predicate = predicate.AndCondition(x => (x.Status.Id == input.StatusId));
+                predicate = predicate.AndCondition(x => (x.Status == input.Status));
             }
 
-            if (input.TemplateId.HasValue)
+            if (input.QuestionnaireId.HasValue)
             {
-                predicate = predicate.AndCondition(x => (x.TemplateId == input.TemplateId));
+                predicate = predicate.AndCondition(x => (x.QuestionnaireId == input.QuestionnaireId));
             }
 
             if (input.ViewerStatus == ViewerStatus.Headquarter)
             {
-                predicate = predicate.AndCondition(x => x.ResponsibleSupervisorId == input.ResponsibleId);
             }
             else
             {
-                predicate = input.ResponsibleId.HasValue 
-                    ? predicate.AndCondition(x => x.Responsible.Id == input.ResponsibleId) 
-                    : predicate.AndCondition(x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
+                //predicate = input.ResponsibleId.HasValue 
+                //    ? predicate.AndCondition(x => x.Responsible.Id == input.ResponsibleId) 
+                //    : predicate.AndCondition(x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
             }
 
             var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
@@ -60,21 +60,30 @@ namespace Core.Supervisor.Views.Interview
                     TotalCount = this.interviews.Query(_ => _.Count(predicate)),
                     Items = interviewItems.Select(x => new InterviewViewItem()
                         {
-                            FeaturedQuestions = x.FeaturedQuestions,
+                            FeaturedQuestions = x.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion()
+                                {
+                                    Id = a.Id,
+                                    Answer = a.Answer,
+                                    Question = a.Title
+                                }),
                             InterviewId = x.InterviewId,
-                            LastEntryDate = x.LastEntryDate.ToShortDateString(),
-                            Responsible = x.Responsible,
-                            Status = x.Status.Name,
-                            Title = x.Title,
-                            CanDelete = x.Status.Id == SurveyStatus.Unknown.PublicId ||
-                                        x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId,
-                            CanBeReassigned = x.Status.Id == SurveyStatus.Unknown.PublicId || x.Status.Id == SurveyStatus.Redo.PublicId ||
-                                        x.Status.Id == SurveyStatus.Unassign.PublicId || x.Status.Id == SurveyStatus.Initial.PublicId
+                            LastEntryDate = x.UpdateDate.ToShortDateString(),
+                            ResponsibleId = x.ResponsibleId,
+                            ResponsibleName = x.ResponsibleName,
+                            Status = x.Status.ToString(),
+                            CanDelete =    x.Status == InterviewStatus.Created
+                                        || x.Status == InterviewStatus.SupervisorAssigned
+                                        || x.Status == InterviewStatus.InterviewerAssigned
+                                        || x.Status == InterviewStatus.SentToCapi,
+                            CanBeReassigned =    x.Status == InterviewStatus.Created
+                                              || x.Status == InterviewStatus.SupervisorAssigned
+                                              || x.Status == InterviewStatus.InterviewerAssigned
+                                              || x.Status == InterviewStatus.RejectedBySupervisor
                         })
                 };
         }
 
-        private IQueryable<InterviewItem> DefineOrderBy(IQueryable<InterviewItem> query,
+        private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query,
                                                         InterviewInputModel model)
         {
             var orderBy = model.Orders.FirstOrDefault();

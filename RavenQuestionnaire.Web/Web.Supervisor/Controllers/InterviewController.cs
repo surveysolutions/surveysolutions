@@ -78,18 +78,18 @@ namespace Web.Supervisor.Controllers
           if (state == 2)
           {
               if (cancel != null)
-                  return this.RedirectToInterviewList(model.TemplateId);
+                  return this.RedirectToInterviewList(model.QuestionnaireId);
               if (ModelState.IsValid)
               {
                   var status = SurveyStatus.Redo;
                   status.ChangeComment = model.Comment;
                   this.CommandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.GlobalInfo.GetCurrentUser() });
-                  return this.RedirectToInterviewList(model.TemplateId);
+                  return this.RedirectToInterviewList(model.QuestionnaireId);
               }
 
               var stat = this.completeQuestionnaireStatisticViewFactory.Load(
                       new CompleteQuestionnaireStatisticViewInputModel(model.Id) { Scope = QuestionScope.Supervisor });
-              return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+              return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, QuestionnaireId = model.QuestionnaireId });
           }
           else
           {
@@ -98,12 +98,12 @@ namespace Web.Supervisor.Controllers
                   var status = SurveyStatus.Approve;
                   status.ChangeComment = model.Comment;
                   this.CommandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.GlobalInfo.GetCurrentUser() });
-                  return this.RedirectToInterviewList(model.TemplateId);
+                  return this.RedirectToInterviewList(model.QuestionnaireId);
               }
 
               var stat = this.completeQuestionnaireStatisticViewFactory.Load(
                       new CompleteQuestionnaireStatisticViewInputModel(model.Id) { Scope = QuestionScope.Supervisor });
-              return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+              return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, QuestionnaireId = model.QuestionnaireId });
           }
       }
       */

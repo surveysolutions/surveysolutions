@@ -59,9 +59,7 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <span data-bind="with: Responsible">
-                        <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Id() }, text: Name"></a>
-                    </span>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td data-bind="text: Status"></td>
