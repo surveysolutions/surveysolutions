@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -19,7 +20,7 @@ using InterviewDeleted = WB.Core.SharedKernels.DataCollection.Events.Interview.I
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class Interview : AggregateRootMappedByConvention
+    internal class Interview : AggregateRootMappedByConvention, ISnapshotable<InterviewState>
     {
         #region Constants
 
@@ -32,11 +33,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Guid questionnaireId;
         private long questionnaireVersion;
         private InterviewStatus status;
-        private readonly Dictionary<string, object> answers = new Dictionary<string, object>();
-        private readonly HashSet<string> disabledGroups = new HashSet<string>();
-        private readonly HashSet<string> disabledQuestions = new HashSet<string>();
-        private readonly Dictionary<string, int> propagatedGroupInstanceCounts = new Dictionary<string, int>();
-        private readonly HashSet<string> invalidAnsweredQuestions = new HashSet<string>();
+        private Dictionary<string, object> answers = new Dictionary<string, object>();
+        private HashSet<string> disabledGroups = new HashSet<string>();
+        private HashSet<string> disabledQuestions = new HashSet<string>();
+        private Dictionary<string, int> propagatedGroupInstanceCounts = new Dictionary<string, int>();
+        private HashSet<string> invalidAnsweredQuestions = new HashSet<string>();
 
         private void Apply(InterviewCreated @event)
         {
@@ -1263,6 +1264,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static string ConvertIdAndPropagationVectorToString(Guid id, int[] propagationVector)
         {
             return string.Format("{0:N}:{1}", id, string.Join("-", propagationVector));
+        }
+
+        public InterviewState CreateSnapshot()
+        {
+            return new InterviewState(questionnaireId, questionnaireVersion, status, answers, disabledGroups,
+                                      disabledQuestions, propagatedGroupInstanceCounts, invalidAnsweredQuestions);
+        }
+
+        public void RestoreFromSnapshot(InterviewState snapshot)
+        {
+            questionnaireId = snapshot.QuestionnaireId;
+            questionnaireVersion = snapshot.QuestionnaireVersion;
+            status = snapshot.Status;
+            answers = snapshot.Answers;
+            disabledGroups = snapshot.DisabledGroups;
+            disabledQuestions = snapshot.DisabledQuestions;
+            propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
+            invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
         }
     }
 }

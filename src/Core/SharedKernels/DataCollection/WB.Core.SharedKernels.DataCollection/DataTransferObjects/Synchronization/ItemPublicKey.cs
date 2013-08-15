@@ -36,10 +36,10 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
             return obj is ItemPublicKey && this == (ItemPublicKey)obj;
         }
+
         public override int GetHashCode()
         {
-            var vectoreHashCode = PropagationVector.Aggregate(0, (current, i) => current ^ i.GetHashCode());
-            return PublicKey.GetHashCode() ^ vectoreHashCode;
+            return ToString().GetHashCode();
         }
 
         public static bool operator ==(ItemPublicKey x, ItemPublicKey y)

@@ -121,6 +121,7 @@
     <Compile Include="Exceptions\InterviewException.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewState.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\ExpressionProcessor.cs" />
