@@ -6,6 +6,5 @@ namespace Core.Supervisor.Views
     {
         int TotalCount { get; set; }
         IEnumerable<T> Items { get; set; }
-        T ItemsSummary { get; set; }
     }
 }

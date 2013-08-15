@@ -184,17 +184,20 @@
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
-    <Compile Include="RavenIndexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
-    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
-    <Compile Include="RavenIndexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RavenIndexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
     <Compile Include="Views\Status\StatusViewInputModel.cs" />
     <Compile Include="Views\Status\StatusViewItem.cs" />
+    <Compile Include="Views\Survey\SurveysViewFactory.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
@@ -217,7 +220,6 @@
     <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
     <Compile Include="Views\Survey\SurveyUsersView.cs" />
-    <Compile Include="Views\Survey\SurveysViewFactory.cs" />
     <Compile Include="Views\Survey\SurveysInputModel.cs" />
     <Compile Include="Views\Survey\SurveysView.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />
@@ -284,6 +286,14 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

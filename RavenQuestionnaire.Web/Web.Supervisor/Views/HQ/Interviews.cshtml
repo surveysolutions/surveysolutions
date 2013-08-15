@@ -59,9 +59,7 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <span data-bind="with: Responsible">
-                        <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Id() }, text: Name"></a>
-                    </span>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td data-bind="text: Status"></td>
@@ -125,7 +123,7 @@
 
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Interview")';
-        var $surveysUrl = '@Url.Action("Surveys", "HQ")';
+        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
         var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })';
         var deleteInterviewUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "DeleteInterview" })';

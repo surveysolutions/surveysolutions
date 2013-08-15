@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Core.Supervisor.RavenIndexes;
 using Main.Core.Entities;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Summary

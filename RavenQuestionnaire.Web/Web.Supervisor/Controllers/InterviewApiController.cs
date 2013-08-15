@@ -45,10 +45,9 @@ namespace Web.Supervisor.Controllers
 
             if (data.Request != null)
             {
-                input.TemplateId = data.Request.TemplateId;
+                input.QuestionnaireId = data.Request.TemplateId;
                 input.ResponsibleId = data.Request.ResponsibleId;
-                input.StatusId = data.Request.StatusId;
-                input.OnlyNotAssigned = data.Request.OnlyAssigned;
+                input.Status = data.Request.Status;
             }
 
             return this.interviewViewFactory.Load(input);

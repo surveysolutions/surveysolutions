@@ -55,7 +55,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return GetType().Name; }
         }
 
-        public Type[] UsesViews { get; private set; }
+        public Type[] UsesViews {
+            get { return new Type[] { }; }
+        }
 
         public Type[] BuildsViews
         {

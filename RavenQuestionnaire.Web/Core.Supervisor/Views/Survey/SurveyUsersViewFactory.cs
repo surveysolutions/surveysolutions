@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Supervisor.DenormalizerStorageItem;
-using Core.Supervisor.RavenIndexes;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Views.Survey
 {
