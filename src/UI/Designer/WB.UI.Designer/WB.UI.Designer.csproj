@@ -235,8 +235,11 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
+    <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
+    <Compile Include="Models\QuestionnaireEditView.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -399,6 +402,7 @@
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\config.js" />
     <Content Include="Scripts\details\dataprimer.js" />
+    <Content Include="Scripts\details\model.sharePerson.js" />
     <Content Include="Scripts\details\model.statistic.js" />
     <Content Include="Scripts\details\datacontext.js" />
     <Content Include="Scripts\details\dataservice.js" />
@@ -540,6 +544,7 @@
     <Content Include="Views\Questionnaire\_QuestionDetails.cshtml" />
     <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
