@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
 
             return identifiersUsedInExpression
-                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdResolvingThisIdentifierOrThrow(identifier, questionId, validationExpression))
+                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdResolvingThisIdentifierOrThrow(identifier, questionId, validationExpression)).Distinct()
                 .ToList();
         }
 
