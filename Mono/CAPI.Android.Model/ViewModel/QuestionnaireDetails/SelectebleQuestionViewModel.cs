@@ -45,6 +45,16 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Answers = answers;
         }
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
+        
+        public override string AnswerString
+        {
+            get
+            {
+                var selectedAnswers = Answers.Where(a => a.Selected).Select(answer => answer.Title).ToList();
+                return string.Join(", ", selectedAnswers);
+            }
+        }
+
         public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
         {
             IList<AnswerViewModel> newAnswers = new List<AnswerViewModel>();

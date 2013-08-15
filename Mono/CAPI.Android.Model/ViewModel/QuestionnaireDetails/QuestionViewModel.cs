@@ -75,9 +75,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public bool Capital { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
-        public string AnswerString {
+
+        public virtual string AnswerString
+        {
             get { return (AnswerObject ?? "").ToString(); }
         }
+
         public object AnswerObject { get; private set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }

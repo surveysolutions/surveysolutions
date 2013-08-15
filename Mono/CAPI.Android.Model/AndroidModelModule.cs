@@ -34,7 +34,7 @@ namespace CAPI.Android.Core.Model
         public override void Load()
         {
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
-            var snapshotStore = new AndroidSnapshotStore();
+            var snapshotStore = new InMemoryEventStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
@@ -74,7 +74,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
             this.Bind<IBackup>()
-                .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore, snapshotStore,
+                .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore,
                                               bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore));
 
         }

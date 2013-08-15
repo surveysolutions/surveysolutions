@@ -185,18 +185,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public void UpdatePropagateGroupsByTemplate(Guid publicKey, int[] outerScopePropagationVector, int count)
         {
-            var propagatedGroupsCount = this.Screens.Keys.Count(id => id.PublicKey == publicKey);
+            var propagatedGroupsCount = this.Screens.Keys.Count(id => id.PublicKey == publicKey) - 1;
             if (propagatedGroupsCount == count)
                 return;
             for (int i = 0; i < Math.Abs(count - propagatedGroupsCount); i++)
             {
-                if (propagatedGroupsCount > count)
+                if (propagatedGroupsCount < count)
                 {
                     AddPropagateGroup(publicKey, outerScopePropagationVector, propagatedGroupsCount + i);
                 }
                 else
                 {
-                    RemovePropagatedGroup(publicKey, outerScopePropagationVector, propagatedGroupsCount - i);
+                    RemovePropagatedGroup(publicKey, outerScopePropagationVector, propagatedGroupsCount - i - 1);
                 }
             }
         }

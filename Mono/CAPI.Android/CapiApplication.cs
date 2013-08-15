@@ -124,6 +124,7 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
            
         }
 
