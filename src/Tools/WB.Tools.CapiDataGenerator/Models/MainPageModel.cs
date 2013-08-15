@@ -22,7 +22,10 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CapiDataGenerator
 {
@@ -392,12 +395,8 @@ namespace CapiDataGenerator
             for (int z = 0; z < statusesCount; z++)
             {
                 var qId = questionnaires.ElementAt(_rand.Next(questionnaires.Count()));
-                commandService.Execute(new ChangeStatusCommand()
-                {
-                    CompleteQuestionnaireId = qId,
-                    Responsible = new UserLight(Guid.NewGuid(), string.Empty),
-                    Status = SurveyStatus.Complete
-                });
+                commandService.Execute(new CompleteInterviewCommand(qId,Guid.NewGuid()));
+
 
                 UpdateProgress();
                 LogStatus("change statuses", z, statusesCount);
@@ -413,11 +412,10 @@ namespace CapiDataGenerator
                 {
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
                     var isAutoQuestion = question is IAutoPropagate;
-                    commandService.Execute(new SetCommentCommand(completeQuestionnaireId: qId,
-                        questionPublicKey: question.PublicKey, 
-                        propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey,
-                        comments: "auto comment",
-                        user: new UserLight(Guid.NewGuid(), string.Empty)));
+                    commandService.Execute(new CommentAnswerCommand(qId, Guid.NewGuid(),
+                                                                    question.PublicKey,
+                                                                    new int[0], 
+                                                                    "auto comment"));
 
                     UpdateProgress();
                     LogStatus("set comments", (j*commentsCount) + z, questionnaires.Count*commentsCount);
@@ -468,14 +466,21 @@ namespace CapiDataGenerator
 
                     commandService.Execute(new CreateCompleteQuestionnaireCommand(completeDocument.PublicKey,
                         template.PublicKey, _headquarterUser));
-                    commandService.Execute(new ChangeAssignmentCommand(completeDocument.PublicKey, completeDocument.Creator));
-                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = completeDocument.PublicKey, Status = SurveyStatus.Unassign, Responsible = completeDocument.Creator });
-                    commandService.Execute(new ChangeAssignmentCommand(completeDocument.PublicKey, interviewer));
-                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = completeDocument.PublicKey, Status = SurveyStatus.Initial, Responsible = interviewer });
 
+                    commandService.Execute(new AssignSupervisorCommand(completeDocument.PublicKey, _headquarterUser.Id,
+                                                                       SelectedSupervisor.UserId));
+
+                    commandService.Execute(new AssignInterviewerCommand(completeDocument.PublicKey, SelectedSupervisor.UserId, interviewer.Id));
+                    
                     questionnaires.Add(completeDocument.PublicKey);
 
-                    commandService.Execute(new CreateNewAssigment(completeDocument));
+                    commandService.Execute(new SynchronizeInterviewCommand(completeDocument.PublicKey, interviewer.Id,
+                                                                           new InterviewSynchronizationDto(
+                                                                               completeDocument.PublicKey,
+                                                                               InterviewStatus.InterviewerAssigned,
+                                                                               interviewer.Id,
+                                                                               completeDocument.TemplateId, null, null,
+                                                                               null, null, null)));
 
                     UpdateProgress();
                 }
@@ -494,10 +499,11 @@ namespace CapiDataGenerator
 
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
                     var isAutoQuestion = question is IAutoPropagate;
-                    commandService.Execute(new SetAnswerCommand(completeQuestionnaireId: qId,
+                    throw new NotImplementedException("implement new version of set answer");
+                   /* commandService.Execute(new SetAnswerCommand(completeQuestionnaireId: qId,
                         questionPublicKey: question.PublicKey, сompleteAnswers: GetDummyCompleteAnswers(question),
                         сompleteAnswerValue: GetDummyAnswer(question),
-                        propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey));
+                        propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey));*/
 
                     UpdateProgress();
                     LogStatus("answer questions", (j*answersCount) + z, questionnaires.Count*answersCount);

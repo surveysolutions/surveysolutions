@@ -147,7 +147,8 @@ namespace CapiDataGenerator
         {
             var dashboardeventHandler =
                 new DashboardDenormalizer(Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                                          Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
+                                          Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
+                                          Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDocument>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireStatusChanged));
         }

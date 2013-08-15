@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Ninject;
 using Ninject.Activation;
+using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 

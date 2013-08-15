@@ -3,10 +3,11 @@ using System.Linq;
 using Core.Supervisor.DenormalizerStorageItem;
 using Machine.Specifications;
 using Raven.Client.Embedded;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests
 {
-    [Subject(typeof(Supervisor.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMember))]
+    [Subject(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember))]
     internal class when_applying_index_to_8_misc_approve_statuses : RavenIndexesTestContext
     {
         Establish context = () =>
@@ -24,7 +25,7 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
         };
 
         Because of = () =>
-            resultItems = QueryUsingIndex<SummaryItem>(documentStore, typeof(Supervisor.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMember));
+            resultItems = QueryUsingIndex<SummaryItem>(documentStore, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember));
 
         It should_return_7_line_items = () =>
             resultItems.Length.ShouldEqual(7);
