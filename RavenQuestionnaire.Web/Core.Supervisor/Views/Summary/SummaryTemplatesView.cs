@@ -4,10 +4,6 @@
 
     public class SummaryTemplatesView
     {
-        #region Public Properties
-
         public IEnumerable<SummaryTemplateViewItem> Items { get; set; }
-
-        #endregion
     }
 }

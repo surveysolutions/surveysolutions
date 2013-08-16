@@ -2,6 +2,7 @@
 using System.Linq;
 using Core.Supervisor.Views;
 using Core.Supervisor.Views.Interviewer;
+using Core.Supervisor.Views.Interviews;
 using Core.Supervisor.Views.Status;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
@@ -27,15 +28,17 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
+        private readonly IViewFactory<TeamInterviewsInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory;
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory)
+            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory, IViewFactory<TeamInterviewsInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory)
             : base(commandService, provider, logger)
         {
             this.surveyUsersViewFactory = surveyUsersViewFactory;
             this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.interviewersFactory = interviewersFactory;
+            this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
         }
 
         public ActionResult Index()
@@ -75,7 +78,8 @@ namespace Web.Supervisor.Controllers
         {
             var statuses = StatusHelper.SurveyStatusViewItems();
             var viewerId = this.GlobalInfo.GetCurrentUser().Id;
-            var viewerStatus = ViewerStatus.Supervisor;
+
+            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamInterviewsInputModel(viewerId));
 
             return new DocumentFilter
             {
@@ -84,10 +88,8 @@ namespace Web.Supervisor.Controllers
                         UserId = u.UserId,
                         UserName = u.UserName
                     }),
-                Responsibles =
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
-                Templates =
-                    this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(viewerId, viewerStatus)).Items,
+                Responsibles = usersAndQuestionnaires.Users,
+                Templates = usersAndQuestionnaires.Questionnaires,
                 Statuses = statuses
             };
         }
