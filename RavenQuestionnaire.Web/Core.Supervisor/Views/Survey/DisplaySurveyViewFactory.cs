@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.View.Group;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
@@ -29,11 +32,6 @@ namespace Core.Supervisor.Views.Survey
 
         public SurveyScreenView Load(DisplayViewInputModel input)
         {
-            if (input.CompleteQuestionnaireId == Guid.Empty)
-            {
-                return null;
-            }
-
             var doc = this.interviewStore.GetById(input.CompleteQuestionnaireId);
 
             if (doc == null || doc.IsDeleted)
@@ -48,10 +46,7 @@ namespace Core.Supervisor.Views.Survey
             {
                 input.CurrentGroupPublicKey = doc.InterviewId;
             }
-
-        /*    var rout = new ScreenWithRout(questionnarie, input.CurrentGroupPublicKey, input.PropagationKey,
-                                   QuestionScope.Supervisor);
-            var screenView = new ScreenNavigationView(rout.MenuItems, rout.Navigation);*/
+            var screenMenu = BuildScreenMenu(questionnarie);
             var result = new SurveyScreenView();
 
             result.User = input.User;
@@ -60,8 +55,26 @@ namespace Core.Supervisor.Views.Survey
             result.Title = questionnarie.Title;
             result.Description = questionnarie.Description;
             result.Status = SurveyStatus.Initial;
-         //   result.Navigation = screenView;
+            result.Navigation = new ScreenNavigationView(screenMenu, null);
             return result;
+        }
+
+        private List<DetailsMenuItem> BuildScreenMenu(QuestionnaireDocument questionnarie)
+        {
+            var menu = new List<DetailsMenuItem>();
+            foreach (var group in questionnarie.Children.OfType<IGroup>())
+            {
+                var menuItem = new DetailsMenuItem();
+
+                menuItem.GroupText = group.Title;
+                menuItem.Description = group.Description;
+                menuItem.Key = new ScreenKey(group.PublicKey, null, group.Propagated);
+                menuItem.Totals=new Counter();
+                
+                menu.Add(menuItem);
+            }
+
+            return menu;
         }
     }
 }

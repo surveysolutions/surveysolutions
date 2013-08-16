@@ -8,12 +8,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewQuestion
     {
-        public InterviewQuestion(Guid id)
+        public InterviewQuestion()
         {
-            Id = id;
             Valid = true;
             Enabled = true;
             Flagged = false;
+        }
+        public InterviewQuestion(Guid id):this()
+        {
+            Id = id;
         }
 
         public InterviewQuestion(Guid id, object answer, string comments, bool valid, bool enabled, bool flagged)
