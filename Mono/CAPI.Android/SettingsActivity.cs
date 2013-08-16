@@ -165,11 +165,11 @@ namespace CAPI.Android
                     {
                         alert.SetPositiveButton("Yes", btnUpdateConfirmed_Click);
                         alert.SetNegativeButton("No", btnUpdateDeclined_Click);
-                        alert.SetMessage("New version exists. Would you like to update?");
+                        alert.SetMessage("New version exists. Would you like to download and update application?");
                     }
                     else
                     {
-                        alert.SetMessage("You have latest version");
+                        alert.SetMessage("You have the latest version of application.");
                         alert.SetNegativeButton("Close", btnUpdateDeclined_Click);
                     }
 
