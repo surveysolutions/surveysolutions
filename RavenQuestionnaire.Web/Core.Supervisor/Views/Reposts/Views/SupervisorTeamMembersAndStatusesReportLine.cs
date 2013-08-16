@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Supervisor.Views.Reposts.Views
 {
-    public class HeadquarterSurveysAndStatusesReportLine : ReportLineCounters
+    public class SupervisorTeamMembersAndStatusesReportLine : ReportLineCounters
     {
-        public int CreatedCount { get; set; }
-
-        public string QuestionnaireTitle { get; set; }
+        public string ResponsibleName { get; set; }
     }
 }

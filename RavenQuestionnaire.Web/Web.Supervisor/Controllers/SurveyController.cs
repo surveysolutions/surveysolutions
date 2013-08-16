@@ -64,7 +64,7 @@ namespace Web.Supervisor.Controllers
             return this.RedirectToAction("Index");
         }
 
-        public ActionResult Summary()
+        public ActionResult TeamMembersAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Summary;
             return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(

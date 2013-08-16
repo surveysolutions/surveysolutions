@@ -47,13 +47,14 @@
         var commands = ko.utils.arrayMap(selectedRawInterviews, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON({
-                UserId: user.UserId,
-                InterviewId: item.InterviewId
+                InterviewerId: user.UserId,
+                InterviewId: item.InterviewId,
+                UserId: user.UserId
             });
         });
         
         var command = {
-            type: "AssignInterviewToUserCommand",
+            type: "AssignInterviewerCommand",
             commands:  commands
         };
         
@@ -67,9 +68,9 @@
                 if (data.status == "ok") {
                     ko.utils.arrayFilter(selectedRawInterviews, function(item) {
                         item.IsSelected(false);
-                        item.Responsible.Id(user.UserId);
-                        item.Responsible.Name(user.UserName);
-                        item.Status("Initial");
+                        item.ResponsibleId(user.UserId);
+                        item.ResponsibleName(user.UserName);
+                        item.Status("InterviewerAssigned");
                     });
                 }
                 if (data.status == "error") {

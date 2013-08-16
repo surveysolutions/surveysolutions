@@ -20,17 +20,69 @@ namespace Web.Supervisor.Controllers
     {
         private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView> headquarterSurveysAndStatusesReport;
         private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView> headquarterSupervisorsAndStatusesReport;
-
+        private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView> supervisorTeamMembersAndStatusesReport;
+        private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView> supervisorSurveysAndStatusesReport;
         public ReportDataApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
             IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView> headquarterSurveysAndStatusesReport,
-            IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView> headquarterSupervisorsAndStatusesReport)
+            IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView> headquarterSupervisorsAndStatusesReport, 
+            IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView> supervisorTeamMembersAndStatusesReport, 
+            IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView> supervisorSurveysAndStatusesReport)
+
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
             this.headquarterSupervisorsAndStatusesReport = headquarterSupervisorsAndStatusesReport;
+            this.supervisorTeamMembersAndStatusesReport = supervisorTeamMembersAndStatusesReport;
+            this.supervisorSurveysAndStatusesReport = supervisorSurveysAndStatusesReport;
+        }
+
+        [HttpPost]
+        public SupervisorTeamMembersAndStatusesReportView SupervisorTeamMembersAndStatusesReport(SummaryListViewModel data)
+        {
+            var input = new SupervisorTeamMembersAndStatusesReportInputModel(GlobalInfo.GetCurrentUser().Id);
+
+            if (data != null)
+            {
+                input.Orders = data.SortOrder;
+                if (data.Pager != null)
+                {
+                    input.Page = data.Pager.Page;
+                    input.PageSize = data.Pager.PageSize;
+                }
+
+                if (data.Request != null)
+                {
+                    input.TemplateId = data.Request.TemplateId;
+                }
+            }
+
+            return this.supervisorTeamMembersAndStatusesReport.Load(input);
+        }
+
+        [HttpPost]
+        public SupervisorSurveysAndStatusesReportView SupervisorSurveysAndStatusesReport (SurveyListViewModel data)
+        {
+            var input = new SupervisorSurveysAndStatusesReportInputModel(GlobalInfo.GetCurrentUser().Id);
+
+            if (data != null)
+            {
+                input.Orders = data.SortOrder;
+                if (data.Pager != null)
+                {
+                    input.Page = data.Pager.Page;
+                    input.PageSize = data.Pager.PageSize;
+                }
+
+                if (data.Request != null)
+                {
+                    input.UserId = data.Request.UserId;
+                }
+            }
+
+            return this.supervisorSurveysAndStatusesReport.Load(input);
         }
 
         [HttpPost]

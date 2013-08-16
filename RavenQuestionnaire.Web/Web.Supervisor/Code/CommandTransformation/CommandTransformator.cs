@@ -5,13 +5,14 @@ using System.Linq;
 using System.Web;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace Web.Supervisor.Code.CommandTransformation
 {
     public class CommandTransformator
     {
-        public ICommand TransformCommnadIfNeeded(string type, ICommand command)
+        public ICommand TransformCommnadIfNeeded(string type, ICommand command, IGlobalInfoProvider globalInfo)
         {
             switch (type)
             {
@@ -28,6 +29,9 @@ namespace Web.Supervisor.Code.CommandTransformation
                     break;
                 case "AnswerTextQuestionCommand":
                     break;
+                case "AssignInterviewerCommand":
+                    var assignCommand = (AssignInterviewerCommand) command;
+                    return new AssignInterviewerCommand(assignCommand.InterviewId, globalInfo.GetCurrentUser().Id, assignCommand.InterviewerId);
             }
 
             return command;
