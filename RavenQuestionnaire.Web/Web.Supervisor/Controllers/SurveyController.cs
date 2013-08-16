@@ -68,16 +68,16 @@ namespace Web.Supervisor.Controllers
         public ActionResult Status()
         {
             ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(SurveyStatusViewItems());
+            return this.View(StatusHelper.SurveyStatusViewItems());
         }
 
         private DocumentFilter Filters()
         {
-            var statuses = SurveyStatusViewItems();
+            var statuses = StatusHelper.SurveyStatusViewItems();
             var viewerId = this.GlobalInfo.GetCurrentUser().Id;
             var viewerStatus = ViewerStatus.Supervisor;
 
-            return new DocumentFilter()
+            return new DocumentFilter
             {
                 Users = this.interviewersFactory.Load(new InterviewersInputModel(viewerId){PageSize = int.MaxValue}).Items.Where(u => !u.IsLocked).Select(u => new SurveyUsersViewItem()
                     {
@@ -91,43 +91,5 @@ namespace Web.Supervisor.Controllers
                 Statuses = statuses
             };
         }
-
-        private IEnumerable<SurveyStatusViewItem> SurveyStatusViewItems()
-        {
-            var statuses = new List<SurveyStatusViewItem>()
-                {
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Unassign.PublicId,
-                            StatusName = SurveyStatus.Unassign.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Initial.PublicId,
-                            StatusName = SurveyStatus.Initial.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Redo.PublicId,
-                            StatusName = SurveyStatus.Redo.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Complete.PublicId,
-                            StatusName = SurveyStatus.Complete.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Error.PublicId,
-                            StatusName = SurveyStatus.Error.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Approve.PublicId,
-                            StatusName = SurveyStatus.Approve.Name
-                        }
-                };
-            return statuses;
-        }
-    }
+     }
 }

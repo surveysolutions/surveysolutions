@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Supervisor.DenormalizerStorageItem;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Views.Survey
@@ -15,56 +16,44 @@ namespace Core.Supervisor.Views.Survey
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        private readonly IQueryableReadSideRepositoryReader<SummaryItem> summary;
-
-        public SurveyUsersViewFactory(IQueryableReadSideRepositoryReader<SummaryItem> summary, IReadSideRepositoryIndexAccessor indexAccessor)
+        public SurveyUsersViewFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.summary = summary;
             this.indexAccessor = indexAccessor;
         }
 
         public SurveyUsersView Load(SurveyUsersViewInputModel input)
         {
-           /* return this.summary.Query(
-                _ =>
-                {*/
-            IEnumerable<SummaryItem> items=Enumerable.Empty<SummaryItem>();
-                    if (input.ViewerStatus == ViewerStatus.Headquarter)
-                    {
-                        items = indexAccessor
-                            .Query<SummaryItem>(typeof(HeadquarterReportsSurveysAndStatusesGroupByTeam).Name)
-                            .Where(x => x.ResponsibleId != Guid.Empty);
-                    }
-                    else if (input.ViewerStatus == ViewerStatus.Supervisor)
-                    {
-                        items = indexAccessor
-                            .Query<SummaryItem>(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Name)
-                            .Where(x => x.ResponsibleSupervisorId == input.ViewerId
-                                && x.ResponsibleId != Guid.Empty);
-                    }
+            var items = Enumerable.Empty<StatisticsLineGroupedByUserAndTemplate>();
+            if (input.ViewerStatus == ViewerStatus.Headquarter)
+            {
+                var indexName = typeof (HeadquarterReportsSurveysAndStatusesGroupByTeam).Name;
+                items = indexAccessor
+                    .Query<StatisticsLineGroupedByUserAndTemplate>(indexName)
+                    .Where(x => x.ResponsibleId != Guid.Empty);
+            }
+            else if (input.ViewerStatus == ViewerStatus.Supervisor)
+            {
+                var indexName = typeof (SupervisorReportsSurveysAndStatusesGroupByTeamMember).Name;
+                items = indexAccessor
+                    .Query<StatisticsLineGroupedByUserAndTemplate>(indexName)
+                    .Where(x => x.TeamLeadId == input.ViewerId && x.ResponsibleId != Guid.Empty);
+            }
 
-                    return new SurveyUsersView()
-                    {
-                        Items =
-                            items.ToList().Distinct(new SurveyItemByUserNameComparer())
-                                .Select(
-                                    x =>
-                                        new SurveyUsersViewItem()
-                                        {
-                                            UserId =
-                                                x.ResponsibleId,
-                                            UserName =
-                                                x.ResponsibleName
-                                        })
-                    };
-              //  });
-
+            return new SurveyUsersView
+            {
+                Items = items.ToList().Distinct(new SurveyItemByUserNameComparer())
+                        .Select(x => new SurveyUsersViewItem
+                                {
+                                    UserId = x.ResponsibleId,
+                                    UserName = x.ResponsibleName
+                                })
+            };
         }
     }
 
-    public class SurveyItemByUserNameComparer : IEqualityComparer<SummaryItem>
+    public class SurveyItemByUserNameComparer : IEqualityComparer<StatisticsLineGroupedByUserAndTemplate>
     {
-        public bool Equals(SummaryItem x, SummaryItem y)
+        public bool Equals(StatisticsLineGroupedByUserAndTemplate x, StatisticsLineGroupedByUserAndTemplate y)
         {
             if (Object.ReferenceEquals(y, null)) return false;
 
@@ -73,7 +62,7 @@ namespace Core.Supervisor.Views.Survey
             return x.ResponsibleName.Equals(y.ResponsibleName);
         }
 
-        public int GetHashCode(SummaryItem obj)
+        public int GetHashCode(StatisticsLineGroupedByUserAndTemplate obj)
         {
             return obj.ResponsibleName.GetHashCode();
         }

@@ -300,6 +300,7 @@
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
+    <Compile Include="Controllers\StatusHelper.cs" />
     <Compile Include="Controllers\SummaryApiController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
