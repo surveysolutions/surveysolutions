@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Core.Supervisor.Views;
 using Core.Supervisor.Views.Interview;
+using Core.Supervisor.Views.Interviews;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Commands.Questionnaire.Completed;
@@ -21,15 +22,19 @@ namespace Web.Supervisor.Controllers
     public class InterviewApiController : BaseApiController
     {
         private readonly IViewFactory<InterviewInputModel, InterviewView> interviewViewFactory;
+        private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<InterviewInputModel, InterviewView> interviewViewFactory)
+            IViewFactory<InterviewInputModel, InterviewView> interviewViewFactory,
+            IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.interviewViewFactory = interviewViewFactory;
+            this.teamInterviewViewFactory = teamInterviewViewFactory;
         }
 
-        public InterviewView Interviews(DocumentListViewModel data)
+        [HttpPost]
+        public InterviewView AllInterviews(DocumentListViewModel data)
         {
             var input = new InterviewInputModel(viewerId: this.GlobalInfo.GetCurrentUser().Id,
                 viewerStatus: this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)
@@ -51,6 +56,30 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.interviewViewFactory.Load(input);
+        }
+
+        [HttpPost]
+        public TeamInterviewsView TeamInterviews(DocumentListViewModel data)
+        {
+            var input = new TeamInterviewsInputModel(viewerId: this.GlobalInfo.GetCurrentUser().Id)
+            {
+                Orders = data.SortOrder
+            };
+
+            if (data.Pager != null)
+            {
+                input.Page = data.Pager.Page;
+                input.PageSize = data.Pager.PageSize;
+            }
+
+            if (data.Request != null)
+            {
+                input.QuestionnaireId = data.Request.TemplateId;
+                input.ResponsibleId = data.Request.ResponsibleId;
+                input.Status = data.Request.Status;
+            }
+
+            return this.teamInterviewViewFactory.Load(input);
         }
 
         [HttpPost]
