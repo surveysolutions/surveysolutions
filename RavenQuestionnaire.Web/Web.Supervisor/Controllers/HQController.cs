@@ -71,8 +71,8 @@ namespace Web.Supervisor.Controllers
                 {
                     Questionnaires =
                         this.questionnaireBrowseViewFactory.Load(
-                            new QuestionnaireBrowseInputModel()),
-                    Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor })
+                            new QuestionnaireBrowseInputModel(){PageSize = 1024}),
+                    Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = 1024 })
                 };
             return this.View(model);
 
