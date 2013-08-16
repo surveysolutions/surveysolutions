@@ -26,6 +26,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         }
 
         public string ResponsibleName { get; set; }
+
+        public Guid TeamLeadId { get; set; }
+        public string TeamLeadName { get; set; }
+
         public UserRoles ResponsibleRole { get; set; }
         public DateTime UpdateDate { get; set; }
         public Dictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
