@@ -25,7 +25,8 @@ namespace Main.Core.EventHandlers
                     ModificationDate = evnt.Payload.CreationDate,
                     ClientInstanceKey = evnt.Payload.ClientInstanceKey,
                     PublicKey = evnt.Payload.Id,
-                    DeviceId = evnt .Payload.DeviceId
+                    DeviceId = evnt .Payload.DeviceId,
+                    SupervisorKey = evnt.Payload.SupervisorKey
                 };
 
             this.devices.Store(doc, doc.PublicKey);

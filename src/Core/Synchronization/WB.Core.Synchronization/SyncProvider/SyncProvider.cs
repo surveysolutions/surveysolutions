@@ -1,20 +1,15 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Commands.Sync;
-using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
     using Main.Core.Documents;
-    using Newtonsoft.Json;
-    
-    using Main.Core.Events;
 
     internal class SyncProvider : ISyncProvider
     {
@@ -105,8 +100,18 @@ namespace WB.Core.Synchronization.SyncProvider
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    //probably device was init with other supervisor 
+                    //probably device has been syncronized with other supervisor application
                     throw new ArgumentException("Unknown device.");
+                }
+
+                if (device.SupervisorKey != identifier.SupervisorPublicKey)
+                {
+                    var package = new HandshakePackage
+                        {
+                            IsErrorOccured = true,
+                            ErrorMessage = "Device assigned to another Supervisor."
+                        };
+                    return package;
                 }
 
                 //TODO: check device validity
@@ -117,7 +122,8 @@ namespace WB.Core.Synchronization.SyncProvider
             {
                 ClientRegistrationKey = Guid.NewGuid();
 
-                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, 
+                    identifier.ClientDeviceKey, identifier.ClientInstanceKey, identifier.SupervisorPublicKey));
             }
 
             Guid syncActivityKey = Guid.NewGuid();

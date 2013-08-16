@@ -14,15 +14,15 @@
         public string DeviceId { get; set; }
     
         public Guid ClientInstanceKey { get; set; }
-    
-        //public string DeviceType;
 
-        public CreateClientDeviceCommand(Guid id, string deviceId, Guid clientInstanceKey/*, string deviceType*/)
+        public Guid SupervisorKey { get; set; }
+        
+        public CreateClientDeviceCommand(Guid id, string deviceId, Guid clientInstanceKey, Guid supervisorKey)
         {
             this.Id = id;
             this.DeviceId = deviceId;
             this.ClientInstanceKey = clientInstanceKey;
-            //this.DeviceType = deviceType;
+            this.SupervisorKey = supervisorKey;
         }
     }
 }
