@@ -65,6 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     UpdateDate = evnt.EventTimeStamp,
                     QuestionnaireId = evnt.Payload.QuestionnaireId,
                     QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
+                    QuestionnaireTitle = questionnaires.GetById(evnt.Payload.QuestionnaireId).Title,
                     ResponsibleId = evnt.Payload.UserId, // Creator is responsible
                     ResponsibleName = this.users.GetById(evnt.Payload.UserId).UserName,
                     ResponsibleRole = responsible.Roles.FirstOrDefault()
@@ -102,9 +103,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
 
+            var supervisorName = this.users.GetById(evnt.Payload.SupervisorId).UserName;
+
             interview.ResponsibleId = evnt.Payload.SupervisorId;
-            interview.ResponsibleName = this.users.GetById(evnt.Payload.SupervisorId).UserName;
+            interview.ResponsibleName = supervisorName;
             interview.ResponsibleRole = UserRoles.Supervisor;
+            interview.TeamLeadId = evnt.Payload.SupervisorId;
+            interview.TeamLeadName = supervisorName;
 
             this.interviews.Store(interview, interview.InterviewId);
         }
