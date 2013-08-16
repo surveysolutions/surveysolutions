@@ -8,8 +8,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewData : InterviewBrief
     {
-        public UserRoles ResponsibleRole { get;  set; }
-        public DateTime UpdateDate { get;  set; }
-        public IDictionary<string, IList<InterviewQuestion>> Levels { get; set; }
+        public InterviewData()
+        {
+            Levels = new Dictionary<string, InterviewLevel>();
+        }
+
+        public UserRoles ResponsibleRole { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public IDictionary<string, InterviewLevel> Levels { get; set; }
     }
 }

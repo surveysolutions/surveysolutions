@@ -185,12 +185,24 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
-    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesFactory.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
-    <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
-    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamInterviewsView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesView.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
@@ -239,9 +251,7 @@
     <Compile Include="Views\Survey\DetailsMenuItem.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
     <Compile Include="Views\Survey\ScreenWithRout.cs" />
-    <Compile Include="Views\Survey\SupervisorScreenSupplier.cs" />
     <Compile Include="Views\Survey\DisplaySurveyViewFactory.cs" />
-    <Compile Include="Views\Survey\ISurveyScreenSupplier.cs" />
     <Compile Include="Views\Survey\SurveyScreenView.cs" />
     <Compile Include="Views\Survey\ScreenNavigationView.cs" />
     <Compile Include="Views\Survey\ChangeStatusHistoryView.cs" />
