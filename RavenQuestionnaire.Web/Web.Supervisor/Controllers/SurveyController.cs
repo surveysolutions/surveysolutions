@@ -7,6 +7,7 @@ using Core.Supervisor.Views.Status;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.User;
+using Core.Supervisor.Views.UsersAndQuestionnaires;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -28,11 +29,13 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<TeamInterviewsInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory;
+        private readonly IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory;
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory, IViewFactory<TeamInterviewsInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory)
+            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory, 
+            IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
+            IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory)
             : base(commandService, provider, logger)
         {
             this.surveyUsersViewFactory = surveyUsersViewFactory;
@@ -61,7 +64,7 @@ namespace Web.Supervisor.Controllers
             return this.RedirectToAction("Index");
         }
 
-        public ActionResult Summary()
+        public ActionResult TeamMembersAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Summary;
             return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
@@ -79,7 +82,7 @@ namespace Web.Supervisor.Controllers
             var statuses = StatusHelper.SurveyStatusViewItems();
             var viewerId = this.GlobalInfo.GetCurrentUser().Id;
 
-            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamInterviewsInputModel(viewerId));
+            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(viewerId));
 
             return new DocumentFilter
             {

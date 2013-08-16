@@ -205,12 +205,21 @@
     </Compile>
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorTeamMembersAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\InputModels\SupervisorSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
     <Compile Include="Views\Status\StatusFactory.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
     <Compile Include="Views\Status\StatusViewInputModel.cs" />
@@ -289,6 +298,12 @@
     <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
     <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />

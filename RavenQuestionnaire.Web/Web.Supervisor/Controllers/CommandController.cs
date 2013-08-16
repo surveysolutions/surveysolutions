@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Ncqrs.Commanding;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Shared.Web;
@@ -18,12 +19,14 @@ namespace Web.Supervisor.Controllers
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
+        private readonly IGlobalInfoProvider globalInfo;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, IGlobalInfoProvider globalInfo)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.logger = logger;
+            this.globalInfo = globalInfo;
         }
 
         [HttpPost]
@@ -35,7 +38,8 @@ namespace Web.Supervisor.Controllers
                 try
                 {
                     var concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                    this.commandService.Execute(concreteCommand);
+                    var transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand, globalInfo);
+                    this.commandService.Execute(transformedCommand);
                 }
                 catch (Exception e)
                 {
@@ -61,7 +65,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                var transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand);
+                var transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand, globalInfo);
                 this.commandService.Execute(transformedCommand);
             }
             catch (Exception e)
