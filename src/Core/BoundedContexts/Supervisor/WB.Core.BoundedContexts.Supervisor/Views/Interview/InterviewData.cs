@@ -15,6 +15,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 
         public UserRoles ResponsibleRole { get; set; }
         public DateTime UpdateDate { get; set; }
-        public IDictionary<string, InterviewLevel> Levels { get; set; }
+        public Dictionary<string, InterviewLevel> Levels { get; set; }
     }
 }

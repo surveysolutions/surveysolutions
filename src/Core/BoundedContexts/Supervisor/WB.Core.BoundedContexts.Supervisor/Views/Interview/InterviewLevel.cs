@@ -12,10 +12,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         {
             ScopeId = scopeId;
             Questions = new List<InterviewQuestion>();
+            DisabledGroups = new HashSet<Guid>();
         }
 
         public Guid ScopeId { get; private set; }
-        public IList<InterviewQuestion> Questions { get; private set; }
-
+        public List<InterviewQuestion> Questions { get; private set; }
+        public HashSet<Guid> DisabledGroups { get; private set; }
     }
 }

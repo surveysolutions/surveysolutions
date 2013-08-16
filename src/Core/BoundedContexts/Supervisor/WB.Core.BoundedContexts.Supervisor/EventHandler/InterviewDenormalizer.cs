@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 ResponsibleId = evnt.Payload.UserId, // Creator is responsible
                 ResponsibleRole = responsible.Roles.FirstOrDefault()
             };
-
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(new int[0]),new InterviewLevel(evnt.EventSourceId));
             this.interviews.Store(interview, interview.InterviewId);
         }
 
@@ -188,12 +188,20 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
-            throw new NotImplementedException();
+            PreformActionOnLevel(evnt.EventSourceId, evnt.Payload.PropagationVector, (level) =>
+            {
+                if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    level.DisabledGroups.Add(evnt.Payload.GroupId);
+            });
         }
 
         public void Handle(IPublishedEvent<GroupEnabled> evnt)
         {
-            throw new NotImplementedException();
+            PreformActionOnLevel(evnt.EventSourceId, evnt.Payload.PropagationVector, (level) =>
+                {
+                    if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                        level.DisabledGroups.Remove(evnt.Payload.GroupId);
+                });
         }
 
         public void Handle(IPublishedEvent<QuestionDisabled> evnt)
@@ -222,6 +230,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private string CreateLevelIdFromPropagationVector(int[] vector)
         {
+            if (vector.Length == 0)
+                return "#";
             return string.Join(",", vector);
         }
 
@@ -245,21 +255,29 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             PreformActionOnQuestion(interviewId, vector, questionId, (question) => { question.Valid = valid; });
         }
 
-        private void PreformActionOnQuestion(Guid interviewId, int[] vector, Guid questionId, Action<InterviewQuestion> action)
+        private void PreformActionOnLevel(Guid interviewId, int[] vector, Action<InterviewLevel> action)
         {
             var interview = this.interviews.GetById(interviewId);
             var levelId = CreateLevelIdFromPropagationVector(vector);
-            var questionsAtTheLevel = interview.Levels[levelId];
-            var answeredQuestion = questionsAtTheLevel.Questions.First(q => q.Id == questionId);
-            if (answeredQuestion == null)
-            {
-                answeredQuestion = new InterviewQuestion(questionId);
-                questionsAtTheLevel.Questions.Add(answeredQuestion);
-            }
-
-            action(answeredQuestion);
-
+            action(interview.Levels[levelId]);
             this.interviews.Store(interview, interview.InterviewId);
+        }
+
+
+        private void PreformActionOnQuestion(Guid interviewId, int[] vector, Guid questionId,
+                                             Action<InterviewQuestion> action)
+        {
+            PreformActionOnLevel(interviewId, vector, (questionsAtTheLevel) =>
+                {
+                    var answeredQuestion = questionsAtTheLevel.Questions.FirstOrDefault(q => q.Id == questionId);
+                    if (answeredQuestion == null)
+                    {
+                        answeredQuestion = new InterviewQuestion(questionId);
+                        questionsAtTheLevel.Questions.Add(answeredQuestion);
+                    }
+
+                    action(answeredQuestion);
+                });
         }
 
         private void RemoveLevelFromInterview(InterviewData interview, string levelKey)
@@ -298,6 +316,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
+#warning create better way of collection scoupes
             var questionnarie = questionnries.GetById(interview.QuestionnaireId);
             var autoPropagatebleQuestions =
                 questionnarie.Find<IAutoPropagateQuestion>(
