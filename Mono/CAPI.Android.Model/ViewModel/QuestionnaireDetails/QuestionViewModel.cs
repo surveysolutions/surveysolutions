@@ -45,39 +45,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 Status = Status | QuestionStatus.Answered;
 
         }
-
-        protected QuestionViewModel(
-           ItemPublicKey publicKey,
-           string text,
-           QuestionType questionType,
-           QuestionStatus status,
-           string instructions,
-           string comments,
-           bool mandatory,
-           bool capital,
-           object answerObject,
-           string validationMessage)
-        {
-            PublicKey = publicKey;
-            ValidationMessage = validationMessage;
-            Text = text;
-            QuestionType = questionType;
-            Capital = capital;
-            Instructions = instructions;
-            Comments = comments;
-            Mandatory = mandatory;
-            AnswerObject = answerObject;
-            Status = status;
-        }
         public ItemPublicKey PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public bool Capital { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
-        public string AnswerString {
+
+        public virtual string AnswerString
+        {
             get { return (AnswerObject ?? "").ToString(); }
         }
+
         public object AnswerObject { get; private set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }

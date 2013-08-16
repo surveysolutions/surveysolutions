@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Supervisor.DenormalizerStorageItem;
-using Core.Supervisor.RavenIndexes;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Tests.RavenIndexes
 {

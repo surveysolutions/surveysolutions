@@ -20,11 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public bool CompareWithVector(int[] vector)
         {
-            if (PropagationVector == null && vector == null)
-                return true;
-            if ((PropagationVector != null && vector == null) || PropagationVector == null)
+            if (PropagationVector.Length != vector.Length)
                 return false;
-
             return PropagationVector.All(vector.Contains);
         }
 
@@ -36,10 +33,10 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
             return obj is ItemPublicKey && this == (ItemPublicKey)obj;
         }
+
         public override int GetHashCode()
         {
-            var vectoreHashCode = PropagationVector.Aggregate(0, (current, i) => current ^ i.GetHashCode());
-            return PublicKey.GetHashCode() ^ vectoreHashCode;
+            return ToString().GetHashCode();
         }
 
         public static bool operator ==(ItemPublicKey x, ItemPublicKey y)
@@ -58,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
             if (!IsTopLevel)
             {
-                string vector = PropagationVector.Aggregate(string.Empty, (current, i) => current + (i + ","));
+                string vector = string.Join(",", PropagationVector);
                 return string.Format("{0},{1}", vector, PublicKey);
             }
             return PublicKey.ToString();

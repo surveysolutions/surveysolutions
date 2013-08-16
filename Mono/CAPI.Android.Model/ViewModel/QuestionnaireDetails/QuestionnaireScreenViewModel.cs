@@ -77,8 +77,19 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public ItemPublicKey ScreenId { get; private set; }
         public string Title { get; private set; }
         public string ScreenName{get; protected set;}
-        public int Answered { get; private set; }
-        public int Total { get; private set; }
+        public int Answered {
+            get { return Enabled ? answered : 0; }
+            private set { answered = value; }
+        }
+        private int answered;
+
+        public int Total
+        {
+            get { return Enabled ? total : 0; }
+            private set { total = value; }
+        }
+
+        private int total;
         public bool Enabled { get; private set; }
         public IList<IQuestionnaireItemViewModel> Items { get; private set; }
 
