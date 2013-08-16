@@ -185,6 +185,12 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
+    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />

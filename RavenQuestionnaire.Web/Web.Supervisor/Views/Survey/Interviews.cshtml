@@ -15,7 +15,7 @@
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })','',commandExecutionUrl, users);
+            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })','',commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });
@@ -75,7 +75,7 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td data-bind="text: Status"></td>
@@ -125,7 +125,7 @@
                 <option value="">Any</option>
                 @foreach (var item in Model.Statuses)
                 {
-                    <option value="@item.StatusId">@item.StatusName</option>
+                    <option value="@item.Status">@item.StatusName</option>
                 }
             </select>
         </li>

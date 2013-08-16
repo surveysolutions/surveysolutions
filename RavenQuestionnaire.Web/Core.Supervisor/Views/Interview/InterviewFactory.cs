@@ -40,20 +40,9 @@ namespace Core.Supervisor.Views.Interview
                 predicate = predicate.AndCondition(x => (x.QuestionnaireId == input.QuestionnaireId));
             }
 
-            if (input.ViewerStatus == ViewerStatus.Headquarter)
-            {
-            }
-            else
-            {
-                //predicate = input.ResponsibleId.HasValue 
-                //    ? predicate.AndCondition(x => x.Responsible.Id == input.ResponsibleId) 
-                //    : predicate.AndCondition(x => x.ResponsibleSupervisorId != null && x.ResponsibleSupervisorId == input.ViewerId);
-            }
-
             var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize).ToList();
-
 
             return new InterviewView()
                 {
@@ -70,6 +59,7 @@ namespace Core.Supervisor.Views.Interview
                             LastEntryDate = x.UpdateDate.ToShortDateString(),
                             ResponsibleId = x.ResponsibleId,
                             ResponsibleName = x.ResponsibleName,
+                            ResponsibleRole = x.ResponsibleRole,
                             Status = x.Status.ToString(),
                             CanDelete =    x.Status == InterviewStatus.Created
                                         || x.Status == InterviewStatus.SupervisorAssigned

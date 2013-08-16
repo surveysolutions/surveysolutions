@@ -110,7 +110,7 @@
                     <option value="">Any</option>
                     @foreach (var item in Model.Statuses)
                     {
-                        <option value="@item.StatusId">@item.StatusName</option>
+                        <option value="@item.Status">@item.StatusName</option>
                     }
                 </select>
         </li>
@@ -125,7 +125,7 @@
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
-        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })';
+        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
         var deleteInterviewUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "DeleteInterview" })';
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
