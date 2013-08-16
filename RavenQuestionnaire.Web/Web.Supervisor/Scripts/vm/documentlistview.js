@@ -100,7 +100,7 @@
             return {
                 TemplateId: self.SelectedTemplate,
                 ResponsibleId: self.SelectedResponsible,
-                StatusId: self.SelectedStatus
+                Status: self.SelectedStatus
             };
         };
         
