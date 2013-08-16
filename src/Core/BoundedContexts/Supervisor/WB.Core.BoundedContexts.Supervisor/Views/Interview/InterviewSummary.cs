@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
             }
         }
 
+        public string QuestionnaireTitle { get; set; }
+
         public string ResponsibleName { get; set; }
 
         public Guid TeamLeadId { get; set; }
