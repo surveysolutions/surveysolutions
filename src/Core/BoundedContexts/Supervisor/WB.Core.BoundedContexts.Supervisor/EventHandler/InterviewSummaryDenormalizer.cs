@@ -20,7 +20,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                 IEventHandler<MultipleOptionsQuestionAnswered>,
                                                 IEventHandler<SingleOptionQuestionAnswered>,
                                                 IEventHandler<NumericQuestionAnswered>,
-                                                IEventHandler<DateTimeQuestionAnswered>
+                                                IEventHandler<DateTimeQuestionAnswered>,
+                                                IEventHandler<InterviewerAssigned>
+        
 
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
@@ -113,6 +115,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             this.interviews.Store(interview, interview.InterviewId);
         }
+
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
+        {
+            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
+
+            var interviewerName = this.users.GetById(evnt.Payload.InterviewerId).UserName;
+
+            interview.ResponsibleId = evnt.Payload.InterviewerId;
+            interview.ResponsibleName = interviewerName;
+            interview.ResponsibleRole = UserRoles.Operator;
+
+            this.interviews.Store(interview, interview.InterviewId);
+        }
+
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
