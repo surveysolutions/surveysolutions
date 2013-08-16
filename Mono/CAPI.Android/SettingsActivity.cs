@@ -120,7 +120,7 @@ namespace CAPI.Android
         private string GetResourceUsage()
         {
             return String.Format("[{0}] [{1}]",
-                GC.GetTotalMemory(false),
+                (GC.GetTotalMemory(false)/1024).ToString("F2"),
                 AppDomain.CurrentDomain.GetAssemblies().Length);
         }
 

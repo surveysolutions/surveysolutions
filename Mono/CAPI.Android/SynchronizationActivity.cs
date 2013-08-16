@@ -153,6 +153,12 @@ namespace CAPI.Android
 
         private void ButtonSyncClick(object sender, EventArgs e)
         {
+            if (!NetworkHelper.IsNetworkEnabled(this))
+            {
+                Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
+                return;
+            }
+
             ThrowExeptionIfDialogIsOpened();
 
             PreperaUI();
