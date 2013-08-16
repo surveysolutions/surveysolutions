@@ -185,12 +185,10 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
-    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
-    <Compile Include="Views\Interviews\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
@@ -282,6 +280,9 @@
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />

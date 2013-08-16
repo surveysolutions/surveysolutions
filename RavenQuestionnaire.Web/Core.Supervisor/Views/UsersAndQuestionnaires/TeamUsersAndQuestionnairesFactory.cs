@@ -1,20 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using Core.Supervisor.DenormalizerStorageItem;
-using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
-using Main.Core.Utility;
+using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using System.Linq;
-using Main.Core.View;
 
-namespace Core.Supervisor.Views.Interviews
+namespace Core.Supervisor.Views.UsersAndQuestionnaires
 {
-    public class TeamUsersAndQuestionnairesFactory : IViewFactory<TeamInterviewsInputModel, TeamUsersAndQuestionnairesView>
+    public class TeamUsersAndQuestionnairesFactory : IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
@@ -23,7 +19,7 @@ namespace Core.Supervisor.Views.Interviews
             this.interviews = interviews;
         }
 
-        public TeamUsersAndQuestionnairesView Load(TeamInterviewsInputModel input)
+        public TeamUsersAndQuestionnairesView Load(TeamUsersAndQuestionnairesInputModel input)
         {
             Expression<Func<InterviewSummary, bool>> predicate = (i) => !i.IsDeleted;
 
