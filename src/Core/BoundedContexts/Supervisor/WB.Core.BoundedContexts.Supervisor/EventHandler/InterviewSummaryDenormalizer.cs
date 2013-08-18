@@ -54,11 +54,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new[] {typeof (InterviewSummary)}; }
         }
 
-        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
-        {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("d", CultureInfo.InvariantCulture));
-        }
-
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
             UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
@@ -81,25 +76,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
 
             interview.Status = evnt.Payload.Status;
+            interview.UpdateDate = evnt.EventTimeStamp;
 
             this.interviews.Store(interview, interview.InterviewId);
         }
 
-        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                                string.Join(",", evnt.Payload.SelectedValues.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray()));
-        }
+            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
 
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
-        {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture));
-        }
+            var interviewerName = this.users.GetById(evnt.Payload.InterviewerId).UserName;
 
-        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
-        {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                                evnt.Payload.SelectedValue.ToString(CultureInfo.InvariantCulture));
+            interview.ResponsibleId = evnt.Payload.InterviewerId;
+            interview.ResponsibleName = interviewerName;
+            interview.ResponsibleRole = UserRoles.Operator;
+            interview.UpdateDate = evnt.EventTimeStamp;
+
+            this.interviews.Store(interview, interview.InterviewId);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
@@ -113,20 +106,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             interview.ResponsibleRole = UserRoles.Supervisor;
             interview.TeamLeadId = evnt.Payload.SupervisorId;
             interview.TeamLeadName = supervisorName;
-
-            this.interviews.Store(interview, interview.InterviewId);
-        }
-
-
-        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
-        {
-            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
-
-            var interviewerName = this.users.GetById(evnt.Payload.InterviewerId).UserName;
-
-            interview.ResponsibleId = evnt.Payload.InterviewerId;
-            interview.ResponsibleName = interviewerName;
-            interview.ResponsibleRole = UserRoles.Operator;
+            interview.UpdateDate = evnt.EventTimeStamp;
 
             this.interviews.Store(interview, interview.InterviewId);
         }
@@ -136,24 +116,49 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
 
             interview.IsDeleted = true;
+            interview.UpdateDate = evnt.EventTimeStamp;
 
             this.interviews.Store(interview, interview.InterviewId);
         }
 
-        public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("d", CultureInfo.InvariantCulture), evnt.EventTimeStamp);
         }
 
-        private void AnswerQuestion(Guid interviewId, Guid questionId, string answer)
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                                string.Join(",", evnt.Payload.SelectedValues.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray()), evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
+                                evnt.Payload.SelectedValue.ToString(CultureInfo.InvariantCulture),
+        evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+        }
+
+        private void AnswerQuestion(Guid interviewId, Guid questionId, string answer, DateTime updateDate)
         {
             InterviewSummary interview = this.interviews.GetById(interviewId);
 
-            if (!interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
-                return;
+            if (interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
+            {
+                interview.AnswersToFeaturedQuestions[questionId].Answer = answer;
+            }
 
-            interview.AnswersToFeaturedQuestions[questionId].Answer = answer;
-
+            interview.UpdateDate = updateDate;
             this.interviews.Store(interview, interview.InterviewId);
         }
     }
