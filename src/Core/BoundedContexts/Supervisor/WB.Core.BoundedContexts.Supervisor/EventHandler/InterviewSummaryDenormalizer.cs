@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                 IEventHandler<SingleOptionQuestionAnswered>,
                                                 IEventHandler<NumericQuestionAnswered>,
                                                 IEventHandler<DateTimeQuestionAnswered>,
-                                                IEventHandler<InterviewerAssigned>
+                                                IEventHandler<InterviewerAssigned>,
+                                                IEventHandler<InterviewDeleted>
         
 
     {
@@ -130,6 +131,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviews.Store(interview, interview.InterviewId);
         }
 
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
+
+            interview.IsDeleted = true;
+
+            this.interviews.Store(interview, interview.InterviewId);
+        }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
