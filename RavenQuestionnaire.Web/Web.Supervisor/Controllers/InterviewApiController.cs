@@ -50,7 +50,7 @@ namespace Web.Supervisor.Controllers
             if (data.Request != null)
             {
                 input.QuestionnaireId = data.Request.TemplateId;
-                input.ResponsibleId = data.Request.ResponsibleId;
+                input.TeamLeadId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
             }
 

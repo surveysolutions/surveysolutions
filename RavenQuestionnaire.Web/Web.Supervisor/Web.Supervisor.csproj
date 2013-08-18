@@ -529,8 +529,9 @@
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\query-string.js" />
+    <Content Include="Scripts\vm\svDocumentlistview.js" />
     <Content Include="Scripts\vm\statuslistview.js" />
-    <Content Include="Scripts\vm\documentlistview.js" />
+    <Content Include="Scripts\vm\hqDocumentlistview.js" />
     <Content Include="Scripts\vm\userlistview.js" />
     <Content Include="Scripts\vm\surveylistview.js" />
     <Content Include="Scripts\vm\summarylistview.js" />

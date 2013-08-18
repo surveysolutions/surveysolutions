@@ -35,6 +35,11 @@ namespace Core.Supervisor.Views.Interview
                 predicate = predicate.AndCondition(x => (x.Status == input.Status));
             }
 
+            if (input.TeamLeadId.HasValue)
+            {
+                predicate = predicate.AndCondition(x => (x.TeamLeadId == input.TeamLeadId.Value));
+            }
+
             if (input.QuestionnaireId.HasValue)
             {
                 predicate = predicate.AndCondition(x => (x.QuestionnaireId == input.QuestionnaireId));

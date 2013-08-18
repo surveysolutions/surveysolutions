@@ -8,7 +8,7 @@ namespace Core.Supervisor.Views.Interview
     {
         public Guid? QuestionnaireId { get; set; }
 
-        public Guid? ResponsibleId { get; set; }
+        public Guid? TeamLeadId { get; set; }
 
         public Guid? InterviewId { get; set; }
 

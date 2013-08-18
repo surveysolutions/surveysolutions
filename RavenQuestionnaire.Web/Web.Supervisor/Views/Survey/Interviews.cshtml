@@ -7,7 +7,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/documentlistview.js")
+    @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
 
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Interview")';
@@ -83,6 +83,7 @@
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
                         <i class="icon icon-align-justify icon-white"></i></a>
+                    <a  class="btn btn-primary"><i class="icon-tags"></i></a>
                 </td>
             </tr>
             <!-- /ko -->
