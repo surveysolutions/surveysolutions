@@ -64,6 +64,10 @@ namespace Web.Supervisor.Code.CommandTransformation
                     return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
 
                 case QuestionType.DateTime:
+                    if (answer.Answer is DateTime)
+                    {
+                        return new KeyValuePair<Guid, object>(answer.Id, (DateTime)answer.Answer);
+                    }
                     DateTime resultDate;
                     if (DateTime.TryParse(answer.Answer.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out resultDate))
                         return new KeyValuePair<Guid, object>(answer.Id, resultDate);
