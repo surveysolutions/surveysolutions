@@ -18,7 +18,7 @@ namespace Core.Supervisor.Views.Survey
     {
         #region Constructors and Destructors
 
-        /// <summary>
+      /*  /// <summary>
         /// Initializes a new instance of the <see cref="SurveyScreenView"/> class.
         /// </summary>
         /// <param name="doc">
@@ -49,7 +49,7 @@ namespace Core.Supervisor.Views.Survey
             this.Screens = new List<SurveyScreen>();
             this.BuildScreenContent(doc, currentGroup, scope);            
             this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status, s.ChangeDate)).ToList();
-        }
+        }*/
 
         public UserLight Responsible { get; set; }
 

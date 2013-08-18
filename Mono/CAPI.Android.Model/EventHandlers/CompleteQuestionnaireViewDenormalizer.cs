@@ -12,11 +12,11 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class CompleteQuestionnaireViewDenormalizer :
+        IEventHandler<InterviewSynchronized>,
         IEventHandler<GroupPropagated>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<AnswerCommented>,
-        IEventHandler<InterviewSynchronized>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<NumericQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
