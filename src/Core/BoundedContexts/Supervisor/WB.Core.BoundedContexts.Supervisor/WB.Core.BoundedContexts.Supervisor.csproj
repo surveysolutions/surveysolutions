@@ -65,6 +65,8 @@
     <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
+    <Compile Include="Views\Interview\InterviewLevel.cs" />
+    <Compile Include="Views\Interview\InterviewQuestion.cs" />
     <Compile Include="Views\Interview\InterviewSummary.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
     <Compile Include="Views\SampleImport\ImportResult.cs" />
