@@ -8,6 +8,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
     public class InterviewQuestion
     {
+        public InterviewQuestion() {}
+
         public InterviewQuestion(Guid id)
         {
             Id = id;
