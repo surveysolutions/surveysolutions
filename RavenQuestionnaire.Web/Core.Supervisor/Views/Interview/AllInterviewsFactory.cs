@@ -17,16 +17,16 @@ namespace Core.Supervisor.Views.Interview
 
     using Main.Core.View;
 
-    public class InterviewFactory : IViewFactory<InterviewInputModel, InterviewView>
+    public class AllInterviewsFactory : IViewFactory<AllInterviewsInputModel, AllInterviewsView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
-        public InterviewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
         {
             this.interviews = interviews;
         }
 
-        public InterviewView Load(InterviewInputModel input)
+        public AllInterviewsView Load(AllInterviewsInputModel input)
         {
             Expression<Func<InterviewSummary, bool>> predicate = (s) => !s.IsDeleted;
 
@@ -44,10 +44,10 @@ namespace Core.Supervisor.Views.Interview
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize).ToList();
 
-            return new InterviewView()
+            return new AllInterviewsView
                 {
                     TotalCount = this.interviews.Query(_ => _.Count(predicate)),
-                    Items = interviewItems.Select(x => new InterviewViewItem()
+                    Items = interviewItems.Select(x => new AllInterviewsViewItem()
                         {
                             FeaturedQuestions = x.AnswersToFeaturedQuestions.Values.Select(a => new InterviewFeaturedQuestion()
                                 {
@@ -64,17 +64,14 @@ namespace Core.Supervisor.Views.Interview
                             CanDelete =    x.Status == InterviewStatus.Created
                                         || x.Status == InterviewStatus.SupervisorAssigned
                                         || x.Status == InterviewStatus.InterviewerAssigned
-                                        || x.Status == InterviewStatus.SentToCapi,
-                            CanBeReassigned =    x.Status == InterviewStatus.Created
-                                              || x.Status == InterviewStatus.SupervisorAssigned
-                                              || x.Status == InterviewStatus.InterviewerAssigned
-                                              || x.Status == InterviewStatus.RejectedBySupervisor
+                                        || x.Status == InterviewStatus.SentToCapi
+                           
                         })
                 };
         }
 
         private IQueryable<InterviewSummary> DefineOrderBy(IQueryable<InterviewSummary> query,
-                                                        InterviewInputModel model)
+                                                        AllInterviewsInputModel model)
         {
             var orderBy = model.Orders.FirstOrDefault();
             if (orderBy == null)

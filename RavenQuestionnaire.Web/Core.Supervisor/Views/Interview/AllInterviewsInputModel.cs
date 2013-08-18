@@ -4,14 +4,8 @@ namespace Core.Supervisor.Views.Interview
 {
     using System;
 
-    public class InterviewInputModel: ListViewModelBase
+    public class AllInterviewsInputModel: ListViewModelBase
     {
-        public InterviewInputModel(Guid viewerId, ViewerStatus viewerStatus)
-        {
-            this.ViewerId = viewerId;
-            this.ViewerStatus = viewerStatus;
-        }
-
         public Guid? QuestionnaireId { get; set; }
 
         public Guid? ResponsibleId { get; set; }
@@ -19,9 +13,5 @@ namespace Core.Supervisor.Views.Interview
         public Guid? InterviewId { get; set; }
 
         public InterviewStatus? Status { get; set; }
-
-        public Guid ViewerId { get; set; }
-
-        public ViewerStatus ViewerStatus { get; set; }
     }
 }

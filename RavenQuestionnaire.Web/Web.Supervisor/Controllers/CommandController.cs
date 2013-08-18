@@ -33,12 +33,24 @@ namespace Web.Supervisor.Controllers
         public JsonResult ExecuteCommands(string type, string[] commands)
         {
             var errors = new List<string>();
+            var failedCommands = new List<ICommand>();
             foreach (var command in commands)
             {
+                ICommand concreteCommand;
+                ICommand transformedCommand;
                 try
                 {
-                    var concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                    var transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand, globalInfo);
+                    concreteCommand = this.commandDeserializer.Deserialize(type, command);
+                    transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand, globalInfo);
+                }
+                catch (CommandDeserializationException e)
+                {
+                    errors.Add(e.Message);
+                    continue;
+                }
+
+                try
+                {
                     this.commandService.Execute(transformedCommand);
                 }
                 catch (Exception e)
@@ -53,9 +65,10 @@ namespace Web.Supervisor.Controllers
                     {
                         errors.Add(domainEx.Message);
                     }
+                    failedCommands.Add(concreteCommand);
                 }
             }
-            return this.Json(errors.Count == 0 ? (object)new {status = "ok"} : new { status ="error", errors = errors });
+            return this.Json(errors.Count == 0 ? (object)new { status = "ok" } : new { status = "error", errors = errors, failedCommands = failedCommands });
         }
 
         [HttpPost]

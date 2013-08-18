@@ -1,8 +1,8 @@
-﻿DocumentListViewModel = function (listViewUrl, deleteInterviewUrl, commandUrl, users) {
+﻿DocumentListViewModel = function (currentUser, listViewUrl, commandUrl, users) {
     var self = this;
-    
-    self.deleteInterviewUrl = deleteInterviewUrl;
-    
+
+    self.CurrentUser = currentUser;
+  
     self.ListView = new ListViewModel(listViewUrl);
 
     self.ListView.mappingOptions = {
@@ -49,7 +49,7 @@
             return ko.toJSON({
                 InterviewerId: user.UserId,
                 InterviewId: item.InterviewId,
-                UserId: user.UserId
+                UserId: self.CurrentUser.UserId
             });
         });
         
@@ -86,6 +86,71 @@
         });
     };
 
+    self.deleteInterview = function () {
+        self.ListView.CheckForRequestComplete();
+
+        var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
+            return item.IsSelected();
+        });
+
+        var request = { Interviews: [] };
+        for (var i = 0; i < selectedRawInterviews.length; i++) {
+            request.Interviews.push(selectedRawInterviews[i]["InterviewId"]());
+        }
+        
+        var commands = ko.utils.arrayMap(selectedRawInterviews, function (rawItem) {
+            var item = ko.mapping.toJS(rawItem);
+            return ko.toJSON({
+                InterviewId: item.InterviewId,
+                UserId: self.CurrentUser.UserId
+            });
+        });
+
+        var command = {
+            type: "DeleteInterviewCommand",
+            commands: commands
+        };
+
+        self.ListView.IsAjaxComplete(false);
+
+       
+        $.ajax({
+            type: "POST",
+            url: commandUrl,
+            data: command,
+            success: function (data) {
+                if (data.status == "ok") {
+                    for (var i = 0; i < selectedRawInterviews.length; i++) {
+                        self.ListView.Items.remove(selectedRawInterviews[i]);
+                    }
+                    
+                    self.ListView.TotalCount(self.ListView.TotalCount() - selectedRawInterviews.length);
+                }
+                if (data.status == "error") {
+                    var faildInterviews = ko.utils.arrayMap(data.failedCommands, function(failedCommand) {
+                        return failedCommand.InterviewId;
+                    });
+                    var deletedInterviews = ko.utils.arrayFilter(selectedRawInterviews, function (item) {
+                        return $.inArray(item["InterviewId"](), faildInterviews) == -1;
+                    });
+
+                    for (var i = 0; i < deletedInterviews.length; i++) {
+                        self.ListView.Items.remove(deletedInterviews[i]);
+                    }
+
+                    self.ListView.TotalCount(self.ListView.TotalCount() - deletedInterviews.length);
+                }
+                self.ListView.IsAjaxComplete(true);
+            },
+            error: function () {
+
+            },
+            dataType: "json",
+            traditional: true
+        });
+        
+    };
+
     self.Users = users;
 
     self.Templates = ko.observableArray([]);
@@ -115,30 +180,5 @@
         self.ListView.search();
     };
 
-    self.deleteInterview = function () {
-        self.ListView.CheckForRequestComplete();
 
-        var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
-            return item.IsSelected();
-        });
-
-        var request = { Interviews: [] };
-        for (var i = 0; i < selectedRawInterviews.length; i++) {
-            request.Interviews.push(selectedRawInterviews[i]["InterviewId"]());
-        }
-
-        self.ListView.IsAjaxComplete(false);
-
-        $.post(self.deleteInterviewUrl, request, null, "json")
-            .done(function (data) {
-                var deletedInterviews = ko.utils.arrayFilter(selectedRawInterviews, function (item) {
-                    return $.inArray(item["InterviewId"](), data["BlockedInterviews"]) == -1;
-                });
-                for (var i = 0; i < deletedInterviews.length; i++) {
-                    self.ListView.Items.remove(deletedInterviews[i]);
-                }
-                self.ListView.TotalCount(self.ListView.TotalCount() - deletedInterviews.length);
-                self.ListView.IsAjaxComplete(true);
-            });
-    };
 };

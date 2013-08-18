@@ -56,6 +56,8 @@ namespace Web.Supervisor.Controllers
         public ActionResult Interviews()
         {
             ViewBag.ActivePage = MenuItem.Docs;
+            var currentUser = this.GlobalInfo.GetCurrentUser();
+            ViewBag.CurrentUser = new SurveyUsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(Filters());
         }
 

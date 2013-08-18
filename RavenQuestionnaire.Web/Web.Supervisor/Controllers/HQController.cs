@@ -85,6 +85,8 @@ namespace Web.Supervisor.Controllers
                         this.Url.Action("TakeNew", "HQ", new {id = questionnaireId.Value})));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
+            var currentUser = this.GlobalInfo.GetCurrentUser();
+            ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
             return this.View(this.Filters());
         }
 
@@ -143,10 +145,11 @@ namespace Web.Supervisor.Controllers
         public ActionResult SurveysAndStatuses()
         {
             this.ViewBag.ActivePage = MenuItem.Surveys;
-            return
-                this.View(
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                                                                                   ViewerStatus.Headquarter)).Items);
+
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+               this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+
+            return this.View(usersAndQuestionnaires.Users);
         }
 
         public ActionResult Assign(Guid id)
@@ -159,8 +162,11 @@ namespace Web.Supervisor.Controllers
         public ActionResult SupervisorsAndStatuses()
         {
             this.ViewBag.ActivePage = MenuItem.Summary;
-            return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
-                                                                       this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Headquarter)).Items);
+
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+              this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+
+            return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()
