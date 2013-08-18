@@ -14,7 +14,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes
                                                                    where doc.TeamLeadId != null
                                                                    select new StatisticsLineGroupedByUserAndTemplate
                                                                        {
-                                                                           ResponsibleId = doc.TeamLeadId.Value,
+                                                                           ResponsibleId = (Guid) doc.TeamLeadId,
                                                                            ResponsibleName = doc.TeamLeadName,
 
                                                                            TeamLeadId = doc.TeamLeadId,
