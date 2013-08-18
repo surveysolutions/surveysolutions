@@ -59,11 +59,6 @@ namespace Web.Supervisor.Controllers
             return this.View(Filters());
         }
 
-        public ActionResult GotoBrowser()
-        {
-            return this.RedirectToAction("Index");
-        }
-
         public ActionResult TeamMembersAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Summary;

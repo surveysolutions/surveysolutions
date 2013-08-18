@@ -24,7 +24,7 @@
         this.IsSelected = ko.observable(false);
     };
 
-    self.ListView.IsNothingSelected = ko.computed(function () {
+    var countSelectedItems = function () {
         var count = 0;
         ko.utils.arrayForEach(self.ListView.Items(), function (item) {
             var value = item.IsSelected();
@@ -32,9 +32,23 @@
                 count++;
             }
         });
+        return count;
+    };
 
-        return count==0;
+    self.ListView.IsNothingSelected = ko.computed(function () {
+        return countSelectedItems() == 0;
     });
+    
+    self.ListView.IsOnlyOneSelected = ko.computed(function () {
+        return countSelectedItems() == 1;
+    });
+
+    self.ChangeState = function () {
+        var interview = ko.utils.arrayFirst(self.ListView.Items(), function (item) {
+            return item.IsSelected();
+        });
+        window.location = "/Interview/ChangeState/" + interview.InterviewId();
+    };
 
     self.Assign = function (user) {
         

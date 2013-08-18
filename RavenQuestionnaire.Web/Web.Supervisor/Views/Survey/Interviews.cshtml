@@ -36,6 +36,7 @@
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>
     </div>
+    <a  class="btn" data-bind="css: { disabled: ListView.IsOnlyOneSelected() == false }, click: $root.ChangeState"><i class="icon-tags"></i> Change state</a>
 }
 
 
@@ -83,7 +84,6 @@
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
                         <i class="icon icon-align-justify icon-white"></i></a>
-                    <a  class="btn btn-primary"><i class="icon-tags"></i></a>
                 </td>
             </tr>
             <!-- /ko -->
