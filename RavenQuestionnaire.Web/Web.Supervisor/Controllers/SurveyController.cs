@@ -47,10 +47,8 @@ namespace Web.Supervisor.Controllers
         public ActionResult Index()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            return
-                this.View(
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                        ViewerStatus.Supervisor)).Items);
+            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+            return this.View(usersAndQuestionnaires.Users);
         }
 
         public ActionResult Interviews()
@@ -69,8 +67,8 @@ namespace Web.Supervisor.Controllers
         public ActionResult TeamMembersAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Summary;
-            return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
-                this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Supervisor)).Items);
+            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+            return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()
