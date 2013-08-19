@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox'],
-    function (ko, _, config, utils, datacontext, router, model, bootbox) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox', 'input'],
+    function (ko, _, config, utils, datacontext, router, model, bootbox, input) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -337,6 +337,50 @@
                         }
                     });
             },
+            addSharedPerson = function(sharedUser) {
+                sharedUser.check(function () {
+                    var options = {
+                        url: input.url.addSharedPersonUrl,
+                        type: 'POST',
+                        data: { userEmail: sharedUser.userEmail() }
+                    };
+                    
+                    $.ajax(options).done(function (data) {
+                        if (data.IsSuccess) {
+                            if (data.IsAlreadyShared) {
+                                showError(input.settings.messages.userToShareAlreadyExistInList.replace("$1", sharedUser.userEmail()));
+                            }
+                            else if(data.IsOwner){
+                                showError(input.settings.messages.userToShareIsOwner);
+                            }
+                            else {
+                                questionnaire().addSharedPerson();
+                            }
+                        } else {
+                            showError(input.settings.messages.unhandledExceptionMessage);
+                        }
+                    }).fail(function () {
+                        showError(input.settings.messages.unhandledExceptionMessage);
+                    });
+                });
+            },
+            removeSharedPerson = function (sharedUser) {
+                var options = {
+                    url: input.url.removeSharedPersonUrl,
+                    type: 'POST',
+                    data: { userEmail: sharedUser.userEmail() }
+                };
+
+                $.ajax(options).done(function (data) {
+                    if (data.IsSuccess) {
+                        questionnaire().removeSharedPerson(sharedUser);
+                    } else {
+                        showError(input.settings.messages.unhandledExceptionMessage);
+                    }
+                }).fail(function() {
+                    showError(input.settings.messages.unhandledExceptionMessage);
+                });
+            },
             clearFilter = function() {
                 filter('');
                 focusOnSearch();
@@ -433,9 +477,6 @@
                             chapters(datacontext.groups.getChapters());
 
                             showError(d);
-                            errors.removeAll();
-                            errors.push(d);
-                            isOutputVisible(true);
                         }
                     });
             },
@@ -490,7 +531,6 @@
                 errors.removeAll();
                 errors.push(message);
                 isOutputVisible(true);
-
             };
 
         init();
@@ -523,6 +563,8 @@
             saveQuestionnaire: saveQuestionnaire,
             isAllChaptersExpanded: isAllChaptersExpanded,
             toggleAllChapters: toggleAllChapters,
-            toggleAllChaptersTooltip: toggleAllChaptersTooltip
+            toggleAllChaptersTooltip: toggleAllChaptersTooltip,
+            addSharedPerson: addSharedPerson,
+            removeSharedPerson : removeSharedPerson
         };
     });

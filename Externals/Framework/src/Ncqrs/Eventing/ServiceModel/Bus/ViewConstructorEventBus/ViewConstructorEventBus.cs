@@ -7,7 +7,7 @@ using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
 {
-    public class SmartEventBus : ISmartEventBus
+    public class ViewConstructorEventBus : IViewConstructorEventBus
     {
         private readonly Dictionary<Type, EventHandlerWrapper> handlers = new Dictionary<Type, EventHandlerWrapper>();
 
@@ -24,15 +24,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
             foreach (var handler in handlers.Values.Where(h=>h.Enabled).ToList())
             {
                 handler.Bus.Publish(eventMessages);
-            }
-        }
-
-        public void DisableHandlersWhichAreNotInList(IEventHandler[] handlerTypes)
-        {
-            foreach (var handler in handlers.Values)
-            {
-               if(!handlerTypes.Contains(handler.Handler))
-                   handler.DisableBus();
             }
         }
 

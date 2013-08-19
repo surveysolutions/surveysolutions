@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,6 +29,7 @@ namespace Web.Supervisor.Controllers
 
         private string CapiFileName = "wbcapi.apk";
 
+        private string pathToSearchVersions = ("~/App_Data/Capi");
         public SyncController(ISyncManager syncManager, ILogger logger,
                               IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
@@ -291,13 +293,14 @@ namespace Web.Supervisor.Controllers
             return null;
         }
 
-        private int GetLastVersionNumber(string pathToSearchVersions)
+        private int GetLastVersionNumber()
         {
             int maxVersion = 0;
 
-            if (Directory.Exists(pathToSearchVersions))
+            var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+            if (Directory.Exists(targetToSearchVersions))
             {
-                var dirInfo = new DirectoryInfo(pathToSearchVersions);
+                var dirInfo = new DirectoryInfo(targetToSearchVersions);
                 foreach (DirectoryInfo directoryInfo in dirInfo.GetDirectories())
                 {
                     int value;
@@ -318,18 +321,25 @@ namespace Web.Supervisor.Controllers
         {
             bool newVwrsionExsists = false;
 
-            int versionValue;
-            if (int.TryParse(versionCode, out versionValue))
+            try
             {
+                int versionValue;
+                if (int.TryParse(versionCode, out versionValue))
+                {
                 int maxVersion = this.GetLastVersionNumber(this.pathToSearchVersions);
 
-                if (maxVersion != 0 && maxVersion > versionValue)
-                {
-                    newVwrsionExsists = true;
+                    if (maxVersion != 0 && maxVersion > versionValue)
+                    {
+                        isNewVersionExsist = true;
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                logger.Error("Error on version check.", e);
+            }
 
-            return this.Json(newVwrsionExsists, JsonRequestBehavior.AllowGet);
+            return Json(isNewVersionExsist, JsonRequestBehavior.AllowGet);
         }
 
 

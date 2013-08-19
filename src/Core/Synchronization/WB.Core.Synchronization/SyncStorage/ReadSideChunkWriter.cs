@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    internal class ReadSideChunkWriter : IChunkWriter
+    internal class ReadSideChunkWriter : IChunkWriter, IReadSideRepositoryCleaner
     {
         private IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage;
         private readonly object myLock = new object();
         private long? currentSequence;
 
-        public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage)
+        public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage, IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.storage = storage;
+            cleanerRegistry.Register(this);
         }
 
         private void DefineCurrentSequence()
@@ -59,6 +61,11 @@ namespace WB.Core.Synchronization.SyncStorage
                 return currentSequence.Value;
             }
             set { currentSequence = value; }
+        }
+
+        public void Clear()
+        {
+            currentSequence = null;
         }
     }
 }

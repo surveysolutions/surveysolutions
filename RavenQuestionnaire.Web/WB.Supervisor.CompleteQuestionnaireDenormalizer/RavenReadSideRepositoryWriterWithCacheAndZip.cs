@@ -16,7 +16,10 @@ using WB.Core.Synchronization;
 
 namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 {
-    internal class RavenReadSideRepositoryWriterWithCacheAndZip : IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>
+    internal class RavenReadSideRepositoryWriterWithCacheAndZip : 
+        IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>, 
+        IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, 
+        IReadSideRepositoryCleaner
 
     {
         private CompleteQuestionnaireDenormalizer hiddentDenormalizer;
@@ -33,7 +36,8 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             IReadSideRepositoryWriter<ZipView> zipWriter,
             IReadSideRepositoryWriter<UserDocument> users,
             IStringCompressor comperessor,
-            IIncomePackagesRepository incomePackages)
+            IIncomePackagesRepository incomePackages,
+            IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             this.zipWriter = zipWriter;
@@ -44,6 +48,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             this.hiddentDenormalizer = new CompleteQuestionnaireDenormalizer(users);
             
             RegisterCompleteQuestionnarieDenormalizerAtProcessBus();
+            cleanerRegistry.Register(this);
         }
 
         private void RegisterCompleteQuestionnarieDenormalizerAtProcessBus()
@@ -185,6 +190,11 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
             public CompleteQuestionnaireStoreDocument Document { get; private set; }
             public long Sequence { get; private set; }
+        }
+
+        public void Clear()
+        {
+            this.memcache=new Dictionary<Guid, QuestionnarieWithSequence>();
         }
     }
 }

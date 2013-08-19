@@ -154,10 +154,10 @@ namespace Web.Supervisor.App_Start
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var bus = new SmartEventBus();
+            var bus = new ViewConstructorEventBus();
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
-            kernel.Bind<ISmartEventBus>().ToConstant(bus);
+            kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {
                 bus.AddHandler(handler as IEventHandler);

@@ -1,0 +1,55 @@
+﻿<div class="title">
+    <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+    <span data-bind="text: title"></span>
+</div>
+<div class="body container-fluid">
+    <div class="row-fluid">
+        <div class="control-group" data-bind="validationElement: title">
+            <label class="control-label required">Title</label>
+            <div class="controls">
+                <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: isPublic" />Make public
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <label class="control-label">Shared with persons</label>
+        <div class="answer-options">
+            <!-- ko foreach: sharePersons -->
+            <div class="control-group">
+                <div class="controls">
+                    <div class="input-prepend">
+                        <button class="btn btn-danger" style="margin-left: 0px;" type="button" data-bind="click: $root.removeSharedPerson"><i class="icon-remove icon-white"></i></button>
+                        <input  type="text" class="input-xxlarge" data-bind="value: userEmail" disabled />
+                    </div>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="row-fluid">
+        <!-- ko with: currentUserForSharing -->
+        <div class="control-group" data-bind="validationElement: userEmail">
+            <div class="controls">
+                <div class="input-prepend">
+                    <button class="btn btn-success" type="button" data-bind="click: $root.addSharedPerson"><i class="icon-plus icon-white"></i></button>
+                    <input id="currentUserEmail" type="text" placeholder="Enter user email:" class="input-xxlarge"  data-bind="value: userEmail" />
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+</div>
+<div class="pane-bottom">
+    <div class="inner">
+        <button class="btn btn-success" data-bind="click: $root.saveQuestionnaire, visible: dirtyFlag().isDirty(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+    </div>
+</div>

@@ -1,6 +1,4 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -8,19 +6,16 @@ namespace WB.UI.Designer.Views.EventHandler
 {
     using System;
 
-    using Main.Core.Documents;
     using Main.Core.Events.Questionnaire;
-    using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                              IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>,IEventHandler<TemplateImported>
+                                             IEventHandler<QuestionnaireDeleted>,
+                                             IEventHandler<TemplateImported>,
+                                             IEventHandler<SharedPersonToQuestionnaireAdded>,
+                                             IEventHandler<SharedPersonFromQuestionnaireRemoved>
     {
         #region Fields
 
@@ -108,6 +103,30 @@ namespace WB.UI.Designer.Views.EventHandler
                 }
             }
             this.documentStorage.Store(item, document.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<SharedPersonToQuestionnaireAdded> evnt)
+        {
+            var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
+            if (browseItem != null)
+            {
+                if (!browseItem.SharedPersons.Contains(evnt.Payload.PersonId))
+                {
+                    browseItem.SharedPersons.Add(evnt.Payload.PersonId);
+                }
+            }
+        }
+
+        public void Handle(IPublishedEvent<SharedPersonFromQuestionnaireRemoved> evnt)
+        {
+            var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
+            if (browseItem != null)
+            {
+                if (browseItem.SharedPersons.Contains(evnt.Payload.PersonId))
+                {
+                    browseItem.SharedPersons.Remove(evnt.Payload.PersonId);
+                }
+            }
         }
     }
 }

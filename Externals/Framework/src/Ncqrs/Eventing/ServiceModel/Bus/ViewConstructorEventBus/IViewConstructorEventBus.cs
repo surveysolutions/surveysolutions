@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus
 {
-    public interface ISmartEventBus : IEventBus
+    public interface IViewConstructorEventBus : IEventBus
     {
         void DisableEventHandler(Type handlerType);
         void EnableAllHandlers();
