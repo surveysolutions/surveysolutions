@@ -8,9 +8,10 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
         }
 
-        public AnsweredQuestionSynchronizationDto(Guid id, object answer, string comments)
+        public AnsweredQuestionSynchronizationDto(Guid id, int[] vector, object answer, string comments)
         {
             Id = id;
+            PropagationVector = vector;
             Answer = answer;
             Comments = comments;
         }

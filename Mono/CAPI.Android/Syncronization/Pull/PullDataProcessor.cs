@@ -139,7 +139,8 @@ namespace CAPI.Android.Syncronization.Pull
                                                                       metaInfo.FeaturedQuestionsMeta.Select(
                                                                           q =>
                                                                           new AnsweredQuestionSynchronizationDto(
-                                                                              q.PublicKey, q.Value, string.Empty))
+                                                                              q.PublicKey, new int[0], q.Value,
+                                                                              string.Empty))
                                                                               .ToList()));
 
 

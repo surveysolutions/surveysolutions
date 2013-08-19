@@ -172,6 +172,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
             this.status = @event.Status;
+
+            RestoreAnswersAfterSynchronization(@event);
+
+            RestoreDesabledGroupsAfterSynchronization(@event);
+
+            RestoreInvalidaAnswersAfterSynchronization(@event);
+
+            RestorePropagatedInstancesAfterSynchronization(@event);
         }
 
         #endregion
@@ -1257,6 +1265,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire.HasGroup(groupId)
                 ? questionnaire.GetGroupTitle(groupId) ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
+        }
+
+        private void RestorePropagatedInstancesAfterSynchronization(InterviewSynchronized @event)
+        {
+            this.propagatedGroupInstanceCounts =
+                @event.PropagatedGroupInstanceCounts.ToDictionary(
+                    key => ConvertIdAndPropagationVectorToString(key.Key.PublicKey, key.Key.PropagationVector),
+                    value => value.Value);
+        }
+
+        private void RestoreInvalidaAnswersAfterSynchronization(InterviewSynchronized @event)
+        {
+            this.invalidAnsweredQuestions = new HashSet<string>();
+            foreach (var invalidAnsweredQuestion in @event.InvalidAnsweredQuestions)
+            {
+                this.disabledGroups.Add(ConvertIdAndPropagationVectorToString(invalidAnsweredQuestion.PublicKey,
+                                                                              invalidAnsweredQuestion.PropagationVector));
+            }
+        }
+
+        private void RestoreDesabledGroupsAfterSynchronization(InterviewSynchronized @event)
+        {
+            this.disabledGroups = new HashSet<string>();
+            foreach (var disabledGroup in @event.DisabledGroups)
+            {
+                this.disabledGroups.Add(ConvertIdAndPropagationVectorToString(disabledGroup.PublicKey,
+                                                                              disabledGroup.PropagationVector));
+            }
+        }
+
+        private void RestoreAnswersAfterSynchronization(InterviewSynchronized @event)
+        {
+            this.answers =
+                @event.AnsweredQuestions.ToDictionary(
+                    question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                    question => question.Answer);
         }
 
         /// <remarks>
