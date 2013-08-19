@@ -30,7 +30,6 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.Synchronization;
-using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Code.CommandDeserialization;
@@ -122,8 +121,7 @@ namespace Web.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
-                new SupervisorBoundedContextModule(),
-                new CompleteQuestionnarieDenormalizerModule());
+                new SupervisorBoundedContextModule());
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
