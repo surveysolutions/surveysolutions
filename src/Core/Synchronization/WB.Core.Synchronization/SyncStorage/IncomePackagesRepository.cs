@@ -15,6 +15,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.SyncProvider;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -41,14 +43,12 @@ namespace WB.Core.Synchronization.SyncStorage
             var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
 
             File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
-            
-            throw new NotImplementedException("please uncomment line below me");
-            /*
+            Task.Factory.StartNew(() => ProcessItem(meta.PublicKey));
 
-            NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId, meta.Title,
-                                                                        meta.ResponsibleId, meta.Status.Id,
-                                                                        null));*/
+            /*     NcqrsEnvironment.Get<ICommandService>()
+                            .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId,
+                                                                        meta.ResponsibleId,
+                                                                        (InterviewStatus) meta.Status, null);*/
         }
 
         private string GetItemFileName(Guid id)
@@ -56,7 +56,7 @@ namespace WB.Core.Synchronization.SyncStorage
             return Path.Combine(path, string.Format("{0}.{1}", id, FileExtension));
         }
 
-        public void ProcessItem(Guid id, long sequence)
+        public void ProcessItem(Guid id)
         {
             var fileName = GetItemFileName(id);
             if (!File.Exists(fileName))
@@ -66,7 +66,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var items = GetContentAsItem<AggregateRootEvent[]>(fileContent);
 
-            StoreEvents(id, items, sequence);
+            StoreEvents(id, items);
 
             File.Delete(fileName);
         }
@@ -80,13 +80,22 @@ namespace WB.Core.Synchronization.SyncStorage
             return item;
         }
 
-        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
+        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var events = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
-            var latestEventSequence = events.IsEmpty ? sequence : events.Last().EventSequence;
+            var eventBus = NcqrsEnvironment.Get<IEventBus>();
+            var events = eventStore.ReadFrom(id, 1, long.MaxValue);
+            var latestEventSequence = events.IsEmpty ? 1 : events.Last().EventSequence;
             var incomeEvents = this.BuildEventStreams(stream, latestEventSequence);
+
             eventStore.Store(incomeEvents);
+
+            foreach (var incomeEvent in incomeEvents)
+            {
+                
+                eventBus.Publish(incomeEvent);
+            }
+        
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
