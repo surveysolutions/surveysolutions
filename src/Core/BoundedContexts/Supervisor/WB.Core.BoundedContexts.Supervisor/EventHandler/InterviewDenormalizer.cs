@@ -22,8 +22,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                          IEventHandler<InterviewCreated>,
                                          IEventHandler<InterviewStatusChanged>,
                                          IEventHandler<SupervisorAssigned>,
+                                         IEventHandler<InterviewerAssigned>,
 
-         IEventHandler<GroupPropagated>,
+    IEventHandler<GroupPropagated>,
         IEventHandler<InterviewCompleted>,
         IEventHandler<InterviewRestarted>,
         IEventHandler<AnswerCommented>,
@@ -353,6 +354,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             return interview.Levels.Where(level => level.Value.ScopeId == scopeId)
                             .Select(level => level.Key).ToList();
+        }
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
+        {
+            var interview = this.interviews.GetById(evnt.EventSourceId);
+
+            interview.ResponsibleId = evnt.Payload.InterviewerId;
+            interview.ResponsibleRole = UserRoles.Operator;
+
+            this.interviews.Store(interview, interview.InterviewId);
         }
     }
 }

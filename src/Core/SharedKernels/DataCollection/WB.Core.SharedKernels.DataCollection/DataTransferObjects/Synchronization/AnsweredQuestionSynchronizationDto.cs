@@ -15,9 +15,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Comments = comments;
         }
 
-        public Guid Id { get; private set; }
-        public int[] PropagationVector { get; private set; }
-        public object Answer { get; private set; }
-        public string Comments { get; private set; }
+        public Guid Id { get;  set; }
+        public int[] PropagationVector { get;  set; }
+        public object Answer { get;  set; }
+        public string Comments { get;  set; }
     }
 }

@@ -284,12 +284,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
-        public Interview(Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus,
+                         List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta):base(id)
         {
-            UpdateInterviewMetaInfo(questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
+            UpdateInterviewMetaInfo(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
         }
 
-        public void SynchronizeInterview(InterviewSynchronizationDto synchronizedInterview)
+        public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(synchronizedInterview.QuestionnaireId);
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview.UserId,
@@ -302,11 +303,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       synchronizedInterview.PropagatedGroupInstanceCounts));
         }
 
-        public void UpdateInterviewMetaInfo(Guid questionnarieId, Guid userId, InterviewStatus interviewStatus, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        public void UpdateInterviewMetaInfo(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus,
+                                            List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
 
-            ApplyEvent(new InterviewMetaInfoUpdated(userId, questionnarieId, questionnaire.Version, interviewStatus, featuredQuestionsMeta));
+            ApplyEvent(new InterviewMetaInfoUpdated(userId, questionnarieId, questionnaire.Version, interviewStatus,
+                                                    featuredQuestionsMeta));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)

@@ -16,10 +16,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
                                               InterviewStatus status, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
             : base(interviewId, userId)
         {
+            this.Id = interviewId;
             QuestionnarieId = questionnarieId;
             InterviewStatus = status;
             FeaturedQuestionsMeta = featuredQuestionsMeta;
         }
+        public Guid Id { get; set; }
 
         public Guid QuestionnarieId { get; set; }
 
