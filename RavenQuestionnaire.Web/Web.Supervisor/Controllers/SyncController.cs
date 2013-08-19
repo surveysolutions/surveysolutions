@@ -23,7 +23,6 @@ namespace Web.Supervisor.Controllers
     public class SyncController : AsyncController
     {
         private readonly ILogger logger;
-        private readonly string pathToSearchVersions = HostingEnvironment.MapPath("/App_Data/Capi");
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
@@ -279,7 +278,7 @@ namespace Web.Supervisor.Controllers
         [AllowAnonymous]
         public ActionResult GetLatestVersion()
         {
-            int maxVersion = this.GetLastVersionNumber(this.pathToSearchVersions);
+            int maxVersion = this.GetLastVersionNumber();
 
             if (maxVersion != 0)
             {
@@ -319,14 +318,14 @@ namespace Web.Supervisor.Controllers
         [AllowAnonymous]
         public ActionResult CheckNewVersion(string version, string versionCode, string androidId)
         {
-            bool newVwrsionExsists = false;
+            bool isNewVersionExsist = false;
 
             try
             {
                 int versionValue;
                 if (int.TryParse(versionCode, out versionValue))
                 {
-                int maxVersion = this.GetLastVersionNumber(this.pathToSearchVersions);
+                int maxVersion = this.GetLastVersionNumber();
 
                     if (maxVersion != 0 && maxVersion > versionValue)
                     {

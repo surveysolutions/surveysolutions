@@ -121,10 +121,8 @@
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
     <Compile Include="RavenIndexes\RavenIndexesTestContext.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
-    <Compile Include="StatusViewFactoryTests.cs" />
     <Compile Include="SummaryDenormalizerTests.cs" />
     <Compile Include="SyncProcessDenormalizerTests.cs" />
-    <Compile Include="Views\StatusViewTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -159,6 +157,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
