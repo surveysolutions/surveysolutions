@@ -307,7 +307,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 foreach (var trigger in questionnarie.PropagationScopes[scopeId])
                 {
                     if (trigger == groupId)
-                        return trigger;
+                        return scopeId;
                 }
             }
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnarie",
