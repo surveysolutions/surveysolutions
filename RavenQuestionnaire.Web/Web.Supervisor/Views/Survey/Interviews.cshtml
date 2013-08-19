@@ -7,15 +7,16 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/documentlistview.js")
+    @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
 
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
+        var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })','',commandExecutionUrl, users);
+            var model = new DocumentListViewModel(currentUser, '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })', commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });
@@ -35,6 +36,7 @@
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>
     </div>
+    <a  class="btn" data-bind="css: { disabled: ListView.IsOnlyOneSelected() == false }, click: $root.ChangeState"><i class="icon-tags"></i> Change state</a>
 }
 
 

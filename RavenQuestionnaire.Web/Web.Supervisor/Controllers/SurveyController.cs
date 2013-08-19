@@ -47,28 +47,23 @@ namespace Web.Supervisor.Controllers
         public ActionResult Index()
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            return
-                this.View(
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                        ViewerStatus.Supervisor)).Items);
+            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+            return this.View(usersAndQuestionnaires.Users);
         }
 
         public ActionResult Interviews()
         {
             ViewBag.ActivePage = MenuItem.Docs;
+            var currentUser = this.GlobalInfo.GetCurrentUser();
+            ViewBag.CurrentUser = new SurveyUsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(Filters());
-        }
-
-        public ActionResult GotoBrowser()
-        {
-            return this.RedirectToAction("Index");
         }
 
         public ActionResult TeamMembersAndStatuses()
         {
             ViewBag.ActivePage = MenuItem.Summary;
-            return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
-                this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Supervisor)).Items);
+            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+            return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()

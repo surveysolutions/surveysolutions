@@ -31,7 +31,10 @@
         <li class="heading"><span>FILTER</span></li>
         <li class="filter"><label>Supervisors</label>
             <select data-bind="value: SelectedUser" class="input-block-level">
-                <option>Any</option>
+                @if (Model.Count() > 1)
+                {
+                    <option>Any</option>
+                }
                 @foreach (var item in Model)
                 {
                     <option value="@item.UserId">@item.UserName</option>

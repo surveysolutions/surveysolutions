@@ -224,12 +224,11 @@
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
-    <Compile Include="Views\Interview\InterviewViewItem.cs" />
+    <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
-    <Compile Include="Views\Interview\InterviewInputModel.cs" />
-    <Compile Include="Views\Interview\InterviewView.cs" />
-    <Compile Include="Views\Interview\InterviewItem.cs" />
-    <Compile Include="Views\Interview\InterviewFactory.cs" />
+    <Compile Include="Views\Interview\AllInterviewsInputModel.cs" />
+    <Compile Include="Views\Interview\AllInterviewsView.cs" />
+    <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
     <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />

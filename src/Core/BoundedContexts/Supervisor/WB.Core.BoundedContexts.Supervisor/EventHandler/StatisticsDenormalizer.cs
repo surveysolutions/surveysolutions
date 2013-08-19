@@ -21,7 +21,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class StatisticsDenormalizer : IEventHandler,
                                           IEventHandler<InterviewCreated>,
                                           IEventHandler<InterviewStatusChanged>,
-                                          IEventHandler<SupervisorAssigned>
+                                          IEventHandler<SupervisorAssigned>,
+                                          IEventHandler<InterviewDeleted>,
+                                          IEventHandler<InterviewerAssigned>
+
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate> statisticsStorage;
@@ -62,14 +65,26 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             StoreStatisticsItem(interviewBriefItem, statistics);
         }
 
-        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
             var statistics = this.GetStatisticItem(interviewBriefItem);
             DecreaseByStatus(statistics, interviewBriefItem.Status);
-            
-            IncreaseByStatus(statistics, evnt.Payload.Status);
 
+            interviewBriefItem.IsDeleted = true;
+            interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            StoreStatisticsItem(interviewBriefItem, statistics);
+        }
+
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        {
+            var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
+            var statistics = this.GetStatisticItem(interviewBriefItem);
+            if (evnt.Payload.Status != InterviewStatus.Deleted)
+            {
+                DecreaseByStatus(statistics, interviewBriefItem.Status);
+                IncreaseByStatus(statistics, evnt.Payload.Status);
+            }
             interviewBriefItem.Status = evnt.Payload.Status;
             interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             StoreStatisticsItem(interviewBriefItem, statistics);
@@ -77,21 +92,31 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
+            this.AssignToOtherUser(evnt.EventSourceId, evnt.Payload.SupervisorId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
+        {
+            this.AssignToOtherUser(evnt.EventSourceId, evnt.Payload.InterviewerId);
+        }
+
+        private void AssignToOtherUser(Guid interviewId, Guid interviewerId)
+        {
+            var interviewBriefItem = this.interviewBriefStorage.GetById(interviewId);
             //update old statistics
             var oldStatistics = this.GetStatisticItem(interviewBriefItem);
-            DecreaseByStatus(oldStatistics, interviewBriefItem.Status);
-            StoreStatisticsItem(interviewBriefItem, oldStatistics);
+            this.DecreaseByStatus(oldStatistics, interviewBriefItem.Status);
+            this.StoreStatisticsItem(interviewBriefItem, oldStatistics);
 
-            interviewBriefItem.ResponsibleId = evnt.Payload.SupervisorId;
+            interviewBriefItem.ResponsibleId = interviewerId;
             var statistics = this.GetStatisticItem(interviewBriefItem);
             if (statistics == null)
             {
-                statistics = CreateNewStatisticsLine(interviewBriefItem);
+                statistics = this.CreateNewStatisticsLine(interviewBriefItem);
             }
-            IncreaseByStatus(statistics, interviewBriefItem.Status);
-            interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            StoreStatisticsItem(interviewBriefItem, statistics);
+            this.IncreaseByStatus(statistics, interviewBriefItem.Status);
+            this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            this.StoreStatisticsItem(interviewBriefItem, statistics);
         }
 
         private StatisticsLineGroupedByUserAndTemplate CreateNewStatisticsLine(InterviewBrief interviewBriefItem)

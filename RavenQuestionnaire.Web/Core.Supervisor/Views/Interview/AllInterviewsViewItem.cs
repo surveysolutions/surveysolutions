@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace Core.Supervisor.Views.Interview
 {
-    public class InterviewViewItem
+    public class AllInterviewsViewItem
     {
         public IEnumerable<InterviewFeaturedQuestion> FeaturedQuestions { get; set; }
         public Guid InterviewId { get; set; }
@@ -16,6 +16,5 @@ namespace Core.Supervisor.Views.Interview
         public string Status { get; set; }
         public string LastEntryDate { get; set; }
         public bool CanDelete { get; set; }
-        public bool CanBeReassigned { get; set; }
     }
 }

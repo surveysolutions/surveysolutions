@@ -119,17 +119,17 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/documentlistview.js")
+    @Scripts.Render("~/Scripts/vm/hqDocumentlistview.js")
 
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
+        var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
         var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
-        var deleteInterviewUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "DeleteInterview" })';
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel(interviewsListUrl, deleteInterviewUrl, commandExecutionUrl, users);
+            var model = new DocumentListViewModel(currentUser, interviewsListUrl, commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });

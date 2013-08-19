@@ -1,8 +1,8 @@
-﻿DocumentListViewModel = function (listViewUrl, deleteInterviewUrl, commandUrl, users) {
+﻿DocumentListViewModel = function (currentUser, listViewUrl, commandUrl, users) {
     var self = this;
-    
-    self.deleteInterviewUrl = deleteInterviewUrl;
-    
+
+    self.CurrentUser = currentUser;
+  
     self.ListView = new ListViewModel(listViewUrl);
 
     self.ListView.mappingOptions = {
@@ -24,7 +24,7 @@
         this.IsSelected = ko.observable(false);
     };
 
-    self.ListView.IsNothingSelected = ko.computed(function () {
+    var countSelectedItems = function () {
         var count = 0;
         ko.utils.arrayForEach(self.ListView.Items(), function (item) {
             var value = item.IsSelected();
@@ -32,9 +32,23 @@
                 count++;
             }
         });
+        return count;
+    };
 
-        return count==0;
+    self.ListView.IsNothingSelected = ko.computed(function () {
+        return countSelectedItems() == 0;
     });
+    
+    self.ListView.IsOnlyOneSelected = ko.computed(function () {
+        return countSelectedItems() == 1;
+    });
+
+    self.ChangeState = function () {
+        var interview = ko.utils.arrayFirst(self.ListView.Items(), function (item) {
+            return item.IsSelected();
+        });
+        window.location = "/Interview/ChangeState/" + interview.InterviewId();
+    };
 
     self.Assign = function (user) {
         
@@ -49,7 +63,7 @@
             return ko.toJSON({
                 InterviewerId: user.UserId,
                 InterviewId: item.InterviewId,
-                UserId: user.UserId
+                UserId: self.CurrentUser.UserId
             });
         });
         
@@ -115,30 +129,5 @@
         self.ListView.search();
     };
 
-    self.deleteInterview = function () {
-        self.ListView.CheckForRequestComplete();
 
-        var selectedRawInterviews = ko.utils.arrayFilter(self.ListView.Items(), function (item) {
-            return item.IsSelected();
-        });
-
-        var request = { Interviews: [] };
-        for (var i = 0; i < selectedRawInterviews.length; i++) {
-            request.Interviews.push(selectedRawInterviews[i]["InterviewId"]());
-        }
-
-        self.ListView.IsAjaxComplete(false);
-
-        $.post(self.deleteInterviewUrl, request, null, "json")
-            .done(function (data) {
-                var deletedInterviews = ko.utils.arrayFilter(selectedRawInterviews, function (item) {
-                    return $.inArray(item["InterviewId"](), data["BlockedInterviews"]) == -1;
-                });
-                for (var i = 0; i < deletedInterviews.length; i++) {
-                    self.ListView.Items.remove(deletedInterviews[i]);
-                }
-                self.ListView.TotalCount(self.ListView.TotalCount() - deletedInterviews.length);
-                self.ListView.IsAjaxComplete(true);
-            });
-    };
 };

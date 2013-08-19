@@ -32,7 +32,10 @@
         <li>
             <label>Template</label>
             <select data-bind="value: SelectedTemplate" class="input-block-level">
-                <option>Any</option>
+                @if (Model.Count() > 1)
+                {
+                    <option>Any</option>
+                }
                 @foreach (var item in Model)
                 {
                     <option value="@item.TemplateId">@item.TemplateName</option>
