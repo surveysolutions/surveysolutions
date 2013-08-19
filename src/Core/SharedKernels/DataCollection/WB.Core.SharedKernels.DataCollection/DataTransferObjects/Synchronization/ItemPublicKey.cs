@@ -15,8 +15,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             PublicKey = publicKey;
             PropagationVector = new int[0];
         }
-        public readonly Guid PublicKey;
-        public readonly int[] PropagationVector;
+
+        public Guid PublicKey;
+        public int[] PropagationVector;
 
         public bool CompareWithVector(int[] vector)
         {
@@ -25,8 +26,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             return PropagationVector.All(vector.Contains);
         }
 
-        public bool IsTopLevel {
-            get { return this.PropagationVector.Length == 0; }
+        public bool IsTopLevel()
+        {
+            return this.PropagationVector.Length == 0;
         }
 
         public override bool Equals(object obj)
@@ -53,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public override string ToString()
         {
-            if (!IsTopLevel)
+            if (!IsTopLevel())
             {
                 string vector = string.Join(",", PropagationVector);
                 return string.Format("{0},{1}", vector, PublicKey);
