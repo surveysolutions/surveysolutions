@@ -1,3 +1,5 @@
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+
 namespace Core.Supervisor.Views.Survey
 {
     using System;
@@ -64,14 +66,6 @@ namespace Core.Supervisor.Views.Survey
         public CompleteGroupMobileView Group { get; set; }
 
         /// <summary>
-        /// get or set questionnaire active status - active if allow to edit, not error or completed
-        /// </summary>
-        public bool IsQuestionnaireActive
-        {
-            get { return !SurveyStatus.IsStatusAllowCapiSync(this.Status); }
-        }
-
-        /// <summary>
         /// Gets or sets the questionnaire public key.
         /// </summary>
         public Guid QuestionnairePublicKey { get; set; }
@@ -94,7 +88,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets Status.
         /// </summary>
-        public SurveyStatus Status { get; set; }
+        public InterviewStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets Navigation.

@@ -54,7 +54,7 @@ namespace Core.Supervisor.Views.Survey
             result.PublicKey = interview.InterviewId;
             result.Title = questionnarie.Title;
             result.Description = questionnarie.Description;
-            result.Status = SurveyStatus.Initial;
+            result.Status = interview.Status;
             result.Navigation = new ScreenNavigationView(screenMenu, null);
             result.Group = BuildCurrentScreen(questionnarie, interview);
             return result;
