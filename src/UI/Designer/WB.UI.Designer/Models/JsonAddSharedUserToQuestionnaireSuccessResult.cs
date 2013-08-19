@@ -3,5 +3,6 @@
     public class JsonAddSharedUserToQuestionnaireSuccessResult: JsonSuccessResult
     {
         public bool IsAlreadyShared { get; set; }
+        public bool IsOwner { get; set; }
     }
 }

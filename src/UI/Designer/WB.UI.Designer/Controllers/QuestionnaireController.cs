@@ -275,13 +275,19 @@ namespace WB.UI.Designer.Controllers
 
             var isAlreadyShared = questionnaireSharedPersons != null &&
                                   questionnaireSharedPersons.SharedPersons.Any(x => x.Id == sharedPersonId);
-            if (!isAlreadyShared)
+            var isOwner = sharedPersonId == questionnaire.CreatedBy;
+
+            if (!isAlreadyShared && !isOwner)
             {
                 commandService.Execute(new AddSharedPersonToQuestionnaireCommand(questionnaireId: id,
                     personId: sharedPersonId, email: userEmail));
             }
 
-            return Json(new JsonAddSharedUserToQuestionnaireSuccessResult() {IsAlreadyShared = isAlreadyShared});
+            return Json(new JsonAddSharedUserToQuestionnaireSuccessResult()
+            {
+                IsAlreadyShared = isAlreadyShared,
+                IsOwner = isOwner
+            });
         }
 
         [HttpPost]
