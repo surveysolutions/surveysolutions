@@ -32,31 +32,47 @@ namespace Core.Supervisor.Views.Survey
 
         public SurveyScreenView Load(DisplayViewInputModel input)
         {
-            var doc = this.interviewStore.GetById(input.CompleteQuestionnaireId);
+            var interview = this.interviewStore.GetById(input.CompleteQuestionnaireId);
 
-            if (doc == null || doc.IsDeleted)
+            if (interview == null || interview.IsDeleted)
             {
                 return null;
             }
 
-            var user = this.userStore.GetById(doc.ResponsibleId);
-            var questionnarie = this.questionnarieStore.GetById(doc.QuestionnaireId);
+            var user = this.userStore.GetById(interview.ResponsibleId);
+            var questionnarie = this.questionnarieStore.GetById(interview.QuestionnaireId);
 
             if (!input.CurrentGroupPublicKey.HasValue)
             {
-                input.CurrentGroupPublicKey = doc.InterviewId;
+                input.CurrentGroupPublicKey = interview.InterviewId;
             }
             var screenMenu = BuildScreenMenu(questionnarie);
             var result = new SurveyScreenView();
 
             result.User = input.User;
-            result.Responsible = new UserLight(doc.ResponsibleId, user.UserName);
-            result.PublicKey = doc.InterviewId;
+            result.Responsible = new UserLight(interview.ResponsibleId, user.UserName);
+            result.PublicKey = interview.InterviewId;
             result.Title = questionnarie.Title;
             result.Description = questionnarie.Description;
             result.Status = SurveyStatus.Initial;
             result.Navigation = new ScreenNavigationView(screenMenu, null);
+            result.Group = BuildCurrentScreen(questionnarie, interview);
             return result;
+        }
+
+        private CompleteGroupMobileView BuildCurrentScreen(QuestionnaireDocument questionnarie, InterviewData interview)
+        {
+            var screen = new CompleteGroupMobileView()
+            {
+                PublicKey = interview.InterviewId,
+                Title = questionnarie.Title,
+                Propagated = questionnarie.Propagated,
+                Enabled = true,
+                Description = questionnarie.Description,
+                QuestionnairePublicKey = interview.InterviewId
+            };
+            
+            return screen;
         }
 
         private List<DetailsMenuItem> BuildScreenMenu(QuestionnaireDocument questionnarie)
