@@ -79,7 +79,8 @@
                                || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
                            CanExport = true, 
                            CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
-                                     x.SharedPersons.Contains(this.userService.WebUser.UserId), 
+                                     x.SharedPersons.Contains(this.userService.WebUser.UserId) ||
+                                     this.userService.WebUser.IsAdmin, 
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
                            CanExportToPdf = true,
                            CreatorName =

@@ -142,8 +142,8 @@ namespace WB.UI.Designer.Controllers
             QuestionnaireSharedPersons questionnaireSharedPersons =
                 this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() {QuestionnaireId = id});
 
-            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId &&
-                questionnaireSharedPersons.SharedPersons.All(x => x.Id != this.UserHelper.WebUser.UserId))
+            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId && !UserHelper.WebUser.IsAdmin &&
+                ((questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.All(x => x.Id != this.UserHelper.WebUser.UserId)))
             {
                 throw new HttpException(403, string.Empty);
             }
