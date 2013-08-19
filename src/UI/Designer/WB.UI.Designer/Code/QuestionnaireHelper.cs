@@ -78,7 +78,8 @@
                                (x.CreatedBy == this.userService.WebUser.UserId
                                || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
                            CanExport = true, 
-                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
+                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
+                                     x.SharedPersons.Contains(this.userService.WebUser.UserId), 
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
                            CanExportToPdf = true,
                            CreatorName =
@@ -100,8 +101,9 @@
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
                            CanExportToPdf = true,
-                           CanDelete = !x.IsDeleted,
-                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
+                           CanDelete = x.CreatedBy == this.userService.WebUser.UserId && !x.IsDeleted,
+                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
+                                     x.SharedPersons.Contains(this.userService.WebUser.UserId), 
                            CanExport = true, 
                            CanSynchronize = this.userService.WebUser.IsAdmin
                        };
