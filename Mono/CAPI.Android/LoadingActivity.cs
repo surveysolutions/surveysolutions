@@ -82,6 +82,8 @@ namespace CAPI.Android
                 commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 
                 syncCacher.DeleteItem(publicKey);
+                return;
+                
             }
 
             var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, 0, long.MaxValue);

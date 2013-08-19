@@ -50,6 +50,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             foreach (var answeredQuestion in interviewData.AnsweredQuestions)
             {
                 var questionKey = new ItemPublicKey(answeredQuestion.Id, answeredQuestion.PropagationVector);
+                if (!this.Questions.ContainsKey(questionKey))
+                    continue;
+
                 SetAnswer(questionKey, answeredQuestion.Answer);
                 SetComment(questionKey, answeredQuestion.Comments);
             }

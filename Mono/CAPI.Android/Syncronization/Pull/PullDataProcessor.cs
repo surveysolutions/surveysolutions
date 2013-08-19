@@ -122,16 +122,16 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-           /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
-            {*/
-                string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
+            /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
+             {*/
+            string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
-                var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
-                
-                ////todo: 
-                //save item to sync cache for handling on demand
-                var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
-                syncCacher.SaveItem(item.Id, item.Content);
+            var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
+
+            ////todo: 
+            //save item to sync cache for handling on demand
+            var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
+            syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
             commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
                                                                       metaInfo.ResponsibleId,

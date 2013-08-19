@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
 
-            var interviewSyncData = BuildSynchronizationDto(interview);
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, evnt.Payload.InterviewerId);           
             
             syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
         }
@@ -52,12 +52,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
 
-            var interviewSyncData = BuildSynchronizationDto(interview);
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, interview.ResponsibleId);
 
             syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
         }
 
-        private InterviewSynchronizationDto BuildSynchronizationDto(InterviewData interview)
+        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<ItemPublicKey>();
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
                                                    interview.Status,
-                                                   interview.ResponsibleId, interview.QuestionnaireId,
+                                                   userId, interview.QuestionnaireId,
                                                    answeredQuestions, disabledGroups, disabledQuestions,
                                                    invalidQuestions, propagatedGroupInstanceCounts);
         }
