@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, evnt.Payload.InterviewerId);           
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, evnt.Payload.InterviewerId, InterviewStatus.InterviewerAssigned);           
             
             syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
         }
@@ -52,12 +52,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, interview.ResponsibleId);
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, interview.ResponsibleId, InterviewStatus.RejectedBySupervisor);
 
-            syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
+            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
 
-        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId)
+        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId, InterviewStatus status)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<ItemPublicKey>();
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel, propagatedGroupInstanceCounts);
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
-                                                   interview.Status,
+                                                   status,
                                                    userId, interview.QuestionnaireId,
                                                    answeredQuestions, disabledGroups, disabledQuestions,
                                                    invalidQuestions, propagatedGroupInstanceCounts);

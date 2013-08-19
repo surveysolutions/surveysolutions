@@ -27,7 +27,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
-        IEventHandler<AnswerDeclaredValid>
+        IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage;
@@ -53,7 +54,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            var document = GetStoredObject(evnt.EventSourceId);
+            var document = GetStoredObject(evnt.EventSourceId); 
             if (document == null)
                 return;
             document.Status = InterviewStatus.Completed;
@@ -163,6 +164,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var doc = GetStoredObject(evnt.EventSourceId);
             doc.UpdatePropagateGroupsByTemplate(evnt.Payload.GroupId, evnt.Payload.OuterScopePropagationVector,
                                                 evnt.Payload.Count);
+        }
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            this.interviewStorage.Remove(evnt.EventSourceId);
         }
     }
 }

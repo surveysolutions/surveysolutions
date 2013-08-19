@@ -16,7 +16,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
     public class DashboardDenormalizer :
                                       IEventHandler<InterviewMetaInfoUpdated>,
                                       IEventHandler<InterviewCompleted>,
-                                      IEventHandler<InterviewRestarted>, IEventHandler<TemplateImported>
+                                      IEventHandler<InterviewRestarted>, 
+                                      IEventHandler<TemplateImported>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnaireStorage;
