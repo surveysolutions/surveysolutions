@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
@@ -77,6 +78,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             interview.Status = evnt.Payload.Status;
             interview.UpdateDate = evnt.EventTimeStamp;
+
+            interview.CommentedStatusesHistory.Add(new InterviewCommentedStatus()
+                {
+                    Status = interview.Status,
+                    Date = interview.UpdateDate,
+                    Comment = ""
+                });
 
             this.interviews.Store(interview, interview.InterviewId);
         }
