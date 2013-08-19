@@ -7,9 +7,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public InterviewStatus Status { get; private set; }
 
-        public InterviewStatusChanged(InterviewStatus status)
+        public string Comment { get; private set; }
+
+        public InterviewStatusChanged(InterviewStatus status, string comment = "")
         {
             this.Status = status;
+            this.Comment = comment;
         }
     }
 }

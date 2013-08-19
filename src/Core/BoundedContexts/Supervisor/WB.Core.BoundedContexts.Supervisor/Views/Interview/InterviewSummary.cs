@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 
         public InterviewSummary(QuestionnaireBrowseItem questionnaireSummary)
         {
+            CommentedStatusesHistory = new List<InterviewCommentedStatus>();
             AnswersToFeaturedQuestions = new Dictionary<Guid, QuestionAnswer>();
             foreach (var featuredQuestion in questionnaireSummary.FeaturedQuestions)
             {
@@ -35,6 +36,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         public UserRoles ResponsibleRole { get; set; }
         public DateTime UpdateDate { get; set; }
         public Dictionary<Guid, QuestionAnswer> AnswersToFeaturedQuestions { get; set; }
+
+        public List<InterviewCommentedStatus> CommentedStatusesHistory { get; set; }
+    }
+
+    public class InterviewCommentedStatus
+    {
+        public string Comment { get; set; }
+        public DateTime Date { get; set; }
+        public InterviewStatus Status { get; set; }
     }
 
     public class QuestionAnswer
