@@ -77,7 +77,7 @@
                     }
                 }
 
-                if (!isInvalidUser && filterContext.Controller is AccountController && filterContext.ActionDescriptor.ActionName.NotIn(new [] { "logoff", "manage" }))
+                if (!isInvalidUser && filterContext.Controller is AccountController && filterContext.ActionDescriptor.ActionName.NotIn(new[] { "logoff", "manage", "findbyemail" }))
                 {
                     filterContext.Result =
                         new RedirectToRouteResult(
