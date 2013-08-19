@@ -1,11 +1,11 @@
-﻿using Main.Core.Services;
+﻿using System.IO;
+using System.Web.Mvc;
+using Main.Core.Services;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Web.Mvc;
-
     /// <summary>
-    /// Responsible for load images
+    ///     Responsible for load images
     /// </summary>
     public class ResourceController : Controller
     {
@@ -19,14 +19,14 @@ namespace Web.Supervisor.Controllers
         [HttpGet]
         public ActionResult Images(string id)
         {
-            var fileBytes = this.fileStorageService.RetrieveFile(id).Content;
+            Stream fileBytes = this.fileStorageService.RetrieveFile(id).Content;
             return this.File(fileBytes, "image/png");
         }
 
         [HttpGet]
         public ActionResult Thumb(string id)
         {
-            var fileBytes = this.fileStorageService.RetrieveThumb(id).Content;
+            Stream fileBytes = this.fileStorageService.RetrieveThumb(id).Content;
             return this.File(fileBytes, "image/png");
         }
     }

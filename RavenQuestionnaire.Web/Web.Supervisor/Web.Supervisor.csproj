@@ -314,7 +314,6 @@
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Controllers\TestUnhandledExceptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
@@ -474,6 +473,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\changeState\main.js" />
+    <Content Include="Scripts\changeState\app\viewmodel.js" />
     <Content Include="Scripts\details\app\config.js" />
     <Content Include="Scripts\details\app\datacontext.js" />
     <Content Include="Scripts\details\app\dataservice.js" />

@@ -1,95 +1,92 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Core.Supervisor.Views;
+using System.Web.Mvc;
 using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.Interviews;
-using Core.Supervisor.Views.Status;
-using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
-using Core.Supervisor.Views.User;
 using Core.Supervisor.Views.UsersAndQuestionnaires;
 using Main.Core.Entities.SubEntities;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Web.Mvc;
-
-    using Main.Core.View;
-
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using Web.Supervisor.Models;
-
     [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
-        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
-        private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
         private readonly IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory;
-        private readonly IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory;
+        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
+
+        private readonly IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
+            teamUsersAndQuestionnairesFactory;
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory, 
-            IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
-            IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView> teamUsersAndQuestionnairesFactory)
+                                IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
+                                IViewFactory<InterviewersInputModel, InterviewersView> interviewersFactory,
+                                IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
+                                    teamUsersAndQuestionnairesFactory)
             : base(commandService, provider, logger)
         {
             this.surveyUsersViewFactory = surveyUsersViewFactory;
-            this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.interviewersFactory = interviewersFactory;
             this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
         }
 
         public ActionResult Index()
         {
-            ViewBag.ActivePage = MenuItem.Surveys;
-            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+            this.ViewBag.ActivePage = MenuItem.Surveys;
+            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
             return this.View(usersAndQuestionnaires.Users);
         }
 
         public ActionResult Interviews()
         {
-            ViewBag.ActivePage = MenuItem.Docs;
-            var currentUser = this.GlobalInfo.GetCurrentUser();
-            ViewBag.CurrentUser = new SurveyUsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
-            return this.View(Filters());
+            this.ViewBag.ActivePage = MenuItem.Docs;
+            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
+            this.ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
+            return this.View(this.Filters());
         }
 
         public ActionResult TeamMembersAndStatuses()
         {
-            ViewBag.ActivePage = MenuItem.Summary;
-            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
+            this.ViewBag.ActivePage = MenuItem.Summary;
+            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
             return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()
         {
-            ViewBag.ActivePage = MenuItem.Statuses;
+            this.ViewBag.ActivePage = MenuItem.Statuses;
             return this.View(StatusHelper.SurveyStatusViewItems());
         }
 
         private DocumentFilter Filters()
         {
-            var statuses = StatusHelper.SurveyStatusViewItems();
-            var viewerId = this.GlobalInfo.GetCurrentUser().Id;
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems();
+            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
 
-            var usersAndQuestionnaires = teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(viewerId));
+            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(viewerId));
 
             return new DocumentFilter
-            {
-                Users = this.interviewersFactory.Load(new InterviewersInputModel(viewerId){PageSize = int.MaxValue}).Items.Where(u => !u.IsLocked).Select(u => new SurveyUsersViewItem()
-                    {
-                        UserId = u.UserId,
-                        UserName = u.UserName
-                    }),
-                Responsibles = usersAndQuestionnaires.Users,
-                Templates = usersAndQuestionnaires.Questionnaires,
-                Statuses = statuses
-            };
+                {
+                    Users =
+                        this.interviewersFactory.Load(new InterviewersInputModel(viewerId) {PageSize = int.MaxValue})
+                            .Items.Where(u => !u.IsLocked)
+                            .Select(u => new SurveyUsersViewItem
+                                {
+                                    UserId = u.UserId,
+                                    UserName = u.UserName
+                                }),
+                    Responsibles = usersAndQuestionnaires.Users,
+                    Templates = usersAndQuestionnaires.Questionnaires,
+                    Statuses = statuses
+                };
         }
-     }
+    }
 }

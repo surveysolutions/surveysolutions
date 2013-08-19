@@ -1,5 +1,4 @@
 using System.Linq;
-using Core.Supervisor.Views.Assign;
 using Main.Core.Documents;
 using Main.Core.View;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

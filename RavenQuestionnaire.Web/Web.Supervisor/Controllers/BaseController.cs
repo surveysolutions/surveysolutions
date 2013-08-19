@@ -1,14 +1,11 @@
-﻿using WB.Core.GenericSubdomains.Logging;
+﻿using System.Web.Mvc;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
+using WB.Core.GenericSubdomains.Logging;
+using Web.Supervisor.Utils;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Web.Mvc;
-
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using Utils;
-
     public abstract class BaseController : Controller
     {
         protected readonly ICommandService CommandService;

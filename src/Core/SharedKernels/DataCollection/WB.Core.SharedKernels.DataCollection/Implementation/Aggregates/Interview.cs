@@ -584,20 +584,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted));
         }
 
-        public void Approve(Guid userId)
+        public void Approve(Guid userId, string comment)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor);
 
             this.ApplyEvent(new InterviewApproved(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
         }
 
-        public void Reject(Guid userId)
+        public void Reject(Guid userId, string comment)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor);
 
             this.ApplyEvent(new InterviewRejected(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
 

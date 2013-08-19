@@ -1,69 +1,50 @@
-﻿using Main.Core.Commands.Questionnaire;
+﻿using System;
+using System.Net;
+using System.ServiceModel.Security;
+using System.Web.Mvc;
+using Core.Supervisor.Views.Template;
+using Main.Core.Documents;
+using Main.Core.Utility;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using Web.Supervisor.DesignerPublicService;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Net;
-    using System.ServiceModel.Security;
-    using System.Web.Mvc;
-
-    using Core.Supervisor.Views.Template;
-
-    using Main.Core.Documents;
-    using Main.Core.Utility;
-    
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using WB.Core.SharedKernel.Utils.Compression;
-
-    using Web.Supervisor.DesignerPublicService;
-    using Web.Supervisor.Models;
-
     /// <summary>
-    /// The template controller.
+    ///     The template controller.
     /// </summary>
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
         private readonly IStringCompressor zipUtils;
-        #region Constructors and Destructors
 
         public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
 
-            ViewBag.ActivePage = MenuItem.Administration;
+            this.ViewBag.ActivePage = MenuItem.Administration;
 
             #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
             ServicePointManager.ServerCertificateValidationCallback =
-                    (self, certificate, chain, sslPolicyErrors) => true;
+                (self, certificate, chain, sslPolicyErrors) => true;
         }
-
-        #endregion
 
         private IPublicService DesignerService
         {
-            get
-            {
-                return DesignerServiceClient;
-            }
+            get { return this.DesignerServiceClient; }
         }
 
         private PublicServiceClient DesignerServiceClient
         {
-            get
-            {
-                return (PublicServiceClient)this.Session[GlobalInfo.GetCurrentUser().Name];
-            }
+            get { return (PublicServiceClient) this.Session[this.GlobalInfo.GetCurrentUser().Name]; }
 
-            set
-            {
-                this.Session[GlobalInfo.GetCurrentUser().Name] = value;
-            }
+            set { this.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
         }
 
         public ActionResult Import(QuestionnaireListInputModel model)
@@ -75,7 +56,7 @@ namespace Web.Supervisor.Controllers
 
             return
                 this.View(
-                    DesignerService.GetQuestionnaireList(
+                    this.DesignerService.GetQuestionnaireList(
                         new QuestionnaireListRequest(
                             Filter: string.Empty,
                             PageIndex: model.Page,
@@ -92,7 +73,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult LoginToDesigner(LogOnModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 var service = new PublicServiceClient();
                 service.ClientCredentials.UserName.UserName = model.UserName;
@@ -102,9 +83,9 @@ namespace Web.Supervisor.Controllers
                 {
                     service.Dummy();
 
-                    DesignerServiceClient = service;
+                    this.DesignerServiceClient = service;
 
-                    return RedirectToAction("Import");
+                    return this.RedirectToAction("Import");
                 }
                 catch (MessageSecurityException)
                 {
@@ -116,7 +97,7 @@ namespace Web.Supervisor.Controllers
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
                             GlobalHelper.GenerateUrl("Import", "Template", null)));
-                    Logger.Error("Could not connect to designer.", ex);
+                    this.Logger.Error("Could not connect to designer.", ex);
                 }
             }
 
@@ -126,8 +107,8 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult List(GridDataRequestModel data)
         {
-            var list =
-                DesignerService.GetQuestionnaireList(
+            QuestionnaireListView list =
+                this.DesignerService.GetQuestionnaireList(
                     new QuestionnaireListRequest(
                         Filter: string.Empty,
                         PageIndex: data.Pager.Page,
@@ -143,13 +124,13 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var docSource = DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
-                document = zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
+                RemoteFileInfo docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
+                document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
             }
             catch (Exception ex)
             {
                 this.Error("Error when downloading questionnaire from designer. Please try again");
-                Logger.Error("Unexpected error occurred", ex);
+                this.Logger.Error("Unexpected error occurred", ex);
             }
 
             if (document == null)
@@ -160,7 +141,7 @@ namespace Web.Supervisor.Controllers
             {
                 this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
 
-                return this.RedirectToAction("Index", "HQ");    
+                return this.RedirectToAction("Index", "HQ");
             }
         }
     }

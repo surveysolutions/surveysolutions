@@ -185,6 +185,9 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -214,10 +217,6 @@
     <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
-    <Compile Include="Views\Status\StatusFactory.cs" />
-    <Compile Include="Views\Status\StatusView.cs" />
-    <Compile Include="Views\Status\StatusViewInputModel.cs" />
-    <Compile Include="Views\Status\StatusViewItem.cs" />
     <Compile Include="Views\Survey\SurveysViewFactory.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
@@ -230,10 +229,7 @@
     <Compile Include="Views\Interview\AllInterviewsView.cs" />
     <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
-    <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
-    <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />
-    <Compile Include="Views\Summary\SummaryTemplatesFactory.cs" />
-    <Compile Include="Views\Summary\TemplateViewItem.cs" />
+    <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
     <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
     <Compile Include="Views\Survey\SurveysViewItem.cs" />
@@ -247,9 +243,6 @@
     <Compile Include="Views\Survey\SurveyScreen.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Assign\AssignSurveyInputModel.cs" />
-    <Compile Include="Views\Assign\AssignSurveyView.cs" />
-    <Compile Include="Views\Assign\AssignSurveyViewFactory.cs" />
     <Compile Include="Views\Survey\DetailsMenuItem.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
     <Compile Include="Views\Survey\ScreenWithRout.cs" />
@@ -275,16 +268,7 @@
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\Interviewer\InterviewerView.cs" />
     <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />
-    <Compile Include="Views\Index\IndexViewItem.cs" />
-    <Compile Include="Views\Index\IndexView.cs" />
-    <Compile Include="Views\Index\SurveyGroupedByStatusHeader.cs" />
-    <Compile Include="Views\Index\IndexViewFactory.cs" />
-    <Compile Include="Views\Index\IndexInputModel.cs" />
-    <Compile Include="Views\Summary\SummaryFactory.cs" />
-    <Compile Include="Views\Summary\SummaryInputModel.cs" />
-    <Compile Include="Views\Summary\SummaryView.cs" />
-    <Compile Include="Views\Summary\SummaryViewItem.cs" />
-    <Compile Include="Views\Survey\SurveyUsersViewItem.cs" />
+    <Compile Include="Views\Reposts\Views\SurveyUsersViewItem.cs" />
     <Compile Include="Views\Survey\WhereClouseHelper.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />

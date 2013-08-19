@@ -1,25 +1,22 @@
-
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using Main.Core.Export;
+using Questionnaire.Core.Web.Helpers;
+using Questionnaire.Core.Web.Threading;
 using SynchronizationMessages.Export;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Synchronization;
+
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Threading;
-    using System.Web;
-    using System.Web.Mvc;
-    using Main.Core.Export;
-    using Questionnaire.Core.Web.Helpers;
-    using Questionnaire.Core.Web.Threading;
-
-
     [NoAsyncTimeout]
     public class ImportExportController : AsyncController
     {
-        private readonly IDataExport exporter;
         private readonly IBackupManager backupManager;
+        private readonly IDataExport exporter;
         private readonly ILogger logger;
 
         public ImportExportController(
@@ -49,16 +46,16 @@ namespace Web.Supervisor.Controllers
             Guid syncProcess = Guid.NewGuid();
 
             WaitCallback callback = (state) =>
-            {
-                try
                 {
-                    backupManager.Restore(zipData);
-                }
-                catch (Exception e)
-                {
-                    logger.Fatal("Error on import ", e);
-                }
-            };
+                    try
+                    {
+                        this.backupManager.Restore(zipData);
+                    }
+                    catch (Exception e)
+                    {
+                        this.logger.Fatal("Error on import ", e);
+                    }
+                };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
 
             return syncProcess;
@@ -68,7 +65,7 @@ namespace Web.Supervisor.Controllers
         {
             return this.RedirectToAction("Index", "Survey");
         }
-         
+
         [Authorize(Roles = "Headquarter")]
         public void GetExportedDataAsync(Guid id, string type)
         {
@@ -80,16 +77,16 @@ namespace Web.Supervisor.Controllers
             AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
                 () =>
-                {
-                    try
                     {
-                        this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
-                    }
-                    catch
-                    {
-                        this.AsyncManager.Parameters["result"] = null;
-                    }
-                });
+                        try
+                        {
+                            this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
+                        }
+                        catch
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                        }
+                    });
         }
 
         public ActionResult GetExportedDataCompleted(byte[] result)
@@ -106,20 +103,19 @@ namespace Web.Supervisor.Controllers
                     {
                         try
                         {
-                            var data = backupManager.Backup();
+                            ZipFileData data = this.backupManager.Backup();
                             this.AsyncManager.Parameters["result"] = ZipHelper.Compress(data);
                         }
                         catch (Exception e)
                         {
                             this.AsyncManager.Parameters["result"] = null;
-                            logger.Fatal("Error on export " + e.Message, e);
+                            this.logger.Fatal("Error on export " + e.Message, e);
                             if (e.InnerException != null)
                             {
-                                logger.Fatal("Error on export (Inner Exception)", e.InnerException);
+                                this.logger.Fatal("Error on export (Inner Exception)", e.InnerException);
                             }
                         }
                     });
-
         }
 
         public ActionResult BackupCompleted(byte[] result)
@@ -127,6 +123,5 @@ namespace Web.Supervisor.Controllers
             return this.File(result, "application/zip",
                              string.Format("backup_{0}.zip", DateTime.UtcNow.ToString("yyyyMMddhhnnss")));
         }
-
     }
 }
