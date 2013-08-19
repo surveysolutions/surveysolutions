@@ -1,6 +1,8 @@
-﻿using System.Web.Routing;
+﻿using System.Web.Security;
 using Main.Core.Domain;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using System.Linq;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -26,20 +28,23 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IExpressionReplacer expressionReplacer;
 
         public QuestionnaireController(
             ICommandService commandService,
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory,
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IExpressionReplacer expressionReplacer)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
-            this.viewFactory = viewFactory;
+            this.questionnaireViewFactory = questionnaireViewFactory;
+            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.expressionReplacer = expressionReplacer;
         }
 
@@ -132,18 +137,25 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            QuestionnaireView model = this.GetQuestionnaire(id);
+            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
 
-            if (model.CreatedBy != UserHelper.WebUser.UserId)
+            QuestionnaireSharedPersons questionnaireSharedPersons =
+                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() {QuestionnaireId = id});
+
+            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId && !UserHelper.WebUser.IsAdmin &&
+                ((questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.All(x => x.Id != this.UserHelper.WebUser.UserId)))
             {
                 throw new HttpException(403, string.Empty);
             }
             else
             {
-                this.ReplaceGuidsInValidationAndConditionRules(model);
+                this.ReplaceGuidsInValidationAndConditionRules(questionnaire);
             }
 
-            return View(model);
+            return
+                View(new QuestionnaireEditView(questionaire: questionnaire,
+                    questionnaireSharedPersons: questionnaireSharedPersons,
+                    isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -166,13 +178,13 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.WebUser.UserId);
+                viewerId: UserHelper.WebUser.UserId);
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire =
-                this.viewFactory.Load(
+                this.questionnaireViewFactory.Load(
                     new QuestionnaireViewInputModel(id));
 
             if (questionnaire == null)
@@ -194,7 +206,7 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.WebUser.UserId);
+                viewerId: UserHelper.WebUser.UserId);
         }
 
         private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
@@ -244,6 +256,56 @@ namespace WB.UI.Designer.Controllers
             {
                 sortBy = string.Format("{0} Desc", sortBy);
             }
+        }
+
+        [HttpPost]
+        public JsonResult AddSharedPerson(Guid id, string userEmail)
+        {
+            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
+            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId)
+            {
+                throw new HttpException(403, string.Empty);
+            }
+
+            var sharedPersonUserName = Membership.GetUserNameByEmail(userEmail);
+            var sharedPersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
+
+            QuestionnaireSharedPersons questionnaireSharedPersons =
+                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
+
+            var isAlreadyShared = questionnaireSharedPersons != null &&
+                                  questionnaireSharedPersons.SharedPersons.Any(x => x.Id == sharedPersonId);
+            var isOwner = sharedPersonId == questionnaire.CreatedBy;
+
+            if (!isAlreadyShared && !isOwner)
+            {
+                commandService.Execute(new AddSharedPersonToQuestionnaireCommand(questionnaireId: id,
+                    personId: sharedPersonId, email: userEmail));
+            }
+
+            return Json(new JsonAddSharedUserToQuestionnaireSuccessResult()
+            {
+                IsAlreadyShared = isAlreadyShared,
+                IsOwner = isOwner
+            });
+        }
+
+        [HttpPost]
+        public JsonResult RemoveSharedPerson(Guid id, string userEmail)
+        {
+            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
+            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId)
+            {
+                throw new HttpException(403, string.Empty);
+            }
+
+            var sharedPersonUserName = Membership.GetUserNameByEmail(userEmail);
+            var sharedPerson = Membership.GetUser(sharedPersonUserName);
+
+            commandService.Execute(new RemoveSharedPersonFromQuestionnaireCommand(questionnaireId: id,
+                personId: sharedPerson.ProviderUserKey.AsGuid()));
+
+            return Json(new JsonSuccessResult());
         }
     }
 }

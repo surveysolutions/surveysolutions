@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Controllers
         {
             MembershipUser account = this.GetUser(id);
 
-            var questionnaires = this.questionnaireHelper.GetQuestionnairesByUserId(userId: id);
+            var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id);
             questionnaires.ToList().ForEach(
                 x =>
                     {
@@ -202,7 +202,7 @@ namespace WB.UI.Designer.Controllers
                                  IsApproved = x.IsApproved, 
                                  IsLockedOut = x.IsLockedOut, 
                                  CanEdit = editAction(x), 
-                                 CanDelete = editAction(x), 
+                                 CanDelete = false, 
                                  CanPreview = editAction(x)
                              });
             return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
