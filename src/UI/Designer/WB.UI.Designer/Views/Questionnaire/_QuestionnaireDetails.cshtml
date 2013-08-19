@@ -4,21 +4,22 @@
 </div>
 <div class="body container-fluid">
     <div class="row-fluid">
-        <div class="control-group" data-bind="validationElement: title">
+        <div class="control-group">
             <label class="control-label required">Title</label>
             <div class="controls">
-                <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
+                <input type="text" data-bind="value: title, disable: true" class="span12" />
             </div>
         </div>
     </div>
     <div class="row-fluid">
-        <label class="checkbox">
-            <input type="checkbox" data-bind="checked: isPublic" />Make public
-        </label>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: isPublic, disable: true" />Is public?
+                </label>
+            </div>
+        </div>
     </div>
 </div>
 <div class="pane-bottom">
-    <div class="inner">
-        <button class="btn btn-success" data-bind="click: $root.saveQuestionnaire, visible: dirtyFlag().isDirty(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
-    </div>
 </div>

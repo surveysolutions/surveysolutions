@@ -483,6 +483,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     });
         }
 
+        public void AddSharedPerson(Guid personId, string email)
+        {
+            this.ApplyEvent(new SharedPersonToQuestionnaireAdded() {PersonId = personId, Email = email});
+        }
+
+        public void RemoveSharedPerson(Guid personId)
+        {
+            this.ApplyEvent(new SharedPersonFromQuestionnaireRemoved() {PersonId = personId});
+        }
+
+        protected void OnSharedPersonToQuestionnaireAdded(SharedPersonToQuestionnaireAdded e) {}
+        protected  void OnSharedPersonFromQuestionnaireRemoved(SharedPersonFromQuestionnaireRemoved e){}
+
         protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = e.Title;
