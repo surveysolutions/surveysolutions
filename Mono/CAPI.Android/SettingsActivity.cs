@@ -12,6 +12,7 @@ using CAPI.Android.Extensions;
 using CAPI.Android.GeolocationServices;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Update;
+using CAPI.Android.Utils;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using Xamarin.Geolocation;
@@ -132,6 +133,11 @@ namespace CAPI.Android
 
         private void btnVersion_Click(object sender, EventArgs evnt)
         {
+            if (!NetworkHelper.IsNetworkEnabled(this))
+            {
+                Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
+                return;
+            }
             progress = ProgressDialog.Show(this, "Checking", "Please Wait...", true, true);
             Task.Factory.StartNew(CheckVersion);
         }
