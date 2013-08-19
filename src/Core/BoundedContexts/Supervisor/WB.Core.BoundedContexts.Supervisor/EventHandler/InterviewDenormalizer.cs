@@ -24,9 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                          IEventHandler<SupervisorAssigned>,
                                          IEventHandler<InterviewerAssigned>,
 
-    IEventHandler<GroupPropagated>,
-        IEventHandler<InterviewCompleted>,
-        IEventHandler<InterviewRestarted>,
+        IEventHandler<GroupPropagated>,
         IEventHandler<AnswerCommented>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<NumericQuestionAnswered>,
@@ -90,24 +88,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviews.Store(interview, interview.InterviewId);
         }
 
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
-        {
-            var interview = this.interviews.GetById(evnt.EventSourceId);
-
-            interview.Status = InterviewStatus.Completed;
-
-            this.interviews.Store(interview, interview.InterviewId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
-        {
-            var interview = this.interviews.GetById(evnt.EventSourceId);
-
-            interview.Status = InterviewStatus.Restarted;
-
-            this.interviews.Store(interview, interview.InterviewId);
-        }
-
         public string Name
         {
             get { return GetType().Name; }
@@ -141,7 +121,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             if (countOfLevelByScope < evnt.Payload.Count)
             {
-                AddNewLevelsToInterview(interview, startIndex: countOfLevelByScope + 1,
+                AddNewLevelsToInterview(interview, startIndex: countOfLevelByScope,
                              count: evnt.Payload.Count - countOfLevelByScope,
                              outerVecor: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
             }

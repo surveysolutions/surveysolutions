@@ -167,7 +167,8 @@ namespace CAPI.Android
         {
            
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
             bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
         }
