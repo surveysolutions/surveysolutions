@@ -185,6 +185,9 @@
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs">
       <SubType>Code</SubType>
     </Compile>

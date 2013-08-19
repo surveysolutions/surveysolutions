@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-
-using WB.Core.Infrastructure;
+﻿using System.Web.Mvc;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Web.Supervisor.Controllers
@@ -31,7 +27,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult RebuildReadLayerPartially(string[] handlers)
         {
             this.readSideAdministrationService.RebuildViewsAsync(handlers);
-            this.TempData["CheckedHandlers"]= handlers;
+            this.TempData["CheckedHandlers"] = handlers;
             return this.RedirectToAction("ReadLayer");
         }
 

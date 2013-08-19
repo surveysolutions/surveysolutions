@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Core.Supervisor.Views;
-using Core.Supervisor.Views.Assign;
-using Core.Supervisor.Views.Summary;
 using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
@@ -28,11 +25,9 @@ namespace Web.Supervisor.Controllers
     public class HQController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
-        private readonly IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory;
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
         private readonly ISampleImportService sampleImportService;
-        private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
         private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
@@ -43,9 +38,7 @@ namespace Web.Supervisor.Controllers
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
                             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
                             IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
-                            IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
                             IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-                            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
                             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
                             IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
                             ISampleImportService sampleImportService,
@@ -56,9 +49,7 @@ namespace Web.Supervisor.Controllers
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireItemFactory = questionnaireItemFactory;
             this.userListViewFactory = userListViewFactory;
-            this.assignSurveyViewFactory = assignSurveyViewFactory;
             this.surveyUsersViewFactory = surveyUsersViewFactory;
-            this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -85,8 +76,8 @@ namespace Web.Supervisor.Controllers
                         this.Url.Action("TakeNew", "HQ", new {id = questionnaireId.Value})));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
-            var currentUser = this.GlobalInfo.GetCurrentUser();
-            ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
+            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
+            this.ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
             return this.View(this.Filters());
         }
 
@@ -147,16 +138,9 @@ namespace Web.Supervisor.Controllers
             this.ViewBag.ActivePage = MenuItem.Surveys;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-               this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
             return this.View(usersAndQuestionnaires.Users);
-        }
-
-        public ActionResult Assign(Guid id)
-        {
-            UserLight user = this.GlobalInfo.GetCurrentUser();
-            AssignSurveyView model = this.assignSurveyViewFactory.Load(new AssignSurveyInputModel(id, user.Id));
-            return this.View(model);
         }
 
         public ActionResult SupervisorsAndStatuses()
@@ -164,7 +148,7 @@ namespace Web.Supervisor.Controllers
             this.ViewBag.ActivePage = MenuItem.Summary;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
-              this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
             return this.View(usersAndQuestionnaires.Questionnaires);
         }

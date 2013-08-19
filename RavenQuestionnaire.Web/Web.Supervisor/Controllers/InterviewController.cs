@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Core.Supervisor.Views.ChangeStatus;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
@@ -14,6 +15,8 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class InterviewController : BaseController
     {
+        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
+
         private readonly IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
             completeQuestionnaireStatisticViewFactory;
 
@@ -22,11 +25,13 @@ namespace Web.Supervisor.Controllers
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
                                        completeQuestionnaireStatisticViewFactory,
-                                   IViewFactory<DisplayViewInputModel, SurveyScreenView> surveyScreenViewFactory)
+                                   IViewFactory<DisplayViewInputModel, SurveyScreenView> surveyScreenViewFactory,
+                                   IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory)
             : base(commandService, provider, logger)
         {
             this.completeQuestionnaireStatisticViewFactory = completeQuestionnaireStatisticViewFactory;
             this.surveyScreenViewFactory = surveyScreenViewFactory;
+            this.changeStatusFactory = changeStatusFactory;
         }
 
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
@@ -50,10 +55,12 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        public ActionResult ChangeState(Guid id, string template)
+        public ActionResult ChangeState(Guid id)
         {
-            CompleteQuestionnaireStatisticView stat = this.completeQuestionnaireStatisticViewFactory.Load(new CompleteQuestionnaireStatisticViewInputModel(id) {Scope = QuestionScope.Supervisor});
-            return this.View(new ApproveRedoModel {Id = id, Statistic = stat, TemplateId = template});
+            ChangeStatusView model = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
+            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
+            this.ViewBag.CurrentUser = new SurveyUsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
+            return this.View(model);
         }
 
         public ActionResult StatusHistory(Guid id)

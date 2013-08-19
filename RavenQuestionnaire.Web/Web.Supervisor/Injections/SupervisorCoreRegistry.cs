@@ -1,5 +1,5 @@
 using System.Web.Configuration;
-using Core.Supervisor.Views.Index;
+using Core.Supervisor.Views.User;
 using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernel.Utils.Serialization;
@@ -33,7 +33,7 @@ namespace Web.Supervisor.Injections
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(IndexViewFactory).Assembly,
+                typeof(UserViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
                 typeof(ImportQuestionnaireCommand).Assembly,
                 typeof(UserDenormalizer).Assembly

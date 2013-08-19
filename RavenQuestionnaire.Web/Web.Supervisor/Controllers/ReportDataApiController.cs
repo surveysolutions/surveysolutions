@@ -1,36 +1,41 @@
-﻿using Core.Supervisor.Views;
+﻿using System.Web.Http;
 using Core.Supervisor.Views.Reposts.InputModels;
 using Core.Supervisor.Views.Reposts.Views;
-using Core.Supervisor.Views.Survey;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Web.Http;
-
-    using Main.Core.View;
-
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using Web.Supervisor.Models;
-
     [Authorize(Roles = "Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
     {
-        private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView> headquarterSurveysAndStatusesReport;
-        private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView> headquarterSupervisorsAndStatusesReport;
-        private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView> supervisorTeamMembersAndStatusesReport;
-        private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView> supervisorSurveysAndStatusesReport;
+        private readonly IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
+            headquarterSupervisorsAndStatusesReport;
+
+        private readonly IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
+            headquarterSurveysAndStatusesReport;
+
+        private readonly IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
+            supervisorSurveysAndStatusesReport;
+
+        private readonly IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
+            supervisorTeamMembersAndStatusesReport;
+
         public ReportDataApiController(
             ICommandService commandService,
             IGlobalInfoProvider provider,
             ILogger logger,
-            IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView> headquarterSurveysAndStatusesReport,
-            IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView> headquarterSupervisorsAndStatusesReport, 
-            IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView> supervisorTeamMembersAndStatusesReport, 
-            IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView> supervisorSurveysAndStatusesReport)
-
+            IViewFactory<HeadquarterSurveysAndStatusesReportInputModel, HeadquarterSurveysAndStatusesReportView>
+                headquarterSurveysAndStatusesReport,
+            IViewFactory<HeadquarterSupervisorsAndStatusesReportInputModel, HeadquarterSupervisorsAndStatusesReportView>
+                headquarterSupervisorsAndStatusesReport,
+            IViewFactory<SupervisorTeamMembersAndStatusesReportInputModel, SupervisorTeamMembersAndStatusesReportView>
+                supervisorTeamMembersAndStatusesReport,
+            IViewFactory<SupervisorSurveysAndStatusesReportInputModel, SupervisorSurveysAndStatusesReportView>
+                supervisorSurveysAndStatusesReport)
             : base(commandService, provider, logger)
         {
             this.headquarterSurveysAndStatusesReport = headquarterSurveysAndStatusesReport;
@@ -42,7 +47,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public SupervisorTeamMembersAndStatusesReportView SupervisorTeamMembersAndStatusesReport(SummaryListViewModel data)
         {
-            var input = new SupervisorTeamMembersAndStatusesReportInputModel(GlobalInfo.GetCurrentUser().Id);
+            var input = new SupervisorTeamMembersAndStatusesReportInputModel(this.GlobalInfo.GetCurrentUser().Id);
 
             if (data != null)
             {
@@ -63,9 +68,9 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public SupervisorSurveysAndStatusesReportView SupervisorSurveysAndStatusesReport (SurveyListViewModel data)
+        public SupervisorSurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
         {
-            var input = new SupervisorSurveysAndStatusesReportInputModel(GlobalInfo.GetCurrentUser().Id);
+            var input = new SupervisorSurveysAndStatusesReportInputModel(this.GlobalInfo.GetCurrentUser().Id);
 
             if (data != null)
             {

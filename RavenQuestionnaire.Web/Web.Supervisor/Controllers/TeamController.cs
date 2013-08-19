@@ -1,29 +1,28 @@
-﻿using Main.Core.Utility;
+﻿using System;
+using System.Web.Mvc;
+using Core.Supervisor.Views.Interviewer;
+using Core.Supervisor.Views.User;
+using Main.Core.Commands.User;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Web.Mvc;
-
-    using Core.Supervisor.Views.Interviewer;
-    using Core.Supervisor.Views.User;
-
-    using Main.Core.Commands.User;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.View;
-
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using Web.Supervisor.Models;
-
     public class TeamController : BaseController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
 
-        public TeamController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> userViewFactory, IViewFactory<UserListViewInputModel, UserListView> userListViewFactory, IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
+        public TeamController(ICommandService commandService, 
+                              IGlobalInfoProvider globalInfo, 
+                              ILogger logger,
+                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
+                              IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
+                              IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.userViewFactory = userViewFactory;
@@ -33,7 +32,7 @@ namespace Web.Supervisor.Controllers
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(Guid id)
         {
-            return this.View(new InterviewerViewModel { Id = id });
+            return this.View(new InterviewerViewModel {Id = id});
         }
 
         [HttpPost]
@@ -42,21 +41,21 @@ namespace Web.Supervisor.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var user =
+                UserView user =
                     this.userViewFactory.Load(
                         new UserViewInputModel(UserName: model.Name, UserEmail: null));
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
-                            publicKey: Guid.NewGuid(),
-                            userName: model.Name,
-                            password: SimpleHash.ComputeHash(model.Password),
-                            email: model.Email,
-                            isLocked: false,
-                            roles: new[] { UserRoles.Operator },
-                            supervsor: this.GetUser(model.Id).GetUseLight()));
+                                                    publicKey: Guid.NewGuid(),
+                                                    userName: model.Name,
+                                                    password: SimpleHash.ComputeHash(model.Password),
+                                                    email: model.Email,
+                                                    isLocked: false,
+                                                    roles: new[] {UserRoles.Operator},
+                                                    supervsor: this.GetUser(model.Id).GetUseLight()));
                     this.Success("Interviewer was successfully created");
-                    return this.RedirectToAction("Interviewers", new { id = model.Id });
+                    return this.RedirectToAction("Interviewers", new {id = model.Id});
                 }
                 else
                 {
@@ -79,19 +78,19 @@ namespace Web.Supervisor.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var user =
+                UserView user =
                     this.userViewFactory.Load(
                         new UserViewInputModel(UserName: model.Name, UserEmail: null));
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
-                            publicKey: Guid.NewGuid(),
-                            userName: model.Name,
-                            password: SimpleHash.ComputeHash(model.Password),
-                            email: model.Email,
-                            isLocked: false,
-                            roles: new[] { UserRoles.Supervisor },
-                            supervsor: null));
+                                                    publicKey: Guid.NewGuid(),
+                                                    userName: model.Name,
+                                                    password: SimpleHash.ComputeHash(model.Password),
+                                                    email: model.Email,
+                                                    isLocked: false,
+                                                    roles: new[] {UserRoles.Supervisor},
+                                                    supervsor: null));
 
                     this.Success("Supervisor was successfully created");
                     return this.RedirectToAction("Index");
