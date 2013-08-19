@@ -10,7 +10,12 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
         }
 
-        public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, IList<AnsweredQuestionSynchronizationDto> answers, HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions, HashSet<ItemPublicKey> invalidAnsweredQuestions, Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
+        public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId,
+                                           IList<AnsweredQuestionSynchronizationDto> answers,
+                                           HashSet<ItemPublicKey> disabledGroups,
+                                           HashSet<ItemPublicKey> disabledQuestions,
+                                           HashSet<ItemPublicKey> invalidAnsweredQuestions,
+                                           Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
         {
             Id = id;
             Status = status;

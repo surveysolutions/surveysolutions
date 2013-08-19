@@ -10,6 +10,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -39,14 +40,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnries; 
+        private readonly IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures; 
         private readonly IReadSideRepositoryWriter<InterviewData> interviews;
 
-        public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users, IReadSideRepositoryWriter<InterviewData> interviews, IReadSideRepositoryWriter<QuestionnaireDocument> questionnries)
+        public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users,
+                                     IReadSideRepositoryWriter<InterviewData> interviews,
+                                     IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures)
         {
             this.users = users;
             this.interviews = interviews;
-            this.questionnries = questionnries;
+            this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
@@ -62,7 +65,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 ResponsibleId = evnt.Payload.UserId, // Creator is responsible
                 ResponsibleRole = responsible.Roles.FirstOrDefault()
             };
-            interview.Levels.Add(CreateLevelIdFromPropagationVector(new int[0]),new InterviewLevel(evnt.EventSourceId));
+            var emptyVector = new int[0];
+            interview.Levels.Add(CreateLevelIdFromPropagationVector(emptyVector), new InterviewLevel(evnt.EventSourceId, emptyVector));
             this.interviews.Store(interview, interview.InterviewId);
         }
 
@@ -110,7 +114,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public Type[] UsesViews
         {
-            get { return new[] { typeof(UserDocument), typeof(QuestionnaireDocument) }; }
+            get { return new[] { typeof(UserDocument), typeof(QuestionnairePropagationStructure) }; }
         }
         public Type[] BuildsViews
         {
@@ -294,7 +298,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var levelKey = CreateLevelIdFromPropagationVector(newVecor);
             if (!interview.Levels.ContainsKey(levelKey))
             {
-                interview.Levels.Add(levelKey, new InterviewLevel(scopeId));
+                interview.Levels.Add(levelKey, new InterviewLevel(scopeId, newVecor));
             }
             else
             {
@@ -316,19 +320,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
-#warning create better way of collection scoupes
-            var questionnarie = questionnries.GetById(interview.QuestionnaireId);
-            var autoPropagatebleQuestions =
-                questionnarie.Find<IAutoPropagateQuestion>(
-                    question =>
-                    question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate);
-            foreach (var autoPropagatebleQuestion in autoPropagatebleQuestions)
+            var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId);
+            foreach (var scopeId in questionnarie.PropagationScopes.Keys)
             {
-
-                foreach (var trigger in autoPropagatebleQuestion.Triggers)
+                foreach (var trigger in questionnarie.PropagationScopes[scopeId])
                 {
                     if (trigger == groupId)
-                        return autoPropagatebleQuestion.PublicKey;
+                        return trigger;
                 }
             }
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnarie",
