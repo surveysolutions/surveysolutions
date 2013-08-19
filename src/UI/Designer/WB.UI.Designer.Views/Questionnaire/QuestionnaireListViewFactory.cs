@@ -1,11 +1,8 @@
 using Main.Core.View;
-using Main.DenormalizerStorage;
 using System;
 using System.Linq;
 using Main.Core.Utility;
 
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Views.Questionnaire
@@ -61,15 +58,16 @@ namespace WB.UI.Designer.Views.Questionnaire
 
             if (input.IsAdminMode)
             {
-                q = q.AndAlso(x => (input.IsPublic || (x.CreatedBy == input.CreatedBy)));
+                q = q.AndAlso(x => (input.IsPublic || (x.CreatedBy == input.ViewerId || 
+                                    x.SharedPersons.Contains(input.ViewerId))));
             }
             else
             {
                 q =
                     q.AndAlso(
                         x =>
-                        !x.IsDeleted
-                        && (((x.CreatedBy == input.CreatedBy) && !input.IsPublic) || (input.IsPublic && x.IsPublic)));
+                        !x.IsDeleted && (((x.CreatedBy == input.ViewerId || x.SharedPersons.Contains(input.ViewerId)) && !input.IsPublic) || 
+                        (input.IsPublic && x.IsPublic)));
             }
 
 
