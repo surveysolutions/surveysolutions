@@ -58,8 +58,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 return;
             }
             var typedAnswers = answer as decimal[];
-            if(typedAnswers==null)
-                return;
+            if (typedAnswers == null)
+            {
+                decimal decimalAnswer;
+                if(!decimal.TryParse(answer.ToString(),out decimalAnswer))
+                    return;
+                typedAnswers = new decimal[] {decimalAnswer};
+            }
             foreach (var item in this.Answers)
             {
                 item.Selected = typedAnswers.Contains(item.Value);

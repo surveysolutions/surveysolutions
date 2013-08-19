@@ -39,7 +39,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             : this(questionnaireId, title, title, enabled, screenId, items, breadcrumbs, 0, 0, next, previous)
         {
             this.sibligsValue = sibligs;
-            if (!screenId.IsTopLevel)
+            if (!screenId.IsTopLevel())
             {
 
                 this.ScreenName = string.Empty;
@@ -49,7 +49,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionnairePropagatedScreenViewModel Clone(int[] propagationVector,
                                                             IList<IQuestionnaireItemViewModel> items)
         {
-            if (!ScreenId.IsTopLevel)
+            if (!ScreenId.IsTopLevel())
                 throw new InvalidOperationException("only template can mutate in that way");
             var key = new ItemPublicKey(this.ScreenId.PublicKey, propagationVector);
             var bradCrumbs = this.Breadcrumbs.ToList();
@@ -74,7 +74,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public void AddNextPrevious(IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
         {
-            if (!ScreenId.IsTopLevel)
+            if (!ScreenId.IsTopLevel())
                 throw new InvalidOperationException("only template can mutate in that way");
             this.Next = next;
             this.Previous = previous;

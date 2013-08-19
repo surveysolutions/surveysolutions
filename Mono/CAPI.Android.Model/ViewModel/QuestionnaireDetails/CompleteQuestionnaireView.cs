@@ -303,7 +303,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             if (e.PropertyName != "AnswerString")
                 return;
             var question = sender as QuestionViewModel;
-            if (question == null || !question.Capital || question.PublicKey.IsTopLevel)
+            if (question == null || !question.Capital || question.PublicKey.IsTopLevel())
                 return;
 
             UpdatePropagatedGroupScreenName(question.PublicKey.PropagationVector);
@@ -330,7 +330,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var propagatedScreen = sender as QuestionnaireScreenViewModel;
             if (propagatedScreen == null)
                 return;
-            if (propagatedScreen.ScreenId.IsTopLevel)
+            if (propagatedScreen.ScreenId.IsTopLevel())
                 return;
             UpdateGrid(propagatedScreen.ScreenId.PublicKey);
         }
@@ -368,7 +368,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected void UpdateQuestionHash(QuestionViewModel question)
         {
             this.Questions.Add(question.PublicKey, question);
-            if (question.Capital && !question.PublicKey.IsTopLevel)
+            if (question.Capital && !question.PublicKey.IsTopLevel())
             {
                 question.PropertyChanged += question_PropertyChanged;
             }
@@ -426,7 +426,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected IEnumerable<ItemPublicKey> GetSiblings(Guid publicKey)
         {
             return
-                this.Screens.Where(s => s.Key.PublicKey == publicKey && !s.Key.IsTopLevel).Select(
+                this.Screens.Where(s => s.Key.PublicKey == publicKey && !s.Key.IsTopLevel()).Select(
                     s => new ItemPublicKey(publicKey, s.Key.PropagationVector)).ToList();
         }
 
