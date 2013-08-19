@@ -104,7 +104,14 @@ namespace WB.Core.Synchronization.SyncProvider
                     throw new ArgumentException("Unknown device.");
                 }
 
-                if (device.SupervisorKey != identifier.SupervisorPublicKey)
+                //old sync devices are already in use
+                //lets allow to sync them for awhile
+                //then 
+                if (identifier.SupervisorPublicKey == Guid.Empty)
+                {
+                    logger.Error("Old registred device is synchronizing. Errors could be on client in case of differernt team.");
+                }
+                else if (device.SupervisorKey != identifier.SupervisorPublicKey)
                 {
                     var package = new HandshakePackage
                         {
