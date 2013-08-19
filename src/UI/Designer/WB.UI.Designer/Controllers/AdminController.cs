@@ -202,7 +202,7 @@ namespace WB.UI.Designer.Controllers
                                  IsApproved = x.IsApproved, 
                                  IsLockedOut = x.IsLockedOut, 
                                  CanEdit = editAction(x), 
-                                 CanDelete = editAction(x), 
+                                 CanDelete = false, 
                                  CanPreview = editAction(x)
                              });
             return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
