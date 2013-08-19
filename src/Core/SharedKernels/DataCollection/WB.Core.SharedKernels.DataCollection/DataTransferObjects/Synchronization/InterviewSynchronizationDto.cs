@@ -28,14 +28,14 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
         }
 
-        public Guid Id { get; private set; }
-        public InterviewStatus Status { get; private set; }
-        public Guid UserId { get; private set; }
-        public Guid QuestionnaireId { get; private set; }
-        public IList<AnsweredQuestionSynchronizationDto> Answers { get; private set; }
-        public HashSet<ItemPublicKey> DisabledGroups { get; private set; }
-        public HashSet<ItemPublicKey> DisabledQuestions { get; private set; }
-        public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get; private set; }
-        public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get; private set; }
+        public Guid Id { get;  set; }
+        public InterviewStatus Status { get;  set; }
+        public Guid UserId { get;  set; }
+        public Guid QuestionnaireId { get; set; }
+        public IList<AnsweredQuestionSynchronizationDto> Answers { get;  set; }
+        public HashSet<ItemPublicKey> DisabledGroups { get;  set; }
+        public HashSet<ItemPublicKey> DisabledQuestions { get;  set; }
+        public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get;  set; }
+        public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get;  set; }
     }
 }

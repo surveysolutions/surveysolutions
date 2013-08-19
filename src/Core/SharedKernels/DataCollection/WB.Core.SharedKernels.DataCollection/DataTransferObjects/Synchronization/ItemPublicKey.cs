@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public ItemPublicKey(Guid publicKey, int[] propagationVector)
         {
             PublicKey = publicKey;
-            PropagationVector = propagationVector;
+            PropagationVector = propagationVector ?? new int[0];
         }
         public ItemPublicKey(Guid publicKey)
         {
