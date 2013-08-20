@@ -7,7 +7,9 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
@@ -31,11 +33,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage;
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
 
         public CompleteQuestionnaireViewDenormalizer(
             IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage,
-            IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage)
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
             this.interviewStorage = interviewStorage;
             this.questionnarieStorage = questionnarieStorage;
@@ -43,11 +45,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var questionnarie = questionnarieStorage.GetById(evnt.Payload.QuestionnaireId);
+            var questionnarie = questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
+                                                             evnt.Payload.QuestionnaireVersion);
             if (questionnarie == null)
                 return;
 
-            var view = new CompleteQuestionnaireView(evnt.EventSourceId, questionnarie, evnt.Payload);
+            var view = new CompleteQuestionnaireView(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload);
 
             interviewStorage.Store(view, evnt.EventSourceId);
         }

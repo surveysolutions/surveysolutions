@@ -13,21 +13,29 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
 
-        public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage)
+        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
             this.questionnarieStorage = questionnarieStorage;
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            questionnarieStorage.Store(evnt.Payload.Source, evnt.EventSourceId);
+            var template = new QuestionnaireDocumentVersioned()
+                {
+                    Questionnaire = evnt.Payload.Source,
+                    Version = evnt.EventSequence
+                };
+
+            questionnarieStorage.Store(template, evnt.EventSourceId);
         }
     }
 }
