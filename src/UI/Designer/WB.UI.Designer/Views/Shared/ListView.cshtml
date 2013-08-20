@@ -24,7 +24,7 @@
                 var property = propertyList[i];
                 var w = propertyList[i].IsDateTimePropertyValue() ? "135px" : "auto";
                 
-                <th style="min-width: @w">
+                <th style="min-width: @w" nowrap="nowrap">
                     @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = property.Name, so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == property.Name), f = ViewBag.Filter })
                     @if (ViewBag.SortBy == property.Name)
                     {
@@ -36,6 +36,10 @@
                         {
                             <i class="icon-chevron-down"></i>
                         }
+                    }
+                    else
+                    { 
+                        <i class="icon-filter"></i>
                     }
                 </th>
 
