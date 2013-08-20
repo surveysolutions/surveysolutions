@@ -73,12 +73,12 @@ namespace WB.UI.Designer.Views.Questionnaire
 
             return this.documentGroupSession.Query(queryable =>
             {
-                var queryResult = queryable.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
+                var queryResult = queryable.Where(q).AsQueryable();
+                queryResult.ToList().ForEach(x=>x.IsShared = x.SharedPersons.Contains(input.ViewerId));
 
-                var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
-
-
-                return new QuestionnaireListView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
+                return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: queryResult.Count(),
+                    items: queryResult.OrderUsingSortExpression(input.Order).Skip((input.Page - 1)*input.PageSize).Take(input.PageSize),
+                    order: input.Order);
             });
         }
 
