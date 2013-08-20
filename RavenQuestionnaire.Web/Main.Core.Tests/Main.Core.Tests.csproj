@@ -177,6 +177,7 @@
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
     <Compile Include="GroupWithRoutTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleObjectExtensionsTests.cs" />
     <Compile Include="Utils\RavenMockUtils.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>

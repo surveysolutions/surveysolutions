@@ -4,11 +4,13 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -28,12 +30,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
-        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<UserDocument> users,
                                             IReadSideRepositoryWriter<InterviewSummary> interviews,
-                                            IReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires)
+                                            IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires)
         {
             this.users = users;
             this.interviews = interviews;
@@ -58,17 +60,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
             UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
-            var interview = new InterviewSummary(this.questionnaires.GetById(evnt.Payload.QuestionnaireId))
-                {
-                    InterviewId = evnt.EventSourceId,
-                    UpdateDate = evnt.EventTimeStamp,
-                    QuestionnaireId = evnt.Payload.QuestionnaireId,
-                    QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
-                    QuestionnaireTitle = questionnaires.GetById(evnt.Payload.QuestionnaireId).Title,
-                    ResponsibleId = evnt.Payload.UserId, // Creator is responsible
-                    ResponsibleName = this.users.GetById(evnt.Payload.UserId).UserName,
-                    ResponsibleRole = responsible.Roles.FirstOrDefault()
-                };
+            var interview =
+                new InterviewSummary(this.questionnaires.GetById(evnt.Payload.QuestionnaireId,
+                                                                 evnt.Payload.QuestionnaireVersion))
+                    {
+                        InterviewId = evnt.EventSourceId,
+                        UpdateDate = evnt.EventTimeStamp,
+                        QuestionnaireId = evnt.Payload.QuestionnaireId,
+                        QuestionnaireVersion = evnt.Payload.QuestionnaireVersion,
+                        QuestionnaireTitle =
+                            questionnaires.GetById(
+                                evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion).Title,
+                        ResponsibleId = evnt.Payload.UserId, // Creator is responsible
+                        ResponsibleName = this.users.GetById(evnt.Payload.UserId).UserName,
+                        ResponsibleRole = responsible.Roles.FirstOrDefault()
+                    };
             this.interviews.Store(interview, interview.InterviewId);
         }
 
