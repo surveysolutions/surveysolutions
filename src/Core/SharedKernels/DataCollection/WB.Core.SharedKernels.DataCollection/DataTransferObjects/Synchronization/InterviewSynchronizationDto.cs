@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         {
         }
 
-        public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId,
+        public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, long questionnaireVersion,
                                            IList<AnsweredQuestionSynchronizationDto> answers,
                                            HashSet<ItemPublicKey> disabledGroups,
                                            HashSet<ItemPublicKey> disabledQuestions,
@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Status = status;
             UserId = userId;
             QuestionnaireId = questionnaireId;
+            QuestionnaireVersion = questionnaireVersion;
             Answers = answers;
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public InterviewStatus Status { get;  set; }
         public Guid UserId { get;  set; }
         public Guid QuestionnaireId { get; set; }
+        public long QuestionnaireVersion { get; set; }
         public IList<AnsweredQuestionSynchronizationDto> Answers { get;  set; }
         public HashSet<ItemPublicKey> DisabledGroups { get;  set; }
         public HashSet<ItemPublicKey> DisabledQuestions { get;  set; }

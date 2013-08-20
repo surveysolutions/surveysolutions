@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             //return documentGroupSession.GetById(input.QuestionnaireId);
             return
                 documentGroupSession.Query(
-                    _ => _.Where(q => q.QuestionnaireId == input.QuestionnaireId).ToList().FirstOrDefault());
+                    _ => _.Where(q => q.QuestionnaireId == input.QuestionnaireId).OrderByDescending(q=>q.Version).ToList().FirstOrDefault());
         }
     }
 }

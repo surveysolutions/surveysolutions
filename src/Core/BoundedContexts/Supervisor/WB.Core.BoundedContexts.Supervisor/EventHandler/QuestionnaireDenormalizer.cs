@@ -4,6 +4,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -11,9 +12,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
-        public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ISynchronizationDataStorage synchronizationDataStorage)
+        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ISynchronizationDataStorage synchronizationDataStorage)
         {
             this.documentStorage = documentStorage;
             this.synchronizationDataStorage = synchronizationDataStorage;
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             if(document==null)
                 return;
             this.documentStorage.Store(document, document.PublicKey);
+            this.documentStorage.Store(document, document.PublicKey,evnt.EventSequence);
             this.synchronizationDataStorage.SaveQuestionnaire(document);
         }
 
