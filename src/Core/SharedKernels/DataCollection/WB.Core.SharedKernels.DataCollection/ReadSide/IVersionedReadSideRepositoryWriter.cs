@@ -9,10 +9,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.SharedKernels.DataCollection.ReadSide
 {
     public interface IVersionedReadSideRepositoryWriter<TEntity> : IReadSideRepositoryWriter<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity
+        where TEntity : class, IVersionedView
     {
         TEntity GetById(Guid id, long version);
         void Remove(Guid id, long version);
-        void Store(TEntity view, Guid id, long version);
     }
 }

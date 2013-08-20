@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Views.Survey
 {
@@ -19,11 +20,11 @@ namespace Core.Supervisor.Views.Survey
     {
         private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IReadSideRepositoryReader<QuestionnaireDocument> questionnarieStore;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore;
 
         public DisplaySurveyViewFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IReadSideRepositoryReader<QuestionnaireDocument> questionnarieStore)
+            IReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
@@ -40,7 +41,7 @@ namespace Core.Supervisor.Views.Survey
             }
 
             var user = this.userStore.GetById(interview.ResponsibleId);
-            var questionnarie = this.questionnarieStore.GetById(interview.QuestionnaireId);
+            var questionnarie = this.questionnarieStore.GetById(interview.QuestionnaireId).Questionnaire;
 
             if (!input.CurrentGroupPublicKey.HasValue)
             {

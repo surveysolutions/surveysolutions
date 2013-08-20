@@ -43,11 +43,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var questionnarie = evnt.Payload.Source;
 
-            var questionnairePropagationStructure = questionnries.GetById(evnt.EventSourceId) ??
-                                                    new QuestionnairePropagationStructure()
-                                                        {
-                                                            QuestionnaireId = evnt.EventSourceId
-                                                        };
+            var questionnairePropagationStructure =
+                new QuestionnairePropagationStructure()
+                    {
+                        QuestionnaireId = evnt.EventSourceId,
+                        Version = evnt.EventSequence
+                    };
+
             questionnairePropagationStructure.PropagationScopes = new Dictionary<Guid, HashSet<Guid>>();
 
             var autoPropagatebleQuestions =
@@ -68,7 +70,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                                         triggerHashSet);
             }
             questionnries.Store(questionnairePropagationStructure,evnt.EventSourceId);
-            questionnries.Store(questionnairePropagationStructure, evnt.EventSourceId, evnt.EventSequence);
         }
     }
 }

@@ -292,6 +292,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedReadSideRepositoryWriter.cs">
       <Link>ReadSide\IVersionedReadSideRepositoryWriter.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedView.cs">
+      <Link>ReadSide\IVersionedView.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewStatus.cs">
       <Link>ValueObjects\Interview\InterviewStatus.cs</Link>
     </Compile>
@@ -309,6 +312,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireBrowseViewFactory.cs">
       <Link>Views\Questionnaire\QuestionnaireBrowseViewFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireDocumentVersioned.cs">
+      <Link>Views\Questionnaire\QuestionnaireDocumentVersioned.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <Link>Views\Questionnaire\QuestionnaireItemInputModel.cs</Link>

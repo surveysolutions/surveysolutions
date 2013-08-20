@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.Questionnaire
 {
-    public class QuestionnairePropagationStructure : IView
+    public class QuestionnairePropagationStructure : IVersionedView
     {
         public QuestionnairePropagationStructure()
         {
@@ -16,5 +17,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Questionnaire
 
         public Guid QuestionnaireId { get; set; }
         public Dictionary<Guid, HashSet<Guid>> PropagationScopes { get; set; }
+        public long Version { get; set; }
     }
 }
