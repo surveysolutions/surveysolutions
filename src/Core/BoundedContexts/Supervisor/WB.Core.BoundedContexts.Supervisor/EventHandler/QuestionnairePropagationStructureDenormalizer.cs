@@ -10,15 +10,16 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class QuestionnairePropagationStructureDenormalizer : IEventHandler, IEventHandler<TemplateImported>
     {
-        private readonly IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnries;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnries;
 
         public QuestionnairePropagationStructureDenormalizer(
-            IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnries)
+            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnries)
         {
             this.questionnries = questionnries;
         }
@@ -67,6 +68,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                                         triggerHashSet);
             }
             questionnries.Store(questionnairePropagationStructure,evnt.EventSourceId);
+            questionnries.Store(questionnairePropagationStructure, evnt.EventSourceId, evnt.EventSequence);
         }
     }
 }

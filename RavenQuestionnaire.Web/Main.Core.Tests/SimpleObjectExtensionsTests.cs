@@ -12,22 +12,19 @@ namespace Main.Core.Tests
     public class SimpleObjectExtensionsTests
     {
         [Test]
-        [TestCase(1)]
-        [TestCase(5)]
-        [TestCase(10)]
-        public void Combine_When_Guid_is_combined_with_long_Then_passet_guid_doest_equal_to_result_guid(long value)
+        public void Combine_When_Guid_is_combined_with_long_Then_passet_guid_doest_equal_to_result_guid()
         {
             //arrange
 
             Guid guidValue = Guid.NewGuid();
-            long longValue = value;
+            long longValue = 5;
 
             //act
 
             var result = guidValue.Combine(longValue);
 
             //assert
-            Assert.AreNotEqual(result.ToString(), guidValue.ToString());
+            Assert.True(result != guidValue);
         }
     }
 }

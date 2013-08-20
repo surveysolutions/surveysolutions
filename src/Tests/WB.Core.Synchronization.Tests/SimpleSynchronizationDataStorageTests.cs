@@ -29,7 +29,7 @@ namespace WB.Core.Synchronization.Tests
 
             // act
             target.SaveInterview(
-                new InterviewSynchronizationDto(questionnarieId, InterviewStatus.Created, userId, Guid.NewGuid(), null, null, null,
+                new InterviewSynchronizationDto(questionnarieId, InterviewStatus.Created, userId, Guid.NewGuid(),1, null, null, null,
                                                 null, null), userId);
 
             // assert
