@@ -177,6 +177,7 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="GeolocationServices\GeoService.cs" />
+    <Compile Include="GeolocationServices\IGeoService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />

@@ -6,38 +6,16 @@ using Xamarin.Geolocation;
 
 namespace CAPI.Android.GeolocationServices
 {
-    public class GeoService
+    public class GeoService : IGeoService
     {
-        private Geolocator geolocator;
-
-        public GeoService(Context context)
-        {
-            if(geolocator == null)
-                geolocator = new Geolocator(context);
-
-            geolocator.DesiredAccuracy = 50;
-        }
-
-        public Task<Position> GetPositionAsync(int timeout, CancellationToken cancelToken)
-        {
-            // we need caching to save a battery if we want to track all coordinates of the answers
-            return this.geolocator.GetPositionAsync(timeout, cancelToken);
-        }
+        private readonly Geolocator geolocator;
 
         public bool IsListening
         {
-            get
-            {
-                return this.geolocator.IsListening;
-            }
+            get { return geolocator.IsListening; }
         }
-
-        public void StopListening()
-        {
-            geolocator.StopListening();
-        }
-
-        public bool IsGeolocationAvailable 
+        
+        public bool IsGeolocationAvailable
         {
             get { return geolocator.IsGeolocationAvailable; }
         }
@@ -48,7 +26,6 @@ namespace CAPI.Android.GeolocationServices
         }
 
         //todo: on suspend stop listening and start again on resume 
-
 
         public event EventHandler<PositionErrorEventArgs> PositionError
         {
@@ -62,5 +39,25 @@ namespace CAPI.Android.GeolocationServices
             remove { geolocator.PositionChanged -= value; }
         }
 
+        public void StartListening(int minTime, double minDistance)
+        {
+            geolocator.StartListening(minTime, minDistance);
+        }
+
+        public void StopListening()
+        {
+            geolocator.StopListening();
+        }
+
+        public GeoService(Context context)
+        {
+            geolocator = new Geolocator(context) { DesiredAccuracy = 50 };
+        }
+
+        public Task<Position> GetPositionAsync(int timeout, CancellationToken cancelToken)
+        {
+            // we need caching to save a battery if we want to track all coordinates of the answers
+            return geolocator.GetPositionAsync(timeout, cancelToken);
+        }
     }
 }

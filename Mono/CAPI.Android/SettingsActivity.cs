@@ -27,7 +27,7 @@ namespace CAPI.Android
     public class SettingsActivity : Activity
     {
         private ProgressDialog progress;
-        private GeoService geoservice;
+        private IGeoService geoservice;
         private CancellationTokenSource cancelSource;
 
         protected EventHandler<EventArgs> versionCheckEventHandler;
@@ -99,7 +99,15 @@ namespace CAPI.Android
                     if (t.IsCanceled)
                         messageToShow = "Canceled or Timeout.";
                     else if (t.IsFaulted)
-                        messageToShow = "Error occured on location retrieving. " + ((GeolocationException)t.Exception.InnerException).Error.ToString();
+                    {
+                        messageToShow = "Error occured on location retrieving. ";
+                        if (t.Exception != null && t.Exception.InnerException != null)
+                        {
+                            var innerException = t.Exception.InnerException as GeolocationException;
+                            if (innerException != null && innerException.Error != null)
+                                messageToShow += innerException.Error.ToString();
+                        }
+                    }
                     else
                     {
                         StringBuilder infoMessageBuilder = new StringBuilder();
