@@ -9,7 +9,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Core.SharedKernels.DataCollection.ReadSide
 {
     public interface IVersionedReadSideRepositoryReader<TEntity> : IReadSideRepositoryReader<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity
+        where TEntity : class, IVersionedView
     {
         TEntity GetById(Guid id, long version);
     }
