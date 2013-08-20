@@ -25,8 +25,6 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
 
             var browseItem = new QuestionnaireBrowseItem(document, evnt.EventSequence);
             this.documentStorage.Store(browseItem, evnt.EventSourceId);
-
-            this.documentStorage.Store(browseItem, evnt.EventSourceId, evnt.EventSequence);
         }
 
         public string Name

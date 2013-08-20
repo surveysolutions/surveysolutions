@@ -133,6 +133,7 @@
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
+    <Compile Include="ReadSide\IVersionedView.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
@@ -143,6 +144,7 @@
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDocumentVersioned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <SubType>Code</SubType>
     </Compile>

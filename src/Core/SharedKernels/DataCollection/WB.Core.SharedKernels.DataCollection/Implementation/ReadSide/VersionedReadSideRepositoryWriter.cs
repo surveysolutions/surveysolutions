@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 {
-    internal class VersionedReadSideRepositoryWriter<TEntity> : IVersionedReadSideRepositoryWriter<TEntity> where TEntity : class, IReadSideRepositoryEntity
+    internal class VersionedReadSideRepositoryWriter<TEntity> : IVersionedReadSideRepositoryWriter<TEntity> where TEntity : class, IVersionedView
     {
         private readonly IReadSideRepositoryWriter<TEntity> internalRepositoryWroter;
 
@@ -31,22 +31,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 
         public void Store(TEntity view, Guid id)
         {
+            var previousEntity = internalRepositoryWroter.GetById(id);
+            if (previousEntity != null)
+            {
+                internalRepositoryWroter.Store(previousEntity, id.Combine(previousEntity.Version));
+            }
             internalRepositoryWroter.Store(view, id);
         }
 
         public TEntity GetById(Guid id, long version)
         {
-            return internalRepositoryWroter.GetById(id.Combine(version));
+       //     return internalRepositoryWroter.GetById(id.Combine(version));
+            var entity = internalRepositoryWroter.GetById(id.Combine(version));
+            if (entity != null)
+                return entity;
+            entity = internalRepositoryWroter.GetById(id);
+            if (entity == null)
+                return null;
+            if (entity.Version == version)
+                return entity;
+            return null;
         }
 
         public void Remove(Guid id, long version)
         {
             internalRepositoryWroter.Remove(id.Combine(version));
-        }
-
-        public void Store(TEntity view, Guid id, long version)
-        {
-            internalRepositoryWroter.Store(view, id.Combine(version));
         }
     }
 }

@@ -3,10 +3,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 {
-    public class QuestionnaireBrowseItem : IView
+    public class QuestionnaireBrowseItem : IVersionedView
     {
         public QuestionnaireBrowseItem()
         {

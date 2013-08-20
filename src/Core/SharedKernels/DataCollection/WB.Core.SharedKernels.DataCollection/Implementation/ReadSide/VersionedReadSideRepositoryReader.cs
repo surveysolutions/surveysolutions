@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 {
     internal class VersionedReadSideRepositoryReader<TEntity> : IVersionedReadSideRepositoryReader<TEntity>
-        where TEntity : class, IReadSideRepositoryEntity
+        where TEntity : class, IVersionedView
     {
         private readonly IReadSideRepositoryReader<TEntity> internalRepositoryReader;
 
@@ -32,7 +32,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.ReadSide
 
         public TEntity GetById(Guid id, long version)
         {
-            return this.internalRepositoryReader.GetById(id.Combine(version));
+            var entity = internalRepositoryReader.GetById(id.Combine(version));
+            if (entity != null)
+                return entity;
+            entity = internalRepositoryReader.GetById(id);
+            if (entity == null)
+                return null;
+            if (entity.Version == version)
+                return entity;
+            return null;
         }
     }
 }

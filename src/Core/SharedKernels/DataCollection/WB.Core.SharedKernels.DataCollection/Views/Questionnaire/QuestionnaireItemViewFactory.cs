@@ -21,8 +21,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         {
             //return documentGroupSession.GetById(input.QuestionnaireId);
             return
-                documentGroupSession.Query(
-                    _ => _.Where(q => q.QuestionnaireId == input.QuestionnaireId).OrderByDescending(q=>q.Version).ToList().FirstOrDefault());
+                documentGroupSession.GetById(input.QuestionnaireId)/*.Query(
+                    _ => _.Where(q => q.QuestionnaireId == input.QuestionnaireId).OrderByDescending(q=>q.Version).ToList().FirstOrDefault())*/;
         }
     }
 }
