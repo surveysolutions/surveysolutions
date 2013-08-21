@@ -46,23 +46,23 @@
             answerOrders = [
                 {
                     key: "AsIs",
-                    value: "As is"
+                    value: "Nothing"
                 },
                 {
                     key: "AZ",
-                    value: "Sort by label AZ"
+                    value: "Label: A to Z"
                 },
                 {
                     key: "ZA",
-                    value: "Sort by label ZA"
+                    value: "Label: Z to A"
                 },
                 {
                     key: "MinMax",
-                    value: "Sort by value, accending"
+                    value: "Value: ascending"
                 },
                 {
                     key: "MaxMin",
-                    value: "Sort by value, discending"
+                    value: "Value: descending"
                 }
             ],
             groupTypes = [
@@ -127,6 +127,10 @@
                 cantMoveUnsavedItem: {
                     title: 'Cant move',
                     text: "You can't move unsaved items"
+                },
+                cantMoveIntoUnsavedItem : {
+                    title: 'Cant move',
+                    text: "You can't move items to unsaved groups or chapters"
                 },
                 saveParentFirst: {
                     title: 'Cant save',

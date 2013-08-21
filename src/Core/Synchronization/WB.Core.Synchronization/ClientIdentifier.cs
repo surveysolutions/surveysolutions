@@ -23,9 +23,6 @@
 
         public Guid? CurrentProcessKey;
 
-        public ClientIdentifier()
-        {
-
-        }
+        public Guid SupervisorPublicKey;
     }
 }

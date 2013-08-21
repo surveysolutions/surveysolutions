@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace WB.Core.Synchronization
@@ -12,12 +13,12 @@ namespace WB.Core.Synchronization
         void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId);
         void SaveImage(Guid publicKey, string title, string desc, string origData);
         void SaveUser(UserDocument doc);
-        
+
         SyncItem GetLatestVersion(Guid id);
-        
+
         IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId);
 
         IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, Guid userId);
-        
+
     }
 }

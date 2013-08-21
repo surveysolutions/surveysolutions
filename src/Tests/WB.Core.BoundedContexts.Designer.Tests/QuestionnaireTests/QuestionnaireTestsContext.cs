@@ -28,14 +28,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId);
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options)
+        public static Questionnaire CreateQuestionnaireWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options, Guid? groupId = null)
         {
-            var groupId = Guid.NewGuid();
+            groupId = groupId ?? Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(Guid.NewGuid(), groupId, Propagate.None );
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid.NewGuid(), groupId.Value, Propagate.None );
 
             questionnaire.NewAddQuestion(questionId,
-                                         groupId, "Title", questionType, "text", false, false,
+                                         groupId.Value, "Title", questionType, "text1", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "",
                                          options, Order.AsIs, null,
                                          new Guid[] { });

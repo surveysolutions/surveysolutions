@@ -3,10 +3,10 @@
 @using Newtonsoft.Json
 @using WB.UI.Designer
 @using WB.UI.Designer.Utils
-@model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
+@model WB.UI.Designer.Models.QuestionnaireEditView
 
 @{
-    ViewBag.Title = "Edit " + Model.Title;
+    ViewBag.Title = "Edit " + Model.Questionnaire.Title;
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 @section Styles{
@@ -19,23 +19,34 @@
     <script type="text/javascript">
         var input = window.input || (function(document) {
             'use strict';
-            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings()
-                        {
-                            TypeNameHandling = TypeNameHandling.Objects,
-                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                        })) ;
+            var q = @Html.Raw(JsonConvert.SerializeObject(Model.Questionnaire, Formatting.None, new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Objects,
+                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                    }));
             return {
                 questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                settings : { unhandledExceptionMessage : 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'  }
+                sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
+                url: {
+                    addSharedPersonUrl: '@Url.Action("AddSharedPerson", "Questionnaire", new {id = Model.Questionnaire.PublicKey}, Request.Url.Scheme)',
+                    removeSharedPersonUrl: '@Url.Action("RemoveSharedPerson", "Questionnaire", new {id = Model.Questionnaire.PublicKey}, Request.Url.Scheme)',
+                },
+                settings: {
+                    messages: {
+                        unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>',
+                        userToShareAlreadyExistInList: 'User $1 already exist in share list',
+                        userToShareIsOwner: 'You are the owner of this questionnaire. Please, input another email'
+        }
+                }
             };
         }(document));
-        
+
         window.input = input;
     </script>
     @Scripts.Render("~/designer")
     <script type="text/javascript">
-        (function () {
+        (function() {
             var root = this;
 
             define3rdPartyModules();
@@ -44,16 +55,16 @@
             function define3rdPartyModules() {
                 // These are already loaded via bundles. 
                 // We define them and put them in the root object.
-                define('jquery', [], function () { return root.jQuery; });
-                define('ko', [], function () { return root.ko; });
-                define('amplify', [], function () { return root.amplify; });
-                define('infuser', [], function () { return root.infuser; });
-                define('moment', [], function () { return root.moment; });
-                define('sammy', [], function () { return root.Sammy; });
-                define('pnotify', [], function () { return root.jQuery.pnotify; });
-                define('underscore', [], function () { return root._; });
-                define('bootbox', [], function () { return root.bootbox; });
-                define('input', [], function () { return root.input; });
+                define('jquery', [], function() { return root.jQuery; });
+                define('ko', [], function() { return root.ko; });
+                define('amplify', [], function() { return root.amplify; });
+                define('infuser', [], function() { return root.infuser; });
+                define('moment', [], function() { return root.moment; });
+                define('sammy', [], function() { return root.Sammy; });
+                define('pnotify', [], function() { return root.jQuery.pnotify; });
+                define('underscore', [], function() { return root._; });
+                define('bootbox', [], function() { return root.bootbox; });
+                define('input', [], function() { return root.input; });
             }
 
             function loadPluginsAndBoot() {
@@ -64,15 +75,15 @@
                     }
                 });
                 requirejs([
-                        'ko.bindingHandlers',
-                        'ko.debug.helpers'
+                    'ko.bindingHandlers',
+                    'ko.debug.helpers'
                 ], boot);
             }
 
             function boot() {
                 require(['jquery', 'config', 'presenter', 'dataprimer', 'binder', 'route-config'],
-                    function ($, config, presenter, dataprimer, binder, routeConfig) {
-              
+                    function($, config, presenter, dataprimer, binder, routeConfig) {
+
                         $.fn.activity.defaults.color = "#fff";
 
                         presenter.toggleActivity(true);
@@ -91,13 +102,18 @@
 }
 
 <div id="busyindicator"></div>
-
+<div id="unsavedWarningMessageContainer" class="statistics" data-bind="with: statistics">
+    <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
+        <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+    </div>
+</div>
 <div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
 
     <div id="footer">
         <div class="inner">
             <div class="row-fluid">
-                <div class="span5">
+
+                <div class="span4">
                     <div class="form-horizontal" id="search-form">
                         <div class="control-group">
                             <label class="control-label">Search question</label>
@@ -110,22 +126,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="span3">
+                <div class="span6">
                     <div class="statistics">
                         <ul class="nav nav-pills" data-bind="with: statistics">
-                            <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
-                            <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
+                            <li><a>Groups: <span class="badge" data-bind="text: groups"></span></a></li>
+                            <li><a>Questions: <span class="badge" data-bind="text: questions"></span></a></li>
                         </ul>
                     </div>
-                    <div class="statistics" data-bind="with: statistics">
-                        <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
-                            <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
-                        </div>
-                    </div>
+
                 </div>
-                <div class="span4">
-                    <div class="pull-right">
-                        <button class="btn btn-info" data-bind="click: $root.toggleOutput">
+                <div class="span2">
+                    <div id="footer-buttons" class="pull-right">
+                        <button class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
                             <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
                         </button>
                     </div>
@@ -142,7 +154,7 @@
             <div class="body">
                 <ul data-bind="foreach: errors" class="error-list">
                     <li class="error">
-                        <span data-bind="html: error"></span>
+                        <span data-bind="html: $data"></span>
                     </li>
                 </ul>
             </div>
@@ -154,11 +166,11 @@
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
                         <button id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
-                            <span data-bind="visible: $root.isAllChaptersExpanded" ><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
+                            <span data-bind="visible: $root.isAllChaptersExpanded"><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
                             <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="icon-plus icon-white"></i></sup><sub><i class="icon-plus icon-white"></i></sub></span>
                         </button>
                         <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
-                            
+
                             <div class="q-item">
                                 <div class="group-actions  pull-right">
                                     <div class="btn-group">
@@ -191,8 +203,8 @@
     <div id="details-questionnaire" class="details stack" data-bind="with: questionnaire ">
         <div class="inner">
             @{
-                this.Html.RenderPartial("_QuestionnaireDetails");
-            }
+                this.Html.RenderPartial(this.Model.IsOwner ? "_QuestionnaireDetailsForOwner" : "_QuestionnaireDetails");
+            } 
         </div>
     </div>
     <div id="details-group" class="details stack" data-bind="with:selectedGroup ">

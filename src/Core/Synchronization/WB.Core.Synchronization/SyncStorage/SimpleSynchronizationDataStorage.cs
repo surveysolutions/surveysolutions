@@ -12,7 +12,7 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
+        private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
 
         private readonly IChunkWriter chunkStorageWriter;
         private readonly IChunkReader chunkStorageReader;
@@ -21,7 +21,7 @@ namespace WB.Core.Synchronization.SyncStorage
         private const bool UseCompressionForFiles = false;
 
         public SimpleSynchronizationDataStorage(
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage,
+            IQueryableReadSideRepositoryWriter<UserDocument> userStorage,
             IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader
             )
         {
