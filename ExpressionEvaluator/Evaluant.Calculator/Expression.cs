@@ -132,7 +132,6 @@ namespace NCalc
                 var lexer = new NCalcLexer(new ANTLRStringStream(expression));
                 var parser = new NCalcParser(new CommonTokenStream(lexer));
                 var exp = parser.ncalcExpression();
-                Console.WriteLine(((CommonTree)exp.Tree).ToStringTree());
                 logicalExpression = exp.value;
 
                 if (parser.Errors != null && parser.Errors.Count > 0)
