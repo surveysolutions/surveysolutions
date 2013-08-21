@@ -22,13 +22,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 {
     internal class SampleImportService : ISampleImportService
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
         private readonly ITemporaryDataStorage<TempFileImportData> tempImportStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
-        
 
-        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
+
+        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository,
                                    IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, 
             ITemporaryDataStorage<TempFileImportData> tempImportStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage)
@@ -103,7 +103,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                     return;
                 }
 
-            var bigTemplate = this.templateRepository.GetById(item.TemplateId);
+            var bigTemplateObject = this.templateRepository.GetById(item.TemplateId);
+
+            var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
             if (bigTemplate == null)
             {
                 result.SetErrorMessage("Template is absent");

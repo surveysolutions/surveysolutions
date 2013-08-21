@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
@@ -39,12 +40,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures; 
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures; 
         private readonly IReadSideRepositoryWriter<InterviewData> interviews;
 
         public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users,
                                      IReadSideRepositoryWriter<InterviewData> interviews,
-                                     IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures)
+                                     IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures)
         {
             this.users = users;
             this.interviews = interviews;
@@ -301,7 +302,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
-            var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId);
+            var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId,interview.QuestionnaireVersion);
             foreach (var scopeId in questionnarie.PropagationScopes.Keys)
             {
                 foreach (var trigger in questionnarie.PropagationScopes[scopeId])

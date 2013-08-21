@@ -168,10 +168,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 return Enumerable.Empty<Guid>();
 
             IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
-
-            return identifiersUsedInExpression
-                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdResolvingThisIdentifierOrThrow(identifier, questionId, validationExpression)).Distinct()
-                .ToList();
+            
+            return
+                FileterExpressionIdentifiersToExistingQuestionIdReplacingThisIdentifierOrThrow(
+                    identifiersUsedInExpression, questionId, validationExpression);
         }
 
         public string GetCustomValidationExpression(Guid questionId)
@@ -470,7 +470,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
 
             return identifiersUsedInExpression
-                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, enablementCondition)).Distinct()
+                .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, enablementCondition))
                 .ToList();
         }
 
@@ -486,20 +486,32 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return parsedValue;
         }
 
-        private Guid ParseExpressionIdentifierToExistingQuestionIdResolvingThisIdentifierOrThrow(string identifier, Guid contextQuestionId, string expression)
+        private IEnumerable<Guid> FileterExpressionIdentifiersToExistingQuestionIdReplacingThisIdentifierOrThrow(
+            IEnumerable<string> identifiers, Guid contextQuestionId, string expression)
         {
-            if (IsSpecialThisIdentifier(identifier))
-                return contextQuestionId;
+            var involvedQuestions = new HashSet<Guid>();
+            foreach (var identifier in identifiers)
+            {
+                if (IsSpecialThisIdentifier(identifier))
+                {
+                    if (!involvedQuestions.Contains(contextQuestionId))
+                    {
+                        involvedQuestions.Add(contextQuestionId);
+                    }
 
-            Guid parsedId;
-            if (!Guid.TryParse(identifier, out parsedId))
-                throw new QuestionnaireException(string.Format(
-                    "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
-                    identifier, expression));
+                    continue;
+                }
 
-            this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId);
+                Guid parsedId;
+                if (!Guid.TryParse(identifier, out parsedId))
+                    throw new QuestionnaireException(string.Format(
+                        "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
+                        identifier, expression));
+                this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression,
+                                                                                                parsedId);
+            }
+            return involvedQuestions;
 
-            return parsedId;
         }
 
         private Guid ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(string identifier, string expression)

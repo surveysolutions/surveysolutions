@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -29,13 +30,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate> statisticsStorage;
         private readonly IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage;
-        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
 
         public StatisticsDenormalizer(
             IReadSideRepositoryWriter<StatisticsLineGroupedByUserAndTemplate> statisticsStorage,
             IReadSideRepositoryWriter<UserDocument> users, 
             IReadSideRepositoryWriter<InterviewBrief> interviewBriefStorage,
-            IReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires)
+            IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires)
         {
             this.statisticsStorage = statisticsStorage;
             this.users = users;
@@ -121,7 +122,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private StatisticsLineGroupedByUserAndTemplate CreateNewStatisticsLine(InterviewBrief interviewBriefItem)
         {
-            var questionnaireTitle = this.questionnaires.GetById(interviewBriefItem.QuestionnaireId).Title;
+            var questionnaireTitle =
+                this.questionnaires.GetById(
+                    interviewBriefItem.QuestionnaireId,interviewBriefItem.QuestionnaireVersion).Title;
             var responsible = users.GetById(interviewBriefItem.ResponsibleId);
             string responsibleName=responsible.UserName;
             Guid? teamLeadId = null;

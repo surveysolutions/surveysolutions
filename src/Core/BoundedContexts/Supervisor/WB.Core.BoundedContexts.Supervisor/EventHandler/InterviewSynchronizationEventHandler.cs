@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
@@ -27,11 +28,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<InterviewData> interviewDataWriter;
-        private readonly IReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
 
         public InterviewSynchronizationEventHandler(ISynchronizationDataStorage syncStorage,
                                                     IReadSideRepositoryWriter<InterviewData> interviewDataWriter,
-                                                    IReadSideRepositoryWriter<QuestionnairePropagationStructure>
+                                                    IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>
                                                         questionnriePropagationStructures)
         {
             this.syncStorage = syncStorage;
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var invalidQuestions = new HashSet<ItemPublicKey>();
             var propagatedGroupInstanceCounts = new Dictionary<ItemPublicKey, int>();
 
-            var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId);
+            var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             foreach (var interviewLevel in interview.Levels.Values)
             {
@@ -89,7 +90,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
                                                    status,
-                                                   userId, interview.QuestionnaireId,
+                                                   userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
                                                    answeredQuestions, disabledGroups, disabledQuestions,
                                                    invalidQuestions, propagatedGroupInstanceCounts);
         }
