@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 {
                     Status = interview.Status,
                     Date = interview.UpdateDate,
-                    Comment = ""
+                    Comment = evnt.Payload.Comment
                 });
 
             this.interviews.Store(interview, interview.InterviewId);
