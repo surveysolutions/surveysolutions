@@ -23,6 +23,7 @@ using Ninject.Modules;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model
 {
@@ -47,11 +48,11 @@ namespace CAPI.Android.Core.Model
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
             var syncCacher = new FileSyncCacher();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
-            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocument>();
+            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
          
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireDocument>>().ToConstant(templateStore);
+            this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
