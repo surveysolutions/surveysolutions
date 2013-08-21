@@ -55,6 +55,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\Questionnaire.cs">
       <Link>Aggregates\Questionnaire.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\QuestionnaireState.cs">
+      <Link>Aggregates\QuestionnaireState.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerDateTimeQuestionCommand.cs">
       <Link>Commands\Interview\AnswerDateTimeQuestionCommand.cs</Link>
     </Compile>

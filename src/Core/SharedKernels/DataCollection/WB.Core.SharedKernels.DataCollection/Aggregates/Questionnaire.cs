@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire
+    public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire, ISnapshotable<QuestionnaireState>
     {
         #region State
 
@@ -509,6 +509,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                         identifier, expression));
                 this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression,
                                                                                                 parsedId);
+                involvedQuestions.Add(parsedId);
             }
             return involvedQuestions;
 
@@ -631,6 +632,18 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.QuestionCache.ContainsKey(questionId)
                 ? this.QuestionCache[questionId]
                 : null;
+        }
+
+        public QuestionnaireState CreateSnapshot()
+        {
+            return new QuestionnaireState(innerDocument,questionCache,groupCache);
+        }
+
+        public void RestoreFromSnapshot(QuestionnaireState snapshot)
+        {
+            innerDocument = snapshot.Document;
+            groupCache = snapshot.GroupCache;
+            questionCache = snapshot.QuestionCache;
         }
     }
 }
