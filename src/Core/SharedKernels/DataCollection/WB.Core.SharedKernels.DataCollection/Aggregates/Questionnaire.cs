@@ -213,9 +213,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
             return Enumerable.ToList(
                 from question in this.GetAllQuestions()
-                where this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey, specifiedQuestionId: questionId)
+                where
+                    this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey,
+                                                                               specifiedQuestionId: questionId)
                 select question.PublicKey
-            );
+                );
         }
 
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
@@ -379,11 +381,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         public IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId)
         {
-            return this
+            var result = this
                 .GetAllParentGroupsForGroupStartingFromBottom(groupId)
                 .Where(this.IsGroupPropagatable)
                 .Reverse()
                 .ToList();
+         
+            if (IsGroupPropagatable(groupId))
+                result.Add(groupId);
+            return result;
         }
 
         public int GetPropagationLevelForQuestion(Guid questionId)
