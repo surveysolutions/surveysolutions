@@ -3,7 +3,10 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -11,9 +14,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class QuestionnaireDenormalizer : IEventHandler<TemplateImported>, IEventHandler
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage;
         private readonly ISynchronizationDataStorage synchronizationDataStorage;
-        public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage, ISynchronizationDataStorage synchronizationDataStorage)
+        public QuestionnaireDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> documentStorage, ISynchronizationDataStorage synchronizationDataStorage)
         {
             this.documentStorage = documentStorage;
             this.synchronizationDataStorage = synchronizationDataStorage;
@@ -24,7 +27,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var document = evnt.Payload.Source.Clone() as QuestionnaireDocument;
             if(document==null)
                 return;
-            this.documentStorage.Store(document, document.PublicKey);
+            this.documentStorage.Store(
+                new QuestionnaireDocumentVersioned() {Questionnaire = document, Version = evnt.EventSequence},
+                document.PublicKey);
             this.synchronizationDataStorage.SaveQuestionnaire(document);
         }
 
