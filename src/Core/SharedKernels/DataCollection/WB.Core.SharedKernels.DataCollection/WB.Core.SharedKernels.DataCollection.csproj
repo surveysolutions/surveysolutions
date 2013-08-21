@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
+    <Compile Include="Aggregates\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
