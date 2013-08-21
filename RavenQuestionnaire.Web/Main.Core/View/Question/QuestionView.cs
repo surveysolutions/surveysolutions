@@ -7,7 +7,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
-using Main.Core.View.Card;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -235,7 +234,6 @@ namespace Main.Core.View.Question
         public AbstractQuestionView()
         {
             this.Answers = new T[0];
-            this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
             this.Groups = new Dictionary<string, Guid>();
         }
@@ -269,7 +267,6 @@ namespace Main.Core.View.Question
             : base(questionnaire, doc)
         {
             this.Answers = new T[0];
-            this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
             this.Groups = new Dictionary<string, Guid>();
             var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
@@ -358,10 +355,6 @@ namespace Main.Core.View.Question
             }
         }
 
-        /// <summary>
-        /// Gets or sets the cards.
-        /// </summary>
-        public CardView[] Cards { get; set; }
 
         #endregion
     }
@@ -547,11 +540,6 @@ namespace Main.Core.View.Question
         {
             this.Answers =
                 doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
-            if (doc.Cards != null)
-            {
-                this.Cards =
-                    doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
-            }
 
 
             var autoQuestion = doc as IAutoPropagate;

@@ -564,9 +564,6 @@
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="View\Answer\AnswerView.cs" />
     <Compile Include="View\Answer\CompleteAnswerView.cs" />
-    <Compile Include="View\Card\CardView.cs" />
-    <Compile Include="View\Card\CardViewFactory.cs" />
-    <Compile Include="View\Card\CardViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />

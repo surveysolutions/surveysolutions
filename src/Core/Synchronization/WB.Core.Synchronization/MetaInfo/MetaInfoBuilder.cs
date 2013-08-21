@@ -5,14 +5,16 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.Synchronization.MetaInfo
 {
     public class MetaInfoBuilder : IMetaInfoBuilder
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
 
-        public MetaInfoBuilder(IReadSideRepositoryWriter<QuestionnaireDocument> questionnarieStorage)
+        public MetaInfoBuilder(IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
             this.questionnarieStorage = questionnarieStorage;
         }
@@ -22,9 +24,10 @@ namespace WB.Core.Synchronization.MetaInfo
             if (doc == null)
                 return null;
 
-            var questionnarie = questionnarieStorage.GetById(doc.QuestionnaireId);
-            if (questionnarie == null)
+            var storedQuestionnarie = questionnarieStorage.GetById(doc.QuestionnaireId, doc.QuestionnaireVersion);
+            if (storedQuestionnarie == null)
                 return null;
+            var questionnarie = storedQuestionnarie.Questionnaire;
             var metaInfo = new InterviewMetaInfo();
 
             metaInfo.ResponsibleId = doc.UserId;

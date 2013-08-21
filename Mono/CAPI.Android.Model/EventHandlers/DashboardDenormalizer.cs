@@ -9,7 +9,9 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
@@ -20,11 +22,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                       IEventHandler<TemplateImported>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> questionnaireStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtOdocumentStorage;
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, IReadSideRepositoryWriter<QuestionnaireDocument> questionnaireStorage
+            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage
             )
         {
             this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
@@ -40,7 +42,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var items =
                 evnt.Payload.FeaturedQuestionsMeta.Select(
                     q =>
-                    new FeaturedItem(q.Id, questionnarieTemplate.Find<IQuestion>(q.Id).QuestionText, q.Answer.ToString()))
+                    new FeaturedItem(q.Id, questionnarieTemplate.Questionnaire.Find<IQuestion>(q.Id).QuestionText, q.Answer.ToString()))
                     .ToList();
             questionnaireDtOdocumentStorage.Store(
                 new QuestionnaireDTO(evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.QuestionnaireId, evnt.Payload.Status, items),

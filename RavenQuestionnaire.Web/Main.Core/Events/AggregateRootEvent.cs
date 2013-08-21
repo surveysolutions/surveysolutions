@@ -87,27 +87,16 @@ namespace Main.Core.Events
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The create uncommited event.
-        /// </summary>
-        /// <param name="eventSequence">
-        /// The event sequence.
-        /// </param>
-        /// <param name="initialVersionOfEventSource">
-        /// The initial version of event source.
-        /// </param>
-        /// <returns>
-        /// The Ncqrs.Eventing.UncommittedEvent.
-        /// </returns>
-        public UncommittedEvent CreateUncommitedEvent(long eventSequence, long initialVersionOfEventSource)
+        public UncommittedEvent CreateUncommitedEvent(long eventSequence, long initialVersionOfEventSource,
+                                                      DateTime? eventTimestamp = null)
         {
             return new UncommittedEvent(
-                this.EventIdentifier, 
-                this.EventSourceId, 
-                eventSequence, 
-                initialVersionOfEventSource, 
-                this.EventTimeStamp, 
-                this.Payload, 
+                this.EventIdentifier,
+                this.EventSourceId,
+                eventSequence,
+                initialVersionOfEventSource,
+                eventTimestamp ?? this.EventTimeStamp,
+                this.Payload,
                 this.EventVersion);
         }
 

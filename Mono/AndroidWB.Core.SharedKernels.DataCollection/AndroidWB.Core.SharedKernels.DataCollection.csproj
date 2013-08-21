@@ -265,6 +265,12 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\InterviewState.cs">
       <Link>Implementation\Aggregates\InterviewState.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryReader.cs">
+      <Link>Implementation\ReadSide\VersionedReadSideRepositoryReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs">
+      <Link>Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Repositories\IQuestionnaireRepository.cs">
       <Link>Implementation\Repositories\IQuestionnaireRepository.cs</Link>
     </Compile>
@@ -279,6 +285,15 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IExpressionProcessor.cs">
       <Link>Implementation\Services\IExpressionProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedReadSideRepositoryReader.cs">
+      <Link>ReadSide\IVersionedReadSideRepositoryReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedReadSideRepositoryWriter.cs">
+      <Link>ReadSide\IVersionedReadSideRepositoryWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedView.cs">
+      <Link>ReadSide\IVersionedView.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ValueObjects\Interview\InterviewStatus.cs">
       <Link>ValueObjects\Interview\InterviewStatus.cs</Link>
@@ -297,6 +312,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireBrowseViewFactory.cs">
       <Link>Views\Questionnaire\QuestionnaireBrowseViewFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireDocumentVersioned.cs">
+      <Link>Views\Questionnaire\QuestionnaireDocumentVersioned.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <Link>Views\Questionnaire\QuestionnaireItemInputModel.cs</Link>
@@ -341,10 +359,11 @@
       <Name>AndroidNinject</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

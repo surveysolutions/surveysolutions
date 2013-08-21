@@ -26,18 +26,6 @@ namespace Main.Core.View.Group
             this.Propagated = Propagate.None;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteGroupMobileView"/> class.
-        /// </summary>
-        /// <param name="doc">
-        /// The doc.
-        /// </param>
-        /// <param name="currentGroup">
-        /// The current group.
-        /// </param>
-        /// <param name="navigation">
-        /// The navigation.
-        /// </param>
         public CompleteGroupMobileView(
             CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup, QuestionScope scope)
             : this()
@@ -82,7 +70,6 @@ namespace Main.Core.View.Group
                         }
                     }
 
-                    this.CollectGalleries(this);
                     this.CollectInstructions(this);
                 }
             }
@@ -139,21 +126,6 @@ namespace Main.Core.View.Group
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// The collect galleries.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        private void CollectGalleries(CompleteGroupMobileView @group)
-        {
-            List<CompleteQuestionView> qs = @group.Children.OfType<CompleteQuestionView>().ToList();
-            if (qs.Count() > 0)
-            {
-                this.QuestionsWithCards.AddRange(qs.Where(question => (question.Cards.Length > 0)).ToList());
-            }
-        }
 
         /// <summary>
         /// The collect instructions.

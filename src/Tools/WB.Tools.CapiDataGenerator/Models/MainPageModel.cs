@@ -479,7 +479,7 @@ namespace CapiDataGenerator
                                                                                completeDocument.PublicKey,
                                                                                InterviewStatus.InterviewerAssigned,
                                                                                interviewer.Id,
-                                                                               completeDocument.TemplateId, null, null,
+                                                                               completeDocument.TemplateId,1, null, null,
                                                                                null, null, null)));
 
                     UpdateProgress();
