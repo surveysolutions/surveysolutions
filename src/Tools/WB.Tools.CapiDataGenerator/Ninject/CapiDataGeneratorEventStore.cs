@@ -34,14 +34,20 @@ namespace WB.Tools.CapiDataGenerator.Models
         {
             var eventstream = new UncommittedEventStream(eventStream.CommitId);
 
-            Func<object, bool> supervisorExpression = (o) => o is NewUserCreated || o is NewCompleteQuestionnaireCreated ||
-                o is TemplateImported || o is QuestionnaireAssignmentChanged ||
-                (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId || 
-                ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId));
+            Func<object, bool> supervisorExpression =
+                (o) => o is NewUserCreated || o is NewCompleteQuestionnaireCreated ||
+                       o is TemplateImported || o is QuestionnaireAssignmentChanged ||
+                       (o is QuestionnaireStatusChanged &&
+                        (((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
+                         ((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Initial.PublicId));
 
-            Func<object, bool> capiExpression = (o) => !(o is NewCompleteQuestionnaireCreated || o is TemplateImported || o is QuestionnaireAssignmentChanged ||
-                 (o is QuestionnaireStatusChanged && (((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
-                 ((QuestionnaireStatusChanged)o).Status.PublicId == SurveyStatus.Initial.PublicId)));
+            Func<object, bool> capiExpression =
+                (o) =>
+                    !(o is NewCompleteQuestionnaireCreated || o is TemplateImported ||
+                      o is QuestionnaireAssignmentChanged ||
+                      (o is QuestionnaireStatusChanged &&
+                       (((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Unassign.PublicId ||
+                        ((QuestionnaireStatusChanged) o).Status.PublicId == SurveyStatus.Initial.PublicId)));
 
             
             IDictionary<Guid, long> eventsequences = null;

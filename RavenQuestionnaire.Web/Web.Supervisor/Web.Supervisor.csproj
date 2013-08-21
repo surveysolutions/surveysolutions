@@ -471,6 +471,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\datacontext.js" />
+    <Content Include="Scripts\details\app\dataservice.js" />
+    <Content Include="Scripts\details\app\mapper.js" />
+    <Content Include="Scripts\details\app\model.js" />
+    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
@@ -478,14 +484,14 @@
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
-    <Content Include="Scripts\details.js" />
+    <Content Include="Scripts\details\app\viewmodel.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable-inline.js" />
     <Content Include="Scripts\bootstrap-editable-inline.min.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\director.min.js" />
+    <Content Include="Scripts\lib\director.js" />
     <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\highcharts.js" />
@@ -607,6 +613,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\GenericSubdomains\Logging\WB.Core.GenericSubdomains.Logging.NLog\WB.Core.GenericSubdomains.Logging.NLog.csproj">
       <Project>{afed8c20-0e91-4605-adb5-35a7f0c0dd0a}</Project>

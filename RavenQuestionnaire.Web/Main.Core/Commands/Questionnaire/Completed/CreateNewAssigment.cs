@@ -6,7 +6,7 @@ using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Main.Core.Commands.Questionnaire.Completed
 {
-    [MapsToAggregateRootMethodOrConstructor(typeof(CompleteQuestionnaireAR), "CreateNewAssigment")]
+    [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "CreateNewAssigment")]
     public class CreateNewAssigment : CommandBase
     {
         public CreateNewAssigment(CompleteQuestionnaireDocument source)

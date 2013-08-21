@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Core.Supervisor.Denormalizer;
 using Main.Core.Documents;
@@ -210,6 +211,11 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
             this.documentStorage.Store(item, item.PublicKey);
 
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[0]; }
         }
     }
 }

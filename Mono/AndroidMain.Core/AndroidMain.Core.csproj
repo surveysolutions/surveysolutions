@@ -119,6 +119,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetFlagCommand.cs">
       <Link>Commands\Questionnaire\Completed\SetFlagCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs">
+      <Link>Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
       <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
     </Compile>
@@ -454,6 +457,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <Link>Entities\SubEntities\Question\GpsCoordinateQuestion.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagateQuestion.cs">
+      <Link>Entities\SubEntities\Question\IAutoPropagateQuestion.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
     </Compile>
@@ -537,6 +543,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
       <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs">
+      <Link>Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <Link>Events\Questionnaire\Completed\NewAssigmentCreated.cs</Link>

@@ -11,9 +11,9 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkReader : IChunkReader
     {
-        private IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage;
+        private readonly IQueryableReadSideRepositoryWriter<SynchronizationDelta> queryableStorage;
 
-        public ReadSideChunkReader(IQueryableReadSideRepositoryReader<SynchronizationDelta> queryableStorage)
+        public ReadSideChunkReader(IQueryableReadSideRepositoryWriter<SynchronizationDelta> queryableStorage)
         {
             this.queryableStorage = queryableStorage;
         }
@@ -25,7 +25,7 @@ namespace WB.Core.Synchronization.SyncStorage
             if (item == null)
                 throw new ArgumentException("chunk is absent");
 
-            return new SyncItem()
+            return new SyncItem
                 {
                     Id = item.PublicKey,
                     IsCompressed = item.IsCompressed,
@@ -47,23 +47,13 @@ namespace WB.Core.Synchronization.SyncStorage
         {
             //todo: query is not optimal but will be replaced shortly
             var elements = queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
-                .Select(d => d)
                 .ToList()
-                .Select(s => new KeyValuePair<long, Guid>(s.Sequence, s.PublicKey))
-                ;
+                .Select(s => new KeyValuePair<long, Guid>(s.Sequence, s.PublicKey));
 
             return elements.GroupBy(g => g.Value)
                    .Select(pair => pair.First(x => x.Key == pair.Max(y => y.Key)))
                    .OrderBy(o=>o.Key)
                    .ToList();
-        }
-
-        public IEnumerable<SyncItem> GetChunks(long sequence, IEnumerable<Guid> users)
-        {
-            return queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
-                .Select(d => new SyncItem())
-                .Distinct()
-                .ToList();
         }
     }
 }

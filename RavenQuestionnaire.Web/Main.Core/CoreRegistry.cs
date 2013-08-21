@@ -9,6 +9,7 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -80,6 +81,7 @@ namespace Main.Core
         protected virtual void RegisterEventHandlers()
         {
             BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler<>), (c) => this.Kernel);
+            BindInterface(this.GetAssembliesForRegistration(), typeof(IEventHandler), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()
@@ -90,7 +92,7 @@ namespace Main.Core
             this.Kernel.Bind(typeof(IReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IQueryableReadSideRepositoryReader<>)).ToMethod(this.GetReadSideRepositoryReader);
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
-            this.Kernel.Bind(typeof(IQuerableReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
+            this.Kernel.Bind(typeof(IQueryableReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideRepositoryWriter);
         }
 
         protected virtual object GetReadSideRepositoryReader(IContext context)

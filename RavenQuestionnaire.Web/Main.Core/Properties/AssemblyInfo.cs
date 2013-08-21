@@ -34,3 +34,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.1")]
 
 [assembly: InternalsVisibleTo("Main.Core.Tests")]
+[assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]

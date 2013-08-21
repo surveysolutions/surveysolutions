@@ -1,3 +1,4 @@
+using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 
 namespace Core.Supervisor.Denormalizer
@@ -19,7 +20,7 @@ namespace Core.Supervisor.Denormalizer
     public class SummaryDenormalizer : UserBaseDenormalizer,
                                        IEventHandler<QuestionnaireStatusChanged>,
                                        IEventHandler<QuestionnaireAssignmentChanged>,
-                                       IEventHandler<InterviewDeleted>
+                                       IEventHandler<InterviewDeleted>, IEventHandler<InterviewMetaInfoUpdated>
     {
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
@@ -34,14 +35,28 @@ namespace Core.Supervisor.Denormalizer
             this.questionnaires = questionnaires;
         }
 
+        public override Type[] UsesViews
+        {
+            get { return base.UsesViews.Union(new Type[] { typeof(CompleteQuestionnaireBrowseItem) }).ToArray(); }
+        }
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (SummaryItem)}; }
+        }
+
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            if (evnt.Payload.Status.PublicId == evnt.Payload.PreviousStatus.PublicId)
+            HandleChangeStatus(evnt.EventSourceId,evnt.Payload.Status.PublicId, evnt.Payload.PreviousStatus.PublicId);
+        }
+
+        private void HandleChangeStatus(Guid interviewId, Guid statusId, Guid previousStatus)
+        {
+            if(statusId==previousStatus)
                 return;
+            
+            var questionnaire = this.questionnaires.GetById(interviewId);
 
-            var questionnaire = this.questionnaires.GetById(evnt.EventSourceId);
-
-            Guid newStatus = evnt.Payload.Status.PublicId;
             var summmaryUserId = questionnaire.Responsible.Id.Combine(questionnaire.TemplateId);
             var userSummary = this.summaryItem.GetById(summmaryUserId);
 
@@ -50,11 +65,12 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(evnt.EventSourceId,
-                                                                 evnt.Payload.PreviousStatus.PublicId, userSummary);
+            DecreaseCountersOrRemoveFromDeletedQuestionnarieList(interviewId, previousStatus, userSummary);
+          
+            IncreaseByStatus(userSummary, statusId);
 
-            this.IncreaseByStatus(userSummary, newStatus);
             this.summaryItem.Store(userSummary, summmaryUserId);
+            
         }
 
         private void DecreaseCountersOrRemoveFromDeletedQuestionnarieList(Guid interviewId, Guid previousStatusId,  SummaryItem userSummary)
@@ -81,6 +97,7 @@ namespace Core.Supervisor.Denormalizer
             var summaryUserId = evnt.Payload.Responsible.Id.Combine(questionnaire.TemplateId);
 
             var userSummary = this.summaryItem.GetById(summaryUserId) ?? this.CreateNewSummaryUser(evnt.Payload.Responsible.Id, questionnaire);
+
 
             if (evnt.Payload.PreviousResponsible != null && userSummary.ResponsibleId != evnt.Payload.PreviousResponsible.Id)
             {
@@ -156,6 +173,11 @@ namespace Core.Supervisor.Denormalizer
                         ResponsibleName = user.UserName
                     };
 
+        }
+
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
         }
     }
 }

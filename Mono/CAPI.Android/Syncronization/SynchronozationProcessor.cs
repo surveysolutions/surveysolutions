@@ -70,35 +70,13 @@ namespace CAPI.Android.Syncronization
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             pullDataProcessor = new PullDataProcessor(changelog, commandService);
-            pushDataProcessor = new PushDataProcessor(changelog, commandService);
+            pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
         #region operations
-
-        private void Validate()
-        {
-            OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true, 0));
-
-            CancelIfException(() =>
-                {
-                    int i = 1;
-                    foreach (var chunck in remoteChuncksForDownload.Where(c => c.Value))
-                    {
-                        pullDataProcessor.Proccess(chunck.Key);
-                        //save last handled item
-                        lastSequence = chunck.Key.Key.ToString();
-
-                        OnStatusChanged(new SynchronizationEventArgsWithPercent("validating", Operation.Validation, true,
-                                                                       (i * 100) / remoteChuncksForDownload.Count));
-                        i++;
-                    }
-                /*    if (remoteChuncksForDownload.Any(i => !i.Value))
-                        throw new OperationCanceledException("pull wasn't completed");*/
-                });
-        }
-
+        
         private void Pull()
         {
             ExitIfCanceled();
@@ -107,43 +85,35 @@ namespace CAPI.Android.Syncronization
             CancelIfException(() =>
                 {
                     remoteChuncksForDownload = pull.GetChuncks(credentials.Login, credentials.Password, clientRegistrationId, lastSequence, ct);
+                    
+                    int progressCounter = 0;
+                    foreach (var chunckId in remoteChuncksForDownload.Keys.ToList())
+                    {
+                        if (ct.IsCancellationRequested)
+                            return;
+
+                        try
+                        {
+                            var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Value, chunckId.Key, clientRegistrationId, ct);
+
+                            pullDataProcessor.Save(data);
+                            remoteChuncksForDownload[chunckId] = true;
+
+                            pullDataProcessor.Proccess(chunckId);
+                            //save last handled item
+                            lastSequence = chunckId.Key.ToString();
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(string.Format("chunk {0} wasn't processed", chunckId), e);
+                            
+                            throw;
+                        }
+
+                        OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
+                                                                                ((progressCounter++) * 100) / remoteChuncksForDownload.Count));
+                    }
                 });
-
-            int i = 1;
-
-            foreach (var chunckId in remoteChuncksForDownload.Keys.ToList())
-            {
-                //if process is canceled we stop pulling but without exception 
-                //in order to move forward and proccess uploaded data
-                if (ct.IsCancellationRequested)
-                    return;
-
-                try
-                {
-                    var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Value, chunckId.Key, clientRegistrationId,ct);
-                  
-                    pullDataProcessor.Save(data);
-                    remoteChuncksForDownload[chunckId] = true;
-
-                    pullDataProcessor.Proccess(chunckId);
-                    //save last handled item
-                    lastSequence = chunckId.Key.ToString();
-                }
-                catch
-                {
-                    //in case of exception we stop pulling but without exception 
-                    //in order to move forward and proccess uploaded data
-                    //but in case of fault we do not request next item
-                    //break;
-
-                    //now we are handling rigth after receiving
-                    throw;
-                }
-
-                OnStatusChanged(new SynchronizationEventArgsWithPercent("pulling", Operation.Pull, true,
-                                                                        (i*100)/remoteChuncksForDownload.Count));
-                i++;
-            }
         }
 
         private void Push()
@@ -160,9 +130,9 @@ namespace CAPI.Android.Syncronization
                     {
                         ExitIfCanceled();
 
-                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription, ct);
+                        push.PushChunck(credentials.Login, credentials.Password, chunckDescription.Content, ct);
                         //fix method
-                        pushDataProcessor.DeleteInterview(chunckDescription.Id, chunckDescription.ItemsContainer[0].Id);
+                        pushDataProcessor.DeleteInterview(chunckDescription.EventSourceId);
 
                         OnStatusChanged(new SynchronizationEventArgsWithPercent("pushing", Operation.Push, true, (i * 100) / dataByChuncks.Count));
                         i++;
@@ -210,7 +180,8 @@ namespace CAPI.Android.Syncronization
             Handshake();
             Push();
             Pull();
-            //Validate();
+            
+
             OnProcessFinished();
         }
 

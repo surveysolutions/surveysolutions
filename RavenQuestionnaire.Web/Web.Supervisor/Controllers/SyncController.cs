@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Http.Controllers;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -23,6 +24,10 @@ namespace Web.Supervisor.Controllers
         private readonly ILogger logger;
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
+
+        private string CapiFileName = "wbcapi.apk";
+
+        private string pathToSearchVersions = ("~/App_Data/Capi");
 
         public SyncController(ISyncManager syncManager, ILogger logger,
             IViewFactory<UserViewInputModel, UserView> viewFactory)
@@ -72,6 +77,7 @@ namespace Web.Supervisor.Controllers
                 identifier.ClientInstanceKey = key;
                 identifier.ClientVersionIdentifier = "unknown";
                 identifier.ClientRegistrationKey = clientRegistrationId;
+                identifier.SupervisorPublicKey = user.Supervisor.Id;
                 try
                 {
                     package = this.syncManager.ItitSync(identifier);
@@ -86,7 +92,7 @@ namespace Web.Supervisor.Controllers
             return Json(package, JsonRequestBehavior.AllowGet);
         }
 
-        //In case of error of type missing or casting error we'll try to send correct response.
+        
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult InitPulling(string clientRegistrationId)
@@ -273,6 +279,73 @@ namespace Web.Supervisor.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [AllowAnonymous]
+        public ActionResult GetLatestVersion()
+        {
+            int maxVersion = GetLastVersionNumber();
+            
+            if (maxVersion != 0)
+            {
+                string path = Path.Combine(Server.MapPath(pathToSearchVersions), maxVersion.ToString(CultureInfo.InvariantCulture));
+
+                string pathToFile = Path.Combine(path, CapiFileName);
+                if (System.IO.File.Exists(pathToFile))
+                    return File(pathToFile, "application/vnd.android.package-archive", CapiFileName);
+            }
+            
+            return null;
+        }
+
+        private int GetLastVersionNumber()
+        {
+            int maxVersion = 0;
+
+            var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+            if (Directory.Exists(targetToSearchVersions))
+            {
+                var dirInfo = new DirectoryInfo(targetToSearchVersions);
+                foreach (DirectoryInfo directoryInfo in dirInfo.GetDirectories())
+                {
+                    int value;
+                    if (int.TryParse(directoryInfo.Name, out value))
+                        if (maxVersion < value)
+                            maxVersion = value;
+                }
+            }
+
+            return maxVersion;
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        [AllowAnonymous]
+        public ActionResult CheckNewVersion(string version, string versionCode, string androidId)
+        {
+            var isNewVersionExsist = false;
+
+            try
+            {
+                int versionValue;
+                if (int.TryParse(versionCode, out versionValue))
+                {
+                    int maxVersion = GetLastVersionNumber();
+
+                    if (maxVersion != 0 && maxVersion > versionValue)
+                    {
+                        isNewVersionExsist = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on version check.", e);
+            }
+
+            return Json(isNewVersionExsist, JsonRequestBehavior.AllowGet);
+        }
+
 
         //move to filter
         //or change to web API

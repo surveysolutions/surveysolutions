@@ -79,6 +79,8 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         string ValidationMessage { get; set; }
 
+        #warning TLK: no data is added to following dependent questions and groups, they should be deleted
+
         /// <summary>
         /// Gets or sets the conditional dependent questions.
         /// </summary>

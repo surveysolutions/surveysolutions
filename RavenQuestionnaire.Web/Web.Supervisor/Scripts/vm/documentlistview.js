@@ -69,7 +69,9 @@
                         item.IsSelected(false);
                         item.Responsible.Id(user.UserId);
                         item.Responsible.Name(user.UserName);
-                        item.Status("Initial");
+                        if (item.Status().trim() != "Redo") {
+                            item.Status("Initial");
+                        }
                     });
                 }
                 if (data.status == "error") {

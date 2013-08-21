@@ -1,10 +1,12 @@
+using System;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Denormalizer
 {
-    public class UserBaseDenormalizer
+    public abstract class UserBaseDenormalizer : IEventHandler
     {
         protected readonly IReadSideRepositoryWriter<UserDocument> users;
 
@@ -24,5 +26,16 @@ namespace Core.Supervisor.Denormalizer
                                : responsible.Name
                 };
         }
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public virtual Type[] UsesViews
+        {
+            get { return new Type[] { typeof(UserDocument) }; }
+        }
+
+        public abstract Type[] BuildsViews { get; }
     }
 }

@@ -120,6 +120,9 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\HtmlBinding.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>
@@ -172,6 +176,8 @@
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
+    <Compile Include="GeolocationServices\GeoService.cs" />
+    <Compile Include="GeolocationServices\IGeoService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -198,6 +204,8 @@
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
+    <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
+    <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>

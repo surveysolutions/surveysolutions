@@ -1,4 +1,6 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using System;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
@@ -6,8 +8,9 @@ namespace Main.Core.EventHandlers
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Main.Core.Documents;
 
-    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>, 
-                                            IEventHandler<ClientDeviceLastSyncItemUpdated>
+    public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>,
+                                            IEventHandler<ClientDeviceLastSyncItemUpdated>,
+                                            IEventHandler
     {
         private readonly IReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
@@ -25,7 +28,8 @@ namespace Main.Core.EventHandlers
                     ModificationDate = evnt.Payload.CreationDate,
                     ClientInstanceKey = evnt.Payload.ClientInstanceKey,
                     PublicKey = evnt.Payload.Id,
-                    DeviceId = evnt .Payload.DeviceId
+                    DeviceId = evnt.Payload.DeviceId,
+                    SupervisorKey = evnt.Payload.SupervisorKey
                 };
 
             this.devices.Store(doc, doc.PublicKey);
@@ -38,6 +42,21 @@ namespace Main.Core.EventHandlers
             item.ModificationDate = evnt.Payload.ChangeDate;
 
             this.devices.Store(item, item.PublicKey);
+        }
+
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (ClientDeviceDocument)}; }
         }
     }
 }

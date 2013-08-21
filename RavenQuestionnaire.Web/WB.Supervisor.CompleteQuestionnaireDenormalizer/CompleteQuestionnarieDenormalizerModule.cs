@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ninject.Modules;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -15,8 +16,10 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         public override void Load()
         {
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument>, IReadSideRepositoryReader<CompleteQuestionnaireStoreDocument>>()
-             .To<RavenReadSideRepositoryWriterWithCacheAndZip>().InSingletonScope();
-            this.Bind(typeof (IEventHandler<>)).To<InterviewSynchronizationEventHandler>();
+                .To<RavenReadSideRepositoryWriterWithCacheAndZip>()
+                .InSingletonScope();
+            this.Bind(typeof (IEventHandler<>)).To<InterviewSynchronizationEventHandler>().InSingletonScope();
+            this.Bind(typeof(IEventHandler)).To<InterviewSynchronizationEventHandler>().InSingletonScope();
         }
     }
 }

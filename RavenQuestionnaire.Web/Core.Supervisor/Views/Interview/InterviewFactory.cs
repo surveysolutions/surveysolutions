@@ -75,14 +75,14 @@ namespace Core.Supervisor.Views.Interview
             //    .Skip((input.Page - 1)*input.PageSize)
             //    .Take(input.PageSize);
 
-            var interviewItems = DefineOrderBy(this.interviews.QueryEnumerable(predicate),input)
+            var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)),input)
                             .Skip((input.Page - 1)*input.PageSize)
                             .Take(input.PageSize).ToList();
 
            
             return new InterviewView()
                 {
-                    TotalCount = this.interviews.Count(predicate),
+                    TotalCount = this.interviews.Query(_ => _.Count(predicate)),
                     Items = interviewItems.Select(x => new InterviewViewItem()
                         {
                             FeaturedQuestions = x.FeaturedQuestions,

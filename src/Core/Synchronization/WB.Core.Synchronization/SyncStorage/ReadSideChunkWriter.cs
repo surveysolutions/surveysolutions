@@ -11,11 +11,11 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     internal class ReadSideChunkWriter : IChunkWriter, IReadSideRepositoryCleaner
     {
-        private IQuerableReadSideRepositoryWriter<SynchronizationDelta> storage;
+        private IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage;
         private readonly object myLock = new object();
         private long? currentSequence;
 
-        public ReadSideChunkWriter(IQuerableReadSideRepositoryWriter<SynchronizationDelta> storage, IReadSideRepositoryCleanerRegistry cleanerRegistry)
+        public ReadSideChunkWriter(IQueryableReadSideRepositoryWriter<SynchronizationDelta> storage, IReadSideRepositoryCleanerRegistry cleanerRegistry)
         {
             this.storage = storage;
             cleanerRegistry.Register(this);
