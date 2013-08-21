@@ -1056,7 +1056,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatGroupForException(groupId, questionnare), vectorPropagationLevel, groupPropagationLevel));
 
                 Guid[] parentPropagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsForGroupStartingFromTop(groupId).ToArray();
-                IEnumerable<int[]> groupPropagationVectors = this.ExtendPropagationVector(propagationVector, groupPropagationLevel, parentPropagatableGroupsStartingFromTop);
+                IEnumerable<int[]> groupPropagationVectors = this.ExtendPropagationVector(propagationVector,
+                                                                                          groupPropagationLevel,
+                                                                                          parentPropagatableGroupsStartingFromTop);
 
                 foreach (int[] groupPropagationVector in groupPropagationVectors)
                 {
@@ -1176,10 +1178,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>
         /// If propagation vector should be extended, result will be a set of vectors depending on propagation count of correspondifg groups.
         /// </remarks>
-        private IEnumerable<int[]> ExtendPropagationVector(int[] propagationVector, int length, Guid[] parentPropagatableGroupsStartingFromTop)
+        private IEnumerable<int[]> ExtendPropagationVector(int[] propagationVector, int length,
+                                                           Guid[] parentPropagatableGroupsStartingFromTop)
         {
             if (length < propagationVector.Length)
-                throw new ArgumentException(string.Format("Cannot extend vector with length {0} to smaller length {1}.", propagationVector.Length, length));
+                throw new ArgumentException(string.Format(
+                    "Cannot extend vector with length {0} to smaller length {1}.", propagationVector.Length, length));
 
             if (length == propagationVector.Length)
             {
@@ -1189,17 +1193,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (length == propagationVector.Length + 1)
             {
-                int countOfInstances = this.GetCountOfPropagatableGroupInstances(
-                    propagatableGroupId: parentPropagatableGroupsStartingFromTop.Last(),
-                    outerScopePropagationVector: propagationVector);
+                int countOfInstances =
+                    this.GetCountOfPropagatableGroupInstances(parentPropagatableGroupsStartingFromTop.Last(), propagationVector);
 
                 for (int instanceIndex = 0; instanceIndex < countOfInstances; instanceIndex++)
                 {
                     yield return ExtendPropagationVectorWithOneValue(propagationVector, instanceIndex);
                 }
+                yield break;
             }
 
-            throw new NotImplementedException("This method doed not support propagated groups inside propagated groups, but may easily support it when needed.");
+            throw new NotImplementedException(
+                "This method doed not support propagated groups inside propagated groups, but may easily support it when needed.");
         }
 
         private static int[] ExtendPropagationVectorWithOneValue(int[] propagationVector, int value)
