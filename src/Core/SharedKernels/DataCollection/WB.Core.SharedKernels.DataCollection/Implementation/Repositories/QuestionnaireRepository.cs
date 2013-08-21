@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             var aggregateRoot = (Questionnaire) domainRepository.Load(typeof (Questionnaire), snapshot, eventStream);
 
             if (!eventStream.IsEmpty)
-                snapshotStore.SaveShapshot(new Snapshot(id, maxVersion, aggregateRoot.CreateSnapshot()));
+                snapshotStore.SaveShapshot(new Snapshot(id, eventStream.CurrentSourceVersion, aggregateRoot.CreateSnapshot()));
 
             return aggregateRoot;
         }
