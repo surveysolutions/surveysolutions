@@ -64,7 +64,7 @@
             <!-- ko foreach:ListView.Items -->
             <tr>
                 <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + QuestionnaireId() }, text: QuestionnaireTitle"></a>
+                    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + QuestionnaireId() }, text: QuestionnaireTitle() + ' (ver.' + QuestionnaireVersion() + ')'"></a>
                 </td>
                 <td data-bind="template: { name: 'SupervisorAssignedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>
