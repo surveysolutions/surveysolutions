@@ -1,27 +1,21 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Commands.Sync;
-using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
     using Main.Core.Documents;
-    using Newtonsoft.Json;
-    
-    using Main.Core.Events;
 
     internal class SyncProvider : ISyncProvider
     {
-        private ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
+        private readonly ICommandService commandService = NcqrsEnvironment.Get<ICommandService>();
         
-        #warning ViewFactory should be used here
-        private readonly IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices;
+        private readonly IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices;
 
         private readonly ISynchronizationDataStorage storage;
         private readonly IIncomePackagesRepository incomeRepository;
@@ -29,7 +23,7 @@ namespace WB.Core.Synchronization.SyncProvider
         private readonly ILogger logger;
 
 
-        public SyncProvider(IQueryableReadSideRepositoryReader<ClientDeviceDocument> devices,
+        public SyncProvider(IQueryableReadSideRepositoryWriter<ClientDeviceDocument> devices,
             ISynchronizationDataStorage storage,IIncomePackagesRepository incomeRepository,
             ILogger logger)
         {
@@ -105,8 +99,25 @@ namespace WB.Core.Synchronization.SyncProvider
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    //probably device was init with other supervisor 
+                    //probably device has been syncronized with other supervisor application
                     throw new ArgumentException("Unknown device.");
+                }
+
+                //old sync devices are already in use
+                //lets allow to sync them for awhile
+                //then 
+                if (identifier.SupervisorPublicKey == Guid.Empty)
+                {
+                    logger.Error("Old registred device is synchronizing. Errors could be on client in case of differernt team.");
+                }
+                else if (device.SupervisorKey != identifier.SupervisorPublicKey)
+                {
+                    var package = new HandshakePackage
+                        {
+                            IsErrorOccured = true,
+                            ErrorMessage = "Device assigned to another Supervisor."
+                        };
+                    return package;
                 }
 
                 //TODO: check device validity
@@ -117,7 +128,8 @@ namespace WB.Core.Synchronization.SyncProvider
             {
                 ClientRegistrationKey = Guid.NewGuid();
 
-                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, 
+                    identifier.ClientDeviceKey, identifier.ClientInstanceKey, identifier.SupervisorPublicKey));
             }
 
             Guid syncActivityKey = Guid.NewGuid();

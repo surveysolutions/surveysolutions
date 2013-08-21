@@ -1,6 +1,5 @@
 using System;
-
-using WB.Core.Infrastructure;
+using System.Collections.Generic;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Views.Questionnaire
@@ -23,6 +22,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
+            this.SharedPersons = new List<Guid>();
         }
 
         #endregion
@@ -68,6 +68,10 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// Gets or sets a value indicating whether is public.
         /// </summary>
         public bool IsPublic { get; set; }
+
+        public List<Guid> SharedPersons { get; private set; }
+
+        public bool IsShared { get; set; }
 
         #endregion
     }

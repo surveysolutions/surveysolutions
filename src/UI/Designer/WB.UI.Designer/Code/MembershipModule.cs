@@ -1,8 +1,5 @@
 ﻿namespace WB.UI.Designer
 {
-    using Ncqrs;
-    using Ncqrs.Commanding.ServiceModel;
-
     using Ninject.Modules;
 
     using WB.UI.Designer.Providers.CQRS;
@@ -16,7 +13,8 @@
         {
             Bind<IPasswordStrategy>().To<HashPasswordStrategy>().InSingletonScope();
             Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy());
-            Bind<IAccountRepository>().To<CQRSAccountRepository>().InSingletonScope();
+            Bind<IAccountRepository>()
+                .ToConstant(AccountRepositoryFactory.CreateRepository()).InSingletonScope();
             Bind<IRoleRepository>().To<CQRSRoleRepository>().InSingletonScope();
         }
     }

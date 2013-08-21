@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox'],
-    function (ko, _, config, utils, datacontext, router, model, bootbox) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox', 'input'],
+    function (ko, _, config, utils, datacontext, router, model, bootbox, input) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -143,6 +143,7 @@
                 datacontext.groups.add(group);
                 datacontext.questionnaire.childrenID.push({ type: group.type(), id: group.id() });
                 chapters.push(group);
+                group.children.id = group.id();
                 router.navigateTo(group.getHref());
                 calcStatistics();
             },
@@ -312,7 +313,7 @@
                             question.commit();
                         },
                         error: function(d) {
-                            isOutputVisible(true);
+                            showError(d);
                             question.canUpdate(true);
                         }
                     });
@@ -331,10 +332,54 @@
                             questionnaire.canUpdate(true);
                         },
                         error: function(d) {
-                            isOutputVisible(true);
+                            showError(d);
                             questionnaire.canUpdate(true);
                         }
                     });
+            },
+            addSharedPerson = function(sharedUser) {
+                sharedUser.check(function () {
+                    var options = {
+                        url: input.url.addSharedPersonUrl,
+                        type: 'POST',
+                        data: { userEmail: sharedUser.userEmail() }
+                    };
+                    
+                    $.ajax(options).done(function (data) {
+                        if (data.IsSuccess) {
+                            if (data.IsAlreadyShared) {
+                                showError(input.settings.messages.userToShareAlreadyExistInList.replace("$1", sharedUser.userEmail()));
+                            }
+                            else if(data.IsOwner){
+                                showError(input.settings.messages.userToShareIsOwner);
+                            }
+                            else {
+                                questionnaire().addSharedPerson();
+                            }
+                        } else {
+                            showError(input.settings.messages.unhandledExceptionMessage);
+                        }
+                    }).fail(function () {
+                        showError(input.settings.messages.unhandledExceptionMessage);
+                    });
+                });
+            },
+            removeSharedPerson = function (sharedUser) {
+                var options = {
+                    url: input.url.removeSharedPersonUrl,
+                    type: 'POST',
+                    data: { userEmail: sharedUser.userEmail() }
+                };
+
+                $.ajax(options).done(function (data) {
+                    if (data.IsSuccess) {
+                        questionnaire().removeSharedPerson(sharedUser);
+                    } else {
+                        showError(input.settings.messages.unhandledExceptionMessage);
+                    }
+                }).fail(function() {
+                    showError(input.settings.messages.unhandledExceptionMessage);
+                });
             },
             clearFilter = function() {
                 filter('');
@@ -353,6 +398,7 @@
                 var fromId = arg.sourceParent.id;
                 var toId = arg.targetParent.id;
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
+                var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
 
@@ -362,13 +408,19 @@
                     return;
                 }
 
-                if (isDropedInChapter && moveItemType == "question") {
+                if (isDropedOutsideAnyChapter && moveItemType == "question") {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveQuestionOutsideGroup);
                     return;
                 }
                 var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
+
+                if (target.isNew()) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveIntoUnsavedItem);
+                    return;
+                }
 
                 if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
                     arg.cancelDrop = true;
@@ -425,9 +477,6 @@
                             chapters(datacontext.groups.getChapters());
 
                             showError(d);
-                            errors.removeAll();
-                            errors.push(d);
-                            isOutputVisible(true);
                         }
                     });
             },
@@ -451,8 +500,6 @@
                         }
                     }
                 };
-                
-
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {
@@ -484,7 +531,6 @@
                 errors.removeAll();
                 errors.push(message);
                 isOutputVisible(true);
-
             };
 
         init();
@@ -517,6 +563,8 @@
             saveQuestionnaire: saveQuestionnaire,
             isAllChaptersExpanded: isAllChaptersExpanded,
             toggleAllChapters: toggleAllChapters,
-            toggleAllChaptersTooltip: toggleAllChaptersTooltip
+            toggleAllChaptersTooltip: toggleAllChaptersTooltip,
+            addSharedPerson: addSharedPerson,
+            removeSharedPerson : removeSharedPerson
         };
     });

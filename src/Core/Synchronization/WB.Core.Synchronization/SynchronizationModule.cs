@@ -9,7 +9,6 @@ using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.Implementation.SyncManager;
 using WB.Core.Synchronization.SyncProvider;
 using WB.Core.Synchronization.SyncStorage;
-using WB.Core.Synchronization.Views;
 
 namespace WB.Core.Synchronization
 {
@@ -32,10 +31,7 @@ namespace WB.Core.Synchronization
             this.Bind<ISynchronizationDataStorage>().To<SimpleSynchronizationDataStorage>().InSingletonScope();
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();
             this.Bind<IChunkReader>().To<ReadSideChunkReader>();
-            var incomeStorage=new IncomePackagesRepository(currentFolderPath);
-            this.Bind<IIncomePackagesRepository>().ToConstant(incomeStorage);
-            this.Bind<IViewFactory<IncomeSyncPackagesInputModel, IncomeSyncPackagesView>>()
-                .To<IncomeSyncPackagesViewFactory>();
+            this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("folderPath", currentFolderPath);
         }
     }
 }
