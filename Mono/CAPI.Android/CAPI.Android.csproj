@@ -140,6 +140,7 @@
     <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Core\ParcelableWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SmartAdapter.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />

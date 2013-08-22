@@ -7,9 +7,9 @@ namespace CAPI.Android.Controls.Navigation
 {
     public class NavigationSpinnerAdapter : BaseAdapter
     {
-        private IList<NavigationItem> _spinnerItems;
+        private readonly IList<NavigationItem> _spinnerItems;
 
-        public NavigationSpinnerAdapter(Context context, IList<NavigationItem> items)
+        public NavigationSpinnerAdapter(IList<NavigationItem> items)
         {
             _spinnerItems = items;
         }
@@ -26,18 +26,13 @@ namespace CAPI.Android.Controls.Navigation
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
+            var view = convertView as TextView ?? new TextView(parent.Context);
 
-            if (convertView != null)
-            {
-                return convertView;
-              
-            }
-            // inflate a new layout for the view.
-            var view = new TextView(parent.Context);
             view.Text = _spinnerItems[position].Title;
             view.TextSize = 20;
             view.Gravity = GravityFlags.Right;
-            view.SetPadding(10,10,10,10);
+            view.SetPadding(10, 10, 10, 10);
+
             return view;
         }
 

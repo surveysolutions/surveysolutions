@@ -9,32 +9,24 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 
 namespace CAPI.Android.Controls
 {
-    public class DashboardAdapter : BaseAdapter<DashboardQuestionnaireItem>
+    public class DashboardAdapter : SmartAdapter<DashboardQuestionnaireItem>
     {
-        private IList<DashboardQuestionnaireItem> questionnaries;
         private readonly Activity activity;
-        public DashboardAdapter(Activity activity, IList<DashboardQuestionnaireItem> questionnaries)
+
+        public DashboardAdapter(IList<DashboardQuestionnaireItem> items, Activity activity) : base(items)
         {
-            this.questionnaries = questionnaries;
             this.activity = activity;
         }
 
-        public override long GetItemId(int position)
+        protected override View BuildViewItem(DashboardQuestionnaireItem dataItem, int position)
         {
-            return position;
-        }
-
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            if (convertView != null)
-                return convertView;
-            var dataItem = this[position];
             LayoutInflater layoutInflater =
-                (LayoutInflater) activity.GetSystemService(Context.LayoutInflaterService);
+               (LayoutInflater)activity.GetSystemService(Context.LayoutInflaterService);
 
             View view = layoutInflater.Inflate(Resource.Layout.dashboard_survey_item, null);
 
@@ -59,15 +51,9 @@ namespace CAPI.Android.Controls
             return view;
         }
 
-
-        public override int Count
+        protected override object GetElementFunction(DashboardQuestionnaireItem dataItem)
         {
-            get { return questionnaries.Count; }
-        }
-
-        public override DashboardQuestionnaireItem this[int position]
-        {
-            get { return questionnaries[position]; }
+            return dataItem.PublicKey;
         }
     }
 }

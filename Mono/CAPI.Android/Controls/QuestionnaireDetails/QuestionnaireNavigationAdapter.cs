@@ -4,67 +4,65 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
-    public class QuestionnaireNavigationAdapter : BaseAdapter<QuestionnaireScreenViewModel>
+    public class QuestionnaireNavigationAdapter : SmartAdapter<QuestionnaireScreenViewModel>
     {
-        private readonly CompleteQuestionnaireView model;
         private readonly Context context;
         private readonly int selectedItem;
         private readonly UpdateTotalClosure[] subscribers;
+        private readonly SurveyStatus status;
 
-        public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem){
+        public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
+            : base(model.Chapters)
+        {
             this.context = context;
             this.selectedItem = selectedItem;
-            this.model = model;
-            this.subscribers=new UpdateTotalClosure[this.model.Chapters.Count];
+            this.status = model.Status;
+            this.subscribers=new UpdateTotalClosure[model.Chapters.Count];
         }
 
-
-        #region Overrides of BaseAdapter
-
-        public override long GetItemId(int position)
+        protected override View BuildViewItem(QuestionnaireScreenViewModel dataItem, int position)
         {
-            return position;
+
+            LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            // no view to re-use, create new
+            var view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
+
+            if (position == selectedItem)
+            {
+                view.SetBackgroundColor(Color.LightBlue);
+            }
+
+            var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
+
+            var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
+            if (position < Count - 1)
+            {
+                var closure = new UpdateTotalClosure(tvCount, dataItem);
+                closure.UpdateCounter();
+                this.subscribers[position] = closure;
+                tvITem.Text = dataItem.ScreenName;
+
+                view.SetTag(Resource.Id.ScreenId, dataItem.ScreenId.ToString());
+            }
+            else
+            {
+                tvITem.Text = SurveyStatus.IsStatusAllowCapiSync(status) ? "Summary" : "Complete";
+                tvCount.Visibility = ViewStates.Gone;
+            }
+            return view;
         }
-        
-        public override View GetView(int position, View convertView, ViewGroup parent)
+
+        protected override object GetElementFunction(QuestionnaireScreenViewModel dataItem)
         {
-            if (convertView != null)
-                return convertView;
-
-            
-                LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
-                // no view to re-use, create new
-                var view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
-
-                if (position == selectedItem)
-                {
-                    view.SetBackgroundColor(Color.LightBlue);
-                }
-
-                var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
-              
-                var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
-                if (position < Count - 1)
-                {
-                    var item = model.Chapters[position];
-                    var closure = new UpdateTotalClosure(tvCount, item);
-                    closure.UpdateCounter();
-                    this.subscribers[position] = closure;
-                    tvITem.Text = item.ScreenName;
-                    
-                    view.SetTag(Resource.Id.ScreenId, item.ScreenId.ToString());
-                }
-                else
-                {
-                    tvITem.Text = SurveyStatus.IsStatusAllowCapiSync(model.Status) ? "Summary" : "Complete";
-                    tvCount.Visibility = ViewStates.Gone;
-                }
-                return view;
+            if (dataItem == null)
+                return string.Empty;
+            return dataItem.ScreenId;
         }
 
         public void Detach()
@@ -86,25 +84,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 subscriber.Attach();
             }
         }
-
-        public override int Count
-        {
-            get { return model.Chapters.Count + 1; }
-        }
-
-        #endregion
-
-        #region Overrides of BaseAdapter<QuestionnaireNavigationPanelItem>
-
         public override QuestionnaireScreenViewModel this[int position]
         {
             get
             {
-                return model.Chapters[position];
+                if (position == Count - 1)
+                    return null;
+                return base[position];
             }
         }
-
-        #endregion
+        public override int Count
+        {
+            get { return base.Count + 1; }
+        }
 
         public class  UpdateTotalClosure
         {

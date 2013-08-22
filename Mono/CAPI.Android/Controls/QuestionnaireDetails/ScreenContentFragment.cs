@@ -28,14 +28,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private const string SCREEN_ID = "screenId";
         private const string QUESTIONNAIRE_ID = "questionnaireId";
-        private readonly IQuestionViewFactory questionViewFactory;
-        
-        protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
+       
+     //   protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
         protected View top;
         public ScreenContentFragment()
         {
-            this.questionViewFactory = new DefaultQuestionViewFactory();
-            this.bindableElements = new List<AbstractQuestionView>();
+        //    this.bindableElements = new List<AbstractQuestionView>();
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -62,32 +60,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             breadcrumbs.SetPadding(0, 0, 0, 10);
             llTop.AddView(breadcrumbs);
 
-          
+            llContent.Adapter = new ScreenContentAdapter(Model.Items, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
 
-
-
-            foreach (var item in Model.Items)
-            {
-                var question = item as QuestionViewModel;
-                View itemView = null;
-                if (question != null)
-                {
-                    var questionView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,
-                                                                                   Model.QuestionnaireId);
-                    this.bindableElements.Add(questionView);
-                    itemView = questionView;
-                }
-                var group = item as QuestionnaireNavigationPanelItem;
-                if (group != null)
-                {
-                    var groupView = new GroupView(inflater.Context, group);
-                    groupView.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
-                    itemView = groupView;
-                }
-                if (itemView != null)
-                    llContent.AddView(itemView);
-            }
-            llContent.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
 
             var nextBtn = new GroupView(inflater.Context,
                                         PropagatedModel == null
@@ -103,7 +77,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return top;
         }
 
-        public override void OnDetach()
+     /*   public override void OnDetach()
         {
 
             base.OnDetach();
@@ -112,7 +86,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 abstractQuestionView.Dispose();
             }
             bindableElements=new List<AbstractQuestionView>();
-        }
+        }*/
+
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);
@@ -150,9 +125,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             get { return Model as QuestionnairePropagatedScreenViewModel; }
         }
 
-        protected LinearLayout llContent
+        protected ListView llContent
         {
-            get { return top.FindViewById<LinearLayout>(Resource.Id.llContent); }
+            get { return top.FindViewById<ListView>(Resource.Id.llContent); }
         }
         protected LinearLayout llTop
         {
