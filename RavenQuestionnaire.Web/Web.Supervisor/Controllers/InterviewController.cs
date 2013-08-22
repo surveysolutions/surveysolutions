@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Core.Supervisor.Views.ChangeStatus;
+using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Survey;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
@@ -22,16 +23,22 @@ namespace Web.Supervisor.Controllers
 
         private readonly IViewFactory<DisplayViewInputModel, SurveyScreenView> surveyScreenViewFactory;
 
+        private readonly IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory;
+
         public InterviewController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                    IViewFactory<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>
                                        completeQuestionnaireStatisticViewFactory,
                                    IViewFactory<DisplayViewInputModel, SurveyScreenView> surveyScreenViewFactory,
-                                   IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory)
+                                   IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
+
+                                   IViewFactory<InterviewDetailsInputModel, InterviewDetailsView> interviewDetailsFactory)
             : base(commandService, provider, logger)
         {
             this.completeQuestionnaireStatisticViewFactory = completeQuestionnaireStatisticViewFactory;
             this.surveyScreenViewFactory = surveyScreenViewFactory;
             this.changeStatusFactory = changeStatusFactory;
+
+            this.interviewDetailsFactory = interviewDetailsFactory;
         }
 
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
@@ -44,6 +51,29 @@ namespace Web.Supervisor.Controllers
                         PropagationKey = propagationKey,
                         User = this.GlobalInfo.GetCurrentUser()
                     });
+            if (model == null)
+            {
+                return this.RedirectToInterviewList(template);
+            }
+            this.ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
+            this.ViewBag.TemplateId = template;
+            UserLight user = this.GlobalInfo.GetCurrentUser();
+            this.ViewBag.CurrentUser = user;
+            return this.View(model);
+        }
+
+        public ActionResult InterviewDetails(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
+        {
+            this.ViewBag.ActivePage = MenuItem.Docs;
+            InterviewDetailsView model = this.interviewDetailsFactory.Load(
+                new InterviewDetailsInputModel()
+                {
+                    CompleteQuestionnaireId = id,
+                    CurrentGroupPublicKey = group,
+                    PropagationKey = propagationKey,
+                    User = this.GlobalInfo.GetCurrentUser()
+                });
+
             if (model == null)
             {
                 return this.RedirectToInterviewList(template);

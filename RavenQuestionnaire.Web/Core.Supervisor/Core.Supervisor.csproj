@@ -200,6 +200,11 @@
     <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Interview\InterviewGroupView.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsView.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewQuestionView.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorSurveysAndStatusesReport.cs" />

@@ -116,7 +116,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 CommandService.Execute(new CommentAnswerCommand(this.QuestionnairePublicKey,
                                                                 CapiApplication.Membership.CurrentUser.Id,
                                                                 this.Model.PublicKey.PublicKey,
-                                                                this.Model.PublicKey.PropagationVector, 
+                                                                this.Model.PublicKey.PropagationVector,
+                                                                DateTime.UtcNow,
                                                                 newComments));
             }
             SetEditCommentsVisibility(false);

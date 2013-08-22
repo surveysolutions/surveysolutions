@@ -53,7 +53,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (newValue != this.Model.AnswerString)
             {
                 CommandService.Execute(new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
-                                                          this.Model.PublicKey.PropagationVector, DateTime.Now, e.Date));
+                                                          this.Model.PublicKey.PropagationVector, DateTime.UtcNow, e.Date));
                 dateDisplay.Text = newValue;
             }
             
