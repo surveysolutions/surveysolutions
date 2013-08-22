@@ -507,13 +507,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
-        public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, string comment)
+        public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime,string comment)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
 
-            this.ApplyEvent(new AnswerCommented(userId, questionId, propagationVector, comment));
+            this.ApplyEvent(new AnswerCommented(userId, questionId, propagationVector, commentTime, comment));
         }
 
         public void SetFlagToAnswer(Guid userId, Guid questionId, int[] propagationVector)

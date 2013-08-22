@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
-using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
@@ -138,8 +132,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
+            var commenter = this.users.GetById(evnt.Payload.UserId);
+
             SaveComment(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                       evnt.Payload.Comment);
+                       evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime);
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
@@ -226,9 +222,18 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             PreformActionOnQuestion(interviewId, vector, questionId, (question) => { question.Answer = answer; });
         }
 
-        private void SaveComment(Guid interviewId, int[] vector, Guid questionId, string comment)
+        private void SaveComment(Guid interviewId, int[] vector, Guid questionId, string comment, Guid userId, string userName, DateTime commentTime)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) => { question.Comments = comment; });
+            var interviewQuestionComment = new InterviewQuestionComment()
+                {
+                    Id = Guid.NewGuid(), 
+                    Text = comment, 
+                    CommenterId = userId,
+                    CommenterName = userName,
+                    Date = commentTime
+                };
+
+            PreformActionOnQuestion(interviewId, vector, questionId, (question) => question.Comments.Add(interviewQuestionComment));
         }
 
         private void ChangeQuestionConditionState(Guid interviewId, int[] vector, Guid questionId, bool newState)
