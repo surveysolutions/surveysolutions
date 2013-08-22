@@ -26,8 +26,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtOdocumentStorage;
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage
-            )
+                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
+                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage)
         {
             this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
             this.surveyDtOdocumentStorage = surveyDTOdocumentStorage;

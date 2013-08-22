@@ -414,7 +414,8 @@ namespace CapiDataGenerator
                     var isAutoQuestion = question is IAutoPropagate;
                     commandService.Execute(new CommentAnswerCommand(qId, Guid.NewGuid(),
                                                                     question.PublicKey,
-                                                                    new int[0], 
+                                                                    new int[0],
+                                                                    DateTime.Now,
                                                                     "auto comment"));
 
                     UpdateProgress();

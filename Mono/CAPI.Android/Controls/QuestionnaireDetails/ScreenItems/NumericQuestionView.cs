@@ -66,7 +66,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     CommandService.Execute(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
                                                                             CapiApplication.Membership.CurrentUser.Id,
                                                                             Model.PublicKey.PublicKey,
-                                                                            this.Model.PublicKey.PropagationVector, DateTime.Now, decimal.Parse(newValue)));
+                                                                            this.Model.PublicKey.PropagationVector, DateTime.UtcNow, decimal.Parse(newValue)));
                 }
                 base.SaveAnswer();
 
