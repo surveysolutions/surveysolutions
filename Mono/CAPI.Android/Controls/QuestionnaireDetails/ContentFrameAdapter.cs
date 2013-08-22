@@ -18,7 +18,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     /// </summary>
     public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
-     //   private readonly Guid questionnaireId;
         private readonly CompleteQuestionnaireView questionnaire;
         private ItemPublicKey? screenId;
         private bool isRoot;

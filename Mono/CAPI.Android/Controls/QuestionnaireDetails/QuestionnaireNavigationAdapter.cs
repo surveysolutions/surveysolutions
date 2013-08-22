@@ -14,15 +14,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly CompleteQuestionnaireView model;
         private readonly Context context;
         private readonly int selectedItem;
-        private View[] items;
-        private UpdateTotalClosure[] subscribers;
-        public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
-            : base()
-        {
+        private readonly UpdateTotalClosure[] subscribers;
+
+        public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem){
             this.context = context;
             this.selectedItem = selectedItem;
             this.model = model;
-            this.items = new View[this.Count];
             this.subscribers=new UpdateTotalClosure[this.model.Chapters.Count];
         }
 
@@ -36,13 +33,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
+            if (convertView != null)
+                return convertView;
 
-            View view = items[position];
-            if (view == null)
-            {
+            
                 LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
                 // no view to re-use, create new
-                view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
+                var view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
 
                 if (position == selectedItem)
                 {
@@ -67,9 +64,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     tvITem.Text = SurveyStatus.IsStatusAllowCapiSync(model.Status) ? "Summary" : "Complete";
                     tvCount.Visibility = ViewStates.Gone;
                 }
-                items[position] = view;
-            }
-            return view;
+                return view;
         }
 
         public void Detach()
@@ -92,16 +87,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
         }
 
-        public void SelectItem(int pos)
-        {
-            for (int i = 0; i < items.Length; i++)
-            {
-                if (items[i] == null)
-                    continue;
-                items[i].SetBackgroundColor(i == pos ? Color.LightBlue : Color.Transparent);
-            }
-        }
-
         public override int Count
         {
             get { return model.Chapters.Count + 1; }
@@ -120,6 +105,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         }
 
         #endregion
+
         public class  UpdateTotalClosure
         {
             private readonly TextView tvCount;
