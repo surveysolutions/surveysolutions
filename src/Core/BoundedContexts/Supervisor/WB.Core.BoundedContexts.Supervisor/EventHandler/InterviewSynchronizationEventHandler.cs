@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id,interviewLevel.PropagationVector,
                                                                                   interviewQuestion.Answer,
-                                                                                  interviewQuestion.Comments);
+                                                                                  interviewQuestion.Comments.LastOrDefault().Text);
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
