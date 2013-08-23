@@ -45,11 +45,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             if (question != null)
             {
                 var questionView = this.questionViewFactory.CreateQuestionView(context, question, questionnaireId);
-                //   this.bindableElements.Add(questionView);
                 if (SurveyStatus.IsStatusAllowCapiSync(status))
                 {
                     questionView.EnableDisableView(false);
                 }
+                questionView.Clickable = true;
+                questionView.Focusable = true;
                 result = questionView;
             }
             var group = questionnaireItemViewModel as QuestionnaireNavigationPanelItem;
@@ -65,11 +66,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 result = groupView;
             }
             return result;
-        }
-
-        protected override object GetElementFunction(IQuestionnaireItemViewModel dataItem)
-        {
-            return dataItem.PublicKey;
         }
     }
 }

@@ -50,7 +50,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                               ? null
                                               : PropagatedModel.Previous as QuestionnaireNavigationPanelItem, global::Android.Resource.Drawable.ArrowUpFloat);
 
-            previousBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+            previousBtn.ScreenChanged += groupView_ScreenChanged;
             llTop.AddView(previousBtn);
             //  top.Orientation = Orientation.Vertical;
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
@@ -69,7 +69,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                             : PropagatedModel.Next as QuestionnaireNavigationPanelItem, global::Android.Resource.Drawable.ArrowDownFloat);
 
 
-            nextBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+            nextBtn.ScreenChanged += groupView_ScreenChanged;
 
             llButtom.AddView(nextBtn);
 

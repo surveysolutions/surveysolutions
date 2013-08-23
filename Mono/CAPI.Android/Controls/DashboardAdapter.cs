@@ -50,10 +50,5 @@ namespace CAPI.Android.Controls
 
             return view;
         }
-
-        protected override object GetElementFunction(DashboardQuestionnaireItem dataItem)
-        {
-            return dataItem.PublicKey;
-        }
     }
 }

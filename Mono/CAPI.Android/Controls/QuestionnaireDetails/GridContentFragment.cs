@@ -56,19 +56,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-         /*   if (top != null)
-            {
-               
-                foreach (var row in Model.Rows)
-                {
-                    var handlers = rowEventHandlers[row.ScreenId];
-                    foreach (PropertyChangedEventHandler propertyChangedEventHandler in handlers)
-                    {
-                        row.PropertyChanged += propertyChangedEventHandler;
-                    }
-                }
-                return top;
-            }*/
 
             top = new LinearLayout(inflater.Context);
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
@@ -135,6 +122,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 tvEmptyLabelDescription.Visibility=ViewStates.Gone;
             ll.AddView(tvEmptyLabelDescription);
         }
+
         protected void BuildTabels(Context context, LinearLayout ll)
         {
             llTablesContainer = new LinearLayout(context);

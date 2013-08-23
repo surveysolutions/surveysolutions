@@ -58,13 +58,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return view;
         }
 
-        protected override object GetElementFunction(QuestionnaireScreenViewModel dataItem)
-        {
-            if (dataItem == null)
-                return string.Empty;
-            return dataItem.ScreenId;
-        }
-
         public void Detach()
         {
             foreach (var subscriber in subscribers)

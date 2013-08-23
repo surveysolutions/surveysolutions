@@ -30,8 +30,8 @@ namespace CAPI.Android.Core
             }
             else
             {
-                var elementId = convertView.GetTag(Resource.Id.ElementId).ToString();
-                if (elementId != GetElementFunction(dataItem).ToString())
+                var elementId = Convert.ToInt32(convertView.GetTag(Resource.Id.ElementId).ToString());
+                if (elementId != position)
                     convertView = CreateViewElement(dataItem, position);
             }
             return convertView;
@@ -41,13 +41,11 @@ namespace CAPI.Android.Core
         {
             View convertView;
             convertView = BuildViewItem(dataItem, position);
-            convertView.SetTag(Resource.Id.ElementId, GetElementFunction(dataItem).ToString());
+            convertView.SetTag(Resource.Id.ElementId, position.ToString());
             return convertView;
         }
 
         protected abstract View BuildViewItem(T dataItem, int position);
-
-        protected abstract object GetElementFunction(T dataItem);
 
         public override long GetItemId(int position)
         {

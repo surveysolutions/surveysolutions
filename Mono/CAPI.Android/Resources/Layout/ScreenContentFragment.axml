@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
       android:layout_centerHorizontal="true"
       android:layout_below="@+id/llTop"
-      android:layout_above="@+id/llButtom" >
+      android:layout_above="@+id/llButtom" 
+        android:descendantFocusability="beforeDescendants">
     </ListView>
 
   <!--</ScrollView>-->

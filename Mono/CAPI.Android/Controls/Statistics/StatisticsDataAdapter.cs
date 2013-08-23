@@ -59,11 +59,6 @@ namespace CAPI.Android.Controls.Statistics
             return view;
         }
 
-        protected override object GetElementFunction(StatisticsQuestionViewModel dataItem)
-        {
-            return dataItem.PublicKey;
-        }
-
         void tr_Click(object sender, EventArgs e)
         {
             var typedSender = sender as LinearLayout;
