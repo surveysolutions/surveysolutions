@@ -7,6 +7,7 @@ using Main.Core.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Threading;
 using SynchronizationMessages.Export;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Synchronization;
 
@@ -16,11 +17,11 @@ namespace Web.Supervisor.Controllers
     public class ImportExportController : AsyncController
     {
         private readonly IBackupManager backupManager;
-        private readonly IDataExport exporter;
+        private readonly IDataExportService exporter;
         private readonly ILogger logger;
 
         public ImportExportController(
-            ILogger logger, IDataExport exporter, IBackupManager backupManager)
+            ILogger logger, IDataExportService exporter, IBackupManager backupManager)
         {
             this.exporter = exporter;
             this.logger = logger;
@@ -67,7 +68,7 @@ namespace Web.Supervisor.Controllers
         }
 
         [Authorize(Roles = "Headquarter")]
-        public void GetExportedDataAsync(Guid id, string type)
+        public void GetExportedDataAsync(Guid id,long version, string type)
         {
             if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
             {
@@ -80,7 +81,7 @@ namespace Web.Supervisor.Controllers
                     {
                         try
                         {
-                            this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
+                            this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, version, type);
                         }
                         catch
                         {
@@ -89,9 +90,9 @@ namespace Web.Supervisor.Controllers
                     });
         }
 
-        public ActionResult GetExportedDataCompleted(byte[] result)
+        public ActionResult GetExportedDataCompleted(Dictionary<string, byte[]> result)
         {
-            return this.File(result, "application/zip", "data.zip");
+            return this.File(ZipFileData.ExportInternal(result, string.Format("exported{0}.zip", DateTime.Now.ToLongTimeString())), "application/zip", "data.zip");
         }
 
 
