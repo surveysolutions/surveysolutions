@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                 }
 
 #warning ReadLayer: ToList materialization because not supported by Raven
-                var queryResult = query.ToList().Distinct(new TemplateComparer()).AsQueryable().OrderUsingSortExpression(input.Order);
+                var queryResult = query.ToList().AsQueryable().OrderUsingSortExpression(input.Order);
 
                 var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 
@@ -92,20 +92,5 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         }
 
         #endregion
-
-        public class TemplateComparer : IEqualityComparer<QuestionnaireBrowseItem>
-        {
-            public bool Equals(QuestionnaireBrowseItem x, QuestionnaireBrowseItem y)
-            {
-                return x.QuestionnaireId == y.QuestionnaireId;
-
-            }
-
-            public int GetHashCode(QuestionnaireBrowseItem obj)
-            {
-                if (Object.ReferenceEquals(obj, null)) return 0;
-                return obj.QuestionnaireId.GetHashCode();
-            }
-        }
     }
 }
