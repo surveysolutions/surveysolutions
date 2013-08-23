@@ -269,24 +269,11 @@ namespace WB.UI.Designer.Controllers
             var sharedPersonUserName = Membership.GetUserNameByEmail(userEmail);
             var sharedPersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
 
-            QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
-
-            var isAlreadyShared = questionnaireSharedPersons != null &&
-                                  questionnaireSharedPersons.SharedPersons.Any(x => x.Id == sharedPersonId);
-            var isOwner = sharedPersonId == questionnaire.CreatedBy;
-
-            if (!isAlreadyShared && !isOwner)
-            {
+            
                 commandService.Execute(new AddSharedPersonToQuestionnaireCommand(questionnaireId: id,
-                    personId: sharedPersonId, email: userEmail));
-            }
+                    personId: sharedPersonId, email: userEmail, responsibleId: UserHelper.WebUser.UserId));
 
-            return Json(new JsonAddSharedUserToQuestionnaireSuccessResult()
-            {
-                IsAlreadyShared = isAlreadyShared,
-                IsOwner = isOwner
-            });
+                return Json(new JsonSuccessResult());
         }
 
         [HttpPost]
@@ -302,7 +289,7 @@ namespace WB.UI.Designer.Controllers
             var sharedPerson = Membership.GetUser(sharedPersonUserName);
 
             commandService.Execute(new RemoveSharedPersonFromQuestionnaireCommand(questionnaireId: id,
-                personId: sharedPerson.ProviderUserKey.AsGuid()));
+                personId: sharedPerson.ProviderUserKey.AsGuid(), responsibleId: UserHelper.WebUser.UserId));
 
             return Json(new JsonSuccessResult());
         }

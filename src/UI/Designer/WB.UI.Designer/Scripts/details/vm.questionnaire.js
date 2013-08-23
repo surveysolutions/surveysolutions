@@ -347,15 +347,7 @@
                     
                     $.ajax(options).done(function (data) {
                         if (data.IsSuccess) {
-                            if (data.IsAlreadyShared) {
-                                showError(input.settings.messages.userToShareAlreadyExistInList.replace("$1", sharedUser.userEmail()));
-                            }
-                            else if(data.IsOwner){
-                                showError(input.settings.messages.userToShareIsOwner);
-                            }
-                            else {
-                                questionnaire().addSharedPerson();
-                            }
+                            questionnaire().addSharedPerson();
                         } else {
                             showError(input.settings.messages.unhandledExceptionMessage);
                         }
