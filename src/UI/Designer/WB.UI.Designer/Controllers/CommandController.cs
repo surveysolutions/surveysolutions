@@ -3,6 +3,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -13,20 +14,21 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
-    using WB.UI.Designer.Code.Helpers;
-    using WB.UI.Designer.Exceptions;
     using WB.UI.Designer.Utils;
 
     [CustomAuthorize]
     public class CommandController : Controller
     {
+        private readonly IMembershipUserService userHelper;
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
         private readonly ILogger logger;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer,
+            IExpressionReplacer expressionReplacer, IMembershipUserService userHelper)
         {
+            this.userHelper = userHelper;
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.expressionReplacer = expressionReplacer;
@@ -40,6 +42,7 @@ namespace WB.UI.Designer.Controllers
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);
+                this.SetResponsible(concreteCommand);
                 this.ReplaceStataCaptionsWithGuidsIfNeeded(concreteCommand);
                 this.commandService.Execute(concreteCommand);
             }
@@ -58,6 +61,14 @@ namespace WB.UI.Designer.Controllers
             }
 
             return this.Json(string.IsNullOrEmpty(error) ? (object)new { } : new { error = error });
+        }
+
+        private void SetResponsible(ICommand concreteCommand)
+        {
+            if (concreteCommand is QuestionnaireCommandBase)
+            {
+                (concreteCommand as QuestionnaireCommandBase).ResponsibleId = userHelper.WebUser.UserId;
+            }
         }
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)

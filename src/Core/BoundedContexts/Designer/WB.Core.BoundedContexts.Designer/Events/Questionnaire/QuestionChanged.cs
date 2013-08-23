@@ -11,7 +11,7 @@
     /// The question changed.
     /// </summary>
     [EventName("RavenQuestionnaire.Core:Events:QuestionChangeded")]
-    public class QuestionChanged
+    public class QuestionChanged : QuestionnaireActiveEvent
     {
         #region Public Properties
 
