@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Export;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Supervisor.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
+using WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport;
 using WB.Core.BoundedContexts.Supervisor.Implementation.TemporaryDataStorage;
 using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 using WB.Core.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor
@@ -17,6 +20,9 @@ namespace WB.Core.BoundedContexts.Supervisor
         public override void Load()
         {
             this.Bind<ISampleImportService>().To<SampleImportService>();
+            this.Bind<IDataExportService>().To<CsvDataExportService>();
+            this.Bind<IEnvironmentSupplier<InterviewDataExportView>>().To<StataEnvironmentSupplier>();
+            this.Bind<IExportProvider<InterviewDataExportView>>().To<CSVIterviewExporter>();
             this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>));
         }
     }
