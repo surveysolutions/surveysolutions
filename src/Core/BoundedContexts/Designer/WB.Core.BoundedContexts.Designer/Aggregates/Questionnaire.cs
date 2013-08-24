@@ -169,9 +169,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void DeleteImage(Guid questionKey, Guid imageKey)
+        public void DeleteImage(Guid questionKey, Guid imageKey, Guid responsibleId)
         {
-            this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
 
         [Obsolete]
