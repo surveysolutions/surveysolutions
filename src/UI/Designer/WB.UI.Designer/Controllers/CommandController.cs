@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.UI.Designer.Models;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;
@@ -38,7 +39,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public JsonResult Execute(string type, string command)
         {
-            string error = string.Empty;
+            var returnValue = new JsonQuestionnaireResult();
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);
@@ -55,12 +56,14 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    error = domainEx.Message;
+                    returnValue.IsSuccess = false;
+                    returnValue.HasPermissions = domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit;
+                    returnValue.Error = domainEx.Message;
                 }
 
             }
 
-            return this.Json(string.IsNullOrEmpty(error) ? (object)new { } : new { error = error });
+            return this.Json(returnValue);
         }
 
         private void SetResponsible(ICommand concreteCommand)
