@@ -24,11 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 var newState = new QuestionnaireDocument();
 
                 // act
-                questionnaire.ImportQuestionnaire(Guid.NewGuid(),newState);
+                questionnaire.ImportQuestionnaire(responsibleId,newState);
 
                 // assert
                 Assert.That(GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -42,7 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 Mock<IQuestionnaireDocument> docMock = new Mock<IQuestionnaireDocument>();
                 // act
                 TestDelegate act =

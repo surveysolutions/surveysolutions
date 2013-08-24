@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Domain;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -23,12 +24,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
                 Guid personId = Guid.NewGuid();
                 string email = "unknown@u.com";
-
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+                
                 // act
-                questionnaire.AddSharedPerson(personId, email);
+                questionnaire.AddSharedPerson(personId, email, responsibleId);
 
                 // assert
                 var evt = GetSingleEvent<SharedPersonToQuestionnaireAdded>(eventContext);
@@ -36,6 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Assert.IsNotNull(evt);
                 Assert.That(evt.PersonId, Is.EqualTo(personId));
                 Assert.That(evt.Email, Is.EqualTo(email));
+                Assert.That(evt.ResponsibleId, Is.EqualTo(responsibleId));
             }
         }
 
@@ -45,15 +48,67 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
                 Guid personId = Guid.NewGuid();
-
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+                
                 // act
-                questionnaire.RemoveSharedPerson(personId);
+                questionnaire.AddSharedPerson(personId, string.Empty, responsibleId);
+                questionnaire.RemoveSharedPerson(personId, responsibleId);
 
                 // assert
-                Assert.That(GetSingleEvent<SharedPersonFromQuestionnaireRemoved>(eventContext).PersonId, Is.EqualTo(personId));
+                var evt = GetSingleEvent<SharedPersonFromQuestionnaireRemoved>(eventContext);
+                Assert.IsNotNull(evt);
+                Assert.That(evt.PersonId, Is.EqualTo(personId));
+                Assert.That(evt.ResponsibleId, Is.EqualTo(responsibleId));
             }
+        }
+
+        [Test]
+        public void AddSharedPerson_When_New_Shared_Person_Is_Questionnaire_Owner_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            string email = "unknown@u.com";
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+            
+            // act
+            TestDelegate act = () => questionnaire.AddSharedPerson(responsibleId, email, responsibleId);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.OwnerCannotBeInShareList));
+        }
+
+        [Test]
+        public void AddSharedPerson_When_New_Shared_Person_Already_Exist_In_Share_List_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid personId = Guid.NewGuid();
+            string email = "unknown@u.com";
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+
+            // act
+            questionnaire.AddSharedPerson(personId, email, responsibleId);
+            TestDelegate act = () => questionnaire.AddSharedPerson(personId, email, responsibleId);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserExistInShareList));
+        }
+
+        [Test]
+        public void RemoveSharedPerson_When_Share_List_Doesnot_Exist_Shared_User_For_Deleting_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid personId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+
+            // act
+            TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, responsibleId);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserDoesNotExistInShareList));
         }
     }
 }

@@ -25,10 +25,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // Arrange
             var groupId = Guid.NewGuid();
             var targetAutoPropagateGroupId = Guid.NewGuid();
-            var questionnaire = CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(targetAutoPropagateGroupId, groupId);
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire =
+                CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
+                    autoPropagateGroupId: targetAutoPropagateGroupId, regularGroupId: groupId,
+                    responsibleId: responsibleId);
 
             // Act
-            TestDelegate act = () => questionnaire.MoveGroup(groupId, targetAutoPropagateGroupId, 0);
+            TestDelegate act = () => questionnaire.MoveGroup(groupId, targetAutoPropagateGroupId, 0, responsibleId);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -43,25 +47,46 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Arrange
                 var moveAutoPropagateGroupId = Guid.NewGuid();
                 var targetRegularGroupId = Guid.NewGuid();
-                var questionnaire = CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(moveAutoPropagateGroupId, targetRegularGroupId);
+                Guid responsibleId = Guid.NewGuid();
+                var questionnaire =
+                    CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
+                        autoPropagateGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
+                        responsibleId: responsibleId);
 
                 // Act
-                questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0);
+                questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: responsibleId);
 
                 // Assert
                 Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).PublicKey, Is.EqualTo(moveAutoPropagateGroupId));
             }
         }
 
-        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(Guid autoPropagateGroupId, Guid regularGroupId)
+        [Test]
+        public void MoveGroup_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            var moveAutoPropagateGroupId = Guid.NewGuid();
+            var targetRegularGroupId = Guid.NewGuid();
+            var questionnaire =
+                CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(
+                    autoPropagateGroupId: moveAutoPropagateGroupId, regularGroupId: targetRegularGroupId,
+                    responsibleId: Guid.NewGuid());
+            // act
+            TestDelegate act = () => questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: Guid.NewGuid());
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+        }
+
+        private Questionnaire CreateQuestionnaireWithChapterWithRegularAndAutoPropagateGroup(Guid autoPropagateGroupId, Guid regularGroupId, Guid responsibleId)
         {
             var chapterId = Guid.NewGuid();
             
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(Guid.NewGuid(), chapterId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: chapterId, responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(autoPropagateGroupId, chapterId, "autoPropagateGroup", Propagate.AutoPropagated, null, null);
+            questionnaire.NewAddGroup(autoPropagateGroupId, chapterId, "autoPropagateGroup", Propagate.AutoPropagated, null, null, responsibleId: responsibleId);
 
-            questionnaire.NewAddGroup(regularGroupId, chapterId, "regularGroup", Propagate.None, null, null);
+            questionnaire.NewAddGroup(regularGroupId, chapterId, "regularGroup", Propagate.None, null, null, responsibleId: responsibleId);
 
             return questionnaire;
         }
