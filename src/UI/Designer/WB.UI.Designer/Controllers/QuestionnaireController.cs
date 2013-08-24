@@ -293,5 +293,11 @@ namespace WB.UI.Designer.Controllers
 
             return Json(new JsonSuccessResult());
         }
+
+        public ActionResult LackOfPermits()
+        {
+            this.Error("You no longer have permission to edit this questionnaire");
+            return this.RedirectToAction("Index");
+        }
     }
 }
