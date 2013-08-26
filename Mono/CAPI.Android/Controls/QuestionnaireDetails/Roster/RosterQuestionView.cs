@@ -9,9 +9,9 @@ using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 {
-    public class RosterQuestionView : LinearLayout
+    public class RosterQuestionView : LinearLayout, IMvxBindingContextOwner
     {
-        private readonly IMvxAndroidBindingContext bindingActivity;
+        private readonly IMvxAndroidBindingContext _bindingContext;
         protected QuestionViewModel Model { get; private set; }
         protected View Content { get; set; }
 
@@ -20,12 +20,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             get { return this.FindViewById<LinearLayout>(Resource.Id.llWrapper); }
         }
 
+
+        public IMvxBindingContext BindingContext
+        {
+            get { return _bindingContext; }
+            set { throw new NotImplementedException("BindingContext is readonly in the roster view"); }
+        }
+
         public RosterQuestionView(Context context,  QuestionViewModel source)
             : base(context)
         {
-            bindingActivity = new MvxAndroidBindingContext(context, ((context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext).LayoutInflater, source);
+            _bindingContext = new MvxAndroidBindingContext(context, ((context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext).LayoutInflater, source);
             this.Model = source;
-            Content = bindingActivity.BindingInflate(Resource.Layout.RosterQuestion, this);
+            Content = _bindingContext.BindingInflate(Resource.Layout.RosterQuestion, this);
            
           
             llWrapper.Click += rowViewItem_Click;
@@ -47,21 +54,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
         public event EventHandler<RosterItemClickEventArgs> RosterItemsClick;
 
 
-        public void ClearBindings()
-        {
-            bindingActivity.ClearBindings(this);
-        }
-
-        protected IMvxAndroidBindingContext BindingActivity
-        {
-            get { return bindingActivity; }
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ClearBindings();
+                this.ClearAllBindings();
             }
 
             base.Dispose(disposing);
