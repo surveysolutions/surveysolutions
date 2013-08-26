@@ -8,21 +8,20 @@ using Cirrious.MvvmCross.Binding.Droid.Target;
 
 namespace CAPI.Android.Bindings
 {
-    public class BackgroundBinding : MvxAndroidTargetBinding
+    public class BackgroundBinding : MvvmBindingWrapper<View>
     {
-        private readonly View control;
 
         public BackgroundBinding(View control)
             : base(control)
         {
-            this.control = control;
         }
+
         #region Overrides of MvxBaseTargetBinding
 
-        public override void SetValue(object value)
+
+        protected override void SetValueToView(View view, object value)
         {
             var status = (QuestionStatus) value;
-
 
             int bgId = Resource.Drawable.questionShape;
             if (!status.HasFlag(QuestionStatus.Enabled))
@@ -32,9 +31,9 @@ namespace CAPI.Android.Bindings
             else if (status.HasFlag(QuestionStatus.Answered))
                 bgId = Resource.Drawable.questionAnsweredShape;
 
-            control.SetBackgroundResource(bgId);
+            view.SetBackgroundResource(bgId);
 
-            var llWrapper = control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
+            var llWrapper = view.FindViewById<LinearLayout>(Resource.Id.llWrapper);
 
             if (llWrapper != null)
             {
