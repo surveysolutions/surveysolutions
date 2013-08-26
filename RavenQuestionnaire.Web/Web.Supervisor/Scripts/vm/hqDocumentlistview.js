@@ -2,7 +2,7 @@
     var self = this;
 
     self.CurrentUser = currentUser;
-  
+
     self.ListView = new ListViewModel(listViewUrl);
 
     self.ListView.mappingOptions = {
@@ -13,12 +13,12 @@
             }
         }
     };
-    
+
     self.ToggleFilter = function () {
         self.ListView.ToggleFilter();
     };
 
-    var myChildModel = function(data) {
+    var myChildModel = function (data) {
         ko.mapping.fromJS(data, {}, this);
 
         this.IsSelected = ko.observable(false);
@@ -33,7 +33,7 @@
             }
         });
 
-        return count==0;
+        return count == 0;
     });
 
     self.deleteInterview = function () {
@@ -47,7 +47,7 @@
         for (var i = 0; i < selectedRawInterviews.length; i++) {
             request.Interviews.push(selectedRawInterviews[i]["InterviewId"]());
         }
-        
+
         var commands = ko.utils.arrayMap(selectedRawInterviews, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON({
@@ -63,7 +63,7 @@
 
         self.ListView.IsAjaxComplete(false);
 
-       
+
         $.ajax({
             type: "POST",
             url: commandUrl,
@@ -73,12 +73,11 @@
                     for (var i = 0; i < selectedRawInterviews.length; i++) {
                         self.ListView.Items.remove(selectedRawInterviews[i]);
                     }
-                    
+
                     self.ListView.TotalCount(self.ListView.TotalCount() - selectedRawInterviews.length);
-                        }
                 }
                 if (data.status == "error") {
-                    var faildInterviews = ko.utils.arrayMap(data.failedCommands, function(failedCommand) {
+                    var faildInterviews = ko.utils.arrayMap(data.failedCommands, function (failedCommand) {
                         return failedCommand.InterviewId;
                     });
                     var deletedInterviews = ko.utils.arrayFilter(selectedRawInterviews, function (item) {
@@ -99,7 +98,7 @@
             dataType: "json",
             traditional: true
         });
-        
+
     };
 
     self.Users = users;
@@ -120,7 +119,7 @@
                 Status: self.SelectedStatus
             };
         };
-        
+
         self.SelectedTemplate(location.queryString['templateid']);
         self.SelectedStatus(location.queryString['status']);
 
