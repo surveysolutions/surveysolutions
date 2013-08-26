@@ -215,7 +215,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 from question in this.GetAllQuestions()
                 where
                     this.DoesQuestionCustomValidationDependOnSpecifiedQuestion(question.PublicKey,
-                                                                               specifiedQuestionId: questionId)
+                                                                               specifiedQuestionId: questionId) &&
+                    questionId != question.PublicKey
                 select question.PublicKey
                 );
         }
