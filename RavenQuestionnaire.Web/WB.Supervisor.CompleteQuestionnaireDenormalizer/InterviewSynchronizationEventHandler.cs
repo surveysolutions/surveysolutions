@@ -17,7 +17,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
     internal class InterviewSynchronizationEventHandler : 
                                                         IEventHandler<QuestionnaireAssignmentChanged>,
                                                         IEventHandler<QuestionnaireStatusChanged>,
-                                                        IEventHandler<InterviewDeleted>, IEventHandler
+                                                        IEventHandler<InterviewDeleted>,IEventHandler<InterviewMetaInfoUpdated>, IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> interviewWriter;
@@ -37,15 +37,24 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var item = interviewWriter.GetById(evnt.EventSourceId);
-            if (SurveyStatus.IsStatusAllowDownSupervisorSync(evnt.Payload.Status))
+            UpdateInterviewStatus(evnt.EventSourceId, evnt.Payload.Status);
+        }
+
+        private void UpdateInterviewStatus(Guid interviewId,SurveyStatus status)
+        {
+            var item = interviewWriter.GetById(interviewId);
+            if (SurveyStatus.IsStatusAllowDownSupervisorSync(status))
             {
-                item.Status = evnt.Payload.Status;
+                item.Status = status;
                 syncStorage.SaveInterview(item, item.Responsible.Id);
             }
             else
-                syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, item.Responsible.Id);
+                syncStorage.MarkInterviewForClientDeleting(interviewId, item.Responsible.Id);
+        }
 
+        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        {
+            UpdateInterviewStatus(evnt.EventSourceId, SurveyStatus.GetStatusByIdOrDefault(evnt.Payload.StatusId));
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
@@ -67,5 +76,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
         {
             get { return new Type[] { typeof(SynchronizationDelta) }; }
         }
+
+       
     }
 }
