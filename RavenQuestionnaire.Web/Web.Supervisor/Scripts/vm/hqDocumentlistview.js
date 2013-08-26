@@ -75,6 +75,7 @@
                     }
                     
                     self.ListView.TotalCount(self.ListView.TotalCount() - selectedRawInterviews.length);
+                        }
                 }
                 if (data.status == "error") {
                     var faildInterviews = ko.utils.arrayMap(data.failedCommands, function(failedCommand) {

@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Bindings\HtmlBinding.cs" />
     <Compile Include="Bindings\CustomImageGetter.cs" />
+    <Compile Include="Bindings\MvvmBindingWrapper.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
@@ -142,7 +143,7 @@
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
-    <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
+    <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -177,6 +178,7 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="GeolocationServices\GeoService.cs" />
+    <Compile Include="GeolocationServices\IGeoService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />

@@ -222,19 +222,18 @@ namespace WB.UI.Designer.Controllers
             {
                 ICompositeView element = elements.Dequeue();
 
-                if (element is QuestionView)
+                var question = element as QuestionView;
+                if (question != null)
                 {
-                    var question = (QuestionView)element;
-
                     question.ConditionExpression =
                         this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
                     question.ValidationExpression =
                         this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
                 }
 
-                if (element is GroupView)
+                var group = element as GroupView;
+                if (group != null)
                 {
-                    var group = (GroupView)element;
                     group.ConditionExpression =
                         this.expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
                     foreach (ICompositeView child in element.Children)

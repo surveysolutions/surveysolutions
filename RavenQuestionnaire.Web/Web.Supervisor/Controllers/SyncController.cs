@@ -75,6 +75,7 @@ namespace Web.Supervisor.Controllers
                 identifier.ClientInstanceKey = key;
                 identifier.ClientVersionIdentifier = "unknown";
                 identifier.ClientRegistrationKey = clientRegistrationId;
+                identifier.SupervisorPublicKey = user.Supervisor.Id;
                 try
                 {
                     package = this.syncManager.ItitSync(identifier);
@@ -89,7 +90,7 @@ namespace Web.Supervisor.Controllers
             return this.Json(package, JsonRequestBehavior.AllowGet);
         }
 
-        //In case of error of type missing or casting error we'll try to send correct response.
+        
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult InitPulling(string clientRegistrationId)

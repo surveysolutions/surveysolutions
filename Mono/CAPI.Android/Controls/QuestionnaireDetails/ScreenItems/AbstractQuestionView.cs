@@ -6,6 +6,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
+using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
@@ -13,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public abstract class AbstractQuestionView : LinearLayout
+    public abstract class AbstractQuestionView : LinearLayout, IMvxBindingContextOwner
     {
         public event EventHandler AnswerSet;
         public bool IsCommentsEditorFocused { get; private set; }
@@ -21,26 +22,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
-        private readonly IMvxAndroidBindingContext bindingActivity;
+        private readonly IMvxAndroidBindingContext _bindingContext;
 
         private readonly int templateId;
 
 
-        public void ClearBindings()
+        public IMvxBindingContext BindingContext
         {
-            bindingActivity.ClearBindings(this);
-        }
-
-        protected IMvxAndroidBindingContext BindingActivity
-        {
-            get { return bindingActivity; }
+            get { return _bindingContext; }
+            set { throw new NotImplementedException("BindingContext is readonly in the question"); }
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ClearBindings();
+                this.ClearAllBindings();
             }
 
             base.Dispose(disposing);
@@ -52,9 +49,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context)
         {
-            this.bindingActivity = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
+            this._bindingContext = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
             templateId = Resource.Layout.AbstractQuestionView;
-            Content = BindingActivity.BindingInflate(templateId, this);
+            Content = _bindingContext.BindingInflate(templateId, this);
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
@@ -209,6 +206,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
-       
+
     }
 }

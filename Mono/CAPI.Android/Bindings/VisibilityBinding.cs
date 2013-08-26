@@ -5,19 +5,19 @@ using Cirrious.MvvmCross.Binding.Droid.Target;
 
 namespace CAPI.Android.Bindings
 {
-    public class VisibilityBinding : MvxAndroidTargetBinding
+    public class VisibilityBinding : MvvmBindingWrapper<View>
     {
-        private readonly View _control;
         public VisibilityBinding(View control):base(control)
         {
-            _control = control;
         }
+
+
         #region Overrides of MvxBaseTargetBinding
 
-        public override void SetValue(object value)
+        protected override void SetValueToView(View view, object value)
         {
-            var visibility = (bool) value;
-            _control.Visibility = visibility ? ViewStates.Visible : ViewStates.Gone;
+            var visibility = (bool)value;
+            view.Visibility = visibility ? ViewStates.Visible : ViewStates.Gone;
         }
 
         public override Type TargetType

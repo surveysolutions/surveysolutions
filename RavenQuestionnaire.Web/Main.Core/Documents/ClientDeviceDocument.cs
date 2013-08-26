@@ -19,6 +19,8 @@ namespace Main.Core.Documents
         public Guid ClientInstanceKey { set; get; }
 
         public long LastSyncItemIdentifier { set; get; }
-        
+
+        public Guid SupervisorKey { set; get; }
+
     }
 }

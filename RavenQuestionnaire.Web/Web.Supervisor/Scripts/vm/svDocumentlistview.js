@@ -85,6 +85,7 @@
                         item.ResponsibleId(user.UserId);
                         item.ResponsibleName(user.UserName);
                         item.Status("InterviewerAssigned");
+                        }
                     });
                 }
                 if (data.status == "error") {

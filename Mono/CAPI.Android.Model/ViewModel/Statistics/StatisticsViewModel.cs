@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
+
 namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
     public class StatisticsViewModel
