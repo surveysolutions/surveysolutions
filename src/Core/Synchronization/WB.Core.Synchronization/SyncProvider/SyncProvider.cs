@@ -1,20 +1,15 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Commands.Sync;
-using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
     using Main.Core.Documents;
-    using Newtonsoft.Json;
-    
-    using Main.Core.Events;
 
     internal class SyncProvider : ISyncProvider
     {
@@ -104,8 +99,25 @@ namespace WB.Core.Synchronization.SyncProvider
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    //probably device was init with other supervisor 
+                    //probably device has been syncronized with other supervisor application
                     throw new ArgumentException("Unknown device.");
+                }
+
+                //old sync devices are already in use
+                //lets allow to sync them for awhile
+                //then we have to delete this code
+                if (device.SupervisorKey == Guid.Empty)
+                {
+                    logger.Error("Old registred device is synchronizing. Errors could be on client in case of differernt team.");
+                }
+                else if (device.SupervisorKey != identifier.SupervisorPublicKey)
+                {
+                    var package = new HandshakePackage
+                        {
+                            IsErrorOccured = true,
+                            ErrorMessage = "Device was assigned to another Supervisor."
+                        };
+                    return package;
                 }
 
                 //TODO: check device validity
@@ -116,7 +128,8 @@ namespace WB.Core.Synchronization.SyncProvider
             {
                 ClientRegistrationKey = Guid.NewGuid();
 
-                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, 
+                    identifier.ClientDeviceKey, identifier.ClientInstanceKey, identifier.SupervisorPublicKey));
             }
 
             Guid syncActivityKey = Guid.NewGuid();

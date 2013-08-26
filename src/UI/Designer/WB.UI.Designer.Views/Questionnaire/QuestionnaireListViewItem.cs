@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Views.Questionnaire
@@ -71,6 +70,8 @@ namespace WB.UI.Designer.Views.Questionnaire
         public bool IsPublic { get; set; }
 
         public List<Guid> SharedPersons { get; private set; }
+
+        public bool IsShared { get; set; }
 
         #endregion
     }
