@@ -105,8 +105,8 @@ namespace WB.Core.Synchronization.SyncProvider
 
                 //old sync devices are already in use
                 //lets allow to sync them for awhile
-                //then 
-                if (identifier.SupervisorPublicKey == Guid.Empty)
+                //then we have to delete this code
+                if (device.SupervisorKey == Guid.Empty)
                 {
                     logger.Error("Old registred device is synchronizing. Errors could be on client in case of differernt team.");
                 }
@@ -115,7 +115,7 @@ namespace WB.Core.Synchronization.SyncProvider
                     var package = new HandshakePackage
                         {
                             IsErrorOccured = true,
-                            ErrorMessage = "Device assigned to another Supervisor."
+                            ErrorMessage = "Device was assigned to another Supervisor."
                         };
                     return package;
                 }
