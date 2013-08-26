@@ -95,7 +95,7 @@
             return new QuestionnaireListViewModel
                        {
                            Id = x.Id,
-                           IsShared = x.SharedPersons.Contains(this.userService.WebUser.UserId),
+                           IsShared = x.IsShared,
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 

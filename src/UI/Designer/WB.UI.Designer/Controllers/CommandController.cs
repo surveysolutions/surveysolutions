@@ -61,18 +61,19 @@ namespace WB.UI.Designer.Controllers
         }
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
-         {
-            if (command is FullQuestionDataCommand)
+        {
+
+            var questionCommand = command as FullQuestionDataCommand;
+            if (questionCommand != null)
             {
-                var questionCommand = (FullQuestionDataCommand)command;
                 questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
                 questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
              }
- 
-            if (command is FullGroupDataCommand)
+            // can command be FullGroupDataCommand and FullQuestionDataCommand at the same time?
+            // if not this cast is unnecessary 
+            var newGroupCommand = command as FullGroupDataCommand;
+            if (newGroupCommand != null)
             {
-                var newGroupCommand = (FullGroupDataCommand)command;
-                
                 newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
              } 
          }
