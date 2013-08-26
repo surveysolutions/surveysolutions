@@ -20,7 +20,7 @@
         define('input', [], function() {
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                         {
-                            TypeNameHandling = TypeNameHandling.Objects,
+                            TypeNameHandling = TypeNameHandling.None,
                             TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
                         })) ,
                 u= @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
