@@ -29,8 +29,6 @@
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
                 url: {
-                    addSharedPersonUrl: '@Url.Action("AddSharedPerson", "Questionnaire", new {id = Model.Questionnaire.PublicKey}, Request.Url.Scheme)',
-                    removeSharedPersonUrl: '@Url.Action("RemoveSharedPerson", "Questionnaire", new {id = Model.Questionnaire.PublicKey}, Request.Url.Scheme)',
                     lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
                 },
                 settings: {

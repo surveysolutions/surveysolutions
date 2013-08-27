@@ -257,43 +257,6 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult AddSharedPerson(Guid id, string userEmail)
-        {
-            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
-            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId)
-            {
-                throw new HttpException(403, string.Empty);
-            }
-
-            var sharedPersonUserName = Membership.GetUserNameByEmail(userEmail);
-            var sharedPersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
-
-            
-                commandService.Execute(new AddSharedPersonToQuestionnaireCommand(questionnaireId: id,
-                    personId: sharedPersonId, email: userEmail, responsibleId: UserHelper.WebUser.UserId));
-
-                return Json(new JsonSuccessResult());
-        }
-
-        [HttpPost]
-        public JsonResult RemoveSharedPerson(Guid id, string userEmail)
-        {
-            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
-            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId)
-            {
-                throw new HttpException(403, string.Empty);
-            }
-
-            var sharedPersonUserName = Membership.GetUserNameByEmail(userEmail);
-            var sharedPerson = Membership.GetUser(sharedPersonUserName);
-
-            commandService.Execute(new RemoveSharedPersonFromQuestionnaireCommand(questionnaireId: id,
-                personId: sharedPerson.ProviderUserKey.AsGuid(), responsibleId: UserHelper.WebUser.UserId));
-
-            return Json(new JsonSuccessResult());
-        }
-
         public ActionResult LackOfPermits()
         {
             this.Error("You no longer have permission to edit this questionnaire");

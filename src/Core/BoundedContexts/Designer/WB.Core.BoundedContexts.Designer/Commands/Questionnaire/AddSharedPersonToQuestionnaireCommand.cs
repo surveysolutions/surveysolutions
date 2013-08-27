@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
             this.Email = email;
         }
 
-        public Guid PersonId { get; private set; }
+        public Guid PersonId { get; set; }
         public string Email { get; private set; }
     }
 }
