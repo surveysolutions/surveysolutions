@@ -35,21 +35,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (e.HasFocus)
             {
-                ShowKeyboard(etAnswer);
+               // ShowKeyboard(etAnswer);
                 return;
             }
             SaveAnswer();
-            if (!IsCommentsEditorFocused)
-                HideKeyboard(etAnswer);
-         /*   InputMethodManager imm
-               = (InputMethodManager)this.Context.GetSystemService(
-                   Context.InputMethodService);
-            if (imm.IsAcceptingText)
-            {
-                SaveAnswer();
-                if (!IsCommentsEditorFocused)
-                    HideKeyboard(etAnswer);
-            }*/
+           /* if (!IsCommentsEditorFocused)
+                HideKeyboard(etAnswer);*/
         }
         protected override void SaveAnswer()
         {
@@ -59,6 +50,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                      null, newValue,
                                                      Model.PublicKey.PropagationKey));
+                if (!IsCommentsEditorFocused)
+                    HideKeyboard(etAnswer);
             }
         
             base.SaveAnswer();
@@ -71,6 +64,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         void TextQuestionView_Click(object sender, EventArgs e)
         {
             etAnswer.RequestFocus();
+            ShowKeyboard(etAnswer);
         }
 
 

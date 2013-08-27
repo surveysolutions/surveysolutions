@@ -75,6 +75,8 @@ namespace CAPI.Android
 
             base.OnCreate(bundle);
 
+            this.Window.SetSoftInputMode(SoftInput.AdjustPan);
+
             if (this.FinishIfNotLoggedIn())
                 return;
             SetContentView(Resource.Layout.Details);

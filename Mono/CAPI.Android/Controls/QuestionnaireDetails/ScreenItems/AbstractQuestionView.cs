@@ -68,6 +68,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             etComments.FocusChange += etComments_FocusChange;
             llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
             llWrapper.Clickable = true;
+            llWrapper.Focusable = true;
+            llWrapper.FocusableInTouchMode = true;
         }
 
         protected virtual void SaveAnswer()
@@ -81,8 +83,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
-
-        #region 
 
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
         {
@@ -138,7 +138,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             imm.ShowSoftInput(editor, 0);
         }
 
-        #endregion
 
         private void SetEditCommentsVisibility(bool visible)
         {
