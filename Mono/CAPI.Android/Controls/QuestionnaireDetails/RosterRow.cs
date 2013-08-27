@@ -10,22 +10,21 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class RosterRow
     {
-        public RosterRow(ItemPublicKey id, string screenName, IList<IQuestionnaireItemViewModel> items, bool enabled)
+        public RosterRow(Guid questionnarieId, List<HeaderItem> header, IEnumerable<QuestionnairePropagatedScreenViewModel> rows)
         {
-            Id = id;
-            ScreenName = screenName;
-            Items = items;
-            Enabled = enabled;
+            QuestionnaireId = questionnarieId;
+            Header = header;
+            Rows = rows;
         }
 
-        public ItemPublicKey Id { get; private set; }
-        public string ScreenName { get; private set; }
-        public IList<IQuestionnaireItemViewModel> Items { get; private set; }
-        public bool Enabled { get; private set; }
+        public Guid QuestionnaireId { get; private set; }
+        public List<HeaderItem> Header { get; private set; }
+        public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows { get; private set; }
     }
 }
