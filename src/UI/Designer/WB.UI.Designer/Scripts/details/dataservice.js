@@ -16,7 +16,7 @@
                             if (!data.HasPermissions) {
                                 window.location.href = input.url.lackOfPermitsUrl;
                             } else {
-                                error(data, status);
+                                error(data.Error, status);
                             }
                             
                         }

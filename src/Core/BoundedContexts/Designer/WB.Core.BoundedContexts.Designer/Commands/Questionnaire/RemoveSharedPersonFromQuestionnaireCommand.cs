@@ -8,12 +8,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "RemoveSharedPerson")]
     public class RemoveSharedPersonFromQuestionnaireCommand : QuestionnaireCommand
     {
-        public RemoveSharedPersonFromQuestionnaireCommand(Guid questionnaireId, Guid personId, Guid responsibleId)
+        public RemoveSharedPersonFromQuestionnaireCommand(Guid questionnaireId, Guid personId, string email, Guid responsibleId)
             : base(questionnaireId, responsibleId)
         {
+            this.Email = email;
             this.PersonId = personId;
         }
 
-        public Guid PersonId { get; private set; }
+        public Guid PersonId { get; set; }
+        public string Email { get; private set; }
     }
 }

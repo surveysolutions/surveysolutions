@@ -1,6 +1,9 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System.Web.Security;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -44,6 +47,8 @@ namespace WB.UI.Designer.Controllers
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);
                 this.SetResponsible(concreteCommand);
+                this.ValidateAddSharedPersonCommand(concreteCommand);
+                this.ValidateRemoveSharedPersonCommand(concreteCommand);
                 this.ReplaceStataCaptionsWithGuidsIfNeeded(concreteCommand);
                 this.commandService.Execute(concreteCommand);
             }
@@ -91,5 +96,26 @@ namespace WB.UI.Designer.Controllers
                 newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
              } 
          }
+
+        private void ValidateAddSharedPersonCommand(ICommand command)
+        {
+            var addSharedPersonCommand = command as AddSharedPersonToQuestionnaireCommand;
+            if (addSharedPersonCommand != null)
+            {
+                var sharedPersonUserName = Membership.GetUserNameByEmail(addSharedPersonCommand.Email);
+
+                addSharedPersonCommand.PersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
+            }
+        }
+
+        private void ValidateRemoveSharedPersonCommand(ICommand command)
+        {
+            var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaireCommand;
+            if (removeSharedPersonCommand != null)
+            {
+                var sharedPersonUserName = Membership.GetUserNameByEmail(removeSharedPersonCommand.Email);
+                removeSharedPersonCommand.PersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
+            }
+        }
     }
 }
