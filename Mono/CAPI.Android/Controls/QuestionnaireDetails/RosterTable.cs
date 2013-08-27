@@ -14,9 +14,9 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
-    public class RosterRow
+    public class RosterTable
     {
-        public RosterRow(Guid questionnarieId, List<HeaderItem> header, IEnumerable<QuestionnairePropagatedScreenViewModel> rows)
+        public RosterTable(Guid questionnarieId, List<HeaderItem> header, IEnumerable<QuestionnairePropagatedScreenViewModel> rows)
         {
             QuestionnaireId = questionnarieId;
             Header = header;

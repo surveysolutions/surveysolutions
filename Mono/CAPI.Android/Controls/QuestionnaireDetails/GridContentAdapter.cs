@@ -19,12 +19,12 @@ using CAPI.Android.Events;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
-    public class GridContentAdapter : SmartAdapter<RosterRow>
+    public class GridContentAdapter : SmartAdapter<RosterTable>
     {
         private readonly Context context;
         private readonly Action<ScreenChangedEventArgs> OnScreenChanged;
         private readonly TextView tvEmptyLabelDescription;
-
+        private readonly int columnCount;
         private readonly IQuestionViewFactory questionViewFactory;
         public GridContentAdapter(QuestionnaireGridViewModel model,int columnCount, Context context,
                                   Action<ScreenChangedEventArgs> onScreenChanged,
@@ -32,71 +32,79 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             : base(CreateItemList(model, columnCount))
         {
             this.context = context;
+            this.columnCount = columnCount;
             this.OnScreenChanged = onScreenChanged;
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.tvEmptyLabelDescription = tvEmptyLabelDescription;
         }
 
-        private static IList<RosterRow> CreateItemList(QuestionnaireGridViewModel model, int columnCount)
+        private static IList<RosterTable> CreateItemList(QuestionnaireGridViewModel model, int columnCount)
         {
-            var result = new List<RosterRow>();
+            var result = new List<RosterTable>();
             for (int i = 0; i < model.Header.Count; i = i + columnCount)
             {
-                result.Add(new RosterRow(model.QuestionnaireId,model.Header.Skip(i).Take(columnCount).ToList(),model.Rows));
+                result.Add(new RosterTable(model.QuestionnaireId,model.Header.Skip(i).Take(columnCount).ToList(),model.Rows));
             }
             return result;
         }
 
-        protected override View BuildViewItem(RosterRow dataItem, int position)
+        protected override View BuildViewItem(RosterTable dataItem, int position)
         {
-            var llTableParent = new LinearLayout(context);
-            llTableParent.Orientation = Orientation.Vertical;
+            var view = new LinearLayout(context);
+            view.Orientation = Orientation.Vertical;
             
             var llTableParentLayoutParameters = new ListView.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.WrapContent);
-            llTableParent.LayoutParameters = llTableParentLayoutParameters;
-            CreateHeader(llTableParent, this[position]);
-            CreateBody(llTableParent, this[position]);
-            return llTableParent;
+            view.LayoutParameters = llTableParentLayoutParameters;
+
+            CreateHeader(view, this[position]);
+            CreateBody(view, this[position]);
+            
+            return view;
         }
 
-        protected void CreateHeader(LinearLayout tl, RosterRow row)
+        protected void CreateHeader(LinearLayout view, RosterTable dataItem)
         {
-            var th = new LinearLayout(context);
-            th.Orientation = Orientation.Horizontal;
-            TextView first = new TextView(context);
-            AssignHeaderStyles(first);
-            th.AddView(first);
+            var headerView = new LinearLayout(context);
+            headerView.Orientation = Orientation.Horizontal;
 
-            foreach (var headerItem in row.Header)
+            headerView.AddView(CreateHeaderViewItem(EmptyRosterItem));
+
+            for (int i = 0; i < columnCount; i++)
             {
-                TextView column = new TextView(context);
-                if (headerItem != null)
-                {
-                    column.Text = headerItem.Title;
-                    if (!string.IsNullOrEmpty(headerItem.Instructions))
-                    {
-
-                        var img = context.Resources.GetDrawable(global::Android.Resource.Drawable.IcDialogInfo);
-                        column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-                        column.Click += (s, e) =>
-                            {
-                                var instructionsBuilder = new AlertDialog.Builder(context);
-                                instructionsBuilder.SetMessage(headerItem.Instructions);
-                                instructionsBuilder.Show();
-                            };
-                    }
-                    column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
-
-                }
-
-                AssignHeaderStyles(column);
-                th.AddView(column);
+                TextView headerItemView = dataItem.Header.Count > i
+                                              ? CreateHeaderItem(dataItem.Header[i])
+                                              : EmptyRosterItem;
+                headerView.AddView(CreateHeaderViewItem(headerItemView));
             }
-            tl.AddView(th);
+            view.AddView(headerView);
         }
 
-        protected void CreateBody(LinearLayout tl, RosterRow row)
+        private TextView CreateHeaderItem(HeaderItem headerItem)
+        {
+            var headerItemView = EmptyRosterItem;
+            headerItemView.Text = headerItem.Title;
+            if (!string.IsNullOrEmpty(headerItem.Instructions))
+            {
+                var img = context.Resources.GetDrawable(global::Android.Resource.Drawable.IcDialogInfo);
+                headerItemView.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+                headerItemView.Click += (s, e) =>
+                    {
+                        var instructionsBuilder = new AlertDialog.Builder(context);
+                        instructionsBuilder.SetMessage(headerItem.Instructions);
+                        instructionsBuilder.Show();
+                    };
+            }
+            headerItemView.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
+            return headerItemView;
+        }
+
+        private TextView EmptyRosterItem
+        {
+            get { return new TextView(context); }
+        }
+
+        protected void CreateBody(LinearLayout tl, RosterTable row)
         {
             foreach (var rosterItem in row.Rows)
             {
@@ -139,7 +147,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
         }
 
-        private void HideOrShowTableRows(RosterRow row, QuestionnaireScreenViewModel item, PropertyChangedEventArgs e, Button first, LinearLayout view, LinearLayout record)
+        private void HideOrShowTableRows(RosterTable row, QuestionnaireScreenViewModel item, PropertyChangedEventArgs e, Button first, LinearLayout view, LinearLayout record)
         {
             if (e.PropertyName == "Enabled")
             {
@@ -156,7 +164,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
         }
 
-        private void ShowPopupWithQuestion(RosterRow row, QuestionViewModel question)
+        private void ShowPopupWithQuestion(RosterTable row, QuestionViewModel question)
         {
             var group =
                 row.Rows.FirstOrDefault(
@@ -170,7 +178,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private void AlignTableCell(View view)
         {
             view.LayoutParameters = new LinearLayout.LayoutParams(0,
-                                                                  ViewGroup.LayoutParams.WrapContent, 1);
+                                                                  ViewGroup.LayoutParams.FillParent, 1);
         }
 
         private void first_Click(object sender, EventArgs e)
@@ -183,7 +191,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         }
 
 
-        protected void AssignHeaderStyles(TextView tv)
+        protected TextView CreateHeaderViewItem(TextView tv)
         {
             tv.Gravity = GravityFlags.Center;
 
@@ -191,7 +199,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             tv.TextSize = 20;
             tv.SetBackgroundResource(Resource.Drawable.grid_headerItem);
             AlignTableCell(tv);
-
+            return tv;
         }
     }
 }
