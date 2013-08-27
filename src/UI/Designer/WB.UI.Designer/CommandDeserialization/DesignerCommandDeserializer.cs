@@ -26,6 +26,8 @@ namespace WB.UI.Designer.CommandDeserialization
                         {"CloneQuestion", typeof (CloneQuestionCommand)},
                         {"DeleteQuestion", typeof (DeleteQuestionCommand)},
                         {"MoveQuestion", typeof (MoveQuestionCommand)},
+                        {"AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand)},
+                        {"RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand)},
                     };
             }
 

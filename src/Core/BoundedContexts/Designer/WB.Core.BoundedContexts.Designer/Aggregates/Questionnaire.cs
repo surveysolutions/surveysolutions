@@ -533,7 +533,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void RemoveSharedPerson(Guid personId, Guid responsibleId)
+        public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 

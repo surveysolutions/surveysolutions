@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 
                 // act
                 questionnaire.AddSharedPerson(personId, string.Empty, responsibleId);
-                questionnaire.RemoveSharedPerson(personId, responsibleId);
+                questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
 
                 // assert
                 var evt = GetSingleEvent<SharedPersonFromQuestionnaireRemoved>(eventContext);
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
             // act
-            TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, responsibleId);
+            TestDelegate act = () => questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.UserDoesNotExistInShareList));
