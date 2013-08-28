@@ -95,7 +95,7 @@
             return new QuestionnaireListViewModel
                        {
                            Id = x.Id,
-                           IsShared = x.IsShared,
+                           Owner = x.Owner,
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
