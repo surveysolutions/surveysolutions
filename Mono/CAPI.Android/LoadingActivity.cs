@@ -4,6 +4,7 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model.CommandService;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -83,7 +84,12 @@ namespace CAPI.Android
                 string content = PackageHelper.DecompressString(item);
                 var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new CreateNewAssigment(questionnarieContent));
+                var asyncCommandServise = commandService as AsyncCommandService;
+                var command = new CreateNewAssigment(questionnarieContent);
+                if(asyncCommandServise!=null)
+                    asyncCommandServise.ExecuteSynchronously(command);
+                else
+                    commandService.Execute(command);
 
                 syncCacher.DeleteItem(publicKey);
             }
