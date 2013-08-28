@@ -55,6 +55,7 @@
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Events\Interview\DateTimeQuestionAnswered.cs" />
     <Compile Include="Events\Interview\FlagRemovedFromAnswer.cs" />
     <Compile Include="Events\Interview\FlagSetToAnswer.cs" />
+    <Compile Include="Events\Interview\GeoLocationQuestionAnswered.cs" />
     <Compile Include="Events\Interview\GroupDisabled.cs" />
     <Compile Include="Events\Interview\GroupEnabled.cs" />
     <Compile Include="Events\Interview\GroupPropagated.cs" />

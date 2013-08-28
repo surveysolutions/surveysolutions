@@ -128,7 +128,7 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
             bus.RegisterHandler(eventHandler, typeof(InterviewMetaInfoUpdated));
-            
+            bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
            
         }
 

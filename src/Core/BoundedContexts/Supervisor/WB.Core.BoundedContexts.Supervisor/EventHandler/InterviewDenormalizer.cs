@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
+        IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
         IEventHandler<QuestionDisabled>,
@@ -166,6 +167,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                      evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                       evnt.Payload.Position);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)

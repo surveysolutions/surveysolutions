@@ -324,6 +324,9 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                                 //parse date
                                 newAnswer = value.mmddyyyy();
                                 break;
+                            case "GpsCoordinates":
+                                newAnswer = value;
+                                break;
                         }
                         if (newAnswer.trim() != '') {
                             self.answer(newAnswer);
@@ -424,6 +427,9 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                                 date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
                                 self.selectedOption(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
                             }
+                            break;
+                        case "GpsCoordinates":
+                            self.selectedOption(self.answer());
                             break;
                     }
                 };
