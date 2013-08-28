@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                 IEventHandler<SingleOptionQuestionAnswered>,
                                                 IEventHandler<NumericQuestionAnswered>,
                                                 IEventHandler<DateTimeQuestionAnswered>,
+                                                IEventHandler<GeoLocationQuestionAnswered>,
                                                 IEventHandler<InterviewerAssigned>,
                                                 IEventHandler<InterviewDeleted>
         
@@ -161,6 +162,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Position.ToString(), evnt.EventTimeStamp);
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, string answer, DateTime updateDate)

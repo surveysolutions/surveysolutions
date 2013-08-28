@@ -289,6 +289,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                             featuredAnswers.Add(question.PublicKey, answer.PublicKey);
                         }
                         break;
+                    case QuestionType.GpsCoordinates:
+                        featuredAnswers.Add(question.PublicKey, new GeoPosition(values[i]));
+                        break;
 
                     case QuestionType.MultyOption:
                         //throw new Exception("Unsupported featured question type in sample");
