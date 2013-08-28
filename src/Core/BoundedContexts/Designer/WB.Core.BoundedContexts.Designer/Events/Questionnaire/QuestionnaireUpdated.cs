@@ -8,7 +8,7 @@
     /// TODO: Update summary.
     /// </summary>
     [EventName("RavenQuestionnaire.Core:Events:QuestionnaireUpdated")]
-    public class QuestionnaireUpdated
+    public class QuestionnaireUpdated : QuestionnaireActiveEvent
     {
         #region Public Properties
 

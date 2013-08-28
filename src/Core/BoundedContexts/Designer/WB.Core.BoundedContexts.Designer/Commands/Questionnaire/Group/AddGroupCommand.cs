@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "NewAddGroup")]
     public class AddGroupCommand : FullGroupDataCommand
     {
-        public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
-            : base(questionnaireId, groupId, title, propagationKind, description, condition)
+        public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
+            : base(questionnaireId, groupId, title, propagationKind, description, condition, responsibleId)
         {
             this.ParentGroupId = parentGroupId;
         }
