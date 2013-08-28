@@ -10,7 +10,8 @@
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
-                "AutoPropagate": "AutoPropagate"
+                "AutoPropagate": "AutoPropagate",
+                "GpsCoordinates": "Geo Location"
             },
             questionTypeOptions = [
                 {
@@ -36,6 +37,10 @@
                 {
                     key: "AutoPropagate",
                     value: "Auto propagate"
+                },
+                {
+                    key: "GpsCoordinates",
+                    value: "Geo Location"
                 }
             ],
             questionScopes = [

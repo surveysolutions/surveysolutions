@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.DateTime,
             QuestionType.Text,
             QuestionType.AutoPropagate,
+            QuestionType.GpsCoordinates
         };
 
         public Questionnaire()
