@@ -26,9 +26,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly TextView tvEmptyLabelDescription;
         private readonly int columnCount;
         private readonly IQuestionViewFactory questionViewFactory;
+        private readonly Guid QuestionnaireId;
+        private readonly ListView listView;
         public GridContentAdapter(QuestionnaireGridViewModel model,int columnCount, Context context,
                                   Action<ScreenChangedEventArgs> onScreenChanged,
-                                  TextView tvEmptyLabelDescription)
+                                  TextView tvEmptyLabelDescription, ListView listView)
             : base(CreateItemList(model, columnCount))
         {
             this.context = context;
@@ -36,6 +38,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.OnScreenChanged = onScreenChanged;
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.tvEmptyLabelDescription = tvEmptyLabelDescription;
+            this.QuestionnaireId = model.QuestionnaireId;
+            this.listView = listView;
         }
 
         private static IList<RosterTable> CreateItemList(QuestionnaireGridViewModel model, int columnCount)
@@ -43,7 +47,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var result = new List<RosterTable>();
             for (int i = 0; i < model.Header.Count; i = i + columnCount)
             {
-                result.Add(new RosterTable(model.QuestionnaireId,model.Header.Skip(i).Take(columnCount).ToList(),model.Rows));
+                result.Add(new RosterTable(model.Header.Skip(i).Take(columnCount).ToList(),model.Rows));
             }
             return result;
         }
@@ -72,7 +76,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
             for (int i = 0; i < columnCount; i++)
             {
-                TextView headerItemView = dataItem.Header.Count > i
+                TextView headerItemView = IsHeaderForIndexAvalibleInRosterTable(dataItem, i)
                                               ? CreateHeaderItem(dataItem.Header[i])
                                               : EmptyRosterItem;
                 headerView.AddView(CreateHeaderViewItem(headerItemView));
@@ -99,79 +103,105 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return headerItemView;
         }
 
+
+        protected void CreateBody(LinearLayout view, RosterTable dataItem)
+        {
+            foreach (var rosterItem in dataItem.Rows)
+            {
+                var rowView = new LinearLayout(context);
+                rowView.Orientation = Orientation.Horizontal;
+
+                var firstItem = CreateFirstItemAsButton(rosterItem);
+                rowView.AddView(firstItem);
+
+                for (int i = 0; i < columnCount; i++)
+                {
+                    View rosterCell = IsHeaderForIndexAvalibleInRosterTable(dataItem, i)
+                                          ? CreateRosterCellView(dataItem.Header[i].PublicKey, rosterItem)
+                                          : EmptyRosterItem;
+
+                    AlignTableCell(rosterCell);
+                    rowView.AddView(rosterCell);
+                }
+
+                rosterItem.PropertyChanged +=
+                    (sender, e) =>
+                    HideOrShowTableRows(dataItem, sender as QuestionnaireScreenViewModel, e.PropertyName, rowView);
+
+                view.AddView(rowView);
+
+                HideIfRowDisabled(rosterItem.Enabled, rowView);
+            }
+        }
+
+        private View CreateRosterCellView(Guid headerId, QuestionnairePropagatedScreenViewModel rosterItem)
+        {
+            View rosterCell;
+            QuestionViewModel rowModel =
+                rosterItem.Items.FirstOrDefault(q => q.PublicKey.PublicKey == headerId) as QuestionViewModel;
+            RosterQuestionView rowViewItem = new RosterQuestionView(context, rowModel);
+            rowViewItem.RosterItemsClick += (s, e) => ShowPopupWithQuestion(rosterItem.ScreenName, e.Model);
+            rosterCell = rowViewItem;
+            return rosterCell;
+        }
+
+        private bool IsHeaderForIndexAvalibleInRosterTable(RosterTable dataItem, int i)
+        {
+            return i < dataItem.Header.Count;
+        }
+
         private TextView EmptyRosterItem
         {
             get { return new TextView(context); }
         }
 
-        protected void CreateBody(LinearLayout tl, RosterTable row)
+        private Button CreateFirstItemAsButton(QuestionnairePropagatedScreenViewModel rosterItem)
         {
-            foreach (var rosterItem in row.Rows)
-            {
+            Button first = new Button(context);
 
-                var th = new LinearLayout(context);
-                th.Orientation=Orientation.Horizontal;
-                if (!rosterItem.Enabled)
-                    th.Visibility = ViewStates.Gone;
+            first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
+            first.Click += first_Click;
+            first.Text = rosterItem.ScreenName;
 
-                Button first = new Button(context);
-                first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
-                first.Click += first_Click;
-                first.Text = rosterItem.ScreenName;
-                rosterItem.PropertyChanged += (sender, e) => HideOrShowTableRows(row, sender as QuestionnaireScreenViewModel, e, first, tl, th);
-
-                AlignTableCell(first);
-                th.AddView(first);
-
-                for (int i = 0; i < row.Header.Count; i++)
+            rosterItem.PropertyChanged += (s, e) =>
                 {
-                    View rosterCell;
-                    if (i < rosterItem.Items.Count())
+                    if (e.PropertyName == "ScreenName")
                     {
-                        QuestionViewModel rowModel = rosterItem.Items.FirstOrDefault(q=>q.PublicKey.PublicKey==row.Header[i].PublicKey) as QuestionViewModel;
-                        RosterQuestionView rowViewItem = new RosterQuestionView(context, rowModel);
-                        rowViewItem.RosterItemsClick += (s, e) => ShowPopupWithQuestion(row, e.Model);
-                        rosterCell = rowViewItem;
+                        first.Text = rosterItem.ScreenName;
                     }
-                    else
-                    {
-                        rosterCell = new TextView(context);
-                    }
+                };
 
-                    AlignTableCell(rosterCell);
-                    th.AddView(rosterCell);
-                }
-
-
-                tl.AddView(th);
-            }
+            AlignTableCell(first);
+            return first;
         }
 
-        private void HideOrShowTableRows(RosterTable row, QuestionnaireScreenViewModel item, PropertyChangedEventArgs e, Button first, LinearLayout view, LinearLayout record)
+        private void HideIfRowDisabled(bool enabled, LinearLayout rowView)
         {
-            if (e.PropertyName == "Enabled")
-            {
-                var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
-                record.Visibility = visibility;
-                var tableVisible = row.Rows.Any(r => r.Enabled);
-                view.Visibility = tableVisible ? ViewStates.Visible : ViewStates.Gone;
-                tvEmptyLabelDescription.Visibility = !tableVisible ? ViewStates.Visible : ViewStates.Gone;
-                return;
-            }
-            if (e.PropertyName == "ScreenName")
-            {
-                first.Text = item.ScreenName;
-            }
+            if (!enabled)
+                rowView.Visibility = ViewStates.Gone;
         }
 
-        private void ShowPopupWithQuestion(RosterTable row, QuestionViewModel question)
+        private void HideOrShowTableRows(RosterTable row, QuestionnaireScreenViewModel item, string propertyName, LinearLayout rosterRecordView)
         {
-            var group =
-                row.Rows.FirstOrDefault(
-                    r => r.ScreenId.PropagationKey == question.PublicKey.PropagationKey);
-            if (@group == null)
+            if (propertyName != "Enabled")
+            {
                 return;
-            new RosterItemDialog(context, question, @group.ScreenName, row.QuestionnaireId,
+            }
+
+            rosterRecordView.Visibility = GetVisibilityFromEnabledStatus(item.Enabled);
+            var tableVisible = row.Rows.Any(r => r.Enabled);
+            listView.Visibility = tableVisible ? ViewStates.Visible : ViewStates.Invisible;
+            tvEmptyLabelDescription.Visibility = GetVisibilityFromEnabledStatus(!tableVisible);
+        }
+
+        private static ViewStates GetVisibilityFromEnabledStatus(bool enabled)
+        {
+            return enabled ? ViewStates.Visible : ViewStates.Gone;
+        }
+
+        private void ShowPopupWithQuestion(string popupName, QuestionViewModel question)
+        {
+            new RosterItemDialog(context, question, popupName, QuestionnaireId,
                                  questionViewFactory);
         }
 

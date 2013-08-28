@@ -58,9 +58,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                                   OnScreenChanged);
             breadcrumbs.SetPadding(0, 0, 0, 10);
             top.AddView(breadcrumbs);
+            
             BuildEmptyLabelDescription(inflater.Context);
             BuildTabels(inflater.Context);
+
+            AjustControlVisibility();
+
             return top;
+        }
+
+        private void AjustControlVisibility()
+        {
+            if (IsRostersAreVisible())
+                tvEmptyLabelDescription.Visibility = ViewStates.Gone;
+            else
+                llTablesContainer.Visibility = ViewStates.Invisible;
         }
 
         protected void BuildEmptyLabelDescription(Context context)
@@ -72,8 +84,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             tvEmptyLabelDescription.Text = "Questions are absent";
             tvEmptyLabelDescription.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.WrapContent);
-            if (Model.Rows.Any(r => r.Enabled))
-                tvEmptyLabelDescription.Visibility=ViewStates.Gone;
             top.AddView(tvEmptyLabelDescription);
         }
 
@@ -84,10 +94,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                                              ViewGroup.LayoutParams.FillParent);
             const int columnCount = 2;
             llTablesContainer.Adapter = new GridContentAdapter(Model, columnCount, this.Activity, OnScreenChanged,
-                                                               tvEmptyLabelDescription);
-            if (!Model.Rows.Any(r => r.Enabled))
-                llTablesContainer.Visibility = ViewStates.Gone;
+                                                               tvEmptyLabelDescription, llTablesContainer);
             top.AddView(llTablesContainer);
+        }
+
+        private bool IsRostersAreVisible()
+        {
+            return Model.Rows.Any(r => r.Enabled);
         }
 
         private QuestionnaireGridViewModel model;

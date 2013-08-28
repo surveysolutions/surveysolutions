@@ -16,14 +16,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class RosterTable
     {
-        public RosterTable(Guid questionnarieId, List<HeaderItem> header, IEnumerable<QuestionnairePropagatedScreenViewModel> rows)
+        public RosterTable(List<HeaderItem> header, IEnumerable<QuestionnairePropagatedScreenViewModel> rows)
         {
-            QuestionnaireId = questionnarieId;
             Header = header;
             Rows = rows;
         }
 
-        public Guid QuestionnaireId { get; private set; }
         public List<HeaderItem> Header { get; private set; }
         public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows { get; private set; }
     }

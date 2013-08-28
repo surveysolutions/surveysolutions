@@ -129,12 +129,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             if (Enabled == enabled)
                 return;
             Enabled = enabled;
-            RaisePropertyChanged("Enabled");
+            this.RaisePropertyChanged("Enabled");
         }
-
-      
-
-        private QuestionnaireNavigationPanelItem shortVersion;
 
         void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
