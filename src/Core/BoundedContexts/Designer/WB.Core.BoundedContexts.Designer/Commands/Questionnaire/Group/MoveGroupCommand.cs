@@ -9,8 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "MoveGroup")]
     public class MoveGroupCommand : GroupCommand
     {
-        public MoveGroupCommand(Guid questionnaireId, Guid groupId, Guid? targetGroupId, int targetIndex)
-            : base(questionnaireId, groupId)
+        public MoveGroupCommand(Guid questionnaireId, Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
+            : base(questionnaireId, groupId, responsibleId)
         {
             this.TargetGroupId = targetGroupId;
             this.TargetIndex = targetIndex;

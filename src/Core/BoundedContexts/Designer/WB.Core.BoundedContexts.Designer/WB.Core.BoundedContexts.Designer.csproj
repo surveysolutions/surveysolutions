@@ -59,6 +59,7 @@
     <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonFromQuestionnaireRemoved.cs" />
     <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />

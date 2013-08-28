@@ -280,6 +280,20 @@
             command.questionnaireId = questionnaire.id();
             return command;
         };
+        
+        commands[config.commands.addSharedPersonToQuestionnaire] = function (sharedUser) {
+            return {
+                email: sharedUser.userEmail(),
+                questionnaireId : questionnaire.id()
+            };
+        };
+        
+        commands[config.commands.removeSharedPersonFromQuestionnaire] = function (sharedUser) {
+            return {
+                email: sharedUser.userEmail(),
+                questionnaireId: questionnaire.id()
+            };
+        };
 
         var converQuestionToCommand = function(question) {
             var command = {

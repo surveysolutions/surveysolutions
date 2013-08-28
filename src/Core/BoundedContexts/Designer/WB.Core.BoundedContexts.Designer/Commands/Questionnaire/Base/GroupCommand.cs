@@ -4,8 +4,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
     public abstract class GroupCommand : QuestionnaireCommand
     {
-        protected GroupCommand(Guid questionnaireId, Guid groupId)
-            : base(questionnaireId)
+        protected GroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId)
+            : base(questionnaireId, responsibleId)
         {
             this.GroupId = groupId;
         }

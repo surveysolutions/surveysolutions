@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -30,9 +28,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
                 Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
                 Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
 
-
-                Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(sourceQuestionId, groupId: groupId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: sourceQuestionId, groupId: groupId, responsibleId: responsibleId);
 
                 string notEmptyTitle = "not empty :)";
 
@@ -40,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.CloneQuestion(newQuestionId, groupId, notEmptyTitle, QuestionType.Text, "test_clone", false, false,
                                                 false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                                 string.Empty,
-                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1);
+                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId: responsibleId);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -55,14 +53,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(sourceQuestionId, groupId: groupId);
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: sourceQuestionId, groupId: groupId, responsibleId: responsibleId);
 
             // act
             var emptyTitle = string.Empty;
             TestDelegate act = () =>
                                questionnaire.CloneQuestion(newQuestionId, groupId, emptyTitle, QuestionType.Text, "test", false, false,
                                                                false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1);
+                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -78,15 +77,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
             var optionsWithEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
                 () =>
                 questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test_clone", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1);
+                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
                 Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
                 Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
 
                 var notEmptyAnswerOptionTitle1 = "title";
                 var notEmptyAnswerOptionTitle2 = "title1";
@@ -112,18 +113,48 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
                             new Option(Guid.NewGuid(), "2", "option text1"),
-                        }, groupId: groupId);
+                        }, responsibleId: responsibleId, groupId: groupId);
 
 
                 // act
                 questionnaire.CloneQuestion(newQuestionId, groupId,"test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1);
+                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
                 Assert.AreEqual(notEmptyAnswerOptionTitle1, risedEvent.Answers[0].AnswerText);
                 Assert.AreEqual(notEmptyAnswerOptionTitle2, risedEvent.Answers[1].AnswerText);
             }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+
+            var notEmptyAnswerOptionTitle1 = "title";
+            var notEmptyAnswerOptionTitle2 = "title1";
+            Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+                sourceQuestionId, questionType, new[]
+                        {
+                            new Option(Guid.NewGuid(), "1", "option text"),
+                            new Option(Guid.NewGuid(), "2", "option text1"),
+                        }, responsibleId: Guid.NewGuid(), groupId: groupId);
+
+            // act
+            TestDelegate act = () => questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, Guid.NewGuid());
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
 //        [Test]

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class SharedPersonToQuestionnaireAdded
+    public class SharedPersonToQuestionnaireAdded : QuestionnaireActiveEvent
     {
         public Guid PersonId { get; set; }
         public string Email { get; set; }
