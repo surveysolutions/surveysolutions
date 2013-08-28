@@ -338,48 +338,32 @@
                     });
             },
             addSharedPerson = function(sharedUser) {
-                sharedUser.check(function () {
-                    var options = {
-                        url: input.url.addSharedPersonUrl,
-                        type: 'POST',
-                        data: { userEmail: sharedUser.userEmail() }
-                    };
-                    
-                    $.ajax(options).done(function (data) {
-                        if (data.IsSuccess) {
-                            if (data.IsAlreadyShared) {
-                                showError(input.settings.messages.userToShareAlreadyExistInList.replace("$1", sharedUser.userEmail()));
-                            }
-                            else if(data.IsOwner){
-                                showError(input.settings.messages.userToShareIsOwner);
-                            }
-                            else {
+                sharedUser.check(function() {
+                    datacontext.sendCommand(
+                        config.commands.addSharedPersonToQuestionnaire,
+                        sharedUser,
+                        {
+                            success: function() {
                                 questionnaire().addSharedPerson();
+                            },
+                            error: function(d) {
+                                showError(d);
                             }
-                        } else {
-                            showError(input.settings.messages.unhandledExceptionMessage);
-                        }
-                    }).fail(function () {
-                        showError(input.settings.messages.unhandledExceptionMessage);
-                    });
+                        });
                 });
             },
             removeSharedPerson = function (sharedUser) {
-                var options = {
-                    url: input.url.removeSharedPersonUrl,
-                    type: 'POST',
-                    data: { userEmail: sharedUser.userEmail() }
-                };
-
-                $.ajax(options).done(function (data) {
-                    if (data.IsSuccess) {
-                        questionnaire().removeSharedPerson(sharedUser);
-                    } else {
-                        showError(input.settings.messages.unhandledExceptionMessage);
-                    }
-                }).fail(function() {
-                    showError(input.settings.messages.unhandledExceptionMessage);
-                });
+                datacontext.sendCommand(
+                    config.commands.removeSharedPersonFromQuestionnaire,
+                    sharedUser,
+                    {
+                        success: function() {
+                            questionnaire().removeSharedPerson(sharedUser);
+                        },
+                        error: function(d) {
+                            showError(d);
+                        }
+                    });
             },
             clearFilter = function() {
                 filter('');

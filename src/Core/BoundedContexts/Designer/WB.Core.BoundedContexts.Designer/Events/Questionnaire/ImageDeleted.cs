@@ -8,7 +8,7 @@
     /// The image deleted.
     /// </summary>
     [EventName("RavenQuestionnaire.Core:Events:ImageDeleted")]
-    public class ImageDeleted
+    public class ImageDeleted: QuestionnaireActiveEvent
     {
         #region Public Properties
 
