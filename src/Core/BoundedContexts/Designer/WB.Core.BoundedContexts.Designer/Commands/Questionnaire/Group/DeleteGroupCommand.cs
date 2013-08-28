@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "NewDeleteGroup")]
     public class DeleteGroupCommand : GroupCommand
     {
-        public DeleteGroupCommand(Guid questionnaireId, Guid groupId)
-            : base(questionnaireId, groupId) {}
+        public DeleteGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId)
+            : base(questionnaireId, groupId, responsibleId) {}
     }
 }

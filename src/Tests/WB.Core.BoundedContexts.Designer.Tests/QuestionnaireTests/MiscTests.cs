@@ -20,7 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid key = Guid.NewGuid();
 
             string title = "test q";
-            var questionnaire = new Questionnaire(key, title);
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire = new Questionnaire(publicKey: key, title: title, createdBy: responsibleId);
 
             using (var ctx = new EventContext())
             {
@@ -31,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string conditionExpression = "1=1";
                 string description = "group desct";
 
-                questionnaire.NewAddGroup(publicKey, parentGroupKey, text, propagateble, description, conditionExpression);
+                questionnaire.NewAddGroup(publicKey, parentGroupKey, text, propagateble, description, conditionExpression, responsibleId: responsibleId);
 
                 Assert.True(ctx.Events.Count() == 1);
 
@@ -61,10 +62,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid key = Guid.NewGuid();
 
             string title = "test q 22";
-            var questionnaire = new Questionnaire(key, title);
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire = new Questionnaire(publicKey: key, title: title, createdBy: responsibleId);
 
             Guid groupPublicKey = Guid.NewGuid();
-            questionnaire.NewAddGroup(groupPublicKey, null, "title", Propagate.None, "description", null);
+
+            questionnaire.NewAddGroup(groupPublicKey, null, "title", Propagate.None, "description", null, responsibleId: responsibleId);
 
             using (var ctx = new EventContext())
             {
@@ -88,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 questionnaire.NewAddQuestion(publicKey, groupPublicKey, questionText, questionType,
                     stataExportCaption, mandatory, featured, capital, questionScope, conditionExpression,
-                    validationExpression, validationMessage, instructions, answers, answerOrder, maxValue, triggers);
+                    validationExpression, validationMessage, instructions, answers, answerOrder, maxValue, triggers, responsibleId: responsibleId);
 
                 Assert.True(ctx.Events.Count() == 1);
 
@@ -161,11 +164,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             string title = "test q";
             string title1 = "test q";
-            var questionnaire = new Questionnaire(key, title);
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire = new Questionnaire(publicKey: key, title: title, createdBy: responsibleId);
 
             using (var ctx = new EventContext())
             {
-                questionnaire.UpdateQuestionnaire(title1);
+                questionnaire.UpdateQuestionnaire(title: title1, isPublic: false, responsibleId: responsibleId);
 
                 Assert.True(ctx.Events.Count() == 1);
 
