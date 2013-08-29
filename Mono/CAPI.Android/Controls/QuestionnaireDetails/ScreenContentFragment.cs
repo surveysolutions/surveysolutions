@@ -60,6 +60,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             llTop.AddView(breadcrumbs);
 
             llContent.Adapter = new ScreenContentAdapter(Model.Items, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
+            //llContent.fil.SetFillViewport()
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
             var nextBtn = new GroupView(inflater.Context,

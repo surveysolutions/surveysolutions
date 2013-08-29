@@ -70,11 +70,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
             etComments.EditorAction += etComments_EditorAction;
+            etComments.ImeOptions = ImeAction.Done;
             etComments.FocusChange += etComments_FocusChange;
             llWrapper.LongClick += AbstractQuestionView_LongClick;
+            llWrapper.FocusChange += llWrapper_FocusChange;
             llWrapper.Clickable = true;
-            llWrapper.Focusable = true;
-            llWrapper.FocusableInTouchMode = true;
+            /*llWrapper.Focusable = true;
+            llWrapper.FocusableInTouchMode = true;*/
+        }
+
+        void llWrapper_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            
         }
 
         protected virtual void SaveAnswer()
@@ -94,20 +101,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             IsCommentsEditorFocused = true;
             SetEditCommentsVisibility(true);
             etComments.RequestFocus();
+            ShowKeyboard(etComments);
         }
 
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             IsCommentsEditorFocused = e.HasFocus;
-            if (!e.HasFocus)
+          /*  if (!e.HasFocus)
             {
                 SaveComment();
                 HideKeyboard(etComments);
-            }
-            else
-            {
-                ShowKeyboard(etComments);
-            }
+            }*/
         }
         
         protected void SaveComment()
@@ -142,7 +146,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+            SaveComment();
             etComments.ClearFocus();
+            HideKeyboard(etComments);
         }
 
         protected void HideKeyboard(EditText editor)
@@ -165,7 +171,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         private void SetEditCommentsVisibility(bool visible)
         {
             etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
-            tvComments.Visibility = visible ? ViewStates.Gone : ViewStates.Visible;
+            tvComments.Visibility = visible ? ViewStates.Invisible : ViewStates.Gone;
         }
         protected override void OnAttachedToWindow()
         {

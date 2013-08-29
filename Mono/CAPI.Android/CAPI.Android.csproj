@@ -149,6 +149,7 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
+    <Compile Include="Core\AjustableListView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>
     </Compile>
