@@ -124,7 +124,18 @@ function GetProjectsWithTests() {
 
 function GetOutputAssembly($Project, $BuildConfiguration) {
     $projectFileInfo = Get-Item $Project
-    $fullPathToAssembly = "$($projectFileInfo.DirectoryName)\bin\$BuildConfiguration\$($projectFileInfo.BaseName).dll"
+    $projectXml = [xml] (Get-Content $Project)
+
+    $projectFolder = $projectFileInfo.DirectoryName
+
+    $outputPath = $projectXml.Project.PropertyGroup `
+        | ?{ $_.Condition -like "*'$BuildConfiguration|*" } `
+        | %{ $_.OutputPath } `
+        | select -First 1
+
+    $assemblyName = $projectXml.Project.PropertyGroup.AssemblyName[0]
+
+    $fullPathToAssembly = Join-Path (Join-Path $projectFolder $outputPath) "$assemblyName.dll"
 
     return GetPathRelativeToCurrectLocation $fullPathToAssembly
 }
@@ -146,7 +157,7 @@ function RunTestsFromProject($Project, $BuildConfiguration) {
         .\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo /nodots | Write-Host
         Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
 
-        .\packages\Machine.Specifications.0.5.12\tools\mspec-clr4.exe --teamcity $assembly | Write-Host
+        .\packages\Machine.Specifications.0.5.14\tools\mspec-clr4.exe --teamcity $assembly | Write-Host
 
         Write-Host "##teamcity[progressFinish 'Running tests from $assembly']"
     }
