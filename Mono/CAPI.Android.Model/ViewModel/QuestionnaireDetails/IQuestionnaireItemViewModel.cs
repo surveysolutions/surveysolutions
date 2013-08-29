@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel;
+using Cirrious.MvvmCross.ViewModels;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
 
-    public interface IQuestionnaireItemViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel, INotifyPropertyChanged
+    public interface IQuestionnaireItemViewModel : IMvxViewModel, INotifyPropertyChanged
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }

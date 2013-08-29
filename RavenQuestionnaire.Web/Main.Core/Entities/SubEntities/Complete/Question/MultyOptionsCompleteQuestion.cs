@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultyOptionsCompleteQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The multy options complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Main.Core.Domain.Exceptions;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
@@ -134,8 +127,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             if (answer == null)
             {
-                ////multiOption supports only list of answers
-                throw new Exception("Parameter: answer");
             }
 
             // iterates over all items to set on/off current state
@@ -144,6 +135,19 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 (item as ICompleteAnswer).Selected = answer.Contains(item.PublicKey);
             }
 
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            if (answerKeys == null)
+            {
+                return;
+            }
+            foreach (var item in answerKeys)
+            {
+                if (this.Answers.All(a => a.PublicKey != item))
+                    throw new InterviewException(string.Format("value {0} is absent", item));
+            }
         }
 
         #endregion

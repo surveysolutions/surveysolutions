@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeletePropagatableGroupCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The delete propagatable group command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire.Group
+﻿namespace Main.Core.Commands.Questionnaire.Group
 {
     using System;
 

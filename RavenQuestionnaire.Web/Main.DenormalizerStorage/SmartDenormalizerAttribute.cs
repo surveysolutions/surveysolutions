@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SmartDenormalizerAttribute.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.DenormalizerStorage
+﻿namespace Main.DenormalizerStorage
 {
     using System;
     using System.Collections.Generic;

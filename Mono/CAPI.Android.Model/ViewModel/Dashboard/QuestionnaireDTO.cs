@@ -1,18 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
-using CAPI.Android.Core.Model.ProjectionStorage;
+using CAPI.Android.Core.Model.ModelUtils;
 using Main.Core.Entities.SubEntities;
-using Newtonsoft.Json;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
@@ -22,7 +13,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             Id = id.ToString();
             Status = status.PublicId.ToString();
-            Properties = GetJsonData(properties.ToArray());
+            Properties = JsonUtils.GetJsonData(properties.ToArray());
             Responsible = responsible.ToString();
             Survey = survey.ToString();
         }
@@ -49,26 +40,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         }
 
 
-        private string GetJsonData(FeaturedItem[] payload)
-        {
-            var data = JsonConvert.SerializeObject(payload, Formatting.None,
-                                                   new JsonSerializerSettings
-                                                   {
-                                                       TypeNameHandling = TypeNameHandling.Objects
-                                                   });
-            Console.WriteLine(data);
-            return data;
-        }
-
         private FeaturedItem[] GetProperties()
         {
             if (string.IsNullOrEmpty(Properties))
                 return new FeaturedItem[0];
-            return JsonConvert.DeserializeObject<FeaturedItem[]>(Properties,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects
-                });
+            return JsonUtils.GetObject<FeaturedItem[]>(Properties);
         }
     }
 }

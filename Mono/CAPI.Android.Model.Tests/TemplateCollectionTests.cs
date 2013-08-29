@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace CAPI.Androids.Core.Model.Tests
@@ -9,7 +11,12 @@ namespace CAPI.Androids.Core.Model.Tests
     [TestFixture]
     public class TemplateCollectionTests
     {
-        
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Add_ValidDate_ItemIsAddedToCollection()
         {

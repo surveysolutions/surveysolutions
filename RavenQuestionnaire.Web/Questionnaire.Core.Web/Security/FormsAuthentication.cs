@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FormsAuthentication.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The forms authentication.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Security
+﻿namespace Questionnaire.Core.Web.Security
 {
     using System;
     using System.Web.Security;

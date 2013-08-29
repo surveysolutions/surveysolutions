@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMultyOptionsQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The MultyOptionsQuestion interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities.Complete
 {
     /// <summary>

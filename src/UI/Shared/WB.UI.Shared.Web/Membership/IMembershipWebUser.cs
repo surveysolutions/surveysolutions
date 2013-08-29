@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMembershipUser.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Shared.Web.Membership
+﻿namespace WB.UI.Shared.Web.Membership
 {
     using System;
     using System.Web.Security;

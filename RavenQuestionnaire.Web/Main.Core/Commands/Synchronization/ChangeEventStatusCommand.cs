@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeEventStatusCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The change event status command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Synchronization
+﻿namespace Main.Core.Commands.Synchronization
 {
     using System;
 

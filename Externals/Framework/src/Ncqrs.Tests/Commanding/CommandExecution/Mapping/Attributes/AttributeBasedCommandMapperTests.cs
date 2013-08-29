@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Commanding.CommandExecution.Mapping;
 using Ncqrs.Domain;
 using NUnit.Framework;
@@ -11,6 +13,12 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Attributes
     [TestFixture]
     public class AttributeBasedCommandMapperTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [MapsToAggregateRootConstructor("foo")]
         public class NonCommandTypeButWithCorrectAttribute
         {

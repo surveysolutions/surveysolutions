@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FileDeleted.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the FileDeleted type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.File
+﻿namespace Main.Core.Events.File
 {
     using System;
 

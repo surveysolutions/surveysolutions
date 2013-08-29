@@ -4,14 +4,26 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
+using Main.Core.ExpressionExecutors;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Ninject.Modules;
-
+using Raven.Client.Document;
+using WB.Core.BoundedContexts.Designer;
+using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
-using WB.Core.Questionnaire.ExportServices;
+using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Synchronization;
 
 namespace LoadTestDataGenerator
 {
@@ -21,7 +33,15 @@ namespace LoadTestDataGenerator
 
         public static StandardKernel Wire(INinjectModule module)
         {
-            kernel = new StandardKernel();
+            var ravenSettings = new RavenConnectionSettings(ConfigurationManager.AppSettings["Raven.DocumentStore"]);
+
+            kernel = new StandardKernel(
+                new NinjectSettings { InjectNonPublic = true },
+                new RavenReadSideInfrastructureModule(ravenSettings),
+                new SynchronizationModule(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)),
+                new NLogLoggingModule(),
+                new DesignerBoundedContextModule()
+            );
             
             RegisterServices(kernel);
 
@@ -30,12 +50,21 @@ namespace LoadTestDataGenerator
 
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Load(new LoadTestDataGeneratorRegistry(repositoryPath: ConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
+
+            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
+            ConditionExecuterFactory.Creator = doc => new FakeCompleteQuestionnaireConditionExecuteCollector();
+
+            kernel.Load(new LoadTestDataGeneratorRegistry());
+
+            var store = new BatchedRavenDBEventStore(kernel.Get<DocumentStoreProvider>().CreateSeparateInstanceForEventStore());
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
+            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
+            kernel.Bind<IStreamableEventStore>().ToConstant(store);
 
             NcqrsInit.Init(kernel);
-
-            kernel.Bind<IExportService>().ToConstant(new JsonExportService(kernel.Get<IDenormalizerStorage<QuestionnaireDocument>>()));
-
+            
             kernel.Load<MainModule>();
         }
     }

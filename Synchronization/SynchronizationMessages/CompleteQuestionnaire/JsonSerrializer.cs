@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonSerrializer.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The json serrializer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.CompleteQuestionnaire
+﻿namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System;
     using System.IO;

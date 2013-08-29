@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAuthorizationService.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The auth packets.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.WCF
+﻿namespace Main.Core.WCF
 {
     using System;
     using System.Collections.Generic;

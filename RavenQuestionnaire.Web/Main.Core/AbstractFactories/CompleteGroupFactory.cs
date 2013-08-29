@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroupFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Factory creates ICompleteGroup.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.AbstractFactories
 {
     using System;

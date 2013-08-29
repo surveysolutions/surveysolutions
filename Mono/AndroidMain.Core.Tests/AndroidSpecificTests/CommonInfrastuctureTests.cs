@@ -7,6 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Commands.User;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
+using Ncqrs.Commanding;
+
 namespace AndroidMain.Core.Tests.CommonTests
 {
     using System;
@@ -35,28 +40,13 @@ namespace AndroidMain.Core.Tests.CommonTests
 
     using NUnit.Framework;
 
-    /// <summary>
-    /// The common infrastucture tests.
-    /// </summary>
     [TestFixture]
     public class CommonInfrastuctureTests
     {
         private const string _testEventStore = "test_event_store";
 
-        #region Fields
-
-        /// <summary>
-        /// The _kernel.
-        /// </summary>
         private IKernel _kernel;
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The set up.
-        /// </summary>
         [SetUp]
         public void SetUp()
         {
@@ -65,6 +55,7 @@ namespace AndroidMain.Core.Tests.CommonTests
             var registry = new TestsRegistry();
 
             this._kernel = new StandardKernel();
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
             Context appContext = TestsContext.CurrentContext;
 
@@ -89,9 +80,6 @@ namespace AndroidMain.Core.Tests.CommonTests
         // Is.EqualTo(Guid.Parse("6de866ac-2a8d-4dc9-8a85-bf425b318caa")));
         // }
 
-        /// <summary>
-        /// The store_template_event_in_db.
-        /// </summary>
         [Test]
         public void store_template_event_in_db()
         {
@@ -112,32 +100,16 @@ namespace AndroidMain.Core.Tests.CommonTests
             Assert.That(storedEvents.Count(), Is.EqualTo(1));
 
             Guid newTemplateGuid = Guid.NewGuid();
-            var command = new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId, new UserLight());
+            ICommand command = null; // TODO: use another command here instead of new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId, new UserLight());
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(command);
 
-            IEnumerable<CommittedEvent> allEvents = store.GetEventStream();
-
-            Assert.That(allEvents.Count(), Is.EqualTo(2));
 
             CommittedEventStream newStoredEvents = store.ReadFrom(newTemplateGuid, long.MinValue, long.MaxValue);
             Assert.That(newStoredEvents.Count(), Is.EqualTo(1));
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get stream.
-        /// </summary>
-        /// <param name="storedEvent">
-        /// The stored event.
-        /// </param>
-        /// <returns>
-        /// The <see cref="UncommittedEventStream"/>.
-        /// </returns>
         private UncommittedEventStream GetStream(StoredEvent storedEvent)
         {
             var @event = new UncommittedEvent(
@@ -154,101 +126,30 @@ namespace AndroidMain.Core.Tests.CommonTests
 
             return result;
         }
-
-        #endregion
     }
 
-    /// <summary>
-    /// The tests registry.
-    /// </summary>
-    public class TestsRegistry : CoreRegistry
-    {
-        #region Constructors and Destructors
+    public class TestsRegistry : CoreRegistry {}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestsRegistry"/> class.
-        /// </summary>
-        public TestsRegistry()
-            : base(null, false)
-        {
-        }
+    internal class FakeCore : CoreRegistry {}
 
-        #endregion
-    }
-
-    /// <summary>
-    /// The fake core.
-    /// </summary>
-    internal class FakeCore : CoreRegistry
-    {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeCore"/> class.
-        /// </summary>
-        public FakeCore()
-            : base(null, false)
-        {
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// The fake file storage.
-    /// </summary>
     public class FakeFileStorage : IFileStorageService
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The delete file.
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
         public void DeleteFile(string filename)
         {
         }
 
-        /// <summary>
-        /// The retrieve file.
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        /// <returns>
-        /// The <see cref="FileDescription"/>.
-        /// </returns>
         public FileDescription RetrieveFile(string filename)
         {
             return new FileDescription();
         }
 
-        /// <summary>
-        /// The retrieve thumb.
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        /// <returns>
-        /// The <see cref="FileDescription"/>.
-        /// </returns>
         public FileDescription RetrieveThumb(string filename)
         {
             return new FileDescription();
         }
 
-        /// <summary>
-        /// The store file.
-        /// </summary>
-        /// <param name="file">
-        /// The file.
-        /// </param>
         public void StoreFile(FileDescription file)
         {
         }
-
-        #endregion
     }
 }

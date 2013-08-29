@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionViewInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The question view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Main.Core.View.Question

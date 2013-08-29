@@ -1,13 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="StataSuplierTests.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Export;
 using Main.Core.View.Export;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Main.Core.Tests.Export
@@ -23,6 +19,12 @@ namespace Main.Core.Tests.Export
     [TestFixture]
     public class StataSuplierTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void BuildMerge_TopLevelTable_OnlyImportWasBuild()
         {

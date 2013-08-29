@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireValidationExecutor.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire validation executor.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.ExpressionExecutors
+﻿namespace Main.Core.ExpressionExecutors
 {
     using System;
     using System.Linq;

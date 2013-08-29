@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MenuItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The menu item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     /// <summary>
     /// The menu item.
@@ -57,6 +48,8 @@ namespace Web.Supervisor.Models
         /// <summary>
         /// The teams
         /// </summary>
-        Teams
+        Teams = 9,
+
+        Summary = 10
     }
 }

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AuthorizationPacket.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.WCF
+﻿namespace Main.Core.WCF
 {
     using Main.Core.Entities;
 

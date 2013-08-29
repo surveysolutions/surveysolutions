@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValueCollection.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.View.Export
+﻿namespace Main.Core.View.Export
 {
     using System;
     using System.Collections;

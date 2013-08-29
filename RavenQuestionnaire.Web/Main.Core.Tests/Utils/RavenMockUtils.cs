@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RavenMockUtils.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The raven mock utils.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-#if !MONODROID
+﻿#if !MONODROID
 namespace RavenQuestionnaire.Core.Tests.Utils
 {
     using System;

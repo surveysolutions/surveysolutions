@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChartDataModel.cs" company="WorldBank">
-//   2012
-// </copyright>
-// <summary>
-//   Class for display visual chart
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     using System.Collections.Generic;
 

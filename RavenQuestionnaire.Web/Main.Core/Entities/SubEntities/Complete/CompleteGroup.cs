@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroup.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete group.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Complete
+﻿namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
     using System.Collections.Generic;

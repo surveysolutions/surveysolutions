@@ -1,4 +1,4 @@
-﻿@model WB.UI.Designer.Pdf.TitlePageDto
+﻿@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireView
 
 @{
     Layout = null;
@@ -8,7 +8,7 @@
 
 <html>
     <head>
-        <title>@Model.SurveyName</title>
+        <title>@Model.Title</title>
         @Styles.Render("~/Content/pdf-title-page.css")
     </head>
     <body>

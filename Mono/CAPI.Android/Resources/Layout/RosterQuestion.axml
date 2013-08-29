@@ -4,8 +4,7 @@
                android:id="@+id/llRoot"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-              local:MvxBind="{'Background':{'Path':'Status'}}"
-              >
+              local:MvxBind="Background Status">
  
   
 
@@ -22,6 +21,6 @@
       android:id="@+id/tvTitle"
         android:padding="10dip"
       android:textSize="20dip"
-      local:MvxBind="{'Text':{'Path':'AnswerString'}}"/>
+      local:MvxBind="Text AnswerString"/>
   </LinearLayout>
 </LinearLayout>

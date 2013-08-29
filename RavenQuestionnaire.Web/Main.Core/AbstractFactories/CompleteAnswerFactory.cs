@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteAnswerFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the CompleteAnswerFactory type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.AbstractFactories
+﻿namespace Main.Core.AbstractFactories
 {
     using System;
 

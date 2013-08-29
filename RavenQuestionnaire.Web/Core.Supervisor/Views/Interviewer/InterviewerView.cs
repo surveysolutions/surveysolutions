@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewer view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FlowConnection.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The flow connection.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     using System;
 

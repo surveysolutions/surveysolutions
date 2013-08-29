@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Security.Authentication;
+using CAPI.Android.Core.Model;
+using CAPI.Android.Core.Model.Authorization;
 using Main.Core.Utility;
-using Main.Synchronization.Credentials;
 using RestSharp;
 
 namespace CAPI.Android.Syncronization
@@ -19,12 +20,11 @@ namespace CAPI.Android.Syncronization
             return handler(this);
         }
 
-        public SyncCredentials RequestCredentials()
+        public SyncCredentials? RequestCredentials()
         {
             var credentials = OnRequestCredentials();
-            if (!credentials.HasValue)
-                throw new AuthenticationException("User wasn't authenticated");
-            return credentials.Value;
+
+            return credentials;
         }
 
     }

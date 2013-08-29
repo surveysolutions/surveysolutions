@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeStateModel.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ChangeStateModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using Main.Core.View.CompleteQuestionnaire.Statistics;
 
 namespace Web.Supervisor.Models

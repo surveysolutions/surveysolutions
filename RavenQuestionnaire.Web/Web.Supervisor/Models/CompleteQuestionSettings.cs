@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionSettings.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the CompleteQuestionSettings type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     using System;
 

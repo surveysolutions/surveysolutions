@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AreaRegistrationContextExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Contains extension methods to map routes in Areas to lowercase URLs.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Code.Helpers.Routes
+﻿namespace WB.UI.Designer.Code.Helpers.Routes
 {
     using System.Linq;
     using System.Web.Mvc;

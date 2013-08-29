@@ -505,7 +505,7 @@ namespace NUnit.Framework
 
 		#region Throws
 
-		public static TException Throws<TException>(Action action) where TException : Exception
+        public static TException Throws<TException>(TestDelegate action) where TException : Exception
 		{
 			try
 			{

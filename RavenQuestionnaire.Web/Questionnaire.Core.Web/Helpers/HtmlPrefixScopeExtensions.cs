@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HtmlPrefixScopeExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The html prefix scope extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Questionnaire.Core.Web.Helpers
 {
     using System;

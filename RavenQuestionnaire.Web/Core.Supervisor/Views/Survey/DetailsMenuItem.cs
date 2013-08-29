@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DetailsMenuItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete group headers.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Survey
 {
     using System;

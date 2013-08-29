@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompositeException.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The composite exception.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.Composite
+﻿namespace Main.Core.Entities.Composite
 {
     using System;
     using System.Runtime.Serialization;

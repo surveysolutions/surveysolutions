@@ -1,15 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   AssemblyInfo.cs
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -45,3 +34,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.1")]
 
 [assembly: InternalsVisibleTo("Main.Core.Tests")]
+[assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]

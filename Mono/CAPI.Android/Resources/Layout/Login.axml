@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:layout_marginBottom="20dip"
-            local:MvxBind="{'Text':{'Path':'Login'}}"
+            local:MvxBind="Text Login"
             android:singleLine="true"/>
       <!--  Password Label -->
       <TextView android:layout_width="fill_parent"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:singleLine="true"
-            local:MvxBind="{'Text':{'Path':'Password'}}"
+            local:MvxBind="Text Password"
             android:password="true"/>
       <!-- Login button -->
       <Button android:id="@+id/btnLogin"

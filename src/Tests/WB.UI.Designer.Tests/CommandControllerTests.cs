@@ -1,18 +1,19 @@
 ﻿using System;
-using Main.Core.Commands.Questionnaire.Group;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
-using WB.UI.Designer.Code.Helpers;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.GenericSubdomains.Logging;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
+using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Tests
 {
-    using WB.Core.SharedKernel.Logger;
-
     [TestFixture]
     public class CommandControllerTests
     {
@@ -20,16 +21,19 @@ namespace WB.UI.Designer.Tests
         public void Execute_When_CommandService_throws_exception_with_inner_DomainExcetion_Then_()
         {
             // Arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var commandType = "UpdateGroup";
             var commandJSON = "some command";
-            var updateGroupCommand = CreateInvalidUpdateGroupCommand();
+            var responsibleId = Guid.NewGuid();
+            var updateGroupCommand = CreateInvalidUpdateGroupCommand(responsibleId: responsibleId);
 
             var commandService = Mock.Of<ICommandService>();
             Mock.Get(commandService).Setup(x => x.Execute(updateGroupCommand)).Throws(CreateTwoLevelException());
 
             var commandDeserializer = Mock.Of<ICommandDeserializer>(serializer => serializer.Deserialize(commandType, commandJSON) == updateGroupCommand);
 
-            var controller = CreateCommandController(commandService: commandService, commandDeserializer: commandDeserializer);
+            var controller = CreateCommandController(commandService: commandService, commandDeserializer: commandDeserializer, responsibleId: responsibleId);
 
             // Act
             var result = controller.Execute(commandType, commandJSON);
@@ -43,16 +47,20 @@ namespace WB.UI.Designer.Tests
         public void Execute_When_CommandService_throws_exception_with_inner_not_DomainExcetion_Then_exception_should_be_thrown()
         {
             // Arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var commandType = "UpdateGroup";
             var commandJSON = "some command";
-            var updateGroupCommand = CreateInvalidUpdateGroupCommand();
+            var responsibleId = Guid.NewGuid();
+
+            var updateGroupCommand = CreateInvalidUpdateGroupCommand(responsibleId: responsibleId);
 
             var commandService = Mock.Of<ICommandService>();
             Mock.Get(commandService).Setup(x => x.Execute(updateGroupCommand)).Throws(CreateThreeLevelException());
 
             var commandDeserializer = Mock.Of<ICommandDeserializer>(serializer => serializer.Deserialize(commandType, commandJSON) == updateGroupCommand);
 
-            var controller = CreateCommandController(commandService: commandService, commandDeserializer: commandDeserializer);
+            var controller = CreateCommandController(commandService: commandService, commandDeserializer: commandDeserializer, responsibleId: responsibleId);
 
             // Act
             var result = controller.Execute(commandType, commandJSON);
@@ -72,22 +80,27 @@ namespace WB.UI.Designer.Tests
             return new Exception("message", CreateTwoLevelException());
         }
 
-        private static UpdateGroupCommand CreateInvalidUpdateGroupCommand(Guid? questionnaireId = null)
+        private static UpdateGroupCommand CreateInvalidUpdateGroupCommand(Guid responsibleId, Guid? questionnaireId = null)
         {
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
-            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty);
+            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty, responsibleId: responsibleId);
 
             return command;
         }
 
-        private CommandController CreateCommandController(ICommandService commandService = null, ICommandDeserializer commandDeserializer = null, 
-            IExpressionReplacer expressionReplacer = null, ILog logReplacer = null)
+        private CommandController CreateCommandController(Guid responsibleId, ICommandService commandService = null, ICommandDeserializer commandDeserializer = null, 
+            IExpressionReplacer expressionReplacer = null, ILogger logReplacer = null, IMembershipUserService userHelper = null)
         {
+             var membershipUserService = Mock.Of<IMembershipUserService>();
+            Mock.Get(membershipUserService).Setup(x => x.WebUser).Returns(new MembershipWebUser(Mock.Of<IMembershipHelper>()));
+            Mock.Get(membershipUserService).Setup(x => x.WebUser.UserId).Returns(responsibleId);
+
             return new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
-                expressionReplacer ?? Mock.Of<IExpressionReplacer>());
+                expressionReplacer ?? Mock.Of<IExpressionReplacer>(),
+                userHelper ?? membershipUserService);
         }
     }
 }

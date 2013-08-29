@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Config;
 using NUnit.Framework;
 using Moq;
@@ -9,6 +10,12 @@ namespace Ncqrs.Tests
     [TestFixture]
     public class NcqrsEnvironmentSpecs
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public interface IFoo
         {}
 

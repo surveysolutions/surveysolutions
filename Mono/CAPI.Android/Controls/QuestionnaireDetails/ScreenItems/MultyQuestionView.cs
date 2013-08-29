@@ -6,32 +6,17 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class MultyQuestionView : AbstractQuestionView
     {
-      /*  public MultyQuestionView(Context context, QuestionViewModel model)
-            : base(context, model)
-        {
-        }
-        */
-        public MultyQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context, bindingActivity, source, questionnairePublicKey)
         {
         }
-
-        /*public MultyQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
-            : base(context, attrs, defStyle, model)
-        {
-        }
-
-        public MultyQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model)
-            : base(javaReference, transfer, model)
-        {
-        }*/
 
         #region Overrides of AbstractQuestionView
 
@@ -41,14 +26,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.Orientation = Orientation.Vertical;
 
             typedMode = Model as SelectebleQuestionViewModel;
-       /*   */
-           
-         //   int i = 0;
             var optionsWrapper = new LinearLayout(this.Context);
             optionsWrapper.Orientation = Orientation.Vertical;
             optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
-      //      var checkboxes = new CheckBox[typedMode.Answers.Count()];
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
@@ -59,11 +40,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
                 cb.AttachImage(answer);
                 optionsWrapper.AddView(cb);
-            /*    checkboxes[i] = cb;
-                i++;*/
             }
-          /* 
-            PopulateComboboxes(optionsWrapper, checkboxes, this.Context);*/
             llWrapper.AddView(optionsWrapper);
         }
 

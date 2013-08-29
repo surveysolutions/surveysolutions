@@ -1,10 +1,13 @@
 using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.Serialization;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Eventing.Storage.Serialization
 {
@@ -18,6 +21,8 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         [SetUp]
         public void SetUp()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             _typeResolver = MockRepository.GenerateStub<IEventTypeResolver>();
             _typeResolver
                 .Stub(x => x.EventNameFor(typeof(AnEvent)))

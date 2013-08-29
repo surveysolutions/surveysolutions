@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteAnswer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The CompleteAnswer interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;

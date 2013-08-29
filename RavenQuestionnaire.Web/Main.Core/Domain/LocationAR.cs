@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LocationAR.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the LocationAR type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     using System;
 

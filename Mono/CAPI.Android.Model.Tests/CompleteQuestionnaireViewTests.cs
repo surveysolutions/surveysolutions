@@ -6,6 +6,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.Validation;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 
@@ -14,6 +15,12 @@ namespace CAPI.Androids.Core.Model.Tests
     [TestFixture]
     public class CompleteQuestionnaireViewTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void SetScreenStatus_ScreenISAbsent_ExeptionThrown()
         {

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GpsCoordinateCompleteQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The gps coordinate complete question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities.Complete.Question
+﻿namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
@@ -146,6 +138,11 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
             this.Answer = answerValue;
+        }
+
+        public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
+        {
+            
         }
 
         #endregion

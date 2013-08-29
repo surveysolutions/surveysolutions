@@ -33,35 +33,52 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.CrossCore.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Droid">
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Droid.dll</HintPath>
+    <Reference Include="Cirrious.CrossCore.Droid">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.CrossCore.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Binding">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Binding.Droid">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Binding.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Localization">
+      <HintPath>..\..\packages\MvvmCross.HotTuna.CrossCore.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+      <HintPath>..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.3.0.10\lib\MonoAndroid16\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization">
+      <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
     <Compile Include="Fakes\CustomerCreatedEvent.cs" />
     <Compile Include="Fakes\CustomerNameChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,10 +98,6 @@
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
-      <Project>{30be60c9-980f-40e1-a8fd-c2a5959827d3}</Project>
-      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
@@ -93,6 +106,13 @@
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
+      <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
+      <Name>WB.Core.Infrastructure.Backup</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

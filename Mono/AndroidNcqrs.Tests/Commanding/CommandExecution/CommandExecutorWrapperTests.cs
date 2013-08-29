@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
 using NUnit.Framework;
@@ -12,6 +14,12 @@ namespace Ncqrs.Tests.Commanding.CommandExecution
     [TestFixture]
     public class CommandExecutorWrapperTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class TheCommand : ICommand
         {
             public Guid CommandIdentifier

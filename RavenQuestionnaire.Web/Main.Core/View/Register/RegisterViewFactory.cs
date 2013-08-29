@@ -1,10 +1,6 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterViewFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Register
 {
@@ -21,7 +17,7 @@ namespace Main.Core.View.Register
         /// <summary>
         /// field documentItemSession
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> documentItemSession;
+        private readonly IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> documentItemSession;
 
         #endregion
 
@@ -33,7 +29,7 @@ namespace Main.Core.View.Register
         /// <param name="item">
         /// The item.
         /// </param>
-        public RegisterViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> item)
+        public RegisterViewFactory(IQueryableReadSideRepositoryReader<SyncDeviceRegisterDocument> item)
         {
             this.documentItemSession = item;
         }

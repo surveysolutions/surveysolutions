@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserBrowseView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The user browse view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Collections.Generic;
 
 namespace Main.Core.View.User

@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceView.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.View.Device
+﻿namespace Main.Core.View.Device
 {
     using System.Collections.Generic;
 

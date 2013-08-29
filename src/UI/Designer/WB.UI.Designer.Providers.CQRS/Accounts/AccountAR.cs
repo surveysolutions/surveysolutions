@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountAR.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account ar.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Providers.CQRS.Accounts
+﻿namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
     using System;
     using System.Collections.Generic;

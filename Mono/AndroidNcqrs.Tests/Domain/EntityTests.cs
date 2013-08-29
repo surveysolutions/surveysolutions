@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
@@ -10,6 +12,12 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     public class EntityTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class Customer : AggregateRootMappedByConvention
         {
             private readonly List<Order> _orders = new List<Order>();

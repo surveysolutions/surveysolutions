@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The question test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.Entities
 {
@@ -28,6 +22,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities
     [TestFixture]
     public class QuestionTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

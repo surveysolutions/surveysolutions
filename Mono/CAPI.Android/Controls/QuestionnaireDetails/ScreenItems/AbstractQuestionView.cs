@@ -6,13 +6,14 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public abstract class AbstractQuestionView : LinearLayout
+    public abstract class AbstractQuestionView : LinearLayout, IMvxBindingContextOwner
     {
         public event EventHandler AnswerSet;
         public bool IsCommentsEditorFocused { get; private set; }
@@ -20,26 +21,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
-        private readonly IMvxBindingActivity _bindingActivity;
+        private readonly IMvxAndroidBindingContext _bindingContext;
 
-        private readonly int _templateId;
+        private readonly int templateId;
 
 
-        public void ClearBindings()
+        public IMvxBindingContext BindingContext
         {
-            _bindingActivity.ClearBindings(this);
-        }
-
-        protected IMvxBindingActivity BindingActivity
-        {
-            get { return _bindingActivity; }
+            get { return _bindingContext; }
+            set { throw new NotImplementedException("BindingContext is readonly in the question"); }
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ClearBindings();
+                this.ClearAllBindings();
             }
 
             base.Dispose(disposing);
@@ -48,12 +45,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected View Content { get; set; }
 
 
-        public AbstractQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context)
         {
-            _bindingActivity = bindingActivity;
-            _templateId = Resource.Layout.AbstractQuestionView;
-            Content = BindingActivity.BindingInflate(source, _templateId, this);
+            this._bindingContext = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
+            templateId = Resource.Layout.AbstractQuestionView;
+            Content = _bindingContext.BindingInflate(templateId, this);
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
@@ -64,11 +61,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void Initialize()
         {
-         /*   LayoutInflater layoutInflater =
-                (LayoutInflater)this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);*/
-        //    tvTitle.Text = Model.Text + (Model.Mandatory ? "*" : "");
-        //    etComments.Text = tvComments.Text = Model.Comments;
             etComments.ImeOptions = ImeAction.Done;
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
@@ -77,10 +69,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
             llWrapper.Clickable = true;
         }
-
-       
-
-      
 
         protected virtual void SaveAnswer()
         {
@@ -171,7 +159,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 btnInstructions.Click += new EventHandler(btnInstructions_Click);
             }
-
         }
 
         void btnInstructions_Click(object sender, EventArgs e)
@@ -180,10 +167,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             instructionsBuilder.SetMessage(Model.Instructions);
             instructionsBuilder.Show();
         }
-       
-
-       
-
 
         protected LinearLayout llRoot
         {
@@ -218,6 +201,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
-       
+
     }
 }

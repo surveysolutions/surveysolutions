@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireViewModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire view model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;

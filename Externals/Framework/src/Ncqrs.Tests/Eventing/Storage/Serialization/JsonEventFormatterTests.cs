@@ -1,5 +1,7 @@
 using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.Serialization;
@@ -16,6 +18,8 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         [SetUp]
         public void SetUp()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var typeResolver = new AttributeEventTypeResolver();
             typeResolver.AddEvent(typeof(AnEvent));
             _typeResolver = typeResolver;

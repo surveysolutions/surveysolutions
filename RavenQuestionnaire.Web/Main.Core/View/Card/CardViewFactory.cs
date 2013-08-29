@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CardViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The card view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Linq;
 using Main.Core.Documents;
@@ -14,6 +5,8 @@ using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Card
 {
@@ -27,7 +20,7 @@ namespace Main.Core.View.Card
         /// <summary>
         /// The _document session.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireDocument> _documentSession;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocument> _documentSession;
 
         #endregion
 
@@ -39,7 +32,7 @@ namespace Main.Core.View.Card
         /// <param name="documentSession">
         /// The document session.
         /// </param>
-        public CardViewFactory(IDenormalizerStorage<QuestionnaireDocument> documentSession)
+        public CardViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> documentSession)
         {
             this._documentSession = documentSession;
         }

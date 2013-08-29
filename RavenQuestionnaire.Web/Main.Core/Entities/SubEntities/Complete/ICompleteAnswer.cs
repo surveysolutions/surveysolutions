@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteAnswer.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CompleteAnswer interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;

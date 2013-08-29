@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerViewModel.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     using System;
     using System.ComponentModel;

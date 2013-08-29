@@ -1,15 +1,16 @@
-using Cirrious.MvvmCross.Application;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
-using Cirrious.MvvmCross.Interfaces.ViewModels;
+
+
+using CAPI.Android.Core.Model.ViewModel.Login;
+using Cirrious.CrossCore;
+using Cirrious.MvvmCross.ViewModels;
 
 namespace CAPI.Android
 {
-    public class App: MvxApplication, IMvxServiceProducer
+    public class App: MvxApplication
     {
         public App()
         {
-            this.RegisterServiceInstance<IMvxStartNavigation>(new StartApplicationObject());
+            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
         }
     }
 }

@@ -7,10 +7,16 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Web.Supervisor")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+
+#if (Debug || DEBUG)
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
+[assembly: AssemblyCompany("The World Bank")]
 [assembly: AssemblyProduct("Web.Supervisor")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2012")]
+[assembly: AssemblyCopyright("Copyright © World Bank 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using System.IO;
 
@@ -9,6 +11,12 @@ namespace Ncqrs.Tests
     [TestFixture]
     public class InternalExtensionsTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void IsEmpty_should_return_true_on_empty_array()
         {

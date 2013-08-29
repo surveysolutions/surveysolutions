@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionRemoved.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the CollectionRemoved type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Collection
+﻿namespace Main.Core.Events.Collection
 {
     using System;
 

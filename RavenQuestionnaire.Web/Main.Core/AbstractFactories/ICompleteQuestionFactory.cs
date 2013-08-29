@@ -1,27 +1,17 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestionFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ICompleteQuestionFactory type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
 
 namespace Main.Core.AbstractFactories
 {
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.Events.Questionnaire;
 
-    /// <summary>
-    /// The CompleteQuestionFactory interface.
-    /// </summary>
     public interface ICompleteQuestionFactory
     {
         ICompleteQuestion ConvertToCompleteQuestion(IQuestion question);
 
-        AbstractQuestion Create(FullQuestionDataEvent type);
+        AbstractQuestion CreateQuestion(Guid publicKey, QuestionType questionType, QuestionScope questionScope, string questionText, string stataExportCaption, string conditionExpression, string validationExpression, string validationMessage, Order answerOrder, bool featured, bool mandatory, bool capital, string instructions, List<Guid> triggers, int maxValue, Answer[] answers);
 
-        IQuestion CreateQuestionFromExistingUsingDataFromEvent(IQuestion question, QuestionChanged e);
+        IQuestion CreateQuestionFromExistingUsingSpecifiedData(IQuestion question, QuestionType questionType, QuestionScope questionScope, string questionText, string stataExportCaption, string conditionExpression, string validationExpression, string validationMessage, Order answerOrder, bool featured, bool mandatory, bool capital, string instructions, List<Guid> triggers, int maxValue, Answer[] answers);
     }
 }

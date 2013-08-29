@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -14,6 +15,11 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     public class UnitOfWorkTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
         [Test]
         public void Accepting_unit_of_work_stores_and_publishes_the_events()
         {

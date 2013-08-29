@@ -2,7 +2,7 @@
     display: block;
     text-align: center;
     font-weight: bold;
-    margin-top: 600px;
+    margin-top: 500px;
     font-size: 2.5em;
 }
 .create-date {
@@ -10,5 +10,6 @@
 }
 
 .statistics {
-    margin-top: 800px;
+    position: absolute;
+    top: 1200px;
 }

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeleteFileCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The delete file command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.File
+﻿namespace Main.Core.Commands.File
 {
     using System;
 

@@ -1,0 +1,103 @@
+﻿@using Main.Core.View.CompleteQuestionnaire.Statistics
+@using Web.Supervisor.Models
+@model ApproveRedoModel
+@{
+    ViewBag.Title = "Change state survey";
+}
+<h3>Approve survey</h3>
+<p><a href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Back to list</a></p>
+<div class="row-fluid">
+    <div class="span6">
+        @using (Html.BeginForm("ChangeState", GlobalHelper.CurrentController, new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <legend>Change survey status</legend>
+            <div class="control-group">
+                @Html.LabelFor(x => x.StatusId, new { @class = "control-label" })
+                <div class="controls">
+                    <select id="state" name="state">
+                        <option value="1">Approve</option>
+                        <option value="2">Redo</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                @Html.LabelFor(x => x.Comment, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextAreaFor(x => x.Comment, new { @class = "span12" })
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn" href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Cancel</a>
+            </div>
+        }
+        @Html.Partial("_StatusHistory", Model.Statistic.StatusHistory)
+    </div>
+    <div class="span6" id="state-right">
+        <div class="tabbable tabs-left">
+            <ul class="nav nav-tabs" id="statisticTab">
+                <li class="active"><a href="#featured">Featured</a></li>
+                <li><a href="#invalid">Invalid</a></li>
+                <li><a href="#answered">Answered</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="featured">
+                    <h4>Featured questions</h4>
+                    @foreach (QuestionStatisticView question in Model.Statistic.FeaturedQuestions)
+                    {
+                        <p>
+                            @Html.Raw(question.QuestionText) - @question.AnswerValue
+                            @if (question.ApproximateTime.HasValue)
+                            {
+                                <b>, Timing : @question.ApproximateTime.Value.Minutes
+                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                            }
+                        </p>
+                    }
+                </div>
+                <div class="tab-pane" id="invalid">
+                    <h4>Invalid questions</h4>
+                    @foreach (QuestionStatisticView question in Model.Statistic.InvalidQuestions)
+                    {
+                        <p>
+                            @Html.Raw(question.QuestionText)
+                            - @question.AnswerValue
+                            @if (question.ApproximateTime.HasValue)
+                            {
+                                <b>, Timing : @question.ApproximateTime.Value.Minutes
+                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                            }
+                        </p>
+                    }</div>
+                <div class="tab-pane" id="answered">
+                    <h4>Answered questions</h4>
+                    @foreach (QuestionStatisticView question in Model.Statistic.AnsweredQuestions)
+                    {
+                        <p>
+                            @Html.Raw(question.QuestionText)
+                            - @question.AnswerValue
+                            @if (question.ApproximateTime.HasValue)
+                            {
+                                <b>, Timing : @question.ApproximateTime.Value.Minutes
+                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
+                            }
+                        </p>
+                    }</div>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                /*$('#state').change(function () {
+                if ($(this).val() != "1") $('#state-right').hide();
+                else $('#state-right').show();
+                });*/
+                $('#statisticTab a').click(function (e) {
+                    e.preventDefault();
+                    $(this).tab('show');
+                });
+            })
+        </script>
+    </div>
+</div>

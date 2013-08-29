@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AggregateRootStatusChanged.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The aggregate root status changed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Synchronization
+﻿namespace Main.Core.Events.Synchronization
 {
     using System;
 

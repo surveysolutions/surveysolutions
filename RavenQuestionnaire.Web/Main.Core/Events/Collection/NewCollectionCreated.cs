@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewCollectionCreated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the NewCollectionCreated type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Collection
+﻿namespace Main.Core.Events.Collection
 {
     using System;
     using System.Collections.Generic;

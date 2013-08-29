@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterData.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Entities
+﻿namespace Main.Core.Entities
 {
     using System;
     using System.Runtime.Serialization;

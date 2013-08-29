@@ -1,24 +1,17 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The user view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Linq;
 using Main.Core.Documents;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.User
 {
     public class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }

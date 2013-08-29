@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeStatusDocument.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Documents
+﻿namespace Main.Core.Documents
 {
     using System;
 

@@ -11,8 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Commands;
 using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard

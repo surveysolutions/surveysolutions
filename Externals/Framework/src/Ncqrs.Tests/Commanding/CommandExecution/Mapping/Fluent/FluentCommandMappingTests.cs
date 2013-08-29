@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution;
@@ -154,6 +156,8 @@ namespace Ncqrs.Tests.Commanding.CommandExecution.Mapping.Fluent
         [SetUp]
         public void Setup()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var service = new CommandService();
 
             Map.Command<AggregateRootTargetStaticCreateCommand>().ToAggregateRoot<AggregateRootTarget>().CreateNew((cmd) => AggregateRootTarget.CreateNew(cmd.Title)).StoreIn((cmd, aggroot) => AggRoot = aggroot).RegisterWith(service);

@@ -1,14 +1,23 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Rhino.Mocks;
 using Ncqrs.Commanding;
 using NUnit.Framework;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Commanding
 {
     [TestFixture]
     public class CommandBasedTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class FooCommand : CommandBase
         {
             public FooCommand(Guid commandIdentifier) : base(commandIdentifier)

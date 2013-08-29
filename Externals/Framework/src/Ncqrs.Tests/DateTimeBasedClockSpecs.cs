@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 
 namespace Ncqrs.Tests
@@ -7,6 +9,12 @@ namespace Ncqrs.Tests
     [TestFixture]
     public class DateTimeBasedClockSpecs
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void When_getting_the_current_time_it_should_be_a_utc_kind()
         {

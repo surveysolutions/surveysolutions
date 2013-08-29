@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FlowRule.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Is used for holding rule of status changing.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     /// <summary>
     /// Is used for holding rule of status changing.

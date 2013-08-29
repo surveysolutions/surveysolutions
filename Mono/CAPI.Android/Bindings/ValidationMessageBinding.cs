@@ -2,34 +2,31 @@ using System;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
-using Cirrious.MvvmCross.Binding.Interfaces;
 
 namespace CAPI.Android.Bindings
 {
-    public class ValidationMessageBinding : MvxBaseAndroidTargetBinding
+    public class ValidationMessageBinding : MvvmBindingWrapper<TextView>
     {
-        private readonly TextView _control;
-        public ValidationMessageBinding(TextView control)
+        public ValidationMessageBinding(TextView control):base(control)
         {
-            _control = control;
         }
         #region Overrides of MvxBaseTargetBinding
 
-        public override void SetValue(object value)
+
+        protected override void SetValueToView(TextView view, object value)
         {
             var validationStatus = (QuestionStatus) value;
 
 
             if (validationStatus.HasFlag(QuestionStatus.Valid))
             {
-                _control.Visibility = ViewStates.Gone;
-
+                view.Visibility = ViewStates.Gone;
             }
             else
             {
-                _control.Visibility = ViewStates.Visible;
-
+                view.Visibility = ViewStates.Visible;
             }
         }
 

@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ChangeStatusHistoryView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.View.CompleteQuestionnaire.Statistics
+﻿namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
     using System;
     using System.Collections.Generic;

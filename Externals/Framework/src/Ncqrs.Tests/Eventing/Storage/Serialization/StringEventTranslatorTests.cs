@@ -1,5 +1,7 @@
 using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.Serialization;
 using Newtonsoft.Json.Linq;
@@ -15,6 +17,8 @@ namespace Ncqrs.Tests.Eventing.Storage.Serialization
         [SetUp]
         public void Setup()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             _translator = new StringEventTranslator();
         }
 

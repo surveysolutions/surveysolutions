@@ -1,20 +1,38 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Core.Supervisor.Denormalizer;
+using Core.Supervisor.RavenIndexes;
+using Core.Supervisor.Views;
 using Main.Core;
+using Main.Core.Documents;
+using Main.Core.Services;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
-
+using WB.Core.BoundedContexts.Supervisor;
+using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
-
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.Synchronization;
+using WB.Supervisor.CompleteQuestionnaireDenormalizer;
+using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
+using Web.Supervisor.CommandDeserialization;
 using Web.Supervisor.Injections;
 using WebActivator;
 
@@ -26,6 +44,7 @@ namespace Web.Supervisor.App_Start
     using Microsoft.Practices.ServiceLocation;
 
     using NinjectAdapter;
+
 
     /// <summary>
     /// The ninject web common.
@@ -62,9 +81,9 @@ namespace Web.Supervisor.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            #warning TLK: delete this when NCQRS initialization moved to Global.asax
+#warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
-            
+
             bool isEmbeded;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
             {
@@ -83,33 +102,75 @@ namespace Web.Supervisor.App_Start
             string username = WebConfigurationManager.AppSettings["Raven.Username"];
             string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
-            string defaultDatabase  = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+            string defaultDatabase = WebConfigurationManager.AppSettings["Raven.DefaultDatabase"];
+
+            int? pageSize = GetEventStorePageSize();
+
+            var ravenSettings = new RavenConnectionSettings(storePath, isEmbedded: isEmbeded, username: username,
+                                                            password: password, defaultDatabase: defaultDatabase);
 
             var kernel = new StandardKernel(
-                new SupervisorCoreRegistry(storePath, defaultDatabase, isEmbeded, username, password, isApprovedSended),
-                new RavenInfrastructureModule());
+                new NinjectSettings {InjectNonPublic = true},
+                new ServiceLocationModule(),
+                new NLogLoggingModule(),
+                new DataCollectionSharedKernelModule(),
+                pageSize.HasValue
+                    ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
+                    : new RavenWriteSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings),
+                new SupervisorCoreRegistry(),
+                new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
+                new SupervisorCommandDeserializationModule(),
+                new SupervisorBoundedContextModule(),
+                new CompleteQuestionnarieDenormalizerModule());
 
-            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            PrepareNcqrsInfrastucture(kernel);
 
-            int pageSize;
-            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
-            {
-                NcqrsInit.Init(kernel, pageSize);
-            }
-            else
-                NcqrsInit.Init(kernel);
-
-            kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
-
+#warning dirty index registrations
+            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
+            indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);
             // SuccessMarker.Start(kernel);
             return kernel;
         }
 
+        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
+        {
+            var commandService = NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>());
+            NcqrsEnvironment.SetDefault(commandService);
+            kernel.Bind<ICommandService>().ToConstant(commandService);
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+
+            CreateAndRegisterEventBus(kernel);
+        }
+
+        private static void CreateAndRegisterEventBus(StandardKernel kernel)
+        {
+            var bus = new ViewConstructorEventBus();
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);
+            foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
+            {
+                bus.AddHandler(handler as IEventHandler);
+            }
+
+        }
+
+        private static int? GetEventStorePageSize()
+        {
+            int pageSize;
+
+            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
+                return pageSize;
+            else
+                return null;
+        }
     }
 }

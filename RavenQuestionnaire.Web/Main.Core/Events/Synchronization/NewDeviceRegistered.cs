@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="NewDeviceRegistered.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Events.Synchronization
+﻿namespace Main.Core.Events.Synchronization
 {
     using System;
 

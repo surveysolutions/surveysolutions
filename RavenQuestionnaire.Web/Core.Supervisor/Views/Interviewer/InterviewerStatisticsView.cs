@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerStatisticsView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;

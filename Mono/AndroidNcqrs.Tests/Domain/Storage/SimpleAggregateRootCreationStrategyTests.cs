@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using NUnit.Framework;
@@ -10,6 +12,12 @@ namespace Ncqrs.Tests.Domain.Storage
     [TestFixture]
     public class SimpleAggregateRootCreationStrategyTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class AggRootWithDefaultCtor : AggregateRoot
         {}
 

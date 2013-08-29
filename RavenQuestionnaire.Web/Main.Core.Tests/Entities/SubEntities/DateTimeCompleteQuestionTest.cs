@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DateTimeCompleteQuestionTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The date time complete question test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
 {
@@ -25,6 +19,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
     [TestFixture]
     public class DateTimeCompleteQuestionTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

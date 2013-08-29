@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceItemView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.View.Device
+﻿namespace Main.Core.View.Device
 {
     using System;
     using System.Collections.Generic;

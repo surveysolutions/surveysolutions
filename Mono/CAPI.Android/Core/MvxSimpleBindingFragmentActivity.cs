@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
@@ -217,4 +217,4 @@ namespace CAPI.Android.Core
             this.SetContentView(this.BindingInflate(layoutResId, (ViewGroup)null));
         }
     }
-}
+}*/

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The auto propagate question.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Question
+﻿namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +9,7 @@ namespace Main.Core.Entities.SubEntities.Question
     /// <summary>
     /// The auto propagate question.
     /// </summary>
-    public class AutoPropagateQuestion : AbstractQuestion, IAutoPropagate
+    public class AutoPropagateQuestion : AbstractQuestion, IAutoPropagateQuestion
     {
         #region Constructors and Destructors
 

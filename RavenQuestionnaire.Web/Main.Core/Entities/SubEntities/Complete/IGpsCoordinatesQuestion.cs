@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IGpsCoordinatesQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The GpsCoordinatesQuestion interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities.Complete
 {
     /// <summary>

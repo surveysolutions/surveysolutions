@@ -15,7 +15,7 @@ function (ko) {
             self.type = ko.observable();
             self.options = ko.observableArray([]);
             self.instructions = ko.observable();
-            self.selectedOption = ko.observable().extend({ required: true });
+            self.selectedOption = ko.observable();
             self.selectedOptions = ko.observableArray([]);
             self.isSingleOption = ko.computed(function () {
                 return self.type() === "SingleOption";
@@ -26,7 +26,6 @@ function (ko) {
             self.hasOptions = ko.computed(function () {
                 return self.isSingleOption() || self.isMultyOption();
             });
-
             self.errors = ko.validation.group(self);
 
             return self;

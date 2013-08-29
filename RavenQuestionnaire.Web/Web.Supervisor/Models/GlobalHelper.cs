@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GlobalHelper.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     using System.Web;
     using System.Web.Mvc;

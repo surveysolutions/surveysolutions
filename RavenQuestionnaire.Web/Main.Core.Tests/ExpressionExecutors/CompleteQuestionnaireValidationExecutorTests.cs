@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireValidationExecutorTests.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire validation executor tests.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
@@ -35,6 +29,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [SetUp]
         public void CreateObjects()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             // iteratorContainerMock = new Mock<IIteratorContainer>();
         }
 

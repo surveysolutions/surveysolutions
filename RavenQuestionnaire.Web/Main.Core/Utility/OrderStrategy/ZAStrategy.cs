@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ZAStrategy.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The za strategy.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility.OrderStrategy
+﻿namespace Main.Core.Utility.OrderStrategy
 {
     using System.Collections.Generic;
     using System.Linq;

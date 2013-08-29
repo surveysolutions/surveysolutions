@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
@@ -12,6 +13,12 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     public class AggregateRootMappedByExpressionTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class EventForPublicMethod
         {}
 

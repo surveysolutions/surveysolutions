@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SurveyAnswer.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Survey
+﻿namespace Core.Supervisor.Views.Survey
 {
     using System.Collections.Generic;
     using System.Linq;

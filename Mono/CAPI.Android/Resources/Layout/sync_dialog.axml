@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <LinearLayout
+    <LinearLayout         android:id="@+id/llContainer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
@@ -12,22 +12,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="15px"
             android:text="Sync" />
-        <Button
-            android:id="@+id/btnPull"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15px"
-            android:text="Pull"
-            android:enabled="false"
-            android:visibility="gone" />
-        <Button
-            android:id="@+id/btnPush"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15px"
-            android:text="Push"
-            android:enabled="false"
-            android:visibility="gone" />
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
@@ -43,9 +27,8 @@
             android:id="@+id/btnRestore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15px"
-            android:text="Restore"
-            android:enabled="false" />
+            android:layout_margin="15px" android:visibility="gone"
+            android:text="Restore" />
         <TextView
             android:id="@+id/tvSyncResult"
             android:padding="10px"

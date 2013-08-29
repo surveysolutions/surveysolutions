@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ApproveModel.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ApproveModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.View.CompleteQuestionnaire.Statistics;
+﻿using Main.Core.View.CompleteQuestionnaire.Statistics;
 
 namespace Web.Supervisor.Models
 {

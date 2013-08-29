@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IExpressionExecutor.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The ExpressionExecutor interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.ExpressionExecutors
+﻿namespace Main.Core.ExpressionExecutors
 {
     /// <summary>
     /// The ExpressionExecutor interface.

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateCollectionCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The create collection command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Collection
+﻿namespace Main.Core.Commands.Collection
 {
     using System;
     using System.Collections.Generic;

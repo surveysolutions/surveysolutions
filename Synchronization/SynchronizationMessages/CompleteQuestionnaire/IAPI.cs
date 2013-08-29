@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAPI.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The API interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.CompleteQuestionnaire
+﻿namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System.IO;
     using System.ServiceModel;

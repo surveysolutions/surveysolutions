@@ -1,5 +1,7 @@
 using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
@@ -14,6 +16,7 @@ namespace Ncqrs.Tests.Eventing.Storage
         [SetUp]
         public void Setup()
         {
+	        ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             resolver = new AttributeEventTypeResolver();
         }
 

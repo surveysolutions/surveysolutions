@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="ScreenGroupView.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
     using System;

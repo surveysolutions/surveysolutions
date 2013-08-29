@@ -6,7 +6,10 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
     public class StatisticsViewModel
     {
-        public StatisticsViewModel(Guid questionnaireId, string title, SurveyStatus status, int totalQuestionCount, IList<StatisticsQuestionViewModel> unansweredQuestions, IList<StatisticsQuestionViewModel> answeredQuestions, IList<StatisticsQuestionViewModel> invalidQuestions)
+        public StatisticsViewModel(Guid questionnaireId, string title, SurveyStatus status, int totalQuestionCount,
+                                   IList<StatisticsQuestionViewModel> unansweredQuestions,
+                                   IList<StatisticsQuestionViewModel> answeredQuestions,
+                                   IList<StatisticsQuestionViewModel> invalidQuestions)
         {
             QuestionnaireId = questionnaireId;
             Title = title;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResetPasswordModel.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The reset password model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;

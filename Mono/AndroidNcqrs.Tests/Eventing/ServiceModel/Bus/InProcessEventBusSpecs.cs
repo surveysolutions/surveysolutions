@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
@@ -12,6 +13,12 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
     [TestFixture]
     public class InProcessEventBusSpecs
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class ADomainEvent
         {
 

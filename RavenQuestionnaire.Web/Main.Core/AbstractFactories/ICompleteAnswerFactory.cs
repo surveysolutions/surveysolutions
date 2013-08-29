@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteAnswerFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CompleteAnswerFactory interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.AbstractFactories
+﻿namespace Main.Core.AbstractFactories
 {
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;

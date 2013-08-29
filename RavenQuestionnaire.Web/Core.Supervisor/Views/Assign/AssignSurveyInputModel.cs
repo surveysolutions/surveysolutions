@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignSurveyInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The assign survey input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Core.Supervisor.Views.Assign

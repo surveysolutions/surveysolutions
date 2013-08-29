@@ -1,10 +1,13 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Rhino.Mocks;
 using Ncqrs.Commanding.ServiceModel;
 using NUnit.Framework;
 using Ncqrs.Commanding.CommandExecution;
 using Ncqrs.Commanding;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests.Commanding.ServiceModel
 {
@@ -43,6 +46,8 @@ namespace Ncqrs.Tests.Commanding.ServiceModel
         [SetUp]
         public void Setup()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             var service = new CommandService();
             ExecutorForCommandWithExecutor = MockRepository.GenerateMock<ICommandExecutor<CommandWithExecutor>>();
             ExecutorForCommandWithExecutorThatThrowsException = MockRepository.GenerateMock<ICommandExecutor<CommandWithExecutorThatThrowsException>>();

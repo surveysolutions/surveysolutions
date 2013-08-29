@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICollectionItem.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The CollectionItem interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities
 {
     using System;

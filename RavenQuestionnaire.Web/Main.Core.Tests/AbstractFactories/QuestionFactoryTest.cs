@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="QuestionFactoryTest.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Tests.AbstractFactories
+﻿namespace Main.Core.Tests.AbstractFactories
 {
     using System;
     using System.Collections.Generic;

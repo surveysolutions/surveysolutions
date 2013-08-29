@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropagatableGroupAdded.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The propagatable group added.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Events.Questionnaire.Completed
+﻿namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
 

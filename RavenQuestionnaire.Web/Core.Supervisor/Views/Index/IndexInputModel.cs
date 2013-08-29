@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IndexInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Index
 {
     using System;

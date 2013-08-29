@@ -4,68 +4,44 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Web.Mvc;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Pdf;
-using WB.UI.Designer.Providers.CQRS.Accounts.View;
 using WB.UI.Designer.Views.Questionnaire;
+using WB.UI.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
     {
-        private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
+        private readonly IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory;
 
-        public PdfController(IMembershipUserService userHelper,
-            IViewFactory<AccountViewInputModel, AccountView> userViewFactory)
+        public PdfController(
+            IMembershipUserService userHelper,
+            IReadSideRepositoryReader<PdfQuestionnaireView> viewFactory)
             : base(userHelper)
         {
-            this.userViewFactory = userViewFactory;
+            this.viewFactory = viewFactory;
         }
 
         public ActionResult RenderQuestionnaire(Guid id)
         {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
-            ViewBag.QuestionnaireGuid = questionnaire.PublicKey;
+            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
 
             return this.View(questionnaire);
         }
 
         public ActionResult RenderTitlePage(Guid id)
         {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
 
-            var model = new TitlePageDto();
-            model.SurveyName = questionnaire.Title;
-            model.CreationDate = questionnaire.CreationDate.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern);
-            model.ChaptersCount = questionnaire.GetChaptersCount();
-            model.QuestionsCount = questionnaire.GetQuestionsCount();
-            model.QuestionsWithConditionsCount = questionnaire.GetQuestionsWithConditionsCount();
-            model.GroupsCount = questionnaire.GetGroupsCount();
-
-            if (questionnaire.CreatedBy.HasValue)
-            {
-                AccountView accountView = userViewFactory.Load(new AccountViewInputModel(questionnaire.CreatedBy.Value));
-                if (accountView != null)
-                {
-                    model.AuthorName = accountView.UserName;
-                }
-                else
-                {
-                    model.AuthorName = "No Author";
-                }
-            }
-            else
-            {
-                model.AuthorName = "No Author";
-            }
-
-            return this.View(model);
+            return this.View(questionnaire);
         }
 
         [Authorize]
         public ActionResult ExportQuestionnaire(Guid id)
         {
-            QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
 
             using (var memoryStream = new MemoryStream())
             {
@@ -105,9 +81,10 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-        private QuestionnaireView LoadQuestionnaire(Guid id)
+
+        private PdfQuestionnaireView LoadQuestionnaire(Guid id)
         {
-            return this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            return this.viewFactory.GetById(id);
         }
     }
 }

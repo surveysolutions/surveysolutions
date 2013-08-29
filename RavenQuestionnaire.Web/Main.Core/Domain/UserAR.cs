@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserAR.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Aggregate root for User.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     using System;
 

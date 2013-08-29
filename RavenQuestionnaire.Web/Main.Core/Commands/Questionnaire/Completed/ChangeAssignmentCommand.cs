@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeAssignmentCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Command to change responsible person
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire.Completed
+﻿namespace Main.Core.Commands.Questionnaire.Completed
 {
     using System;
 

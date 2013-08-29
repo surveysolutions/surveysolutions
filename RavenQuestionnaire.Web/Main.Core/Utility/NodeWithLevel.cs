@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="NodeWithLevel.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 using Main.Core.Entities.SubEntities.Complete;
 
 namespace Main.Core.Utility

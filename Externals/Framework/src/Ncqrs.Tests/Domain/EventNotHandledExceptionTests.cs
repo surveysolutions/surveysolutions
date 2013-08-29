@@ -2,6 +2,8 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Config;
 using Ncqrs.Domain;
 using NUnit.Framework;
@@ -12,6 +14,12 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     public class EventNotHandledExceptionTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         public class FooEvent : Event
         {}
 

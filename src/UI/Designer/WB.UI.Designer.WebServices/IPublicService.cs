@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPublicService.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.WebServices
+﻿namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.ServiceModel;

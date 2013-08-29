@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQStatusReportViewInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The cq status report view input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 
 namespace Main.Core.View.StatusReport

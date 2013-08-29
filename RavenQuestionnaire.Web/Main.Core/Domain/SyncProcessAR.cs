@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessAR.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the SyncProcessAR type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     using System;
     using System.Collections.Generic;

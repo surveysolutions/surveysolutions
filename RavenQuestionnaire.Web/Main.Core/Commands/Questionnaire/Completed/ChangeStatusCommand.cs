@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChangeStatusCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   COmmand is used for status changing.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Questionnaire.Completed
+﻿namespace Main.Core.Commands.Questionnaire.Completed
 {
     using System;
 

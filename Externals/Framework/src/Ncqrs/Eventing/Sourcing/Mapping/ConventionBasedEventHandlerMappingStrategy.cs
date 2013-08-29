@@ -4,8 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using WB.Core.SharedKernel.Logger;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
 {
@@ -34,14 +33,14 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
     /// </summary>
     public class ConventionBasedEventHandlerMappingStrategy : IEventHandlerMappingStrategy
     {
-        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public Type EventBaseType { get; set; }
         public String MethodNameRegexPattern { get; set; }
 
         public ConventionBasedEventHandlerMappingStrategy()
         {
-            MethodNameRegexPattern = "^(on|On|ON)+";
+            MethodNameRegexPattern = "^(on|On|ON)+|Apply$";
             EventBaseType = typeof (Object);
         }
 

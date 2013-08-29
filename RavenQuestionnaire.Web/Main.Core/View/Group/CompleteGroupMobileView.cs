@@ -1,9 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroupMobileView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.Entities.Extensions;
 
 namespace Main.Core.View.Group

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CollectionItemRemoved.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The collection item removed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Collection
+﻿namespace Main.Core.Events.Collection
 {
     using System;
 

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatusDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Describes the status in the system
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Documents
+﻿namespace Main.Core.Documents
 {
     using System.Collections.Generic;
 

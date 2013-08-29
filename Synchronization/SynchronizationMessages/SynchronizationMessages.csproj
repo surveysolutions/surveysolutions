@@ -108,14 +108,12 @@
     <Compile Include="CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs" />
     <Compile Include="CompleteQuestionnaire\JsonSerrializer.cs" />
     <Compile Include="CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs" />
-    <Compile Include="CompleteQuestionnaire\SyncItemsMetaContainer.cs" />
     <Compile Include="Discover\ISpotSync.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Export\ZipManager.cs" />
     <Compile Include="Synchronization\IGetLastSyncEvent.cs" />
     <Compile Include="Synchronization\FormatHelper.cs" />
     <Compile Include="Synchronization\ICustomSerializable.cs" />
-    <Compile Include="Synchronization\PackageHelper.cs" />
     <Compile Include="WcfInfrastructure\ChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
   </ItemGroup>

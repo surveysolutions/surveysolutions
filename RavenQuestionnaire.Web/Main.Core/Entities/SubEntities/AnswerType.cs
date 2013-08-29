@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnswerType.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The answer type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     /// <summary>
     /// The answer type.

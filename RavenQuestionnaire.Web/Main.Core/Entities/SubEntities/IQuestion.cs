@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IQuestion.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The Question interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities
 {
     using System;
@@ -87,6 +78,8 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         string ValidationMessage { get; set; }
+
+        #warning TLK: no data is added to following dependent questions and groups, they should be deleted
 
         /// <summary>
         /// Gets or sets the conditional dependent questions.

@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DefaultSurveyScreenSupplier.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
+﻿namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDateTimeQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The DateTimeQuestion interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;

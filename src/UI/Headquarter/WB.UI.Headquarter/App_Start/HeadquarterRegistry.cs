@@ -5,6 +5,6 @@
     public class HeadquarterRegistry : CoreRegistry
     {
         public HeadquarterRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded) { }
+            : base() { }
     }
 }

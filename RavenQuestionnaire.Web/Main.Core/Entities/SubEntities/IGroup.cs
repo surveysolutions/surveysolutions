@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IGroup.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The Group interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities
 {
     using Main.Core.Entities.Composite;

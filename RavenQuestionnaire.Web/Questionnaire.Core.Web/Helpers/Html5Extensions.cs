@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Html5Extensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The html 5 extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Questionnaire.Core.Web.Helpers
+﻿namespace Questionnaire.Core.Web.Helpers
 {
     using System;
     using System.Collections.Generic;

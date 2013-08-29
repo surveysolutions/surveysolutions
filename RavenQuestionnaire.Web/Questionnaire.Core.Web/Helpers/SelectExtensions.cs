@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SelectExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The select extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Questionnaire.Core.Web.Helpers
 {
     using System;

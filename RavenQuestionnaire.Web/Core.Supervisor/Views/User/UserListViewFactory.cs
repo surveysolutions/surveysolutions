@@ -1,4 +1,6 @@
 ﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.User
 {
@@ -14,9 +16,9 @@ namespace Core.Supervisor.Views.User
 
     public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
     {
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
 
-        public UserListViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
+        public UserListViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
         }
@@ -32,23 +34,22 @@ namespace Core.Supervisor.Views.User
                         var all = _.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
 
                         var selection =
-                            all.Skip((input.Page - 1) * input.PageSize)
-                                       .Take(input.PageSize)
-                                       .ToList()
-                                       .Select(
-                                           x =>
-                                           new UserListItem
-                                               {
-                                                   PublicKey = x.PublicKey,
-                                                   CreationDate = x.CreationDate,
-                                                   Email = x.Email,
-                                                   IsLocked = x.IsLocked,
-                                                   UserName = x.UserName,
-                                                   Roles = x.Roles
-                                               });
+                            all.Skip((input.Page - 1)*input.PageSize)
+                                .Take(input.PageSize)
+                                .ToList()
+                                .Select(
+                                    x =>
+                                        new UserListItem
+                                            (
+                                            id: x.PublicKey,
+                                            creationDate: x.CreationDate,
+                                            email: x.Email,
+                                            isLocked: x.IsLocked,
+                                            name: x.UserName,
+                                            roles: x.Roles
+                                            ));
 
-                        return new UserListView(
-                            input.Page, input.PageSize, all.Count(), selection, input.Order);
+                        return new UserListView {TotalCount = all.Count(), Items = selection};
                     });
         }
     }

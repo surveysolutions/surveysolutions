@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountModels.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the ChangePassword, LogOn and register Model  type for authorizing user.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     using System.ComponentModel.DataAnnotations;
 

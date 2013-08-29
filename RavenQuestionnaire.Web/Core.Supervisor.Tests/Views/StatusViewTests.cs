@@ -14,7 +14,7 @@ namespace Core.Supervisor.Tests.Views
     public class StatusViewTests
     {
         [Test]
-        public void Ctor_When_Grid_is_empty_header_is_not_empty_Then_final_header_is_empty()
+        public void Ctor_When_Grid_is_empty_header_is_not_empty_Then_final_header_is_still_not_empty()
         {
             // arrange
             var header = new List<TemplateLight>() {new TemplateLight(Guid.NewGuid(), "test")};
@@ -24,11 +24,11 @@ namespace Core.Supervisor.Tests.Views
             StatusView target = CreateStatusViewWithHeaderAndItems(header, items);
 
             // assert
-            Assert.That(target.Headers.Count,Is.EqualTo(0));
+            Assert.That(target.Headers.Count, Is.EqualTo(header.Count));
         }
 
         [Test]
-        public void Ctor_When_item_is_not_presented_in_heade_Then_final_header_is_empty_item_is_absent_in_grid()
+        public void Ctor_When_item_is_not_presented_in_header_Then_final_header_is_still_not_empty_item_is_present_in_grid()
         {
             // arrange
             var header = new List<TemplateLight>() { new TemplateLight(Guid.NewGuid(), "test") };
@@ -42,7 +42,7 @@ namespace Core.Supervisor.Tests.Views
             StatusView target = CreateStatusViewWithHeaderAndItems(header, items);
 
             // assert
-            Assert.That(target.Headers.Count, Is.EqualTo(0));
+            Assert.That(target.Headers.Count, Is.EqualTo(header.Count));
         }
 
         [Test]
@@ -70,31 +70,6 @@ namespace Core.Supervisor.Tests.Views
             //check item value
             Assert.That(target.Items.Count, Is.EqualTo(1));
             Assert.That(target.Items[0].GetCount(templateId), Is.EqualTo(questionnarieCount));
-
-        }
-
-        [Test]
-        public void Ctor_When_two_items_Then_summary_Rows_contains_total_number_of_all_questionnaries()
-        {
-            // arrange
-            var templateId = Guid.NewGuid();
-            var questionnarie1Count = 1;
-            var questionnarie2Count = 2;
-            var header = new List<TemplateLight>() {new TemplateLight(templateId, "test")};
-            var items = new StatusViewItem[]
-                {
-                    new StatusViewItem(new UserLight(Guid.NewGuid(), "user"),
-                                       new Dictionary<Guid, int>() {{templateId, questionnarie1Count}}),
-                    new StatusViewItem(new UserLight(Guid.NewGuid(), "user2"),
-                                       new Dictionary<Guid, int>() {{templateId, questionnarie2Count}})
-                };
-
-            // act
-            StatusView target = CreateStatusViewWithHeaderAndItems(header, items);
-
-            // assert
-            Assert.That(target.Summary.GetCount(templateId), Is.EqualTo(questionnarie1Count + questionnarie2Count));
-            Assert.That(target.Summary.User.Id, Is.EqualTo(Guid.Empty));
 
         }
 

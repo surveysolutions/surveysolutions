@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExtentionFunctionsTests.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the ExtentionFunctionsTests type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
 {
@@ -27,8 +21,9 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
         /// The create objects.
         /// </summary>
         [SetUp]
-        public void CreateObjects()
+        public void SetUp()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
         /// <summary>

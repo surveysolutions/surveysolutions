@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropagatedGroupMobileView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The propagated group mobile view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Linq;
 using Main.Core.Documents;

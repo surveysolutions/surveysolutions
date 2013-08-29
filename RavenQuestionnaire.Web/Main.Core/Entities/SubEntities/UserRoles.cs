@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserRoles.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The user roles.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     public enum UserRoles
     {

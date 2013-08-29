@@ -37,12 +37,9 @@ body:before
 }
 #stacks
 {
-	bottom: 0;
-	left: 0;
-	right: 0;
-	top: 40px;
+    min-height: 800px;
 	overflow: hidden;
-	position: absolute;
+	position: relative;
 }
 #stacks > div
 {

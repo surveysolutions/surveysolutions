@@ -1,14 +1,7 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceAR.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Domain
+﻿namespace Main.Core.Domain
 {
     using System;
 
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
     using Ncqrs.Domain;
 

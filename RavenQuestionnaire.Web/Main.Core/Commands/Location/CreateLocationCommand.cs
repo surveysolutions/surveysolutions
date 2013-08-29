@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateLocationCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The create location command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Location
+﻿namespace Main.Core.Commands.Location
 {
     using System;
 

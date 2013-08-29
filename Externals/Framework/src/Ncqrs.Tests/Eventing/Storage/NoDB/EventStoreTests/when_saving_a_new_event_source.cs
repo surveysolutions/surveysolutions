@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
@@ -14,6 +16,12 @@ namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
     {
         private string _filename;
         private string _foldername;
+
+        [SetUp]
+        public void SetUpTests()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [TestFixtureSetUp]
         public void SetUp()

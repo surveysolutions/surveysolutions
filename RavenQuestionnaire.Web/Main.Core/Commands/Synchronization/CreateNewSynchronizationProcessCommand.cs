@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CreateNewSynchronizationProcessCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The create new synchronization process command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Synchronization
+﻿namespace Main.Core.Commands.Synchronization
 {
     using System;
 

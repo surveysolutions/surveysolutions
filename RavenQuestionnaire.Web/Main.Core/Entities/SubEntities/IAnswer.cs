@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAnswer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The Answer interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities
 {
     using System;

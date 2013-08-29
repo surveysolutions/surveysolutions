@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IQuestionnaireDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The QuestionnaireDocument interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Documents
 {
     using System;

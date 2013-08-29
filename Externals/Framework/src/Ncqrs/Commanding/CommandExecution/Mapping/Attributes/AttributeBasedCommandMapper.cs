@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using WB.Core.SharedKernel.Logger;
-using WB.Core.SharedKernel.Utils.Logging;
+using WB.Core.GenericSubdomains.Logging;
 
 
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public class AttributeBasedCommandMapper : ICommandMapper
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly Dictionary<Type, object> _handlers = new Dictionary<Type, object>();
 
         public AttributeBasedCommandMapper()

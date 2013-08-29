@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
@@ -85,8 +84,6 @@ namespace Ncqrs.Spec
         /// </summary>
         public void Dispose()
         {
-          //  Contract.Ensures(IsDisposed == true);
-
              Dispose(true);
              GC.SuppressFinalize(this);
         }
@@ -97,8 +94,6 @@ namespace Ncqrs.Spec
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         private void Dispose(bool disposing)
         {
-        //    Contract.Ensures(IsDisposed == true);
-
             if (!IsDisposed)
             {
                 if (disposing)

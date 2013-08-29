@@ -5,24 +5,30 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Question;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Views.Assign
 {
     public class AssignSurveyView
     {
-        public AssignSurveyView(ICompleteQuestionnaireDocument completeQuestionnaire)
+        public AssignSurveyView(QuestionnaireBrowseItem completeQuestionnaire, Guid questionnarieId)
         {
-            this.Id = completeQuestionnaire.PublicKey;
+            this.Id = questionnarieId;
             this.QuestionnaireTitle = completeQuestionnaire.Title;
-            this.TemplateId = completeQuestionnaire.TemplateId;
-            this.Status = completeQuestionnaire.Status;
-            this.Responsible = completeQuestionnaire.Responsible;
+            this.TemplateId = completeQuestionnaire.QuestionnaireId;
+            this.Status = SurveyStatus.Unknown;
+            this.Responsible = null;
             this.FeaturedQuestions = new List<CompleteQuestionView>();
             this.Supervisors = new List<UserDocument>();
 
-            foreach (ICompleteQuestion q in completeQuestionnaire.GetFeaturedQuestions())
+            foreach (var q in completeQuestionnaire.FeaturedQuestions)
             {
-                var questionView = new CompleteQuestionView(completeQuestionnaire, q);
+                var questionView = new CompleteQuestionView(questionnarieId.ToString(), null)
+                    {
+                        Title = q.Title,
+                        PublicKey = q.Id,
+                        StataExportCaption = q.Caption
+                    };
                 this.FeaturedQuestions.Add(questionView);
             }
         }

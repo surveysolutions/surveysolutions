@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="HeaderCollection.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using System.Collections;
+﻿using System.Collections;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 

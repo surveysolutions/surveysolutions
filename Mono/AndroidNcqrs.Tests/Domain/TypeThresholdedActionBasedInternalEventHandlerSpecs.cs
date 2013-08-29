@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
@@ -20,6 +22,8 @@ namespace Ncqrs.Tests.Domain
         [SetUp]
         public void SetUp()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+
             NcqrsEnvironment.Deconfigure();
         }
         

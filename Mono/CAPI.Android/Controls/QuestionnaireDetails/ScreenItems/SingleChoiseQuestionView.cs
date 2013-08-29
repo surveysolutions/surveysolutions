@@ -5,21 +5,20 @@ using Android.Content;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class SingleChoiseQuestionView : AbstractQuestionView
     {
-        public SingleChoiseQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public SingleChoiseQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context, bindingActivity, source, questionnairePublicKey)
         {
         }
 
         protected SelectebleQuestionViewModel typedMode;
         protected RadioGroup radioGroup;
-      //  protected RadioButton[] radioButtons;
         #region Overrides of AbstractQuestionView
 
         protected override void Initialize()

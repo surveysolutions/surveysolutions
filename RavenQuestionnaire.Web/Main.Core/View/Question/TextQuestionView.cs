@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="TextQuestionView.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.View.Question
+﻿namespace Main.Core.View.Question
 {
     using System;
 

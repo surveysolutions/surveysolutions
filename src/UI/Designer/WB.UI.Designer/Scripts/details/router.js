@@ -1,6 +1,6 @@
 ﻿define('router',
-    ['jquery', 'underscore', 'sammy', 'presenter', 'config', 'route-mediator', 'store'],
-    function ($, _, Sammy, presenter, config, routeMediator, store) {
+    ['jquery', 'underscore', 'sammy', 'presenter', 'config', 'route-mediator'],
+    function ($, _, Sammy, presenter, config, routeMediator) {
         var
             currentHash = '',
             defaultRoute = '',
@@ -10,11 +10,6 @@
             window = config.window,
 
             sammy = new Sammy.Application(function () {
-                if (Sammy.Title) {
-                    this.use(Sammy.Title);
-                    this.setTitle(config.title);
-                }
-
                 this.get('', function () {
                     this.app.runRoute('get', startupUrl);
                 });
@@ -79,7 +74,6 @@
                 }
 
                 sammy.get(options.route, function (context) { //context is 'this'
-                    store.save(config.stateKeys.lastView, context.path);
                     options.callback(context.params); // Activate the viewmodel
                     $('.view').hide();
                     if (this.title) {

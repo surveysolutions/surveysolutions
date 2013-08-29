@@ -1,0 +1,27 @@
+﻿@using Main.Core.Entities.SubEntities
+
+<script type="text/html" id="unassignedTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : Template.TemplateId(), Count : Unassigned(), Status : '@SurveyStatus.Unassign.PublicId' }}"></span>
+</script>
+<script type="text/html" id="initialTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : Template.TemplateId(), Count : Initial(), Status : '@SurveyStatus.Initial.PublicId' }}"></span>
+</script>
+<script type="text/html" id="redoTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : Template.TemplateId(), Count : Redo(), Status : '@SurveyStatus.Redo.PublicId' }}"></span>
+</script>
+<script type="text/html" id="completedTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : Template.TemplateId(), Count : Completed(), Status : '@SurveyStatus.Complete.PublicId' }}"></span>
+</script>
+<script type="text/html" id="errorTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : Template.TemplateId(), Count : Error(), Status : '@SurveyStatus.Error.PublicId' }}"></span>
+</script>
+<script type="text/html" id="approvedTemplate">
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : Template.TemplateId(), Count : Approved(), Status : '@SurveyStatus.Approve.PublicId' }}"></span>
+</script>
+
+<script type="text/html" id="statusTemplate">
+    <!-- ko if:Count == 0 -->0<!-- /ko -->
+    <!-- ko ifnot:Count == 0 -->
+    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template + '&status=' + Status }, text: Count"></a>
+    <!-- /ko -->
+</script>

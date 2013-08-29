@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerStatistics.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The interviewer item view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Main.Core.Entities.SubEntities;
 

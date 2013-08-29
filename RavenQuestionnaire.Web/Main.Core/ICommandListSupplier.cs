@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ICommandListSupplier.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core
+﻿namespace Main.Core
 {
     using System;
     using System.Collections.Generic;

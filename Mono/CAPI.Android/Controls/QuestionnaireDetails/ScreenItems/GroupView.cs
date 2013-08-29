@@ -1,5 +1,6 @@
 using System;
 using Android.Content;
+using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
@@ -9,10 +10,11 @@ using CAPI.Android.Events;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class GroupView:LinearLayout
+    public class GroupView : RelativeLayout 
     {
         protected QuestionnaireNavigationPanelItem Model { get; private set; }
         protected Button GroupButton { get; private set; }
+        protected TextView CounterText { get; private set; }
         protected int? IconId { get; private set; }
         public GroupView(Context context, QuestionnaireNavigationPanelItem model)
             : base(context)
@@ -50,13 +52,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void Initialize()
         {
-            var layoutParams = new TableLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             layoutParams.SetMargins(0, 0, 0, 10);
             this.LayoutParameters = layoutParams;
             
-            GroupButton=new Button(this.Context);
-            GroupButton.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            this.AddView(GroupButton);
+            AddButton();
+
+            AddCounterText();
+
             if (Model != null)
             {
                 GroupButton.Text = Model.Text;
@@ -73,12 +76,48 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 {
                     Model.PropertyChanged += Model_PropertyChanged;
                 }
+                UpdateCounter();
             }
             else
             {
                 this.Visibility = ViewStates.Gone;
             }
+
+          
+        }
+
+        private void AddCounterText()
+        {
+            CounterText = new TextView(this.Context);
+            var counterParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             
+            counterParameters.AddRule(LayoutRules.AlignParentRight);
+
+            CounterText.LayoutParameters = counterParameters;
+
+            CounterText.SetPadding(3, 3, 3, 3);
+            CounterText.SetTextColor(Color.Black);
+            CounterText.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+            this.AddView(CounterText);
+        }
+
+        private void AddButton()
+        {
+            GroupButton = new Button(this.Context);
+            var buttonParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                                   ViewGroup.LayoutParams.WrapContent);
+            GroupButton.LayoutParameters = buttonParameters;
+            this.AddView(GroupButton);
+        }
+
+
+        public void UpdateCounter()
+        {
+            CounterText.Text = string.Format("{0}/{1}", Model.Answered, Model.Total);
+            if (Model.Total == Model.Answered)
+                CounterText.SetBackgroundResource(Resource.Drawable.donecountershape);
+            else
+                CounterText.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
         }
         protected override void OnAttachedToWindow()
         {
@@ -88,9 +127,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName!="Enabled")
+            if (e.PropertyName == "Enabled")
+            {
+                GroupButton.Enabled = Model.Enabled;
+                CounterText.Visibility = Model.Enabled ? ViewStates.Visible : ViewStates.Gone;
                 return;
-            GroupButton.Enabled = Model.Enabled;
+            }
+            if (e.PropertyName == "Answered" || e.PropertyName == "Total")
+            {
+                UpdateCounter();
+                return;
+            }
         }
 
         void GroupButton_Click(object sender, EventArgs e)

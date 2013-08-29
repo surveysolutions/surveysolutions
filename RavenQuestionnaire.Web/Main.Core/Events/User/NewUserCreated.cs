@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewUserCreated.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the NewUserCreated type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.User
+﻿namespace Main.Core.Events.User
 {
     using System;
     using System.Linq;

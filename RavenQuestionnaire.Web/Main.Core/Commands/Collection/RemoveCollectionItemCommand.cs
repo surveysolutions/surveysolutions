@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RemoveCollectionItemCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the RemoveCollectionItemCommand type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Collection
+﻿namespace Main.Core.Commands.Collection
 {
     using System;
 

@@ -1,6 +1,6 @@
 ﻿define('route-mediator',
-['messenger', 'config'],
-    function (messenger, config) {
+[ 'config'],
+    function (config) {
         var
             canleaveCallback,
             self = this,
@@ -17,17 +17,7 @@
                 return response;
             },
 
-            subscribeToViewModelActivations = function () {
-                var context = self;
-                messenger.subscribe({
-                    topic: config.messages.viewModelActivated, 
-                    context: context, 
-                    callback: viewModelActivated
-                    });
-            },
-
             init = function () {
-                subscribeToViewModelActivations();
             };
 
         init();

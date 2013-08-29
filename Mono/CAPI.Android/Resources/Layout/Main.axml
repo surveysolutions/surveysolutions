@@ -6,24 +6,25 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >-->
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:orientation="vertical"
                android:padding="10px"
-    >
+    >-->
 
-  <!--<ScrollView 
-               android:id="@+id/MyLayout"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:scrollbars="horizontal|vertical">-->
-    
-    <LinearLayout android:id="@+id/llSurveyHolder"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:paddingTop="10px"
-    android:orientation="vertical" />
-  <!--</ScrollView>-->
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+              android:id="@+id/MyLayout"
+     android:layout_width="fill_parent"
+     android:layout_height="fill_parent"
+     android:scrollbars="horizontal|vertical">
+
+  <LinearLayout android:id="@+id/llSurveyHolder"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:paddingTop="10px"
+  android:orientation="vertical" />
+</ScrollView>
+<!--</LinearLayout>-->

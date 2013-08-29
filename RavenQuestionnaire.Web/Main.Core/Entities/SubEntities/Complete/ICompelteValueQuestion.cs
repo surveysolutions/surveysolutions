@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="IValueQuestion.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Main.Core.Entities.SubEntities.Complete
+﻿namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
     using System.Collections.Generic;

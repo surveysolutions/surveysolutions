@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFileStorageService.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The FileStorageService interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.Documents;
 
 namespace Main.Core.Services

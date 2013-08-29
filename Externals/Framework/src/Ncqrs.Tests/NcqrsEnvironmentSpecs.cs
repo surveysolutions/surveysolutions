@@ -1,8 +1,11 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
+using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace Ncqrs.Tests
 {
@@ -17,6 +20,12 @@ namespace Ncqrs.Tests
 
         public interface IBar
         {}
+        
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
 
         [TearDown]
         public void TearDown()

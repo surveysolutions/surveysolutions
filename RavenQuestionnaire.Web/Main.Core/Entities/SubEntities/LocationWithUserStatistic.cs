@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LocationWithUserStatistic.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The location with user statistic.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Entities.SubEntities
+﻿namespace Main.Core.Entities.SubEntities
 {
     /// <summary>
     /// The location with user statistic.

@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RemoveCollectionCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The remove collection command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.Collection
+﻿namespace Main.Core.Commands.Collection
 {
     using System;
 

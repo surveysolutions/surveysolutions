@@ -1,39 +1,50 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Web.Supervisor.Controllers
 {
+    [AllowAnonymous]
     public class ControlPanelController : Controller
     {
-        private readonly IReadLayerAdministrationService readLayerAdministrationService;
+        private readonly IReadSideAdministrationService readSideAdministrationService;
 
-        public ControlPanelController(IReadLayerAdministrationService readLayerAdministrationService)
+        public ControlPanelController(IReadSideAdministrationService readSideAdministrationService)
         {
-            this.readLayerAdministrationService = readLayerAdministrationService;
+            this.readSideAdministrationService = readSideAdministrationService;
         }
 
         public ActionResult ReadLayer()
         {
-            return this.View();
+            return this.View(this.readSideAdministrationService.GetAllAvailableHandlers());
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReadLayerStatus()
         {
-            return this.readLayerAdministrationService.GetReadableStatus();
+            return this.readSideAdministrationService.GetReadableStatus();
+        }
+
+        public ActionResult RebuildReadLayerPartially(string[] handlers)
+        {
+            this.readSideAdministrationService.RebuildViewsAsync(handlers);
+            this.TempData["CheckedHandlers"]= handlers;
+            return this.RedirectToAction("ReadLayer");
         }
 
         public ActionResult RebuildReadLayer()
         {
-            this.readLayerAdministrationService.RebuildAllViewsAsync();
+            this.readSideAdministrationService.RebuildAllViewsAsync();
 
             return this.RedirectToAction("ReadLayer");
         }
 
         public ActionResult StopReadLayerRebuilding()
         {
-            this.readLayerAdministrationService.StopAllViewsRebuilding();
+            this.readSideAdministrationService.StopAllViewsRebuilding();
 
             return this.RedirectToAction("ReadLayer");
         }

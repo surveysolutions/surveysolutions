@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -8,6 +10,12 @@ namespace Ncqrs.Tests
     [TestFixture]
     public class BasicGuidGeneratorSpecs
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void When_getting_a_new_identifier_it_should_not_be_empty()
         {

@@ -9,9 +9,11 @@ namespace CAPI.Android.Utils
     {
         public static bool IsNetworkEnabled(Context context)
         {
-            var connectivityMAnager = (ConnectivityManager)context.GetSystemService(Context.ConnectivityService);
-
-            return connectivityMAnager.GetAllNetworkInfo().ToList().Select(n => n.IsConnected).Any();
+            var cm = (ConnectivityManager)context.GetSystemService(Context.ConnectivityService);
+            
+            return cm.GetAllNetworkInfo().Where(networkInfo => networkInfo.Type == ConnectivityType.Wifi || networkInfo.Type == ConnectivityType.Mobile)
+                     .Any(networkInfo => networkInfo.IsConnectedOrConnecting);
         }
+
     }
 }

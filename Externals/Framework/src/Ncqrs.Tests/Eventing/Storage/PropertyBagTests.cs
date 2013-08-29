@@ -1,5 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 
@@ -10,6 +12,12 @@ namespace Ncqrs.Tests.Eventing.Storage
     [TestFixture]
     public class PropertyBagTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Creating_a_bag_should_not_throw_exception()
         {

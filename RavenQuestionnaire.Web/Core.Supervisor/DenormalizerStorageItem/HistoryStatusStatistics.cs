@@ -1,13 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HistoryStatusStatistics.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using WB.Core.Infrastructure;
+﻿using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace Core.Supervisor.DenormalizerStorageItem
 {

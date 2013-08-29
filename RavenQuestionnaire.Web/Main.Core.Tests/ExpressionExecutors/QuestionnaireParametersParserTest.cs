@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireParametersParserTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The questionnaire parameters parser test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 {
@@ -23,6 +17,12 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
     [TestFixture]
     public class QuestionnaireParametersParserTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

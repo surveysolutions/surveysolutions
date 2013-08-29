@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage.NoDB.Tests.Fakes;
 using Ncqrs.Spec;
@@ -18,6 +20,7 @@ namespace Ncqrs.Eventing.Storage.NoDB.Tests.EventStoreTests
         [TestFixtureSetUp]
         public void BaseSetup()
         {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             EventStore = new NoDBEventStore("./NoDBTests/"+GetType().Name);
             EventSourceId = Guid.NewGuid();
             Guid entityId = Guid.NewGuid();

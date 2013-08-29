@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserBrowseInputModel.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The user browse input model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;

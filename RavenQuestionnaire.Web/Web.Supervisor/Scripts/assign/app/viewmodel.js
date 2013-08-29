@@ -1,5 +1,5 @@
-﻿define('app/viewmodel', ['knockout', 'app/datacontext'],
-    function (ko, datacontext) {
+﻿define('app/viewmodel', ['knockout', 'app/datacontext', 'input'],
+    function (ko, datacontext, input) {
         var questionnaire = ko.observable(),
             responsible = ko.observable(),
             questions = ko.observableArray(),
@@ -16,8 +16,6 @@
                 isSaving(true);
                 datacontext.save(ko.toJS(responsible), {
                     success: function (response) {
-                        
-                        
                         if (response.status == "error") {
                             errors.removeAll();
                             errors.push({
@@ -26,8 +24,27 @@
                             $('body').addClass('output-visible');
                         }
                         if (response.status == "ok") {
-                            window.back();
+                            input.backUrl = input.backUrl.replace("_______", datacontext.questionnaire.templateId);
+                            window.location = input.backUrl;
                         }
+                        isSaving(false);
+                    }
+                });
+            },
+            saveCommand = function () {
+                isSaving(true);
+                datacontext.sendCommand("CreateInterviewWithFeaturedQuestionsCommand", ko.toJS(responsible), {
+                    success: function (response) {
+                        var backUrl = input.backUrl.replace("_______", datacontext.questionnaire.templateId);
+                        window.location = backUrl;
+                        isSaving(false);
+                    },
+                    error: function (response) {
+                        errors.removeAll();
+                        errors.push({
+                            error: response.error
+                        });
+                        $('body').addClass('output-visible');
                         isSaving(false);
                     }
                 });
@@ -48,8 +65,10 @@
             responsible: responsible,
             questionnaire: questionnaire,
             save: save,
+            saveCommand : saveCommand,
             hideOutput: hideOutput,
             errors: errors,
-            isSaveEnable: isSaveEnable
+            isSaveEnable: isSaveEnable,
+            isSaving: isSaving
         };
     });

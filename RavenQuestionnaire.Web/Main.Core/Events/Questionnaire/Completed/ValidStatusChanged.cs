@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValidStatusChanged.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The valid status changed.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Main.Core.Events.Questionnaire.Completed
+﻿namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
 

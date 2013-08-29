@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="INumericQuestion.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The NumericQuestion interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities.Complete
 {
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿define('app/datacontext',
-    ['jquery', 'lodash', 'app/dataservice', 'app/mapper'],
+    ['knockout', 'jquery', 'lodash', 'app/dataservice', 'app/mapper'],
 
-    function ($, _, dataservice, mapper) {
+    function (ko, $, _, dataservice, mapper) {
         var EntitySet = function (mapper) {
             var items = {},
                 mapDtoToContext = function (dto) {
@@ -37,24 +37,7 @@
              
              return $.Deferred(function (def) {
 
-                 var answers = _.map(questions.getAllLocal(), function (question) {
-                     
-                     var answer = {
-                         Id: question.id(),
-                         Type: question.type(),
-                         Answer: question.hasOptions() ? "" : question.selectedOption(),
-                         Answers: []
-                    };
-                    
-                     if (question.hasOptions()) {
-                         if (question.type() == "SingleOption")
-                             answer.Answers.push(question.selectedOption());
-                         else
-                             answer.Answers = question.selectedOptions();
-                     }
-                     
-                     return answer;
-                 });
+                 var answers = prepareQuestion();
 
                  var data = {
                      QuestionnaireId : questionnaire.id,
@@ -86,25 +69,91 @@
             supervisors = new EntitySet(mapper.user),
             status = {},
             responsible = {},
-            questionnaire = {};
+            questionnaire = {},
+            currentUser = {};
+
+        var prepareQuestion = function () {
+            return _.map(questions.getAllLocal(), function (question) {
+                     
+                var answer = {
+                    Id: question.id(),
+                    Type: question.type(),
+                    Answer: question.hasOptions() ? "" : question.selectedOption(),
+                    Answers: []
+                };
+                    
+                if (question.hasOptions()) {
+                    if (question.type() == "SingleOption")
+                        answer.Answers.push(question.selectedOption());
+                    else
+                        answer.Answers = question.selectedOptions();
+                }
+                     
+                return answer;
+            });
+        };
 
         var parseData = function (input) {
             status = input.questionnaire.Status;
 
-            questionnaire.id = input.questionnaire.Id;
-            questionnaire.templateId = input.questionnaire.TemplateId;
+            currentUser = input.questionnaire.CurrentUser;
+
+            questionnaire.id = Math.uuid();
+            questionnaire.templateId = input.questionnaire.QuestionnaireId;
             questionnaire.title = input.questionnaire.QuestionnaireTitle;
 
             responsible = input.questionnaire.Responsible;
             questions.getData(input.questionnaire.FeaturedQuestions);
             supervisors.getData(input.questionnaire.Supervisors);
         };
+        
+        var commands = {};
+
+        commands["CreateInterviewWithFeaturedQuestionsCommand"] = function(args) {
+            return {
+                interviewId : questionnaire.id,
+                questionnaireId: questionnaire.templateId,
+                featuredAnswers: prepareQuestion(),
+                responsible: {
+                    Id: args.id,
+                    Name: args.name
+                },
+                creator: currentUser
+            };
+        };
+        
+        var sendCommand = function (commandName, args, callbacks) {
+            return $.Deferred(function (def) {
+                var command = {
+                    type: commandName,
+                    command: ko.toJSON(commands[commandName](args))
+                };
+
+                dataservice.sendCommand({
+                    success: function (response, status) {
+                        if (callbacks && callbacks.success) {
+                            callbacks.success();
+                        }
+                        def.resolve(response);
+                    },
+                    error: function (response, xhr) {
+                        if (callbacks && callbacks.error) {
+                            callbacks.error(response);
+                        }
+                        def.reject(response);
+                        return;
+                    }
+                }, command);
+            }).promise();
+        };
+        
         return {
             questions: questions,
             questionnaire: questionnaire,
             status: status,
-            parseData: parseData,
             supervisors: supervisors,
-            save: save
+            save: save,
+            sendCommand: sendCommand,
+            parseData: parseData
         };
     });

@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewHelperExtensions.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Utils
+﻿namespace Web.Supervisor.Utils
 {
     using System;
     using System.Collections;

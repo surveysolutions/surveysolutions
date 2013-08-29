@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UploadFileCommand.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The upload file command.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Commands.File
+﻿namespace Main.Core.Commands.File
 {
     using System;
     using System.IO;

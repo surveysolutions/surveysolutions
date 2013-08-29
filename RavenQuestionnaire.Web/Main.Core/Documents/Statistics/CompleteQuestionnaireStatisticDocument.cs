@@ -1,11 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireStatisticDocument.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The complete questionnaire statistic document.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Documents.Statistics
 {
     using System;

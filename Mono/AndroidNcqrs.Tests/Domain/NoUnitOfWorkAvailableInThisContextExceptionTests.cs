@@ -2,6 +2,8 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions;
+using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
 
@@ -10,6 +12,12 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     public class NoUnitOfWorkAvailableInThisContextExceptionTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         [Test]
         public void Constructing_an_instance_should_initialize_the_message()
         {

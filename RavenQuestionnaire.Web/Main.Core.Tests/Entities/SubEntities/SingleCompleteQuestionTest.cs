@@ -1,11 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SingleCompleteQuestionTest.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The single complete question test.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using Microsoft.Practices.ServiceLocation;
+using Moq;
 
 namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
 {
@@ -28,6 +22,12 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
     [TestFixture]
     public class SingleCompleteQuestionTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

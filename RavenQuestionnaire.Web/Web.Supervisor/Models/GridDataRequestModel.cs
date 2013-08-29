@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GridDataRequestModel.cs" company="World bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the GridDataRequestModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+﻿namespace Web.Supervisor.Models
 {
     using System;
     using System.Collections.Generic;

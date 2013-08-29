@@ -1,9 +1,3 @@
-// -----------------------------------------------------------------------
-// <copyright file="SurveyGroupedByStatusHeader.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
 namespace Core.Supervisor.Views.Index
 {
     using System;

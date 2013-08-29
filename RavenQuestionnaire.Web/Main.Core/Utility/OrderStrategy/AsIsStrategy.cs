@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AsIsStrategy.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The as is strategy.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.Utility.OrderStrategy
 {

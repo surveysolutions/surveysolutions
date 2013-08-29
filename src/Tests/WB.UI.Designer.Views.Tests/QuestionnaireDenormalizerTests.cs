@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Restoring.EventStapshoot;
 
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.EventHandler;
 using WB.UI.Designer.Views.Questionnaire;
@@ -21,26 +24,11 @@ namespace WB.UI.Designer.Views.Tests
     [TestFixture]
     public class QuestionnaireDenormalizerTests
     {
-
-        [Test]
-        public void Handle_When_SnapshotLoaded_event_donot_contains_questionnairie_document_Then_No_actions_was_performed()
-        {
-            // arrange
-            QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
-
-            // act
-            target.Handle(CreateEvent(new SnapshootLoaded(){Template = new Snapshot(Guid.NewGuid(),1,new object())}));
-
-            // assert
-            questionnaireStorageMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Never());
-            questionnaireStorageMock.Verify(x => x.Store(It.IsAny<QuestionnaireListViewItem>(), It.IsAny<Guid>()),
-                                            Times.Never());
-        }
-
         [Test]
         public void Handle_When_SnapshotLoaded_event_template_is_absent_Then_new_document_is_added()
         {
             // arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
 
             Guid questionnaireId = Guid.NewGuid();
@@ -48,7 +36,7 @@ namespace WB.UI.Designer.Views.Tests
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle };
 
             // act
-            target.Handle(CreateEvent(CreateSnapshotEvent(documentReplacement)));
+            target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
             // assert
             questionnaireStorageMock.Verify(
@@ -59,6 +47,7 @@ namespace WB.UI.Designer.Views.Tests
         public void Handle_When_SnapshotLoadedEventTemplateIsPresent_Then_OldTemplateReplaced()
         {
             // arrange
+            ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
             QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
 
             Guid questionnaireId = Guid.NewGuid();
@@ -72,7 +61,7 @@ namespace WB.UI.Designer.Views.Tests
             questionnaireStorageMock.Setup(x => x.GetById(questionnaireId)).Returns(currentItem);
 
             // act
-            target.Handle(CreateEvent(CreateSnapshotEvent(documentReplacement)));
+            target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
             // assert
             questionnaireStorageMock.Verify(
@@ -80,10 +69,10 @@ namespace WB.UI.Designer.Views.Tests
         }
 
 
-        private SnapshootLoaded CreateSnapshotEvent(QuestionnaireDocument content)
+        private TemplateImported CreateTemplateImportedEvent(QuestionnaireDocument content)
         {
-            var result = new SnapshootLoaded();
-            result.Template = new Snapshot(content.PublicKey, 1, content);
+            var result = new TemplateImported();
+            result.Source = content;
             return result;
         }
 
@@ -100,7 +89,7 @@ namespace WB.UI.Designer.Views.Tests
             return new QuestionnaireDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object);
         }
 
-        private Mock<IDenormalizerStorage<QuestionnaireListViewItem>> questionnaireStorageMock=new Mock<IDenormalizerStorage<QuestionnaireListViewItem>>();
-        private Mock<IDenormalizerStorage<AccountDocument>> accountStorageMock=new Mock<IDenormalizerStorage<AccountDocument>>();
+        private Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>> questionnaireStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>>();
+        private Mock<IReadSideRepositoryWriter<AccountDocument>> accountStorageMock = new Mock<IReadSideRepositoryWriter<AccountDocument>>();
     }
 }

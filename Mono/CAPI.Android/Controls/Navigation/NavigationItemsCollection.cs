@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
 using System;
 using System.Collections.Generic;

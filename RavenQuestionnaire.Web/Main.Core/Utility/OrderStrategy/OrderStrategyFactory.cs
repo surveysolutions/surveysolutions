@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OrderStrategyFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The OrderStrategyFactory interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Utility.OrderStrategy
+﻿namespace Main.Core.Utility.OrderStrategy
 {
     using Main.Core.Entities.SubEntities;
 

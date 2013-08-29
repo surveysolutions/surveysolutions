@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyScreen.cs" company="The World Bank">
-//   The World Bank
-// </copyright>
-// <summary>
-//   The survey screen.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Survey
+﻿namespace Core.Supervisor.Views.Survey
 {
     using System;
     using System.Collections.Generic;

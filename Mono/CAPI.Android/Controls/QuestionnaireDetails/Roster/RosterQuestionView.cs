@@ -4,13 +4,14 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 {
-    public class RosterQuestionView : LinearLayout
+    public class RosterQuestionView : LinearLayout, IMvxBindingContextOwner
     {
-        private readonly IMvxBindingActivity _bindingActivity;
+        private readonly IMvxAndroidBindingContext _bindingContext;
         protected QuestionViewModel Model { get; private set; }
         protected View Content { get; set; }
 
@@ -19,16 +20,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             get { return this.FindViewById<LinearLayout>(Resource.Id.llWrapper); }
         }
 
-        public RosterQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
+
+        public IMvxBindingContext BindingContext
+        {
+            get { return _bindingContext; }
+            set { throw new NotImplementedException("BindingContext is readonly in the roster view"); }
+        }
+
+        public RosterQuestionView(Context context,  QuestionViewModel source)
             : base(context)
         {
-            _bindingActivity = bindingActivity;
+            _bindingContext = new MvxAndroidBindingContext(context, ((context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext).LayoutInflater, source);
             this.Model = source;
-            Content = bindingActivity.BindingInflate(source, Resource.Layout.RosterQuestion, this);
+            Content = _bindingContext.BindingInflate(Resource.Layout.RosterQuestion, this);
            
           
             llWrapper.Click += rowViewItem_Click;
-         //   this.SetBackgroundResource(Resource.Drawable.grid_headerItem);
         }
         protected override void OnAttachedToWindow()
         {
@@ -42,27 +49,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             {
                 handler(this, new RosterItemClickEventArgs(Model));
             }
-            //   var template = Model.Header[i];
         }
 
         public event EventHandler<RosterItemClickEventArgs> RosterItemsClick;
 
 
-        public void ClearBindings()
-        {
-            _bindingActivity.ClearBindings(this);
-        }
-
-        protected IMvxBindingActivity BindingActivity
-        {
-            get { return _bindingActivity; }
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ClearBindings();
+                this.ClearAllBindings();
             }
 
             base.Dispose(disposing);

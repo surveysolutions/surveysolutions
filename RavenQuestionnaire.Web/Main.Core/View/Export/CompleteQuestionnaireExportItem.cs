@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireExportItem.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The complete questionnaire export item.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
