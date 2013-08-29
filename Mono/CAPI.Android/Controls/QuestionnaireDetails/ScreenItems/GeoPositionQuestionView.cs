@@ -29,20 +29,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
 
-            var geoWrapper = new LinearLayout(this.Context);
-            geoWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+            var geoWrapper = new RelativeLayout(this.Context);
+            geoWrapper.LayoutParameters = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
 
-            geoWrapper.Orientation = Orientation.Vertical;
+            //geoWrapper.Orientation = Orientation.Horizontal;
 
             locaionDisplay = new TextView(this.Context);
             locaionDisplay.Text = Model.AnswerString;
             
             var updateLocationButton = new Button(this.Context) {Text = "Get Location"};
+            var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, 
+                                                               ViewGroup.LayoutParams.WrapContent);
+            layoutParams.AddRule(LayoutRules.AlignParentRight);
+            updateLocationButton.LayoutParameters = layoutParams;
             updateLocationButton.Click += GetLocation;
-            updateLocationButton.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, 
-                ViewGroup.LayoutParams.WrapContent);
-            
+
             geoWrapper.AddView(updateLocationButton);
             geoWrapper.AddView(locaionDisplay);
 
