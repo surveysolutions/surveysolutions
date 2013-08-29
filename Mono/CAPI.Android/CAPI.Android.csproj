@@ -144,8 +144,10 @@
     <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>

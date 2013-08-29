@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Views;
@@ -9,6 +10,7 @@ using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
@@ -21,6 +23,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
+        protected IAnswerOnQuestionCommandService AnswerCommandService { get; private set; }
         private readonly IMvxAndroidBindingContext _bindingContext;
 
         private readonly int templateId;
@@ -45,7 +48,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected View Content { get; set; }
 
 
-        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context)
         {
             this._bindingContext = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
@@ -54,11 +57,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
+            this.AnswerCommandService = commandService;
 
             Initialize();
 
             PostInit();
         }
+
         protected virtual void Initialize()
         {
             etComments.ImeOptions = ImeAction.Done;
@@ -66,7 +71,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             etComments.SetSingleLine(true);
             etComments.EditorAction += etComments_EditorAction;
             etComments.FocusChange += etComments_FocusChange;
-            llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            llWrapper.LongClick += AbstractQuestionView_LongClick;
             llWrapper.Clickable = true;
             llWrapper.Focusable = true;
             llWrapper.FocusableInTouchMode = true;
@@ -90,6 +95,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             SetEditCommentsVisibility(true);
             etComments.RequestFocus();
         }
+
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             IsCommentsEditorFocused = e.HasFocus;
@@ -115,6 +121,23 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
             
+        }
+
+        protected void ExecuteSaveAnswerCommand(SetAnswerCommand command)
+        {
+            tvError.Visibility = ViewStates.Gone;
+            AnswerCommandService.Execute(command);
+        }
+
+        protected virtual void SaveAnswerErrorHappend()
+        {
+        }
+
+        private Exception GetDippestException(Exception e)
+        {
+            if (e.InnerException == null)
+                return e;
+            return GetDippestException(e.InnerException);
         }
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)

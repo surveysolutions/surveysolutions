@@ -13,8 +13,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
     public class NumericQuestionView : AbstractQuestionView
     {
 
-        public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -49,34 +49,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void SaveAnswer()
         {
-            try
+            string newValue = etAnswer.Text.Trim();
+            if (newValue != this.Model.AnswerString)
             {
-                tvError.Visibility = ViewStates.Gone;
-                string newValue = etAnswer.Text.Trim();
-                if (newValue != this.Model.AnswerString)
-                {
-                    CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                                null, newValue,
-                                                                Model.PublicKey.PropagationKey));
-                    if (!IsCommentsEditorFocused)
-                        HideKeyboard(etAnswer);
-                }
-                base.SaveAnswer();
-
+                ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                              null, newValue,
+                                                              Model.PublicKey.PropagationKey));
+                if (!IsCommentsEditorFocused)
+                    HideKeyboard(etAnswer);
             }
-            catch (Exception ex)
-            {
-                tvError.Visibility = ViewStates.Visible;
-                etAnswer.Text = Model.AnswerString;
-                tvError.Text = GetDippestException(ex).Message;
-            }
+            base.SaveAnswer();
         }
 
-        private Exception GetDippestException(Exception e)
+        protected override void SaveAnswerErrorHappend()
         {
-            if (e.InnerException == null)
-                return e;
-            return GetDippestException(e.InnerException);
+            etAnswer.Text = Model.AnswerString;
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

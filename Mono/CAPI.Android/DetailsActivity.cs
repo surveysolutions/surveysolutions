@@ -8,6 +8,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
+using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
@@ -21,7 +22,7 @@ using Ninject;
 namespace CAPI.Android
 {
     [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
-    public class DetailsActivity : MvxFragmentActivity/*<CompleteQuestionnaireView>, View.IOnTouchListener*/
+    public class DetailsActivity : MvxFragmentActivity
     {
         protected ItemPublicKey? ScreenId;
         protected FrameLayout FlDetails
@@ -79,6 +80,7 @@ namespace CAPI.Android
 
             if (this.FinishIfNotLoggedIn())
                 return;
+
             SetContentView(Resource.Layout.Details);
 
 
@@ -115,7 +117,6 @@ namespace CAPI.Android
             VpContent.PageSelected += VpContent_PageSelected;
 
             cleanUpExecutor = new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>());
-
         }
 
         protected override void OnResume()
@@ -269,7 +270,6 @@ namespace CAPI.Android
         public override void Finish()
         {
             base.Finish();
-            
             cleanUpExecutor.CleanUpInterviewCaches(QuestionnaireId);
         }
 

@@ -57,6 +57,7 @@ namespace Main.Core
 #if MONODROID
         //    NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+            InitializeCommandService(kernel.Get<ICommandListSupplier>(), new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>()));
 
 #else
 

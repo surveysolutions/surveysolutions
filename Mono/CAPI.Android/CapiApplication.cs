@@ -2,8 +2,8 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
+using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
-using CAPI.Android.Core.Model.CommandService;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
@@ -168,11 +168,13 @@ namespace CAPI.Android
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), new AsyncCommandService());
             NcqrsInit.Init(kernel);
        
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+            Kernel.Unbind<IAnswerOnQuestionCommandService>();
+            Kernel.Bind<IAnswerOnQuestionCommandService>()
+                  .ToConstant(new AnswerOnQuestionCommandService(CommandService));
 
             #region register handlers
 

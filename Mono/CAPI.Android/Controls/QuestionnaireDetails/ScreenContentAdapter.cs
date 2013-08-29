@@ -15,6 +15,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Entities.SubEntities;
+using Ninject;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -34,7 +35,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.context = context;
             this.questionnaireId = questionnaireId;
             this.status = status;
-            this.questionViewFactory = new DefaultQuestionViewFactory();
+            this.questionViewFactory = new DefaultQuestionViewFactory(CapiApplication.Kernel.Get<IAnswerOnQuestionCommandService>());
             this.screenChangeEventHandler = screenChangeEventHandler;
         }
 

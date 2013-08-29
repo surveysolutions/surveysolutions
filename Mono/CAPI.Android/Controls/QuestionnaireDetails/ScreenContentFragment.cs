@@ -9,6 +9,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Entities.SubEntities;
+using Ninject;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -28,12 +29,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private const string SCREEN_ID = "screenId";
         private const string QUESTIONNAIRE_ID = "questionnaireId";
-       
-     //   protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
         protected View top;
+
         public ScreenContentFragment()
         {
-        //    this.bindableElements = new List<AbstractQuestionView>();
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -76,17 +75,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
             return top;
         }
-
-     /*   public override void OnDetach()
-        {
-
-            base.OnDetach();
-            foreach (AbstractQuestionView abstractQuestionView in bindableElements)
-            {
-                abstractQuestionView.Dispose();
-            }
-            bindableElements=new List<AbstractQuestionView>();
-        }*/
 
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {

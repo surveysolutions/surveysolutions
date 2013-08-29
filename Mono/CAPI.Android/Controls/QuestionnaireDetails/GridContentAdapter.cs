@@ -16,6 +16,7 @@ using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
+using Ninject;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -36,7 +37,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.context = context;
             this.columnCount = columnCount;
             this.OnScreenChanged = onScreenChanged;
-            this.questionViewFactory = new DefaultQuestionViewFactory();
+            this.questionViewFactory = new DefaultQuestionViewFactory(CapiApplication.Kernel.Get<IAnswerOnQuestionCommandService>());
             this.tvEmptyLabelDescription = tvEmptyLabelDescription;
             this.QuestionnaireId = model.QuestionnaireId;
             this.listView = listView;
