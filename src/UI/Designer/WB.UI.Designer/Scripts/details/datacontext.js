@@ -73,7 +73,7 @@
                             var results = options && options.results,
                                 sortFunction = options && options.sortFunction,
                                 filter = options && options.filter,
-                                forceRefresh = options && options.forceRefresh;
+                                forceRefresh = (options && options.forceRefresh) || false;
 
                             var dtos = mapper.objectsFromDto(data);
 
@@ -279,6 +279,20 @@
         commands[config.commands.groupMove] = function (command) {
             command.questionnaireId = questionnaire.id();
             return command;
+        };
+        
+        commands[config.commands.addSharedPersonToQuestionnaire] = function (sharedUser) {
+            return {
+                email: sharedUser.userEmail(),
+                questionnaireId : questionnaire.id()
+            };
+        };
+        
+        commands[config.commands.removeSharedPersonFromQuestionnaire] = function (sharedUser) {
+            return {
+                email: sharedUser.userEmail(),
+                questionnaireId: questionnaire.id()
+            };
         };
 
         var converQuestionToCommand = function(question) {

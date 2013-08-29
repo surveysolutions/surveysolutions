@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IChanelFactoryWrapper.cs" company="The World Bank">
-//   The World Bank
-// </copyright>
-// <summary>
-//   The ChanelFactoryWrapper interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace SynchronizationMessages.WcfInfrastructure
+﻿namespace SynchronizationMessages.WcfInfrastructure
 {
     using System;
 

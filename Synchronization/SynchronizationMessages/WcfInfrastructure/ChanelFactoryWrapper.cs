@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChanelFactoryWrapper.cs" company="The World Bank">
-//   The World Bank
-// </copyright>
-// <summary>
-//   The chanel factory wrapper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace SynchronizationMessages.WcfInfrastructure
 {
     using System;

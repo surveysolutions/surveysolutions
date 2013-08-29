@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISpotSync.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The SpotSync interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.Discover
+﻿namespace SynchronizationMessages.Discover
 {
     using System.ServiceModel;
 

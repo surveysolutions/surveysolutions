@@ -1,0 +1,60 @@
+﻿<div class="title">
+    <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+    <span data-bind="text: title"></span>
+</div>
+<div class="body container-fluid">
+    <div class="row-fluid">
+        <div class="control-group" data-bind="validationElement: title">
+            <label class="control-label required">Title</label>
+            <div class="controls">
+                <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
+            </div>
+        </div>
+    </div>
+    <!-- ko if : level() != 0 -->
+    <div class="row-fluid">
+        <label class="required">
+            <a href="#" class="btn btn-info btn-small btn-help"
+                data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
+                data-original-title="Kind of propagation"
+                data-html="true"
+                data-trigger="hover"
+                data-placement="right"
+                data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
+            Kind of propagation</label>
+        <div class="btn-group">
+            <button
+                data-value="None" data-bind="checkedButtons: gtype" class="btn btn-small">
+                None</button>
+            <button data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
+        </div>
+
+
+    </div>
+    <!-- /ko -->
+    <div class="row-fluid">
+        <label>Description</label>
+        <div class="note">
+            <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+        </div>
+    </div>
+
+    <label>
+        <a href="#" class="btn btn-info btn btn-help"
+            data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+            data-original-title="Condition expression"
+            data-html="true"
+            data-trigger="hover"
+            data-placement="right"
+            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+    <div class="editor-container">
+        <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
+    </div>
+
+</div>
+<div class="pane-bottom">
+    <div class="inner">
+        <button class="btn btn-success" data-bind="click: $root.saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+        <button class="btn btn-link cancel-edit" data-bind="click: revert, visible: dirtyFlag().isDirty() && !isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-remove"></i></button>
+    </div>
+</div>

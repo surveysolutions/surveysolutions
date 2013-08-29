@@ -7,17 +7,19 @@
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 decoder: function (data, status, xhr, success, error) {
-                    if (xhr.status == 500) {
-                        error({error : "Unexpected error occured. Try to refresh page to continue. If this problem persists, please contact support."}, status);
-                    } else if (status === "success") {
-                        var result = JSON.parse(xhr.responseText);
-                        if (result.error == null) {
+                    if (data == null) {
+                        error({ error: input.settings.messages.unhandledExceptionMessage }, status);
+                    } else {
+                        if (data.IsSuccess) {
                             success(data, status);
                         } else {
-                            error(result, status);
+                            if (!data.HasPermissions) {
+                                window.location.href = input.url.lackOfPermitsUrl;
+                            } else {
+                                error(data.Error, status);
+                            }
+                            
                         }
-                    } else {
-                        error(status, xhr);
                     }
                 }
             });

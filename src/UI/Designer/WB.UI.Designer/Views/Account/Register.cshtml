@@ -19,9 +19,9 @@
 
         @if (AppSettings.Instance.IsReCaptchaEnabled)
         {
-            <p>
+            <div style="line-height: 0">
                 @Html.Raw(Html.GenerateCaptcha())
-            </p>
+            </div>
         }
 
         <div class="form-actions">

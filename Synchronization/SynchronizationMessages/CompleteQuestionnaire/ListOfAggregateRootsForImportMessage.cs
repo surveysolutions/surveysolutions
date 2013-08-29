@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ListOfAggregateRootsForImportMessage.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The list of aggregate roots for import message.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace SynchronizationMessages.CompleteQuestionnaire
+﻿namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System.Collections.Generic;
     using System.IO;

@@ -1,12 +1,12 @@
-﻿namespace WB.UI.Designer.App_Start
+﻿using WB.Core.SharedKernel.Utils.Serialization;
+
+namespace WB.UI.Designer.App_Start
 {
     using System.Web.Mvc;
 
     using Ncqrs.Commanding.ServiceModel;
     using Ninject.Modules;
     using Ninject.Web.Mvc.FilterBindingSyntax;
-
-    using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
     
     using WB.UI.Designer.Exceptions;
@@ -23,7 +23,8 @@
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
             this.Bind<ICommandService>().ToConstant(Ncqrs.NcqrsEnvironment.Get<ICommandService>());
-            this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();
             this.Bind<IMembershipWebUser>()
                 .ToConstructor(x => new MembershipWebUser(x.Inject<IMembershipHelper>()))

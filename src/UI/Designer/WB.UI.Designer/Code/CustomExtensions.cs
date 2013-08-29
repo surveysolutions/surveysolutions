@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomExtensions.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The custom extensions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Extensions
+﻿namespace WB.UI.Designer.Extensions
 {
     using System;
     using System.Globalization;

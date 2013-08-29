@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MembershipProvider.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   A membership provider which uses different components to make it more SOLID.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Shared.Web.MembershipProvider.Accounts
+﻿namespace WB.UI.Shared.Web.MembershipProvider.Accounts
 {
     using System;
     using System.Collections.Generic;
@@ -1201,7 +1192,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Accounts
             bool isApproved, 
             out MembershipCreateStatus status)
         {
-            if (this.AccountRepository.IsUniqueEmailRequired && this.AccountRepository.GetUserNameByEmail(email) != null)
+            if (this.AccountRepository.IsUniqueEmailRequired && !string.IsNullOrEmpty(this.AccountRepository.GetUserNameByEmail(email)))
             {
                 status = MembershipCreateStatus.DuplicateEmail;
                 return null;
