@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "NewDeleteQuestion")]
     public class DeleteQuestionCommand : QuestionCommand
     {
-        public DeleteQuestionCommand(Guid questionnaireId, Guid questionId)
-            : base(questionnaireId, questionId) {}
+        public DeleteQuestionCommand(Guid questionnaireId, Guid questionId, Guid responsibleId)
+            : base(questionnaireId, questionId, responsibleId) {}
     }
 }

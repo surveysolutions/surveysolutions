@@ -15,8 +15,8 @@ namespace WB.UI.Designer.Models
             }
         }
 
-        [Display(Name = "Shared?", Order = 1)]
-        public bool IsShared { get; set; }
+        [Display(Name = "Owner", Order = 1)]
+        public string Owner { get; set; }
 
         [Display(Name = "Title", Order = 2)]
         [Default]
