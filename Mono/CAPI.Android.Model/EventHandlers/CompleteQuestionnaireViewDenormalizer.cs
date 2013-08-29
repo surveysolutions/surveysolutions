@@ -88,7 +88,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
-                                evnt.Payload.Position);
+                                evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)

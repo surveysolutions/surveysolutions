@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                       evnt.Payload.Position);
+                       evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)

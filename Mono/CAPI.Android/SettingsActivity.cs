@@ -89,7 +89,7 @@ namespace CAPI.Android
         private void GetLocation()
         {
             cancelSource = new CancellationTokenSource();
-            geoservice.GetPositionAsync(20000, cancelSource.Token).ContinueWith(t => RunOnUiThread(() =>
+            geoservice.GetPositionAsync(20000, cancelSource.Token).ContinueWith((Task<Position> t) => RunOnUiThread(() =>
                 {
                     if (progress != null)
                         progress.Dismiss();

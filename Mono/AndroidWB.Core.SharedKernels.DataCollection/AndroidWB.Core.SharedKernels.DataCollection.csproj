@@ -61,6 +61,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerDateTimeQuestionCommand.cs">
       <Link>Commands\Interview\AnswerDateTimeQuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerGeoLocationQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerGeoLocationQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs">
       <Link>Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs</Link>
     </Compile>
@@ -185,7 +188,7 @@
       <Link>Events\Interview\FlagSetToAnswer.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GeoLocationQuestionAnswered.cs">
-      <Link>Events\GeoLocationQuestionAnswered.cs</Link>
+      <Link>Events\Interview\GeoLocationQuestionAnswered.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\GroupDisabled.cs">
       <Link>Events\Interview\GroupDisabled.cs</Link>
