@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMembershipWebServiceUser.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Shared.Web.Membership
+﻿namespace WB.UI.Shared.Web.Membership
 {
     /// <summary>
     /// The MembershipWebServiceUser interface.

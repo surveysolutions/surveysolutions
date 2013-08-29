@@ -1,11 +1,12 @@
-﻿@model WB.UI.Designer.Pdf.TitlePageDto
+﻿@using System.Globalization
+@model WB.UI.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireView
 
 
 <header>
-    @Model.SurveyName
+    @Model.Title
 </header>
 <div class="create-date">
-    Created by: @Model.AuthorName, @Model.CreationDate
+    Created by: @Model.CreatedBy, @Model.CreationDate.ToString(CultureInfo.InvariantCulture)
 </div>
 <div class="statistics">
     Chapters: @Model.ChaptersCount <br/>

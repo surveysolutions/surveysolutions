@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EmailConfirmationModel.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     /// <summary>
     /// The email confirmation model.

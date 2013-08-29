@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PasswordModel.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System.ComponentModel.DataAnnotations;
 

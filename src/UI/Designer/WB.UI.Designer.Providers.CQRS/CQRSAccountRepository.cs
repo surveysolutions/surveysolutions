@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CQRSAccountRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The cqrs account repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Providers.CQRS
+﻿namespace WB.UI.Designer.Providers.CQRS
 {
     using System;
     using System.Collections.Generic;
@@ -22,43 +13,18 @@ namespace WB.UI.Designer.Providers.CQRS
     using WB.UI.Designer.Providers.CQRS.Accounts.View;
     using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
-    /// <summary>
-    /// The cqrs account repository.
-    /// </summary>
     public class CQRSAccountRepository : IAccountRepository
     {
-        #region Fields
-
-        /// <summary>
-        /// The _command service.
-        /// </summary>
         private readonly ICommandService commandService;
+        private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
+        private readonly IViewFactory<AccountViewInputModel, AccountView> accountViewFactory;
 
-        /// <summary>
-        /// The _view repository.
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CQRSAccountRepository"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        public CQRSAccountRepository(IViewRepository repository, ICommandService commandService)
+        public CQRSAccountRepository(ICommandService commandService, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory, IViewFactory<AccountViewInputModel, AccountView> accountViewFactory)
         {
-            this.viewRepository = repository;
             this.commandService = commandService;
+            this.accountListViewFactory = accountListViewFactory;
+            this.accountViewFactory = accountViewFactory;
         }
-
-        #endregion
 
         #region Public Properties
 
@@ -143,7 +109,7 @@ namespace WB.UI.Designer.Providers.CQRS
         public IEnumerable<IMembershipAccount> FindAll(int pageIndex, int pageSize, out int totalRecords)
         {
             AccountListView accounts =
-                this.viewRepository.Load<AccountListViewInputModel, AccountListView>(
+                this.accountListViewFactory.Load(
                     new AccountListViewInputModel { Page = pageIndex, PageSize = pageSize });
             totalRecords = accounts.TotalCount;
 
@@ -175,7 +141,7 @@ namespace WB.UI.Designer.Providers.CQRS
             string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
             AccountListView accounts =
-                this.viewRepository.Load<AccountListViewInputModel, AccountListView>(
+                this.accountListViewFactory.Load(
                     new AccountListViewInputModel { Email = emailToMatch, Page = pageIndex, PageSize = pageSize });
             totalRecords = accounts.TotalCount;
 
@@ -207,7 +173,7 @@ namespace WB.UI.Designer.Providers.CQRS
             string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
             AccountListView accounts =
-                this.viewRepository.Load<AccountListViewInputModel, AccountListView>(
+                this.accountListViewFactory.Load(
                     new AccountListViewInputModel { Name = usernameToMatch, Page = pageIndex, PageSize = pageSize });
             totalRecords = accounts.TotalCount;
 
@@ -235,7 +201,7 @@ namespace WB.UI.Designer.Providers.CQRS
         public IEnumerable<IMembershipAccount> FindNewAccounts(int pageIndex, int pageSize, out int totalRecords)
         {
             AccountListView accounts =
-                this.viewRepository.Load<AccountListViewInputModel, AccountListView>(
+                this.accountListViewFactory.Load(
                     new AccountListViewInputModel { IsNewOnly = true, Page = pageIndex, PageSize = pageSize });
             totalRecords = accounts.TotalCount;
 
@@ -281,7 +247,7 @@ namespace WB.UI.Designer.Providers.CQRS
                 throw new ArgumentNullException("id");
             }
 
-            return this.viewRepository.Load<AccountViewInputModel, AccountView>(new AccountViewInputModel(id));
+            return this.accountViewFactory.Load(new AccountViewInputModel(id));
         }
 
         /// <summary>
@@ -293,7 +259,7 @@ namespace WB.UI.Designer.Providers.CQRS
         public int GetNumberOfUsersOnline()
         {
             AccountListView accountsOnline =
-                this.viewRepository.Load<AccountListViewInputModel, AccountListView>(
+                this.accountListViewFactory.Load(
                     new AccountListViewInputModel { IsOnlineOnly = true });
             return accountsOnline.TotalCount;
         }
@@ -476,7 +442,7 @@ namespace WB.UI.Designer.Providers.CQRS
             string resetPasswordToken = null)
         {
             return
-                this.viewRepository.Load<AccountViewInputModel, AccountView>(
+                this.accountViewFactory.Load(
                     new AccountViewInputModel(
                         accountName: accountName, 
                         accountEmail: accountEmail, 

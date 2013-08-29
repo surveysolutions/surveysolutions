@@ -8,14 +8,11 @@ namespace WB.UI.Designer.Utils
 {
     public class ExpressionReplacer : IExpressionReplacer
     {
-        /// <summary>
-        /// The view repository.
-        /// </summary>
-        private readonly IViewRepository _viewRepository;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView> viewFactory;
 
-        public ExpressionReplacer(IViewRepository viewRepository)
+        public ExpressionReplacer(IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView> viewFactory)
         {
-            this._viewRepository = viewRepository;
+            this.viewFactory = viewFactory;
         }
 
         /// <summary>
@@ -71,7 +68,7 @@ namespace WB.UI.Designer.Utils
 
         private QuestionnaireStataMapView LoadMap(Guid questionnaireKey)
         {
-            return this._viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(new QuestionnaireViewInputModel(questionnaireKey));
+            return this.viewFactory.Load(new QuestionnaireViewInputModel(questionnaireKey));
         }
 
         private static string MakeSubstitutions(string expression, IEnumerable<KeyValuePair<string, string>> map)

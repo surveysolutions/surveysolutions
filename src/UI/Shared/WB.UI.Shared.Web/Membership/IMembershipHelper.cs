@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMembershipHelper.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Shared.Web.Membership
+﻿namespace WB.UI.Shared.Web.Membership
 {
     /// <summary>
     /// The MembershipHelper interface.

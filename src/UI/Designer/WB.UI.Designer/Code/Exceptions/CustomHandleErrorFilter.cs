@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomHandleErrorFilter.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer.Exceptions
+﻿namespace WB.UI.Designer.Exceptions
 {
     using System.Web.Mvc;
 

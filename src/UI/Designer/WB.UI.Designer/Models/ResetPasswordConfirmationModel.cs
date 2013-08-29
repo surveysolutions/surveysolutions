@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ResetPasswordConfirmationModel.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
     using System.ComponentModel;
     using System.Web.Mvc;

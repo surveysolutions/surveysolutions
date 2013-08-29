@@ -1,11 +1,11 @@
-﻿namespace WB.UI.Designer.Tests.CommandDeserializerTests
+﻿using WB.UI.Shared.Web.CommandDeserialization;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+
+namespace WB.UI.Designer.Tests.CommandDeserializerTests
 {
     using System;
 
     using Machine.Specifications;
-
-    using Main.Core.Commands.Questionnaire.Question;
-
     using Ncqrs.Commanding;
 
     using WB.UI.Designer.Code.Helpers;

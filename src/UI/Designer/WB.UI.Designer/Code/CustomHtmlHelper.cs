@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CustomHtmlHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The custom html helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using System;
     using System.Security.Policy;

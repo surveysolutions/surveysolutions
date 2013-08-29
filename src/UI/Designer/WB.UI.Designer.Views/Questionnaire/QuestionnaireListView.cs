@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System.Collections.Generic;
 
 namespace WB.UI.Designer.Views.Questionnaire

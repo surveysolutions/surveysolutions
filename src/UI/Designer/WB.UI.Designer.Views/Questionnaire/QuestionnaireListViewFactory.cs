@@ -1,19 +1,9 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireBrowseViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The questionnaire browse view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.Core.View;
-using Main.DenormalizerStorage;
 using System;
 using System.Linq;
 using Main.Core.Utility;
 
-using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -27,7 +17,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> documentGroupSession;
 
         #endregion
 
@@ -39,7 +29,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireListViewFactory(IQueryableDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession)
+        public QuestionnaireListViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
@@ -59,8 +49,6 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// </returns>
         public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
         {
-            IQueryable<QuestionnaireListViewItem> query = this.documentGroupSession.Query();
-
             Func<QuestionnaireListViewItem, bool> q =
                 (x) =>
                 string.IsNullOrEmpty(input.Filter)
@@ -70,23 +58,28 @@ namespace WB.UI.Designer.Views.Questionnaire
 
             if (input.IsAdminMode)
             {
-                q = q.AndAlso(x => (input.IsPublic || (x.CreatedBy == input.CreatedBy)));
+                q = q.AndAlso(x => (input.IsPublic || (x.CreatedBy == input.ViewerId || 
+                                    x.SharedPersons.Contains(input.ViewerId))));
             }
             else
             {
                 q =
                     q.AndAlso(
                         x =>
-                        !x.IsDeleted
-                        && (((x.CreatedBy == input.CreatedBy) && !input.IsPublic) || (input.IsPublic && x.IsPublic)));
+                        !x.IsDeleted && (((x.CreatedBy == input.ViewerId || x.SharedPersons.Contains(input.ViewerId)) && !input.IsPublic) || 
+                        (input.IsPublic && x.IsPublic)));
             }
 
-            var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
 
-            var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
+            return this.documentGroupSession.Query(queryable =>
+            {
+                var queryResult = queryable.Where(q).AsQueryable();
+                queryResult.ToList().ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "me" : x.CreatorName);
 
-
-            return new QuestionnaireListView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
+                return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: queryResult.Count(),
+                    items: queryResult.OrderUsingSortExpression(input.Order).Skip((input.Page - 1)*input.PageSize).Take(input.PageSize),
+                    order: input.Order);
+            });
         }
 
         #endregion

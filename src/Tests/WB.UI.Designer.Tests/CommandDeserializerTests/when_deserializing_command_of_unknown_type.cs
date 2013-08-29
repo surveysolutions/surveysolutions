@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.Tests.CommandDeserializerTests
+﻿using WB.UI.Shared.Web.CommandDeserialization;
+
+namespace WB.UI.Designer.Tests.CommandDeserializerTests
 {
     using System;
 

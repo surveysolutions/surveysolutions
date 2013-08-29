@@ -2,15 +2,9 @@
     ['ko', 'datacontext', 'config'],
     function (ko, datacontext, config) {
 
-        var logger = config.logger,
-            
-            fetch = function () {
+        var fetch = function () {
                 
                 return $.Deferred(function (def) {
-
-                    var data = {
-                    };
-
                     $.when()
                         .pipe(function() { })
                         .fail(function() { def.reject(); })
