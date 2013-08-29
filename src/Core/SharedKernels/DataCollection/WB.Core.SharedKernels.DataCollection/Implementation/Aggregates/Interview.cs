@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
-            this.answers[questionKey] = @event.Position;
+            this.answers[questionKey] = @event.Answer;
         }
 
         private void Apply(AnswerDeclaredValid @event)
@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.GpsCoordinates:
-                        this.AnswerGeoLocationQuestion(userId, questionId, EmptyPropagationVector, answersTime, new GeoPosition(answer as string)); // move it on upper level
+                        this.AnswerGeoLocationQuestion(userId, questionId, EmptyPropagationVector, answersTime, (GeoPosition) answer);
                         break;
 
                     default:
