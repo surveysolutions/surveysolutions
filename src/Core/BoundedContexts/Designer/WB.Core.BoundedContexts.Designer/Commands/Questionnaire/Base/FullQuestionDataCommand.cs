@@ -8,8 +8,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
-            : base(questionnaireId, questionId)
+            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId)
+            : base(questionnaireId, questionId, responsibleId)
         {
             this.Title = title;
             this.Type = type;

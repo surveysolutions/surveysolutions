@@ -130,6 +130,14 @@
 
         TooFewOptionsInCategoryQuestion,
 
-        CouldNotDeleteInterview
+        CouldNotDeleteInterview,
+
+        DoesNotHavePermissionsForEdit,
+
+        UserDoesNotExistInShareList,
+
+        UserExistInShareList,
+
+        OwnerCannotBeInShareList
     }
 }
