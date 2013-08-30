@@ -55,16 +55,17 @@ namespace Main.Core
         public static void Init(IKernel kernel)
         {
 #if MONODROID
+        //    NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
-            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
+            InitializeCommandService(kernel.Get<ICommandListSupplier>(), new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>()));
+
 #else
-            
-            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+
+            InitializeCommandService(kernel.Get<ICommandListSupplier>(), new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>()));
 
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
-            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
@@ -135,26 +136,17 @@ namespace Main.Core
 
         #region Methods
 
-        /// <summary>
-        /// The initialize command service.
-        /// </summary>
-        /// <param name="commandSupplier">
-        /// The command supplier.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICommandService"/>.
-        /// </returns>
-        public static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
+        public static void InitializeCommandService(ICommandListSupplier commandSupplier, CommandService service)
         {
             var mapper = new AttributeBasedCommandMapper();
-            var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+       //     var service = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             foreach (Type type in commandSupplier.GetCommandList())
             {
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
-
-            return service;
+            NcqrsEnvironment.SetDefault<ICommandService>(service);
+          //  return service;
         }
 
         /// <summary>

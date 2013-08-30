@@ -7,22 +7,11 @@ namespace CAPI.Android.Controls.Navigation
 {
     public class NavigationSpinnerAdapter : BaseAdapter
     {
-        private IList<NavigationItem> _spinnerItems;
-        private LayoutInflater _layoutInflater;
+        private readonly IList<NavigationItem> _spinnerItems;
 
-        public NavigationSpinnerAdapter(Context context, IList<NavigationItem> items)
+        public NavigationSpinnerAdapter(IList<NavigationItem> items)
         {
             _spinnerItems = items;
-
-           /* // Create java strings for this sample.
-            // This saves a bit on JNI handles.
-            _spinnerItems.Add("Dashboard");
-            _spinnerItems.Add("Sync");
-            if (CapiApplication.Membership.IsLoggedIn)
-                _spinnerItems.Add("LogOff");*/
-
-            // Retrieve the layout inflater from the provided context
-            _layoutInflater = LayoutInflater.FromContext(context);
         }
 
         public override Java.Lang.Object GetItem(int position)
@@ -37,22 +26,13 @@ namespace CAPI.Android.Controls.Navigation
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var view = convertView;
+            var view = convertView as TextView ?? new TextView(parent.Context);
 
-            // Try to reuse views as much as possible.
-            // It is alot faster than inflating new views all the time
-            // and it saves quite a bit on memory usage aswell.
-            if (view == null)
-            {
-                // inflate a new layout for the view.
-                view = new TextView(parent.Context);
-            }
+            view.Text = _spinnerItems[position].Title;
+            view.TextSize = 20;
+            view.Gravity = GravityFlags.Right;
+            view.SetPadding(10, 10, 10, 10);
 
-            var textView = view as TextView;
-            textView.Text = _spinnerItems[position].Title;
-            textView.TextSize = 20;
-            textView.Gravity = GravityFlags.Right;
-            view.SetPadding(10,10,10,10);
             return view;
         }
 

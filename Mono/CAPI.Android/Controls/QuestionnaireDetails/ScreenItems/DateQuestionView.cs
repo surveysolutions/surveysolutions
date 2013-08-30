@@ -14,8 +14,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
         }
         */
-        public DateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public DateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -51,7 +51,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string newValue = e.Date.ToString("d");
             if (newValue != this.Model.AnswerString)
             {
-                CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                           null, newValue,
                                                           Model.PublicKey.PropagationKey));
                 dateDisplay.Text = newValue;
@@ -61,6 +61,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             SaveAnswer();
           //  UpdateDisplay();
         }
+
         #endregion
 
         private TextView dateDisplay;

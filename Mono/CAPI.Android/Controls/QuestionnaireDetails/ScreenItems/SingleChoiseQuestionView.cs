@@ -12,13 +12,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class SingleChoiseQuestionView : AbstractQuestionView
     {
-        public SingleChoiseQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public SingleChoiseQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
         protected SelectebleQuestionViewModel typedMode;
         protected RadioGroup radioGroup;
+
         #region Overrides of AbstractQuestionView
 
         protected override void Initialize()
@@ -54,7 +55,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             var selectedItem = radioGroup.FindViewById<RadioButton>(e.CheckedId);
             var answerGuid = Guid.Parse(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
 
-            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+            ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                         new List<Guid>(1) {answerGuid}, "",
                                                         Model.PublicKey.PropagationKey));
             SaveAnswer();
