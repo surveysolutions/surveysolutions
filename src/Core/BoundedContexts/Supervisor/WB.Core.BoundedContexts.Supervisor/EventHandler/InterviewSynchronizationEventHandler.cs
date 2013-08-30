@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 foreach (var interviewQuestion in interviewLevel.Questions)
                 {
-                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id,interviewLevel.PropagationVector,
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
                                                                                   interviewQuestion.Answer,
                                                                                   interviewQuestion.Comments.Any() ?
                                                                                         interviewQuestion.Comments.Last().Text :
