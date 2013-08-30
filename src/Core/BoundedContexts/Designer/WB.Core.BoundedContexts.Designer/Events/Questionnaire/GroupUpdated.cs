@@ -10,7 +10,7 @@
     /// The group updated.
     /// </summary>
     [EventName("RavenQuestionnaire.Core:Events:GroupUpdated")]
-    public class GroupUpdated
+    public class GroupUpdated : QuestionnaireActiveEvent
     {
         #region Public Properties
 
