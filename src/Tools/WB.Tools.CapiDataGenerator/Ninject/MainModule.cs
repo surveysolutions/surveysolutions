@@ -80,7 +80,9 @@ namespace CapiDataGenerator
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            NcqrsEnvironment.SetDefault(NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>()));
+            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(commandService);
+            NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), commandService);
             NcqrsEnvironment.SetDefault(Kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
