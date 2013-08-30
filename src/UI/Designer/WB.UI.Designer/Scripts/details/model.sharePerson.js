@@ -36,7 +36,7 @@ ko.validation.rules['validateUserEmailAsync'] = {
     async: true,
     validator: function(val, parms, callback) {
         var options = {
-            url: '/designer/account/findbyemail',
+            url: input.url.checkUserUrl,
             type: 'POST',
             success: callback,
             data: { email: val }

@@ -74,7 +74,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             return this.documentGroupSession.Query(queryable =>
             {
                 var queryResult = queryable.Where(q).AsQueryable();
-                queryResult.ToList().ForEach(x=>x.IsShared = x.SharedPersons.Contains(input.ViewerId));
+                queryResult.ToList().ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "me" : x.CreatorName);
 
                 return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: queryResult.Count(),
                     items: queryResult.OrderUsingSortExpression(input.Order).Skip((input.Page - 1)*input.PageSize).Take(input.PageSize),

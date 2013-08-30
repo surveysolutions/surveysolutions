@@ -86,7 +86,9 @@
                 cloneQuestion: "CloneQuestion",
                 updateQuestion: "UpdateQuestion",
                 deleteQuestion: "DeleteQuestion",
-                questionMove: "MoveQuestion"
+                questionMove: "MoveQuestion",
+                addSharedPersonToQuestionnaire: "AddSharedPersonToQuestionnaire",
+                removeSharedPersonFromQuestionnaire: "RemoveSharedPersonFromQuestionnaire"
             },
             hashes = {
                 details: '#/details',

@@ -3,6 +3,7 @@ using System.Linq;
 using Core.Supervisor.DenormalizerStorageItem;
 using Machine.Specifications;
 using Raven.Client.Embedded;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests
@@ -12,44 +13,44 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
     {
         Establish context = () =>
         {
-            IEnumerable<SummaryItem> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
-                new SummaryItemSketch { Initial = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
-                new SummaryItemSketch { Initial = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
-                new SummaryItemSketch { Initial = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
-                new SummaryItemSketch { Initial = 13, ResponsibleSupervisor = SupervisorB, Responsible = SupervisorB, Template = Template1 },
-                new SummaryItemSketch { Initial = 23, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB1, Template = Template1 },
-                new SummaryItemSketch { Initial = 0, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB2, Template = Template1 }
+            IEnumerable<StatisticsLineGroupedByUserAndTemplate> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
+                new SummaryItemSketch { InterviewerAssignedCount = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
+                new SummaryItemSketch { InterviewerAssignedCount = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
+                new SummaryItemSketch { InterviewerAssignedCount = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
+                new SummaryItemSketch { InterviewerAssignedCount = 13, ResponsibleSupervisor = SupervisorB, Responsible = SupervisorB, Template = Template1 },
+                new SummaryItemSketch { InterviewerAssignedCount = 23, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB1, Template = Template1 },
+                new SummaryItemSketch { InterviewerAssignedCount = 0, ResponsibleSupervisor = SupervisorB, Responsible = InterviewerB2, Template = Template1 }
             );
 
             documentStore = CreateDocumentStore(generateStatisticDocumentsWithUnassignedCounts);
         };
 
         Because of = () =>
-            resultItems = QueryUsingIndex<SummaryItem>(documentStore, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember));
+            resultItems = QueryUsingIndex<StatisticsLineGroupedByUserAndTemplate>(documentStore, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember));
 
         It should_return_7_line_items = () =>
             resultItems.Length.ShouldEqual(7);
         
         It should_set_0_to_Unassigned_property_for_all_line_items = () =>
-            resultItems.ShouldEachConformTo(lineItem => lineItem.UnassignedCount == 0);
+            resultItems.ShouldEachConformTo(lineItem => lineItem.SupervisorAssignedCount == 0);
 
         It should_set_0_to_Completed_property_for_all_line_items = () =>
             resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedCount == 0);
 
         It should_set_0_to_Approved_property_for_all_line_items = () =>
-            resultItems.ShouldEachConformTo(lineItem => lineItem.ApprovedCount == 0);
+            resultItems.ShouldEachConformTo(lineItem => lineItem.ApprovedBySupervisorCount == 0);
 
-        It should_set_0_to_Errors_property_for_all_line_items = () =>
-           resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedWithErrorsCount == 0);
+        /*It should_set_0_to_Errors_property_for_all_line_items = () =>
+           resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedWithErrorsCount == 0);*/
 
         It should_set_0_to_Redo_property_for_all_line_items = () =>
-            resultItems.ShouldEachConformTo(lineItem => lineItem.RedoCount == 0);
+            resultItems.ShouldEachConformTo(lineItem => lineItem.RejectedBySupervisorCount == 0);
 
         It should_set_2x56_to_Initial_property_for_sum_of_all_line_items = () =>
-            resultItems.Sum(lineItem => lineItem.InitialCount).ShouldEqual(2*56);
+            resultItems.Sum(lineItem => lineItem.InterviewerAssignedCount).ShouldEqual(2*56);
 
         It should_group_each_Totals_to_be_equal_Initial_property_for_line_items = () =>
-           resultItems.ShouldEachConformTo(lineItem => lineItem.TotalCount == lineItem.InitialCount);
+           resultItems.ShouldEachConformTo(lineItem => lineItem.TotalCount == lineItem.InterviewerAssignedCount);
 
         It should_set_2x56_to_Total_property_for_sum_of_all_line_items = () =>
             resultItems.Sum(lineItem => lineItem.TotalCount).ShouldEqual(56*2);
@@ -61,19 +62,19 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
                 .ShouldEqual(1);
 
         It should_set_20_to_line_with_supervisorA_and_empty_responsible_for_Unassigned_property = () =>
-            GetLineItemForTeam(resultItems, SupervisorA).Single().InitialCount.ShouldEqual(2+7+11);
+            GetLineItemForTeam(resultItems, SupervisorA).Single().InterviewerAssignedCount.ShouldEqual(2+7+11);
 
         It should_set_20_to_line_with_supervisorA_and_empty_responsible_for_Total_property = () =>
             GetLineItemForTeam(resultItems, SupervisorA).Single().TotalCount.ShouldEqual(2+7+11);
 
         It should_set_2_to_line_with_supervisorA_and_supervisorA_as_responsible_for_Initial_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorA, SupervisorA).Single().InitialCount.ShouldEqual(2);
+            GetLineItemForTeamMember(resultItems, SupervisorA, SupervisorA).Single().InterviewerAssignedCount.ShouldEqual(2);
 
         It should_set_7_to_line_with_supervisorA_and_interviewerA1_as_responsible_for_Initial_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA1).Single().InitialCount.ShouldEqual(7);
+            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA1).Single().InterviewerAssignedCount.ShouldEqual(7);
 
         It should_set_11_to_line_with_supervisorA_and_interviewerA2_as_responsible_for_Initial_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA2).Single().InitialCount.ShouldEqual(11);
+            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA2).Single().InterviewerAssignedCount.ShouldEqual(11);
 
         It should_set_2_to_line_with_supervisorA_and_supervisorA_as_responsible_for_Total_property = () =>
             GetLineItemForTeamMember(resultItems, SupervisorA, SupervisorA).Single().TotalCount.ShouldEqual(2);
@@ -91,16 +92,16 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
                 .ShouldEqual(1);
 
         It should_set_36_to_line_with_supervisorB_and_empty_responsible_for_Initial_property = () =>
-            GetLineItemForTeam(resultItems, SupervisorB).Single().InitialCount.ShouldEqual(13+23+0);
+            GetLineItemForTeam(resultItems, SupervisorB).Single().InterviewerAssignedCount.ShouldEqual(13+23+0);
 
         It should_set_36_to_line_with_supervisorB_and_empty_responsible_for_Total_property = () =>
             GetLineItemForTeam(resultItems, SupervisorB).Single().TotalCount.ShouldEqual(13+23+0);
 
         It should_set_13_to_line_with_supervisorB_and_supervisorB_as_responsible_for_Initial_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorB, SupervisorB).Single().InitialCount.ShouldEqual(13);
+            GetLineItemForTeamMember(resultItems, SupervisorB, SupervisorB).Single().InterviewerAssignedCount.ShouldEqual(13);
         
         It should_set_23_to_line_with_supervisorB_and_interviewerB1_as_responsible_for_Initial_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorB, InterviewerB1).Single().InitialCount.ShouldEqual(23);
+            GetLineItemForTeamMember(resultItems, SupervisorB, InterviewerB1).Single().InterviewerAssignedCount.ShouldEqual(23);
 
         It should_set_13_to_line_with_supervisorB_and_supervisorB_as_responsible_for_Total_property = () =>
             GetLineItemForTeamMember(resultItems, SupervisorB, SupervisorB).Single().TotalCount.ShouldEqual(13);
@@ -118,6 +119,6 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
         };
 
         private static EmbeddableDocumentStore documentStore;
-        private static SummaryItem[] resultItems;
+        private static StatisticsLineGroupedByUserAndTemplate[] resultItems;
     }
 }

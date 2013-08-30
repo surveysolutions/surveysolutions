@@ -9,8 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "UpdateQuestionnaire")]
     public class UpdateQuestionnaireCommand : QuestionnaireCommand
     {
-        public UpdateQuestionnaireCommand(Guid questionnaireId, string title, bool isPublic)
-            : base(questionnaireId)
+        public UpdateQuestionnaireCommand(Guid questionnaireId, string title, bool isPublic, Guid responsibleId)
+            : base(questionnaireId, responsibleId)
         {
             this.Title = title;
             this.IsPublic = isPublic;

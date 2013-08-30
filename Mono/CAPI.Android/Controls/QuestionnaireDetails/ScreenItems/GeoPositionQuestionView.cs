@@ -18,8 +18,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class GeoPositionQuestionView : AbstractQuestionView
     {
-        public GeoPositionQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public GeoPositionQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 

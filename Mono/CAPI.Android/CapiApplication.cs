@@ -2,6 +2,7 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
+using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.SyncCacher;
@@ -198,11 +199,16 @@ namespace CAPI.Android
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
             NcqrsInit.Init(kernel);
+       
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
             var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
             kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
+            Kernel.Unbind<IAnswerOnQuestionCommandService>();
+            Kernel.Bind<IAnswerOnQuestionCommandService>()
+                  .ToConstant(new AnswerOnQuestionCommandService(CommandService));
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;

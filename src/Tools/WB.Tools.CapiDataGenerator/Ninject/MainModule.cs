@@ -12,6 +12,7 @@ using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core;
+using Main.Core.Commands;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Main.Core.Services;
@@ -26,6 +27,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using NinjectAdapter;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
@@ -90,7 +92,9 @@ namespace CapiDataGenerator
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
-            NcqrsEnvironment.SetDefault(NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>()));
+            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(commandService);
+            NcqrsInit.InitializeCommandService(Kernel.Get<ICommandListSupplier>(), commandService);
             NcqrsEnvironment.SetDefault(Kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
@@ -176,7 +180,7 @@ namespace CapiDataGenerator
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
-
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
         }
 
         private void InitChangeLog(InProcessEventBus bus)

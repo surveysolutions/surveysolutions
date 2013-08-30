@@ -14,8 +14,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
     public class NumericQuestionView : AbstractQuestionView
     {
 
-        public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -40,51 +40,32 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (e.HasFocus)
             {
-                ShowKeyboard(etAnswer);
+                //ShowKeyboard(etAnswer);
                 return;
             }
             SaveAnswer();
-            if (!IsCommentsEditorFocused)
-                HideKeyboard(etAnswer);
-           /* InputMethodManager imm
-               = (InputMethodManager)this.Context.GetSystemService(
-                   Context.InputMethodService);
-            if(imm.IsAcceptingText)
-            {
-                
-            }*/
+           /* if (!IsCommentsEditorFocused)
+                HideKeyboard(etAnswer);*/
         }
 
         protected override void SaveAnswer()
         {
-            try
+            string newValue = etAnswer.Text.Trim();
+            if (newValue != this.Model.AnswerString)
             {
-                tvError.Visibility = ViewStates.Gone;
-                string newValue = etAnswer.Text.Trim();
-                if (newValue != this.Model.AnswerString)
-                {
-                    CommandService.Execute(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
+                    ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
                                                                             CapiApplication.Membership.CurrentUser.Id,
                                                                             Model.PublicKey.PublicKey,
                                                                             this.Model.PublicKey.PropagationVector, DateTime.UtcNow, decimal.Parse(newValue)));
-                }
-                base.SaveAnswer();
-
+                if (!IsCommentsEditorFocused)
+                    HideKeyboard(etAnswer);
             }
-            catch (Exception ex)
-            {
-                // etAnswer.Text = Model.AnswerString;
-                tvError.Visibility = ViewStates.Visible;
-                etAnswer.Text = Model.AnswerString;
-                tvError.Text = GetDippestException(ex).Message;
-            }
+            base.SaveAnswer();
         }
 
-        private Exception GetDippestException(Exception e)
+        protected override void SaveAnswerErrorHappend()
         {
-            if (e.InnerException == null)
-                return e;
-            return GetDippestException(e.InnerException);
+            etAnswer.Text = Model.AnswerString;
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -94,6 +75,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             etAnswer.RequestFocus();
+            ShowKeyboard(etAnswer);
         }
 
         protected TextView tvTitle

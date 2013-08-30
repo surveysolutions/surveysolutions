@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public List<Guid> SharedPersons { get; private set; }
 
-        public bool IsShared { get; set; }
+        public string Owner { get; set; }
 
         #endregion
     }
