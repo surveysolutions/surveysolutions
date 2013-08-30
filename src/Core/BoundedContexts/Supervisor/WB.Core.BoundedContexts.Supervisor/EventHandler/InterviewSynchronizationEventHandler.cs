@@ -72,9 +72,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 foreach (var interviewQuestion in interviewLevel.Questions)
                 {
-                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id,interviewLevel.PropagationVector,
+                    var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
                                                                                   interviewQuestion.Answer,
-                                                                                  interviewQuestion.Comments.LastOrDefault().Text);
+                                                                                  interviewQuestion.Comments.Any()
+                                                                                      ? interviewQuestion.Comments.LastOrDefault().Text
+                                                                                      : null);
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
