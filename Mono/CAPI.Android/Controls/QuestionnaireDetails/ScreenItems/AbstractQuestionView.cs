@@ -121,6 +121,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey, newComments, this.Model.PublicKey.PropagationKey,
                                                              CapiApplication.Membership.CurrentUser));
+                tvComments.Text = newComments;
             }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
