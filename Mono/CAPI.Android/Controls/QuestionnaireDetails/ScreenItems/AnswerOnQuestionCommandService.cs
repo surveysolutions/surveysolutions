@@ -13,13 +13,15 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class AnswerOnQuestionCommandService : IAnswerOnQuestionCommandService
     {
-        private readonly Dictionary<ItemPublicKey, SetAnswerCommand> commandQueue =
-            new Dictionary<ItemPublicKey, SetAnswerCommand>();
+        private readonly Dictionary<ItemPublicKey, AnswerQuestionCommand> commandQueue =
+            new Dictionary<ItemPublicKey, AnswerQuestionCommand>();
 
         private readonly Queue<ItemPublicKey> executionLine = new Queue<ItemPublicKey>();
         private readonly ICommandService commandService;
@@ -31,7 +33,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.commandService = commandService;
         }
 
-        public void Execute(SetAnswerCommand command)
+        public void Execute(AnswerQuestionCommand command)
         {
             UpdateExecutionFlow(command);
 
@@ -42,9 +44,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        private void UpdateExecutionFlow(SetAnswerCommand command)
+        private void UpdateExecutionFlow(AnswerQuestionCommand command)
         {
-            var key = new ItemPublicKey(command.QuestionPublickey, command.PropogationPublicKey);
+            var key = new ItemPublicKey(command.QuestionId, command.PropagationVector);
 
             lock (locker)
             {
@@ -60,7 +62,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private void ExecuteSaveAnswerCommandAndRunNextIfExist()
         {
-            SetAnswerCommand nextCommand = null;
+            AnswerQuestionCommand nextCommand = null;
 
             lock (locker)
             {

@@ -16,7 +16,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly Context context;
         private readonly int selectedItem;
         private readonly UpdateTotalClosure[] subscribers;
-        private readonly SurveyStatus status;
+        private readonly InterviewStatus status;
 
         public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
             : base(model.Chapters)
@@ -53,7 +53,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
             else
             {
-                    tvITem.Text = model.Status == InterviewStatus.Completed ? "Summary" : "Complete";
+                tvITem.Text = status == InterviewStatus.Completed ? "Summary" : "Complete";
                 tvCount.Visibility = ViewStates.Gone;
             }
             return view;

@@ -13,6 +13,7 @@ using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -134,7 +135,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
         }
 
-        protected void ExecuteSaveAnswerCommand(SetAnswerCommand command)
+        protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
             AnswerCommandService.Execute(command);
