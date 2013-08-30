@@ -11,7 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
 
         public Guid UserId { get; private set; }
 
-        protected InterviewCommand(Guid interviewId, Guid userId)
+        protected InterviewCommand(Guid interviewId, Guid userId) 
+            : base(interviewId)
         {
             ThrowArgumentExceptionIfGuidIsEmpty(userId);
 
