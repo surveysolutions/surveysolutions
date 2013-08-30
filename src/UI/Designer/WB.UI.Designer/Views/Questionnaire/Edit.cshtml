@@ -29,6 +29,7 @@
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
                 url: {
+                    checkUserUrl: '@Url.Action("FindByEmail", "Account", null, Request.Url.Scheme)',
                     lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
                 },
                 settings: {
