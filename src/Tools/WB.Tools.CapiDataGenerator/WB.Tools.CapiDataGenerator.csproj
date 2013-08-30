@@ -110,6 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="Converters\BoolToNegotiationVisibilityConverter.cs" />
     <Compile Include="Ninject\CapiDataGeneratorEventStore.cs" />
     <Compile Include="MVVMCross\CapiDataGeneratorApplication.cs" />
@@ -266,6 +267,10 @@
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
