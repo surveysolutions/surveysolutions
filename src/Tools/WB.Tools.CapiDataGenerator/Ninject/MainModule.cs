@@ -176,7 +176,7 @@ namespace CapiDataGenerator
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
-
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
         }
 
         private void InitChangeLog(InProcessEventBus bus)
