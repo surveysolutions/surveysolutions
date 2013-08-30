@@ -18,7 +18,7 @@ namespace WB.UI.Designer.CommandDeserialization
                         {"UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand)},
                         {"UpdateGroup", typeof (UpdateGroupCommand)},
                         {"AddGroup", typeof (AddGroupCommand)},
-                        {"CloneGroupWithoutChildren", typeof (CloneGroupCommand)},
+                        {"CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand)},
                         {"DeleteGroup", typeof (DeleteGroupCommand)},
                         {"MoveGroup", typeof (MoveGroupCommand)},
                         {"UpdateQuestion", typeof (UpdateQuestionCommand)},
@@ -26,6 +26,8 @@ namespace WB.UI.Designer.CommandDeserialization
                         {"CloneQuestion", typeof (CloneQuestionCommand)},
                         {"DeleteQuestion", typeof (DeleteQuestionCommand)},
                         {"MoveQuestion", typeof (MoveQuestionCommand)},
+                        {"AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand)},
+                        {"RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand)},
                     };
             }
 

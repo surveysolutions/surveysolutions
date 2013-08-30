@@ -8,22 +8,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
   </LinearLayout>
-  <ScrollView
+  <!--<ScrollView
       android:id="@+id/sv"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_centerHorizontal="true"
       android:layout_below="@+id/llTop"
-      android:layout_above="@+id/llButtom" >
+      android:layout_above="@+id/llButtom" >-->
 
-    <LinearLayout
+    <ListView
         android:id="@+id/llContent"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_below="@+id/llTop"
+      android:layout_above="@+id/llButtom" 
+        android:descendantFocusability="beforeDescendants">
+    </ListView>
 
-  </ScrollView>
+  <!--</ScrollView>-->
 
   <LinearLayout
       android:id="@+id/llButtom"

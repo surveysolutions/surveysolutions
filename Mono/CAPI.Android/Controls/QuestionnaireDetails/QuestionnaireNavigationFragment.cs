@@ -1,4 +1,5 @@
 using System;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Views;
@@ -73,10 +74,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         public void SelectItem(int ind)
         {
-            if(selectedItemIndex==ind)
+            if (selectedItemIndex == ind)
                 return;
             selectedItemIndex = ind;
-            adapter.SelectItem(selectedItemIndex);
+
+            for (int i = 0; i < this.ListView.ChildCount; i++)
+            {
+                var element = this.ListView.GetChildAt(i);
+                if (element == null)
+                    continue;
+                element.SetBackgroundColor(i == ind ? Color.LightBlue : Color.Transparent);
+            }
         }
 
         public override void OnListItemClick(ListView l, View v, int pos, long id)

@@ -114,7 +114,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private View CreatePopupView(IList<StatisticsQuestionViewModel> questions, IList<Func<StatisticsQuestionViewModel, string>> valueFucntions)
         {
             var invalidQuestionsView = new ListView(this.Activity);
-            invalidQuestionsView.Adapter = new StatisticsDataAdapter(this.Activity, OnScreenChanged, questions, valueFucntions);
+            invalidQuestionsView.Adapter = new StatisticsDataAdapter(questions, valueFucntions, this.Activity,
+                                                                     OnScreenChanged);
             return invalidQuestionsView;
         }
 

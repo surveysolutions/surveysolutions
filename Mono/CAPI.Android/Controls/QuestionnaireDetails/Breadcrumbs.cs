@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -31,28 +33,56 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                ViewGroup.LayoutParams.WrapContent);
             this.Orientation = Orientation.Vertical;
-            var buttons = new List<Button>();
+
+            var firstBreadcrumbLine = CreateOneLineOfBreadcrumbs();
+            this.AddView(firstBreadcrumbLine);
+
             foreach (var questionnaireNavigationPanelItem in breadcrumbs)
             {
-                Button crumb = new Button(this.Context);
-                crumb.Text = questionnaireNavigationPanelItem.ScreenName;
-                crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.ScreenId.ToString());
-                crumb.Click += crumb_Click;
-                var butParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                             ViewGroup.LayoutParams.WrapContent);
+                var crumbButton = CreateBreadCrumbButton(questionnaireNavigationPanelItem);
 
-                var img = Context.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
-                //img.SetBounds(0, 0, 45, 45);
-                crumb.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+                DisableBreadcrumbIfLast(questionnaireNavigationPanelItem, crumbButton);
 
-                butParam.SetMargins(0, 0, 10, 0);
-                crumb.LayoutParameters = butParam;
-
-                buttons.Add(crumb);
+                var crumbWrapper = CreateBreadCrumbWrapper();
+                crumbWrapper.AddView(crumbButton);
+                firstBreadcrumbLine.AddView(crumbWrapper);
             }
+            PopulateBreadcrumbs(this);
+        }
 
-            PopulateBreadcrumbs(this, buttons, this.Context);
-            buttons.Last().Enabled = false;
+        private void DisableBreadcrumbIfLast(IQuestionnaireViewModel questionnaireNavigationPanelItem, Button crumbButton)
+        {
+            if (breadcrumbs.Last() == questionnaireNavigationPanelItem)
+                crumbButton.Enabled = false;
+        }
+
+        private Button CreateBreadCrumbButton(IQuestionnaireViewModel questionnaireNavigationPanelItem)
+        {
+            Button crumb = new Button(this.Context);
+            crumb.Text = questionnaireNavigationPanelItem.ScreenName;
+            crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.ScreenId.ToString());
+            crumb.Click += crumb_Click;
+            var butParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                         ViewGroup.LayoutParams.WrapContent);
+
+            var img = Context.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
+            //img.SetBounds(0, 0, 45, 45);
+            crumb.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+
+            butParam.SetMargins(0, 0, 10, 0);
+            crumb.LayoutParameters = butParam;
+            return crumb;
+        }
+
+        private LinearLayout CreateBreadCrumbWrapper()
+        {
+            LinearLayout LL = new LinearLayout(this.Context);
+            LL.Orientation = Orientation.Horizontal;
+            LL.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom);
+            LL.LayoutParameters = new ListView.LayoutParams(
+                LayoutParams.WrapContent, LayoutParams.WrapContent);
+
+            return LL;
         }
 
         void crumb_Click(object sender, EventArgs e)
@@ -64,55 +94,128 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             notifier(new ScreenChangedEventArgs(screenId));
         }
 
-        private void PopulateBreadcrumbs(LinearLayout ll, List<Button> views, Context mContext)
+        private void PopulateBreadcrumbs(LinearLayout ll)
         {
-            //  Display display = ((Activity)mContext).WindowManager.DefaultDisplay;
-            ll.RemoveAllViews();
-            this.Measure(0, 0);
-            int maxWidth = this.MeasuredWidth - 20;
+            var breadcrumbsViews = GetPresentBreaCrumbs(ll);
 
-            LinearLayout.LayoutParams lparams;
-            LinearLayout newLL = new LinearLayout(mContext);
+            var screenWidth = ScreenWidth();
+
+            int widthSoFar = 0;
+
+            var currentLineView = ll.GetChildAt(0) as LinearLayout;
+
+            for (int i = 0; i < breadcrumbsViews.Count; i++)
+            {
+                LinearLayout breadcrumbView = breadcrumbsViews[i];
+
+                var breadcrumbWith = AssignMesuredWidthToBreadcrumbAndReturnIt(breadcrumbView);
+
+                widthSoFar += breadcrumbWith;
+
+                if (widthSoFar >= screenWidth)
+                {
+                    currentLineView = PutBreadCrumbAtNextLineAndReturnNextLine(breadcrumbView);
+                    widthSoFar = breadcrumbWith;
+                }
+
+                CheckIsBreadCrumbIsAtCurrentLineIfNotMoveIt(currentLineView, breadcrumbView);
+            }
+            DeleteAllEmptyLines(ll);
+        }
+
+        private List<LinearLayout> GetPresentBreaCrumbs(LinearLayout ll)
+        {
+            var result = new List<LinearLayout>();
+
+            for (int i = 0; i < ll.ChildCount; i++)
+            {
+                var lineView = ll.GetChildAt(i) as LinearLayout;
+                for (int j = 0; j < lineView.ChildCount; j++)
+                {
+                    result.Add(lineView.GetChildAt(j) as LinearLayout);
+                }
+            }
+
+            return result;
+        }
+
+        private void DeleteAllEmptyLines(LinearLayout ll)
+        {
+            for (int i = 0; i < ll.ChildCount; i++)
+            {
+                var line = ll.GetChildAt(i) as LinearLayout;
+                if (line.ChildCount == 0)
+                    ll.RemoveView(line);
+            }
+        }
+
+        private void CheckIsBreadCrumbIsAtCurrentLineIfNotMoveIt(LinearLayout currentLineView,
+                                                                 LinearLayout breadcrumbView)
+        {
+            if (breadcrumbView.Parent == currentLineView)
+                return;
+            var breadcrumbLine = breadcrumbView.Parent as LinearLayout;
+            breadcrumbLine.RemoveView(breadcrumbView);
+            currentLineView.AddView(breadcrumbView);
+        }
+
+        private LinearLayout PutBreadCrumbAtNextLineAndReturnNextLine(LinearLayout breadcrumbView)
+        {
+            var currentLine = breadcrumbView.Parent as LinearLayout;
+            var wholeBreadCrumbContainer = currentLine.Parent as LinearLayout;
+            var currentLinePosition = GetCurrentLinePositionInContainer(wholeBreadCrumbContainer, currentLine);
+            LinearLayout nextLine = null;
+            if (currentLinePosition < wholeBreadCrumbContainer.ChildCount - 1)
+            {
+                nextLine = wholeBreadCrumbContainer.GetChildAt(currentLinePosition + 1) as LinearLayout;
+            }
+            else
+            {
+                nextLine = CreateOneLineOfBreadcrumbs();
+                wholeBreadCrumbContainer.AddView(nextLine);
+            }
+            currentLine.RemoveView(breadcrumbView);
+            nextLine.AddView(breadcrumbView);
+            return nextLine;
+        }
+
+        private int GetCurrentLinePositionInContainer(LinearLayout wholeBreadCrumbContainer, LinearLayout currentLine)
+        {
+            for (int i = 0; i < wholeBreadCrumbContainer.ChildCount; i++)
+            {
+                if (wholeBreadCrumbContainer.GetChildAt(i) == currentLine) return i;
+            }
+            return -1;
+        }
+
+        private int AssignMesuredWidthToBreadcrumbAndReturnIt(LinearLayout breadcrumbView)
+        {
+            breadcrumbView.Measure(0, 0);
+            breadcrumbView.LayoutParameters = new LinearLayout.LayoutParams(breadcrumbView.MeasuredWidth,
+                                                                            LayoutParams.WrapContent);
+            return breadcrumbView.MeasuredWidth;
+        }
+
+        private LinearLayout CreateOneLineOfBreadcrumbs()
+        {
+            LinearLayout newLL = new LinearLayout(this.Context);
             newLL.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
                                                       LayoutParams.WrapContent);
             newLL.SetGravity(GravityFlags.Left);
             newLL.Orientation = Orientation.Horizontal;
+            return newLL;
+        }
 
-            int widthSoFar = 0;
-
-            for (int i = 0; i < views.Count; i++)
-            {
-                LinearLayout LL = new LinearLayout(mContext);
-                LL.Orientation = Orientation.Horizontal;
-                LL.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom);
-                LL.LayoutParameters = new ListView.LayoutParams(
-                    LayoutParams.WrapContent, LayoutParams.WrapContent);
-                views[i].Measure(0, 0);
-                lparams = new LinearLayout.LayoutParams(views[i].MeasuredWidth,
-                                                        LayoutParams.WrapContent);
-                LL.AddView(views[i], lparams);
-                LL.Measure(0, 0);
-                widthSoFar += views[i].MeasuredWidth; // YOU MAY NEED TO ADD THE MARGINS
-                if (widthSoFar >= maxWidth)
-                {
-                    ll.AddView(newLL);
-
-                    newLL = new LinearLayout(mContext);
-                    newLL.LayoutParameters = new LayoutParams(
-                        LayoutParams.FillParent,
-                        LayoutParams.WrapContent);
-                    newLL.Orientation = Orientation.Horizontal;
-                    newLL.SetGravity(GravityFlags.Left);
-                    lparams = new LinearLayout.LayoutParams(LL.MeasuredWidth, LL.MeasuredHeight);
-                    newLL.AddView(LL, lparams);
-                    widthSoFar = LL.MeasuredWidth;
-                }
-                else
-                {
-                    newLL.AddView(LL);
-                }
-            }
-            ll.AddView(newLL);
+        private int ScreenWidth()
+        {
+            Display display = ((Activity)this.Context).WindowManager.DefaultDisplay;
+            Point size = new Point();
+            display.GetSize(size);
+            return size.X - 20;
+         /*   var parent = this.Parent as View ?? this;
+            parent.Measure(0, 0);
+            int maxWidth = parent.MeasuredWidth - 20;
+            return maxWidth;*/
         }
     }
 }

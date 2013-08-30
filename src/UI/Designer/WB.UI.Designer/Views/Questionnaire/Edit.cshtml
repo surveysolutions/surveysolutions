@@ -29,15 +29,13 @@
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
                 url: {
-                    addSharedPersonUrl: '@Url.Action("AddSharedPerson", "Questionnaire", new {id = Model.Questionnaire.PublicKey}, Request.Url.Scheme)',
-                    removeSharedPersonUrl: '@Url.Action("RemoveSharedPerson", "Questionnaire", new {id = Model.Questionnaire.PublicKey}, Request.Url.Scheme)',
+                    checkUserUrl: '@Url.Action("FindByEmail", "Account", null, Request.Url.Scheme)',
+                    lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
                 },
                 settings: {
                     messages: {
-                        unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>',
-                        userToShareAlreadyExistInList: 'User $1 already exist in share list',
-                        userToShareIsOwner: 'You are the owner of this questionnaire. Please, input another email'
-        }
+                        unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.SupportEmail">@AppSettings.Instance.SupportEmail</a>'
+                    }
                 }
             };
         }(document));

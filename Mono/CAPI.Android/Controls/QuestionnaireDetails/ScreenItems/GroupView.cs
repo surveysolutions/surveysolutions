@@ -53,10 +53,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void Initialize()
         {
-            var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            layoutParams.SetMargins(0, 0, 0, 10);
-            this.LayoutParameters = layoutParams;
-            
             AddButton();
 
             AddCounterText();

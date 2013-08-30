@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Views;
@@ -9,6 +10,7 @@ using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
@@ -22,6 +24,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
+        protected IAnswerOnQuestionCommandService AnswerCommandService { get; private set; }
         private readonly IMvxAndroidBindingContext _bindingContext;
 
         private readonly int templateId;
@@ -46,7 +49,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected View Content { get; set; }
 
 
-        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context)
         {
             this._bindingContext = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
@@ -55,20 +58,31 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
+            this.AnswerCommandService = commandService;
 
             Initialize();
 
             PostInit();
         }
+
         protected virtual void Initialize()
         {
             etComments.ImeOptions = ImeAction.Done;
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
             etComments.EditorAction += etComments_EditorAction;
+            etComments.ImeOptions = ImeAction.Done;
             etComments.FocusChange += etComments_FocusChange;
-            llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            llWrapper.LongClick += AbstractQuestionView_LongClick;
+            llWrapper.FocusChange += llWrapper_FocusChange;
             llWrapper.Clickable = true;
+            /*llWrapper.Focusable = true;
+            llWrapper.FocusableInTouchMode = true;*/
+        }
+
+        void llWrapper_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            
         }
 
         protected virtual void SaveAnswer()
@@ -83,26 +97,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 handler(this, EventArgs.Empty);
         }
 
-        #region 
-
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
         {
             IsCommentsEditorFocused = true;
             SetEditCommentsVisibility(true);
             etComments.RequestFocus();
+            ShowKeyboard(etComments);
         }
+
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             IsCommentsEditorFocused = e.HasFocus;
-            if (!e.HasFocus)
+          /*  if (!e.HasFocus)
             {
                 SaveComment();
                 HideKeyboard(etComments);
-            }
-            else
-            {
-                ShowKeyboard(etComments);
-            }
+            }*/
         }
         
         protected void SaveComment()
@@ -116,15 +126,36 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                                                                 this.Model.PublicKey.PropagationVector,
                                                                 DateTime.UtcNow,
                                                                 newComments));
+           tvComments.Text = newComments;
+
             }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
             
         }
 
+        protected void ExecuteSaveAnswerCommand(SetAnswerCommand command)
+        {
+            tvError.Visibility = ViewStates.Gone;
+            AnswerCommandService.Execute(command);
+        }
+
+        protected virtual void SaveAnswerErrorHappend()
+        {
+        }
+
+        private Exception GetDippestException(Exception e)
+        {
+            if (e.InnerException == null)
+                return e;
+            return GetDippestException(e.InnerException);
+        }
+
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+            SaveComment();
             etComments.ClearFocus();
+            HideKeyboard(etComments);
         }
 
         protected void HideKeyboard(EditText editor)
@@ -143,12 +174,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             imm.ShowSoftInput(editor, 0);
         }
 
-        #endregion
 
         private void SetEditCommentsVisibility(bool visible)
         {
             etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
-            tvComments.Visibility = visible ? ViewStates.Gone : ViewStates.Visible;
+            tvComments.Visibility = visible ? ViewStates.Invisible : ViewStates.Gone;
         }
         protected override void OnAttachedToWindow()
         {

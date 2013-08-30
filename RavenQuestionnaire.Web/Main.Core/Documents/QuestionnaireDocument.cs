@@ -29,6 +29,7 @@ namespace Main.Core.Documents
             this.Children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
+            this.SharedPersons = new List<Guid>();
         }
 
 
@@ -95,6 +96,8 @@ namespace Main.Core.Documents
             {
             }
         }
+
+        public List<Guid> SharedPersons { get; set; }
 
         #endregion
 

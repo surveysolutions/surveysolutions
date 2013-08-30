@@ -14,8 +14,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class MultyQuestionView : AbstractQuestionView
     {
-        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -60,7 +60,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 answered.Remove(answerValue);
             }
-            CommandService.Execute(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
+            ExecuteSaveAnswerCommand(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
                                                         this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answered.ToArray()));
             SaveAnswer();
 
