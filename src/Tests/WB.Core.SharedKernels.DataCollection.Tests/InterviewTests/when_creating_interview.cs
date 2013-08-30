@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         {
             eventContext = new EventContext();
 
+            interviewId = Guid.Parse("11000000000000000000000000000000");
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
+            new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.Events.ShouldContain(@event => @event.Payload is InterviewCreated);
@@ -60,6 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static long questionnaireVersion;
         private static Guid userId;
         private static Guid responsibleSupervisorId;
+        private static Guid interviewId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
     }
 }
