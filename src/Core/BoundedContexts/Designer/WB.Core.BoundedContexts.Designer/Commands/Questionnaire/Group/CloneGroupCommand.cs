@@ -7,12 +7,12 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneGroup")]
-    public class CloneGroupCommand : FullGroupDataCommand
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneGroupWithoutChildren")]
+    public class CloneGroupWithoutChildrenCommand : FullGroupDataCommand
     {
-        public CloneGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, Guid sourceGroupId, int targetIndex,
-            string title, Propagate propagationKind, string description, string condition)
-            : base(questionnaireId, groupId, title, propagationKind, description, condition)
+        public CloneGroupWithoutChildrenCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, Guid sourceGroupId, int targetIndex,
+            string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
+            : base(questionnaireId, groupId, title, propagationKind, description, condition, responsibleId)
         {
             this.ParentGroupId = parentGroupId;
             this.SourceGroupId = sourceGroupId;

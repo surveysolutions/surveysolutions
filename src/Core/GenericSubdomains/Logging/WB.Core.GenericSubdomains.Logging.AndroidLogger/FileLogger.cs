@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using Java.Lang;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
@@ -9,7 +10,7 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
     internal class FileLogger : ILogger
     {
         private static readonly string LogFilename = Path.Combine(GetLogDirectory(), "WBCapi.log.txt");
-        
+        private static readonly ReaderWriterLockSlim rwl = new ReaderWriterLockSlim();
         private const string Tag = "Android.WBCapi";
         private const string CapiFolderName = "CAPI";
         private const string LogFolderName = "Logs";
@@ -132,30 +133,52 @@ namespace WB.Core.GenericSubdomains.Logging.AndroidLogger
         public bool IsErrorEnabled { get; private set; }
         public bool IsFatalEnabled { get; private set; }
 
-        private void WriteLogMessage(string tag, string type,  string message)
+        private void WriteLogMessage(string tag, string type, string message)
         {
-            using (var s = File.AppendText(LogFilename))
-            {
-                s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type, tag, message));
-            }
+            WrapWithReadWriteLocker(() =>
+                {
+                    using (var s = File.AppendText(LogFilename))
+                    {
+                        s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type, tag, message));
+                    }
+                });
         }
 
         private void WriteLogMessage(string tag, string type, Throwable exc, string message)
         {
-            using (var s = File.AppendText(LogFilename))
-            {
-                s.WriteLine(string.Format("{0} {1} {2} {3} {4}", DateTime.UtcNow, type, tag, message, exc));
-            }
+            WrapWithReadWriteLocker(() =>
+                {
+                    using (var s = File.AppendText(LogFilename))
+                    {
+                        s.WriteLine(string.Format("{0} {1} {2} {3} {4}", DateTime.UtcNow, type, tag, message, exc));
+                    }
+                });
         }
 
         private void WriteLogMessage(string tag, string type ,string format, params object[] args)
         {
-            using (var s = File.AppendText(LogFilename))
-            {
-                s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type , tag, string.Format(format, args)));    
-            }
+            WrapWithReadWriteLocker(() =>
+                {
+                    using (var s = File.AppendText(LogFilename))
+                    {
+                        s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.UtcNow, type, tag,
+                                                  string.Format(format, args)));
+                    }
+                });
         }
 
+        private void WrapWithReadWriteLocker(Action action)
+        {
+            rwl.EnterWriteLock();
+            try
+            {
+                action();
+            }
+            finally
+            {
+                rwl.ExitWriteLock();
+            }
+        }
     }
 
     public static class LogMessageType

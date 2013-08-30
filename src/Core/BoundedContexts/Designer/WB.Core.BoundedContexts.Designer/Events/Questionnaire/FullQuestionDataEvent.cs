@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.Events.Questionnaire
 {
-    public class FullQuestionDataEvent
+    public class FullQuestionDataEvent : QuestionnaireActiveEvent
     {
         public Order AnswerOrder { get; set; }
         public Answer[] Answers { get; set; }

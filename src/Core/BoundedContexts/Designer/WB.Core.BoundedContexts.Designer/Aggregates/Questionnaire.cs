@@ -96,7 +96,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             title: g.Title,
                             propagationKind: g.Propagated,
                             description: g.Description,
-                            condition: g.ConditionExpression);
+                            condition: g.ConditionExpression,
+                            responsibleId: createdBy);
                     }
                 });
             source.Children.ApplyAction(
@@ -126,7 +127,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
                             optionsOrder: q.AnswerOrder,
                             maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
+                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray(), 
+                            responsibleId: createdBy);
                     }
                 });
         }
@@ -153,12 +155,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void UpdateQuestionnaire(string title, bool isPublic = false)
+        public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
 #warning CRUD
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
-            this.ApplyEvent(new QuestionnaireUpdated() { Title = title, IsPublic = isPublic });
+            this.ApplyEvent(new QuestionnaireUpdated() {Title = title, IsPublic = isPublic, ResponsibleId = responsibleId});
         }
 
         public void DeleteQuestionnaire()
@@ -167,9 +170,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        public void DeleteImage(Guid questionKey, Guid imageKey)
+        public void DeleteImage(Guid questionKey, Guid imageKey, Guid responsibleId)
         {
-            this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey, ResponsibleId = responsibleId });
         }
 
         [Obsolete]
@@ -185,8 +190,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void NewAddGroup(Guid groupId,
-            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
+            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
             this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(parentGroupId);
 
@@ -202,13 +208,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Paropagateble = propagationKind,
                 Description = description,
                 ConditionExpression = condition,
+                ResponsibleId = responsibleId
             });
         }
 
 
-        public void CloneGroup(Guid groupId,
-            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid sourceGroupId, int targetIndex)
+        public void CloneGroupWithoutChildren(Guid groupId,
+            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid sourceGroupId, int targetIndex, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
             this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(parentGroupId);
 
@@ -225,21 +233,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Description = description,
                 ConditionExpression = condition,
                 SourceGroupId = sourceGroupId,
-                TargetIndex = targetIndex
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
             });
         }
 
 
-        public void NewDeleteGroup(Guid groupId)
+        public void NewDeleteGroup(Guid groupId, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
-            this.ApplyEvent(new GroupDeleted(groupId));
+            this.ApplyEvent(new GroupDeleted(){GroupPublicKey = groupId, ResponsibleId = responsibleId});   
         }
 
-        public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex)
+        public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
@@ -256,11 +267,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = groupId,
                 GroupKey = targetGroupId,
                 TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
             });
         }
 
-        public void NewUpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition)
+        public void NewUpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
@@ -279,6 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Propagateble = propagationKind,
                 Description = description,
                 ConditionExpression = condition,
+                ResponsibleId = responsibleId
             });
         }
 
@@ -286,10 +301,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             alias = alias.Trim();
 
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
@@ -330,7 +346,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 SourceQuestionId = sourceQuestionId,
-                TargetIndex = targetIndex
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
             });
         }
 
@@ -338,10 +355,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            Guid groupId, string title, QuestionType type, string alias,
            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
            QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
+           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId)
         {
             alias = alias.Trim();
 
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
@@ -384,19 +402,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AnswerOrder = optionsOrder,
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+                ResponsibleId = responsibleId
             });
         }
 
-        public void NewDeleteQuestion(Guid questionId)
+        public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
-            this.ApplyEvent(new QuestionDeleted(questionId));
+            this.ApplyEvent(new QuestionDeleted() {QuestionId = questionId, ResponsibleId = responsibleId});
         }
 
-        public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex)
+        public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
@@ -407,6 +428,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = questionId,
                 GroupKey = targetGroupId,
                 TargetIndex = targetIndex,
+                ResponsibleId = responsibleId
             });
         }
 
@@ -414,8 +436,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
@@ -457,6 +480,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AnswerOrder = optionsOrder,
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+                ResponsibleId = responsibleId
             });
         }
 
@@ -484,18 +508,59 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     });
         }
 
-        public void AddSharedPerson(Guid personId, string email)
+        public void AddSharedPerson(Guid personId, string email, Guid responsibleId)
         {
-            this.ApplyEvent(new SharedPersonToQuestionnaireAdded() {PersonId = personId, Email = email});
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            if (responsibleId == personId)
+            {
+                throw new DomainException(
+                    DomainExceptionType.OwnerCannotBeInShareList,
+                    "You are the owner of this questionnaire. Please, input another email");
+            }
+
+            if (this.innerDocument.SharedPersons.Contains(personId))
+            {
+                throw new DomainException(
+                    DomainExceptionType.UserExistInShareList,
+                    string.Format("User {0} already exist in share list", email));
+            }
+
+            this.ApplyEvent(new SharedPersonToQuestionnaireAdded()
+            {
+                PersonId = personId,
+                Email = email,
+                ResponsibleId = responsibleId
+            });
         }
 
-        public void RemoveSharedPerson(Guid personId)
+        public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
         {
-            this.ApplyEvent(new SharedPersonFromQuestionnaireRemoved() {PersonId = personId});
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+
+            if (!this.innerDocument.SharedPersons.Contains(personId))
+            {
+                throw new DomainException(
+                   DomainExceptionType.UserDoesNotExistInShareList,
+                   "Couldn't remove user, because it doesn't exist in share list");
+            }
+
+            this.ApplyEvent(new SharedPersonFromQuestionnaireRemoved()
+            {
+                PersonId = personId,
+                ResponsibleId = responsibleId
+            });
         }
 
-        protected void OnSharedPersonToQuestionnaireAdded(SharedPersonToQuestionnaireAdded e) {}
-        protected  void OnSharedPersonFromQuestionnaireRemoved(SharedPersonFromQuestionnaireRemoved e){}
+        protected void OnSharedPersonToQuestionnaireAdded(SharedPersonToQuestionnaireAdded e)
+        {
+            this.innerDocument.SharedPersons.Add(e.PersonId);
+        }
+
+        protected void OnSharedPersonFromQuestionnaireRemoved(SharedPersonFromQuestionnaireRemoved e)
+        {
+            this.innerDocument.SharedPersons.Remove(e.PersonId);
+        }
 
         protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
         {
@@ -991,6 +1056,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (elementsWithSameId.Count > expectedCount)
             {
                 throw new DomainException(exceptionType, getExceptionDescription(elementsWithSameId));
+            }
+        }
+
+        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId)
+        {
+            if(this.innerDocument.CreatedBy != viewerId && !this.innerDocument.SharedPersons.Contains(viewerId))
+            {
+                throw new DomainException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit,
+                    "You don't have permissions for changing this questionnaire");
             }
         }
     }

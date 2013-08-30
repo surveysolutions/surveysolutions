@@ -2,9 +2,8 @@
 {
     using System;
 
-    public class SharedPersonFromQuestionnaireRemoved
+    public class SharedPersonFromQuestionnaireRemoved : QuestionnaireActiveEvent
     {
         public Guid PersonId { get; set; }
-        public string Email { get; set; }
     }
 }
