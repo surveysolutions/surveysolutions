@@ -92,8 +92,14 @@ namespace WB.Core.Synchronization.SyncStorage
 
             foreach (var incomeEvent in incomeEvents)
             {
-                
-                eventBus.Publish(incomeEvent);
+                try
+                {
+                    eventBus.Publish(incomeEvent);
+                }
+                catch (Exception)
+                {
+                }
+             
             }
         
         }

@@ -5,8 +5,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
     public abstract class FullGroupDataCommand : GroupCommand
     {
-        protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition)
-            : base(questionnaireId, groupId)
+        protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition, Guid responsibleId)
+            : base(questionnaireId, groupId, responsibleId)
         {
             this.Title = title;
             this.PropagationKind = propagationKind;
