@@ -132,10 +132,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
-            var commenter = this.users.GetById(evnt.Payload.UserId);
 
+            var commenter = this.users.GetById(evnt.Payload.UserId);
+            if (commenter == null)
+                return;
             SaveComment(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                       evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime);
+                        evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime);
+
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
@@ -171,10 +174,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             PreformActionOnLevel(evnt.EventSourceId, evnt.Payload.PropagationVector, (level) =>
-            {
-                if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
-                    level.DisabledGroups.Add(evnt.Payload.GroupId);
-            });
+                {
+                    if (!level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
+                        level.DisabledGroups.Add(evnt.Payload.GroupId);
+                        return true;
+                    }
+                    return false;
+                });
         }
 
         public void Handle(IPublishedEvent<GroupEnabled> evnt)
@@ -182,7 +189,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             PreformActionOnLevel(evnt.EventSourceId, evnt.Payload.PropagationVector, (level) =>
                 {
                     if (level.DisabledGroups.Contains(evnt.Payload.GroupId))
+                    {
                         level.DisabledGroups.Remove(evnt.Payload.GroupId);
+                        return true;
+                    }
+                    return false;
                 });
         }
 
@@ -219,7 +230,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void SaveAnswer(Guid interviewId, int[] vector, Guid questionId, object answer)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) => { question.Answer = answer; });
+            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+                {
+                    question.Answer = answer;
+                    return true;
+                });
         }
 
         private void SaveComment(Guid interviewId, int[] vector, Guid questionId, string comment, Guid userId, string userName, DateTime commentTime)
@@ -233,30 +248,50 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     Date = commentTime
                 };
 
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) => question.Comments.Add(interviewQuestionComment));
+            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+                {
+                    if(question.Comments==null)
+                        question.Comments=new List<InterviewQuestionComment>();
+                    question.Comments.Add(interviewQuestionComment);
+                    return true;
+                });
         }
 
         private void ChangeQuestionConditionState(Guid interviewId, int[] vector, Guid questionId, bool newState)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) => { question.Enabled = newState; });
+            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+                {
+                    if (question.Enabled == newState)
+                        return false;
+                    question.Enabled = newState;
+                    return true;
+                });
         }
 
         private void ChangeQuestionConditionValidity(Guid interviewId, int[] vector, Guid questionId, bool valid)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) => { question.Valid = valid; });
+            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+                {
+                    if (question.Valid == valid)
+                        return false;
+                    question.Valid = valid;
+                    return true;
+                });
         }
 
-        private void PreformActionOnLevel(Guid interviewId, int[] vector, Action<InterviewLevel> action)
+        private void PreformActionOnLevel(Guid interviewId, int[] vector, Func<InterviewLevel, bool> action)
         {
             var interview = this.interviews.GetById(interviewId);
             var levelId = CreateLevelIdFromPropagationVector(vector);
-            action(interview.Levels[levelId]);
-            this.interviews.Store(interview, interview.InterviewId);
+            if(action(interview.Levels[levelId]))
+            {
+                this.interviews.Store(interview, interview.InterviewId);
+            }
         }
 
 
         private void PreformActionOnQuestion(Guid interviewId, int[] vector, Guid questionId,
-                                             Action<InterviewQuestion> action)
+                                             Func<InterviewQuestion, bool> action)
         {
             PreformActionOnLevel(interviewId, vector, (questionsAtTheLevel) =>
                 {
@@ -267,7 +302,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                         questionsAtTheLevel.Questions.Add(answeredQuestion);
                     }
 
-                    action(answeredQuestion);
+                    return action(answeredQuestion);
                 });
         }
 
