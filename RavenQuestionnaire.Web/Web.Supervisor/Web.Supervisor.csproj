@@ -314,6 +314,7 @@
     <Compile Include="Controllers\TestUnhandledExceptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Global.asax.cs">
@@ -599,6 +600,7 @@
     <Content Include="Views\HQ\ImportSample.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
+    <Content Include="Views\Team\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

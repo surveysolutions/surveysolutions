@@ -119,9 +119,12 @@
         /// <param name="roles">
         /// Roles for User. 
         /// </param>
-        public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
+        /// <param name="password">
+        /// User password.
+        /// </param>
+        public void ChangeUser(string email, bool isLocked, UserRoles[] roles, string password)
         {
-            this.ApplyEvent(new UserChanged { Email = email, Roles = roles });
+            this.ApplyEvent(new UserChanged { Email = email, Roles = roles, Password = password});
 
             if (isLocked)
             {
@@ -184,6 +187,7 @@
         {
             this.email = e.Email;
             this.roles = e.Roles;
+            this.password = e.Password;
         }
 
         #endregion

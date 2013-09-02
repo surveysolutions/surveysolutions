@@ -88,6 +88,7 @@ namespace Core.Supervisor.Denormalizer
 
             item.Email = evnt.Payload.Email;
             item.Roles = evnt.Payload.Roles.ToList();
+            item.Password = evnt.Payload.Password;
             users.Store(item, item.PublicKey);
         }
 

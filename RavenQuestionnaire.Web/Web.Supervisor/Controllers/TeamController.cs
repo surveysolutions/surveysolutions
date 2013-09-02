@@ -126,5 +126,61 @@ namespace Web.Supervisor.Controllers
         {
             return this.userViewFactory.Load(new UserViewInputModel(id));
         }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult Details(Guid id)
+        {
+            var user = this.GetUser(id);
+            return this.View(new UserEditModel()
+                {
+                    Id = user.PublicKey,
+                    Email = user.Email,
+                    IsLocked = user.IsLocked,
+                    UserName = user.UserName
+                });
+        }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        [HttpPost]
+        public ActionResult Details(UserEditModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var user = this.GetUser(model.Id);
+                if (user != null)
+                {
+                    this.CommandService.Execute(
+                        new ChangeUserCommand()
+                            {
+                                PublicKey = user.PublicKey,
+                                Password = string.IsNullOrEmpty(model.Password)
+                                               ? user.Password
+                                               : SimpleHash.ComputeHash(model.Password),
+                                Email = model.Email,
+                                IsLocked = model.IsLocked,
+                                Roles = user.Roles.ToArray(),
+                            }
+                        );
+                    this.Success(string.Format("Information about <b>{0}</b> sucessfully updated", user.UserName));
+                    return this.DetailsBackByUser(user);
+                }
+            }
+
+            return this.View(model);
+        }
+
+        [Authorize(Roles = "Headquarter, Supervisor")]
+        public ActionResult DetailsBack(Guid id)
+        {
+            var user = this.GetUser(id);
+            return this.DetailsBackByUser(user);
+        }
+
+        private ActionResult DetailsBackByUser(UserView user)
+        {
+            return this.GlobalInfo.IsHeadquarter && user.Supervisor == null
+                       ? this.RedirectToAction("Index")
+                       : this.RedirectToAction("Interviewers", new {id = user.Supervisor.Id});
+        }
     }
 }

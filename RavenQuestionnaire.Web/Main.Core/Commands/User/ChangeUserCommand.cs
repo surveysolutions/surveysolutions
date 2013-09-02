@@ -39,13 +39,14 @@
         /// <param name="isLocked">
         /// The is locked.
         /// </param>
-        public ChangeUserCommand(Guid publicKey, string email, UserRoles[] roles, bool isLocked)
+        public ChangeUserCommand(Guid publicKey, string email, UserRoles[] roles, bool isLocked, string password)
             : base(publicKey)
         {
             this.PublicKey = publicKey;
             this.Email = email;
             this.Roles = roles;
             this.IsLocked = isLocked;
+            this.Password = password;
         }
 
         #endregion
@@ -77,16 +78,6 @@
         /// Gets or sets the roles.
         /// </summary>
         public UserRoles[] Roles { get; set; }
-
-        /// <summary>
-        /// Gets or sets the supervisor.
-        /// </summary>
-        public UserLight Supervisor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user name.
-        /// </summary>
-        public string UserName { get; set; }
 
         #endregion
     }
