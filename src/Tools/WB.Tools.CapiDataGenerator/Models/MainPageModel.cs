@@ -411,23 +411,24 @@ namespace CapiDataGenerator
             }
         }
 
-        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> questionnaires, IEnumerable<ICompleteQuestion> questions)
+        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<ICompleteQuestion> questions)
         {
-            for (int j = 0; j < questionnaires.Count; j++)
+            for (int j = 0; j < interviews.Count; j++)
             {
-                var qId = questionnaires.ElementAt(j).Key;
+                var interview = interviews.ElementAt(j);
                 for (int z = 0; z < commentsCount; z++)
                 {
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
 
-                    commandService.Execute(new CommentAnswerCommand(qId, Guid.NewGuid(),
-                                                                    question.PublicKey,
-                                                                    new int[0],
-                                                                    DateTime.UtcNow,
-                                                                    "auto comment"));
+                    commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
+                                                                    userId: interview.Value,
+                                                                    questionId: question.PublicKey,
+                                                                    propagationVector: new int[0],
+                                                                    commentTime: DateTime.UtcNow,
+                                                                    comment: "auto comment"));
 
                     UpdateProgress();
-                    LogStatus("set comments", (j*commentsCount) + z, questionnaires.Count*commentsCount);
+                    LogStatus("set comments", (j*commentsCount) + z, interviews.Count*commentsCount);
                 }
             }
         }
