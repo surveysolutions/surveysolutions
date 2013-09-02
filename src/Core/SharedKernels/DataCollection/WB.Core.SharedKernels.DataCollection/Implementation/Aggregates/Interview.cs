@@ -960,7 +960,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool? DetermineCustomEnablementStateOfGroup(Identity group, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForGroup(@group.Id);
+            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(@group.Id);
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, @group.PropagationVector, questionnaire);
 
             string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(group.Id);
@@ -970,7 +970,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private bool? DetermineCustomEnablementStateOfQuestion(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionForQuestion(question.Id);
+            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id);
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
             string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(question.Id);
