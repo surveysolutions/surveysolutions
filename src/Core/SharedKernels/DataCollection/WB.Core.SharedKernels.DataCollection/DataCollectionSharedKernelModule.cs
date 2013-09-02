@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public override void Load()
         {
-            this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
+            this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
             this.Bind<IExpressionProcessor>().To<ExpressionProcessor>();
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));
             this.Bind(typeof(IVersionedReadSideRepositoryReader<>)).To(typeof(VersionedReadSideRepositoryReader<>));
