@@ -499,6 +499,7 @@ namespace CapiDataGenerator
                                                                            questionnaireVersion: 1,
                                                                            answers: null, disabledGroups: null,
                                                                            disabledQuestions: null,
+                                                                           validAnsweredQuestions: null,
                                                                            invalidAnsweredQuestions: null,
                                                                            propagatedGroupInstanceCounts: null)));
                 UpdateProgress();

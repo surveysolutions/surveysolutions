@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
                               Dictionary<string, object> answers, HashSet<string> disabledGroups,
                               HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
-                              HashSet<string> invalidAnsweredQuestions)
+                              HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions)
         {
             QuestionnaireId = questionnaireId;
             QuestionnaireVersion = questionnaireVersion;
@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
+            ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
         }
 
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public HashSet<string> DisabledGroups { get; private set; }
         public HashSet<string> DisabledQuestions { get; private set; }
         public Dictionary<string, int> PropagatedGroupInstanceCounts { get; private set; }
+        public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
     }
 }

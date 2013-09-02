@@ -46,6 +46,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.QuestionnaireVersion;
         }
 
+        private void Apply(InterviewSynchronized @event)
+        {
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+            this.status = @event.Status;
+
+            this.answers = @event.AnsweredQuestions.ToDictionary(
+                question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                question => question.Answer);
+
+            this.disabledGroups = ToHashSetOfIdAndPropagationVectorStrings(@event.DisabledGroups);
+            this.disabledQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.DisabledQuestions);
+
+            this.propagatedGroupInstanceCounts = @event.PropagatedGroupInstanceCounts.ToDictionary(
+                pair => ConvertIdAndPropagationVectorToString(pair.Key.PublicKey, pair.Key.PropagationVector),
+                pair => pair.Value);
+
+            this.validAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.ValidAnsweredQuestions);
+            this.invalidAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.InvalidAnsweredQuestions);
+        }
+
         private void Apply(InterviewMetaInfoUpdated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
@@ -92,6 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
+            this.validAnsweredQuestions.Add(questionKey);
             this.invalidAnsweredQuestions.Remove(questionKey);
         }
 
@@ -99,6 +121,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
+            this.validAnsweredQuestions.Remove(questionKey);
             this.invalidAnsweredQuestions.Add(questionKey);
         }
 
@@ -167,21 +190,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(InterviewDeclaredValid @event) {}
 
         private void Apply(InterviewDeclaredInvalid @event) {}
-
-        private void Apply(InterviewSynchronized @event)
-        {
-            this.questionnaireId = @event.QuestionnaireId;
-            this.questionnaireVersion = @event.QuestionnaireVersion;
-            this.status = @event.Status;
-
-            RestoreAnswersAfterSynchronization(@event);
-
-            RestoreDesabledGroupsAfterSynchronization(@event);
-
-            RestoreInvalidaAnswersAfterSynchronization(@event);
-
-            RestorePropagatedInstancesAfterSynchronization(@event);
-        }
 
         #endregion
 
@@ -310,6 +318,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       synchronizedInterview.Answers,
                                                       synchronizedInterview.DisabledGroups,
                                                       synchronizedInterview.DisabledQuestions,
+                                                      synchronizedInterview.ValidAnsweredQuestions,
                                                       synchronizedInterview.InvalidAnsweredQuestions,
                                                       synchronizedInterview.PropagatedGroupInstanceCounts));
         }
@@ -871,12 +880,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private List<Identity> RemoveQuestionsAlreadyDeclaredValid(IEnumerable<Identity> questionsToBeDeclaredValid)
         {
-            return questionsToBeDeclaredValid.Where(question => !this.IsQuestionValid(question)).ToList();
+            return questionsToBeDeclaredValid.Where(question => !this.IsQuestionAnsweredValid(question)).ToList();
         }
 
         private List<Identity> RemoveQuestionsAlreadyDeclaredInvalid(IEnumerable<Identity> questionsToBeDeclaredInvalid)
         {
-            return questionsToBeDeclaredInvalid.Where(question => !this.IsQuestionInvalid(question)).ToList();
+            return questionsToBeDeclaredInvalid.Where(question => !this.IsQuestionAnsweredInvalid(question)).ToList();
         }
 
         private void PerformCustomValidationOfDependentQuestions(
@@ -1127,14 +1136,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : 0;
         }
 
-        private bool IsQuestionValid(Identity question)
+        private bool IsQuestionAnsweredValid(Identity question)
         {
             string questionKey = ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector);
 
             return this.validAnsweredQuestions.Contains(questionKey);
         }
 
-        private bool IsQuestionInvalid(Identity question)
+        private bool IsQuestionAnsweredInvalid(Identity question)
         {
             string questionKey = ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector);
 
@@ -1302,40 +1311,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : "<<MISSING GROUP>>";
         }
 
-        private void RestorePropagatedInstancesAfterSynchronization(InterviewSynchronized @event)
+        private static HashSet<string> ToHashSetOfIdAndPropagationVectorStrings(IEnumerable<ItemPublicKey> synchronizationIdentities)
         {
-            this.propagatedGroupInstanceCounts =
-                @event.PropagatedGroupInstanceCounts.ToDictionary(
-                    key => ConvertIdAndPropagationVectorToString(key.Key.PublicKey, key.Key.PropagationVector),
-                    value => value.Value);
-        }
-
-        private void RestoreInvalidaAnswersAfterSynchronization(InterviewSynchronized @event)
-        {
-            this.invalidAnsweredQuestions = new HashSet<string>();
-            foreach (var invalidAnsweredQuestion in @event.InvalidAnsweredQuestions)
-            {
-                this.invalidAnsweredQuestions.Add(ConvertIdAndPropagationVectorToString(invalidAnsweredQuestion.PublicKey,
-                                                                              invalidAnsweredQuestion.PropagationVector));
-            }
-        }
-
-        private void RestoreDesabledGroupsAfterSynchronization(InterviewSynchronized @event)
-        {
-            this.disabledGroups = new HashSet<string>();
-            foreach (var disabledGroup in @event.DisabledGroups)
-            {
-                this.disabledGroups.Add(ConvertIdAndPropagationVectorToString(disabledGroup.PublicKey,
-                                                                              disabledGroup.PropagationVector));
-            }
-        }
-
-        private void RestoreAnswersAfterSynchronization(InterviewSynchronized @event)
-        {
-            this.answers =
-                @event.AnsweredQuestions.ToDictionary(
-                    question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
-                    question => question.Answer);
+            return new HashSet<string>(
+                synchronizationIdentities.Select(question => ConvertIdAndPropagationVectorToString(question.PublicKey, question.PropagationVector)));
         }
 
         /// <remarks>
@@ -1351,7 +1330,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewState CreateSnapshot()
         {
             return new InterviewState(questionnaireId, questionnaireVersion, status, answers, disabledGroups,
-                                      disabledQuestions, propagatedGroupInstanceCounts, invalidAnsweredQuestions);
+                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
@@ -1363,6 +1342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             disabledGroups = snapshot.DisabledGroups;
             disabledQuestions = snapshot.DisabledQuestions;
             propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
+            validAnsweredQuestions = snapshot.ValidAnsweredQuestions;
             invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
         }
     }

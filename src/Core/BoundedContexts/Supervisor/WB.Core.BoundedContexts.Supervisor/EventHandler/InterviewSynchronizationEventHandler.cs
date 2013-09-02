@@ -63,6 +63,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<ItemPublicKey>();
             var disabledQuestions = new HashSet<ItemPublicKey>();
+            var validQuestions = new HashSet<ItemPublicKey>();
             var invalidQuestions = new HashSet<ItemPublicKey>();
             var propagatedGroupInstanceCounts = new Dictionary<ItemPublicKey, int>();
 
@@ -80,8 +81,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
+
+                    #warning TLK: validness flag misses undefined state
                     if (!interviewQuestion.Valid)
                         invalidQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
+                    if (interviewQuestion.Valid)
+                        validQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {
@@ -94,7 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                    status,
                                                    userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
                                                    answeredQuestions, disabledGroups, disabledQuestions,
-                                                   invalidQuestions, propagatedGroupInstanceCounts);
+                                                   validQuestions, invalidQuestions, propagatedGroupInstanceCounts);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
