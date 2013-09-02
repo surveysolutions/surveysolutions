@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public InterviewSynchronized(Guid userId, Guid questionnaireId, InterviewStatus status,
                                      long questionnaireVersion, IList<AnsweredQuestionSynchronizationDto> answeredQuestions,
                                      HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions,
-                                     HashSet<ItemPublicKey> invalidAnsweredQuestions,
+                                     HashSet<ItemPublicKey> validAnsweredQuestions, HashSet<ItemPublicKey> invalidAnsweredQuestions,
                                      Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
             : base(userId)
         {
@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             AnsweredQuestions = answeredQuestions?? new List<AnsweredQuestionSynchronizationDto>();
             DisabledGroups = disabledGroups?? new HashSet<ItemPublicKey>();
             DisabledQuestions = disabledQuestions?? new HashSet<ItemPublicKey>();
+            ValidAnsweredQuestions = validAnsweredQuestions?? new HashSet<ItemPublicKey>();
             InvalidAnsweredQuestions = invalidAnsweredQuestions?? new HashSet<ItemPublicKey>();
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts?? new Dictionary<ItemPublicKey, int>();
         }
@@ -34,6 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public IList<AnsweredQuestionSynchronizationDto> AnsweredQuestions { get; private set; }
         public HashSet<ItemPublicKey> DisabledGroups { get; private set; }
         public HashSet<ItemPublicKey> DisabledQuestions { get; private set; }
+        public HashSet<ItemPublicKey> ValidAnsweredQuestions { get; private set; }
         public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get; private set; }
         public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get; private set; }
     }

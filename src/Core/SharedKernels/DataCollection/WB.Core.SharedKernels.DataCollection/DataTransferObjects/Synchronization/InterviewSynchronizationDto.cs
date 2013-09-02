@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                                            IList<AnsweredQuestionSynchronizationDto> answers,
                                            HashSet<ItemPublicKey> disabledGroups,
                                            HashSet<ItemPublicKey> disabledQuestions,
+                                           HashSet<ItemPublicKey> validAnsweredQuestions,
                                            HashSet<ItemPublicKey> invalidAnsweredQuestions,
                                            Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
         {
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Answers = answers;
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
+            ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
         }
@@ -37,6 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public IList<AnsweredQuestionSynchronizationDto> Answers { get;  set; }
         public HashSet<ItemPublicKey> DisabledGroups { get;  set; }
         public HashSet<ItemPublicKey> DisabledQuestions { get;  set; }
+        public HashSet<ItemPublicKey> ValidAnsweredQuestions { get;  set; }
         public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get;  set; }
         public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get;  set; }
     }
