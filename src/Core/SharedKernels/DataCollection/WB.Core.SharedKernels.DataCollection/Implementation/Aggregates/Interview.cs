@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private HashSet<string> disabledGroups = new HashSet<string>();
         private HashSet<string> disabledQuestions = new HashSet<string>();
         private Dictionary<string, int> propagatedGroupInstanceCounts = new Dictionary<string, int>();
+        private HashSet<string> validAnsweredQuestions = new HashSet<string>();
         private HashSet<string> invalidAnsweredQuestions = new HashSet<string>();
 
         private void Apply(InterviewCreated @event)
@@ -844,16 +845,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
             Identity answeredQuestion, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
-            out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
+            out List<Identity> questionsToBeDeclaredValid, out List<Identity> questionsToBeDeclaredInvalid)
         {
-            questionsDeclaredValid = new List<Identity>();
-            questionsDeclaredInvalid = new List<Identity>();
+            questionsToBeDeclaredValid = new List<Identity>();
+            questionsToBeDeclaredInvalid = new List<Identity>();
 
             bool? answeredQuestionValidationResult = this.PerformCustomValidationOfQuestion(answeredQuestion, questionnaire, getAnswer);
             switch (answeredQuestionValidationResult)
             {
-                case true: questionsDeclaredValid.Add(answeredQuestion); break;
-                case false: questionsDeclaredInvalid.Add(answeredQuestion); break;
+                case true: questionsToBeDeclaredValid.Add(answeredQuestion); break;
+                case false: questionsToBeDeclaredInvalid.Add(answeredQuestion); break;
             }
 
             List<Identity> dependentQuestionsDeclaredValid;
@@ -861,8 +862,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformCustomValidationOfDependentQuestions(answeredQuestion, questionnaire, getAnswer,
                 out dependentQuestionsDeclaredValid, out dependentQuestionsDeclaredInvalid);
 
-            questionsDeclaredValid.AddRange(dependentQuestionsDeclaredValid);
-            questionsDeclaredInvalid.AddRange(dependentQuestionsDeclaredInvalid);
+            questionsToBeDeclaredValid.AddRange(dependentQuestionsDeclaredValid);
+            questionsToBeDeclaredInvalid.AddRange(dependentQuestionsDeclaredInvalid);
+
+            questionsToBeDeclaredValid = this.RemoveQuestionsAlreadyDeclaredValid(questionsToBeDeclaredValid);
+            questionsToBeDeclaredInvalid = this.RemoveQuestionsAlreadyDeclaredInvalid(questionsToBeDeclaredInvalid);
+        }
+
+        private List<Identity> RemoveQuestionsAlreadyDeclaredValid(IEnumerable<Identity> questionsToBeDeclaredValid)
+        {
+            return questionsToBeDeclaredValid.Where(question => !this.IsQuestionValid(question)).ToList();
+        }
+
+        private List<Identity> RemoveQuestionsAlreadyDeclaredInvalid(IEnumerable<Identity> questionsToBeDeclaredInvalid)
+        {
+            return questionsToBeDeclaredInvalid.Where(question => !this.IsQuestionInvalid(question)).ToList();
         }
 
         private void PerformCustomValidationOfDependentQuestions(
@@ -1113,6 +1127,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : 0;
         }
 
+        private bool IsQuestionValid(Identity question)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector);
+
+            return this.validAnsweredQuestions.Contains(questionKey);
+        }
+
+        private bool IsQuestionInvalid(Identity question)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector);
+
+            return this.invalidAnsweredQuestions.Contains(questionKey);
+        }
+
         private bool HasInvalidAnswers()
         {
             return this.invalidAnsweredQuestions.Any();
@@ -1287,7 +1315,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.invalidAnsweredQuestions = new HashSet<string>();
             foreach (var invalidAnsweredQuestion in @event.InvalidAnsweredQuestions)
             {
-                this.disabledGroups.Add(ConvertIdAndPropagationVectorToString(invalidAnsweredQuestion.PublicKey,
+                this.invalidAnsweredQuestions.Add(ConvertIdAndPropagationVectorToString(invalidAnsweredQuestion.PublicKey,
                                                                               invalidAnsweredQuestion.PropagationVector));
             }
         }
