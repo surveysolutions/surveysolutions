@@ -9,11 +9,11 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootMethodOrConstructor(typeof(Implementation.Aggregates.Interview), "UpdateInterviewMetaInfo")]
-    public class UpdateInterviewMetaInfoCommand : InterviewCommand
+    [MapsToAggregateRootMethodOrConstructor(typeof(Implementation.Aggregates.Interview), "ApplySynchronizationMetadata")]
+    public class ApplySynchronizationMetadata : InterviewCommand
     {
-        public UpdateInterviewMetaInfoCommand(Guid interviewId, Guid questionnarieId, Guid userId,
-                                              InterviewStatus status, List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        public ApplySynchronizationMetadata(Guid interviewId, Guid questionnarieId, Guid userId,
+                                              InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -27,6 +27,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public InterviewStatus InterviewStatus { get; set; }
 
-        public List<AnsweredQuestionSynchronizationDto> FeaturedQuestionsMeta { get; set; }
+        public AnsweredQuestionSynchronizationDto[] FeaturedQuestionsMeta { get; set; }
     }
 }

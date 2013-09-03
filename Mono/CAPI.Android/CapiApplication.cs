@@ -128,7 +128,7 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
-            bus.RegisterHandler(eventHandler, typeof(InterviewMetaInfoUpdated));
+            bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             
            
         }
@@ -160,8 +160,8 @@ namespace CAPI.Android
                 new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
                                           kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
-           
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));

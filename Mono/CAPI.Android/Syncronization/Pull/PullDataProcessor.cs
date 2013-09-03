@@ -21,6 +21,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Syncronization.Pull
@@ -133,7 +134,7 @@ namespace CAPI.Android.Syncronization.Pull
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
             syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
-            commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
+            commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.TemplateId,
                                                                       metaInfo.ResponsibleId,
                                                                       (InterviewStatus) metaInfo.Status,
                                                                       metaInfo.FeaturedQuestionsMeta.Select(
@@ -141,7 +142,7 @@ namespace CAPI.Android.Syncronization.Pull
                                                                           new AnsweredQuestionSynchronizationDto(
                                                                               q.PublicKey, new int[0], q.Value,
                                                                               string.Empty))
-                                                                              .ToList()));
+                                                                              .ToArray()));
 
 
             /*    }

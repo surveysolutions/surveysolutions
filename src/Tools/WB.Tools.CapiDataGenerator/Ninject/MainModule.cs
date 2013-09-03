@@ -176,7 +176,7 @@ namespace CapiDataGenerator
                                           Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
                                           Kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
 
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
+            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
