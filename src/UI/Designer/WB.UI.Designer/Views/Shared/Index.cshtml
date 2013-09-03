@@ -8,10 +8,11 @@
     </p>
 </blockquote>
 
-<form class="form-search">
-    <div class="input-prepend">
-        <button type="submit" class="btn">Search</button>
-        <input type="text" class="span2 search-query" name="f" value="@ViewBag.Filter">
+<form id="frmSearch" class="form-search">
+    <div class="input-prepend input-append">
+        <a class="btn add-on" onclick="$('#frmSearch').submit()">Search</a>
+        <input id="txtFilter" type="text" class="span2" name="f" value="@ViewBag.Filter" />
+        <a class="btn add-on" onclick="$('#txtFilter').val(''); $('#frmSearch').submit();">x</a>
     </div>
 </form>
 
