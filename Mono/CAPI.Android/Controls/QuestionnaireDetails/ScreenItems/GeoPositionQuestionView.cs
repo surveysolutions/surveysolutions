@@ -40,6 +40,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             //locationDisplay = CreateTable(Model.AnswerObject as GeoPosition);
             
             locationText = new TextView(this.Context);
+            
             locationText.SetTypeface(null, TypefaceStyle.Bold);
             locationText.Text = RenderPositionAsText(Model.AnswerObject as GeoPosition);
 
@@ -68,7 +69,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             if (!this.geoservice.IsGeolocationAvailable || !this.geoservice.IsGeolocationEnabled)
             {
-                Toast.MakeText(this.Context, "Geolocation is unavailable", ToastLength.Long).Show();
+                Toast.MakeText(this.Context, "Geo location is unavailable", ToastLength.Long).Show();
                 return;
             }
 
@@ -104,7 +105,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 }
                 else if (t.IsFaulted)
                 {
-                    Toast.MakeText(this.Context, "Error occured on location retrieving.", ToastLength.Long).Show();
+                    Toast.MakeText(this.Context, "Error occurred on location retrieving.", ToastLength.Long).Show();
                 }
                 else
                 {
@@ -132,38 +133,45 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var table = new TableLayout(this.Context);
 
-
-            TableRow th = new TableRow(this.Context);
-            TextView columnName = new TextView(this.Context);
-            columnName.Text = "Latitude:";
-            TextView columnValue = new TextView(this.Context);
-            columnValue.Text = position.Latitude.ToString("{0:N4}");
-
-            th.AddView(columnName);
-            th.AddView(columnValue);
-            table.AddView(th);
-
-             th = new TableRow(this.Context);
-             columnName = new TextView(this.Context);
-            columnName.Text = "Longitude:";
-             columnValue = new TextView(this.Context);
-            columnValue.Text = position.Longitude.ToString("{0:N4}");
-
-            th.AddView(columnName);
-            th.AddView(columnValue);
-            table.AddView(th);
-
-             th = new TableRow(this.Context);
-             columnName = new TextView(this.Context);
-             columnName.Text = "Accuracy:";
-             columnValue = new TextView(this.Context);
-             columnValue.Text = position.Accuracy.ToString("{0:N2}");
-
-            th.AddView(columnName);
-            th.AddView(columnValue);
-            table.AddView(th);
+            if (position != null)
+            {
+                CreateAndAddRow(table, "Latitude:", position.Latitude);
+                CreateAndAddRow(table, "Longitude:", position.Longitude);
+                CreateAndAddRow(table, "Accuracy:", position.Accuracy);
+            }
+            else
+            {
+                var nonValueRow = new TableRow(this.Context);
+                var nonValueText = new TextView(this.Context) {Text = "N/A"};
+                nonValueText.SetTypeface(null, TypefaceStyle.Bold);
+                nonValueRow.AddView(nonValueText);
+                table.AddView(nonValueRow);
+            }
 
             return table;
+        }
+
+        private void CreateAndAddRow(TableLayout table, string name, double value)
+        {
+            TableRow th = new TableRow(this.Context);
+            TextView columnName = new TextView(this.Context);
+            columnName.Text = name;
+            columnName.SetTypeface(null, TypefaceStyle.Bold);
+
+            TextView columnValue = new TextView(this.Context);
+
+            var textToShow = value.ToString("N4");
+            
+            //placeholder for minus sign
+            if (value >= 0)
+                textToShow = " " + textToShow;
+            
+            columnValue.SetTypeface(null, TypefaceStyle.Bold);
+            columnValue.Text = textToShow;
+
+            th.AddView(columnName);
+            th.AddView(columnValue);
+            table.AddView(th);
         }
 
         private string RenderPositionAsText(GeoPosition position)
@@ -171,17 +179,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             StringBuilder sb = new StringBuilder();
             if (position != null)
             {
-                sb.AppendLine(string.Format("Latitude:\t\t\t{0}{1:N4}", position.Latitude > 0 ? "\t" : "", position.Latitude));
-                sb.AppendLine(string.Format("Longitude:\t\t{0}{1:N4}", position.Longitude > 0 ? "\t" : "", position.Longitude));
-                sb.AppendLine(string.Format("Accuracy:\t\t{0}{1:N2}", position.Accuracy > 0 ? "\t" : "", position.Accuracy));
+                sb.AppendLine(string.Format("Latitude:\u0009\u0009\u0009{0}{1:N4}", position.Latitude > 0 ? " " : "", position.Latitude));
+                sb.AppendLine(string.Format("Longitude:\u0009\u0009{0}{1:N4}", position.Longitude > 0 ? " " : "", position.Longitude));
+                sb.AppendLine(string.Format("Accuracy:\u0009\u0009 {0:N2}", position.Accuracy));
             }
             else
             {
                 sb.Append("N/A");
             }
-
             return sb.ToString();
         }
-
     }
 };
