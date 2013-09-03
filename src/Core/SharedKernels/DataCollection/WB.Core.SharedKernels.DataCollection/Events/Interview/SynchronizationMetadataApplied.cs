@@ -6,9 +6,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class InterviewMetaInfoUpdated : InterviewActiveEvent
+    public class SynchronizationMetadataApplied : InterviewActiveEvent
     {
-        public InterviewMetaInfoUpdated(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status, IEnumerable<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
             : base(userId)
         {
             QuestionnaireId = questionnaireId;
@@ -23,6 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public InterviewStatus Status { get; private set; }
 
-        public IEnumerable<AnsweredQuestionSynchronizationDto> FeaturedQuestionsMeta { get; private set; }
+        public AnsweredQuestionSynchronizationDto[] FeaturedQuestionsMeta { get; private set; }
     }
 }
