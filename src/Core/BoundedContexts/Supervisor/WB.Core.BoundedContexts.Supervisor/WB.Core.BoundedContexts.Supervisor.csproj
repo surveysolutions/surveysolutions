@@ -56,6 +56,8 @@
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
+    <Compile Include="Implementation\ReadSide\InterviewDataRepositoryWriterWithCache.cs" />
+    <Compile Include="Implementation\ReadSide\TemporaryInterviewWriter.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvDataExportService.cs" />
     <Compile Include="Implementation\Services\DataExport\CSVIterviewExporter.cs" />

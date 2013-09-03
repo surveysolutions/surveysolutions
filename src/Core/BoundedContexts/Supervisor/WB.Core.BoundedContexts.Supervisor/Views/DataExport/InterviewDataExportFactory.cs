@@ -20,18 +20,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class InterviewDataExportFactory : IViewFactory<InterviewDataExportInputModel, InterviewDataExportView>
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewData> interviewStorage;
+        private readonly IReadSideRepositoryReader<InterviewData> interviewStorage;
+
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
 
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStorage;
 
         private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage;
 
-        public InterviewDataExportFactory(IQueryableReadSideRepositoryReader<InterviewData> interviewStorage,
+        public InterviewDataExportFactory(IReadSideRepositoryReader<InterviewData> interviewStorage,IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
                                           IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStorage,
                                           IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure>
                                               questionnaireLevelStorage)
         {
             this.interviewStorage = interviewStorage;
+            this.interviewSummaryStorage = interviewSummaryStorage;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireLevelStorage = questionnaireLevelStorage;
         }
@@ -61,16 +64,41 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             return rootGroups.First().Title;
         }
 
+        public IList<InterviewSummary> GetApprovedInterviews(Guid templateId,
+                                                                  long templateVersion, int bulkSize=256)
+        {
+            var result = new List<InterviewSummary>();
+            int returnedEventCount = 0;
+            while (true)
+            {
+                var interviews =
+                    this.interviewSummaryStorage.Query(
+                        _ =>
+                        _.Where(
+                            interview =>
+                            interview.QuestionnaireId == templateId && interview.QuestionnaireVersion == templateVersion &&
+                            interview.Status == InterviewStatus.ApprovedBySupervisor)).Skip(returnedEventCount)
+                        .Take(bulkSize).ToArray();
+                bool allEventsWereAlreadyReturned = interviews.Length == 0;
+
+                if (allEventsWereAlreadyReturned)
+                     break;
+
+                result.AddRange(interviews);
+
+                returnedEventCount += bulkSize;
+            }
+            return result;
+        }
+
         private InterviewDataExportRerord[] BuildRecordsForHeader(Guid templateId,
                                                                   long templateVersion, Guid? levelId)
         {
             var dataRecords = new List<InterviewDataExportRerord>();
-#warning implement with paging
+
             var interviews =
-                this.interviewStorage.QueryAll(
-                    interview =>
-                    interview.QuestionnaireId == templateId && interview.QuestionnaireVersion == templateVersion &&
-                    interview.Status == InterviewStatus.ApprovedBySupervisor);
+                GetApprovedInterviews(templateId, templateVersion)
+                    .Select(interview => this.interviewStorage.GetById(interview.InterviewId));
 
             foreach (var interview in interviews)
             {

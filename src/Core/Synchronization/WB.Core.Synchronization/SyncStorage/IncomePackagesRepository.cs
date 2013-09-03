@@ -24,7 +24,7 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private readonly string path;
-        private const string FolderName = "IncomingData";
+        private const string FolderName = "IncomingData"; 
         private const string FileExtension = "sync";
 
         public IncomePackagesRepository(string folderPath)
@@ -43,20 +43,20 @@ namespace WB.Core.Synchronization.SyncStorage
             var meta = GetContentAsItem<InterviewMetaInfo>(item.MetaInfo);
 
             File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
-            Task.Factory.StartNew(() => ProcessItem(meta.PublicKey));
 
-            /*     NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId,
+            NcqrsEnvironment.Get<ICommandService>()
+                            .Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.TemplateId,
                                                                         meta.ResponsibleId,
-                                                                        (InterviewStatus) meta.Status, null);*/
+                                                                        (InterviewStatus) meta.Status, null));
         }
+
 
         private string GetItemFileName(Guid id)
         {
             return Path.Combine(path, string.Format("{0}.{1}", id, FileExtension));
         }
 
-        public void ProcessItem(Guid id)
+        public void ProcessItem(Guid id, long sequence)
         {
             var fileName = GetItemFileName(id);
             if (!File.Exists(fileName))
@@ -66,7 +66,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             var items = GetContentAsItem<AggregateRootEvent[]>(fileContent);
 
-            StoreEvents(id, items);
+            StoreEvents(id, items, sequence);
 
             File.Delete(fileName);
         }
@@ -80,28 +80,13 @@ namespace WB.Core.Synchronization.SyncStorage
             return item;
         }
 
-        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream)
+        private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var eventBus = NcqrsEnvironment.Get<IEventBus>();
-            var events = eventStore.ReadFrom(id, 1, long.MaxValue);
-            var latestEventSequence = events.IsEmpty ? 1 : events.Last().EventSequence;
+            var events = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
+            var latestEventSequence = events.IsEmpty ? sequence : events.Last().EventSequence;
             var incomeEvents = this.BuildEventStreams(stream, latestEventSequence);
-
             eventStore.Store(incomeEvents);
-
-            foreach (var incomeEvent in incomeEvents)
-            {
-                try
-                {
-                    eventBus.Publish(incomeEvent);
-                }
-                catch (Exception)
-                {
-                }
-             
-            }
-        
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)
@@ -110,10 +95,11 @@ namespace WB.Core.Synchronization.SyncStorage
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.UtcNow));
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
             }
             return uncommitedStream;
         }
+
     }
 }
