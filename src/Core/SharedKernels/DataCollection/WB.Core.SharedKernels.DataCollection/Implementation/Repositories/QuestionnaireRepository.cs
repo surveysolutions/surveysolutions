@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -14,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository domainRepository;
+        private readonly Dictionary<string, IQuestionnaire> historicalQuestionnaireCache = new Dictionary<string, IQuestionnaire>();
 
         public QuestionnaireRepository(IDomainRepository domainRepository, IEventStore eventStore,
                                        ISnapshotStore snapshotStore)
@@ -29,6 +31,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         }
 
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
+        {
+            string cacheKey = string.Format("{0}---{1}", id, version);
+
+            if (!this.historicalQuestionnaireCache.ContainsKey(cacheKey))
+            {
+                IQuestionnaire historicalQuestionnaire = this.GetHistoricalQuestionnaireImpl(id, version);
+
+                if (historicalQuestionnaire == null)
+                    return null; // does not need to store not existing result because questionnaire with asked version and id might probably appear in future
+
+                this.historicalQuestionnaireCache[cacheKey] = historicalQuestionnaire;
+            }
+
+            return this.historicalQuestionnaireCache[cacheKey];
+        }
+
+        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, long version)
         {
             IQuestionnaire historicalQuestionnaire = this.GetQuestionnaireImpl(id, version);
 
