@@ -826,7 +826,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new DomainException(
                     DomainExceptionType.GroupTitleRequired,
-                    "The titles of groups and chapters can not be empty or contains whitespaces only");
+                    "The titles of groups and chapters can not be empty or contains whitespace only");
             }
         }
 
@@ -836,7 +836,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new DomainException(
                     DomainExceptionType.QuestionnaireTitleRequired,
-                    "Questionnaire's title can not be empty or contains whitespaces only");
+                    "Questionnaire's title can not be empty or contains whitespace only");
             }
         }
 
