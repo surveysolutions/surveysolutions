@@ -46,8 +46,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var questionnarie = questionnarieStorage.GetById(evnt.Payload.QuestionnaireId,
-                                                             evnt.Payload.QuestionnaireVersion);
+            var questionnarie = questionnarieStorage.GetById(evnt.Payload.InterviewData.QuestionnaireId,
+                                                             evnt.Payload.InterviewData.QuestionnaireVersion);
             if (questionnarie == null)
                 return;
 
