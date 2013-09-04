@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionViewModel:QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            ItemPublicKey publicKey, 
+            InterviewItemId publicKey, 
             string text,
             QuestionType questionType, 
             IEnumerable<AnswerViewModel> answers, 
@@ -18,70 +20,57 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments, 
             bool valid, 
             bool mandatory, 
-            bool capital, 
-            string answerString, 
-            string validationExpression,
-            string validationMessage)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
-        {
-            Answers = answers;
-        }
-
-        [JsonConstructor]
-        public SelectebleQuestionViewModel(
-            ItemPublicKey publicKey,
-            string text,
-            QuestionType questionType,
-            IEnumerable<AnswerViewModel> answers,
-            QuestionStatus status,
-            string instructions,
-            string comments,
-            bool mandatory,
             bool capital,
-            string answerString,
-            string validationExpression,
+            object answerObject, 
             string validationMessage)
-            : base(publicKey, text, questionType, status, instructions, comments,  mandatory, capital, answerString, validationExpression, validationMessage)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
         {
             Answers = answers;
         }
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
+        
+        public override string AnswerString
+        {
+            get
+            {
+                var selectedAnswers = Answers.Where(a => a.Selected).Select(answer => answer.Title).ToList();
+                return string.Join(", ", selectedAnswers);
+            }
+        }
+
+        public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
         {
             IList<AnswerViewModel> newAnswers = new List<AnswerViewModel>();
             foreach (AnswerViewModel answerViewModel in Answers)
             {
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
-            return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
+            return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                                                    this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerString, this.ValidationExpression,this.ValidationMessage);
+                                                   this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
         }
 
-        public override string AnswerObject
-        {
-            get
-            {
-                var value = this.Answers.Where(a => a.Selected).Select(a => a.Value).FirstOrDefault();
-                if (value == null)
-                    return string.Empty;
-                return value;
-            }
-        }
-
-        public override void SetAnswer(List<Guid> answer, string answerString)
+        public override void SetAnswer(object answer)
         {
             if (answer == null)
             {
                 return;
             }
+            var typedAnswers = answer as decimal[];
+            if (typedAnswers == null)
+            {
+                decimal decimalAnswer;
+                if(!decimal.TryParse(answer.ToString(),out decimalAnswer))
+                    return;
+                typedAnswers = new decimal[] {decimalAnswer};
+            }
             foreach (var item in this.Answers)
             {
-                item.Selected = answer.Contains(item.PublicKey);
+                item.Selected = typedAnswers.Contains(item.Value);
             }
-            base.SetAnswer(answer, answerString);
+            base.SetAnswer(answer);
             if (QuestionType==QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a=>a.Selected))
             {
                 Status &= ~QuestionStatus.Answered;

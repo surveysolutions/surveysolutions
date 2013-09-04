@@ -44,7 +44,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             Guid key = Guid.NewGuid();
             Guid commandId = Guid.NewGuid();
 
-            var completeQuestionnaire = new CompleteQuestionnaireAR(key, this.configurator.Document, null);
+            var completeQuestionnaire = new _CompleteQuestionnaireAR(key, this.configurator.Document, null);
 
             using (var ctx = new EventContext())
             {
@@ -82,7 +82,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             Guid key = Guid.NewGuid();
             Guid commandId = Guid.NewGuid();
 
-            var completeQuestionnaire = new CompleteQuestionnaireAR(key, this.configurator.Document, null);
+            var completeQuestionnaire = new _CompleteQuestionnaireAR(key, this.configurator.Document, null);
 
             using (var ctx = new EventContext())
             {
@@ -137,7 +137,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             Guid key = Guid.NewGuid();
             Guid commandId = Guid.NewGuid();
 
-            var completeQuestionnaire = new CompleteQuestionnaireAR(key, this.configurator.Document, null);
+            var completeQuestionnaire = new _CompleteQuestionnaireAR(key, this.configurator.Document, null);
 
             using (var ctx = new EventContext())
             {
@@ -173,7 +173,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             Guid key = Guid.NewGuid();
             Guid commandId = Guid.NewGuid();
 
-            var completeQuestionnaire = new CompleteQuestionnaireAR(key, this.configurator.Document, null);
+            var completeQuestionnaire = new _CompleteQuestionnaireAR(key, this.configurator.Document, null);
 
             using (var ctx = new EventContext())
             {
@@ -212,7 +212,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
 
             using (var ctx = new EventContext())
             {
-                var completeQuestionnaire = new CompleteQuestionnaireAR(
+                var completeQuestionnaire = new _CompleteQuestionnaireAR(
                     key, this.configurator.Document, new UserLight(userId, userName));
 
                 Assert.True(ctx.Events.Count() == 1);
@@ -283,7 +283,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             Guid key = Guid.NewGuid();
             Guid commandId = Guid.NewGuid();
 
-            var completeQuestionnaire = new CompleteQuestionnaireAR(key, this.configurator.Document, null);
+            var completeQuestionnaire = new _CompleteQuestionnaireAR(key, this.configurator.Document, null);
 
             using (var ctx = new EventContext())
             {

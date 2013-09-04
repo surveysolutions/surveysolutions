@@ -3,15 +3,17 @@ using System.Linq;
 using Core.Supervisor.DenormalizerStorageItem;
 using Machine.Specifications;
 using Raven.Client.Embedded;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests
 {
-    [Subject(typeof(Supervisor.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMember))]
+    [Subject(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember))]
     internal class when_applying_index_to_8_misc_redo_statuses : RavenIndexesTestContext
     {
         Establish context = () =>
         {
-            IEnumerable<SummaryItem> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
+            IEnumerable<StatisticsLineGroupedByUserAndTemplate> generateStatisticDocumentsWithUnassignedCounts = GenerateStatisticDocuments(
                 new SummaryItemSketch { Redo = 2, ResponsibleSupervisor = SupervisorA, Responsible = SupervisorA, Template = Template1 },
                 new SummaryItemSketch { Redo = 7, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA1, Template = Template1 },
                 new SummaryItemSketch { Redo = 11, ResponsibleSupervisor = SupervisorA, Responsible = InterviewerA2, Template = Template1 },
@@ -24,31 +26,31 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
         };
 
         Because of = () =>
-            resultItems = QueryUsingIndex<SummaryItem>(documentStore, typeof(Supervisor.RavenIndexes.SupervisorReportsSurveysAndStatusesGroupByTeamMember));
+            resultItems = QueryUsingIndex<StatisticsLineGroupedByUserAndTemplate>(documentStore, typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember));
 
         It should_return_7_line_items = () =>
             resultItems.Length.ShouldEqual(7);
         
         It should_set_0_to_Unassigned_property_for_all_line_items = () =>
-            resultItems.ShouldEachConformTo(lineItem => lineItem.UnassignedCount == 0);
+            resultItems.ShouldEachConformTo(lineItem => lineItem.SupervisorAssignedCount == 0);
 
         It should_set_0_to_Initial_property_for_all_line_items = () =>
-            resultItems.ShouldEachConformTo(lineItem => lineItem.InitialCount == 0);
+            resultItems.ShouldEachConformTo(lineItem => lineItem.InterviewerAssignedCount == 0);
 
         It should_set_0_to_Completed_property_for_all_line_items = () =>
           resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedCount == 0);
 
         It should_set_0_to_Approved_property_for_all_line_items = () =>
-            resultItems.ShouldEachConformTo(lineItem => lineItem.ApprovedCount == 0);
+            resultItems.ShouldEachConformTo(lineItem => lineItem.ApprovedBySupervisorCount == 0);
 
-        It should_set_0_to_Errors_property_for_all_line_items = () =>
-           resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedWithErrorsCount == 0);
+        /*It should_set_0_to_Errors_property_for_all_line_items = () =>
+           resultItems.ShouldEachConformTo(lineItem => lineItem.CompletedWithErrorsCount == 0);*/
 
         It should_set_2x56_to_Redo_property_for_sum_of_all_line_items = () =>
-            resultItems.Sum(lineItem => lineItem.RedoCount).ShouldEqual(2*56);
+            resultItems.Sum(lineItem => lineItem.RejectedBySupervisorCount).ShouldEqual(2*56);
 
         It should_group_each_Totals_to_be_equal_Redo_property_for_line_items = () =>
-           resultItems.ShouldEachConformTo(lineItem => lineItem.TotalCount == lineItem.RedoCount);
+           resultItems.ShouldEachConformTo(lineItem => lineItem.TotalCount == lineItem.RejectedBySupervisorCount);
 
         It should_set_2x56_to_Total_property_for_sum_of_all_line_items = () =>
             resultItems.Sum(lineItem => lineItem.TotalCount).ShouldEqual(56*2);
@@ -60,19 +62,19 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
                 .ShouldEqual(1);
 
         It should_set_20_to_line_with_supervisorA_and_empty_responsible_for_Redo_property = () =>
-            GetLineItemForTeam(resultItems, SupervisorA).Single().RedoCount.ShouldEqual(2 + 7 + 11);
+            GetLineItemForTeam(resultItems, SupervisorA).Single().RejectedBySupervisorCount.ShouldEqual(2 + 7 + 11);
 
         It should_set_20_to_line_with_supervisorA_and_empty_responsible_for_Total_property = () =>
             GetLineItemForTeam(resultItems, SupervisorA).Single().TotalCount.ShouldEqual(2+7+11);
 
         It should_set_2_to_line_with_supervisorA_and_supervisorA_as_responsible_for_Redo_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorA, SupervisorA).Single().RedoCount.ShouldEqual(2);
+            GetLineItemForTeamMember(resultItems, SupervisorA, SupervisorA).Single().RejectedBySupervisorCount.ShouldEqual(2);
 
         It should_set_7_to_line_with_supervisorA_and_interviewerA1_as_responsible_for_Redo_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA1).Single().RedoCount.ShouldEqual(7);
+            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA1).Single().RejectedBySupervisorCount.ShouldEqual(7);
 
         It should_set_11_to_line_with_supervisorA_and_interviewerA2_as_responsible_for_Redo_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA2).Single().RedoCount.ShouldEqual(11);
+            GetLineItemForTeamMember(resultItems, SupervisorA, InterviewerA2).Single().RejectedBySupervisorCount.ShouldEqual(11);
 
         It should_set_2_to_line_with_supervisorA_and_supervisorA_as_responsible_for_Total_property = () =>
             GetLineItemForTeamMember(resultItems, SupervisorA, SupervisorA).Single().TotalCount.ShouldEqual(2);
@@ -90,16 +92,16 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
                 .ShouldEqual(1);
 
         It should_set_36_to_line_with_supervisorB_and_empty_responsible_for_Redo_property = () =>
-            GetLineItemForTeam(resultItems, SupervisorB).Single().RedoCount.ShouldEqual(13 + 23 + 0);
+            GetLineItemForTeam(resultItems, SupervisorB).Single().RejectedBySupervisorCount.ShouldEqual(13 + 23 + 0);
 
         It should_set_36_to_line_with_supervisorB_and_empty_responsible_for_Total_property = () =>
             GetLineItemForTeam(resultItems, SupervisorB).Single().TotalCount.ShouldEqual(13+23+0);
 
         It should_set_13_to_line_with_supervisorB_and_supervisorB_as_responsible_for_Redo_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorB, SupervisorB).Single().RedoCount.ShouldEqual(13);
+            GetLineItemForTeamMember(resultItems, SupervisorB, SupervisorB).Single().RejectedBySupervisorCount.ShouldEqual(13);
 
         It should_set_23_to_line_with_supervisorB_and_interviewerB1_as_responsible_for_Redo_property = () =>
-            GetLineItemForTeamMember(resultItems, SupervisorB, InterviewerB1).Single().RedoCount.ShouldEqual(23);
+            GetLineItemForTeamMember(resultItems, SupervisorB, InterviewerB1).Single().RejectedBySupervisorCount.ShouldEqual(23);
 
         It should_set_13_to_line_with_supervisorB_and_supervisorB_as_responsible_for_Total_property = () =>
             GetLineItemForTeamMember(resultItems, SupervisorB, SupervisorB).Single().TotalCount.ShouldEqual(13);
@@ -117,6 +119,6 @@ namespace Core.Supervisor.Tests.RavenIndexes.SupervisorReportsSurveysAndStatuses
         };
 
         private static EmbeddableDocumentStore documentStore;
-        private static SummaryItem[] resultItems;
+        private static StatisticsLineGroupedByUserAndTemplate[] resultItems;
     }
 }

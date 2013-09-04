@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
@@ -23,7 +24,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         #region Constructors and Destructors
 
         
-        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, SurveyStatus status, IList<FeaturedItem> properties, string title)
+        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, InterviewStatus status, IList<FeaturedItem> properties, string title)
         {
             this.PublicKey = publicKey;
             this.status = status;
@@ -52,12 +53,12 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         /// <summary>
         /// Gets the status.
         /// </summary>
-        public SurveyStatus Status
+        public InterviewStatus Status
         {
             get { return status; }
         }
 
-        private SurveyStatus status;
+        private InterviewStatus status;
         
      
 

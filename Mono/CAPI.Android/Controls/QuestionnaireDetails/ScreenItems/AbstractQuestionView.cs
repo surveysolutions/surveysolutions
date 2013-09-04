@@ -6,18 +6,21 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public abstract class AbstractQuestionView : LinearLayout, IMvxBindingContextOwner
     {
-        public event EventHandler AnswerSet;
+        public event EventHandler<AnswerSetEventArgs> AnswerSet;
         public bool IsCommentsEditorFocused { get; private set; }
         protected QuestionViewModel Model { get; private set; }
 
@@ -84,16 +87,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
         }
 
-        protected virtual void SaveAnswer()
+        protected virtual void SaveAnswer(string newAnswer)
         {
-            OnAnswerSet();
+            OnAnswerSet(newAnswer);
         }
 
-        protected void OnAnswerSet()
+        protected void OnAnswerSet(string newAnswer)
         {
             var handler = AnswerSet;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler(this, new AnswerSetEventArgs(Model.PublicKey, newAnswer));
         }
 
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
@@ -119,22 +122,27 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string newComments = etComments.Text.Trim();
             if (newComments != this.Model.Comments)
             {
-                CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey, newComments, this.Model.PublicKey.PropagationKey,
-                                                             CapiApplication.Membership.CurrentUser));
-                tvComments.Text = newComments;
+                CommandService.Execute(new CommentAnswerCommand(this.QuestionnairePublicKey,
+                                                                CapiApplication.Membership.CurrentUser.Id,
+                                                                this.Model.PublicKey.Id,
+                                                                this.Model.PublicKey.PropagationVector,
+                                                                DateTime.UtcNow,
+                                                                newComments));
+           tvComments.Text = newComments;
+
             }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
             
         }
 
-        protected void ExecuteSaveAnswerCommand(SetAnswerCommand command)
+        protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
             AnswerCommandService.Execute(command);
         }
 
-        protected virtual void SaveAnswerErrorHappend()
+        protected virtual void SaveAnswerErrorHappen()
         {
         }
 

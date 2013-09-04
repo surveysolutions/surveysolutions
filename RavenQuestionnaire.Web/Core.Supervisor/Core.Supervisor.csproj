@@ -178,48 +178,69 @@
     <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
-    <Compile Include="Denormalizer\InterviewDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorFileStoreDenormalizer.cs" />
     <Compile Include="Denormalizer\SummaryDenormalizer.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
     <Compile Include="Denormalizer\UserBaseDenormalizer.cs" />
-    <Compile Include="Denormalizer\UserDenormalizer.cs" />
     <Compile Include="QuestionnaireHelper.cs" />
-    <Compile Include="RavenIndexes\HeadquarterReportsTeamsAndStatusesGroupByTeam.cs" />
-    <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMember.cs" />
-    <Compile Include="RavenIndexes\SupervisorReportsTeamMembersAndStatusesGroupByTeamMember.cs">
+    <Compile Include="Views\BaseUserViewFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
+    <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RavenIndexes\HeadquarterReportsSurveysAndStatusesGroupByTeam.cs" />
-    <Compile Include="Views\BaseUserViewFactory.cs" />
-    <Compile Include="Views\Status\StatusFactory.cs" />
-    <Compile Include="Views\Status\StatusView.cs" />
-    <Compile Include="Views\Status\StatusViewInputModel.cs" />
-    <Compile Include="Views\Status\StatusViewItem.cs" />
+    <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamInterviewsView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Interview\InterviewGroupView.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsView.cs" />
+    <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewQuestionView.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorSurveysAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\Factories\SupervisorTeamMembersAndStatusesReport.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSupervisorsAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\HeadquarterSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SupervisorTeamMembersAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSupervisorsAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\HeadquarterSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\InputModels\SupervisorSurveysAndStatusesReportInputModel.cs" />
+    <Compile Include="Views\Reposts\Views\ReportLineCounters.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorSurveysAndStatusesReportView.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportLine.cs" />
+    <Compile Include="Views\Reposts\Views\SupervisorTeamMembersAndStatusesReportView.cs" />
+    <Compile Include="Views\Survey\SurveysViewFactory.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
-    <Compile Include="Views\Interview\InterviewViewItem.cs" />
+    <Compile Include="Views\Interview\AllInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\InterviewFeaturedQuestion.cs" />
-    <Compile Include="Views\Interview\InterviewInputModel.cs" />
-    <Compile Include="Views\Interview\InterviewView.cs" />
-    <Compile Include="Views\Interview\InterviewItem.cs" />
-    <Compile Include="Views\Interview\InterviewFactory.cs" />
+    <Compile Include="Views\Interview\AllInterviewsInputModel.cs" />
+    <Compile Include="Views\Interview\AllInterviewsView.cs" />
+    <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
-    <Compile Include="Views\Summary\SummaryTemplatesView.cs" />
-    <Compile Include="Views\Summary\SummaryTemplatesInputModel.cs" />
-    <Compile Include="Views\Summary\SummaryTemplatesFactory.cs" />
-    <Compile Include="Views\Summary\TemplateViewItem.cs" />
+    <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
     <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
     <Compile Include="Views\Survey\SurveysViewItem.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewFactory.cs" />
     <Compile Include="Views\Survey\SurveyUsersViewInputModel.cs" />
     <Compile Include="Views\Survey\SurveyUsersView.cs" />
-    <Compile Include="Views\Survey\SurveysViewFactory.cs" />
     <Compile Include="Views\Survey\SurveysInputModel.cs" />
     <Compile Include="Views\Survey\SurveysView.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />
@@ -227,15 +248,10 @@
     <Compile Include="Views\Survey\SurveyScreen.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Assign\AssignSurveyInputModel.cs" />
-    <Compile Include="Views\Assign\AssignSurveyView.cs" />
-    <Compile Include="Views\Assign\AssignSurveyViewFactory.cs" />
     <Compile Include="Views\Survey\DetailsMenuItem.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
     <Compile Include="Views\Survey\ScreenWithRout.cs" />
-    <Compile Include="Views\Survey\SupervisorScreenSupplier.cs" />
     <Compile Include="Views\Survey\DisplaySurveyViewFactory.cs" />
-    <Compile Include="Views\Survey\ISurveyScreenSupplier.cs" />
     <Compile Include="Views\Survey\SurveyScreenView.cs" />
     <Compile Include="Views\Survey\ScreenNavigationView.cs" />
     <Compile Include="Views\Survey\ChangeStatusHistoryView.cs" />
@@ -257,22 +273,19 @@
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\Interviewer\InterviewerView.cs" />
     <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />
-    <Compile Include="Views\Index\IndexViewItem.cs" />
-    <Compile Include="Views\Index\IndexView.cs" />
-    <Compile Include="Views\Index\SurveyGroupedByStatusHeader.cs" />
-    <Compile Include="Views\Index\IndexViewFactory.cs" />
-    <Compile Include="Views\Index\IndexInputModel.cs" />
-    <Compile Include="Views\Summary\SummaryFactory.cs" />
-    <Compile Include="Views\Summary\SummaryInputModel.cs" />
-    <Compile Include="Views\Summary\SummaryView.cs" />
-    <Compile Include="Views\Summary\SummaryViewItem.cs" />
-    <Compile Include="Views\Survey\SurveyUsersViewItem.cs" />
+    <Compile Include="Views\Reposts\Views\SurveyUsersViewItem.cs" />
     <Compile Include="Views\Survey\WhereClouseHelper.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
     <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesInputModel.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesFactory.cs" />
+    <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />
@@ -286,6 +299,14 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Core.Infrastructure.Raven</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

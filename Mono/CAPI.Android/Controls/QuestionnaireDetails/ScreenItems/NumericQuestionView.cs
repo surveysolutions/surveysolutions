@@ -7,6 +7,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -39,29 +40,32 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (e.HasFocus)
             {
-                //ShowKeyboard(etAnswer);
                 return;
             }
-            SaveAnswer();
-           /* if (!IsCommentsEditorFocused)
-                HideKeyboard(etAnswer);*/
+
+            SaveAnswer(etAnswer.Text.Trim());
         }
 
-        protected override void SaveAnswer()
+        protected override void SaveAnswer(string newAnswer)
         {
-            string newValue = etAnswer.Text.Trim();
-            if (newValue != this.Model.AnswerString)
+            if (newAnswer != this.Model.AnswerString)
             {
-                ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                              null, newValue,
-                                                              Model.PublicKey.PropagationKey));
+                decimal answer;
+                if(!decimal.TryParse(newAnswer,out  answer))
+                    return;
+                ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
+                                                                          CapiApplication.Membership.CurrentUser.Id,
+                                                                          Model.PublicKey.Id,
+                                                                          this.Model.PublicKey.PropagationVector,
+                                                                          DateTime.UtcNow, answer));
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
+
+                base.SaveAnswer(newAnswer);
             }
-            base.SaveAnswer();
         }
 
-        protected override void SaveAnswerErrorHappend()
+        protected override void SaveAnswerErrorHappen()
         {
             etAnswer.Text = Model.AnswerString;
         }

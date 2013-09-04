@@ -119,9 +119,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetFlagCommand.cs">
       <Link>Commands\Questionnaire\Completed\SetFlagCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs">
-      <Link>Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
       <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
     </Compile>
@@ -248,9 +245,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CollectionAR.cs">
       <Link>Domain\CollectionAR.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CompleteQuestionnaireAR.cs">
-      <Link>Domain\CompleteQuestionnaireAR.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\DeviceAR.cs">
       <Link>Domain\DeviceAR.cs</Link>
     </Compile>
@@ -274,6 +268,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\UserAR.cs">
       <Link>Domain\UserAR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\_CompleteQuestionnaireAR.cs">
+      <Link>Domain\_CompleteQuestionnaireAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Composite\CompositeException.cs">
       <Link>Entities\Composite\CompositeException.cs</Link>
@@ -544,9 +541,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
       <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs">
-      <Link>Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <Link>Events\Questionnaire\Completed\NewAssigmentCreated.cs</Link>
     </Compile>
@@ -723,15 +717,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Answer\CompleteAnswerView.cs">
       <Link>View\Answer\CompleteAnswerView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Card\CardView.cs">
-      <Link>View\Card\CardView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Card\CardViewFactory.cs">
-      <Link>View\Card\CardViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Card\CardViewInputModel.cs">
-      <Link>View\Card\CardViewInputModel.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs">
       <Link>View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs</Link>

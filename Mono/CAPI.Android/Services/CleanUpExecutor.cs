@@ -28,15 +28,6 @@ namespace CAPI.Android.Services
         {
             changelog.CleanUpChangeLogByEventSourceId(id);
 
-            //delete from snapshot store
-            var storage = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
-            if (storage != null)
-                storage.DeleteSnapshot(id);
-
-            //delete from read model
-            var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
-            documentStorage.Remove(id);
-
             //delete from event store
             #warning invent some better way of doing that
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as MvvmCrossSqliteEventStore;
@@ -50,17 +41,5 @@ namespace CAPI.Android.Services
             CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().Remove(id);
 
         }
-
-        //frees up memory dedicated to this interview  
-        public void CleanUpInterviewCaches(Guid id)
-        {
-            var storage = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
-            if (storage != null)
-                storage.FlushSnapshot(id);
-
-            var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
-            documentStorage.Remove(id);
-        }
-
     }
 }

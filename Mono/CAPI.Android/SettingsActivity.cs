@@ -117,7 +117,7 @@ namespace CAPI.Android
                         infoMessageBuilder.AppendLine(String.Format(format, "Longitude", t.Result.Longitude.ToString("N4")));
                         //infoMessageBuilder.AppendLine(String.Format(format, "Altitude", t.Result.Altitude.ToString("N4")));
 
-                        infoMessageBuilder.AppendLine(String.Format(format, "Time", t.Result.Timestamp.ToString("G")));
+                        infoMessageBuilder.AppendLine(String.Format(format, "Time", t.Result.Timestamp.ToLocalTime().ToString("G")));
 
                         messageToShow = infoMessageBuilder.ToString();
                     }

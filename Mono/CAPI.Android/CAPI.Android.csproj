@@ -142,7 +142,6 @@
     <Compile Include="Controls\QuestionnaireDetails\GridContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
@@ -181,6 +180,7 @@
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
+    <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
@@ -321,6 +321,10 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
+      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>

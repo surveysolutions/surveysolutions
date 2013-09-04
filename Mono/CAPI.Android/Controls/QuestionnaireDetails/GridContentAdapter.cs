@@ -17,6 +17,8 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
 using Ninject;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -26,7 +28,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly Action<ScreenChangedEventArgs> OnScreenChanged;
         private readonly TextView tvEmptyLabelDescription;
         private readonly int columnCount;
-        private readonly IQuestionViewFactory questionViewFactory;
+       
         private readonly Guid QuestionnaireId;
         private readonly ListView listView;
         public GridContentAdapter(QuestionnaireGridViewModel model,int columnCount, Context context,
@@ -37,7 +39,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.context = context;
             this.columnCount = columnCount;
             this.OnScreenChanged = onScreenChanged;
-            this.questionViewFactory = new DefaultQuestionViewFactory(CapiApplication.Kernel.Get<IAnswerOnQuestionCommandService>());
+         
             this.tvEmptyLabelDescription = tvEmptyLabelDescription;
             this.QuestionnaireId = model.QuestionnaireId;
             this.listView = listView;
@@ -137,13 +139,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private View CreateRosterCellView(Guid headerId, QuestionnairePropagatedScreenViewModel rosterItem)
         {
-            View rosterCell;
             QuestionViewModel rowModel =
-                rosterItem.Items.FirstOrDefault(q => q.PublicKey.PublicKey == headerId) as QuestionViewModel;
-            RosterQuestionView rowViewItem = new RosterQuestionView(context, rowModel);
-            rowViewItem.RosterItemsClick += (s, e) => ShowPopupWithQuestion(rosterItem.ScreenName, e.Model);
-            rosterCell = rowViewItem;
-            return rosterCell;
+                rosterItem.Items.FirstOrDefault(q => q.PublicKey.Id == headerId) as QuestionViewModel;
+
+            return new RosterQuestionView(context, rowModel, this.QuestionnaireId);
         }
 
         private bool IsHeaderForIndexAvalibleInRosterTable(RosterTable dataItem, int i)
@@ -200,12 +199,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return enabled ? ViewStates.Visible : ViewStates.Gone;
         }
 
-        private void ShowPopupWithQuestion(string popupName, QuestionViewModel question)
-        {
-            new RosterItemDialog(context, question, popupName, QuestionnaireId,
-                                 questionViewFactory);
-        }
-
         private void AlignTableCell(View view)
         {
             view.LayoutParameters = new LinearLayout.LayoutParams(0,
@@ -217,7 +210,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var senderButton = sender as Button;
             if (senderButton == null)
                 return;
-            var publicKey = ItemPublicKey.Parse(senderButton.GetTag(Resource.Id.PrpagationKey).ToString());
+            var publicKey = InterviewItemId.Parse(senderButton.GetTag(Resource.Id.PrpagationKey).ToString());
             OnScreenChanged(new ScreenChangedEventArgs(publicKey));
         }
 

@@ -15,8 +15,6 @@ namespace Main.Core.Documents
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
 
-
-    [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
 

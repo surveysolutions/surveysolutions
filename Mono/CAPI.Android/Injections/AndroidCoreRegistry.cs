@@ -17,6 +17,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Activation;
 using Main.Core;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace CAPI.Android.Injections
 {
@@ -25,7 +26,7 @@ namespace CAPI.Android.Injections
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return
-                Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { GetType().Assembly });
+                Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { typeof(ImportQuestionnaireCommand).Assembly, GetType().Assembly });
         }
     }
 }

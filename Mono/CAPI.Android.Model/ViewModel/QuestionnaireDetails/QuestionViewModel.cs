@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -9,7 +11,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
         protected QuestionViewModel(
-            ItemPublicKey publicKey,
+            InterviewItemId publicKey,
             string text,
             QuestionType questionType,
             bool enabled,
@@ -18,16 +20,14 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             bool valid,
             bool mandatory,
             bool capital,
-            string answerString,
-            string validationExpression,
+            object answerObject,
             string validationMessage)
         {
             PublicKey = publicKey;
-            ValidationExpression = validationExpression;
             ValidationMessage = validationMessage;
             Text = text;
             QuestionType = questionType;
-            AnswerString = answerString;
+            AnswerObject = answerObject;
             Capital = capital;
             Mandatory = mandatory;
             Instructions = instructions;
@@ -41,55 +41,33 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 Status = Status | QuestionStatus.Valid;
             }
-            var answered = !string.IsNullOrEmpty(answerString);
+            var answered = answerObject != null;
             if (answered)
                 Status = Status | QuestionStatus.Answered;
-            
-        }
-        protected QuestionViewModel(
-           ItemPublicKey publicKey,
-           string text,
-           QuestionType questionType,
-           QuestionStatus status,
-           string instructions,
-           string comments,
-           bool mandatory,
-           bool capital,
-           string answerString,
-           string validationExpression,
-           string validationMessage)
-        {
-            PublicKey = publicKey;
-            ValidationExpression = validationExpression;
-            ValidationMessage = validationMessage;
-            Text = text;
-            QuestionType = questionType;
-            AnswerString = answerString;
-            Capital = capital;
-            Instructions = instructions;
-            Comments = comments;
-            Mandatory = mandatory;
 
-            Status = status;
         }
-        public ItemPublicKey PublicKey { get; private set; }
+        public InterviewItemId PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public bool Capital { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
-        public string AnswerString { get; protected set; }
-        public abstract string AnswerObject { get; }
+
+        public virtual string AnswerString
+        {
+            get { return (AnswerObject ?? "").ToString(); }
+        }
+
+        public object AnswerObject { get; private set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
-        public string ValidationExpression { get; private set; }
         public string ValidationMessage { get; private set; }
 
-        public abstract IQuestionnaireItemViewModel Clone(Guid propagationKey);
+        public abstract IQuestionnaireItemViewModel Clone(int[] propagationVector);
 
-        public virtual void SetAnswer(List<Guid> answer, string answerString)
+        public virtual void SetAnswer(object answer)
         {
-            this.AnswerString = answerString;
+            this.AnswerObject = answer;
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
                 Status = Status | QuestionStatus.Answered;

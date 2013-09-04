@@ -1,13 +1,10 @@
-﻿using WB.Core.GenericSubdomains.Logging;
+﻿using System.Web.Http;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Web.Supervisor.Controllers
 {
-    using System.Web.Http;
-
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-
     public abstract class BaseApiController : ApiController
     {
         protected readonly ICommandService CommandService;

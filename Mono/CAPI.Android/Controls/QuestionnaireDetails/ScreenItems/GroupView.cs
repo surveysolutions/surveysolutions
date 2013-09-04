@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -141,7 +143,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             OnScreenChanged(Model.PublicKey);
         }
 
-        protected void OnScreenChanged(ItemPublicKey publicKey)
+        protected void OnScreenChanged(InterviewItemId publicKey)
         {
             var handler = ScreenChanged;
             if(handler!=null)

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -10,9 +12,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         [JsonConstructor]
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string screenName, string title,
                                                       bool enabled,
-                                                      ItemPublicKey screenId,
+                                                      InterviewItemId screenId,
                                                       IList<IQuestionnaireItemViewModel> items,
-                                                      IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered,
+                                                      IEnumerable<InterviewItemId> breadcrumbs, int total, int answered,
             IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous
             )
             : base(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs,  total,  answered)
@@ -22,64 +24,64 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                       bool enabled,
-                                                      ItemPublicKey screenId,
+                                                      InterviewItemId screenId,
                                                       IList<IQuestionnaireItemViewModel> items,
-                                                      Func<Guid, IEnumerable<ItemPublicKey>> sibligs,
-                                                      IEnumerable<ItemPublicKey> breadcrumbs)
+                                                      Func<Guid, IEnumerable<InterviewItemId>> sibligs,
+                                                      IEnumerable<InterviewItemId> breadcrumbs)
             : this(questionnaireId,  title, enabled, screenId, items,sibligs, breadcrumbs, null, null)
         {
         }
         protected QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                      bool enabled,
-                                                     ItemPublicKey screenId,
+                                                     InterviewItemId screenId,
                                                      IList<IQuestionnaireItemViewModel> items,
-                                                     Func<Guid, IEnumerable<ItemPublicKey>> sibligs,
-                                                     IEnumerable<ItemPublicKey> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
+                                                     Func<Guid, IEnumerable<InterviewItemId>> sibligs,
+                                                     IEnumerable<InterviewItemId> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
             : this(questionnaireId, title, title, enabled, screenId, items, breadcrumbs, 0, 0, next, previous)
         {
             this.sibligsValue = sibligs;
-            if (screenId.PropagationKey.HasValue)
+            if (!screenId.IsTopLevel())
             {
-               
+
                 this.ScreenName = string.Empty;
             }
         }
-        public QuestionnairePropagatedScreenViewModel Clone(Guid propagationKey, IList<IQuestionnaireItemViewModel> items)
+
+        public QuestionnairePropagatedScreenViewModel Clone(int[] propagationVector,
+                                                            IList<IQuestionnaireItemViewModel> items)
         {
-            if (ScreenId.PropagationKey.HasValue)
+            if (!ScreenId.IsTopLevel())
                 throw new InvalidOperationException("only template can mutate in that way");
-            var key = new ItemPublicKey(this.ScreenId.PublicKey, propagationKey);
+            var key = new InterviewItemId(this.ScreenId.Id, propagationVector);
             var bradCrumbs = this.Breadcrumbs.ToList();
             return new QuestionnairePropagatedScreenViewModel(this.QuestionnaireId,
-                                                                this.Title, true,
-                                                                key, items,
-                                                                sibligsValue, bradCrumbs,
-                                                                this.Next != null ? this.Next.Clone(propagationKey) : null,
-                                                                this.Previous != null ? this.Previous.Clone(propagationKey) : null);
+                                                              this.Title, true,
+                                                              key, items,
+                                                              sibligsValue, bradCrumbs,
+                                                              this.Next != null
+                                                                  ? this.Next.Clone(propagationVector)
+                                                                  : null,
+                                                              this.Previous != null
+                                                                  ? this.Previous.Clone(propagationVector)
+                                                                  : null);
         }
 
-        public QuestionnairePropagatedScreenViewModel Clone(Guid propagationKey)
+        public QuestionnairePropagatedScreenViewModel Clone(int[] propagationVector)
         {
 
-            IList<IQuestionnaireItemViewModel> items = new List<IQuestionnaireItemViewModel>();
-            foreach (var questionnaireItemViewModel in this.Items)
-            {
-                var newItem = questionnaireItemViewModel.Clone(propagationKey);
-                items.Add(newItem);
-
-            }
-            return Clone(propagationKey, items);
+            IList<IQuestionnaireItemViewModel> items = this.Items.Select(questionnaireItemViewModel => questionnaireItemViewModel.Clone(propagationVector)).ToList();
+            return Clone(propagationVector, items);
         }
 
         public void AddNextPrevious(IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
         {
-            if(ScreenId.PropagationKey.HasValue)
+            if (!ScreenId.IsTopLevel())
                 throw new InvalidOperationException("only template can mutate in that way");
             this.Next = next;
             this.Previous = previous;
         }
 
-        private readonly Func<Guid, IEnumerable<ItemPublicKey>> sibligsValue;
+        private readonly Func<Guid, IEnumerable<InterviewItemId>> sibligsValue;
 
         public void UpdateScreenName(string screenName)
         {
@@ -87,9 +89,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             RaisePropertyChanged("ScreenName");
         }
         [JsonIgnore]
-        public override IEnumerable<ItemPublicKey> Siblings
+        public override IEnumerable<InterviewItemId> Siblings
         {
-            get { return sibligsValue(this.ScreenId.PublicKey); }
+            get { return sibligsValue(this.ScreenId.Id); }
         }
 
         public IQuestionnaireItemViewModel Next { get; private set; }

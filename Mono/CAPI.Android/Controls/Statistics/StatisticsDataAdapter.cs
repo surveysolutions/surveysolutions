@@ -14,6 +14,8 @@ using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Events;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Orientation = Android.Widget.Orientation;
 
 namespace CAPI.Android.Controls.Statistics
@@ -62,7 +64,7 @@ namespace CAPI.Android.Controls.Statistics
         void tr_Click(object sender, EventArgs e)
         {
             var typedSender = sender as LinearLayout;
-            var screenId = ItemPublicKey.Parse(typedSender.GetTag(Resource.Id.ScreenId).ToString());
+            var screenId = InterviewItemId.Parse(typedSender.GetTag(Resource.Id.ScreenId).ToString());
             notifier(new ScreenChangedEventArgs(screenId));
         }
     }

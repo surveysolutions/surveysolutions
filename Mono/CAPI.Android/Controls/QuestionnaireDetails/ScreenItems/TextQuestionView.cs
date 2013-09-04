@@ -6,6 +6,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -41,24 +42,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 // ShowKeyboard(etAnswer);
                 return;
             }
-            SaveAnswer();
+            SaveAnswer(etAnswer.Text.Trim());
             /* if (!IsCommentsEditorFocused)
                  HideKeyboard(etAnswer);*/
         }
 
-        protected override void SaveAnswer()
+        protected override void SaveAnswer(string newAnswer)
         {
-            string newValue = etAnswer.Text.Trim();
-            if (newValue != this.Model.AnswerString)
+            if (newAnswer != this.Model.AnswerString)
             {
-                ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                              null, newValue,
-                                                              Model.PublicKey.PropagationKey));
+                ExecuteSaveAnswerCommand(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.Id,
+                                                     this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newAnswer));
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
-            }
 
-            base.SaveAnswer();
+                base.SaveAnswer(newAnswer);
+            }
         }
 
         private void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

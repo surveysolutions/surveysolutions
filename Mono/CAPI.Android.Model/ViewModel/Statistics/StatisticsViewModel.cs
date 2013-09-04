@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+
 
 namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
     public class StatisticsViewModel
     {
-        public StatisticsViewModel(Guid questionnaireId, string title, SurveyStatus status, int totalQuestionCount,
+        public StatisticsViewModel(Guid questionnaireId, string title, InterviewStatus status, int totalQuestionCount,
                                    IList<StatisticsQuestionViewModel> unansweredQuestions,
                                    IList<StatisticsQuestionViewModel> answeredQuestions,
                                    IList<StatisticsQuestionViewModel> invalidQuestions)
@@ -22,7 +24,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
 
         public Guid QuestionnaireId { get; private set; }
         public string Title { get; private set; }
-        public SurveyStatus Status { get; private set; }
+        public InterviewStatus Status { get; private set; }
         public int TotalQuestionCount { get; set; }
 
         public IList<StatisticsQuestionViewModel> UnansweredQuestions { get; private set; }

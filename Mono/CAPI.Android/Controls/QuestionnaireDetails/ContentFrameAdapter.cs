@@ -10,6 +10,8 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -19,11 +21,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
         private readonly CompleteQuestionnaireView questionnaire;
-        private ItemPublicKey? screenId;
+        private InterviewItemId? screenId;
         private bool isRoot;
-        private IList<ItemPublicKey> screensHolder;
+        private IList<InterviewItemId> screensHolder;
         private AbstractScreenChangingFragment[] mFragments;
-        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ItemPublicKey? screenId)
+        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, InterviewItemId? screenId)
             : base(fm)
         {
             this.questionnaire = questionnaire;
@@ -45,7 +47,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             get { return isRoot; }
         }
-        public ItemPublicKey? ScreenId
+        public InterviewItemId? ScreenId
         {
             get { return screenId; }
         }
@@ -98,7 +100,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             base.DestroyItem(p0, p1, p2);
            
         }
-        public int GetScreenIndex(ItemPublicKey? screenId)
+        public int GetScreenIndex(InterviewItemId? screenId)
         {
             if (!screenId.HasValue)
                 return isRoot ? Count - 1 : -1;
@@ -109,7 +111,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
             return -1;
         }
-        public void UpdateScreenData(ItemPublicKey? newScreenId)
+        public void UpdateScreenData(InterviewItemId? newScreenId)
         {
             var screenIdNotNull = newScreenId ?? this.questionnaire.Chapters.First().ScreenId;
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();

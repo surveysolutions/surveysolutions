@@ -1,3 +1,5 @@
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+
 namespace Core.Supervisor.Views.Survey
 {
     using System;
@@ -18,7 +20,7 @@ namespace Core.Supervisor.Views.Survey
     {
         #region Constructors and Destructors
 
-        /// <summary>
+      /*  /// <summary>
         /// Initializes a new instance of the <see cref="SurveyScreenView"/> class.
         /// </summary>
         /// <param name="doc">
@@ -49,7 +51,7 @@ namespace Core.Supervisor.Views.Survey
             this.Screens = new List<SurveyScreen>();
             this.BuildScreenContent(doc, currentGroup, scope);            
             this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status, s.ChangeDate)).ToList();
-        }
+        }*/
 
         public UserLight Responsible { get; set; }
 
@@ -62,14 +64,6 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets the group.
         /// </summary>
         public CompleteGroupMobileView Group { get; set; }
-
-        /// <summary>
-        /// get or set questionnaire active status - active if allow to edit, not error or completed
-        /// </summary>
-        public bool IsQuestionnaireActive
-        {
-            get { return !SurveyStatus.IsStatusAllowCapiSync(this.Status); }
-        }
 
         /// <summary>
         /// Gets or sets the questionnaire public key.
@@ -94,7 +88,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets Status.
         /// </summary>
-        public SurveyStatus Status { get; set; }
+        public InterviewStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets Navigation.

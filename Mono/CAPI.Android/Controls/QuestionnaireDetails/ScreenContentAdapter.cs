@@ -16,6 +16,7 @@ using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Entities.SubEntities;
 using Ninject;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -23,12 +24,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     {
         private readonly Context context;
         private readonly Guid questionnaireId;
-        private readonly SurveyStatus status;
+        private readonly InterviewStatus status;
         private readonly IQuestionViewFactory questionViewFactory;
         private readonly EventHandler<ScreenChangedEventArgs> screenChangeEventHandler;
 
         public ScreenContentAdapter(IList<IQuestionnaireItemViewModel> items, Context context, Guid questionnaireId,
-                                    SurveyStatus status, 
+                                    InterviewStatus status, 
                                     EventHandler<ScreenChangedEventArgs> screenChangeEventHandler)
             : base(items)
         {
@@ -46,7 +47,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             if (question != null)
             {
                 var questionView = this.questionViewFactory.CreateQuestionView(context, question, questionnaireId);
-                if (SurveyStatus.IsStatusAllowCapiSync(status))
+                if (status==InterviewStatus.Completed)
                 {
                     questionView.EnableDisableView(false);
                 }

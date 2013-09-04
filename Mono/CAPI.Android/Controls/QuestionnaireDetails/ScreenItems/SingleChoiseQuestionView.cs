@@ -7,6 +7,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -54,11 +55,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var selectedItem = radioGroup.FindViewById<RadioButton>(e.CheckedId);
             var answerGuid = Guid.Parse(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
-
-            ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                        new List<Guid>(1) {answerGuid}, "",
-                                                        Model.PublicKey.PropagationKey));
-            SaveAnswer();
+            var selectedAnswer = typedMode.Answers.FirstOrDefault(
+                a => a.PublicKey == answerGuid);
+            if(selectedAnswer==null)
+                return;
+            
+            ExecuteSaveAnswerCommand(new AnswerSingleOptionQuestionCommand(this.QuestionnairePublicKey,
+                                                                         CapiApplication.Membership.CurrentUser.Id,
+                                                                         Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                                                                             selectedAnswer.Value));
+            SaveAnswer(selectedAnswer.Title);
         }
 
 

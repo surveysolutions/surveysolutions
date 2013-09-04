@@ -13,15 +13,18 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class AnswerOnQuestionCommandService : IAnswerOnQuestionCommandService
     {
-        private readonly Dictionary<ItemPublicKey, SetAnswerCommand> commandQueue =
-            new Dictionary<ItemPublicKey, SetAnswerCommand>();
+        private readonly Dictionary<InterviewItemId, AnswerQuestionCommand> commandQueue =
+            new Dictionary<InterviewItemId, AnswerQuestionCommand>();
 
-        private readonly Queue<ItemPublicKey> executionLine = new Queue<ItemPublicKey>();
+        private readonly Queue<InterviewItemId> executionLine = new Queue<InterviewItemId>();
         private readonly ICommandService commandService;
         private readonly object locker = new object();
         private bool isRunning;
@@ -31,7 +34,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.commandService = commandService;
         }
 
-        public void Execute(SetAnswerCommand command)
+        public void Execute(AnswerQuestionCommand command)
         {
             UpdateExecutionFlow(command);
 
@@ -42,9 +45,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        private void UpdateExecutionFlow(SetAnswerCommand command)
+        private void UpdateExecutionFlow(AnswerQuestionCommand command)
         {
-            var key = new ItemPublicKey(command.QuestionPublickey, command.PropogationPublicKey);
+            var key = new InterviewItemId(command.QuestionId, command.PropagationVector);
 
             lock (locker)
             {
@@ -60,7 +63,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private void ExecuteSaveAnswerCommandAndRunNextIfExist()
         {
-            SetAnswerCommand nextCommand = null;
+            AnswerQuestionCommand nextCommand = null;
 
             lock (locker)
             {
@@ -70,7 +73,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     return;
                 }
 
-                ItemPublicKey key = executionLine.Dequeue();
+                InterviewItemId key = executionLine.Dequeue();
                 nextCommand = commandQueue[key];
                 commandQueue.Remove(key);
             }

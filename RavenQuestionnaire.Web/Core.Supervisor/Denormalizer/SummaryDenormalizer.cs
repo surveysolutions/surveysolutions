@@ -1,5 +1,6 @@
 using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace Core.Supervisor.Denormalizer
 {
@@ -20,7 +21,7 @@ namespace Core.Supervisor.Denormalizer
     public class SummaryDenormalizer : UserBaseDenormalizer,
                                        IEventHandler<QuestionnaireStatusChanged>,
                                        IEventHandler<QuestionnaireAssignmentChanged>,
-                                       IEventHandler<InterviewDeleted>, IEventHandler<InterviewMetaInfoUpdated>
+                                       IEventHandler<InterviewDeleted>, IEventHandler<SynchronizationMetadataApplied>
     {
         private readonly IReadSideRepositoryWriter<SummaryItem> summaryItem;
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireBrowseItem> questionnaires;
@@ -175,9 +176,9 @@ namespace Core.Supervisor.Denormalizer
 
         }
 
-        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
+       //     HandleChangeStatus(evnt.EventSourceId, evnt.Payload.StatusId, evnt.Payload.PreviousStatusId);
         }
     }
 }

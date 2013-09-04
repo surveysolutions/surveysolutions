@@ -116,7 +116,7 @@ namespace Main.Core
         {
 
             var implementations =
-             assembyes.SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
+             assembyes.SelectMany(a => a.GetTypes()).Where(t =>t.IsPublic && ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
 

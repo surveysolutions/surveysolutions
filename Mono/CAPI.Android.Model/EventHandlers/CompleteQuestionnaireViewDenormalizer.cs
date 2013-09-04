@@ -1,137 +1,177 @@
 using System;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer : IEventHandler<NewAssigmentCreated>, 
-                                                         IEventHandler<ConditionalStatusChanged>, 
-                                                         IEventHandler<CommentSet>,
-                                                         IEventHandler<AnswerSet>,
-                                                         IEventHandler<PropagatableGroupAdded>,
-                                                         IEventHandler<PropagatableGroupDeleted>,
-                                                         IEventHandler<QuestionnaireStatusChanged>
+    public class CompleteQuestionnaireViewDenormalizer :
+        IEventHandler<InterviewSynchronized>,
+        IEventHandler<GroupPropagated>,
+        IEventHandler<InterviewCompleted>,
+        IEventHandler<InterviewRestarted>,
+        IEventHandler<AnswerCommented>,
+        IEventHandler<MultipleOptionsQuestionAnswered>,
+        IEventHandler<NumericQuestionAnswered>,
+        IEventHandler<TextQuestionAnswered>,
+        IEventHandler<SingleOptionQuestionAnswered>,
+        IEventHandler<DateTimeQuestionAnswered>,
+        IEventHandler<GroupDisabled>,
+        IEventHandler<GroupEnabled>,
+        IEventHandler<QuestionDisabled>,
+        IEventHandler<QuestionEnabled>,
+        IEventHandler<AnswerDeclaredInvalid>,
+        IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<SynchronizationMetadataApplied>
     {
-        /// <summary>
-        /// The _document storage.
-        /// </summary>
-        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> _documentStorage;
+        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
 
-
-        public CompleteQuestionnaireViewDenormalizer(IReadSideRepositoryWriter<CompleteQuestionnaireView> documentStorage)
+        public CompleteQuestionnaireViewDenormalizer(
+            IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage,
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
-            _documentStorage = documentStorage;
-        }
-        #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
-
-        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
-        {
-            var document = evnt.Payload.Source;
-            
-            var view = new CompleteQuestionnaireView(document);
-
-            _documentStorage.Store(view, document.PublicKey);
+            this.interviewStorage = interviewStorage;
+            this.questionnarieStorage = questionnarieStorage;
         }
 
-
-        #endregion
-
-        #region Implementation of IEventHandler<in AnswerSet>
-
-        public void Handle(IPublishedEvent<AnswerSet> evnt)
+        public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetAnswer(new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey),
-                          evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
+            var questionnarie = questionnarieStorage.GetById(evnt.Payload.InterviewData.QuestionnaireId,
+                                                             evnt.Payload.InterviewData.QuestionnaireVersion);
+            if (questionnarie == null)
+                return;
+
+            var view = new CompleteQuestionnaireView(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload);
+
+            interviewStorage.Store(view, evnt.EventSourceId);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in CommentSeted>
-
-        public void Handle(IPublishedEvent<CommentSet> evnt)
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetComment(new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey),
-                           evnt.Payload.Comments);
+            var document = GetStoredObject(evnt.EventSourceId); 
+            if (document == null)
+                return;
+            document.Status = InterviewStatus.Completed;
         }
 
-        #endregion
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
+        {
+            var document = GetStoredObject(evnt.EventSourceId);
+            if (document == null)
+                return;
+            document.Status = InterviewStatus.Restarted;
+        }
 
-        #region Implementation of IEventHandler<in ConditionalStatusChanged>
-
-        public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
+        public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            foreach (var item in evnt.Payload.ResultQuestionsStatus)
-            {
-                if (!item.Value.HasValue)
-                    continue;
-                doc.SetQuestionStatus(ParseCrap(item.Key), item.Value.Value);
-            }
-            foreach (var item in evnt.Payload.ResultGroupsStatus)
-            {
-                if (!item.Value.HasValue)
-                    continue;
-                doc.SetScreenStatus(ParseCrap(item.Key), item.Value.Value);
-            }
+            doc.SetComment(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
+                           evnt.Payload.Comment);
         }
-        #endregion
-        
 
-        #region Implementation of IEventHandler<in PropagatableGroupAdded>
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        {
+            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                                evnt.Payload.SelectedValues);
+        }
 
-        public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        {
+            SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                                new decimal[] {evnt.Payload.SelectedValue});
+        }
+
+        public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                           evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-                doc.PropagateGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
-            //   doc.AddScreen(rout, current);
+            doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), false);
         }
 
-        #endregion
-
-        #region Implementation of IEventHandler<in PropagatableGroupDeleted>
-
-        public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
+        public void Handle(IPublishedEvent<GroupEnabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.RemovePropagatedGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
+            doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), true);
         }
 
-        #endregion
+        public void Handle(IPublishedEvent<QuestionDisabled> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
+        }
+
+        public void Handle(IPublishedEvent<QuestionEnabled> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+        }
+
+        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
+        }
+
+        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+        }
 
         private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
         {
-            var doc = _documentStorage.GetById(publicKey);
-        /*    if (doc == null || doc.IsRestored)
-                return doc;
-            _projectionStorage.RestoreProjection(doc);*/
+            var doc = interviewStorage.GetById(publicKey);
             return doc;
         }
 
-        private ItemPublicKey ParseCrap(string key)
+        private void SetSelectableAnswer(Guid interviewId, Guid questionId, int[] protagationVector, decimal[] answers)
         {
-            Guid publicKey;
-            if (Guid.TryParse(key, out publicKey))
-                return new ItemPublicKey(publicKey, null);
-            var pkString = key.Substring(0, key.Length / 2);
-            var prKey = key.Substring(key.Length / 2);
-            return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
+            var doc = GetStoredObject(interviewId);
+            doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answers);
         }
 
-        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
-
-        public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
+        private void SetValueAnswer(Guid interviewId, Guid questionId, int[] protagationVector, object answer)
         {
-            var document = GetStoredObject(evnt.EventSourceId);
-            if(document==null)
-                return;
-            document.Status = evnt.Payload.Status;
+            var doc = GetStoredObject(interviewId);
+            doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answer);
         }
 
-        #endregion
-        
+        public void Handle(IPublishedEvent<GroupPropagated> evnt)
+        {
+            var doc = GetStoredObject(evnt.EventSourceId);
+            doc.UpdatePropagateGroupsByTemplate(evnt.Payload.GroupId, evnt.Payload.OuterScopePropagationVector,
+                                                evnt.Payload.Count);
+        }
+
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
+        {
+            this.interviewStorage.Remove(evnt.EventSourceId);
+        }
     }
 }

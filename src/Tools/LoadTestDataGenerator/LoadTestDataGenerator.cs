@@ -29,6 +29,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide.Indexes;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 
 namespace LoadTestDataGenerator
@@ -427,7 +428,7 @@ namespace LoadTestDataGenerator
             {
                 FillAnswers(surveyId);
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
-                CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
+                CompleteSurvey(surveyId,responsible);
                 this.UpdateProgress();
                 this.UpdateForecast(this.MakeTotalTimeForecast(startTime, processedSurveys, surveysCount));
                 processedSurveys++;
@@ -439,9 +440,8 @@ namespace LoadTestDataGenerator
                 if (rand.Next(10) != 5) continue;
 
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
-                this.CompleteSurvey(surveyId, SurveyStatus.Initial, responsible);
                 this.FillAnswers(surveyId, true);
-                this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
+                this.CompleteSurvey(surveyId,  responsible);
                 this.UpdateProgress();
             }
         }
@@ -469,9 +469,11 @@ namespace LoadTestDataGenerator
                 }
                 if (question.Enabled)
                 {
-                    this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey,
-                                                                     this.GetDummyCompleteAnswers(question),
-                                                                     GetDummyAnswer(question), null));
+                    var maxValue = ((IAutoPropagate)question).MaxValue;
+                    this.CommandService.Execute(new AnswerNumericQuestionCommand(surveyId, survey.Responsible.Id,
+                                                                                 question.PublicKey, new int[0],
+                                                                                 DateTime.Now,
+                                                                                 rand.Next(maxValue)));
                 }
             }
             var allQuestions = survey.GetQuestions().Where(x => !(x is IAutoPropagate)).ToList();
@@ -483,22 +485,14 @@ namespace LoadTestDataGenerator
                 }
                 if (question.Enabled)
                 {
-                    this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey,
-                                                                     GetDummyCompleteAnswers(question),
-                                                                     GetDummyAnswer(question),
-                                                                     question.PropagationPublicKey));
+                    FillQuestionWithDummyAnswer(surveyId, survey.Responsible.Id, question);
                 }
             }
         }
 
-        private void CompleteSurvey(Guid surveyId, SurveyStatus status, UserLight initiator)
+        private void CompleteSurvey(Guid surveyId, UserLight initiator)
         {
-            this.CommandService.Execute(new ChangeStatusCommand()
-            {
-                CompleteQuestionnaireId = surveyId,
-                Status = status,
-                Responsible = initiator
-            });
+            this.CommandService.Execute(new CompleteInterviewCommand(surveyId, initiator.Id));
         }
 
         private List<Guid> GetSurveyIds()
@@ -639,16 +633,12 @@ namespace LoadTestDataGenerator
                 {
                     var responsible = this.AssignSurveyToOneOfSupervisors(surveyId, supervisors, hq);
                     this.UpdateProgress();
-                    this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Unassign, surveyId, responsible);
-                    this.UpdateProgress();
 
                     var supervisorTeamMembers =
                         interviewers.Where(x => x.Supervisor.Id == responsible.PublicKey).ToList();
                     if (supervisorTeamMembers.Count > 0)
                     {
                         var interviwer = this.AssignSurveyToOneOfInterviewers(surveyId, supervisorTeamMembers);
-                        this.UpdateProgress();
-                        this.MarkSurveysAsReadyForSyncWithStatus(SurveyStatus.Initial, surveyId, interviwer);
                         this.UpdateProgress();
                     }
                     else
@@ -786,106 +776,72 @@ namespace LoadTestDataGenerator
         {
             foreach (var question in featuredQuestions)
             {
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyAnswers(question), GetDummyAnswer(question), null));
+                FillQuestionWithDummyAnswer(surveyId, initiator.PublicKey, question);
                 this.UpdateProgress();
             }
         }
 
-        private static string GetDummyAnswer(IQuestion q)
+
+        private void FillQuestionWithDummyAnswer(Guid surveyId, Guid userId, IQuestion question)
         {
             var rand = RandomObject;
-            if (q is IMultyOptionsQuestion)
+            if (question is IMultyOptionsQuestion)
             {
-                return null;
+                this.CommandService.Execute(new AnswerMultipleOptionsQuestionCommand(surveyId, userId,
+                                                                                     question.PublicKey, new int[0],
+                                                                                     DateTime.Now,
+                                                                                     GetDummyAnswers(question)));
             }
-            if (q is ISingleQuestion)
+            if (question is ISingleQuestion)
             {
-                return null;
+                this.CommandService.Execute(new AnswerSingleOptionQuestionCommand(surveyId, userId, question.PublicKey,
+                                                                                  new int[0], DateTime.Now,
+                                                                                  GetDummyAnswers(question)[0]));
             }
-            if (q is IDateTimeQuestion)
+            if (question is IDateTimeQuestion)
             {
-                return (new DateTime(rand.Next(1940, 2003), rand.Next(1, 13), rand.Next(1, 29))).ToString(CultureInfo.InvariantCulture);
+                this.CommandService.Execute(new AnswerDateTimeQuestionCommand(surveyId, userId, question.PublicKey,
+                                                                              new int[0], DateTime.Now,
+                                                                              new DateTime(rand.Next(1940, 2003),
+                                                                                           rand.Next(1, 13),
+                                                                                           rand.Next(1, 29))));
             }
-            if (q is INumericQuestion)
+            if (question is INumericQuestion)
             {
-                return rand.Next(100).ToString(CultureInfo.InvariantCulture);
+                this.CommandService.Execute(new AnswerNumericQuestionCommand(surveyId, userId, question.PublicKey,
+                                                                             new int[0], DateTime.Now,
+                                                                             rand.Next(100)));
             }
-            if (q is IAutoPropagate)
+            if (question is ITextCompleteQuestion)
             {
-                var question = (AutoPropagateCompleteQuestion)q;
-                var maxValue = question.MaxValue;
-                return rand.Next(maxValue).ToString(CultureInfo.InvariantCulture);
+                this.CommandService.Execute(new AnswerTextQuestionCommand(surveyId, userId, question.PublicKey,
+                                                                          new int[0], DateTime.Now,
+                                                                          "value " + rand.Next()));
             }
-            if (q is ITextCompleteQuestion)
-            {
-                return "value " + rand.Next();
-            }
-            return string.Empty;
         }
 
-        private List<Guid> GetDummyAnswers(IQuestion q)
+        private decimal[] GetDummyAnswers(IQuestion question)
         {
             var random = RandomObject;
-            if (q is IMultyOptionsQuestion)
+            var rand = random;
+            var answersCount = question.Answers.Count;
+            var selectedAnswersCount = rand.Next(1, answersCount + 1);
+            var result = new List<decimal>();
+            for (int i = 0; i < selectedAnswersCount; i++)
             {
-                var rand = random;
-                var question = (MultyOptionsQuestion)q;
-                var answersCount = question.Answers.Count;
-                var selectedAnswersCount = rand.Next(1, answersCount + 1);
-                var result = new List<Guid>();
-                for (int i = 0; i < selectedAnswersCount; i++)
-                {
-                    var answer = question.Answers[rand.Next(0, answersCount)];
-                    result.Add(answer.PublicKey);
-                }
-                return result.Distinct().ToList();
+                var answer = question.Answers[rand.Next(0, answersCount)];
+                result.Add(decimal.Parse(answer.AnswerValue));
             }
-            if (q is ISingleQuestion)
-            {
-                var question = (SingleQuestion)q;
-                var answersCount = question.Answers.Count;
-                return new List<Guid>()
-                    {
-                        question.Answers[random.Next(answersCount)].PublicKey
-                    };
-            }
-            return new List<Guid>() { };
-        }
+            return result.Distinct().ToArray();
 
-        private List<Guid> GetDummyCompleteAnswers(IQuestion q)
-        {
-            var random = RandomObject;
-            if (q is IMultyOptionsQuestion)
-            {
-                var rand = random;
-                var question = (MultyOptionsCompleteQuestion)q;
-                var answersCount = question.Answers.Count;
-                var selectedAnswersCount = rand.Next(1, answersCount + 1);
-                var result = new List<Guid>();
-                for (int i = 0; i < selectedAnswersCount; i++)
-                {
-                    var answer = question.Answers[rand.Next(0, answersCount)];
-                    result.Add(answer.PublicKey);
-                }
-                return result.Distinct().ToList();
-            }
-            if (q is ISingleQuestion)
-            {
-                var question = (SingleCompleteQuestion)q;
-                var answersCount = question.Answers.Count;
-                return new List<Guid>()
-                    {
-                        question.Answers[random.Next(answersCount)].PublicKey
-                    };
-            }
-            return new List<Guid>() { Guid.NewGuid() };
         }
 
         private UserDocument AssignSurveyToOneOfSupervisors(Guid surveyId, List<UserDocument> supervisors, UserDocument hq)
         {
             var rand = RandomObject;
             var responsibleSupervisor = supervisors[rand.Next(supervisors.Count)];
-            this.CommandService.Execute(new ChangeAssignmentCommand(surveyId, responsibleSupervisor.ToUserLight()));
+            this.CommandService.Execute(new AssignSupervisorCommand(surveyId, hq.PublicKey,
+                                                                    responsibleSupervisor.PublicKey));
             return responsibleSupervisor;
         }
 
@@ -893,12 +849,11 @@ namespace LoadTestDataGenerator
         {
             var rand = RandomObject;
             var responsibleInterviewer = interviewers[rand.Next(interviewers.Count)];
-            this.CommandService.Execute(new ChangeAssignmentCommand(surveyId, responsibleInterviewer.ToUserLight()));
+            this.CommandService.Execute(new AssignInterviewerCommand(surveyId, responsibleInterviewer.Supervisor.Id, responsibleInterviewer.PublicKey));
             return responsibleInterviewer;
         }
 
-        private void MarkSurveysAsReadyForSyncWithStatus(
-            SurveyStatus surveyStatus, Guid surveyId, UserDocument initiator)
+    /*    private void MarkSurveysAsReadyForSyncWithStatus(Guid surveyId, UserDocument initiator)
         {
             this.CommandService.Execute(
                 new ChangeStatusCommand()
@@ -907,7 +862,7 @@ namespace LoadTestDataGenerator
                         Status = surveyStatus,
                         Responsible = initiator.ToUserLight()
                     });
-        }
+        }*/
 
         private void templatePath_Enter(object sender, EventArgs e)
         {

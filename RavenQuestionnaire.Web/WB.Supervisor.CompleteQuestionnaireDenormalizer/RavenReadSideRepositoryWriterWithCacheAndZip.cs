@@ -133,7 +133,8 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
         private void UpdateViewFromEventStream(QuestionnarieWithSequence viewItem)
         {
-            incomePackages.ProcessItem(viewItem.Document.PublicKey, viewItem.Sequence);
+            throw new NotImplementedException("implementation is commented");
+          /*  incomePackages.ProcessItem(viewItem.Document.PublicKey, viewItem.Sequence);
 
             var events = eventStore.ReadFrom(viewItem.Document.PublicKey, viewItem.Sequence, long.MaxValue);
             if (events.IsEmpty)
@@ -141,7 +142,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             var updatedView = RestoreFromEventStream(events, viewItem.Document);
            
             memcache[updatedView.PublicKey] = new QuestionnarieWithSequence(updatedView,
-                                                                                  events.Last().EventSequence);
+                                                                                  events.Last().EventSequence);*/
         }
 
         private void ClearCacheIfLimitExcided()

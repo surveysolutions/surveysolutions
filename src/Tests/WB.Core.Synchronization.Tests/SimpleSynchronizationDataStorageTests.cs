@@ -6,6 +6,9 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Tests
@@ -25,7 +28,9 @@ namespace WB.Core.Synchronization.Tests
             SimpleSynchronizationDataStorage target = CreateSimpleSynchronizationDataStorageWithOneSupervisorAndOneUser(supervisorId, userId);
 
             // act
-            target.SaveInterview(new CompleteQuestionnaireStoreDocument(){PublicKey = questionnarieId}, userId);
+            target.SaveInterview(
+                new InterviewSynchronizationDto(questionnarieId, InterviewStatus.Created, userId, Guid.NewGuid(),1, null, null, null,
+                                                null, null, null), userId);
 
             // assert
             var result = target.GetLatestVersion(questionnarieId);
@@ -94,7 +99,8 @@ namespace WB.Core.Synchronization.Tests
             var userStorageMock = new Mock<IQueryableReadSideRepositoryWriter<UserDocument>>();
 
             var retval =
-                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage, inmemoryChunkStorage);
+                new SimpleSynchronizationDataStorage(userStorageMock.Object, inmemoryChunkStorage, inmemoryChunkStorage,
+                                                     new Mock<IMetaInfoBuilder>().Object);
 
             retval.SaveUser(new UserDocument()
             {

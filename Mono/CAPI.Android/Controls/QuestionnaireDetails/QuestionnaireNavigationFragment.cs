@@ -6,6 +6,8 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -64,7 +66,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private QuestionnaireNavigationAdapter adapter;
         #endregion
 
-        protected void OnItemClick(ItemPublicKey? groupKey)
+        protected void OnItemClick(InterviewItemId? groupKey)
         {
             var handler = ScreenChanged;
             if (handler != null)
@@ -91,10 +93,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             
             SelectItem(pos);
             var tag = v.GetTag(Resource.Id.ScreenId);
-            ItemPublicKey? screenId = null;
+            InterviewItemId? screenId = null;
             if (tag != null)
             {
-                screenId = ItemPublicKey.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
+                screenId = InterviewItemId.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
             }
             OnItemClick(screenId);
         }

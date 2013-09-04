@@ -21,7 +21,7 @@ namespace Core.Supervisor.Views.Interviewer
         public SurveyStatus Status { get; set; }
 
         /// <summary>
-        /// Gets or sets TemplateId.
+        /// Gets or sets QuestionnaireId.
         /// </summary>
         public Guid TemplateId { get; set; }
 
@@ -50,7 +50,7 @@ namespace Core.Supervisor.Views.Interviewer
                         Id = publicKey,
                         Status = status,
                         Title = title,
-                        TemplateId = templateId
+                        QuestionnaireId = templateId
                     });
             }
         }*/

@@ -19,8 +19,8 @@ namespace Main.Core.EventHandlers
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewMetaInfoUpdated>,
+                                                               IEventHandler<InterviewDeleted>/*,
+        IEventHandler<InterviewMetaInfoUpdated>*/,
          IEventHandler
 
     {
@@ -214,7 +214,7 @@ namespace Main.Core.EventHandlers
         }
 
         #endregion
-
+        /*
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
@@ -224,7 +224,7 @@ namespace Main.Core.EventHandlers
             item.LastEntryDate = evnt.EventTimeStamp;
             item.IsDeleted = false;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
-        }
+        }*/
 
         public string Name
         {

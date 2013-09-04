@@ -8,11 +8,11 @@
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "SetFlag")]
-    public class SetFlagCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "SetFlag")]
+    public class _SetFlagCommand : CommandBase
     {
+        public _SetFlagCommand(
       
-        public SetFlagCommand(
             Guid completeQuestionnaireId,
             Guid questionPublicKey,
             Guid? propogationPublicKey,
@@ -25,14 +25,14 @@
             this.PropogationPublicKey = propogationPublicKey;
             this.IsFlaged = isFlaged;
         }
-
+        
         [AggregateRootId]
         public Guid CompleteQuestionnaireId { get; set; }
 
         public Guid? PropogationPublicKey { get; set; }
 
         public Guid QuestionPublickey { get; set; }
-
+        
         public bool IsFlaged { get; set; }
     }
 }

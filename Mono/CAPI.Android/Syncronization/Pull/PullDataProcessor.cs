@@ -18,28 +18,31 @@ using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Syncronization.Pull
 {
     public class PullDataProcessor
     {
-        private const string syncTemp = "sync_temp";
-
-        private ILogger logger;
-
         public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
             this.chuncksFroProccess=new List<SyncItem>();
-
-            cleanUpExecutor = new CleanUpExecutor(changelog);
+            this.cleanUpExecutor = new CleanUpExecutor(changelog);
         }
         private IList<SyncItem> chuncksFroProccess;
+        private ILogger logger;
+        private CleanUpExecutor cleanUpExecutor;
+
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
-        private CleanUpExecutor cleanUpExecutor;
+       
 
         public void Save(SyncItem  data)
         {
@@ -74,6 +77,9 @@ namespace CAPI.Android.Syncronization.Pull
                     break;
                 case SyncItemType.File:
                     ExecuteFile(item);
+                    break;
+                case SyncItemType.Template:
+                    ExecuteTemplate(item);
                     break;
                 default: break;
             }
@@ -117,24 +123,28 @@ namespace CAPI.Android.Syncronization.Pull
 
         private void ExecuteInterview(SyncItem item)
         {
-            if (!string.IsNullOrWhiteSpace(item.MetaInfo))
-            {
-                string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
+            /* if (!string.IsNullOrWhiteSpace(item.MetaInfo))
+             {*/
+            string meta = item.IsCompressed ? PackageHelper.DecompressString(item.MetaInfo) : item.MetaInfo;
 
-                var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
-                
-                ////todo: 
-                //save item to sync cache for handling on demand
-                var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
-                syncCacher.SaveItem(item.Id, item.Content);
+            var metaInfo = JsonUtils.GetObject<InterviewMetaInfo>(meta);
 
-                commandService.Execute(new UpdateInterviewMetaInfoCommand(metaInfo.PublicKey, metaInfo.TemplateId,
-                                                                          metaInfo.Title, metaInfo.ResponsibleId,
-                                                                          metaInfo.Status.Id,
-                                                                          metaInfo.FeaturedQuestionsMeta.ToList()));
+            ////todo: 
+            //save item to sync cache for handling on demand
+            var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
+            syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
+
+            commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
+                                                                      (InterviewStatus) metaInfo.Status,
+                                                                      metaInfo.FeaturedQuestionsMeta.Select(
+                                                                          q =>
+                                                                          new AnsweredQuestionSynchronizationDto(
+                                                                              q.PublicKey, new int[0], q.Value,
+                                                                              string.Empty))
+                                                                              .ToArray()));
 
 
-            }
+            /*    }
             
             else
             {
@@ -142,8 +152,15 @@ namespace CAPI.Android.Syncronization.Pull
 
                 var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
                 commandService.Execute(new CreateNewAssigment(questionnarieContent));    
-            }
-            
+            }*/
+
+        }
+
+        private void ExecuteTemplate(SyncItem item)
+        {
+            string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
+            var template = JsonUtils.GetObject<QuestionnaireDocument>(content);
+            commandService.Execute(new ImportQuestionnaireCommand(Guid.NewGuid(), template));
         }
     }
 }

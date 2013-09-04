@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Core.Supervisor.Denormalizer;
-using Core.Supervisor.RavenIndexes;
 using Core.Supervisor.Views;
 using Main.Core;
 using Main.Core.Commands;
@@ -14,6 +13,7 @@ using Main.Core.Services;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -27,14 +27,14 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.Synchronization;
-using WB.Supervisor.CompleteQuestionnaireDenormalizer;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
-using Web.Supervisor.CommandDeserialization;
+using Web.Supervisor.Code.CommandDeserialization;
 using Web.Supervisor.Injections;
 using WebActivator;
 
@@ -123,8 +123,7 @@ namespace Web.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(AppDomain.CurrentDomain.GetData("DataDirectory").ToString()),
                 new SupervisorCommandDeserializationModule(),
-                new SupervisorBoundedContextModule(),
-                new CompleteQuestionnarieDenormalizerModule());
+                new SupervisorBoundedContextModule());
 
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
@@ -133,6 +132,9 @@ namespace Web.Supervisor.App_Start
 
             PrepareNcqrsInfrastucture(kernel);
 
+            var repository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+            kernel.Bind<IDomainRepository>().ToConstant(repository);
+            kernel.Bind<ISnapshotStore>().ToConstant(NcqrsEnvironment.Get<ISnapshotStore>());
 #warning dirty index registrations
             var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
             indexccessor.RegisterIndexesFromAssembly(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Assembly);

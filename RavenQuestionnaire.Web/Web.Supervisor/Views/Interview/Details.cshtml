@@ -4,6 +4,7 @@
 @using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Survey
 @using Newtonsoft.Json
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @model SurveyScreenView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -116,7 +117,7 @@
                 <div class="inner">
                     <a class="btn btn-info nav-link" id="ref-link-statusHistoryLink" href="#/status_history">Status history</a>
                     
-                    @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId || Model.Status.PublicId == SurveyStatus.Error.PublicId)
+                    @if (Model.Status == InterviewStatus.Completed)
                     {
                        <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
                             <i class="icon-ok-sign icon-white"></i>Change state</a>

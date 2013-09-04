@@ -150,7 +150,7 @@
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\..\ExpressionEvaluator\Binaries\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -288,15 +288,18 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Code\AppSettings.cs" />
-    <Compile Include="CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
-    <Compile Include="CommandDeserialization\SupervisorCommandDeserializer.cs" />
+    <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializationModule.cs" />
+    <Compile Include="Code\CommandDeserialization\SupervisorCommandDeserializer.cs" />
+    <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
+    <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
+    <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
+    <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
-    <Compile Include="Controllers\StatusApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
-    <Compile Include="Controllers\SurveysApiController.cs" />
-    <Compile Include="Controllers\SummaryApiController.cs" />
+    <Compile Include="Controllers\ReportDataApiController.cs" />
+    <Compile Include="Controllers\StatusHelper.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -311,7 +314,6 @@
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Controllers\TestUnhandledExceptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Models\UserEditModel.cs" />
@@ -472,6 +474,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\changeState\main.js" />
+    <Content Include="Scripts\changeState\app\viewmodel.js" />
     <Content Include="Scripts\details\app\config.js" />
     <Content Include="Scripts\details\app\datacontext.js" />
     <Content Include="Scripts\details\app\dataservice.js" />
@@ -527,8 +531,9 @@
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\query-string.js" />
+    <Content Include="Scripts\vm\svDocumentlistview.js" />
     <Content Include="Scripts\vm\statuslistview.js" />
-    <Content Include="Scripts\vm\documentlistview.js" />
+    <Content Include="Scripts\vm\hqDocumentlistview.js" />
     <Content Include="Scripts\vm\userlistview.js" />
     <Content Include="Scripts\vm\surveylistview.js" />
     <Content Include="Scripts\vm\summarylistview.js" />
@@ -601,6 +606,7 @@
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
+    <Content Include="Views\Interview\InterviewDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -676,10 +682,6 @@
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.Supervisor.CompleteQuestionnaireDenormalizer\WB.Supervisor.CompleteQuestionnaireDenormalizer.csproj">
-      <Project>{60c152be-f926-4289-be28-89207f2c12c7}</Project>
-      <Name>WB.Supervisor.CompleteQuestionnaireDenormalizer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Survey\Index.cshtml" />
@@ -726,7 +728,7 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\Survey\Summary.cshtml" />
+    <Content Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
@@ -740,12 +742,12 @@
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
     <Content Include="Views\Interview\Approve.cshtml" />
     <Content Include="Views\Interview\ChangeState.cshtml" />
-    <Content Include="Views\HQ\Surveys.cshtml">
+    <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>
       </SubType>
     </Content>
     <Content Include="Views\Interview\Redo.cshtml" />
-    <Content Include="Views\HQ\Summary.cshtml" />
+    <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
