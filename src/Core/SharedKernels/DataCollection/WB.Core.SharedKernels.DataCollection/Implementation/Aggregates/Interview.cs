@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.invalidAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.InvalidAnsweredQuestions);
         }
 
-        private void Apply(InterviewMetaInfoUpdated @event)
+        private void Apply(SynchronizationMetadataApplied @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
@@ -315,9 +315,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus,
-                         List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta):base(id)
+                         AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta):base(id)
         {
-            UpdateInterviewMetaInfo(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
+            ApplySynchronizationMetadata(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
         }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
@@ -334,13 +334,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       synchronizedInterview.PropagatedGroupInstanceCounts));
         }
 
-        public void UpdateInterviewMetaInfo(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus,
-                                            List<AnsweredQuestionSynchronizationDto> featuredQuestionsMeta)
+        public void ApplySynchronizationMetadata(Guid id, Guid questionnarieId, Guid userId,
+                                                 InterviewStatus interviewStatus,
+                                                 AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
         {
+            var changeStatusEvent =
+                GetChangeStatusEventOrThrowIfSatusNotAllowedToBeChangedWithMetadata(interviewStatus);
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
 
-            ApplyEvent(new InterviewMetaInfoUpdated(userId, questionnarieId, questionnaire.Version, interviewStatus,
-                                                    featuredQuestionsMeta));
+            ApplyEvent(new SynchronizationMetadataApplied(userId, questionnarieId, questionnaire.Version,
+                                                          interviewStatus,
+                                                          featuredQuestionsMeta));
+            ApplyEvent(changeStatusEvent);
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
@@ -1047,6 +1053,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
         }
 
+        private InterviewStatusChanged GetChangeStatusEventOrThrowIfSatusNotAllowedToBeChangedWithMetadata(
+            InterviewStatus interviewStatus)
+        {
+            switch (interviewStatus)
+            {
+                case InterviewStatus.Completed:
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned,
+                                                                  InterviewStatus.Restarted,
+                                                                  InterviewStatus.RejectedBySupervisor);
+                    return new InterviewStatusChanged(InterviewStatus.Completed);
+                case InterviewStatus.RejectedBySupervisor:
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
+                                                                  InterviewStatus.ApprovedBySupervisor);
+                    return new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor);
+                case InterviewStatus.InterviewerAssigned:
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                        InterviewStatus.SupervisorAssigned, InterviewStatus.Restored,
+                        InterviewStatus.RejectedBySupervisor, InterviewStatus.InterviewerAssigned);
+                    return new InterviewStatusChanged(InterviewStatus.InterviewerAssigned);
+            }
+            throw new InterviewException(string.Format(
+                "Status {0} not allowed to be changed with ApplySynchronizationMetadata command",
+                interviewStatus));
+        }
 
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
             IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare)
