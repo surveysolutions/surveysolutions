@@ -60,7 +60,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 answered.Remove(answerValue);
             }
-            ExecuteSaveAnswerCommand(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
+            ExecuteSaveAnswerCommand(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
                                                         this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answered.ToArray()));
             SaveAnswer();
 

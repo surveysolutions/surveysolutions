@@ -12,11 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public InterviewSynchronizationDto(Guid id, InterviewStatus status, Guid userId, Guid questionnaireId, long questionnaireVersion,
                                            IList<AnsweredQuestionSynchronizationDto> answers,
-                                           HashSet<ItemPublicKey> disabledGroups,
-                                           HashSet<ItemPublicKey> disabledQuestions,
-                                           HashSet<ItemPublicKey> validAnsweredQuestions,
-                                           HashSet<ItemPublicKey> invalidAnsweredQuestions,
-                                           Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
+                                           HashSet<InterviewItemId> disabledGroups,
+                                           HashSet<InterviewItemId> disabledQuestions,
+                                           HashSet<InterviewItemId> validAnsweredQuestions,
+                                           HashSet<InterviewItemId> invalidAnsweredQuestions,
+                                           Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts)
         {
             Id = id;
             Status = status;
@@ -37,10 +37,10 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
         public IList<AnsweredQuestionSynchronizationDto> Answers { get;  set; }
-        public HashSet<ItemPublicKey> DisabledGroups { get;  set; }
-        public HashSet<ItemPublicKey> DisabledQuestions { get;  set; }
-        public HashSet<ItemPublicKey> ValidAnsweredQuestions { get;  set; }
-        public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get;  set; }
-        public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get;  set; }
+        public HashSet<InterviewItemId> DisabledGroups { get;  set; }
+        public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
+        public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
+        public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
+        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get;  set; }
     }
 }

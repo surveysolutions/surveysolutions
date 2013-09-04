@@ -17,7 +17,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class ScreenContentFragment : AbstractScreenChangingFragment
     {
-        public static ScreenContentFragment NewInstance(ItemPublicKey screenId, Guid questionnaireId)
+        public static ScreenContentFragment NewInstance(InterviewItemId screenId, Guid questionnaireId)
         {
             ScreenContentFragment myFragment = new ScreenContentFragment();
 
@@ -90,7 +90,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             get {
                 if (model == null)
                 {
-                    model = Questionnaire.Screens[ItemPublicKey.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireScreenViewModel;
+                    model = Questionnaire.Screens[InterviewItemId.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireScreenViewModel;
                 }
                 return model;
             }

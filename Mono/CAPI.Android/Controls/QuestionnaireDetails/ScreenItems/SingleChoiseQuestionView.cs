@@ -58,7 +58,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             ExecuteSaveAnswerCommand(new AnswerSingleOptionQuestionCommand(this.QuestionnairePublicKey,
                                                                          CapiApplication.Membership.CurrentUser.Id,
-                                                                         Model.PublicKey.PublicKey, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                                                                         Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
                                                                              typedMode.Answers.FirstOrDefault(
                                                                                  a => a.PublicKey == answerGuid).Value));
             SaveAnswer();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -10,7 +11,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
         protected QuestionViewModel(
-            ItemPublicKey publicKey,
+            InterviewItemId publicKey,
             string text,
             QuestionType questionType,
             bool enabled,
@@ -45,7 +46,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 Status = Status | QuestionStatus.Answered;
 
         }
-        public ItemPublicKey PublicKey { get; private set; }
+        public InterviewItemId PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public bool Capital { get; private set; }

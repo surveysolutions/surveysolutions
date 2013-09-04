@@ -4,22 +4,23 @@ using System.ComponentModel;
 using System.Linq;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
         protected QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                            ItemPublicKey screenId, IList<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
+                                            InterviewItemId screenId, IList<IQuestionnaireItemViewModel> items,
+                                            IEnumerable<InterviewItemId> breadcrumbs, int total, int answered)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
             if (breadcrumbs == null)
-                breadcrumbs = new List<ItemPublicKey>();
-            Breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { this.ScreenId });
+                breadcrumbs = new List<InterviewItemId>();
+            Breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] { this.ScreenId });
             Title = title;
             Enabled = enabled;
             ScreenName = screenName;
@@ -58,23 +59,23 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                           ItemPublicKey screenId, IList<IQuestionnaireItemViewModel> items,
-                                           IEnumerable<ItemPublicKey> siblings,
-                                           IEnumerable<ItemPublicKey> breadcrumbs)
+                                           InterviewItemId screenId, IList<IQuestionnaireItemViewModel> items,
+                                           IEnumerable<InterviewItemId> siblings,
+                                           IEnumerable<InterviewItemId> breadcrumbs)
             : this(questionnaireId,screenName, title, enabled, screenId, items,siblings, breadcrumbs,0,0)
         {
         }
         [JsonConstructor]
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                          ItemPublicKey screenId, IList<IQuestionnaireItemViewModel> items,
-                                          IEnumerable<ItemPublicKey> siblings,
-                                          IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
+                                          InterviewItemId screenId, IList<IQuestionnaireItemViewModel> items,
+                                          IEnumerable<InterviewItemId> siblings,
+                                          IEnumerable<InterviewItemId> breadcrumbs, int total, int answered)
             : this(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs, total, answered)
         {
             Siblings = siblings;
         }
         public Guid QuestionnaireId { get; private set; }
-        public ItemPublicKey ScreenId { get; private set; }
+        public InterviewItemId ScreenId { get; private set; }
         public string Title { get; private set; }
         public string ScreenName{get; protected set;}
         public int Answered {
@@ -93,10 +94,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public bool Enabled { get; private set; }
         public IList<IQuestionnaireItemViewModel> Items { get; private set; }
 
-        public virtual IEnumerable<ItemPublicKey> Siblings { get; private set; }
+        public virtual IEnumerable<InterviewItemId> Siblings { get; private set; }
 
-        
-        public IEnumerable<ItemPublicKey> Breadcrumbs { get; protected set; }
+
+        public IEnumerable<InterviewItemId> Breadcrumbs { get; protected set; }
         
 
         protected void UpdateCounters()

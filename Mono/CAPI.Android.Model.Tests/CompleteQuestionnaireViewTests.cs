@@ -9,6 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Androids.Core.Model.Tests
 {
@@ -24,21 +25,21 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void SetScreenStatus_ScreenISAbsent_ExeptionThrown()
         {
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
+            var screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
 
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens);
             Assert.Throws<KeyNotFoundException>(
-                () => target.SetScreenStatus(new ItemPublicKey(Guid.NewGuid(), null), true));
+                () => target.SetScreenStatus(new InterviewItemId(Guid.NewGuid(), null), true));
         }
         [Test]
         public void SetScreenStatus_ScreenISPresent_StatusIsChanged()
         {
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            var screenKEy = new ItemPublicKey(Guid.NewGuid(), null);
+            var screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
+            var screenKEy = new InterviewItemId(Guid.NewGuid(), null);
             var screen = new QuestionnaireScreenViewModel(Guid.NewGuid(), "test", "test", true, screenKEy,
                                                           Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
-                                                          Enumerable.Empty<ItemPublicKey>(),
-                                                          Enumerable.Empty<ItemPublicKey>());
+                                                          Enumerable.Empty<InterviewItemId>(),
+                                                          Enumerable.Empty<InterviewItemId>());
             screens.Add(screenKEy, screen);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens);
             target.SetScreenStatus(screenKEy, false);
@@ -48,18 +49,18 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void SetQuestionStatus_QuestionISAbsent_ExeptionISNotThrown()
         {
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
 
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
-            target.SetQuestionStatus(new ItemPublicKey(Guid.NewGuid(), null), true);
+            target.SetQuestionStatus(new InterviewItemId(Guid.NewGuid(), null), true);
           /*  Assert.Throws<KeyNotFoundException>(
                 () => target.SetQuestionStatus(new ItemPublicKey(Guid.NewGuid(), null), true));*/
         }
         [Test]
         public void SetQuestionStatus_QuestionISPresent_StatusIsChanged()
         {
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            var questionKEy = new ItemPublicKey(Guid.NewGuid(), null);
+            var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
+            var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
                                                       false, false,  "");
             questions.Add(questionKEy, question);
@@ -70,17 +71,17 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void SetComment_QuestionISAbsent_ExeptionThrown()
         {
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
 
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             Assert.Throws<KeyNotFoundException>(
-                () => target.SetComment(new ItemPublicKey(Guid.NewGuid(), null), ""));
+                () => target.SetComment(new InterviewItemId(Guid.NewGuid(), null), ""));
         }
         [Test]
         public void SetComment_QuestionISPresent_StatusIsChanged()
         {
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            var questionKEy = new ItemPublicKey(Guid.NewGuid(), null);
+            var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
+            var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
                                                       false, false,  "");
             questions.Add(questionKEy, question);
@@ -91,17 +92,17 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void SetAnswer_QuestionISAbsent_ExeptionThrown()
         {
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
 
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             Assert.Throws<KeyNotFoundException>(
-                () => target.SetAnswer(new ItemPublicKey(Guid.NewGuid(), null),null));
+                () => target.SetAnswer(new InterviewItemId(Guid.NewGuid(), null), null));
         }
         [Test]
         public void SetAnswer_QuestionISPresent_AnswerSetAndValidationExecuted()
         {
-            var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            var questionKEy = new ItemPublicKey(Guid.NewGuid(), null);
+            var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
+            var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
                                                       false, false,  "");
 
@@ -114,33 +115,34 @@ namespace CAPI.Androids.Core.Model.Tests
 
     public class CompleteQuestionnaireViewTestable : CompleteQuestionnaireView
     {
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, QuestionViewModel> questions):this(Guid.NewGuid())
+        public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, QuestionViewModel> questions)
+            : this(Guid.NewGuid())
         {
             this.Questions = questions;
         }
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents, TemplateCollection templates)
+        public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, TemplateCollection templates)
             : this(screents)
         {
             this.Templates = templates;
         }
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents, IDictionary<ItemPublicKey, QuestionViewModel> questions)
+        public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, IDictionary<InterviewItemId, QuestionViewModel> questions)
             : this(screents)
         {
             this.Questions = questions;
         }
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents)
+        public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents)
             : this(Guid.NewGuid())
         {
             this.Screens = screents;
         }
         public CompleteQuestionnaireViewTestable(Guid publicKey) : base(publicKey)
         {
-            this.Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
+            this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             this.Templates = new TemplateCollection();
-            this.Screens=new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
+            this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
         }
 
-        public IDictionary<ItemPublicKey, QuestionViewModel> GetQuestionHash()
+        public IDictionary<InterviewItemId, QuestionViewModel> GetQuestionHash()
         {
             return this.Questions;
         }

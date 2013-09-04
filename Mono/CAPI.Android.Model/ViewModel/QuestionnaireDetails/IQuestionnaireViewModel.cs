@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -12,11 +13,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         Guid QuestionnaireId { get; }
         string Title { get; }
         string ScreenName { get; }
-        ItemPublicKey ScreenId { get; }
+        InterviewItemId ScreenId { get; }
         int Total { get; }
         int Answered { get; }
-        IEnumerable<ItemPublicKey> Siblings { get; }
-        IEnumerable<ItemPublicKey> Breadcrumbs { get; }
+        IEnumerable<InterviewItemId> Siblings { get; }
+        IEnumerable<InterviewItemId> Breadcrumbs { get; }
 
         bool Enabled { get; }
         void SetEnabled(bool enabled);
