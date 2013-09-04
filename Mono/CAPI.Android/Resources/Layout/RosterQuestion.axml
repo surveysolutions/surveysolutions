@@ -21,6 +21,6 @@
       android:id="@+id/tvTitle"
         android:padding="10dip"
       android:textSize="20dip"
-      local:MvxBind="Text AnswerString"/>
+      local:MvxBind="Text AnswerString, Mode=OneWay"/>
   </LinearLayout>
 </LinearLayout>

@@ -53,16 +53,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             var cb = sender as CheckBox;
             var answerGuid = Guid.Parse(cb.GetTag(Resource.Id.AnswerId).ToString());
             var answered = typedMode.Answers.Where(a => a.Selected).Select(a => a.Value).ToList();
-            var answerValue = typedMode.Answers.FirstOrDefault(a => a.PublicKey == answerGuid).Value;
+            var selectedAnswer = typedMode.Answers.FirstOrDefault(a => a.PublicKey == answerGuid);
             if(e.IsChecked)
-                answered.Add(answerValue);
+                answered.Add(selectedAnswer.Value);
             else
             {
-                answered.Remove(answerValue);
+                answered.Remove(selectedAnswer.Value);
             }
+
             ExecuteSaveAnswerCommand(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
                                                         this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answered.ToArray()));
-            SaveAnswer();
+            SaveAnswer(Model.AnswerString);
 
         }
     }

@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -19,7 +20,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public abstract class AbstractQuestionView : LinearLayout, IMvxBindingContextOwner
     {
-        public event EventHandler AnswerSet;
+        public event EventHandler<AnswerSetEventArgs> AnswerSet;
         public bool IsCommentsEditorFocused { get; private set; }
         protected QuestionViewModel Model { get; private set; }
 
@@ -86,16 +87,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
         }
 
-        protected virtual void SaveAnswer()
+        protected virtual void SaveAnswer(string newAnswer)
         {
-            OnAnswerSet();
+            OnAnswerSet(newAnswer);
         }
 
-        protected void OnAnswerSet()
+        protected void OnAnswerSet(string newAnswer)
         {
             var handler = AnswerSet;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler(this, new AnswerSetEventArgs(Model.PublicKey, newAnswer));
         }
 
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
@@ -141,7 +142,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             AnswerCommandService.Execute(command);
         }
 
-        protected virtual void SaveAnswerErrorHappend()
+        protected virtual void SaveAnswerErrorHappen()
         {
         }
 
