@@ -9,6 +9,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -90,7 +91,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var crumb = sender as Button;
             if (crumb == null)
                 return;
-            var screenId = ItemPublicKey.Parse(crumb.GetTag(Resource.Id.ScreenId).ToString());
+            var screenId = InterviewItemId.Parse(crumb.GetTag(Resource.Id.ScreenId).ToString());
             notifier(new ScreenChangedEventArgs(screenId));
         }
 

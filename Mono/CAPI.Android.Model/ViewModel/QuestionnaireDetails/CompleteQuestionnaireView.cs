@@ -21,8 +21,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public CompleteQuestionnaireView(Guid id)
         {
             this.PublicKey = id;
-            this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
+            this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             this.Templates = new TemplateCollection();
         }
 
@@ -49,7 +49,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             foreach (var answeredQuestion in interviewData.AnsweredQuestions)
             {
-                var questionKey = new ItemPublicKey(answeredQuestion.Id, answeredQuestion.PropagationVector);
+                var questionKey = new InterviewItemId(answeredQuestion.Id, answeredQuestion.PropagationVector);
                 if (!this.Questions.ContainsKey(questionKey))
                     continue;
 
@@ -62,7 +62,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             foreach (var question in interviewData.InvalidAnsweredQuestions)
             {
-                SetQuestionValidity(new ItemPublicKey(question.PublicKey, question.PropagationVector), false);
+                SetQuestionValidity(new InterviewItemId(question.Id, question.PropagationVector), false);
             }
         }
 
@@ -70,12 +70,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             foreach (var group in interviewData.DisabledGroups)
             {
-                SetScreenStatus(new ItemPublicKey(@group.PublicKey, @group.PropagationVector), false);
+                SetScreenStatus(new InterviewItemId(@group.Id, @group.PropagationVector), false);
             }
 
             foreach (var question in interviewData.DisabledQuestions)
             {
-                SetQuestionStatus(new ItemPublicKey(question.PublicKey, question.PropagationVector), false);
+                SetQuestionStatus(new InterviewItemId(question.Id, question.PropagationVector), false);
             }
         }
 
@@ -85,7 +85,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
                 {
-                    AddPropagateGroup(propagatedGroupInstanceCount.Key.PublicKey,
+                    AddPropagateGroup(propagatedGroupInstanceCount.Key.Id,
                                       propagatedGroupInstanceCount.Key.PropagationVector, i);
                 }
             }
@@ -94,7 +94,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         private void CreateInterviewChapters(IQuestionnaireDocument questionnarie)
         {
             this.Chapters = questionnarie.Children.OfType<IGroup>().Select(
-                c => this.Screens[new ItemPublicKey(c.PublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
+                c => this.Screens[new InterviewItemId(c.PublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
         }
 
         private void CreateInterviewTitle(IQuestionnaireDocument questionnarie)
@@ -103,7 +103,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var answersOnFeaturedQuestions = new List<string>();
             foreach (var featuredQuestionFromTemplate in questionnarie.Find<IQuestion>(q => q.Featured))
             {
-                var key = new ItemPublicKey(featuredQuestionFromTemplate.PublicKey);
+                var key = new InterviewItemId(featuredQuestionFromTemplate.PublicKey);
                 if (!this.Questions.ContainsKey(key))
                     continue;
                 answersOnFeaturedQuestions.Add(Questions[key].AnswerString);
@@ -144,7 +144,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected void CreateNextPrevious()
         {
-            var templates = Templates.Select(t => t.ScreenId.PublicKey).ToList();
+            var templates = Templates.Select(t => t.ScreenId.Id).ToList();
             while (templates.Count > 0)
             {
                 var first = templates[0];
@@ -175,11 +175,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public Guid PublicKey { get; private set; }
         public string Title { get; private set; }
         public InterviewStatus Status { get; set; }
-        public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
+        public IDictionary<InterviewItemId, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
         protected TemplateCollection Templates { get; set; }
-        protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
+        protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
        
         #endregion
 
@@ -188,7 +188,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public void UpdatePropagateGroupsByTemplate(Guid publicKey, int[] outerScopePropagationVector, int count)
         {
-            var propagatedGroupsCount = this.Screens.Keys.Count(id => id.PublicKey == publicKey) - 1;
+            var propagatedGroupsCount = this.Screens.Keys.Count(id => id.Id == publicKey) - 1;
             if (propagatedGroupsCount == count)
                 return;
             for (int i = 0; i < Math.Abs(count - propagatedGroupsCount); i++)
@@ -231,7 +231,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             var propagationVector = BuildPropagationVectorForGroup(outerScopePropagationVector,
                                                              index);
-            var key = new ItemPublicKey(publicKey, propagationVector);
+            var key = new InterviewItemId(publicKey, propagationVector);
             var screen = this.Screens[key] as QuestionnaireScreenViewModel;
             foreach (var item in screen.Items)
             {
@@ -243,26 +243,26 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             UpdateGrid(publicKey);
 
         }
-        public IEnumerable<IQuestionnaireViewModel> RestoreBreadCrumbs(IEnumerable<ItemPublicKey> breadcrumbs)
+        public IEnumerable<IQuestionnaireViewModel> RestoreBreadCrumbs(IEnumerable<InterviewItemId> breadcrumbs)
         {
             return breadcrumbs.Select(b => this.Screens[b]);
         }
 
-        public void SetAnswer(ItemPublicKey key, object  answer)
+        public void SetAnswer(InterviewItemId key, object answer)
         {
             var question =
                 this.Questions[key];
             question.SetAnswer(answer);
         }
 
-        public void SetComment(ItemPublicKey key, string comment)
+        public void SetComment(InterviewItemId key, string comment)
         {
             var question =
                 this.Questions[key];
             question.SetComment(comment);
         }
 
-        public void SetQuestionStatus(ItemPublicKey key, bool enebled)
+        public void SetQuestionStatus(InterviewItemId key, bool enebled)
         {
             if (!this.Questions.ContainsKey(key))
                 return;
@@ -271,7 +271,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Questions[key];
             question.SetEnabled(enebled);
         }
-        public void SetQuestionValidity(ItemPublicKey key, bool valid)
+        public void SetQuestionValidity(InterviewItemId key, bool valid)
         {
             if (!this.Questions.ContainsKey(key))
                 return;
@@ -280,7 +280,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Questions[key];
             question.SetValid(valid);
         }
-        public void SetScreenStatus(ItemPublicKey key, bool enebled)
+        public void SetScreenStatus(InterviewItemId key, bool enebled)
         {
             var screen =
                 this.Screens[key];
@@ -332,7 +332,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 return;
             if (propagatedScreen.ScreenId.IsTopLevel())
                 return;
-            UpdateGrid(propagatedScreen.ScreenId.PublicKey);
+            UpdateGrid(propagatedScreen.ScreenId.Id);
         }
 
         #endregion
@@ -342,7 +342,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected void AddScreen(List<IGroup> rout, 
                             IGroup group)
         {
-            var key = new ItemPublicKey(group.PublicKey);
+            var key = new InterviewItemId(group.PublicKey);
 
 
             if (group.Propagated == Propagate.None)
@@ -356,7 +356,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
             else
             {
-                var gridKey = new ItemPublicKey(group.PublicKey);
+                var gridKey = new InterviewItemId(group.PublicKey);
                 if (!this.Screens.ContainsKey(gridKey))
                 {
                     CreateGrid(group, rout);
@@ -376,7 +376,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected void CreateGrid(IGroup group, List<IGroup> rout)
         {
-            ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey);
+            InterviewItemId rosterKey = new InterviewItemId(group.PublicKey);
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
@@ -395,14 +395,14 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                                                                                     .Interviewer)
                                                                                             .Select(
                                                                                                 BuildHeader)),
-                                                        () => CollectPropagatedScreen(rosterKey.PublicKey));
+                                                        () => CollectPropagatedScreen(rosterKey.Id));
 
-            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] {roster.ScreenId}).ToList();
+            breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] { roster.ScreenId }).ToList();
             var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, true,
                                                                       rosterKey, screenItems,
                                                                       GetSiblings,
                                                                       breadcrumbs);
-            Templates.Add(rosterKey.PublicKey, template);
+            Templates.Add(rosterKey.Id, template);
             this.Screens.Add(rosterKey, roster);
         }
 
@@ -423,16 +423,16 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             //  return screen.Children.Select(CreateView).Where(c => c != null);
         }
 
-        protected IEnumerable<ItemPublicKey> GetSiblings(Guid publicKey)
+        protected IEnumerable<InterviewItemId> GetSiblings(Guid publicKey)
         {
             return
-                this.Screens.Where(s => s.Key.PublicKey == publicKey && !s.Key.IsTopLevel()).Select(
-                    s => new ItemPublicKey(publicKey, s.Key.PropagationVector)).ToList();
+                this.Screens.Where(s => s.Key.Id == publicKey && !s.Key.IsTopLevel()).Select(
+                    s => new InterviewItemId(publicKey, s.Key.PropagationVector)).ToList();
         }
 
         protected void UpdateGrid(Guid key)
         {
-            var gridkey = new ItemPublicKey(key);
+            var gridkey = new InterviewItemId(key);
             var grid = this.Screens[gridkey] as QuestionnaireGridViewModel;
             if (grid != null)
                 grid.UpdateCounters();
@@ -442,22 +442,22 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             return
                 this.Screens.Select(
-                    s => s.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(s => s.ScreenId.PublicKey == publicKey).ToList();
+                    s => s.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(s => s.ScreenId.Id == publicKey).ToList();
         }
 
-        protected IList<ItemPublicKey> BuildBreadCrumbs(IList<IGroup> rout, ItemPublicKey key)
+        protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)
         {
             return
-                rout.Skip(1).TakeWhile(r => r.PublicKey != key.PublicKey).Select(
-                    r => new ItemPublicKey(r.PublicKey)).ToList();
+                rout.Skip(1).TakeWhile(r => r.PublicKey != key.Id).Select(
+                    r => new InterviewItemId(r.PublicKey)).ToList();
         }
 
-        protected IEnumerable<ItemPublicKey> BuildSiblingsForNonPropagatedGroups(IList<IGroup> rout,
-                                                                                 ItemPublicKey key)
+        protected IEnumerable<InterviewItemId> BuildSiblingsForNonPropagatedGroups(IList<IGroup> rout,
+                                                                                 InterviewItemId key)
         {
             var parent = rout[rout.Count - 2];
             return parent.Children.OfType<IGroup>().Select(
-                        g => new ItemPublicKey(g.PublicKey));
+                        g => new InterviewItemId(g.PublicKey));
         }
     
         protected HeaderItem BuildHeader(IQuestion question)
@@ -485,7 +485,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 if (!IsTypeSelectable(newType))
                     questionView =
                         new ValueQuestionViewModel(
-                            new ItemPublicKey(question.PublicKey), question.QuestionText,
+                            new InterviewItemId(question.PublicKey), question.QuestionText,
                             newType,
                             null,
                             true, question.Instructions, null,
@@ -494,7 +494,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 else
                     questionView =
                         new SelectebleQuestionViewModel(
-                            new ItemPublicKey(question.PublicKey), question.QuestionText,
+                            new InterviewItemId(question.PublicKey), question.QuestionText,
                             newType, question.Answers.Select(
                                 a =>
                                 new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage))
@@ -514,7 +514,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var group = item as IGroup;
             if (group != null)
             {
-                var key = new ItemPublicKey(group.PublicKey);
+                var key = new InterviewItemId(group.PublicKey);
                 return
                     new QuestionnaireNavigationPanelItem(
                         key, this.Screens[key]);

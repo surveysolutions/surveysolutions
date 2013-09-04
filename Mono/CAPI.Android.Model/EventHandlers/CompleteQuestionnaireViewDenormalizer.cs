@@ -75,7 +75,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetComment(new ItemPublicKey(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
+            doc.SetComment(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector),
                            evnt.Payload.Comment);
         }
 
@@ -118,37 +118,37 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetScreenStatus(new ItemPublicKey(evnt.Payload.GroupId, evnt.Payload.PropagationVector), false);
+            doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), false);
         }
 
         public void Handle(IPublishedEvent<GroupEnabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetScreenStatus(new ItemPublicKey(evnt.Payload.GroupId, evnt.Payload.PropagationVector), true);
+            doc.SetScreenStatus(new InterviewItemId(evnt.Payload.GroupId, evnt.Payload.PropagationVector), true);
         }
 
         public void Handle(IPublishedEvent<QuestionDisabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetQuestionStatus(new ItemPublicKey(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
+            doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
         }
 
         public void Handle(IPublishedEvent<QuestionEnabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetQuestionStatus(new ItemPublicKey(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+            doc.SetQuestionStatus(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
         }
 
         public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetQuestionValidity(new ItemPublicKey(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
+            doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), false);
         }
 
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
-            doc.SetQuestionValidity(new ItemPublicKey(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
+            doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
         }
 
         private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
@@ -160,13 +160,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
         private void SetSelectableAnswer(Guid interviewId, Guid questionId, int[] protagationVector, decimal[] answers)
         {
             var doc = GetStoredObject(interviewId);
-            doc.SetAnswer(new ItemPublicKey(questionId, protagationVector), answers);
+            doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answers);
         }
 
         private void SetValueAnswer(Guid interviewId, Guid questionId, int[] protagationVector, object answer)
         {
             var doc = GetStoredObject(interviewId);
-            doc.SetAnswer(new ItemPublicKey(questionId, protagationVector), answer);
+            doc.SetAnswer(new InterviewItemId(questionId, protagationVector), answer);
         }
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt)

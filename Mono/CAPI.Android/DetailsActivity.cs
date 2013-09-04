@@ -17,6 +17,7 @@ using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
 using Ninject;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 
 namespace CAPI.Android
@@ -24,7 +25,7 @@ namespace CAPI.Android
     [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxFragmentActivity
     {
-        protected ItemPublicKey? ScreenId;
+        protected InterviewItemId? ScreenId;
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -89,7 +90,7 @@ namespace CAPI.Android
                 var savedScreen = bundle.GetString("ScreenId");
                 if (!string.IsNullOrEmpty(savedScreen))
                 {
-                    ScreenId = ItemPublicKey.Parse(savedScreen);
+                    ScreenId = InterviewItemId.Parse(savedScreen);
                 }
             }
             else

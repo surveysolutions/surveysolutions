@@ -27,7 +27,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private const string SCREEN_ID = "screenId";
         private const string QUESTIONNAIRE_ID = "questionnaireId";
 
-        public static GridContentFragment NewInstance(ItemPublicKey screenId, Guid questionnaireId)
+        public static GridContentFragment NewInstance(InterviewItemId screenId, Guid questionnaireId)
         {
             GridContentFragment myFragment = new GridContentFragment();
 
@@ -113,7 +113,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             {
                 if (model == null)
                 {
-                    model = Questionnaire.Screens[ItemPublicKey.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireGridViewModel;
+                    model = Questionnaire.Screens[InterviewItemId.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireGridViewModel;
                 }
                 return model;
             }

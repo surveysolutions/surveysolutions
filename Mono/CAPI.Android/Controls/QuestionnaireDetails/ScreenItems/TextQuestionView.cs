@@ -52,7 +52,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string newValue = etAnswer.Text.Trim();
             if (newValue != this.Model.AnswerString)
             {
-                ExecuteSaveAnswerCommand(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.PublicKey,
+                ExecuteSaveAnswerCommand(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.Id,
                                                      this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newValue));
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);

@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Androids.Core.Model.Tests
 {
@@ -24,9 +25,9 @@ namespace CAPI.Androids.Core.Model.Tests
             var target = new TemplateCollection();
             var key = Guid.NewGuid();
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
-                                                                  new ItemPublicKey(Guid.NewGuid(), null),
+                                                                  new InterviewItemId(Guid.NewGuid(), null),
                                                                   Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
-                                                                  Enumerable.Empty<ItemPublicKey>(), 0, 0, null, null);
+                                                                  Enumerable.Empty<InterviewItemId>(), 0, 0, null, null);
             target.Add(key, item);
             Assert.AreEqual(item, target[key]);
         }
@@ -64,9 +65,9 @@ namespace CAPI.Androids.Core.Model.Tests
             var target = new TemplateCollection();
             var key = Guid.NewGuid();
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
-                                                                  new ItemPublicKey(Guid.NewGuid(), null),
+                                                                  new InterviewItemId(Guid.NewGuid(), null),
                                                                   Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
-                                                                  Enumerable.Empty<ItemPublicKey>(), 0, 0, null, null);
+                                                                  Enumerable.Empty<InterviewItemId>(), 0, 0, null, null);
             target.Add(key, item);
             var result = target.GetItemsInScope(key);
             Assert.AreEqual(result.Count(), 1);
@@ -113,9 +114,9 @@ namespace CAPI.Androids.Core.Model.Tests
         protected void AddItemInCollections(TemplateCollection target,Guid key)
         {
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
-                                                                 new ItemPublicKey(Guid.NewGuid(), null),
+                                                                 new InterviewItemId(Guid.NewGuid(), null),
                                                                  Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
-                                                                 Enumerable.Empty<ItemPublicKey>(), 0, 0, null, null);
+                                                                 Enumerable.Empty<InterviewItemId>(), 0, 0, null, null);
             target.Add(key, item);
         }
     }

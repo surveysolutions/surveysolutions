@@ -72,11 +72,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId, InterviewStatus status)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
-            var disabledGroups = new HashSet<ItemPublicKey>();
-            var disabledQuestions = new HashSet<ItemPublicKey>();
-            var validQuestions = new HashSet<ItemPublicKey>();
-            var invalidQuestions = new HashSet<ItemPublicKey>();
-            var propagatedGroupInstanceCounts = new Dictionary<ItemPublicKey, int>();
+            var disabledGroups = new HashSet<InterviewItemId>();
+            var disabledQuestions = new HashSet<InterviewItemId>();
+            var validQuestions = new HashSet<InterviewItemId>();
+            var invalidQuestions = new HashSet<InterviewItemId>();
+            var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, int>();
 
             var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
@@ -91,17 +91,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                                                         null);
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
-                        disabledQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
+                        disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
 
                     #warning TLK: validness flag misses undefined state
                     if (!interviewQuestion.Valid)
-                        invalidQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
+                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
                     if (interviewQuestion.Valid)
-                        validQuestions.Add(new ItemPublicKey(interviewQuestion.Id, interviewLevel.PropagationVector));
+                        validQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {
-                    disabledGroups.Add(new ItemPublicKey(disabledGroup, interviewLevel.PropagationVector));
+                    disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.PropagationVector));
                 }
 
                 FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel, propagatedGroupInstanceCounts);
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
             QuestionnairePropagationStructure questionnariePropagationStructure, InterviewLevel interviewLevel,
-            Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
+            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.PropagationVector.Length == 0)
                 return;
@@ -124,14 +124,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var groupId in questionnariePropagationStructure.PropagationScopes[interviewLevel.ScopeId])
             {
-                var groupKey = new ItemPublicKey(groupId, outerVector);
+                var groupKey = new InterviewItemId(groupId, outerVector);
 
                 AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
             }
         }
 
-        private void AddPropagatedGroupToDictionary(Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts,
-                                                    ItemPublicKey groupKey)
+        private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
+                                                    InterviewItemId groupKey)
         {
             if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
             {

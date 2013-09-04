@@ -4,13 +4,14 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionViewModel:QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            ItemPublicKey publicKey, 
+            InterviewItemId publicKey, 
             string text,
             QuestionType questionType, 
             IEnumerable<AnswerViewModel> answers, 
@@ -44,7 +45,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
-            return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationVector),
+            return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                                                    this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),

@@ -18,6 +18,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
 using Ninject;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -140,7 +141,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             View rosterCell;
             QuestionViewModel rowModel =
-                rosterItem.Items.FirstOrDefault(q => q.PublicKey.PublicKey == headerId) as QuestionViewModel;
+                rosterItem.Items.FirstOrDefault(q => q.PublicKey.Id == headerId) as QuestionViewModel;
             RosterQuestionView rowViewItem = new RosterQuestionView(context, rowModel);
             rowViewItem.RosterItemsClick += (s, e) => ShowPopupWithQuestion(rosterItem.ScreenName, e.Model);
             rosterCell = rowViewItem;
@@ -218,7 +219,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var senderButton = sender as Button;
             if (senderButton == null)
                 return;
-            var publicKey = ItemPublicKey.Parse(senderButton.GetTag(Resource.Id.PrpagationKey).ToString());
+            var publicKey = InterviewItemId.Parse(senderButton.GetTag(Resource.Id.PrpagationKey).ToString());
             OnScreenChanged(new ScreenChangedEventArgs(publicKey));
         }
 

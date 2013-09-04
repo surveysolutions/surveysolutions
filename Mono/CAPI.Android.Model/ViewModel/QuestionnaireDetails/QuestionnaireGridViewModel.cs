@@ -10,6 +10,7 @@ using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -21,8 +22,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         #region Implementation of IQuestionnaireViewModel
      
         private  Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
-            IEnumerable<ItemPublicKey> breadcrumbs,IList<HeaderItem> header
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, IEnumerable<InterviewItemId> siblings,
+            IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
             , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows, int total, int answered)
         {
             QuestionnaireId = questionnaireId;
@@ -31,8 +32,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             ScreenId = screenId;
             Siblings = siblings;
             if (breadcrumbs == null)
-                breadcrumbs = new List<ItemPublicKey>();
-            Breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { this.ScreenId });
+                breadcrumbs = new List<InterviewItemId>();
+            Breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] { this.ScreenId });
             rowsValue = rows;
             Header = header;
             Enabled = enabled;
@@ -40,8 +41,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Total = total;
         }
         [JsonConstructor]
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
-           IEnumerable<ItemPublicKey> breadcrumbs, IList<HeaderItem> header
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, IEnumerable<InterviewItemId> siblings,
+           IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
            , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
             : this(questionnaireId, screenName, title, screenId, enabled, siblings, breadcrumbs, header, rows, 0, 0)
         {
@@ -50,7 +51,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public Guid QuestionnaireId { get; private set; }
         public string Title { get; private set; }
         public string ScreenName { get; private set; }
-        public ItemPublicKey ScreenId { get; private set; }
+        public InterviewItemId ScreenId { get; private set; }
         public int Total { get; private set; }
         public int Answered { get; private set; }
         public bool Enabled { get; private set; }
@@ -60,8 +61,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             get { return rowsValue(); }
         }
-        public IEnumerable<ItemPublicKey> Siblings { get; private set; }
-        public IEnumerable<ItemPublicKey> Breadcrumbs { get; private set; }
+        public IEnumerable<InterviewItemId> Siblings { get; private set; }
+        public IEnumerable<InterviewItemId> Breadcrumbs { get; private set; }
         
         public void SetEnabled(bool enabled)
         {

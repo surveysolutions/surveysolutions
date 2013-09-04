@@ -55,7 +55,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                     ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
                                                                             CapiApplication.Membership.CurrentUser.Id,
-                                                                            Model.PublicKey.PublicKey,
+                                                                            Model.PublicKey.Id,
                                                                             this.Model.PublicKey.PropagationVector, DateTime.UtcNow, decimal.Parse(newValue)));
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
