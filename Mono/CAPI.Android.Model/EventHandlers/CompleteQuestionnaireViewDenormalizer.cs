@@ -24,6 +24,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
+        IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
         IEventHandler<QuestionDisabled>,
@@ -82,6 +83,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             SetSelectableAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                                 evnt.Payload.SelectedValues);
+        }
+
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                                evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)

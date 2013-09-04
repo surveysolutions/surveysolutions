@@ -8,7 +8,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
-using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;

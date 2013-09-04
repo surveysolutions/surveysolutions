@@ -145,3 +145,15 @@
         </div>
     </div>
 </script>
+<script type="text/html" id="GpsCoordinates">
+    <div class="control-group" data-bind="validationElement: selectedOption">
+        <label class="control-label" data-bind="text: title"></label>
+        <div class="controls">
+            <div class="input-prepend">
+                <span class="add-on">T</span>
+                <input type="text"  data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+            </div>
+            <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
+        </div>
+    </div>
+</script>

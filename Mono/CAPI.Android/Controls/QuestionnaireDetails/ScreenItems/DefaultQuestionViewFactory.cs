@@ -44,6 +44,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 case QuestionType.AutoPropagate:
                     itemView = new AutoPropagateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
+                case QuestionType.GpsCoordinates:
+                    itemView = new GeoPositionQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                    break;
                 default:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;

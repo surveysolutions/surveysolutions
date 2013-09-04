@@ -1,3 +1,5 @@
+using System;
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
     /// <summary>
@@ -7,15 +9,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     {
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets the add gps coordinate attr.
-        /// </summary>
-        string AddGpsCoordinateAttr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the int attr.
-        /// </summary>
-        char IntAttr { get; set; }
+        //GeoPosition Position { get; set; }
 
         #endregion
     }

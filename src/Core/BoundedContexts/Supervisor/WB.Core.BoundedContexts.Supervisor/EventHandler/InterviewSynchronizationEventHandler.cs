@@ -104,9 +104,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
                                                                                   interviewQuestion.Answer,
-                                                                                  interviewQuestion.Comments.Any()
-                                                                                      ? interviewQuestion.Comments.LastOrDefault().Text
-                                                                                      : null);
+                                                                                  interviewQuestion.Comments.Any() ?
+                                                                                        interviewQuestion.Comments.Last().Text :
+                                                                                        null);
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));

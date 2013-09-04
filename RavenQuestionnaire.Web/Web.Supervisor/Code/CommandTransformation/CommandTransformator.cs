@@ -29,6 +29,8 @@ namespace Web.Supervisor.Code.CommandTransformation
                     break;
                 case "AnswerTextQuestionCommand":
                     break;
+                case "AnswerGeoLocationQuestionCommand":
+                    break;
                 case "AssignInterviewerCommand":
                     var assignCommand = (AssignInterviewerCommand) command;
                     return new AssignInterviewerCommand(assignCommand.InterviewId, globalInfo.GetCurrentUser().Id, assignCommand.InterviewerId);
@@ -79,6 +81,8 @@ namespace Web.Supervisor.Code.CommandTransformation
                 case QuestionType.MultyOption:
                     var answerAsDecimalArray = ((string[])answer.Answer).Select(decimal.Parse);
                     return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
+                case QuestionType.GpsCoordinates:
+                    return new KeyValuePair<Guid, object>(answer.Id, new GeoPosition(answer.Answer as string));
             }
             throw new Exception("Unknown question type");
         }

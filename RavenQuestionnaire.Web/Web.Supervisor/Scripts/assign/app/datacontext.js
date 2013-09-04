@@ -48,6 +48,7 @@
                     case "AutoPropagate":
                     case "Numeric":
                     case "DateTime":
+                    case "GpsCoordinates":
                     case "SingleOption":
                         answer =  {
                             id: question.id(),

@@ -818,6 +818,13 @@ namespace LoadTestDataGenerator
                                                                           new int[0], DateTime.Now,
                                                                           "value " + rand.Next()));
             }
+            if (question is IGpsCoordinatesQuestion)
+            {
+                this.CommandService.Execute(new AnswerGeoLocationQuestionCommand(surveyId, userId, question.PublicKey,
+                                                                          new int[0], DateTime.Now,
+                                                                          new GeoPosition() { Latitude = 0.0, Longitude = 44.33 , Accuracy = -1}));
+            }
+
         }
 
         private decimal[] GetDummyAnswers(IQuestion question)

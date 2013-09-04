@@ -640,6 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [TestCase(QuestionType.Text)]
         [TestCase(QuestionType.DateTime)]
         [TestCase(QuestionType.AutoPropagate)]
+        [TestCase(QuestionType.GpsCoordinates)]
         public void NewUpdateQuestion_When_question_type_is_allowed_Then_raised_QuestionChanged_event_with_same_question_type(
             QuestionType allowedQuestionType)
         {
@@ -678,7 +679,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         [Test]
         [TestCase(QuestionType.DropDownList)]
-        [TestCase(QuestionType.GpsCoordinates)]
         [TestCase(QuestionType.YesNo)]
         public void NewUpdateQuestion_When_question_type_is_not_allowed_Then_DomainException_with_type_NotAllowedQuestionType_should_be_thrown(
             QuestionType notAllowedQuestionType)
