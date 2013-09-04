@@ -48,23 +48,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewSynchronized @event)
         {
-            this.questionnaireId = @event.QuestionnaireId;
-            this.questionnaireVersion = @event.QuestionnaireVersion;
-            this.status = @event.Status;
+            this.questionnaireId = @event.InterviewData.QuestionnaireId;
+            this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
+            this.status = @event.InterviewData.Status;
 
-            this.answers = @event.AnsweredQuestions.ToDictionary(
+            this.answers = @event.InterviewData.Answers.ToDictionary(
                 question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
                 question => question.Answer);
 
-            this.disabledGroups = ToHashSetOfIdAndPropagationVectorStrings(@event.DisabledGroups);
-            this.disabledQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.DisabledQuestions);
+            this.disabledGroups = ToHashSetOfIdAndPropagationVectorStrings(@event.InterviewData.DisabledGroups);
+            this.disabledQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.InterviewData.DisabledQuestions);
 
-            this.propagatedGroupInstanceCounts = @event.PropagatedGroupInstanceCounts.ToDictionary(
+            this.propagatedGroupInstanceCounts = @event.InterviewData.PropagatedGroupInstanceCounts.ToDictionary(
                 pair => ConvertIdAndPropagationVectorToString(pair.Key.Id, pair.Key.PropagationVector),
                 pair => pair.Value);
 
-            this.validAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.ValidAnsweredQuestions);
-            this.invalidAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.InvalidAnsweredQuestions);
+            this.validAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
+            this.invalidAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
         }
 
         private void Apply(SynchronizationMetadataApplied @event)
@@ -321,16 +321,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(synchronizedInterview.QuestionnaireId);
-            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview.UserId,
-                                                      synchronizedInterview.QuestionnaireId,
-                                                      synchronizedInterview.Status, questionnaire.Version,
-                                                      synchronizedInterview.Answers,
-                                                      synchronizedInterview.DisabledGroups,
-                                                      synchronizedInterview.DisabledQuestions,
-                                                      synchronizedInterview.ValidAnsweredQuestions,
-                                                      synchronizedInterview.InvalidAnsweredQuestions,
-                                                      synchronizedInterview.PropagatedGroupInstanceCounts));
+            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
         }
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
