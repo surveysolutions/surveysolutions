@@ -17,7 +17,7 @@ namespace CAPI.Android.Extensions
             NavigationItemsCollection navigation = new NavigationItemsCollection(activity);
             
             activity.ActionBar.SetListNavigationCallbacks(
-                new NavigationSpinnerAdapter(activity, navigation),
+                new NavigationSpinnerAdapter(navigation),
                 new NavigationListener(activity, navigation));
             
             if (navigation.SelectedItemIndex != null)

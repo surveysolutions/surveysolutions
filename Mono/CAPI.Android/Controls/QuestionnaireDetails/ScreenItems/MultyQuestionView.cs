@@ -13,8 +13,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class MultyQuestionView : AbstractQuestionView
     {
-        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -58,7 +58,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 answered.Remove(answerGuid);
             }
-            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+            ExecuteSaveAnswerCommand(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                          answered, "",
                                                          Model.PublicKey.PropagationKey));
             SaveAnswer();

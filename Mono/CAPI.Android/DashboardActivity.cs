@@ -60,7 +60,7 @@ namespace CAPI.Android
             txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString();
             var llQuestionnarieHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
 
-            var adapter = new DashboardAdapter(this, dashboardSurveyItem.ActiveItems);
+            var adapter = new DashboardAdapter(dashboardSurveyItem.ActiveItems,this);
             for (int i = 0; i < adapter.Count; i++)
             {
                 View item = adapter.GetView(i, null, null);

@@ -8,6 +8,7 @@ using Core.Supervisor.Denormalizer;
 using Core.Supervisor.RavenIndexes;
 using Core.Supervisor.Views;
 using Main.Core;
+using Main.Core.Commands;
 using Main.Core.Documents;
 using Main.Core.Services;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -22,6 +23,7 @@ using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Raven;
@@ -140,8 +142,9 @@ namespace Web.Supervisor.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            var commandService = NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>());
+            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
             NcqrsEnvironment.SetDefault(commandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
             kernel.Bind<ICommandService>().ToConstant(commandService);
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));

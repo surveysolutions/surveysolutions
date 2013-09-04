@@ -10,6 +10,7 @@ using Android.Text;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Events;
@@ -17,33 +18,21 @@ using Orientation = Android.Widget.Orientation;
 
 namespace CAPI.Android.Controls.Statistics
 {
-    public class StatisticsDataAdapter : BaseAdapter<StatisticsQuestionViewModel>
+    public class StatisticsDataAdapter : SmartAdapter<StatisticsQuestionViewModel>
     {
-        private readonly IList<StatisticsQuestionViewModel> questions;
         protected readonly IList<Func<StatisticsQuestionViewModel, string>> valueFucntions;
         private readonly Context context;
         private readonly Action<ScreenChangedEventArgs> notifier;
-        public StatisticsDataAdapter(Context context, Action<ScreenChangedEventArgs> notifier,
-                                     IList<StatisticsQuestionViewModel> questions,
-                                     IList<Func<StatisticsQuestionViewModel, string>> valueFucntions)
+
+        public StatisticsDataAdapter(IList<StatisticsQuestionViewModel> items, IList<Func<StatisticsQuestionViewModel, string>> valueFucntions, Context context, Action<ScreenChangedEventArgs> notifier) : base(items)
         {
-            this.questions = questions;
             this.valueFucntions = valueFucntions;
             this.context = context;
             this.notifier = notifier;
         }
 
-        public override long GetItemId(int position)
+        protected override View BuildViewItem(StatisticsQuestionViewModel dataItem, int position)
         {
-            return position;
-        }
-
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            if (convertView != null)
-                return convertView;
-            var dataItem = this[position];
-
             LinearLayout view = new LinearLayout(context);
             view.Orientation = Orientation.Horizontal;
             view.LayoutParameters = new ListView.LayoutParams(ViewGroup.LayoutParams.FillParent,
@@ -69,17 +58,6 @@ namespace CAPI.Android.Controls.Statistics
 
             return view;
         }
-
-        public override int Count
-        {
-            get { return questions.Count;  }
-        }
-
-        public override StatisticsQuestionViewModel this[int position]
-        {
-            get { return questions[position]; }
-        }
-
 
         void tr_Click(object sender, EventArgs e)
         {
