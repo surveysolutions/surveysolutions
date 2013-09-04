@@ -21,9 +21,11 @@ using InterviewDeleted = Main.Core.Events.Questionnaire.Completed.InterviewDelet
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class InterviewSynchronizationEventHandler : IEventHandler<InterviewerAssigned>,
+        IEventHandler<InterviewStatusChanged>,/*,
                                                         IEventHandler<InterviewRejected>,
                                                         IEventHandler<InterviewCompleted>,
-                                                        IEventHandler<InterviewDeleted>, 
+                                                        IEventHandler<InterviewDeleted>, */
+        IEventHandler<InterviewCompleted>,
                                                         IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
@@ -42,31 +44,47 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            var interview = interviewDataWriter.GetById(evnt.EventSourceId);
-            Task.Factory.StartNew(() =>
-                {
-                    var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
-                                                                                         evnt.Payload.InterviewerId,
-                                                                                         InterviewStatus
-                                                                                             .InterviewerAssigned);
-
-                    syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
-                });
-
+            ResendInterviewInStatus(evnt.EventSourceId, InterviewStatus.InterviewerAssigned);
         }
 
-        public void Handle(IPublishedEvent<InterviewRejected> evnt)
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            var interview = interviewDataWriter.GetById(evnt.EventSourceId);
-            Task.Factory.StartNew(() =>
-                {
-                    var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
-                                                                                         interview.ResponsibleId,
-                                                                                         InterviewStatus
-                                                                                             .RejectedBySupervisor);
+            var newStatus = evnt.Payload.Status;
 
-                    syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
-                });
+            if (IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
+            {
+                ResendInterviewInStatus(evnt.EventSourceId, newStatus);
+            }
+
+            if (IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
+            {
+                DeleteInterview(evnt.EventSourceId);
+            }
+        }
+
+        private  bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
+        {
+            return newStatus == InterviewStatus.RejectedBySupervisor;
+        }
+        private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
+        {
+            return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
+        }
+
+        public void ResendInterviewInStatus(Guid interviewId, InterviewStatus status)
+        {
+            var interview = interviewDataWriter.GetById(interviewId);
+
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
+                                                                                 interview.ResponsibleId, status);
+
+            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+        }
+
+        public void DeleteInterview(Guid interviewId)
+        {
+            syncStorage.MarkInterviewForClientDeleting(interviewId, null);
+
         }
 
         private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId, InterviewStatus status)
@@ -153,16 +171,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return outerVector;
         }
 
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
-        {
-            syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
-
-        }
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
-        {
-            syncStorage.MarkInterviewForClientDeleting(evnt.EventSourceId, null);
-        }
-
         public string Name
         {
             get { return GetType().Name; }
@@ -175,6 +183,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public Type[] BuildsViews
         {
             get { return new Type[] {typeof (SynchronizationDelta)}; }
+        }
+
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
+        {
+            
         }
     }
 }
