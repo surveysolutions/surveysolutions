@@ -201,6 +201,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Sup
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Supervisor.Tests", "Tests\WB.Core.BoundedContexts.Supervisor.Tests\WB.Core.BoundedContexts.Supervisor.Tests.csproj", "{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidWB.Core.SharedKernels.DataCollection", "..\Mono\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj", "{6B901897-7B53-41FB-8E33-D5AA93218ADC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1291,6 +1293,21 @@ Global
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4410AFF7-26EE-49E4-8B6B-2F2E9D9D321C}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1372,6 +1389,7 @@ Global
 		{FC6CE152-DDAE-4F56-91EB-7389A79386F2} = {BD94CB7B-967D-4C78-814E-9B0F1F5BDF37}
 		{EA102E79-6CCF-49F7-9B12-C26320C91CA2} = {BD94CB7B-967D-4C78-814E-9B0F1F5BDF37}
 		{4ECE2C97-13A0-46D6-95D1-7BB50A48267B} = {BD94CB7B-967D-4C78-814E-9B0F1F5BDF37}
+		{6B901897-7B53-41FB-8E33-D5AA93218ADC} = {BD94CB7B-967D-4C78-814E-9B0F1F5BDF37}
 		{8237C4D5-6F0E-4DE4-B145-F471D49EBAAC} = {F793704E-B346-4B6B-AC14-A1BB45DB08A0}
 		{C9FA7474-8407-4C32-A946-DF47591FCC89} = {F793704E-B346-4B6B-AC14-A1BB45DB08A0}
 		{667B05AE-CF79-4A4B-B9F8-DCC0999A729B} = {F793704E-B346-4B6B-AC14-A1BB45DB08A0}
