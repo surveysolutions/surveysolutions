@@ -324,15 +324,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
         {
-            var changeStatusEvent =
-                GetChangeStatusEventOrThrowIfSatusNotAllowedToBeChangedWithMetadata(interviewStatus);
+            ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
             ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaire.Version,
                                                           interviewStatus,
                                                           featuredQuestionsMeta));
-            ApplyEvent(changeStatusEvent);
+            ApplyEvent(new InterviewStatusChanged(interviewStatus));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
@@ -1004,7 +1003,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
         }
 
-        private InterviewStatusChanged GetChangeStatusEventOrThrowIfSatusNotAllowedToBeChangedWithMetadata(
+        private void ThrowIfStatusNotAllowedToBeChangedWithMetadata(
             InterviewStatus interviewStatus)
         {
             switch (interviewStatus)
@@ -1013,16 +1012,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned,
                                                                   InterviewStatus.Restarted,
                                                                   InterviewStatus.RejectedBySupervisor);
-                    return new InterviewStatusChanged(InterviewStatus.Completed);
+                    return;
                 case InterviewStatus.RejectedBySupervisor:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
                                                                   InterviewStatus.ApprovedBySupervisor);
-                    return new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor);
+                    return;
                 case InterviewStatus.InterviewerAssigned:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(
                         InterviewStatus.SupervisorAssigned, InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor, InterviewStatus.InterviewerAssigned);
-                    return new InterviewStatusChanged(InterviewStatus.InterviewerAssigned);
+                    return;
             }
             throw new InterviewException(string.Format(
                 "Status {0} not allowed to be changed with ApplySynchronizationMetadata command",
