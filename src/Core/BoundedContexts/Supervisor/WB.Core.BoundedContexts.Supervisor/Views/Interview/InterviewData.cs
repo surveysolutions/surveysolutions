@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
 {
