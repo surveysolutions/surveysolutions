@@ -262,8 +262,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsHaveInvalidCustomEnablementConditions(questionnaire, questionnaireId);
             ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(questionnaire, questionnaireId);
 
+
+            List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
+
+
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created));
+
+            initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+
 
 #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -1153,6 +1160,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     yield return new Identity(groupId, groupPropagationVector);
                 }
             }
+        }
+
+        private static List<Identity> GetQuestionsToBeDisabledInJustCreatedInterview(IQuestionnaire questionnaire)
+        {
+            return questionnaire
+                .GetAllQuestionsWithNotEmptyCustomEnablementConditions()
+                .Where(questionId => !IsQuestionUnderPropagatableGroup(questionnaire, questionId))
+                .Select(questionId => new Identity(questionId, EmptyPropagationVector))
+                .ToList();
+        }
+
+        private static bool IsQuestionUnderPropagatableGroup(IQuestionnaire questionnaire, Guid questionId)
+        {
+            return questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).Any();
         }
 
 
