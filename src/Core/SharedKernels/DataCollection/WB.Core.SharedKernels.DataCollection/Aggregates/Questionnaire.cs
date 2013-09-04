@@ -419,6 +419,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 select question.PublicKey;
         }
 
+        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyCustomEnablementConditions()
+        {
+            return
+               from question in this.GetAllQuestions()
+               where IsExpressionDefined(question.ConditionExpression)
+               select question.PublicKey;
+        }
+
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
