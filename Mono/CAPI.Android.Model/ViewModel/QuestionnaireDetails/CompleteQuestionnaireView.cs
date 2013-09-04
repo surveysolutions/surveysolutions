@@ -28,7 +28,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public CompleteQuestionnaireView(Guid id, IQuestionnaireDocument questionnarie, InterviewSynchronized interviewData):this(id)
         {
-            this.Status = interviewData.Status;
+            this.Status = interviewData.InterviewData.Status;
 
             BuildInterviewStructureFromTemplate(questionnarie);
             
@@ -47,7 +47,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void SetAnswers(InterviewSynchronized interviewData)
         {
-            foreach (var answeredQuestion in interviewData.AnsweredQuestions)
+            foreach (var answeredQuestion in interviewData.InterviewData.Answers)
             {
                 var questionKey = new InterviewItemId(answeredQuestion.Id, answeredQuestion.PropagationVector);
                 if (!this.Questions.ContainsKey(questionKey))
@@ -60,7 +60,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void MarkAnswersAsInvalid(InterviewSynchronized interviewData)
         {
-            foreach (var question in interviewData.InvalidAnsweredQuestions)
+            foreach (var question in interviewData.InterviewData.InvalidAnsweredQuestions)
             {
                 SetQuestionValidity(new InterviewItemId(question.Id, question.PropagationVector), false);
             }
@@ -68,12 +68,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void DisableInterviewElements(InterviewSynchronized interviewData)
         {
-            foreach (var group in interviewData.DisabledGroups)
+            foreach (var group in interviewData.InterviewData.DisabledGroups)
             {
                 SetScreenStatus(new InterviewItemId(@group.Id, @group.PropagationVector), false);
             }
 
-            foreach (var question in interviewData.DisabledQuestions)
+            foreach (var question in interviewData.InterviewData.DisabledQuestions)
             {
                 SetQuestionStatus(new InterviewItemId(question.Id, question.PropagationVector), false);
             }
@@ -81,7 +81,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void PropagateGroups(InterviewSynchronized interviewData)
         {
-            foreach (var propagatedGroupInstanceCount in interviewData.PropagatedGroupInstanceCounts)
+            foreach (var propagatedGroupInstanceCount in interviewData.InterviewData.PropagatedGroupInstanceCounts)
             {
                 for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
                 {

@@ -73,8 +73,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
-                                            evnt.Payload.Status, evnt.Payload.AnsweredQuestions);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
+                                            evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers);
         }
 
 
