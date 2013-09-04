@@ -7,6 +7,7 @@ using Main.Core.View;
 using Ninject.Modules;
 using WB.Core.Synchronization.Implementation.ImportManager;
 using WB.Core.Synchronization.Implementation.SyncManager;
+using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncProvider;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -32,6 +33,7 @@ namespace WB.Core.Synchronization
             this.Bind<IChunkWriter>().To<ReadSideChunkWriter>().InSingletonScope();
             this.Bind<IChunkReader>().To<ReadSideChunkReader>();
             this.Bind<IIncomePackagesRepository>().To<IncomePackagesRepository>().InSingletonScope().WithConstructorArgument("folderPath", currentFolderPath);
+            this.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
         }
     }
 }

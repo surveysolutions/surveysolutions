@@ -1,17 +1,20 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>, IEventHandler
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
-        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
+        public QuestionnaireBrowseItemDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
         {
             this.documentStorage = documentStorage;
         }
@@ -20,9 +23,8 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
         {
             var document = evnt.Payload.Source;
 
-            var browseItem = new QuestionnaireBrowseItem(document);
-
-            this.documentStorage.Store(browseItem, document.PublicKey);
+            var browseItem = new QuestionnaireBrowseItem(document, evnt.EventSequence);
+            this.documentStorage.Store(browseItem, evnt.EventSourceId);
         }
 
         public string Name

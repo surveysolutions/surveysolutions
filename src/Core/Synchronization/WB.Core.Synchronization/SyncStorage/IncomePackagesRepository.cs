@@ -15,6 +15,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.SyncProvider;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -22,7 +24,7 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class IncomePackagesRepository : IIncomePackagesRepository
     {
         private readonly string path;
-        private const string FolderName = "IncomingData";
+        private const string FolderName = "IncomingData"; 
         private const string FileExtension = "sync";
 
         public IncomePackagesRepository(string folderPath)
@@ -42,12 +44,11 @@ namespace WB.Core.Synchronization.SyncStorage
 
             File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
 
-
             NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new UpdateInterviewMetaInfoCommand(meta.PublicKey, meta.TemplateId, meta.Title,
-                                                                        meta.ResponsibleId, meta.Status.Id,
-                                                                        null));
+                            .Execute(new ApplySynchronizationMetadata(
+                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, null));
         }
+
 
         private string GetItemFileName(Guid id)
         {
@@ -93,10 +94,11 @@ namespace WB.Core.Synchronization.SyncStorage
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i,0));
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
                 i++;
             }
             return uncommitedStream;
         }
+
     }
 }

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace WB.UI.Shared.Web.CommandDeserialization
 {
     [Serializable]
-    internal class CommandDeserializationException : Exception
+    public class CommandDeserializationException : Exception
     {
         public CommandDeserializationException() {}
 

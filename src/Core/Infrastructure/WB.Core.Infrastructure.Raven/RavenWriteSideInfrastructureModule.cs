@@ -29,6 +29,7 @@ namespace WB.Core.Infrastructure.Raven
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
             this.Kernel.Bind<IStreamableEventStore>().ToConstant(store);
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
+            this.Kernel.Bind<IEventStore>().ToConstant(store);
         }
     }
 }
