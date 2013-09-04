@@ -12,7 +12,7 @@
 
         public override string ToString()
         {
-            return string.Format("{0};{1}", Latitude, Longitude);
+            return string.Format("{0},{1}[{2}]", Latitude, Longitude, Accuracy);
         }
 
         public GeoPosition()
@@ -21,7 +21,7 @@
 
         public GeoPosition(string position)
         {
-            var coordinates = position.Split(';');
+            var coordinates = position.Split(',');
             Latitude = Double.Parse(coordinates[0]);
             Longitude = Double.Parse(coordinates[1]);
         }

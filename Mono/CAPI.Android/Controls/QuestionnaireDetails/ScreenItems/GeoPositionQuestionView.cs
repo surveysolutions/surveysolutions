@@ -117,8 +117,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                             Timestamp = t.Result.Timestamp
                         };
                     
-                    
-                    CommandService.Execute(new AnswerGeoLocationQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.PublicKey,
+                    CommandService.Execute(new AnswerGeoLocationQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
                                                                   this.Model.PublicKey.PropagationVector, DateTime.UtcNow, position));
 
                     locationText.Text = RenderPositionAsText(position);
@@ -181,7 +180,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 sb.AppendLine(string.Format("Latitude:\u0009\u0009\u0009{0}{1:N4}", position.Latitude > 0 ? " " : "", position.Latitude));
                 sb.AppendLine(string.Format("Longitude:\u0009\u0009{0}{1:N4}", position.Longitude > 0 ? " " : "", position.Longitude));
-                sb.AppendLine(string.Format("Accuracy:\u0009\u0009 {0:N2}", position.Accuracy));
+                sb.AppendLine(string.Format("Accuracy:\u0009\u0009 {0:N2}m", position.Accuracy));
             }
             else
             {
