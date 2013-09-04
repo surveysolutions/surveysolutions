@@ -68,5 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int GetPropagationLevelForGroup(Guid groupId);
 
         IEnumerable<Guid> GetAllMandatoryQuestions();
+
+        IEnumerable<Guid> GetAllQuestionsWithNotEmptyCustomEnablementConditions();
     }
 }
