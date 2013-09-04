@@ -142,7 +142,6 @@
     <Compile Include="Controls\QuestionnaireDetails\GridContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
@@ -181,6 +180,7 @@
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
+    <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />

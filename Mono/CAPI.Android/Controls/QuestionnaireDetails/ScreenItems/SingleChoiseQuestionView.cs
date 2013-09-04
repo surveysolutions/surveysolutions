@@ -55,13 +55,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var selectedItem = radioGroup.FindViewById<RadioButton>(e.CheckedId);
             var answerGuid = Guid.Parse(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
-
+            var selectedAnswer = typedMode.Answers.FirstOrDefault(
+                a => a.PublicKey == answerGuid);
+            if(selectedAnswer==null)
+                return;
+            
             ExecuteSaveAnswerCommand(new AnswerSingleOptionQuestionCommand(this.QuestionnairePublicKey,
                                                                          CapiApplication.Membership.CurrentUser.Id,
                                                                          Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
-                                                                             typedMode.Answers.FirstOrDefault(
-                                                                                 a => a.PublicKey == answerGuid).Value));
-            SaveAnswer();
+                                                                             selectedAnswer.Value));
+            SaveAnswer(selectedAnswer.Title);
         }
 
 
