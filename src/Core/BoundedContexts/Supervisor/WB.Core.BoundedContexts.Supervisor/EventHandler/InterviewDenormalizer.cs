@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewDenormalizer : IEventHandler,
+    internal class InterviewDenormalizer : IEventHandler,
                                          IEventHandler<InterviewCreated>,
                                          IEventHandler<InterviewStatusChanged>,
                                          IEventHandler<SupervisorAssigned>,
@@ -36,15 +36,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures; 
-        private readonly IReadSideRepositoryWriter<InterviewData> interviews;
+        private IReadSideRepositoryWriter<InterviewData> interviews;
 
         public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users,
-                                     IReadSideRepositoryWriter<InterviewData> interviews,
                                      IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures)
         {
             this.users = users;
-            this.interviews = interviews;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
+        }
+
+        public void SetStorage(IReadSideRepositoryWriter<InterviewData> documentStorage)
+        {
+            this.interviews = documentStorage;
+        }
+
+        public void ClearStorage()
+        {
+            this.interviews = null;
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)

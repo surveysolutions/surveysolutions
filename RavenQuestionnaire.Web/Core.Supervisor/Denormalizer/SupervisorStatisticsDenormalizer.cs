@@ -30,7 +30,7 @@ namespace Core.Supervisor.Denormalizer
                                                     IEventHandler<QuestionnaireStatusChanged>, 
                                                     IEventHandler<QuestionnaireAssignmentChanged>,
                                                     IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewMetaInfoUpdated>
+        IEventHandler<SynchronizationMetadataApplied>
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
         /// <summary>
@@ -247,7 +247,7 @@ namespace Core.Supervisor.Denormalizer
         }
         #endregion
 
-        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
          //   HandleStatusChange(evnt.EventSourceId, evnt.Payload.StatusId);
         }

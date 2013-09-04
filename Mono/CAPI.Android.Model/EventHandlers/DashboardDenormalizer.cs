@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class DashboardDenormalizer :
-                                      IEventHandler<InterviewMetaInfoUpdated>,
+                                      IEventHandler<SynchronizationMetadataApplied>,
          IEventHandler<InterviewSynchronized>,
                                       IEventHandler<InterviewCompleted>,
                                       IEventHandler<InterviewRestarted>, 
@@ -37,7 +37,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
             AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.FeaturedQuestionsMeta);
         }

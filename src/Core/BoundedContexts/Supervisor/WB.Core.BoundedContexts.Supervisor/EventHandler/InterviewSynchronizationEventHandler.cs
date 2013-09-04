@@ -43,19 +43,30 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
+            Task.Factory.StartNew(() =>
+                {
+                    var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
+                                                                                         evnt.Payload.InterviewerId,
+                                                                                         InterviewStatus
+                                                                                             .InterviewerAssigned);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, evnt.Payload.InterviewerId, InterviewStatus.InterviewerAssigned);           
-            
-            syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
+                    syncStorage.SaveInterview(interviewSyncData, evnt.Payload.UserId);
+                });
+
         }
 
         public void Handle(IPublishedEvent<InterviewRejected> evnt)
         {
             var interview = interviewDataWriter.GetById(evnt.EventSourceId);
+            Task.Factory.StartNew(() =>
+                {
+                    var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
+                                                                                         interview.ResponsibleId,
+                                                                                         InterviewStatus
+                                                                                             .RejectedBySupervisor);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview, interview.ResponsibleId, InterviewStatus.RejectedBySupervisor);
-
-            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+                    syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+                });
         }
 
         private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId, InterviewStatus status)

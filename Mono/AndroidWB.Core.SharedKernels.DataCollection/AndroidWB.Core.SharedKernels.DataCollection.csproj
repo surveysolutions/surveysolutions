@@ -76,6 +76,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerTextQuestionCommand.cs">
       <Link>Commands\Interview\AnswerTextQuestionCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\ApplySynchronizationMetadata.cs">
+      <Link>Commands\Interview\ApplySynchronizationMetadata.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\ApproveInterviewCommand.cs">
       <Link>Commands\Interview\ApproveInterviewCommand.cs</Link>
     </Compile>
@@ -123,9 +126,6 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\SynchronizeInterviewCommand.cs">
       <Link>Commands\Interview\SynchronizeInterviewCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\UpdateInterviewMetaInfoCommand.cs">
-      <Link>Commands\Interview\UpdateInterviewMetaInfoCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs">
       <Link>Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs</Link>
@@ -220,9 +220,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewerAssigned.cs">
       <Link>Events\Interview\InterviewerAssigned.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewMetaInfoUpdated.cs">
-      <Link>Events\Interview\InterviewMetaInfoUpdated.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewRejected.cs">
       <Link>Events\Interview\InterviewRejected.cs</Link>
     </Compile>
@@ -255,6 +252,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SupervisorAssigned.cs">
       <Link>Events\Interview\SupervisorAssigned.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SynchronizationMetadataApplied.cs">
+      <Link>Events\Interview\SynchronizationMetadataApplied.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\TextQuestionAnswered.cs">
       <Link>Events\Interview\TextQuestionAnswered.cs</Link>

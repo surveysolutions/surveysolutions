@@ -31,7 +31,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
-        IEventHandler<InterviewMetaInfoUpdated>
+        IEventHandler<SynchronizationMetadataApplied>
     {
         private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -176,7 +176,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                                 evnt.Payload.Count);
         }
 
-        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
             this.interviewStorage.Remove(evnt.EventSourceId);
         }
