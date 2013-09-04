@@ -303,10 +303,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
-        public Interview(Guid id, Guid questionnarieId, Guid userId, InterviewStatus interviewStatus,
+        public Interview(Guid id, Guid questionnaireId, Guid userId, InterviewStatus interviewStatus,
                          AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta):base(id)
         {
-            ApplySynchronizationMetadata(id, questionnarieId, userId, interviewStatus, featuredQuestionsMeta);
+            ApplySynchronizationMetadata(id, questionnaireId, userId, interviewStatus, featuredQuestionsMeta);
         }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
@@ -323,16 +323,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       synchronizedInterview.PropagatedGroupInstanceCounts));
         }
 
-        public void ApplySynchronizationMetadata(Guid id, Guid questionnarieId, Guid userId,
+        public void ApplySynchronizationMetadata(Guid id, Guid questionnaireId, Guid userId,
                                                  InterviewStatus interviewStatus,
                                                  AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
         {
             var changeStatusEvent =
                 GetChangeStatusEventOrThrowIfSatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnarieId);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
-            ApplyEvent(new SynchronizationMetadataApplied(userId, questionnarieId, questionnaire.Version,
+            ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaire.Version,
                                                           interviewStatus,
                                                           featuredQuestionsMeta));
             ApplyEvent(changeStatusEvent);
