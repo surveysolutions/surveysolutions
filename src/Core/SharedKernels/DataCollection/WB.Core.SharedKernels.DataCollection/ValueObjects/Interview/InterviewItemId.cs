@@ -1,22 +1,22 @@
 using System;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization
+namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
-    public struct ItemPublicKey
+    public struct InterviewItemId
     {
-        public ItemPublicKey(Guid publicKey, int[] propagationVector)
+        public InterviewItemId(Guid id, int[] propagationVector)
         {
-            PublicKey = publicKey;
+            Id = id;
             PropagationVector = propagationVector ?? new int[0];
         }
-        public ItemPublicKey(Guid publicKey)
+        public InterviewItemId(Guid id)
         {
-            PublicKey = publicKey;
+            Id = id;
             PropagationVector = new int[0];
         }
 
-        public Guid PublicKey;
+        public Guid Id;
         public int[] PropagationVector;
 
         public bool CompareWithVector(int[] vector)
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public override bool Equals(object obj)
         {
-            return obj is ItemPublicKey && this == (ItemPublicKey)obj;
+            return obj is InterviewItemId && this == (InterviewItemId)obj;
         }
 
         public override int GetHashCode()
@@ -41,14 +41,14 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             return ToString().GetHashCode();
         }
 
-        public static bool operator ==(ItemPublicKey x, ItemPublicKey y)
+        public static bool operator ==(InterviewItemId x, InterviewItemId y)
         {
-            if (x.PublicKey != y.PublicKey)
+            if (x.Id != y.Id)
                 return false;
             return x.CompareWithVector(y.PropagationVector);
         }
 
-        public static bool operator !=(ItemPublicKey x, ItemPublicKey y)
+        public static bool operator !=(InterviewItemId x, InterviewItemId y)
         {
             return !(x == y);
         }
@@ -58,17 +58,17 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             if (!IsTopLevel())
             {
                 string vector = string.Join(",", PropagationVector);
-                return string.Format("{0},{1}", vector, PublicKey);
+                return string.Format("{0},{1}", vector, Id);
             }
-            return PublicKey.ToString();
+            return Id.ToString();
         }
 
-        public static explicit operator ItemPublicKey(string b)  // explicit byte to digit conversion operator
+        public static explicit operator InterviewItemId(string b)  // explicit byte to digit conversion operator
         {
             return Parse(b);
         }
 
-        public static ItemPublicKey Parse(string value)
+        public static InterviewItemId Parse(string value)
         {
             if (value.Contains(','))
             {
@@ -78,9 +78,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                 {
                     vector[i] = int.Parse(items[i]);
                 }
-                return new ItemPublicKey(Guid.Parse(items[items.Length - 1]), vector);
+                return new InterviewItemId(Guid.Parse(items[items.Length - 1]), vector);
             }
-            return new ItemPublicKey(Guid.Parse(value));
+            return new InterviewItemId(Guid.Parse(value));
         }
     }
 

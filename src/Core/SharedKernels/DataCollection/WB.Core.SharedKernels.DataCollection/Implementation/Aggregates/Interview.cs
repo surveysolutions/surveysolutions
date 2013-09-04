@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.disabledQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.DisabledQuestions);
 
             this.propagatedGroupInstanceCounts = @event.PropagatedGroupInstanceCounts.ToDictionary(
-                pair => ConvertIdAndPropagationVectorToString(pair.Key.PublicKey, pair.Key.PropagationVector),
+                pair => ConvertIdAndPropagationVectorToString(pair.Key.Id, pair.Key.PropagationVector),
                 pair => pair.Value);
 
             this.validAnsweredQuestions = ToHashSetOfIdAndPropagationVectorStrings(@event.ValidAnsweredQuestions);
@@ -1337,10 +1337,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : "<<MISSING GROUP>>";
         }
 
-        private static HashSet<string> ToHashSetOfIdAndPropagationVectorStrings(IEnumerable<ItemPublicKey> synchronizationIdentities)
+        private static HashSet<string> ToHashSetOfIdAndPropagationVectorStrings(IEnumerable<InterviewItemId> synchronizationIdentities)
         {
             return new HashSet<string>(
-                synchronizationIdentities.Select(question => ConvertIdAndPropagationVectorToString(question.PublicKey, question.PropagationVector)));
+                synchronizationIdentities.Select(question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector)));
         }
 
         /// <remarks>

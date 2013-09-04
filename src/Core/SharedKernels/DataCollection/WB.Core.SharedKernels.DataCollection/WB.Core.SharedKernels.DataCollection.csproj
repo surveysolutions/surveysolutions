@@ -81,7 +81,6 @@
     <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
-    <Compile Include="DataTransferObjects\Synchronization\ItemPublicKey.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
@@ -136,6 +135,7 @@
     <Compile Include="ReadSide\IVersionedReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\IVersionedView.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
+    <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>

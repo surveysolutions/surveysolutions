@@ -13,30 +13,30 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public InterviewSynchronized(Guid userId, Guid questionnaireId, InterviewStatus status,
                                      long questionnaireVersion, IList<AnsweredQuestionSynchronizationDto> answeredQuestions,
-                                     HashSet<ItemPublicKey> disabledGroups, HashSet<ItemPublicKey> disabledQuestions,
-                                     HashSet<ItemPublicKey> validAnsweredQuestions, HashSet<ItemPublicKey> invalidAnsweredQuestions,
-                                     Dictionary<ItemPublicKey, int> propagatedGroupInstanceCounts)
+                                     HashSet<InterviewItemId> disabledGroups, HashSet<InterviewItemId> disabledQuestions,
+                                     HashSet<InterviewItemId> validAnsweredQuestions, HashSet<InterviewItemId> invalidAnsweredQuestions,
+                                     Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts)
             : base(userId)
         {
             QuestionnaireId = questionnaireId;
             Status = status;
             QuestionnaireVersion = questionnaireVersion;
             AnsweredQuestions = answeredQuestions?? new List<AnsweredQuestionSynchronizationDto>();
-            DisabledGroups = disabledGroups?? new HashSet<ItemPublicKey>();
-            DisabledQuestions = disabledQuestions?? new HashSet<ItemPublicKey>();
-            ValidAnsweredQuestions = validAnsweredQuestions?? new HashSet<ItemPublicKey>();
-            InvalidAnsweredQuestions = invalidAnsweredQuestions?? new HashSet<ItemPublicKey>();
-            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts?? new Dictionary<ItemPublicKey, int>();
+            DisabledGroups = disabledGroups?? new HashSet<InterviewItemId>();
+            DisabledQuestions = disabledQuestions?? new HashSet<InterviewItemId>();
+            ValidAnsweredQuestions = validAnsweredQuestions?? new HashSet<InterviewItemId>();
+            InvalidAnsweredQuestions = invalidAnsweredQuestions?? new HashSet<InterviewItemId>();
+            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts?? new Dictionary<InterviewItemId, int>();
         }
 
         public Guid QuestionnaireId { get; private set; }
         public InterviewStatus Status { get; private set; }
         public long QuestionnaireVersion { get; private set; }
         public IList<AnsweredQuestionSynchronizationDto> AnsweredQuestions { get; private set; }
-        public HashSet<ItemPublicKey> DisabledGroups { get; private set; }
-        public HashSet<ItemPublicKey> DisabledQuestions { get; private set; }
-        public HashSet<ItemPublicKey> ValidAnsweredQuestions { get; private set; }
-        public HashSet<ItemPublicKey> InvalidAnsweredQuestions { get; private set; }
-        public Dictionary<ItemPublicKey, int> PropagatedGroupInstanceCounts { get; private set; }
+        public HashSet<InterviewItemId> DisabledGroups { get; private set; }
+        public HashSet<InterviewItemId> DisabledQuestions { get; private set; }
+        public HashSet<InterviewItemId> ValidAnsweredQuestions { get; private set; }
+        public HashSet<InterviewItemId> InvalidAnsweredQuestions { get; private set; }
+        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get; private set; }
     }
 }
