@@ -134,8 +134,7 @@ namespace CAPI.Android.Syncronization.Pull
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
             syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
-            commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.TemplateId,
-                                                                      metaInfo.ResponsibleId,
+            commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
                                                                       (InterviewStatus) metaInfo.Status,
                                                                       metaInfo.FeaturedQuestionsMeta.Select(
                                                                           q =>

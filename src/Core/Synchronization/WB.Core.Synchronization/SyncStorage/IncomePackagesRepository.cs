@@ -45,9 +45,8 @@ namespace WB.Core.Synchronization.SyncStorage
             File.WriteAllText(GetItemFileName(meta.PublicKey), item.Content);
 
             NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new ApplySynchronizationMetadata(meta.PublicKey, meta.TemplateId,
-                                                                        meta.ResponsibleId,
-                                                                        (InterviewStatus) meta.Status, null));
+                            .Execute(new ApplySynchronizationMetadata(
+                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, null));
         }
 
 

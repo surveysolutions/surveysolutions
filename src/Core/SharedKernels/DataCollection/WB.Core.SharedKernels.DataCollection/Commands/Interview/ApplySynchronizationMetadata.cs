@@ -12,18 +12,17 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     [MapsToAggregateRootMethodOrConstructor(typeof(Implementation.Aggregates.Interview), "ApplySynchronizationMetadata")]
     public class ApplySynchronizationMetadata : InterviewCommand
     {
-        public ApplySynchronizationMetadata(Guid interviewId, Guid questionnarieId, Guid userId,
-                                              InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
+        public ApplySynchronizationMetadata(Guid interviewId, Guid userId, Guid questionnaireId, InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
-            QuestionnarieId = questionnarieId;
+            QuestionnaireId = questionnaireId;
             InterviewStatus = status;
             FeaturedQuestionsMeta = featuredQuestionsMeta;
         }
         public Guid Id { get; set; }
 
-        public Guid QuestionnarieId { get; set; }
+        public Guid QuestionnaireId { get; set; }
 
         public InterviewStatus InterviewStatus { get; set; }
 
