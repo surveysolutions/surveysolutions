@@ -303,10 +303,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
         }
 
-        public Interview(Guid id, Guid questionnaireId, Guid userId, InterviewStatus interviewStatus,
-                         AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta):base(id)
+        public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta):base(id)
         {
-            ApplySynchronizationMetadata(id, questionnaireId, userId, interviewStatus, featuredQuestionsMeta);
+            this.ApplySynchronizationMetadata(id, userId, questionnaireId, interviewStatus, featuredQuestionsMeta);
         }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
@@ -323,9 +322,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                                       synchronizedInterview.PropagatedGroupInstanceCounts));
         }
 
-        public void ApplySynchronizationMetadata(Guid id, Guid questionnaireId, Guid userId,
-                                                 InterviewStatus interviewStatus,
-                                                 AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
+        public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
         {
             var changeStatusEvent =
                 GetChangeStatusEventOrThrowIfSatusNotAllowedToBeChangedWithMetadata(interviewStatus);
