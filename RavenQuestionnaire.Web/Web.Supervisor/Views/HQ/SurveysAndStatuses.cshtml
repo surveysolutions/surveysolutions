@@ -54,11 +54,9 @@
                     <th data-bind='sortby: "CreatedCount"'>Created</th>
                     <th data-bind='sortby: "SupervisorAssignedCount"'>Supervisor assigned</th>
                     <th data-bind='sortby: "InterviewerAssignedCount"'>Interviewer assigned</th>
-                    <th data-bind='sortby: "SentToCapiCount"'>Sent to capi</th>
                     <th data-bind='sortby: "CompletedCount"'>Completed</th>
                     <th data-bind='sortby: "ApprovedBySupervisorCount"'>Approved by supervisor</th>
                     <th data-bind='sortby: "RejectedBySupervisorCount"'>Rejected by supervisor</th>
-                    <th data-bind='sortby: "RestoredCount"'>Restored</th>
                     <th data-bind='sortby: "TotalCount"'>Total</th>
                 </tr>
             </thead>
@@ -71,11 +69,9 @@
                     <td data-bind="template: { name: 'CreatedCountTemplate' }"></td>
                     <td data-bind="template: { name: 'SupervisorAssignedCountTemplate' }"></td>
                     <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>
-                    <td data-bind="template: { name: 'SentToCapiCountTemplate' }"></td>
                     <td data-bind="template: { name: 'CompletedCountTemplate' }"></td>
                     <td data-bind="template: { name: 'ApprovedBySupervisorCountTemplate' }"></td>
                     <td data-bind="template: { name: 'RejectedBySupervisorCountTemplate' }"></td>
-                    <td data-bind="template: { name: 'RestoredCountTemplate' }"></td>
                     <td>
                         <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + QuestionnaireId() + 'templateVersion=' + QuestionnaireVersion() }, text: TotalCount"></a>
                     </td>
