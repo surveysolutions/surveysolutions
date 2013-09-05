@@ -13,6 +13,8 @@ using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
+    using System.Web;
+
     public class TeamController : BaseController
     {
         private readonly IViewFactory<UserViewInputModel, UserView> userViewFactory;
@@ -128,6 +130,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult Details(Guid id)
         {
             var user = this.GetUser(id);
+
+            if(user == null) throw new HttpException(404, string.Empty);
+
             return this.View(new UserEditModel()
                 {
                     Id = user.PublicKey,
@@ -150,7 +155,7 @@ namespace Web.Supervisor.Controllers
                         new ChangeUserCommand()
                             {
                                 PublicKey = user.PublicKey,
-                                Password = string.IsNullOrEmpty(model.Password)
+                                PasswordHash = string.IsNullOrEmpty(model.Password)
                                                ? user.Password
                                                : SimpleHash.ComputeHash(model.Password),
                                 Email = model.Email,
@@ -160,6 +165,10 @@ namespace Web.Supervisor.Controllers
                         );
                     this.Success(string.Format("Information about <b>{0}</b> sucessfully updated", user.UserName));
                     return this.DetailsBackByUser(user);
+                }
+                else
+                {
+                    this.Error("Could not update user information because current user does not exist");
                 }
             }
 
