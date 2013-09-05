@@ -116,7 +116,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 HideKeyboard(etComments);
             }*/
         }
-        
+
         protected void SaveComment()
         {
             string newComments = etComments.Text.Trim();
@@ -128,12 +128,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                                                                 this.Model.PublicKey.PropagationVector,
                                                                 DateTime.UtcNow,
                                                                 newComments));
-           tvComments.Text = newComments;
+                tvComments.Text = newComments;
 
             }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
-            
+
         }
 
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
@@ -185,7 +185,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         private void SetEditCommentsVisibility(bool visible)
         {
             etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
-            tvComments.Visibility = visible ? ViewStates.Invisible : ViewStates.Gone;
+            tvComments.Visibility = visible ? ViewStates.Gone : ViewStates.Visible;
         }
         protected override void OnAttachedToWindow()
         {
