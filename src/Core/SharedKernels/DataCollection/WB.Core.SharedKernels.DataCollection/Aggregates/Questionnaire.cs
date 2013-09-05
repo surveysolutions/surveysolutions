@@ -427,6 +427,21 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                select question.PublicKey;
         }
 
+        public IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions()
+        {
+            return
+                from @group in this.GetAllGroups()
+                where IsExpressionDefined(@group.ConditionExpression)
+                select @group.PublicKey;
+        }
+
+        public bool IsGroupPropagatable(Guid groupId)
+        {
+            IGroup @group = this.GetGroupOrThrow(groupId);
+
+            return @group.Propagated == Propagate.AutoPropagated;
+        }
+
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
@@ -661,13 +676,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             if (!this.DoesQuestionSupportPropagation(questionId))
                 throw new QuestionnaireException(string.Format("Question with id '{0}' is not a propagating question.", questionId));
-        }
-
-        private bool IsGroupPropagatable(Guid groupId)
-        {
-            IGroup @group = this.GetGroupOrThrow(groupId);
-
-            return @group.Propagated == Propagate.AutoPropagated;
         }
 
         private void ThrowIfGroupDoesNotExist(Guid groupId)

@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_propagatable_ancestor_group : InterviewTestsContext
+    internal class when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_propagatable : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -25,12 +25,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
             answersTime = new DateTime(2013, 09, 01);
 
-            Guid questionId = Guid.Parse("22220000111111111111111111111111");
-            Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
-                && _.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId) == new [] { parentPropagatableGroupId });
+                => _.GetAllGroupsWithNotEmptyCustomEnablementConditions() == new[] { groupId }
+                && _.IsGroupPropagatable(groupId) == true
+                && _.GetParentPropagatableGroupsForGroupStartingFromTop(groupId) == new Guid[] {});
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);
@@ -43,8 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
-        It should_not_raise_QuestionDisabled_event = () =>
-            eventContext.Events.ShouldNotContain(@event => @event.Payload is QuestionDisabled);
+        It should_not_raise_GroupDisabled_event = () =>
+            eventContext.Events.ShouldNotContain(@event => @event.Payload is GroupDisabled);
 
         Cleanup stuff = () =>
         {
