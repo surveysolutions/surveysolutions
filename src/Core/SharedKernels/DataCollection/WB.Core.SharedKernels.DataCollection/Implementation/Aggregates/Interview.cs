@@ -1056,11 +1056,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 case InterviewStatus.Completed:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned,
-                                                                  InterviewStatus.Restarted,
+                                                                  InterviewStatus.Restarted, InterviewStatus.Restored,
                                                                   InterviewStatus.RejectedBySupervisor);
                     return;
                 case InterviewStatus.RejectedBySupervisor:
-                    this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.Restored,
                                                                   InterviewStatus.ApprovedBySupervisor);
                     return;
                 case InterviewStatus.InterviewerAssigned:
