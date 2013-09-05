@@ -17,6 +17,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization
 {
@@ -39,7 +40,7 @@ namespace CAPI.Android.Syncronization
         private readonly PullDataProcessor pullDataProcessor;
         private readonly PushDataProcessor pushDataProcessor;
 
-        private IDictionary<KeyValuePair<long,Guid>, bool> remoteChuncksForDownload;
+        private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -94,14 +95,14 @@ namespace CAPI.Android.Syncronization
 
                         try
                         {
-                            var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Value, chunckId.Key, clientRegistrationId, ct);
+                            var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Id, chunckId.Sequence, clientRegistrationId, ct);
 
                             pullDataProcessor.Save(data);
                             remoteChuncksForDownload[chunckId] = true;
 
                             pullDataProcessor.Proccess(chunckId);
                             //save last handled item
-                            lastSequence = chunckId.Key.ToString();
+                            lastSequence = chunckId.Sequence.ToString();
                         }
                         catch (Exception e)
                         {

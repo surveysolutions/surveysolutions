@@ -107,18 +107,11 @@ namespace WB.Core.Synchronization.SyncStorage
             return result;
         }
 
-        public IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(long sequence, Guid userId)
         {
             var users = GetUserTeamates(userId);
             return
-                chunkStorageReader.GetChunksCreatedAfterForUsers(sequence, users);
-        }
-
-        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, Guid userId)
-        {
-            var users = GetUserTeamates(userId);
-            return
-                chunkStorageReader.GetChunkPairsCreatedAfter(sequence, users);
+                chunkStorageReader.GetChunkMetaDataCreatedAfter(sequence, users);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)

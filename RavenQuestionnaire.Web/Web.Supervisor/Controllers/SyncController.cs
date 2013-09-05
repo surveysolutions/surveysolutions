@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
 
@@ -210,9 +211,9 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                IEnumerable<KeyValuePair<long, Guid>> package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey,
+                IEnumerable<SynchronizationChunkMeta> package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey,
                                                                                                       clientSequence);
-                result.ARId = package.ToList();
+                result.ChunksMeta = package.ToList();
             }
             catch (Exception ex)
             {
