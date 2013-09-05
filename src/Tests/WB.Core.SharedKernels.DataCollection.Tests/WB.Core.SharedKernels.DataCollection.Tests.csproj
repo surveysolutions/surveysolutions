@@ -66,7 +66,7 @@
     <Compile Include="InterviewTests\when_creating_interview.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_does_not_exist.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_has_propagatable_ancestor_group.cs" />
-    <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and_has_no_propagatable_ancestor_groups.cs" />
+    <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and_has_no_propagatable_ances___.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_propagatable.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_no_propagatable_ancestor_groups.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_propagatable_ancestor_group.cs" />
