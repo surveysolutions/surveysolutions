@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             item.Email = evnt.Payload.Email;
             item.Roles = evnt.Payload.Roles.ToList();
-            item.Password = evnt.Payload.Password;
+            item.Password = evnt.Payload.PasswordHash;
             users.Store(item, item.PublicKey);
         }
 
