@@ -119,11 +119,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     
                     CommandService.Execute(new AnswerGeoLocationQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
                                                                   this.Model.PublicKey.PropagationVector, DateTime.UtcNow, position));
+                    var positionAsText = RenderPositionAsText(position);
 
-                    locationText.Text = RenderPositionAsText(position);
+                    locationText.Text = positionAsText;
                     //locationDisplay = CreateTable(position);
-                    
-                    SaveAnswer();
+
+                    SaveAnswer(positionAsText);
                 }
             }));
         }
