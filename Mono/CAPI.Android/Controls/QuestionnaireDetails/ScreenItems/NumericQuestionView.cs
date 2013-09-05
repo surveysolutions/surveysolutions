@@ -65,8 +65,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        protected override void SaveAnswerErrorHappen()
+        protected override void SaveAnswerErrorHandler(Exception ex)
         {
+            base.SaveAnswerErrorHandler(ex);
             etAnswer.Text = Model.AnswerString;
         }
 

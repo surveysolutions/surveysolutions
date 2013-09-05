@@ -60,6 +60,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
+        protected override void SaveAnswerErrorHandler(Exception ex)
+        {
+            base.SaveAnswerErrorHandler(ex);
+            etAnswer.Text = Model.AnswerString;
+        }
+
         private void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
             etAnswer.ClearFocus();

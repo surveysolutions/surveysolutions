@@ -39,14 +39,14 @@
         /// <param name="isLocked">
         /// The is locked.
         /// </param>
-        public ChangeUserCommand(Guid publicKey, string email, UserRoles[] roles, bool isLocked, string password)
+        public ChangeUserCommand(Guid publicKey, string email, UserRoles[] roles, bool isLocked, string passwordHash)
             : base(publicKey)
         {
             this.PublicKey = publicKey;
             this.Email = email;
             this.Roles = roles;
             this.IsLocked = isLocked;
-            this.Password = password;
+            this.PasswordHash = passwordHash;
         }
 
         #endregion
@@ -66,7 +66,7 @@
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
