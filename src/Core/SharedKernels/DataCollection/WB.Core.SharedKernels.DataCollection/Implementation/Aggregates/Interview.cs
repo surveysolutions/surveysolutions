@@ -263,12 +263,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomePropagatingQuestionsReferToNotExistingOrNotPropagatableGroups(questionnaire, questionnaireId);
 
 
+            List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
             List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
 
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created));
 
+            initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
             initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
 
 
@@ -1162,6 +1164,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        private static List<Identity> GetGroupsToBeDisabledInJustCreatedInterview(IQuestionnaire questionnaire)
+        {
+            return questionnaire
+                .GetAllGroupsWithNotEmptyCustomEnablementConditions()
+                .Where(groupId => !questionnaire.IsGroupPropagatable(groupId))
+                .Where(groupId => !IsGroupUnderPropagatableGroup(questionnaire, groupId))
+                .Select(groupId => new Identity(groupId, EmptyPropagationVector))
+                .ToList();
+        }
+
         private static List<Identity> GetQuestionsToBeDisabledInJustCreatedInterview(IQuestionnaire questionnaire)
         {
             return questionnaire
@@ -1169,6 +1181,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(questionId => !IsQuestionUnderPropagatableGroup(questionnaire, questionId))
                 .Select(questionId => new Identity(questionId, EmptyPropagationVector))
                 .ToList();
+        }
+
+        private static bool IsGroupUnderPropagatableGroup(IQuestionnaire questionnaire, Guid groupId)
+        {
+            return questionnaire.GetParentPropagatableGroupsForGroupStartingFromTop(groupId).Any();
         }
 
         private static bool IsQuestionUnderPropagatableGroup(IQuestionnaire questionnaire, Guid questionId)
