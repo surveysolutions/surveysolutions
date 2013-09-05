@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_creating_interview_from_questionnaire_with_question_with_custom_enablement_condition_and_question_is_not_propagatable : InterviewTestsContext
+    internal class when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_propagatable_ancestor_group : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -26,10 +26,11 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             answersTime = new DateTime(2013, 09, 01);
 
             questionId = Guid.Parse("22220000111111111111111111111111");
+            Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
 
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
-                && _.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId) == new Guid[] {});
+                && _.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId) == new [] { parentPropagatableGroupId });
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);
@@ -42,16 +43,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
-        It should_raise_QuestionDisabled_event = () =>
-            eventContext.Events.ShouldContain(@event => @event.Payload is QuestionDisabled);
-
-        It should_provide_id_of_group_with_custom_enablement_condition_in_QuestionDisabled_event = () =>
-            GetEvent<QuestionDisabled>(eventContext)
-                .QuestionId.ShouldEqual(questionId);
-
-        It should_provide_zero_dimensional_propagation_vector_in_QuestionDisabled_event = () =>
-            GetEvent<QuestionDisabled>(eventContext)
-                .PropagationVector.Length.ShouldEqual(0);
+        It should_not_raise_QuestionDisabled_event = () =>
+            eventContext.Events.ShouldNotContain(@event => @event.Payload is QuestionDisabled);
 
         Cleanup stuff = () =>
         {
