@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization.SyncProvider;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncManager
 {
@@ -60,13 +61,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             return syncProvider.HandleSyncItem(item, Guid.Empty);
         }
 
-        
-        public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
-        {
-           return syncProvider.GetAllARIds(userId, clientRegistrationKey);
-        }
-
-        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
             return syncProvider.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
         }

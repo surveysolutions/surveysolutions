@@ -167,43 +167,6 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
 
         }
 
-        [Test]
-        public void GetAllARIds_when_ClientId_and_DeviceRegistrationKey_Provided_ListARIsReturned()
-        {
-            //Arrange
-            var commandService = new Mock<ICommandService>();
-            NcqrsEnvironment.SetDefault(commandService.Object);
-
-            var registrationKey = Guid.NewGuid();
-            var clientDevice = new ClientDeviceDocument()
-            {
-                ClientInstanceKey = Guid.NewGuid(),
-                PublicKey = registrationKey,
-                LastSyncItemIdentifier = 2
-            };
-
-            var devices = new Mock<IQueryableReadSideRepositoryWriter<ClientDeviceDocument>>();
-            devices.Setup(d => d.GetById(clientDevice.PublicKey)).Returns(clientDevice);
-
-            var userId = Guid.NewGuid();
-
-            var listIds = new List<Guid>() {Guid.NewGuid(),Guid.NewGuid()};
-
-            var storage = new Mock<ISynchronizationDataStorage>();
-            storage.Setup(s => s.GetChunksCreatedAfter(2, userId)).Returns(listIds);
-            var incomeStorage = new Mock<IIncomePackagesRepository>();
-            var logger = new Mock<ILogger>();
-
-            var provider = CreateDefaultSyncProvider(devices.Object, storage.Object, incomeStorage.Object, logger.Object);
-
-            //Act
-            var ids = provider.GetAllARIds(userId, registrationKey);
-
-            //Assert
-            Assert.That(ids, Is.EqualTo(listIds));
-
-        }
-
         private SyncProvider CreateDefaultSyncProvider()
         {
             var devices = new Mock<IQueryableReadSideRepositoryWriter<ClientDeviceDocument>>();

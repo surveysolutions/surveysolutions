@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization
 {
@@ -18,9 +19,7 @@ namespace WB.Core.Synchronization
 
         SyncItem GetLatestVersion(Guid id);
 
-        IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId);
-
-        IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, Guid userId);
+        IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(long sequence, Guid userId);
 
     }
 }
