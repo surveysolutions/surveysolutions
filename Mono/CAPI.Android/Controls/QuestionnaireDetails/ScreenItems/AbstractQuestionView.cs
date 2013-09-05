@@ -139,11 +139,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
-            AnswerCommandService.Execute(command);
+            AnswerCommandService.AnswerOnQuestion(command,
+                                                  (ex) =>
+                                                  ((Activity) this.Context).RunOnUiThread(
+                                                      () => SaveAnswerErrorHandler(ex)));
         }
 
-        protected virtual void SaveAnswerErrorHappen()
+        protected virtual void SaveAnswerErrorHandler(Exception ex)
         {
+            tvError.Visibility = ViewStates.Visible;
+            tvError.Text = GetDippestException(ex).Message;
         }
 
         private Exception GetDippestException(Exception e)

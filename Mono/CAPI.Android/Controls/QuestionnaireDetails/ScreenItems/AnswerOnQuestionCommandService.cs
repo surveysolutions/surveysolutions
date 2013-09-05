@@ -21,8 +21,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class AnswerOnQuestionCommandService : IAnswerOnQuestionCommandService
     {
-        private readonly Dictionary<InterviewItemId, AnswerQuestionCommand> commandQueue =
-            new Dictionary<InterviewItemId, AnswerQuestionCommand>();
+        private readonly Dictionary<InterviewItemId, CommandAndErrorCallback> commandQueue =
+            new Dictionary<InterviewItemId, CommandAndErrorCallback>();
 
         private readonly Queue<InterviewItemId> executionLine = new Queue<InterviewItemId>();
         private readonly ICommandService commandService;
@@ -34,9 +34,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.commandService = commandService;
         }
 
-        public void Execute(AnswerQuestionCommand command)
+        public void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback)
         {
-            UpdateExecutionFlow(command);
+            UpdateExecutionFlow(new CommandAndErrorCallback(command, errorCallback));
 
             if (!isRunning)
             {
@@ -45,9 +45,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        private void UpdateExecutionFlow(AnswerQuestionCommand command)
+        private void UpdateExecutionFlow(CommandAndErrorCallback command)
         {
-            var key = new InterviewItemId(command.QuestionId, command.PropagationVector);
+            var key = new InterviewItemId(command.Command.QuestionId, command.Command.PropagationVector);
 
             lock (locker)
             {
@@ -63,7 +63,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private void ExecuteSaveAnswerCommandAndRunNextIfExist()
         {
-            AnswerQuestionCommand nextCommand = null;
+            CommandAndErrorCallback nextCommand = null;
 
             lock (locker)
             {
@@ -81,10 +81,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             try
             {
                 if (nextCommand != null)
-                    commandService.Execute(nextCommand);
+                    commandService.Execute(nextCommand.Command);
             }
             catch (Exception ex)
             {
+                if (nextCommand != null)
+                    nextCommand.ErrorCallback(ex);
                 /*((Activity)this.Context).RunOnUiThread(() =>
                 {
                     tvError.Visibility = ViewStates.Visible;
@@ -94,6 +96,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
 
             ExecuteSaveAnswerCommandAndRunNextIfExist();
+        }
+
+        class CommandAndErrorCallback
+        {
+            public CommandAndErrorCallback(AnswerQuestionCommand command, Action<Exception> errorCallback)
+            {
+                Command = command;
+                ErrorCallback = errorCallback;
+            }
+
+            public AnswerQuestionCommand Command { get; private set; }
+            public Action<Exception> ErrorCallback { get; private set; }
         }
     }
 }
