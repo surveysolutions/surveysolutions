@@ -39,7 +39,7 @@
         /// </summary>
         [Required]
         [Display(Name = "Name", Order = 1)]
-        [RegularExpression("^[a-z0-9_]{3,15}$", 
+        [RegularExpression("^[a-zA-Z0-9_]{3,15}$", 
             ErrorMessage =
                 "Name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol")
         ]

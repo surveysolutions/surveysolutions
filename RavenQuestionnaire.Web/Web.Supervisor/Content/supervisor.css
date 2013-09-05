@@ -4541,3 +4541,6 @@ a.pseudo-link:hover {
  #alerts .alert {
      margin-top: 5px;
  }
+ #content .alert {
+     margin-bottom: 0;
+ }
