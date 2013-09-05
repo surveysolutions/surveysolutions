@@ -5,6 +5,7 @@ using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -58,19 +59,8 @@ namespace WB.Core.Synchronization.SyncProvider
 
             throw new NotImplementedException();
         }
-        
-        public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
-        {
-            var device = devices.GetById(clientRegistrationKey);
-            //return storate.GetChunksCreatedAfter(0, userId);
 
-            if (device == null)
-                throw new ArgumentException("Device was not found.");
-           
-            return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier, userId);
-        }
-
-        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
             var device = devices.GetById(clientRegistrationKey);
 

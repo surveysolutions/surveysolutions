@@ -10,8 +10,7 @@ namespace WB.Core.Synchronization.SyncStorage
     public interface IChunkReader
     {
         SyncItem ReadChunk(Guid id);
-        IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users);
 
-        IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users);
+        IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(long sequence, IEnumerable<Guid> users);
     }
 }
