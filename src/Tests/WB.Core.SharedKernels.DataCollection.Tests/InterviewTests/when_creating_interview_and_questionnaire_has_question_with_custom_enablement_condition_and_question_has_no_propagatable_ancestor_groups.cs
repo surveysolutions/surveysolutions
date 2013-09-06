@@ -16,8 +16,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
     {
         Establish context = () =>
         {
-            eventContext = new EventContext();
-
             interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -37,13 +35,15 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
+
+            eventContext = new EventContext();
         };
 
         Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
         It should_raise_QuestionDisabled_event = () =>
-            eventContext.Events.ShouldContain(@event => @event.Payload is QuestionDisabled);
+            eventContext.ShouldContainEvent<QuestionDisabled>();
 
         It should_provide_id_of_group_with_custom_enablement_condition_in_QuestionDisabled_event = () =>
             GetEvent<QuestionDisabled>(eventContext)
