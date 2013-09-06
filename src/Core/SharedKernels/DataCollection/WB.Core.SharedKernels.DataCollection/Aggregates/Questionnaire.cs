@@ -380,17 +380,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId)
+        public IEnumerable<Guid> GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(Guid groupId)
         {
-            var result = this
-                .GetAllParentGroupsForGroupStartingFromBottom(groupId)
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            return this
+                .GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(@group)
                 .Where(this.IsGroupPropagatable)
                 .Reverse()
                 .ToList();
-         
-            if (IsGroupPropagatable(groupId))
-                result.Add(groupId);
-            return result;
         }
 
         public int GetPropagationLevelForQuestion(Guid questionId)
@@ -530,15 +528,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             var parentGroup = (IGroup) question.GetParent();
-
-            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
-        }
-
-        private IEnumerable<Guid> GetAllParentGroupsForGroupStartingFromBottom(Guid groupId)
-        {
-            IGroup group = this.GetGroupOrThrow(groupId);
-
-            var parentGroup = (IGroup) group.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
