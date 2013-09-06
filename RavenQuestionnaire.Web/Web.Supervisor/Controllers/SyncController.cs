@@ -85,7 +85,7 @@ namespace Web.Supervisor.Controllers
                 {
                     this.logger.Fatal("Sync Handshake Error", exc);
                     package.IsErrorOccured = true;
-                    package.ErrorMessage = "Error occured on sync. Try later.";
+                    package.ErrorMessage = "Error occurred on sync. Try later.";
                 }
             }
             return this.Json(package, JsonRequestBehavior.AllowGet);
@@ -161,7 +161,7 @@ namespace Web.Supervisor.Controllers
                 this.logger.Fatal(ex.StackTrace);
 
                 package.IsErrorOccured = true;
-                package.ErrorMessage = "Error occured. Try later.";
+                package.ErrorMessage = "Error occurred. Try later.";
             }
 
             return this.Json(package, JsonRequestBehavior.AllowGet);
@@ -221,7 +221,7 @@ namespace Web.Supervisor.Controllers
                 this.logger.Fatal(ex.Message);
                 this.logger.Fatal(ex.StackTrace);
 
-                result.ErrorMessage = "Server error occured.";
+                result.ErrorMessage = "Server error occurred.";
                 result.IsErrorOccured = true;
             }
 
@@ -284,7 +284,8 @@ namespace Web.Supervisor.Controllers
 
             if (maxVersion != 0)
             {
-                string path = Path.Combine(this.pathToSearchVersions, maxVersion.ToString());
+                var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+                string path = Path.Combine(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
 
                 string pathToFile = Path.Combine(path, this.CapiFileName);
                 if (System.IO.File.Exists(pathToFile))
