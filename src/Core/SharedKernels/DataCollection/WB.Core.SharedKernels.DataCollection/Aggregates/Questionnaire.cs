@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -49,6 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         }
 
         private Dictionary<Guid, IQuestion> QuestionCache
@@ -380,17 +382,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .ToList();
         }
 
-        public IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId)
+        public IEnumerable<Guid> GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(Guid groupId)
         {
-            var result = this
-                .GetAllParentGroupsForGroupStartingFromBottom(groupId)
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            return this
+                .GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(@group)
                 .Where(this.IsGroupPropagatable)
                 .Reverse()
                 .ToList();
-         
-            if (IsGroupPropagatable(groupId))
-                result.Add(groupId);
-            return result;
         }
 
         public int GetPropagationLevelForQuestion(Guid questionId)
@@ -440,6 +440,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IGroup @group = this.GetGroupOrThrow(groupId);
 
             return @group.Propagated == Propagate.AutoPropagated;
+        }
+
+        public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingQuestions.ContainsKey(groupId))
+                this.cacheOfUnderlyingQuestions[groupId] = this.GetAllUnderlyingQuestionsImpl(groupId);
+
+            return this.cacheOfUnderlyingQuestions[groupId];
         }
 
 
@@ -506,6 +514,16 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             );
         }
 
+        private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
+        {
+            IGroup @group = this.GetGroupOrThrow(groupId);
+
+            return @group
+                .Find<IQuestion>(_ => true)
+                .Select(question => question.PublicKey)
+                .ToList();
+        }
+
 
         private IEnumerable<IGroup> GetAllGroups()
         {
@@ -530,15 +548,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             var parentGroup = (IGroup) question.GetParent();
-
-            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
-        }
-
-        private IEnumerable<Guid> GetAllParentGroupsForGroupStartingFromBottom(Guid groupId)
-        {
-            IGroup group = this.GetGroupOrThrow(groupId);
-
-            var parentGroup = (IGroup) group.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
