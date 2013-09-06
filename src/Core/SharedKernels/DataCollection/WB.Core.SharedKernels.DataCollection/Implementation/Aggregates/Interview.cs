@@ -128,6 +128,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
+        private void Apply(LinkedQuestionAnswered @event)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answeredQuestions.Add(questionKey);
+        }
+
         private void Apply(AnswerDeclaredValid @event)
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -354,6 +361,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.AnswerGeoLocationQuestion(userId, questionId, EmptyPropagationVector, answersTime, (GeoPosition) answer);
                         break;
 
+                    case QuestionType.Linked:
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial featured question.",
@@ -613,6 +621,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+        }
+
+        public void AnswerLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
+        {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Linked);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
+
+
+            this.ApplyEvent(new LinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
+
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime,string comment)
