@@ -18,20 +18,20 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
     internal class when_creating_interview_and_questionnaire_does_not_exist : InterviewTestsContext
     {
         Establish context = () =>
-            {
-                interviewId = Guid.Parse("11000000000000000000000000000000");
-                questionnaireId = Guid.Parse("10000000000000000000000000000000");
-                userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
-                answersToFeaturedQuestions = new Dictionary<Guid, object>();
+        {
+            interviewId = Guid.Parse("11000000000000000000000000000000");
+            questionnaireId = Guid.Parse("10000000000000000000000000000000");
+            userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
+            answersToFeaturedQuestions = new Dictionary<Guid, object>();
 
-                var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
-                    => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
+            var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
 
-                Mock.Get(ServiceLocator.Current)
-                    .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                    .Returns(repositoryWithoutQuestionnaire);
-            };
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
+                .Returns(repositoryWithoutQuestionnaire);
+        };
 
         Because of = () =>
             exception = Catch.Exception(() =>
