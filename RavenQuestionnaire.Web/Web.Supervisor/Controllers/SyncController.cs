@@ -289,7 +289,7 @@ namespace Web.Supervisor.Controllers
 
                 string pathToFile = Path.Combine(path, this.CapiFileName);
                 if (System.IO.File.Exists(pathToFile))
-                    return File(path, "application/vnd.android.package-archive", this.CapiFileName);
+                    return File(pathToFile, "application/vnd.android.package-archive", this.CapiFileName);
             }
 
             return null;
