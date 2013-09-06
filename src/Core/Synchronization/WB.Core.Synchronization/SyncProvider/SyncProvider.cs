@@ -89,8 +89,13 @@ namespace WB.Core.Synchronization.SyncProvider
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    //probably device has been syncronized with other supervisor application
-                    throw new ArgumentException("Unknown device.");
+                    //probably device has been synchronized with other supervisor application
+                    var package = new HandshakePackage
+                    {
+                        IsErrorOccured = true,
+                        ErrorMessage = "Device was not found. It could be linked to other system."
+                    };
+                    return package;
                 }
 
                 //old sync devices are already in use
@@ -98,7 +103,7 @@ namespace WB.Core.Synchronization.SyncProvider
                 //then we have to delete this code
                 if (device.SupervisorKey == Guid.Empty)
                 {
-                    logger.Error("Old registred device is synchronizing. Errors could be on client in case of differernt team.");
+                    logger.Error("Old registered device is synchronizing. Errors could be on client in case of different team.");
                 }
                 else if (device.SupervisorKey != identifier.SupervisorPublicKey)
                 {
