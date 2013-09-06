@@ -77,7 +77,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void Apply(SynchronizationMetadataApplied @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
-            this.questionnaireVersion = @event.QuestionnaireVersion;
             this.status = @event.Status;
         }
 
@@ -386,11 +385,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ApplySynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
         {
-            ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
+            if (this.status == InterviewStatus.Deleted)
+                Restore(userId);
+            else
+                ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
-
-            ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaire.Version,
+            ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, 
                                                           interviewStatus,
                                                           featuredQuestionsMeta));
             ApplyEvent(new InterviewStatusChanged(interviewStatus));
