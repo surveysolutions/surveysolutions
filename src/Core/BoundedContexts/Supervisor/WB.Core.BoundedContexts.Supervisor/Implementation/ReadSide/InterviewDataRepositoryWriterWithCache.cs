@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> qestionnairePropagationStructure;
         private IEventStore eventStore;
-        private InProcessEventBus eventEventBus;
         private Dictionary<Guid, IntervieweWithSequence> memcache;
         private IIncomePackagesRepository incomePackages;
 
@@ -44,25 +43,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             this.interviewWriter = interviewWriter;
             this.incomePackages = incomePackages;
             this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
-            this.eventEventBus = new InProcessEventBus();
             this.users = users;
             this.qestionnairePropagationStructure = qestionnairePropagationStructure;
             cleanerRegistry.Register(this);
-        }
-
-        private void RegisterInterviewDenormalizerAtProcessBus(InterviewDenormalizer hiddentDenormalizer)
-        {
-            IEnumerable<Type> ieventHandlers =
-                hiddentDenormalizer.GetType()
-                                   .GetInterfaces()
-                                   .Where(
-                                       type =>
-                                       type.IsInterface && type.IsGenericType &&
-                                       type.GetGenericTypeDefinition() == typeof (IEventHandler<>));
-            foreach (Type ieventHandler in ieventHandlers)
-            {
-                eventEventBus.RegisterHandler(hiddentDenormalizer, ieventHandler.GetGenericArguments()[0]);
-            }
         }
 
         public int Count()
@@ -156,20 +139,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             InterviewData updatedView = view;
             if (!events.IsEmpty)
             {
-                var hiddentDenormalizer=new InterviewDenormalizer(this.users,this.qestionnairePropagationStructure);
-                RegisterInterviewDenormalizerAtProcessBus(hiddentDenormalizer);
-                using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, hiddentDenormalizer))
-                {   
-                    foreach (var @event in events)
-                    {
-                        try
-                        {
-                            eventEventBus.Publish(@event);
-                        }
-                        catch
-                        {
-                        }
-                    }
+
+                using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, this.users, this.qestionnairePropagationStructure))
+                {
+                    entityWriter.PublishEvents(events);
+                   
                     updatedView = entityWriter.GetById(events.SourceId);
 
                     PersistItem(updatedView, events.SourceId, events.Last().EventSequence);
