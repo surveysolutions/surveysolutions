@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -45,11 +46,11 @@ namespace WB.Core.Synchronization.SyncStorage
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
         }
 
-        public void SaveQuestionnaire(QuestionnaireDocument doc)
+        public void SaveQuestionnaire(QuestionnaireDocument doc, long version)
         {
             var syncItem = new SyncItem
             {
-                Id = doc.PublicKey,
+                Id = doc.PublicKey.Combine(version),
                 ItemType = SyncItemType.Template,
                 IsCompressed = UseCompression,
                 Content = GetItemAsContent(doc)
