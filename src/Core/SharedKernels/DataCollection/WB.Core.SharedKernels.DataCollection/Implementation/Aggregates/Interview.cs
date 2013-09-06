@@ -198,6 +198,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewDeclaredInvalid @event) {}
 
+        public InterviewState CreateSnapshot()
+        {
+            return new InterviewState(questionnaireId, questionnaireVersion, status, answers, disabledGroups,
+                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions);
+        }
+
+        public void RestoreFromSnapshot(InterviewState snapshot)
+        {
+            questionnaireId = snapshot.QuestionnaireId;
+            questionnaireVersion = snapshot.QuestionnaireVersion;
+            status = snapshot.Status;
+            answers = snapshot.Answers;
+            disabledGroups = snapshot.DisabledGroups;
+            disabledQuestions = snapshot.DisabledQuestions;
+            propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
+            validAnsweredQuestions = snapshot.ValidAnsweredQuestions;
+            invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
+        }
+
         #endregion
 
         #region Dependencies
@@ -1426,25 +1445,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static string ConvertIdAndPropagationVectorToString(Guid id, int[] propagationVector)
         {
             return string.Format("{0:N}:{1}", id, string.Join("-", propagationVector));
-        }
-
-        public InterviewState CreateSnapshot()
-        {
-            return new InterviewState(questionnaireId, questionnaireVersion, status, answers, disabledGroups,
-                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions);
-        }
-
-        public void RestoreFromSnapshot(InterviewState snapshot)
-        {
-            questionnaireId = snapshot.QuestionnaireId;
-            questionnaireVersion = snapshot.QuestionnaireVersion;
-            status = snapshot.Status;
-            answers = snapshot.Answers;
-            disabledGroups = snapshot.DisabledGroups;
-            disabledQuestions = snapshot.DisabledQuestions;
-            propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
-            validAnsweredQuestions = snapshot.ValidAnsweredQuestions;
-            invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
         }
     }
 }
