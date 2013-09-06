@@ -8,18 +8,15 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class SynchronizationMetadataApplied : InterviewActiveEvent
     {
-        public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
+        public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, InterviewStatus status, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta)
             : base(userId)
         {
             QuestionnaireId = questionnaireId;
-            QuestionnaireVersion = questionnaireVersion;
             Status = status;
             FeaturedQuestionsMeta = featuredQuestionsMeta;
         }
 
         public Guid QuestionnaireId { get; private set; }
-
-        public long QuestionnaireVersion { get; private set; }
 
         public InterviewStatus Status { get; private set; }
 
