@@ -23,8 +23,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         IReadSideRepositoryCleaner
 
     {
-        private InterviewDenormalizer hiddentDenormalizer;
         private IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> qestionnairePropagationStructure;
         private IEventStore eventStore;
         private InProcessEventBus eventEventBus;
         private Dictionary<Guid, IntervieweWithSequence> memcache;
@@ -44,13 +45,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             this.incomePackages = incomePackages;
             this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
             this.eventEventBus = new InProcessEventBus();
-            this.hiddentDenormalizer = new InterviewDenormalizer(users, qestionnairePropagationStructure);
-
-            RegisterInterviewDenormalizerAtProcessBus();
+            this.users = users;
+            this.qestionnairePropagationStructure = qestionnairePropagationStructure;
             cleanerRegistry.Register(this);
         }
 
-        private void RegisterInterviewDenormalizerAtProcessBus()
+        private void RegisterInterviewDenormalizerAtProcessBus(InterviewDenormalizer hiddentDenormalizer)
         {
             IEnumerable<Type> ieventHandlers =
                 hiddentDenormalizer.GetType()
@@ -156,11 +156,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             InterviewData updatedView = view;
             if (!events.IsEmpty)
             {
+                var hiddentDenormalizer=new InterviewDenormalizer(this.users,this.qestionnairePropagationStructure);
+                RegisterInterviewDenormalizerAtProcessBus(hiddentDenormalizer);
                 using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, hiddentDenormalizer))
                 {   
                     foreach (var @event in events)
                     {
-                        eventEventBus.Publish(@event);
+                        try
+                        {
+                            eventEventBus.Publish(@event);
+                        }
+                        catch
+                        {
+                        }
                     }
                     updatedView = entityWriter.GetById(events.SourceId);
 
