@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -49,6 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.cacheOfQuestionsInvolvedInCustomEnablementConditionOfQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         }
 
         private Dictionary<Guid, IQuestion> QuestionCache
@@ -440,6 +442,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return @group.Propagated == Propagate.AutoPropagated;
         }
 
+        public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingQuestions.ContainsKey(groupId))
+                this.cacheOfUnderlyingQuestions[groupId] = this.GetAllUnderlyingQuestionsImpl(groupId);
+
+            return this.cacheOfUnderlyingQuestions[groupId];
+        }
+
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
@@ -502,6 +512,16 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 where this.DoesCustomEnablementConditionDependOnSpecifiedQuestion(enablementCondition, questionId)
                 select question.PublicKey
             );
+        }
+
+        private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
+        {
+            IGroup @group = this.GetGroupOrThrow(groupId);
+
+            return @group
+                .Find<IQuestion>(_ => true)
+                .Select(question => question.PublicKey)
+                .ToList();
         }
 
 
