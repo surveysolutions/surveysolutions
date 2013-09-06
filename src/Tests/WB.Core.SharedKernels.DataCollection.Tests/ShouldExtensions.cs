@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests
                     && condition.Invoke((TEvent) @event.Payload));
             }
         }
-        
+
         public static void ShouldNotContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
         {
             if (condition == null)
