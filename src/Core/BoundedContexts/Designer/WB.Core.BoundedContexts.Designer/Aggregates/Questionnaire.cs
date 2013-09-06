@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (document == null)
                 throw new DomainException(DomainExceptionType.TemplateIsInvalid
                                           , "only QuestionnaireDocuments are supported for now");
-            document.CreatedBy = this.innerDocument.CreatedBy;
+            document.CreatedBy = createdBy;
             ApplyEvent(new TemplateImported() {Source = document});
            
         }
