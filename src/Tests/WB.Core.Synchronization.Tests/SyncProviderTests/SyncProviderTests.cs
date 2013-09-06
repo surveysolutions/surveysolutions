@@ -55,7 +55,7 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
         }
 
 
-        [Test]
+        /*[Test]
         public void CheckAndCreateNewSyncActivity_when_Valid_Non_Existent_ClientIdentifier_Arrived_then_Exeption_is_Thrown()
         {
             //Arrange
@@ -78,7 +78,7 @@ namespace WB.Core.Synchronization.Tests.SyncProviderTests
 
             //Assert
             Assert.Throws<ArgumentException>(act);
-        }
+        }*/
 
         [Test]
         public void HandleSyncItem_If_Item_Content_Is_Empty_Exception_is_thrown()
