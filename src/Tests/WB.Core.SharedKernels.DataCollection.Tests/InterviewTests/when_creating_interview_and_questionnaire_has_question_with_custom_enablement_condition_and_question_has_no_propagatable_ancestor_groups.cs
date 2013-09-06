@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
         It should_raise_QuestionDisabled_event = () =>
-            eventContext.Events.ShouldContain(@event => @event.Payload is QuestionDisabled);
+            eventContext.ShouldContainEvent<QuestionDisabled>();
 
         It should_provide_id_of_group_with_custom_enablement_condition_in_QuestionDisabled_event = () =>
             GetEvent<QuestionDisabled>(eventContext)

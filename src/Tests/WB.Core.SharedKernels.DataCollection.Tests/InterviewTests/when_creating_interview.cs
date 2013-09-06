@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -40,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
 
         It should_raise_InterviewCreated_event = () =>
-            eventContext.Events.ShouldContain(@event => @event.Payload is InterviewCreated);
+            eventContext.ShouldContainEvent<InterviewCreated>();
 
         It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
             GetEvent<InterviewCreated>(eventContext)
