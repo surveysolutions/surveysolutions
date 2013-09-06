@@ -43,7 +43,7 @@ namespace WB.UI.Designer.Controllers
                 return null;
             }
 
-            return new FileStreamResult(this.zipUtils.Compress(templateInfo.Source), "application/gzip")
+            return new FileStreamResult(this.zipUtils.Compress(templateInfo.Source), "application/octet-stream")
                        {
                            FileDownloadName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName())
                        };
