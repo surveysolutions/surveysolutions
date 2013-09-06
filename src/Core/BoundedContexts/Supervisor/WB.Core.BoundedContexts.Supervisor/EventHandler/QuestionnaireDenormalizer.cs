@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.documentStorage.Store(
                 new QuestionnaireDocumentVersioned() {Questionnaire = document, Version = evnt.EventSequence},
                 document.PublicKey);
-            this.synchronizationDataStorage.SaveQuestionnaire(document);
+            this.synchronizationDataStorage.SaveQuestionnaire(document, evnt.EventSequence);
         }
 
         public string Name
