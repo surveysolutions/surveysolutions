@@ -84,6 +84,7 @@
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
+    <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\GroupPassiveEvent.cs" />
     <Compile Include="Events\Interview\Base\QuestionActiveEvent.cs" />
     <Compile Include="Events\Interview\AnswerDeclaredInvalid.cs" />
