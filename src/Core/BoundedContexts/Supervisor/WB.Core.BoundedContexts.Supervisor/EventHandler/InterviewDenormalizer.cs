@@ -35,24 +35,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures; 
-        private IReadSideRepositoryWriter<InterviewData> interviews;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IReadSideRepositoryWriter<InterviewData> interviews;
 
-        public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users,
-                                     IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures)
+        public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users, IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures, IReadSideRepositoryWriter<InterviewData> interviews)
         {
             this.users = users;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
-        }
-
-        public void SetStorage(IReadSideRepositoryWriter<InterviewData> documentStorage)
-        {
-            this.interviews = documentStorage;
-        }
-
-        public void ClearStorage()
-        {
-            this.interviews = null;
+            this.interviews = interviews;
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)

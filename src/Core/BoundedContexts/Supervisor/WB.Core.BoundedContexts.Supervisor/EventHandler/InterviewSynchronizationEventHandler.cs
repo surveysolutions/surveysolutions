@@ -25,8 +25,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                         IEventHandler<InterviewRejected>,
                                                         IEventHandler<InterviewCompleted>,
                                                         IEventHandler<InterviewDeleted>, */
-        IEventHandler<InterviewCompleted>,
-                                                        IEventHandler
+        IEventHandler<AnswerDeclaredValid>,IEventHandler<GroupPropagated>,IEventHandler<QuestionEnabled>,IEventHandler<AnswerDeclaredInvalid>,IEventHandler<QuestionDisabled>,IEventHandler<GroupDisabled>,IEventHandler<InterviewCompleted>,
+    IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
         private readonly IReadSideRepositoryWriter<InterviewData> interviewDataWriter;
@@ -183,6 +183,36 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public Type[] BuildsViews
         {
             get { return new Type[] {typeof (SynchronizationDelta)}; }
+        }
+
+        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<GroupPropagated> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<QuestionEnabled> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<QuestionDisabled> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<GroupDisabled> evnt)
+        {
+            
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)

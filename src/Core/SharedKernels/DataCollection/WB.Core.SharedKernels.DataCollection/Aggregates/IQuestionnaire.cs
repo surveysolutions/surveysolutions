@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
 
-        IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId);
+        IEnumerable<Guid> GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(Guid groupId);
 
         int GetPropagationLevelForQuestion(Guid questionId);
 
@@ -74,5 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions();
 
         bool IsGroupPropagatable(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
     }
 }

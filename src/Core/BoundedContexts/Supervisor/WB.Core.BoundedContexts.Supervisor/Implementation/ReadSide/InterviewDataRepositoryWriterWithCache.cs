@@ -23,10 +23,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         IReadSideRepositoryCleaner
 
     {
-        private InterviewDenormalizer hiddentDenormalizer;
         private IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> qestionnairePropagationStructure;
         private IEventStore eventStore;
-        private InProcessEventBus eventEventBus;
         private Dictionary<Guid, IntervieweWithSequence> memcache;
         private IIncomePackagesRepository incomePackages;
 
@@ -43,26 +43,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             this.interviewWriter = interviewWriter;
             this.incomePackages = incomePackages;
             this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
-            this.eventEventBus = new InProcessEventBus();
-            this.hiddentDenormalizer = new InterviewDenormalizer(users, qestionnairePropagationStructure);
-
-            RegisterInterviewDenormalizerAtProcessBus();
+            this.users = users;
+            this.qestionnairePropagationStructure = qestionnairePropagationStructure;
             cleanerRegistry.Register(this);
-        }
-
-        private void RegisterInterviewDenormalizerAtProcessBus()
-        {
-            IEnumerable<Type> ieventHandlers =
-                hiddentDenormalizer.GetType()
-                                   .GetInterfaces()
-                                   .Where(
-                                       type =>
-                                       type.IsInterface && type.IsGenericType &&
-                                       type.GetGenericTypeDefinition() == typeof (IEventHandler<>));
-            foreach (Type ieventHandler in ieventHandlers)
-            {
-                eventEventBus.RegisterHandler(hiddentDenormalizer, ieventHandler.GetGenericArguments()[0]);
-            }
         }
 
         public int Count()
@@ -156,12 +139,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             InterviewData updatedView = view;
             if (!events.IsEmpty)
             {
-                using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, hiddentDenormalizer))
-                {   
-                    foreach (var @event in events)
-                    {
-                        eventEventBus.Publish(@event);
-                    }
+
+                using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, this.users, this.qestionnairePropagationStructure))
+                {
+                    entityWriter.PublishEvents(events);
+                   
                     updatedView = entityWriter.GetById(events.SourceId);
 
                     PersistItem(updatedView, events.SourceId, events.Last().EventSequence);
