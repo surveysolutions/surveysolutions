@@ -236,7 +236,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.WriteSide
                 {
                     StoredEvent[] storedEventsBulk =
                         QueryAllEvents(session)
-                        .OrderBy(y => y.EventTimeStamp)
+                        .OrderBy(y => y.EventTimeStamp).ThenBy(y=>y.EventSequence)
                         .Skip(returnedEventCount)
                         .Take(bulkSize)
                         .ToArray();
