@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                         answeredQuestion = new InterviewQuestion(questionId);
                         questionsAtTheLevel.Questions.Add(answeredQuestion);
                     }
-
+                    answeredQuestion.IsAnswered = true;
                     return action(answeredQuestion);
                 });
         }

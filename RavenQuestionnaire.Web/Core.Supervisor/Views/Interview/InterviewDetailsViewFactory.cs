@@ -100,6 +100,7 @@ namespace Core.Supervisor.Views.Interview
                 {
                     var rootLevel = interview.Levels.FirstOrDefault(w => w.Value.ScopeId == interview.InterviewId).Value;
 
+         
                     interviewDetails.Groups.Add(GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel));
 
                     foreach (var group in currentGroup.Key.Children.OfType<IGroup>().Reverse())
