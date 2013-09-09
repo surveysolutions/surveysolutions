@@ -71,7 +71,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
             this.Bind<IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>>()
-                .To<QuestionnaireScreenViewFactory>();
+                .To<QuestionnaireScreenViewFactory>().InSingletonScope();
             this.Bind<IViewFactory<StatisticsInput, StatisticsViewModel>>().To<StatisticsViewFactory>();
 
             this.Bind<IBackup>()
