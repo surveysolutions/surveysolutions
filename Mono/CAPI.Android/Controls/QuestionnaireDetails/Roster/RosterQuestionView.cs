@@ -9,6 +9,7 @@ using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Main.Core.Entities.SubEntities;
 using Ninject;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
@@ -82,7 +83,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
         {
             tvTitle.Text = e.AnswerSting;
             if (!questionView.IsCommentsEditorFocused)
-                dialog.Dismiss();
+                if (Model.QuestionType != QuestionType.MultyOption)
+                    dialog.Dismiss();
         }
 
         protected override void Dispose(bool disposing)
