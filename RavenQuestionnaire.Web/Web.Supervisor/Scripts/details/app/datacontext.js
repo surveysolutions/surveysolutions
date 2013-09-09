@@ -45,8 +45,10 @@
 				_.extend(questionnaire, mapper.interview.fromDto(q));
 				_.extend(user, mapper.user.fromDto(q.User));
 				var rawQuestions = [];
-				_.each(input.questionnaire.Groups, function(group){
-					_.each(group.Questions, function(question){
+				_.each(input.questionnaire.Groups, function (group) {
+				    var propagationVector = group.PropagationVector;
+				    _.each(group.Questions, function (question) {
+				        question.PropagationVector = propagationVector;
 						rawQuestions.push(question);
 					});
 				});

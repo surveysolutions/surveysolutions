@@ -1,15 +1,31 @@
 ﻿define('app/mapper', ['lodash', 'app/model', 'app/config'],
     function (_, model, config) {
         var question = {
-            getDtoId: function (dto) { return dto.Id; },
+            getDtoId: function (dto) { return dto.Id + "_" + dto.PropagationVector; },
             fromDto: function (dto) {
                 var item = {};
                 switch (dto.QuestionType) {
                     case 0:
                         item = new model.SingleOptionQuestion();
+
+                        item.options(_.map(dto.Options, function (option) {
+                            var o = { value: option.Value, label: option.Label };
+                            if (dto.Answer == option.Value) {
+                                item.selectedOption(o);
+                            }
+                            return o;
+                        }));
+
                         break;
                     case 3:
                         item = new model.MultyOptionQuestion();
+                        item.options(_.map(dto.Options, function (option) {
+                            var o = { value: option.Value, label: option.Label };
+                            if (_.dto.Answer == option.Value) {
+                                item.selectedOptions.push(o);
+                            }
+                            return o;
+                        }));
                         break;
                     case 7:
                         item = new model.TextQuestion();
@@ -30,6 +46,7 @@
                 }
                 item.scope(dto.Scope);
                 item.isAnswered(dto.IsAnswered);
+                item.uiId(dto.Id + "_" + dto.PropagationVector);
                 item.id(dto.Id);
                 item.title(dto.Title);
                 item.isFlagged(dto.IsFlagged);
@@ -47,12 +64,14 @@
             }
         },
             group = {
-                getDtoId: function (dto) { return dto.Id; },
+                getDtoId: function (dto) { return dto.Id + "_" + dto.PropagationVector; },
                 fromDto: function (dto, questions) {
                     var item = new model.Group();
+                    item.uiId(dto.Id + "_" + dto.PropagationVector);
                     item.id(dto.Id);
                     item.depth(dto.Depth);
-                    item.parentId(dto.ParentId);
+                    var parentPropagationVector = _.first(dto.PropagationVector, dto.PropagationVector.length - 1);
+                    item.parentId(dto.ParentId + "_" + parentPropagationVector);
                     item.propagationVector(dto.PropagationVector);
                     item.questions(_.map(dto.Questions, function (q) {
                         return questions.getLocalById(question.getDtoId(q));

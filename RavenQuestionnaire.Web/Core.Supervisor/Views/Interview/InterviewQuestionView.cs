@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
@@ -18,7 +21,16 @@ namespace Core.Supervisor.Views.Interview
             IsCapital = question.Capital;
             ValidationMessage = question.ValidationMessage;
             ValidationExpression = question.ValidationExpression;
-         
+
+            if (question.Answers != null)
+            {
+                Options = question.Answers.Select(a => new QuestionOption()
+                {
+                    Value = decimal.Parse(a.AnswerValue),
+                    Label = a.AnswerText
+                }).ToList();
+            }
+
             if (answeredQuestion == null) return;
 
             IsAnswered = answeredQuestion.IsAnswered;
@@ -29,6 +41,8 @@ namespace Core.Supervisor.Views.Interview
             Scope = question.QuestionScope;
             Answer = answeredQuestion.Answer;
         }
+
+        public List<QuestionOption> Options { get; set; }
 
         public QuestionScope Scope { get; set; }
 
@@ -54,5 +68,11 @@ namespace Core.Supervisor.Views.Interview
         public List<InterviewQuestionComment> Comments { get; set; }
 
         public object Answer { get; set; }
+    }
+
+    public class QuestionOption
+    {
+        public decimal Value { get; set; }
+        public string Label { get; set; }
     }
 }

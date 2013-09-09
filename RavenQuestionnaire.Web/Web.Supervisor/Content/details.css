@@ -433,11 +433,14 @@ body:before
 .questions  .table td.question-text .featured .icon-star {
     display: block;
 }
-.questions  .table.mandatory td:first-child {
+.questions  .table tr.mandatory td:first-child {
     font-weight: bold;
 }
-.questions  .table.disabled td{
+.questions  .table tr.disabled td{
     color: #999;
+}
+.questions  .table tr td .text-error {
+    display: block;
 }
 .question-marker {
     background: transparent;
