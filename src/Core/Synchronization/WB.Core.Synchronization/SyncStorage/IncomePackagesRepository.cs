@@ -94,7 +94,7 @@ namespace WB.Core.Synchronization.SyncStorage
             var i = sequence + 1;
             foreach (var aggregateRootEvent in stream)
             {
-                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0));
+                uncommitedStream.Append(aggregateRootEvent.CreateUncommitedEvent(i, 0, DateTime.Now));
                 i++;
             }
             return uncommitedStream;
