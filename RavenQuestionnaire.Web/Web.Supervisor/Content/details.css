@@ -233,8 +233,6 @@ body:before
 }
 .questions .table {
 	margin-bottom: 0;
-	width: auto;
-	max-width: none;
 }
  .questions .table.table-headers {
      position: absolute;
@@ -419,11 +417,33 @@ body:before
 .cell-content:hover .actions {
 	display: inline-block !important;	
 }
-.questions  .table-condensed td {
+.questions  .table td.question-answer,
+.questions  .table td.question-text {
  	padding: 0;
 }
+.questions  .table td.question-text .featured {
+    padding-left: 20px;
+}
+.questions  .table td.question-text .icon-star {
+    display: none;
+    position: absolute;
+    top: 7px;
+    left: 5px;
+}
+.questions  .table td.question-text .featured .icon-star {
+    display: block;
+}
+.questions  .table tr.mandatory td:first-child {
+    font-weight: bold;
+}
+.questions  .table tr.disabled td{
+    color: #999;
+}
+.questions  .table tr td .text-error {
+    display: block;
+}
 .question-marker {
-    background: #ddd;
+    background: transparent;
     display: block;
     height: 4px;
     left: 5px;
