@@ -21,7 +21,9 @@ using InterviewDeleted = Main.Core.Events.Questionnaire.Completed.InterviewDelet
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class InterviewSynchronizationEventHandler : IEventHandler<InterviewerAssigned>,
-        IEventHandler<InterviewStatusChanged>,/*,
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<AnswerCommented>,
+        /*,
                                                         IEventHandler<InterviewRejected>,
                                                         IEventHandler<InterviewCompleted>,
                                                         IEventHandler<InterviewDeleted>, */
@@ -218,6 +220,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
             
+        }
+
+        public void Handle(IPublishedEvent<AnswerCommented> evnt)
+        {
+
         }
     }
 }
