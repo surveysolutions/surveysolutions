@@ -2,7 +2,7 @@
     function(ko) {
         var commands = {
             setFlagCommand: "SetFlagCommand",
-            setCommentCommand: "SetCommentCommand",
+            setCommentCommand: "CommentAnswerCommand",
             setAnswerCommand: "SetAnswerCommand",
             setFlagToAnswer: "SetFlagToAnswer",
             removeFlagFromAnswer: "RemoveFlagFromAnswer",

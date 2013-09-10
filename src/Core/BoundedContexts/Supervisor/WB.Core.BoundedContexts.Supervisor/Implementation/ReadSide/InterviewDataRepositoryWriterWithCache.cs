@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         {
             incomePackages.ProcessItem(viewItem.Document.InterviewId, viewItem.Sequence);
 
-            var events = eventStore.ReadFrom(viewItem.Document.InterviewId, viewItem.Sequence, long.MaxValue);
+            var events = eventStore.ReadFrom(viewItem.Document.InterviewId, viewItem.Sequence + 1, long.MaxValue);
             if (events.IsEmpty)
                 return;
             var updatedView = RestoreFromEventStream(events, viewItem.Document);

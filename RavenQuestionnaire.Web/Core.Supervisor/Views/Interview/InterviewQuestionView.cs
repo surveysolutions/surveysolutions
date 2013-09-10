@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
@@ -24,7 +25,7 @@ namespace Core.Supervisor.Views.Interview
 
             if (question.Answers != null)
             {
-                Options = question.Answers.Select(a => new QuestionOption()
+                Options = question.Answers.Select(a => new QuestionOptionView()
                 {
                     Value = decimal.Parse(a.AnswerValue),
                     Label = a.AnswerText
@@ -36,13 +37,20 @@ namespace Core.Supervisor.Views.Interview
             IsAnswered = answeredQuestion.IsAnswered;
             IsEnabled = answeredQuestion.Enabled;
             IsFlagged = answeredQuestion.Flagged;
-            Comments = answeredQuestion.Comments;
+            Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
+            {
+                Id = x.Id,
+                Text = x.Text,
+                CommenterId = x.CommenterId,
+                CommenterName = x.CommenterName,
+                Date = x.Date
+            }).ToList();
             IsValid = answeredQuestion.Valid;
             Scope = question.QuestionScope;
             Answer = answeredQuestion.Answer;
         }
 
-        public List<QuestionOption> Options { get; set; }
+        public List<QuestionOptionView> Options { get; set; }
 
         public QuestionScope Scope { get; set; }
 
@@ -65,12 +73,21 @@ namespace Core.Supervisor.Views.Interview
 
         public int[] PropagationVector { get; set; }
 
-        public List<InterviewQuestionComment> Comments { get; set; }
+        public List<InterviewQuestionCommentView> Comments { get; set; }
 
         public object Answer { get; set; }
     }
 
-    public class QuestionOption
+    public class InterviewQuestionCommentView
+    {
+        public Guid Id { get; set; }
+        public string Text { get; set; }
+        public DateTime Date { get; set; }
+        public Guid CommenterId { get; set; }
+        public string CommenterName { get; set; }
+    }
+
+    public class QuestionOptionView
     {
         public decimal Value { get; set; }
         public string Label { get; set; }

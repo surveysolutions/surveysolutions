@@ -15,6 +15,7 @@ function (ko) {
         self.title = ko.observable();
         self.isValid = ko.observable(true);
         self.isVisible = ko.observable(true);
+        self.isSelected = ko.observable(false);
         self.isAnswered = ko.observable(false);
         self.validationMessage = ko.observable('');
         self.validationExpression = ko.observable('');

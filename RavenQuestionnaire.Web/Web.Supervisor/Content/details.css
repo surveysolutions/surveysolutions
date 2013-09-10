@@ -21,7 +21,16 @@
 
 .heading {
     color: #0088CC;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    margin: 0;
+    margin-top: 10px;
+}
+
+h4.heading {
+    color: #0088CC;
+    font-size: 13px;
     line-height: 1.3;
     word-wrap: break-word;
     margin: 0;
@@ -101,13 +110,16 @@
 }
 
 #content.details-visible #list {
-    margin-right: 310px;
+    margin-right: 41%;
 }
 
 #details {
     position: absolute;
-    width: 300px;
+    width: 40%;
     min-height: 100px;
     top: 0;
     right: 8px;
+}
+#footer-block {
+    display: none;
 }

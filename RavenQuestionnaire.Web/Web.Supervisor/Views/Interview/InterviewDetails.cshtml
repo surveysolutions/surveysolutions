@@ -28,7 +28,7 @@
         </ul>
     </div>
 </div>
-<div id="content" class="details-visible">
+<div id="content">
     <h3 class="sinle-line-header" data-bind="with: questionnaire">
         <!-- ko text: title -->
         <!-- /ko -->
@@ -63,7 +63,7 @@
                     <div class="horizontal-scroll questions">
                         <table class="table table-bordered table-hover">
                             <tbody data-bind="foreach: questions">
-                                <tr data-bind="visible : isVisible,css: {error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
+                                <tr data-bind="click: $root.showDetails, visible : isVisible,css: {error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
                                     <td style="width: 60%" class="question-text">
                                         <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                             <span class="icon-star"></span>
@@ -76,6 +76,7 @@
                                             <span data-bind="template: { name: questionType() }"></span>
                                             <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
                                             <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
+                                            <div class="actions"></div>
                                         </div>
                                     </td>
                                 </tr>
@@ -86,8 +87,20 @@
                 <!-- /ko -->
             </div>
         </div>
-        <div id="details">
-            
+        <div id="details" data-bind="with: currentQuestion">
+            <button class="close" data-bind="click: $root.closeDetails">&times;</button>
+            <h3 class="heading" data-bind="text: title"></h3>
+            <div data-bind="template: { name: questionType() }"></div>
+            <h4 class="heading">Comments</h4>
+            <dl class="dl-horizontal" data-bind="foreach: comments">
+                <dt data-bind="text: userName"></dt>
+                <dd >
+                    <span data-bind="text: text"></span>
+                    <span data-bind="text: date"></span>
+                </dd>
+            </dl>
+            <textarea data-bind="value: $root.currentComment" class="input-block-level"></textarea>
+            <button class="btn" type="button" data-bind="click: $root.addComment">Comment</button>
         </div>
     </div>
 </div>
@@ -128,7 +141,7 @@
     <script type="text/html" id="GpsCoordinates">
     </script>
 
-    @Scripts.Render("~/js/list")
+
     <script data-main="../../Scripts/details/main.js" src="~/Scripts/lib/require.js"></script>
 
     <script type="text/javascript">

@@ -22,7 +22,7 @@ namespace Web.Supervisor.Code.CommandDeserialization
                         // flags and comments
                         { "SetFlagToAnswer", typeof (SetFlagToAnswerCommand) },
                         { "RemoveFlagFromAnswer ", typeof (RemoveFlagFromAnswerCommand ) },
-                        { "CommentAnswer", typeof (CommentAnswerCommand ) },
+                        { "CommentAnswerCommand", typeof (CommentAnswerCommand ) },
                         // answer question
                         { "AnswerDateTimeQuestionCommand", typeof (AnswerDateTimeQuestionCommand ) },
                         { "AnswerMultipleOptionsQuestionCommand", typeof (AnswerMultipleOptionsQuestionCommand ) },

@@ -44,6 +44,10 @@
                         item = new model.GpsQuestion();
                         break;
                 }
+                var comments = _.map(dto.Comments, function(comment) {
+                    return { userName: comment.CommenterName, text: comment.Text, date: comment.Date };
+                });
+                item.comments(comments);
                 item.scope(dto.Scope);
                 item.isAnswered(dto.IsAnswered);
                 item.uiId(dto.Id + "_" + dto.PropagationVector);
@@ -52,7 +56,6 @@
                 item.isFlagged(dto.IsFlagged);
                 item.questionType(config.questionTypeMap[dto.QuestionType]);
                 item.isCapital(dto.IsCapital);
-                item.comments(dto.Comments);
                 item.isEnabled(dto.IsEnabled);
                 item.isFeatured(dto.IsFeatured);
                 item.isMandatory(dto.IsMandatory);

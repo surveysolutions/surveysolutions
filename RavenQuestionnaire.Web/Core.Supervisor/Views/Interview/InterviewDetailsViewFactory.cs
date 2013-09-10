@@ -18,14 +18,14 @@ namespace Core.Supervisor.Views.Interview
     {
         private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStore;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures;
         private readonly ICompleteQuestionFactory questionFactory;
 
         public InterviewDetailsViewFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStore,
-            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures)
+            IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore,
+            IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
