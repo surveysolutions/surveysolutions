@@ -57,6 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             item.Roles = evnt.Payload.Roles.ToList();
             item.Password = evnt.Payload.PasswordHash;
             users.Store(item, item.PublicKey);
+            this.syncStorage.SaveUser(item);
         }
 
         public void Handle(IPublishedEvent<UserLocked> @event)
