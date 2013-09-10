@@ -152,6 +152,7 @@ namespace CAPI.Android
             var usereventHandler =
                 new UserDenormalizer(kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
             bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
+            bus.RegisterHandler(usereventHandler, typeof(UserChanged));
         }
 
         private void InitDashboard(InProcessEventBus bus)

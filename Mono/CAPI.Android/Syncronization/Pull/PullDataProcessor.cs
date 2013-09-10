@@ -6,6 +6,7 @@ using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Services;
 using Main.Core;
 using Main.Core.Commands.File;
@@ -13,6 +14,7 @@ using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging;
@@ -28,13 +30,14 @@ namespace CAPI.Android.Syncronization.Pull
 {
     public class PullDataProcessor
     {
-        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
+        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService, IReadSideRepositoryReader<LoginDTO> userStorage)
         {
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
             this.changelog = changelog;
             this.commandService = commandService;
             this.chuncksFroProccess=new List<SyncItem>();
             this.cleanUpExecutor = new CleanUpExecutor(changelog);
+            this.userStorage = userStorage;
         }
         private IList<SyncItem> chuncksFroProccess;
         private ILogger logger;
@@ -42,7 +45,7 @@ namespace CAPI.Android.Syncronization.Pull
 
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
-       
+        private readonly IReadSideRepositoryReader<LoginDTO> userStorage;
 
         public void Save(SyncItem  data)
         {
@@ -117,8 +120,18 @@ namespace CAPI.Android.Syncronization.Pull
         {
             string content = item.IsCompressed ? PackageHelper.DecompressString(item.Content) : item.Content;
             var user = JsonUtils.GetObject<UserDocument>(content);
-            commandService.Execute(new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
-                                                         user.Roles.ToArray(), user.IsLocked, user.Supervisor));
+
+            ICommand userCommand = null;
+
+            if (this.userStorage.GetById(user.PublicKey) == null)
+                userCommand = new CreateUserCommand(user.PublicKey, user.UserName, user.Password, user.Email,
+                                                    user.Roles.ToArray(), user.IsLocked, user.Supervisor);
+
+            else
+
+                userCommand = new ChangeUserCommand(user.PublicKey, user.Email,
+                                                    user.Roles.ToArray(), user.IsLocked, user.Password);
+            commandService.Execute(userCommand);
         }
 
         private void ExecuteInterview(SyncItem item)

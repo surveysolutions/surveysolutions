@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Extensions;
 using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
@@ -17,6 +18,7 @@ using System.Text;
 using System.Threading;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
 {
@@ -165,7 +167,7 @@ namespace CAPI.Android
             try
             {
                 synchronizer = new SynchronozationProcessor(this, CreateAuthenticator(),
-                                                            CapiApplication.Kernel.Get<IChangeLogManipulator>());
+                                                            CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IReadSideRepositoryReader<LoginDTO>>());
             }
             catch (Exception ex)
             {
