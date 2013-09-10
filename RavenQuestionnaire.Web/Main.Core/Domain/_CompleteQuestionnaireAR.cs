@@ -201,7 +201,7 @@ namespace Main.Core.Domain
             }
         }
 
-        public void DeleteInterview(Guid deletedBy)
+        /*public void DeleteInterview(Guid deletedBy)
         {
             if (this.doc.Status == SurveyStatus.Unknown || this.doc.Status == SurveyStatus.Unassign ||
                 this.doc.Status == SurveyStatus.Initial)
@@ -216,7 +216,7 @@ namespace Main.Core.Domain
             {
                 throw new DomainException(DomainExceptionType.CouldNotDeleteInterview, "Couldn't delete completed interview");
             }
-        }
+        }*/
 
         public void AddRemovePropagatedGroup(AutoPropagateCompleteQuestion question, string completeAnswerValue)
         {
@@ -571,10 +571,10 @@ namespace Main.Core.Domain
             question.IsFlaged = e.IsFlaged;
         }
 
-        protected void OnInterviewDeleted(InterviewDeleted e)
+        /*protected void OnInterviewDeleted(InterviewDeleted e)
         {
             this.doc.IsDeleted = true;
             this.doc.DeletedBy = e.DeletedBy;
-        }
+        }*/
     }
 }

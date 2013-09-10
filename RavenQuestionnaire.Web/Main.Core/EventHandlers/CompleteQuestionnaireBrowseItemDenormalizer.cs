@@ -18,8 +18,10 @@ namespace Main.Core.EventHandlers
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>,
-                                                               IEventHandler<InterviewDeleted>/*,
+                                                               IEventHandler<QuestionnaireAssignmentChanged>/*,
+                                                               IEventHandler<InterviewDeleted>,
+                                                               IEventHandler<InterviewRestored>*/
+        /*,
         IEventHandler<InterviewMetaInfoUpdated>*/,
          IEventHandler
 
@@ -85,14 +87,14 @@ namespace Main.Core.EventHandlers
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        /*public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
                 this.documentItemStore.GetById(evnt.EventSourceId);
 
             item.IsDeleted = true;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
-        }
+        }*/
 
         private UserLight FillResponsiblesName(UserLight responsible)
         {
