@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Handshake;
 using CAPI.Android.Syncronization.Pull;
@@ -17,6 +18,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization
@@ -56,8 +58,8 @@ namespace CAPI.Android.Syncronization
             set { SettingsManager.SetSetting(SettingsNames.LastHandledSequence, value); }
             get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
         }
-        
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
+
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog, IReadSideRepositoryReader<LoginDTO> userStorage)
         {
             this.context = context;
             
@@ -70,7 +72,7 @@ namespace CAPI.Android.Syncronization
             handshake = new RestHandshake(executor);
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            pullDataProcessor = new PullDataProcessor(changelog, commandService);
+            pullDataProcessor = new PullDataProcessor(changelog, commandService, userStorage);
             pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();

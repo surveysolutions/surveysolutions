@@ -54,6 +54,7 @@ namespace CAPI.Android.Core.Model
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
+            this.Bind<IReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
             this.Bind<IReadSideRepositoryReader<CompleteQuestionnaireView>>().ToConstant(bigSurveyStore);
