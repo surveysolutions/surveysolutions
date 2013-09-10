@@ -5,6 +5,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
 			groups = ko.observableArray(),
 			questions = ko.observableArray(),
 			isFilterOpen = ko.observable(true),
+			isDetailsOpen = ko.observable(true),
             toggleFilter = function () {
                 if (isFilterOpen()) {
                     $('#wrapper').addClass('menu-hidden');
@@ -12,6 +13,14 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                     $('#wrapper').removeClass('menu-hidden');
                 }
                 isFilterOpen(!isFilterOpen());
+            },
+            toggleDetails = function () {
+                if (isDetailsOpen()) {
+                    $('#content').addClass('details-visible');
+                } else {
+                    $('#content').removeClass('details-visible');
+                }
+                isDetailsOpen(!isDetailsOpen());
             },
             isSaving = ko.observable(false),
 
@@ -97,6 +106,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             toggleFilter: toggleFilter,
             isFilterOpen: isFilterOpen,
             isSaving: isSaving,
-            init: init
+            init: init,
+            toggleDetail: toggleDetails
         };
     });

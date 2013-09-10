@@ -21,7 +21,7 @@
                         item = new model.MultyOptionQuestion();
                         item.options(_.map(dto.Options, function (option) {
                             var o = { value: option.Value, label: option.Label };
-                            if (_.dto.Answer == option.Value) {
+                            if (_.contains(dto.Answer, option.Value)) {
                                 item.selectedOptions.push(o);
                             }
                             return o;

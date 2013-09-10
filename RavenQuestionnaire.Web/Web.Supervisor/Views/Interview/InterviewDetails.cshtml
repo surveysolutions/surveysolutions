@@ -28,7 +28,7 @@
         </ul>
     </div>
 </div>
-<div id="content">
+<div id="content" class="details-visible">
     <h3 class="sinle-line-header" data-bind="with: questionnaire">
         <!-- ko text: title -->
         <!-- /ko -->
@@ -54,41 +54,40 @@
         </div>
     </div>
     <div class="innerLR">@Html.Partial("_alerts")</div>
-    <div id="list">
-        <div class="innerLR ">
-            <!-- ko foreach: groups -->
-            <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
-                <h2 data-bind="text: title" class="heading"></h2>
-                <div class="horizontal-scroll questions">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <td style="width: 60%">Question</td>
-                                <td>Answer</td>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: questions">
-                            <tr data-bind="visible : isVisible,css: {error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
-                                <td style="width: 60%" class="question-text">
-                                    <div class="cell-content" data-bind="css: {featured : isFeatured}">
-                                        <span class="icon-star"></span>
-                                        <span data-bind="text: title"></span>
-                                    </div>
-                                </td>
-                                <td class="question-answer">
-                                    <div class="cell-content" data-bind="visible: isEnabled">
-                                        <span data-bind="css: markerStyle()" class="question-marker"></span>
-                                        <span data-bind="template: { name: questionType() }"></span>
-                                        <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
-                                        <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="panel-container">
+        <div id="list">
+            <div class="innerLR ">
+                <!-- ko foreach: groups -->
+                <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
+                    <h2 data-bind="text: title" class="heading"></h2>
+                    <div class="horizontal-scroll questions">
+                        <table class="table table-bordered table-hover">
+                            <tbody data-bind="foreach: questions">
+                                <tr data-bind="visible : isVisible,css: {error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
+                                    <td style="width: 60%" class="question-text">
+                                        <div class="cell-content" data-bind="css: {featured : isFeatured}">
+                                            <span class="icon-star"></span>
+                                            <span data-bind="text: title"></span>
+                                        </div>
+                                    </td>
+                                    <td class="question-answer">
+                                        <div class="cell-content" data-bind="visible: isEnabled">
+                                            <span data-bind="css: markerStyle()" class="question-marker"></span>
+                                            <span data-bind="template: { name: questionType() }"></span>
+                                            <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
+                                            <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                <!-- /ko -->
             </div>
-            <!-- /ko -->
+        </div>
+        <div id="details">
+            
         </div>
     </div>
 </div>
