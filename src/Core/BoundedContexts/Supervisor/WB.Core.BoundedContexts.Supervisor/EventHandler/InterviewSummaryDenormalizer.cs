@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -26,7 +24,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                 IEventHandler<DateTimeQuestionAnswered>,
                                                 IEventHandler<GeoLocationQuestionAnswered>,
                                                 IEventHandler<InterviewerAssigned>,
-                                                IEventHandler<InterviewDeleted>
+                                                IEventHandler<InterviewDeleted>,
+                                                IEventHandler<InterviewRestored>
         
 
     {
@@ -179,6 +178,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
 
             interview.UpdateDate = updateDate;
+            this.interviews.Store(interview, interview.InterviewId);
+        }
+        
+        public void Handle(IPublishedEvent<InterviewRestored> evnt)
+        {
+            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
+
+            interview.IsDeleted = false;
+            interview.UpdateDate = evnt.EventTimeStamp;
+
             this.interviews.Store(interview, interview.InterviewId);
         }
     }
