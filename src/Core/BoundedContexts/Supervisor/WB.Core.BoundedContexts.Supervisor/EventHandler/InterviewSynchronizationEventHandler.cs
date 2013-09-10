@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
-using InterviewDeleted = Main.Core.Events.Questionnaire.Completed.InterviewDeleted;
+//using InterviewDeleted = Main.Core.Events.Questionnaire.Completed.InterviewDeleted;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
