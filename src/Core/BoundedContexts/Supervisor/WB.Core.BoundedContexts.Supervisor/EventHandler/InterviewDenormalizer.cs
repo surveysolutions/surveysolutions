@@ -36,11 +36,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>
     {
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IReadSideRepositoryReader<UserDocument> users;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures;
         private readonly IReadSideRepositoryWriter<InterviewData> interviews;
 
-        public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users, IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures, IReadSideRepositoryWriter<InterviewData> interviews)
+        public InterviewDenormalizer(IReadSideRepositoryReader<UserDocument> users, 
+                                     IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures, 
+                                     IReadSideRepositoryWriter<InterviewData> interviews)
         {
             this.users = users;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
@@ -104,8 +106,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             var scopeOfCurrentGroup = GetScopeOfPassedGroup(interview,
                                                             evnt.Payload.GroupId);
-            if (scopeOfCurrentGroup == null)
-                return;
+            /*if (scopeOfCurrentGroup == null)
+                return;*/
 
             var keysOfLevelsByScope =
                 GetLevelsByScopeFromInterview(interview: interview, scopeId: scopeOfCurrentGroup);
