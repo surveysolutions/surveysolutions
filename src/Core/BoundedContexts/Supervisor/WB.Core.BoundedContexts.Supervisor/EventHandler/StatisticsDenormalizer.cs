@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Main.Core.View.CompleteQuestionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.Infrastructure.ReadSide.Repository;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
@@ -24,6 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                           IEventHandler<InterviewStatusChanged>,
                                           IEventHandler<SupervisorAssigned>,
                                           IEventHandler<InterviewDeleted>,
+                                          IEventHandler<InterviewRestored>,
                                           IEventHandler<InterviewerAssigned>
 
     {
@@ -205,6 +200,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public Type[] BuildsViews
         {
             get { return new Type[] { typeof(StatisticsLineGroupedByUserAndTemplate), typeof(InterviewBrief) }; }
+        }
+        
+        public void Handle(IPublishedEvent<InterviewRestored> evnt)
+        {
+            var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
+            var statistics = this.GetStatisticItem(interviewBriefItem);
+            IncreaseByStatus(statistics, interviewBriefItem.Status);
+
+            interviewBriefItem.IsDeleted = false;
+            interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            StoreStatisticsItem(interviewBriefItem, statistics);
         }
     }
 }
