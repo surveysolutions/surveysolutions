@@ -1,12 +1,10 @@
 ﻿define('app/config', ['knockout', 'knockout.validation'],
     function(ko) {
         var commands = {
-            setFlagCommand: "SetFlagCommand",
             setCommentCommand: "CommentAnswerCommand",
             setAnswerCommand: "SetAnswerCommand",
-            setFlagToAnswer: "SetFlagToAnswer",
-            removeFlagFromAnswer: "RemoveFlagFromAnswer",
-            commentAnswer: "CommentAnswer"
+            setFlagToAnswer: "SetFlagToAnswerCommand",
+            removeFlagFromAnswer: "RemoveFlagFromAnswerCommand"
         },
             questionTypeMap = {
                 0: "SingleOption",

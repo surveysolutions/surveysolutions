@@ -22,6 +22,7 @@ namespace Core.Supervisor.Views.Interview
             IsCapital = question.Capital;
             ValidationMessage = question.ValidationMessage;
             ValidationExpression = question.ValidationExpression;
+            Variable = question.StataExportCaption;
 
             if (question.Answers != null)
             {
@@ -36,7 +37,7 @@ namespace Core.Supervisor.Views.Interview
 
             IsAnswered = answeredQuestion.IsAnswered;
             IsEnabled = answeredQuestion.Enabled;
-            IsFlagged = answeredQuestion.Flagged;
+            IsFlagged = answeredQuestion.IsFlagged;
             Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
             {
                 Id = x.Id,
@@ -49,6 +50,8 @@ namespace Core.Supervisor.Views.Interview
             Scope = question.QuestionScope;
             Answer = answeredQuestion.Answer;
         }
+
+        public string Variable { get; set; }
 
         public List<QuestionOptionView> Options { get; set; }
 

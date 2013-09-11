@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Web.Security;
 using Core.Supervisor.Views.ChangeStatus;
 using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Survey;

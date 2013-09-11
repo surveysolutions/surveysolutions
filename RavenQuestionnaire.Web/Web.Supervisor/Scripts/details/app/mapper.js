@@ -4,14 +4,18 @@
             getDtoId: function (dto) { return dto.Id + "_" + dto.PropagationVector; },
             fromDto: function (dto) {
                 var item = {};
+                var uiId = dto.Id + "_" + dto.PropagationVector;
                 switch (dto.QuestionType) {
                     case 0:
                         item = new model.SingleOptionQuestion();
 
                         item.options(_.map(dto.Options, function (option) {
-                            var o = { value: option.Value, label: option.Label };
+                            var o = new model.Option(uiId);
+                            o.value(option.Value);
+                            o.label(option.Label);
                             if (dto.Answer == option.Value) {
                                 item.selectedOption(o);
+                                o.isSelected(true);
                             }
                             return o;
                         }));
@@ -20,9 +24,12 @@
                     case 3:
                         item = new model.MultyOptionQuestion();
                         item.options(_.map(dto.Options, function (option) {
-                            var o = { value: option.Value, label: option.Label };
+                            var o = new model.Option(uiId);
+                            o.value(option.Value);
+                            o.label(option.Label);
                             if (_.contains(dto.Answer, option.Value)) {
                                 item.selectedOptions.push(o);
+                                o.isSelected(true);
                             }
                             return o;
                         }));
@@ -44,13 +51,21 @@
                         item = new model.GpsQuestion();
                         break;
                 }
-                var comments = _.map(dto.Comments, function(comment) {
-                    return { userName: comment.CommenterName, text: comment.Text, date: comment.Date };
+                var comments = _.map(dto.Comments, function (comment) {
+                    var c = new model.Comment();
+                    c.id(comment.Id);
+                    c.text(comment.Text);
+                    c.date(comment.Date);
+                    c.userName(comment.CommenterName);
+                    c.userId(comment.CommenterId);
+                    return c;
                 });
+                item.isReadonly(dto.scope != 1);
+                item.variable(dto.Variable);
                 item.comments(comments);
                 item.scope(dto.Scope);
                 item.isAnswered(dto.IsAnswered);
-                item.uiId(dto.Id + "_" + dto.PropagationVector);
+                item.uiId(uiId);
                 item.id(dto.Id);
                 item.title(dto.Title);
                 item.isFlagged(dto.IsFlagged);

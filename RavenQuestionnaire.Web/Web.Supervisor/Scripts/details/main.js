@@ -20,10 +20,13 @@
         'director': {
             exports: "Router",
             deps: ['jquery'],
-        }            
+        },
+        'moment' : {
+            exports : 'moment'
+        }
     }
 });
-requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid'],
+requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid','moment'],
 function ($, ko, amplify, _, viewmodel, input, datacontext) {
     ko.validation.configure({
         insertMessages: false,

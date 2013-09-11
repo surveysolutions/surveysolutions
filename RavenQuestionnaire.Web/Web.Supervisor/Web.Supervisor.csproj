@@ -524,6 +524,7 @@
     <Content Include="Scripts\lib\knockout.js" />
     <Content Include="Scripts\lib\knockout.validation.js" />
     <Content Include="Scripts\lib\lodash.js" />
+    <Content Include="Scripts\lib\moment.js" />
     <Content Include="Scripts\lib\require.js" />
     <Content Include="Scripts\assign\main.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />

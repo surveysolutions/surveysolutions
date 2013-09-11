@@ -18,10 +18,9 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
 {
-    public class InterviewDataRepositoryWriterWithCache: IReadSideRepositoryReader<InterviewData>, 
-        IReadSideRepositoryWriter<InterviewData>, 
+    public class InterviewDataRepositoryWriterWithCache : IReadSideRepositoryReader<InterviewData>,
+        IReadSideRepositoryWriter<InterviewData>,
         IReadSideRepositoryCleaner
-
     {
         private IReadSideRepositoryWriter<IntervieweWithSequence> interviewWriter;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
@@ -96,8 +95,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
         {
             var viewItem = interviewWriter.GetById(id);
 
-            long start = viewItem == null ? 0 : viewItem.Sequence;
-            
+            long start = viewItem == null ? 0 : viewItem.Sequence + 1;
+
             var events = eventStore.ReadFrom(id, start, long.MaxValue);
 
             if (viewItem == null && events.IsEmpty)
@@ -108,7 +107,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
             ClearCacheIfLimitExcided();
 
             var view = viewItem == null ? null : viewItem.Document;
-            var updatedView= RestoreFromEventStream(events, view);
+            var updatedView = RestoreFromEventStream(events, view);
 
             memcache.Add(id, new IntervieweWithSequence(updatedView, maxSequence));
         }
@@ -143,7 +142,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
                 using (var entityWriter = new TemporaryInterviewWriter(events.SourceId, updatedView, this.users, this.qestionnairePropagationStructure))
                 {
                     entityWriter.PublishEvents(events);
-                   
+
                     updatedView = entityWriter.GetById(events.SourceId);
 
                     PersistItem(updatedView, events.SourceId, events.Last().EventSequence);
@@ -161,14 +160,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide
                 });
         }
 
-      
+
         public void Clear()
         {
             this.memcache = new Dictionary<Guid, IntervieweWithSequence>();
         }
     }
 
-    public class IntervieweWithSequence:IView
+    public class IntervieweWithSequence : IView
     {
         public IntervieweWithSequence(InterviewData document, long sequence)
         {

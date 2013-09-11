@@ -3,7 +3,9 @@
 @using System.Web.Script.Serialization
 @using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Survey
+@using Mono.CSharp
 @using Newtonsoft.Json
+@using Questionnaire.Core.Web.Helpers
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @model Core.Supervisor.Views.Interview.InterviewDetailsView
 @{
@@ -35,6 +37,11 @@
         <span data-bind="text: status"></span></h3>
     <div class="menubar">
         <span data-bind="visible: isFilterOpen() == false"><a class="pseudo-link" data-bind="    click: toggleFilter">Show filter</a>&nbsp;&rarr;</span>
+        @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
+        {
+            <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
+                <i class="icon-ok-sign icon-white"></i>Change state</a>
+        }
         <div class="btn-group">
             <a href="#/all" class="btn" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
             <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': filter() == 'flaged' }"><i class="icon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i>flagged (<span data-bind="    text: flagedCount"></span>)</a>
@@ -60,10 +67,10 @@
                 <!-- ko foreach: groups -->
                 <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
                     <h2 data-bind="text: title" class="heading"></h2>
-                    <div class="horizontal-scroll questions">
+                    <div class="questions">
                         <table class="table table-bordered table-hover">
                             <tbody data-bind="foreach: questions">
-                                <tr data-bind="click: $root.showDetails, visible : isVisible,css: {error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
+                                <tr data-bind="visible : isVisible,css: {success: isSelected, error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
                                     <td style="width: 60%" class="question-text">
                                         <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                             <span class="icon-star"></span>
@@ -72,11 +79,30 @@
                                     </td>
                                     <td class="question-answer">
                                         <div class="cell-content" data-bind="visible: isEnabled">
-                                            <span data-bind="css: markerStyle()" class="question-marker"></span>
-                                            <span data-bind="template: { name: questionType() }"></span>
-                                            <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
-                                            <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
-                                            <div class="actions"></div>
+                                            <div class="question-clickable" data-bind="click: $root.showDetails">
+                                                <span data-bind="css: markerStyle()" class="question-marker"></span>
+                                                <span data-bind="template: { name: questionType() }"></span>
+                                                <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
+                                                <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
+                                            </div>
+                                            <div class="actions pull-right">
+                                                <div class="action-content">
+                                                    <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
+                                                        <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                                        <ul class="dropdown-menu pull-right">
+                                                            <li data-bind="visible: isReadonly == false"><a class="" href="#" data-bind="click: $root.showDetails">Answer</a></li>
+                                                            <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
+                                                            <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
+                                                        <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
+                                                    </a>
+                                                    <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
+                                                        <i class="icon-flag icon-white"></i></a>
+                                                    <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -90,17 +116,17 @@
         <div id="details" data-bind="with: currentQuestion">
             <button class="close" data-bind="click: $root.closeDetails">&times;</button>
             <h3 class="heading" data-bind="text: title"></h3>
-            <div data-bind="template: { name: questionType() }"></div>
+            <div data-bind="template: { name: questionType() + 'Full' }"></div>
             <h4 class="heading">Comments</h4>
-            <dl class="dl-horizontal" data-bind="foreach: comments">
+            <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
                 <dt data-bind="text: userName"></dt>
-                <dd >
+                <dd>
                     <span data-bind="text: text"></span>
-                    <span data-bind="text: date"></span>
+                    <span class="text-block comment-date " data-bind="text: moment(date()).fromNow()"></span>
                 </dd>
             </dl>
             <textarea data-bind="value: $root.currentComment" class="input-block-level"></textarea>
-            <button class="btn" type="button" data-bind="click: $root.addComment">Comment</button>
+            <button class="btn" type="button" data-bind="click: $root.addComment">Add comment</button>
         </div>
     </div>
 </div>
@@ -112,6 +138,41 @@
 }
 @section scripts
 {
+    <script type="text/html" id="SingleOptionFull">
+        <!-- ko foreach: options -->
+        <label class="radio" data-bind='attr: { "for": optionFor }'>
+            <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption().value, value: value, disable: $parent.isReadonly">
+            <span data-bind="text: label"></span>
+        </label>
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="MultyOptionFull">
+        <!-- ko foreach: selectedOptions -->
+        <label class="radio" data-bind='attr: { "for": optionFor }'>
+            <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value, disable: $parent.isReadonly">
+            <span data-bind="text: label"></span>
+        </label>
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="NumericFull">
+        <!-- ko text: answer -->
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="DateTimeFull">
+        <!-- ko text: answer -->
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="AutoPropagateFull">
+        <!-- ko text: answer -->
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="TextFull">
+        <!-- ko text: answer -->
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="GpsCoordinatesFull">
+    </script>
+
     <script type="text/html" id="SingleOption">
         <!-- ko with: selectedOption -->
         <span data-bind="text: label"></span>
@@ -147,18 +208,18 @@
     <script type="text/javascript">
         define('input', [], function() {
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.None,
-                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                        })) ,
-                u= @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.None,
-                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                        })) ;
+                    {
+                        TypeNameHandling = TypeNameHandling.None,
+                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                    })),
+                u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.None,
+                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                    }));
             return {
                 questionnaire: q,
-                user : u,
+                user: u,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
                 backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
             };

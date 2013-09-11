@@ -1,5 +1,5 @@
-define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'app/config'],
-    function (ko, datacontext, Router, input, config) {
+define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'app/config', 'app/model'],
+    function (ko, datacontext, Router, input, config, model) {
         var questionnaire = ko.observable(),
             groups = ko.observableArray(),
             questions = ko.observableArray(),
@@ -17,11 +17,13 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             closeDetails = function () {
                 $('#content').removeClass('details-visible');
             },
-            showDetails = function (question) {
+            showDetails = function (question, event) {
+                event.stopPropagation();
                 if (_.isNull(currentQuestion()) == false && _.isUndefined(currentQuestion()) == false) {
-
+                    currentQuestion().isSelected(false);
                 }
                 currentQuestion(question);
+                currentQuestion().isSelected(true);
                 $('#content').addClass('details-visible');
             },
             isSaving = ko.observable(false),
@@ -39,7 +41,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
 			}),
             commentedCount = ko.computed(function () {
                 return _.reduce(questions(), function (count, question) {
-                    return count + (question.comments.length > 0 ? 1 : 0);
+                    return count + (question.comments().length > 0 ? 1 : 0);
                 }, 0);
             }),
 
@@ -77,6 +79,12 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                     questionId: currentQuestion().uiId()
                 }, {
                     success: function (response) {
+                        var comment = new model.Comment();
+                        comment.text(currentComment());
+                        comment.date(new Date());
+                        comment.userName(datacontext.user.name());
+                        comment.userId(datacontext.user.id());
+                        currentQuestion().comments.push(comment);
                         currentComment('');
                         isSaving(false);
                     },
@@ -85,30 +93,47 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                     }
                 });
             },
-        init = function () {
-            questionnaire(datacontext.questionnaire);
-            groups(datacontext.groups.getAllLocal());
-            questions(datacontext.questions.getAllLocal());
-            Router({
-                '/group/:groupId': function (groupId) {
-                    applyQuestionFilter('all');
-                    var visibleGroupsIds = [groupId];
-                    _.each(groups(), function (group) {
-                        if (_.contains(visibleGroupsIds, group.uiId())) {
-                            group.isVisible(true);
-                        } else if (_.contains(visibleGroupsIds, group.parentId())) {
-                            visibleGroupsIds.push(group.uiId());
-                            group.isVisible(true);
-                        } else {
-                            group.isVisible(false);
-                        }
-                    });
-                },
-                '/:filter': function (f) {
-                    applyQuestionFilter(f);
-                }
-            }).init();
-        };
+            flagAnswer = function (question) {
+                isSaving(true);
+                var commandName = question.isFlagged()
+                    ? config.commands.removeFlagFromAnswer
+                    : config.commands.setFlagToAnswer;
+                
+                datacontext.sendCommand(commandName, { questionId: question.uiId() },
+                {
+                    success: function (response) {
+                        question.isFlagged(!question.isFlagged());
+                        isSaving(false);
+                    },
+                    error: function (response) {
+                        isSaving(false);
+                    }
+                });
+            },
+            init = function () {
+                questionnaire(datacontext.questionnaire);
+                groups(datacontext.groups.getAllLocal());
+                questions(datacontext.questions.getAllLocal());
+                Router({
+                    '/group/:groupId': function (groupId) {
+                        applyQuestionFilter('all');
+                        var visibleGroupsIds = [groupId];
+                        _.each(groups(), function (group) {
+                            if (_.contains(visibleGroupsIds, group.uiId())) {
+                                group.isVisible(true);
+                            } else if (_.contains(visibleGroupsIds, group.parentId())) {
+                                visibleGroupsIds.push(group.uiId());
+                                group.isVisible(true);
+                            } else {
+                                group.isVisible(false);
+                            }
+                        });
+                    },
+                    '/:filter': function (f) {
+                        applyQuestionFilter(f);
+                    }
+                }).init();
+            };
 
         return {
             filter: filter,
@@ -128,6 +153,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             showDetails: showDetails,
             currentQuestion: currentQuestion,
             currentComment: currentComment,
-            addComment: addComment
+            addComment: addComment,
+            flagAnswer: flagAnswer
         };
     });

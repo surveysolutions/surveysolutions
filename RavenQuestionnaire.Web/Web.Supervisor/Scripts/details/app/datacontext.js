@@ -85,18 +85,22 @@ define('app/datacontext',
         var commands = {};
 
         commands[config.commands.setFlagToAnswer] = function (args) {
+            var question = questions.getLocalById(args.questionId);
             return {
-                questionId: args.questionId,
-                interviewId: args.interviewId,
-                userId: args.userId
+                questionId: question.id(),
+                propagationVector: question.propagationVector(),
+                interviewId: questionnaire.id(),
+                userId: user.id(),
             };
         };
 
         commands[config.commands.removeFlagFromAnswer] = function (args) {
+            var question = questions.getLocalById(args.questionId);
             return {
-                questionId: args.questionId,
-                interviewId: args.interviewId,
-                userId: args.userId
+                questionId: question.id(),
+                propagationVector: question.propagationVector(),
+                interviewId: questionnaire.id(),
+                userId: user.id(),
             };
         };
 

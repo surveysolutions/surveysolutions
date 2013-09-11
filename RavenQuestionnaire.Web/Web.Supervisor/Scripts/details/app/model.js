@@ -4,8 +4,10 @@ function (ko) {
         var self = this;
         self.uiId = ko.observable();
         self.id = ko.observable();
+        self.variable = ko.observable();
         self.isCapital = ko.observable();
         self.comments = ko.observableArray();
+        self.isReadonly = ko.observable(true);
         self.isEnabled = ko.observable();
         self.isFeatured = ko.observable();
         self.isFlagged = ko.observable();
@@ -33,9 +35,9 @@ function (ko) {
             switch (filter) {
                 case "all": self.isVisible(true); break;
                 case "flaged": self.isVisible(self.isFlagged()); break;
-                case "commented": self.isVisible(self.comments.length > 0); break;
+                case "commented": self.isVisible(self.comments().length > 0); break;
                 case "answered": self.isVisible(self.isAnswered()); break;
-                case "invalid": self.isVisible(self.isValid()==false); break;
+                case "invalid": self.isVisible(self.isValid() == false); break;
                 case "supervisor": self.isVisible(self.scope() == 1); break;
                 case "enabled": self.isVisible(self.isEnabled()); break;
             }
@@ -84,7 +86,7 @@ function (ko) {
         },
         Group: function () {
             var self = this;
-            
+
             self.uiId = ko.observable();
             self.id = ko.observable();
             self.depth = ko.observable();
@@ -99,7 +101,7 @@ function (ko) {
             self.propagationVector = ko.observable();
             self.questions = ko.observableArray();
             self.isVisible = ko.observable(true);
-            self.visibleQuestionsCount = ko.computed(function() {
+            self.visibleQuestionsCount = ko.computed(function () {
                 return _.reduce(self.questions(), function (count, question) {
                     return count + (question.isVisible() ? 1 : 0);
                 }, 0);
@@ -119,6 +121,32 @@ function (ko) {
             var self = this;
             self.id = ko.observable();
             self.name = ko.observable();
+            return self;
+        },
+        Option: function (questionId) {
+            var self = this;
+            self.label = ko.observable();
+            self.value = ko.observable();
+            self.isSelected = ko.observable(false);
+            self.optionFor = ko.computed(function () {
+                return 'option-' + questionId + '-' + self.value();
+            });
+            return self;
+        },
+        Comment: function () {
+            var self = this;
+            self.id = ko.observable();
+            self.text = ko.observable();
+            self.date = ko.observable();
+            self.userName = ko.observable();
+            self.userId = ko.observable();
+
+            var update = function () {
+                self.date.valueHasMutated();
+            };
+
+            setInterval(update, 10000);
+
             return self;
         }
     };

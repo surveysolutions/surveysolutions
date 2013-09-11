@@ -20,8 +20,8 @@ namespace Web.Supervisor.Code.CommandDeserialization
                         { "AssignInterviewerCommand", typeof (AssignInterviewerCommand) },
                         { "AssignSupervisorCommand", typeof (AssignSupervisorCommand) },
                         // flags and comments
-                        { "SetFlagToAnswer", typeof (SetFlagToAnswerCommand) },
-                        { "RemoveFlagFromAnswer ", typeof (RemoveFlagFromAnswerCommand ) },
+                        { "SetFlagToAnswerCommand", typeof (SetFlagToAnswerCommand) },
+                        { "RemoveFlagFromAnswerCommand ", typeof (RemoveFlagFromAnswerCommand ) },
                         { "CommentAnswerCommand", typeof (CommentAnswerCommand ) },
                         // answer question
                         { "AnswerDateTimeQuestionCommand", typeof (AnswerDateTimeQuestionCommand ) },
