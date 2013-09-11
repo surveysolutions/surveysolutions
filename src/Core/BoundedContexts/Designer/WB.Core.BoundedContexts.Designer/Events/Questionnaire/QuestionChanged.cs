@@ -100,6 +100,8 @@
         /// </summary>
         public int MaxValue { get; set; }
 
+        public Guid? LinkedToQuestionId { get; set; }
+
         #endregion
     }
 }
