@@ -34,12 +34,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>
     {
-        private readonly IReadSideRepositoryReader<UserDocument> users;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
         private readonly IReadSideRepositoryWriter<InterviewData> interviews;
 
-        public InterviewDenormalizer(IReadSideRepositoryReader<UserDocument> users, 
-                                     IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures, 
+        public InterviewDenormalizer(IReadSideRepositoryWriter<UserDocument> users, 
+                                     IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures, 
                                      IReadSideRepositoryWriter<InterviewData> interviews)
         {
             this.users = users;
