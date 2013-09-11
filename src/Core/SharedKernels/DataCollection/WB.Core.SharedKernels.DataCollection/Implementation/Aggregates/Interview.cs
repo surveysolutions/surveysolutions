@@ -1195,7 +1195,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer)
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer, null, true)
                 ?? ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered;
         }
 
