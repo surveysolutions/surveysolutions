@@ -166,6 +166,8 @@
         /// </summary>
         public string ValidationMessage { get; set; }
 
+        public Guid? LinkedToQuestionId { get; set; }
+
         #endregion
 
         /*/// <summary>
