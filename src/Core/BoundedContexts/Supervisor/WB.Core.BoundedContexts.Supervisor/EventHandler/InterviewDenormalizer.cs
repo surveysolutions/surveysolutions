@@ -32,7 +32,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<QuestionDisabled>,
         IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
-        IEventHandler<AnswerDeclaredValid>
+        IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<FlagRemovedFromAnswer>,
+        IEventHandler<FlagSetToAnswer>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
@@ -93,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
         public Type[] BuildsViews
         {
-            get { return new [] { typeof(InterviewData) }; }
+            get { return new[] { typeof(InterviewData) }; }
         }
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt)
@@ -138,6 +140,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             SaveComment(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                         evnt.Payload.Comment, evnt.Payload.UserId, commenter.UserName, evnt.Payload.CommentTime);
 
+        }
+
+        public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt)
+        {
+            SetFlagStateForQuestion(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false);
+        }
+
+        public void Handle(IPublishedEvent<FlagSetToAnswer> evnt)
+        {
+            SetFlagStateForQuestion(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true);
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
@@ -242,12 +254,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 });
         }
 
+        private void SetFlagStateForQuestion(Guid interviewId, int[] vector, Guid questionId, bool isFlagged)
+        {
+            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+            {
+                if (question.IsFlagged == isFlagged)
+                    return false;
+                question.IsFlagged = isFlagged;
+                return true;
+            });
+        }
+
         private void SaveComment(Guid interviewId, int[] vector, Guid questionId, string comment, Guid userId, string userName, DateTime commentTime)
         {
             var interviewQuestionComment = new InterviewQuestionComment()
                 {
-                    Id = Guid.NewGuid(), 
-                    Text = comment, 
+                    Id = Guid.NewGuid(),
+                    Text = comment,
                     CommenterId = userId,
                     CommenterName = userName,
                     Date = commentTime
@@ -255,8 +278,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
                 {
-                    if(question.Comments==null)
-                        question.Comments=new List<InterviewQuestionComment>();
+                    if (question.Comments == null)
+                        question.Comments = new List<InterviewQuestionComment>();
                     question.Comments.Add(interviewQuestionComment);
                     return true;
                 });
@@ -288,7 +311,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = this.interviews.GetById(interviewId);
             var levelId = CreateLevelIdFromPropagationVector(vector);
-            if(action(interview.Levels[levelId]))
+            if (action(interview.Levels[levelId]))
             {
                 this.interviews.Store(interview, interview.InterviewId);
             }
@@ -347,7 +370,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
-            var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId,interview.QuestionnaireVersion);
+            var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
             foreach (var scopeId in questionnarie.PropagationScopes.Keys)
             {
                 foreach (var trigger in questionnarie.PropagationScopes[scopeId])
@@ -391,5 +414,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             this.interviews.Store(interview, interview.InterviewId);
         }
+
     }
 }
