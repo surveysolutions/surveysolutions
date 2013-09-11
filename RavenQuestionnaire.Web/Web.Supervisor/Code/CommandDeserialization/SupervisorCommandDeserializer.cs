@@ -21,7 +21,7 @@ namespace Web.Supervisor.Code.CommandDeserialization
                         { "AssignSupervisorCommand", typeof (AssignSupervisorCommand) },
                         // flags and comments
                         { "SetFlagToAnswerCommand", typeof (SetFlagToAnswerCommand) },
-                        { "RemoveFlagFromAnswerCommand ", typeof (RemoveFlagFromAnswerCommand ) },
+                        { "RemoveFlagFromAnswerCommand", typeof (RemoveFlagFromAnswerCommand ) },
                         { "CommentAnswerCommand", typeof (CommentAnswerCommand ) },
                         // answer question
                         { "AnswerDateTimeQuestionCommand", typeof (AnswerDateTimeQuestionCommand ) },
