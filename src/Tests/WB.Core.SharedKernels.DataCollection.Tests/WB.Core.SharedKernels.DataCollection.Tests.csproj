@@ -64,6 +64,8 @@
     <Compile Include="InterviewItemIdTests.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs" />
     <Compile Include="InterviewTests\when_answering_propagating_question_with_2_and_previous_answer_was_4_and_there_were_answers_given_to_propagated_questions_with_indexes_1___.cs" />
+    <Compile Include="InterviewTests\when_condition_expression_execution_throw_exception_for_questions_in_disabled_state_and_for_group_in_disabled_state.cs" />
+    <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_questions_in_invalid_state.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="InterviewTests\when_creating_interview.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_does_not_exist.cs" />

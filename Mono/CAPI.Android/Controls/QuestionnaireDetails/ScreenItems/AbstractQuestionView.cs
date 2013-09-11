@@ -147,6 +147,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected virtual void SaveAnswerErrorHandler(Exception ex)
         {
+            if (!Model.Status.HasFlag(QuestionStatus.Enabled))
+                return;
             tvError.Visibility = ViewStates.Visible;
             tvError.Text = GetDippestException(ex).Message;
         }
