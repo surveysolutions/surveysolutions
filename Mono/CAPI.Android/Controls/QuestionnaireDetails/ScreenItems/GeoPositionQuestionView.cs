@@ -129,7 +129,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }));
         }
 
-        private TableLayout CreateTable(GeoPosition position)
+        /*private TableLayout CreateTable(GeoPosition position)
         {
             var table = new TableLayout(this.Context);
 
@@ -172,7 +172,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             th.AddView(columnName);
             th.AddView(columnValue);
             table.AddView(th);
-        }
+        }*/
 
         private string RenderPositionAsText(GeoPosition position)
         {
