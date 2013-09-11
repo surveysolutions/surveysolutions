@@ -33,6 +33,7 @@
             this.Title = view.Title;
             this.ValidationExpression = view.ValidationExpression;
             this.ValidationMessage = view.ValidationMessage;
+            this.LinkedToQuestionId = view.LinkedToQuestionId;
         }
 
         #endregion
@@ -114,6 +115,7 @@
         /// </summary>
         public string Comments { get; set; }
 
+        public Guid? LinkedToQuestionId { get; set; }
         #endregion
     }
 }

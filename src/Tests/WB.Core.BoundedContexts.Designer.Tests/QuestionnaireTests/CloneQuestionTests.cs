@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.CloneQuestion(newQuestionId, groupId, notEmptyTitle, QuestionType.Text, "test_clone", false, false,
                                                 false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                                 string.Empty,
-                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId: responsibleId);
+                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () =>
                                questionnaire.CloneQuestion(newQuestionId, groupId, emptyTitle, QuestionType.Text, "test", false, false,
                                                                false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId);
+                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId, null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test_clone", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId);
+                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId, null);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.CloneQuestion(newQuestionId, groupId,"test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId);
+                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId, null);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
                 Assert.AreEqual(notEmptyAnswerOptionTitle1, risedEvent.Answers[0].AnswerText);
@@ -151,10 +151,110 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act = () => questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, Guid.NewGuid());
+                                            string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, Guid.NewGuid(), null);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_does_not_exist_in_autopropagated_group_questions_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestoinId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId);
+
+            // act
+            TestDelegate act = () =>
+                               questionnaire.CloneQuestion(newQuestionId, groupId, "title", questionType, "test", false, false,
+                                                               false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                               string.Empty, new[] { new Option(Guid.NewGuid(), "1", "title"), }, Order.AZ,
+                                                               null, new Guid[0], questionId, 1, responsibleId, Guid.NewGuid());
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedToQuestionDoesNotExist));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope_(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+                Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+                Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+                Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+                Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
+
+                Questionnaire questionnaire =
+                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                        autoGroupPublicKey: autoGroupId,
+                        secondGroup: groupId,
+                        autoQuestoinId: autoQuestionId,
+                        questionId: questionId,
+                        responsibleId: responsibleId);
+
+
+                // act
+                questionnaire.CloneQuestion(newQuestionId, groupId, "title", questionType, "test", false, false,
+                                                               false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                               string.Empty, new[] { new Option(Guid.NewGuid(), "1", "title"), }, Order.AZ,
+                                                               null, new Guid[0], questionId, 1, responsibleId, questionId);
+                // assert
+                var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
+                Assert.AreEqual(questionId, risedEvent.LinkedToQuestionId);
+            }
+        }
+
+        [Test]
+        public void CloneQuestion_When_not_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope_()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+                Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+                Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+                Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+                Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
+
+                Questionnaire questionnaire =
+                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                        autoGroupPublicKey: autoGroupId,
+                        secondGroup: groupId,
+                        autoQuestoinId: autoQuestionId,
+                        questionId: questionId,
+                        responsibleId: responsibleId);
+
+
+                // act
+                questionnaire.CloneQuestion(newQuestionId, groupId, "title", QuestionType.Text, "test", false, false,
+                                                               false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                               string.Empty, new Option[0], Order.AZ,
+                                                               null, new Guid[0], questionId, 1, responsibleId, questionId);
+                // assert
+                var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
+                Assert.AreEqual(questionId, risedEvent.LinkedToQuestionId);
+            }
         }
 
 //        [Test]

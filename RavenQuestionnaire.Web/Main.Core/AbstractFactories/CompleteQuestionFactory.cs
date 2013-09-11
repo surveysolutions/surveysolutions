@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
@@ -62,7 +63,8 @@
                 question.Capital,
                 question.Instructions,
                 null,
-                maxValue);
+                maxValue,
+                question.LinkedToQuestionId);
             ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 
@@ -98,67 +100,39 @@
 
             return completeQuestion;
         }
-
-        public AbstractQuestion CreateQuestion(Guid publicKey, QuestionType questionType,
-            QuestionScope questionScope, string questionText, string stataExportCaption,
-            string conditionExpression, string validationExpression, string validationMessage,
-            Order answerOrder, bool featured, bool mandatory, bool capital, string instructions,
-            List<Guid> triggers, int maxValue, Answer[] answers)
+        
+        public AbstractQuestion CreateQuestion(DataQuestion data)
         {
-            AbstractQuestion q = CreateQuestion(questionType);
-
-            q.PublicKey = publicKey;
+            AbstractQuestion q = CreateQuestion(data.questionType, data.publicKey);
 
             UpdateQuestion(
                 q,
-                questionType,
-                questionScope,
-                questionText,
-                stataExportCaption,
-                conditionExpression,
-                validationExpression,
-                validationMessage,
-                answerOrder,
-                featured,
-                mandatory,
-                capital,
-                instructions,
-                triggers,
-                maxValue);
+                data.questionType,
+                data.questionScope,
+                data.questionText,
+                data.stataExportCaption,
+                data.conditionExpression,
+                data.validationExpression,
+                data.validationMessage,
+                data.answerOrder,
+                data.featured,
+                data.mandatory,
+                data.capital,
+                data.instructions,
+                data.triggers,
+                data.maxValue,
+                data.linkedToQuestionId);
 
-            UpdateAnswerList(answers, q);
+            UpdateAnswerList(data.answers, q, data.linkedToQuestionId);
 
             return q;
         }
 
-        public IQuestion CreateQuestionFromExistingUsingSpecifiedData(IQuestion question, QuestionType questionType,
-            QuestionScope questionScope, string questionText, string stataExportCaption,
-            string conditionExpression, string validationExpression, string validationMessage,
-            Order answerOrder, bool featured, bool mandatory, bool capital, string instructions,
-            List<Guid> triggers, int maxValue, Answer[] answers)
+        private static AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
         {
             AbstractQuestion q = CreateQuestion(questionType);
 
-            q.PublicKey = question.PublicKey;
-
-            UpdateQuestion(
-                q,
-                questionType,
-                questionScope,
-                questionText,
-                stataExportCaption,
-                conditionExpression,
-                validationExpression,
-                validationMessage,
-                answerOrder,
-                featured,
-                mandatory,
-                capital,
-                instructions,
-                triggers,
-                maxValue);
-
-            UpdateAnswerList(answers, q);
+            q.PublicKey = publicKey;
 
             return q;
         }
@@ -195,14 +169,14 @@
             }
         }
 
-        private static void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
+        private static void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question, Guid? linkedToQuestionId)
         {
             if (question.Answers != null)
             {
                 question.Answers.Clear();
             }
 
-            if (answers != null && answers.Any())
+            if (!linkedToQuestionId.HasValue && answers != null && answers.Any())
             {
                 foreach (var answer in answers)
                 {
@@ -226,7 +200,8 @@
             bool capital,
             string instructions,
             IEnumerable<Guid> triggers,
-            int maxValue)
+            int maxValue,
+            Guid? linkedToQuestionId)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -240,6 +215,7 @@
             question.Mandatory = mandatory;
             question.Instructions = instructions;
             question.Capital = capital;
+            question.LinkedToQuestionId = linkedToQuestionId;
 
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null)

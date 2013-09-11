@@ -76,6 +76,8 @@ namespace Main.Core.View.Question
             {
                 this.Triggers = autoQuestion.Triggers;
             }
+
+            this.LinkedToQuestionId = doc.LinkedToQuestionId;
         }
 
         #endregion
@@ -205,6 +207,7 @@ namespace Main.Core.View.Question
         /// </summary>
         public bool IsPropagated { get; set; }
 
+        public Guid? LinkedToQuestionId { get; set; }
         #endregion
 
     }

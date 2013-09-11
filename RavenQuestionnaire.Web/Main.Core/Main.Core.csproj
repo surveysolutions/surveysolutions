@@ -140,6 +140,7 @@
     <Compile Include="AbstractFactories\CompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\CompleteQuestionFactory.cs" />
+    <Compile Include="Entities\DataQuestion.cs" />
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
