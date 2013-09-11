@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId)
+            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
             : base(questionnaireId, questionId, responsibleId)
         {
             this.Title = title;
@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.OptionsOrder = optionsOrder;
             this.MaxValue = maxValue;
             this.TriggedGroupIds = triggedGroupIds;
+            this.LinkedToQuestionId = linkedToQuestionId;
         }
 
         public string Title { get; private set; }
@@ -57,5 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public int? MaxValue { get; private set; }
 
         public Guid[] TriggedGroupIds { get; private set; }
+
+        public Guid? LinkedToQuestionId { get; private set; }
     }
 }
