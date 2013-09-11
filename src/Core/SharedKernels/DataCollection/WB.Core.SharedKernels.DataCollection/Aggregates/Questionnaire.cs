@@ -36,6 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -51,6 +53,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         }
 
         private Dictionary<Guid, IQuestion> QuestionCache
@@ -450,6 +454,22 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.cacheOfUnderlyingQuestions[groupId];
         }
 
+        public IEnumerable<Guid> GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions.ContainsKey(groupId))
+                this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions[groupId] = this.GetUnderlyingGroupsWithNotEmptyCustomEnablementConditionsImpl(groupId);
+
+            return this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions[groupId];
+        }
+
+        public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions.ContainsKey(groupId))
+                this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions[groupId] = this.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditionsImpl(groupId);
+
+            return this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions[groupId];
+        }
+
 
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
@@ -516,10 +536,27 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
         {
-            IGroup @group = this.GetGroupOrThrow(groupId);
-
-            return @group
+            return this
+                .GetGroupOrThrow(groupId)
                 .Find<IQuestion>(_ => true)
+                .Select(question => question.PublicKey)
+                .ToList();
+        }
+
+        private IEnumerable<Guid> GetUnderlyingGroupsWithNotEmptyCustomEnablementConditionsImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Find<IGroup>(group => IsExpressionDefined(group.ConditionExpression))
+                .Select(group => group.PublicKey)
+                .ToList();
+        }
+
+        private IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditionsImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Find<IQuestion>(question => IsExpressionDefined(question.ConditionExpression))
                 .Select(question => question.PublicKey)
                 .ToList();
         }
