@@ -76,5 +76,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsGroupPropagatable(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
+
+        IEnumerable<Guid> GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
+
+        IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId);
     }
 }

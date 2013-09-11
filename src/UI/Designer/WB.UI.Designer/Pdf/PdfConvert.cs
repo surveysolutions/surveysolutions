@@ -69,7 +69,7 @@ namespace WB.UI.Designer.Pdf
 
             if (!string.IsNullOrEmpty(document.PageNumbersFormat))
             {
-                paramsBuilder.AppendFormat("--header-right \"{0}\" ", document.PageNumbersFormat);
+                paramsBuilder.AppendFormat("--footer-right \"{0}\" ", document.PageNumbersFormat);
             }
 
             if (!string.IsNullOrEmpty(document.CoverUrl))
