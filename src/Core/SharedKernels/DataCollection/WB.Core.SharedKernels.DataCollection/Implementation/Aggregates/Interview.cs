@@ -1064,7 +1064,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(validationExpression, involvedQuestions, getAnswer, question.Id);
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(validationExpression, involvedQuestions, getAnswer, question.Id);
         }
 
 
@@ -1080,10 +1080,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Identity dependentGroup in dependentGroups)
             {
-                bool? enablementState = this.DetermineCustomEnablementStateOfGroup(dependentGroup, questionnaire, getAnswer);
-
-                bool shouldGroupBeDisabled = enablementState == false;
-                bool shouldGroupBeEnabled = enablementState == true;
+                bool shouldGroupBeEnabled = this.ShouldGroupBeEnabledByCustomEnablementCondition(dependentGroup, questionnaire, getAnswer);
+                bool shouldGroupBeDisabled = !shouldGroupBeEnabled;
 
                 if (shouldGroupBeDisabled && !this.IsGroupDisabled(dependentGroup))
                 {
@@ -1109,10 +1107,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Identity dependentQuestion in dependentQuestions)
             {
-                bool? enablementState = this.DetermineCustomEnablementStateOfQuestion(dependentQuestion, questionnaire, getAnswer);
-
-                bool shouldQuestionBeDisabled = enablementState == false;
-                bool shouldQuestionBeEnabled = enablementState == true;
+                bool shouldQuestionBeEnabled = this.ShouldQuestionBeEnabledByCustomEnablementCondition(dependentQuestion, questionnaire, getAnswer);
+                bool shouldQuestionBeDisabled = !shouldQuestionBeEnabled;
 
                 if (shouldQuestionBeDisabled && !this.IsQuestionDisabled(dependentQuestion))
                 {
@@ -1126,24 +1122,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private bool? DetermineCustomEnablementStateOfGroup(Identity group, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        private bool ShouldGroupBeEnabledByCustomEnablementCondition(Identity group, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(@group.Id);
-            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, @group.PropagationVector, questionnaire);
-
-            string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(group.Id);
-
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
+            return this.ShouldBeEnabledByCustomEnablementCondition(
+                questionnaire.GetCustomEnablementConditionForGroup(group.Id),
+                group.PropagationVector,
+                questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(group.Id),
+                questionnaire,
+                getAnswer);
         }
 
-        private bool? DetermineCustomEnablementStateOfQuestion(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        private bool ShouldQuestionBeEnabledByCustomEnablementCondition(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id);
-            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
+            return this.ShouldBeEnabledByCustomEnablementCondition(
+                questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
+                question.PropagationVector,
+                questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id),
+                questionnaire,
+                getAnswer);
+        }
 
-            string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(question.Id);
+        private bool ShouldBeEnabledByCustomEnablementCondition(string enablementCondition, int[] propagationVector, IEnumerable<Guid> involvedQuestionIds, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        {
+            const bool ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered = false;
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
+            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
+
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer)
+                ?? ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered;
         }
 
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
@@ -1300,7 +1306,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private bool? EvaluateBooleanExpressionIfEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
+        private bool? EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
             Func<Identity, object> getAnswer, Guid? thisIdentifierQuestionId = null)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
