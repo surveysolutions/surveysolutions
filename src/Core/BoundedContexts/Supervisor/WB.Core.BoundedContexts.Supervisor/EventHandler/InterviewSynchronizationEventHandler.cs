@@ -23,6 +23,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
     public class InterviewSynchronizationEventHandler : IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewStatusChanged>,
         IEventHandler<AnswerCommented>,
+        IEventHandler<FlagRemovedFromAnswer>,
+        IEventHandler<FlagSetToAnswer>,
         /*,
                                                         IEventHandler<InterviewRejected>,
                                                         IEventHandler<InterviewCompleted>,
@@ -225,6 +227,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<AnswerCommented> evnt)
         {
 
+        }
+
+        public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<FlagSetToAnswer> evnt)
+        {
         }
     }
 }
