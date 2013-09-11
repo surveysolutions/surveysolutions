@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                          groupId.Value, "Title", questionType, "text1", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "",
                                          options, Order.AsIs, null,
-                                         new Guid[] { }, responsibleId);
+                                         new Guid[] { }, responsibleId, null);
 
             return questionnaire;
             
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                          groupId.Value, "Title", questionType, "text", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", 
                                          new Option[0], Order.AsIs, null,
-                                         new Guid[] { }, responsibleId: responsibleId);
+                                         new Guid[] { }, responsibleId: responsibleId, linkedToQuestionId: null);
 
             return questionnaire;
         }
@@ -113,11 +113,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Title", QuestionType.Text, "text", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0], responsibleId: responsibleId);
+                                         new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null);
 
             questionnaire.NewAddQuestion(secondQuestionId, groupId, "Title", QuestionType.Text, "name", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0], responsibleId:responsibleId);
+                                         new Guid[0], responsibleId:responsibleId, linkedToQuestionId: null);
 
             return questionnaire;
         }
@@ -149,9 +149,24 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0], responsibleId);
+                                         new Guid[0], responsibleId, null);
             return questionnaire;
         }
+
+        public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestoinId, Guid questionId, Guid responsibleId)
+        {
+            Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey, secondGroup, responsibleId);
+
+            questionnaire.NewAddQuestion(autoQuestoinId, autoGroupPublicKey, "Title", QuestionType.Text, "auto", false, false,
+                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
+                                         new Guid[0], responsibleId, null);
+
+            questionnaire.NewAddQuestion(questionId, secondGroup, "Title", QuestionType.MultyOption, "manual", false, false,
+                                        false, QuestionScope.Interviewer, "", "", "", "", new [] { new Option(Guid.NewGuid(), "1", "title") }, Order.AsIs, 0,
+                                        new Guid[0], responsibleId, null);
+            return questionnaire;
+        }
+
 
         public static Questionnaire CreateQuestionnaireWithTwoRegularGroupsAndQuestionInLast(Guid firstGroup, Guid autoQuestoinId, Guid responsibleId)
         {
@@ -161,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false,
                 false,
                 false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                new Guid[0], responsibleId: responsibleId);
+                new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null);
             return questionnaire;
         }
 
