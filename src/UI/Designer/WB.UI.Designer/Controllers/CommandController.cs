@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Controllers
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
-                    throw e;
+                    throw;
                 }
                 else
                 {
