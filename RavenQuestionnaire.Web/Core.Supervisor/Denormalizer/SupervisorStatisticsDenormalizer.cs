@@ -30,7 +30,8 @@ namespace Core.Supervisor.Denormalizer
                                                     IEventHandler<QuestionnaireStatusChanged>, 
                                                     IEventHandler<QuestionnaireAssignmentChanged>,
                                                     IEventHandler<InterviewDeleted>,
-        IEventHandler<SynchronizationMetadataApplied>
+                                                    //IEventHandler<InterviewRestored>,
+                                                    IEventHandler<SynchronizationMetadataApplied>
     {
         private readonly IReadSideRepositoryWriter<SupervisorStatisticsItem> statistics;
         /// <summary>
@@ -220,14 +221,14 @@ namespace Core.Supervisor.Denormalizer
         }
 
         /// <summary>
-        /// Removes CQ guid from previous statistics item
+        /// Removes CQ Guid from previous statistics item
         /// </summary>
-        /// <param name="completedQuestionnaireId">
+        /// <param name="interviewId">
         /// The completed questionnaire id.
         /// </param>
-        private void RemoveOldStatistics(Guid completedQuestionnaireId)
+        private void RemoveOldStatistics(Guid interviewId)
         {
-            var oldKey = this.keysHash.GetById(completedQuestionnaireId);
+            var oldKey = this.keysHash.GetById(interviewId);
 
             if (oldKey == null)
             {
@@ -242,7 +243,7 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            old.Surveys.Remove(completedQuestionnaireId);
+            old.Surveys.Remove(interviewId);
             this.statistics.Store(old, oldKey.StorageKey);
         }
         #endregion
@@ -251,5 +252,10 @@ namespace Core.Supervisor.Denormalizer
         {
          //   HandleStatusChange(evnt.EventSourceId, evnt.Payload.StatusId);
         }
+
+        /*public void Handle(IPublishedEvent<InterviewRestored> evnt)
+        {
+            throw new NotImplementedException();
+        }*/
     }
 }

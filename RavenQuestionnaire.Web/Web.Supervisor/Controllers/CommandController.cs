@@ -6,6 +6,7 @@ using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.Code;
@@ -41,7 +42,8 @@ namespace Web.Supervisor.Controllers
                 try
                 {
                     concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                    transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand, this.globalInfo);
+                    transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand,
+                                                                                             this.globalInfo);
                 }
                 catch (CommandDeserializationException e)
                 {
@@ -55,8 +57,12 @@ namespace Web.Supervisor.Controllers
                 }
                 catch (Exception e)
                 {
-                    var domainEx = e.As<DomainException>();
-                    if (domainEx == null)
+                    string error;
+                    if (IsExceptionRaisedByAggregateRoot(e, out error))
+                    {
+                        errors.Add(error);
+                    }
+                    else
                     {
                         this.logger.Error("Unexpected error occurred", e);
                         errors.Add(
@@ -64,14 +70,14 @@ namespace Web.Supervisor.Controllers
                                 "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",
                                 AppSettings.Instance.AdminEmail));
                     }
-                    else
-                    {
-                        errors.Add(domainEx.Message);
-                    }
+
                     failedCommands.Add(concreteCommand);
                 }
             }
-            return this.Json(errors.Count == 0 ? (object) new {status = "ok"} : new {status = "error", errors, failedCommands});
+            return
+                this.Json(errors.Count == 0
+                              ? (object) new {status = "ok"}
+                              : new {status = "error", errors, failedCommands});
         }
 
         [HttpPost]
@@ -81,13 +87,13 @@ namespace Web.Supervisor.Controllers
             try
             {
                 ICommand concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand, this.globalInfo);
+                ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(type, concreteCommand,
+                                                                                                  this.globalInfo);
                 this.commandService.Execute(transformedCommand);
             }
             catch (Exception e)
             {
-                var domainEx = e.As<DomainException>();
-                if (domainEx == null)
+                if (!IsExceptionRaisedByAggregateRoot(e, out error))
                 {
                     this.logger.Error("Unexpected error occurred", e);
                     error =
@@ -95,13 +101,33 @@ namespace Web.Supervisor.Controllers
                             "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",
                             AppSettings.Instance.AdminEmail);
                 }
-                else
-                {
-                    error = domainEx.Message;
-                }
             }
 
             return this.Json(string.IsNullOrEmpty(error) ? (object) new {} : new {error});
+        }
+
+        private bool IsExceptionRaisedByAggregateRoot(Exception exception, out string domainMessage)
+        {
+            var interviewException = exception.As<InterviewException>();
+            if (interviewException == null)
+            {
+                var domainException = exception.As<DomainException>();
+                if (domainException == null)
+                {
+                    domainMessage = string.Empty;
+                    return false;
+                }
+                else
+                {
+                    domainMessage = domainException.Message;
+                    return true;
+                }
+            }
+            else
+            {
+                domainMessage = interviewException.Message;
+                return true;
+            }
         }
     }
 }
