@@ -233,6 +233,22 @@ namespace CapiDataGenerator
             }
         }
 
+        private bool _onlyForSupervisor = false;
+        public bool OnlyForSupervisor
+        {
+            get
+            {
+                return _onlyForSupervisor;
+            }
+            set
+            {
+                _onlyForSupervisor = value;
+                RaisePropertyChanged(() => OnlyForSupervisor);
+            }
+        }
+
+        
+
         private UserListItem _selectedSupervisor = null;
         public UserListItem SelectedSupervisor
         {
@@ -363,6 +379,8 @@ namespace CapiDataGenerator
                         StatusesCount = scount.ToString();
                     }
 
+                    var onlyForSupervisor = this.OnlyForSupervisor;
+
                     var questions = ((CompleteQuestionnaireDocument) template).GetQuestions().Where(x => !x.Featured);
                     var questionsCount = questions.Count();
 
@@ -376,10 +394,10 @@ namespace CapiDataGenerator
                     {
                         AppSettings.Instance.IsSupervisorEvents = true;
                         var users = CreateUsers(icount);
-                        var questionnaries = this.CreateInterviews(template, qcount, users);
+                        var questionnaries = this.CreateInterviews(template, qcount, users, onlyForSupervisor);
                         CreateAnswers(acount, questionnaries, questions);
                         CreateComments(ccount, questionnaries, questions);
-                        ChangeStatuses(scount, questionnaries);
+                        ChangeStatuses(scount, questionnaries, onlyForSupervisor);
 
                         Log("create backup");
                         string backupPath = backupService.Backup();
@@ -399,12 +417,17 @@ namespace CapiDataGenerator
             });
         }
 
-        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews)
+        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews, bool onlyForSupervisor)
         {
             for (int z = 0; z < statusesCount; z++)
             {
                 var interview = interviews.ElementAt(z);
                 commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value));
+
+                if (onlyForSupervisor)
+                {
+                    commandService.Execute(new ApproveInterviewCommand(interview.Key, interview.Value, "auto approve comment"));
+                }
 
                 UpdateProgress();
                 LogStatus("set complete status", z, statusesCount);
@@ -454,7 +477,7 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users)
+        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
         {
             Log("import template");
             commandService.Execute(new ImportQuestionnaireCommand(_headquarterUser.Id, template));
@@ -485,7 +508,7 @@ namespace CapiDataGenerator
                     UpdateProgress();
                 }
             }
-            AppSettings.Instance.IsSupervisorEvents = false;
+            AppSettings.Instance.IsSupervisorEvents = onlyForSupervisor;
             for (int i = 0; i < interviews.Count; i++)
             {
                 LogStatus("synchronize interview", i, interviews.Count);
