@@ -1133,7 +1133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(group.Id);
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
+            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer,null, true);
         }
 
         private bool? DetermineCustomEnablementStateOfQuestion(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
@@ -1143,7 +1143,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(question.Id);
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer);
+            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer, null, true);
         }
 
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
@@ -1301,7 +1301,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private bool? EvaluateBooleanExpressionIfEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
-            Func<Identity, object> getAnswer, Guid? thisIdentifierQuestionId = null)
+            Func<Identity, object> getAnswer, Guid? thisIdentifierQuestionId = null, bool? resultInCaseOfExceptionDuringEvaluation = false)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
                 involvedQuestion => involvedQuestion.Id,
@@ -1314,11 +1314,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isSpecialThisIdentifierSupportedByExpression = thisIdentifierQuestionId.HasValue;
 
             var mapIdentifierToQuestionId = isSpecialThisIdentifierSupportedByExpression
-                ? (Func<string, Guid>) (identifier => GetQuestionIdByExpressionIdentifierIncludingThis(identifier, thisIdentifierQuestionId.Value))
-                : (Func<string, Guid>) (identifier => GetQuestionIdByExpressionIdentifierExcludingThis(identifier));
+                ? (Func<string, Guid>)(identifier => GetQuestionIdByExpressionIdentifierIncludingThis(identifier, thisIdentifierQuestionId.Value))
+                : (Func<string, Guid>)(identifier => GetQuestionIdByExpressionIdentifierExcludingThis(identifier));
 
-            return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
-                getValueForIdentifier: idetifier => involvedAnswers[mapIdentifierToQuestionId(idetifier)]);
+            try
+            {
+                return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
+                    getValueForIdentifier: idetifier => involvedAnswers[mapIdentifierToQuestionId(idetifier)]);
+            }
+            catch (Exception)
+            {
+                return resultInCaseOfExceptionDuringEvaluation;
+            }
         }
 
         private static Guid GetQuestionIdByExpressionIdentifierIncludingThis(string identifier, Guid contextQuestionId)
