@@ -459,11 +459,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
                 answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
+            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled;
+            this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedPropagation(
+                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
+            this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedPropagation(
+                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
+
+            List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, out dependentGroupsToBeDisabled, out dependentGroupsToBeEnabled);
             this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, out dependentQuestionsToBeDisabled, out dependentQuestionsToBeEnabled);
 
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -475,10 +481,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
-            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
-            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
-            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+            initializedGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            initializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+
+            dependentGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            dependentGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+            dependentQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            dependentQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
@@ -1064,7 +1075,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(validationExpression, involvedQuestions, getAnswer, question.Id);
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(validationExpression, involvedQuestions, getAnswer, question.Id);
         }
 
 
@@ -1080,20 +1091,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Identity dependentGroup in dependentGroups)
             {
-                bool? enablementState = this.DetermineCustomEnablementStateOfGroup(dependentGroup, questionnaire, getAnswer);
-
-                bool shouldGroupBeDisabled = enablementState == false;
-                bool shouldGroupBeEnabled = enablementState == true;
-
-                if (shouldGroupBeDisabled && !this.IsGroupDisabled(dependentGroup))
-                {
-                    groupsToBeDisabled.Add(dependentGroup);
-                }
-
-                if (shouldGroupBeEnabled && this.IsGroupDisabled(dependentGroup))
-                {
-                    groupsToBeEnabled.Add(dependentGroup);
-                }
+                PutToCorrespondingListAccordingToEnablementStateChange(dependentGroup, groupsToBeEnabled, groupsToBeDisabled,
+                    isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(dependentGroup, questionnaire, getAnswer),
+                    isOldStateEnabled: !this.IsGroupDisabled(dependentGroup));
             }
         }
 
@@ -1109,41 +1109,108 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Identity dependentQuestion in dependentQuestions)
             {
-                bool? enablementState = this.DetermineCustomEnablementStateOfQuestion(dependentQuestion, questionnaire, getAnswer);
+                PutToCorrespondingListAccordingToEnablementStateChange(dependentQuestion, questionsToBeEnabled, questionsToBeDisabled,
+                    isNewStateEnabled: this.ShouldQuestionBeEnabledByCustomEnablementCondition(dependentQuestion, questionnaire, getAnswer),
+                    isOldStateEnabled: !this.IsQuestionDisabled(dependentQuestion));
+            }
+        }
 
-                bool shouldQuestionBeDisabled = enablementState == false;
-                bool shouldQuestionBeEnabled = enablementState == true;
+        private void DetermineCustomEnablementStateOfGroupsInitializedByIncreasedPropagation(
+            IEnumerable<Guid> idsOfGroupsBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
+        {
+            groupsToBeDisabled = new List<Identity>();
+            groupsToBeEnabled = new List<Identity>();
 
-                if (shouldQuestionBeDisabled && !this.IsQuestionDisabled(dependentQuestion))
+            foreach (Guid idOfGroupBeingPropagated in idsOfGroupsBeingPropagated)
+            {
+                bool isPropagationCountBeingIncreased = propagationCount > this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+                if (!isPropagationCountBeingIncreased)
+                    continue;
+
+                IEnumerable<Guid> underlyingGroupIds = questionnaire.GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
+
+                IEnumerable<Identity> underlyingGroups
+                    = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(underlyingGroupIds, outerScopePropagationVector, questionnaire);
+
+                foreach (Identity group in underlyingGroups)
                 {
-                    questionsToBeDisabled.Add(dependentQuestion);
-                }
-
-                if (shouldQuestionBeEnabled && this.IsQuestionDisabled(dependentQuestion))
-                {
-                    questionsToBeEnabled.Add(dependentQuestion);
+                    PutToCorrespondingListAccordingToEnablementStateChange(group, groupsToBeEnabled, groupsToBeDisabled,
+                        isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(group, questionnaire, getAnswer),
+                        isOldStateEnabled: !this.IsGroupDisabled(group));
                 }
             }
         }
 
-        private bool? DetermineCustomEnablementStateOfGroup(Identity group, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        private void DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedPropagation(
+            IEnumerable<Guid> idsOfGroupsBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(@group.Id);
-            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, @group.PropagationVector, questionnaire);
+            questionsToBeDisabled = new List<Identity>();
+            questionsToBeEnabled = new List<Identity>();
 
-            string enablementCondition = questionnaire.GetCustomEnablementConditionForGroup(group.Id);
+            foreach (Guid idOfGroupBeingPropagated in idsOfGroupsBeingPropagated)
+            {
+                bool isPropagationCountBeingIncreased = propagationCount > this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+                if (!isPropagationCountBeingIncreased)
+                    continue;
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer,null, true);
+                IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
+
+                IEnumerable<Identity> underlyingQuestions
+                    = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(underlyingQuestionIds, outerScopePropagationVector, questionnaire);
+
+                foreach (Identity question in underlyingQuestions)
+                {
+                    PutToCorrespondingListAccordingToEnablementStateChange(question, questionsToBeEnabled, questionsToBeDisabled,
+                        isNewStateEnabled: this.ShouldQuestionBeEnabledByCustomEnablementCondition(question, questionnaire, getAnswer),
+                        isOldStateEnabled: !this.IsQuestionDisabled(question));
+                }
+            }
         }
 
-        private bool? DetermineCustomEnablementStateOfQuestion(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        private bool ShouldGroupBeEnabledByCustomEnablementCondition(Identity group, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
         {
-            IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id);
-            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
+            return this.ShouldBeEnabledByCustomEnablementCondition(
+                questionnaire.GetCustomEnablementConditionForGroup(group.Id),
+                group.PropagationVector,
+                questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(group.Id),
+                questionnaire,
+                getAnswer);
+        }
 
-            string enablementCondition = questionnaire.GetCustomEnablementConditionForQuestion(question.Id);
+        private bool ShouldQuestionBeEnabledByCustomEnablementCondition(Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        {
+            return this.ShouldBeEnabledByCustomEnablementCondition(
+                questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
+                question.PropagationVector,
+                questionnaire.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.Id),
+                questionnaire,
+                getAnswer);
+        }
 
-            return this.EvaluateBooleanExpressionIfEnoughAnswers(enablementCondition, involvedQuestions, getAnswer, null, true);
+        private bool ShouldBeEnabledByCustomEnablementCondition(string enablementCondition, int[] propagationVector, IEnumerable<Guid> involvedQuestionIds, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        {
+            const bool ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered = false;
+
+            IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
+
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer)
+                ?? ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered;
+        }
+
+        private static void PutToCorrespondingListAccordingToEnablementStateChange(
+            Identity entity, List<Identity> entitiesToBeEnabled, List<Identity> entitiesToBeDisabled, bool isNewStateEnabled, bool isOldStateEnabled)
+        {
+            if (isNewStateEnabled && !isOldStateEnabled)
+            {
+                entitiesToBeEnabled.Add(entity);
+            }
+
+            if (!isNewStateEnabled && isOldStateEnabled)
+            {
+                entitiesToBeDisabled.Add(entity);
+            }
         }
 
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
@@ -1300,7 +1367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private bool? EvaluateBooleanExpressionIfEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
+        private bool? EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
             Func<Identity, object> getAnswer, Guid? thisIdentifierQuestionId = null, bool? resultInCaseOfExceptionDuringEvaluation = false)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
