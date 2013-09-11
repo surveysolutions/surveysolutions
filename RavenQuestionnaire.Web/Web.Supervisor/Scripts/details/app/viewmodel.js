@@ -3,6 +3,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
         var questionnaire = ko.observable(),
             groups = ko.observableArray(),
             questions = ko.observableArray(),
+             errors = ko.observableArray(),
             isFilterOpen = ko.observable(true),
             currentQuestion = ko.observable(),
             currentComment = ko.observable(''),
@@ -89,6 +90,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                         isSaving(false);
                     },
                     error: function (response) {
+                        showErrors(response);
                         isSaving(false);
                     }
                 });
@@ -98,7 +100,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                 var commandName = question.isFlagged()
                     ? config.commands.removeFlagFromAnswer
                     : config.commands.setFlagToAnswer;
-                
+
                 datacontext.sendCommand(commandName, { questionId: question.uiId() },
                 {
                     success: function (response) {
@@ -106,34 +108,45 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                         isSaving(false);
                     },
                     error: function (response) {
+                        showErrors(response);
                         isSaving(false);
                     }
                 });
             },
-            init = function () {
-                questionnaire(datacontext.questionnaire);
-                groups(datacontext.groups.getAllLocal());
-                questions(datacontext.questions.getAllLocal());
-                Router({
-                    '/group/:groupId': function (groupId) {
-                        applyQuestionFilter('all');
-                        var visibleGroupsIds = [groupId];
-                        _.each(groups(), function (group) {
-                            if (_.contains(visibleGroupsIds, group.uiId())) {
-                                group.isVisible(true);
-                            } else if (_.contains(visibleGroupsIds, group.parentId())) {
-                                visibleGroupsIds.push(group.uiId());
-                                group.isVisible(true);
-                            } else {
-                                group.isVisible(false);
-                            }
-                        });
-                    },
-                    '/:filter': function (f) {
-                        applyQuestionFilter(f);
-                    }
-                }).init();
-            };
+            showErrors = function (response) {
+                errors.removeAll();
+                errors.push({
+                    error: response.error
+                });
+                $('body').addClass('output-visible');
+            },
+         hideOutput = function () {
+             $('body').removeClass('output-visible');
+         },
+        init = function () {
+            questionnaire(datacontext.questionnaire);
+            groups(datacontext.groups.getAllLocal());
+            questions(datacontext.questions.getAllLocal());
+            Router({
+                '/group/:groupId': function (groupId) {
+                    applyQuestionFilter('all');
+                    var visibleGroupsIds = [groupId];
+                    _.each(groups(), function (group) {
+                        if (_.contains(visibleGroupsIds, group.uiId())) {
+                            group.isVisible(true);
+                        } else if (_.contains(visibleGroupsIds, group.parentId())) {
+                            visibleGroupsIds.push(group.uiId());
+                            group.isVisible(true);
+                        } else {
+                            group.isVisible(false);
+                        }
+                    });
+                },
+                '/:filter': function (f) {
+                    applyQuestionFilter(f);
+                }
+            }).init();
+        };
 
         return {
             filter: filter,
@@ -154,6 +167,8 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             currentQuestion: currentQuestion,
             currentComment: currentComment,
             addComment: addComment,
-            flagAnswer: flagAnswer
+            flagAnswer: flagAnswer,
+            hideOutput: hideOutput,
+            errors: errors
         };
     });

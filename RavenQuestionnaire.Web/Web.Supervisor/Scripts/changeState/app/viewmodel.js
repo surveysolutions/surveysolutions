@@ -1,5 +1,6 @@
 ﻿define('app/viewmodel', ['amplify', 'input', 'knockout'], function (amplify, input, ko) {
     var host = input.url,
+        errors = ko.observableArray(),
         init = function() {
 
             amplify.request.define('sendCommand', 'ajax', {
@@ -23,8 +24,16 @@
                 }
             });
         },
-        showErrors = function() {
+        showErrors = function (response) {
+            errors.removeAll();
+            errors.push({
+                error: response.error
+            });
+            $('body').addClass('output-visible');
         },
+         hideOutput = function () {
+             $('body').removeClass('output-visible');
+         },
         sendCommand = function(callbacks, command) {
             return amplify.request({
                 resourceId: 'sendCommand',
@@ -35,17 +44,17 @@
         },
         savingMessage = ko.observable('Loading, please wait'),
         isSaving = ko.observable(false),
-        approveComment = ko.observable('approve'),
-        rejectComment = ko.observable('reject'),
-        approve = function () {
+        approveComment = ko.observable(''),
+        rejectComment = ko.observable(''),
+        approve = function() {
             savingMessage('Approving this interview, please wait');
-            changeState("ApproveInterviewCommand", approveComment().trim());
+            changeState("ApproveInterviewCommand", approveComment().trim(), "approved");
         },
-        reject = function () {
+        reject = function() {
             savingMessage('Rejecting this interview, please wait');
-            changeState("RejectInterviewCommand", rejectComment().trim());
+            changeState("RejectInterviewCommand", rejectComment().trim(), 'rejected');
         },
-        changeState = function (commandName,comment) {
+        changeState = function(commandName, comment, status) {
             var command = {
                 type: commandName,
                 command: ko.toJSON({
@@ -56,10 +65,13 @@
             };
             isSaving(true);
             sendCommand({
-                success: function (response) {
+                success: function(response) {
+                    var backUrl = input.backUrl;
+                    backUrl = backUrl.replace("_______", status);
+                    window.location = backUrl;
                     isSaving(false);
                 },
-                error: function (response) {
+                error: function(response) {
                     showErrors(response);
                     isSaving(false);
                 }
@@ -73,6 +85,8 @@
         reject: reject,
         isSaving: isSaving,
         savingMessage : savingMessage,
-        init: init
+        init: init,
+        hideOutput: hideOutput,
+        errors: errors
     };
 });

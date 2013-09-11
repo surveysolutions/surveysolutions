@@ -130,7 +130,21 @@
         </div>
     </div>
 </div>
-
+<div id="output">
+    <div class="inner">
+        <div class="title">
+            <button type="button" class="close" data-bind="click: hideOutput">&times</button>
+            <span>Errors log</span>
+        </div>
+        <div class="body">
+            <ul data-bind="foreach: errors" class="error-list">
+                <li class="error">
+                    <span data-bind="html: error"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 @section styles
 {
     @Styles.Render("~/css/list")

@@ -74,6 +74,21 @@
         </table>
     </div>
 </div>
+<div id="output">
+    <div class="inner">
+        <div class="title">
+            <button type="button" class="close" data-bind="click: hideOutput">&times</button>
+            <span>Errors log</span>
+        </div>
+        <div class="body">
+            <ul data-bind="foreach: errors" class="error-list">
+                <li class="error">
+                    <span data-bind="html: error"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 @section scripts
 {
     <script data-main="../../Scripts/changeState/main.js" src="~/Scripts/lib/require.js"></script>
@@ -85,7 +100,7 @@
                 interviewId: '@Model.InterviewId',
                 currentUser: currentUser,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
+                backUrl: '@Url.Action("Interviews", "Survey", new { status = "_______" }, Request.Url.Scheme)',
             };
         });
     </script>

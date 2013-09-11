@@ -43,8 +43,12 @@ namespace Web.Supervisor.Controllers
             return this.View(usersAndQuestionnaires.Users);
         }
 
-        public ActionResult Interviews()
+        public ActionResult Interviews(string status)
         {
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                this.Success(string.Format(@"Status was successfully changed. Interview is {0}", status));
+            }
             this.ViewBag.ActivePage = MenuItem.Docs;
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
             this.ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
