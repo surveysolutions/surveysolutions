@@ -54,12 +54,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
 
-            this.answersSupportedInExpressions = @event.InterviewData
-                .Answers
-                .Where(question => !(question.Answer is GeoPosition))
-                .ToDictionary(
-                    question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
-                    question => question.Answer);
+            this.answersSupportedInExpressions = @event.InterviewData.Answers == null
+                ? new Dictionary<string, object>()
+                : @event.InterviewData
+                    .Answers
+                    .Where(question => !(question.Answer is GeoPosition))
+                    .ToDictionary(
+                        question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                        question => question.Answer);
 
             this.answeredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector)));
@@ -1068,7 +1070,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(validationExpression, involvedQuestions, getAnswer, question.Id);
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(validationExpression, involvedQuestions, getAnswer, resultInCaseOfExceptionDuringEvaluation: false, thisIdentifierQuestionId: question.Id);
         }
 
 
@@ -1121,12 +1123,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
-                IEnumerable<Guid> underlyingGroupIds = questionnaire.GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
+                IEnumerable<Guid> affectedGroupIds = questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                IEnumerable<Identity> underlyingGroups
-                    = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(underlyingGroupIds, outerScopePropagationVector, questionnaire);
+                IEnumerable<Identity> affectedGroups
+                    = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(affectedGroupIds, outerScopePropagationVector, questionnaire);
 
-                foreach (Identity group in underlyingGroups)
+                foreach (Identity group in affectedGroups)
                 {
                     PutToCorrespondingListAccordingToEnablementStateChange(group, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(group, questionnaire, getAnswer),
@@ -1188,7 +1190,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer, null, true)
+            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer, resultInCaseOfExceptionDuringEvaluation: true)
                 ?? ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered;
         }
 
@@ -1361,7 +1363,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private bool? EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
-            Func<Identity, object> getAnswer, Guid? thisIdentifierQuestionId = null, bool? resultInCaseOfExceptionDuringEvaluation = false)
+            Func<Identity, object> getAnswer, bool? resultInCaseOfExceptionDuringEvaluation, Guid? thisIdentifierQuestionId = null)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
                 involvedQuestion => involvedQuestion.Id,
