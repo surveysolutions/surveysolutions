@@ -317,6 +317,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
 
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+
             var group = this.innerDocument.Find<IGroup>(groupId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
@@ -371,6 +373,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
+
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
             var group = this.innerDocument.Find<IGroup>(groupId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -452,6 +456,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
             
             IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -1120,6 +1126,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
             }
+        }
+
+        private void ThrowDomainExceptionIfQuestionCanNotBeFeatured(QuestionType questionType, bool isFeatured)
+        {
+            if (isFeatured && questionType == QuestionType.GpsCoordinates)
+                throw new DomainException(
+                    DomainExceptionType.QuestionCanNotBeFeatured, 
+                    "Question can't be featured");
         }
     }
 }

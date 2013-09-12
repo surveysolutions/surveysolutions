@@ -52,6 +52,7 @@ h4.heading {
         background: #eee;
         width: 120px;
         vertical-align: middle;
+         border-left: 1px solid #DDDDDD;
     }
 
     .cell-content .actions .action-content {

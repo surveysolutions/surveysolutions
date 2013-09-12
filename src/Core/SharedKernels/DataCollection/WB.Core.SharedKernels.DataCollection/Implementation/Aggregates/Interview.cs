@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Guid questionnaireId;
         private long questionnaireVersion;
+        private bool interviewWasCompleted;
         private InterviewStatus status;
         private Dictionary<string, object> answersSupportedInExpressions = new Dictionary<string, object>();
         private HashSet<string> answeredQuestions = new HashSet<string>();
@@ -53,12 +54,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
 
-            this.answersSupportedInExpressions = @event.InterviewData
-                .Answers
-                .Where(question => !(question.Answer is GeoPosition))
-                .ToDictionary(
-                    question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
-                    question => question.Answer);
+            this.answersSupportedInExpressions = @event.InterviewData.Answers == null
+                ? new Dictionary<string, object>()
+                : @event.InterviewData
+                    .Answers
+                    .Where(question => !(question.Answer is GeoPosition))
+                    .ToDictionary(
+                        question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                        question => question.Answer);
 
             this.answeredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector)));
@@ -204,7 +207,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewRestored @event) {}
 
-        private void Apply(InterviewCompleted @event) {}
+        private void Apply(InterviewCompleted @event)
+        {
+            interviewWasCompleted = true;
+        }
 
         private void Apply(InterviewRestarted @event) {}
 
@@ -671,11 +677,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+            if (!interviewWasCompleted)
+            {
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+            }
         }
 
         public void Delete(Guid userId)
         {
+            this.ThrowIfInterviewWasCompleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restored);
 
@@ -731,7 +741,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
-
         private IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
             IQuestionnaire questionnaire = this.QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
@@ -750,6 +759,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Questionnaire with id '{0}' is not found.", id));
 
             return questionnaire;
+        }
+
+        private void ThrowIfInterviewWasCompleted()
+        {
+            if (interviewWasCompleted)
+                throw new InterviewException(string.Format("Interview was completed by interviewer and cannot be deleted"));
         }
 
         private static void ThrowIfQuestionDoesNotExist(Guid questionId, IQuestionnaire questionnaire)

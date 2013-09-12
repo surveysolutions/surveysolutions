@@ -48,8 +48,11 @@ function (ko) {
         GpsQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.lat = ko.observable();
-            self.lon = ko.observable();
+            self.latitude = ko.observable();
+            self.longitude = ko.observable();
+            self.accuracy = ko.observable();
+            self.altitude = ko.observable();
+            self.timestamp = ko.observable();
             return self;
         },
         TextQuestion: function () {
