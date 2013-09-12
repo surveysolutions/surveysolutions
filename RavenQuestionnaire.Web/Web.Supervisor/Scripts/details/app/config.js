@@ -1,30 +1,33 @@
 ﻿define('app/config', ['knockout', 'knockout.validation'],
     function(ko) {
         var commands = {
-            
             answerDateTimeQuestionCommand: "AnswerDateTimeQuestionCommand",
             answerMultipleOptionsQuestionCommand: "AnswerMultipleOptionsQuestionCommand",
             answerNumericQuestionCommand: "AnswerNumericQuestionCommand",
             answerSingleOptionQuestionCommand: "AnswerSingleOptionQuestionCommand",
             answerTextQuestionCommand: "AnswerTextQuestionCommand",
-            answerGeoLocationQuestionCommand:"AnswerGeoLocationQuestionCommand",
-            
+            answerGeoLocationQuestionCommand: "AnswerGeoLocationQuestionCommand",
+
             setCommentCommand: "CommentAnswerCommand",
             setAnswerCommand: "SetAnswerCommand",
             setFlagToAnswer: "SetFlagToAnswerCommand",
             removeFlagFromAnswer: "RemoveFlagFromAnswerCommand"
         },
-            questionTypeMap = {
-                0: "SingleOption",
-                3: "MultyOption",
-                4: "Numeric",
-                5: "DateTime",
-                6: "GpsCoordinates",
-                7: "Text",
-                8: "AutoPropagate",
+            statusMap = {
+                Created: "Created",
+                SupervisorAssigned: "Supervisor assigned",
+                Deleted: "Deleted",
+                Restored: "Restored",
+                InterviewerAssigned: "Interviewer assigned",
+                ReadyForInterview: "Ready for interview",
+                SentToCapi: "Sent to capi",
+                Completed: "Completed",
+                Restarted: "Restarted",
+                ApprovedBySupervisor: "Approved by supervisor",
+                RejectedBySupervisor: "Rejected by supervisor",
             };
         return {
             commands: commands,
-            questionTypeMap: questionTypeMap
+            statusMap: statusMap
         };
     });

@@ -7,11 +7,10 @@
 @using Newtonsoft.Json
 @using Questionnaire.Core.Web.Helpers
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using Web.Supervisor.Code
 @model Core.Supervisor.Views.Interview.InterviewDetailsView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    var serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
 }
 
 
@@ -22,6 +21,8 @@
         </div>
         <ul>
             <li class="heading"><span>FILTER</span></li>
+        </ul>
+        <ul id="groups-menu">
             <!-- ko foreach: groups -->
             <li data-bind="css: css">
                 <a data-bind="text: title, attr: {href : href}"></a>
@@ -231,7 +232,11 @@
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.None,
-                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                        Converters = new List<JsonConverter>()
+                        {
+                            new EnumToStringConverter()
+                        }
                     })),
                 u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
                     {

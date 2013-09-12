@@ -294,6 +294,7 @@
     <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
     <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
     <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
+    <Compile Include="Code\EnumToStringConverter.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
