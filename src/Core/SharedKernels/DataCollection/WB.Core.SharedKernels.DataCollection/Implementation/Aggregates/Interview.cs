@@ -421,9 +421,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -458,6 +458,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Guid> idsOfGroupsToBePropagated = questionnaire.GetGroupsPropagatedByQuestion(questionId).ToList();
             int propagationCount = idsOfGroupsToBePropagated.Any() ? ToPropagationCount(answer) : 0;
 
+            Func<Guid, int[], bool> isGroupBeingPropagated = (groupId, groupOuterScopePropagationVector)
+                => idsOfGroupsToBePropagated.Contains(groupId)
+                && Enumerable.SequenceEqual(groupOuterScopePropagationVector, propagationVector);
+
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances = (groupId, groupOuterPropagationVector)
+                => isGroupBeingPropagated(groupId, groupOuterPropagationVector)
+                    ? propagationCount
+                    : this.GetCountOfPropagatableGroupInstances(groupId, groupOuterPropagationVector);
+
             List<Identity> answersToRemove = this.GetAnswersToRemoveIfPropagationCountIsBeingDecreased(
                 idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire);
 
@@ -467,15 +476,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedPropagation(
-                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
+                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
+                out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
             this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedPropagation(
-                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
+                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
+                out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, out dependentGroupsToBeDisabled, out dependentGroupsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
+                out dependentGroupsToBeDisabled, out dependentGroupsToBeEnabled);
             this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, questionnaire, getAnswer, out dependentQuestionsToBeDisabled, out dependentQuestionsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
+                out dependentQuestionsToBeDisabled, out dependentQuestionsToBeEnabled);
 
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -517,9 +530,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -553,9 +566,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValue));
@@ -589,9 +602,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
-                answeredQuestion, questionnaire, getAnswer, out groupsToBeDisabled, out groupsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out groupsToBeDisabled, out groupsToBeEnabled);
             this.DetermineCustomEnablementStateOfDependentQuestions(
-                answeredQuestion, questionnaire, getAnswer, out questionsToBeDisabled, out questionsToBeEnabled);
+                answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValues));
@@ -1019,7 +1032,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> dependentQuestionsDeclaredValid;
             List<Identity> dependentQuestionsDeclaredInvalid;
-            this.PerformCustomValidationOfDependentQuestions(answeredQuestion, questionnaire, getAnswer,
+            this.PerformCustomValidationOfDependentQuestions(answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances,
                 out dependentQuestionsDeclaredValid, out dependentQuestionsDeclaredInvalid);
 
             questionsToBeDeclaredValid.AddRange(dependentQuestionsDeclaredValid);
@@ -1039,15 +1052,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionsToBeDeclaredInvalid.Where(question => !this.IsQuestionAnsweredInvalid(question)).ToList();
         }
 
-        private void PerformCustomValidationOfDependentQuestions(
-            Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+        private void PerformCustomValidationOfDependentQuestions(Identity question, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, int[], int> getCountOfPropagatableGroupInstances,
             out List<Identity> questionsDeclaredValid, out List<Identity> questionsDeclaredInvalid)
         {
             questionsDeclaredValid = new List<Identity>();
             questionsDeclaredInvalid = new List<Identity>();
 
             IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(question.Id);
-            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(dependentQuestionIds, question.PropagationVector, questionnaire);
+            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                dependentQuestionIds, question.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
             foreach (Identity dependentQuestion in dependentQuestions)
             {
@@ -1074,15 +1088,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private void DetermineCustomEnablementStateOfDependentGroups(
-            Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+        private void DetermineCustomEnablementStateOfDependentGroups(Identity question, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, int[], int> getCountOfPropagatableGroupInstances,
             out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
         {
             groupsToBeDisabled = new List<Identity>();
             groupsToBeEnabled = new List<Identity>();
 
             IEnumerable<Guid> dependentGroupIds = questionnaire.GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(question.Id);
-            IEnumerable<Identity> dependentGroups = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(dependentGroupIds, question.PropagationVector, questionnaire);
+            IEnumerable<Identity> dependentGroups = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
+                dependentGroupIds, question.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
             foreach (Identity dependentGroup in dependentGroups)
             {
@@ -1092,15 +1107,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void DetermineCustomEnablementStateOfDependentQuestions(
-            Identity question, IQuestionnaire questionnaire, Func<Identity, object> getAnswer,
+        private void DetermineCustomEnablementStateOfDependentQuestions(Identity question, IQuestionnaire questionnaire,
+            Func<Identity, object> getAnswer, Func<Guid, int[], int> getCountOfPropagatableGroupInstances,
             out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
             questionsToBeDisabled = new List<Identity>();
             questionsToBeEnabled = new List<Identity>();
 
             IEnumerable<Guid> dependentQuestionIds = questionnaire.GetQuestionsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(question.Id);
-            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(dependentQuestionIds, question.PropagationVector, questionnaire);
+            IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                dependentQuestionIds, question.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
             foreach (Identity dependentQuestion in dependentQuestions)
             {
@@ -1112,7 +1128,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void DetermineCustomEnablementStateOfGroupsInitializedByIncreasedPropagation(
             IEnumerable<Guid> idsOfGroupsBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
+            Func<Identity, object> getAnswer, Func<Guid, int[], int> getCountOfPropagatableGroupInstances,
+            out List<Identity> groupsToBeDisabled, out List<Identity> groupsToBeEnabled)
         {
             groupsToBeDisabled = new List<Identity>();
             groupsToBeEnabled = new List<Identity>();
@@ -1125,8 +1142,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 IEnumerable<Guid> affectedGroupIds = questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                IEnumerable<Identity> affectedGroups
-                    = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(affectedGroupIds, outerScopePropagationVector, questionnaire);
+                IEnumerable<Identity> affectedGroups = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
+                    affectedGroupIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
                 foreach (Identity group in affectedGroups)
                 {
@@ -1139,7 +1156,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedPropagation(
             IEnumerable<Guid> idsOfGroupsBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire,
-            Func<Identity, object> getAnswer, out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
+            Func<Identity, object> getAnswer, Func<Guid, int[], int> getCountOfPropagatableGroupInstances,
+            out List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeEnabled)
         {
             questionsToBeDisabled = new List<Identity>();
             questionsToBeEnabled = new List<Identity>();
@@ -1152,8 +1170,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                IEnumerable<Identity> underlyingQuestions
-                    = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(underlyingQuestionIds, outerScopePropagationVector, questionnaire);
+                IEnumerable<Identity> underlyingQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                    underlyingQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
                 foreach (Identity question in underlyingQuestions)
                 {
@@ -1229,7 +1247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
-            IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare)
+            IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare, Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             int vectorPropagationLevel = propagationVector.Length;
 
@@ -1243,7 +1261,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
 
                 Guid[] parentPropagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
-                IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop);
+                IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(
+                    propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
 
                 foreach (int[] questionPropagationVector in questionPropagationVectors)
                 {
@@ -1273,7 +1292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
-            IEnumerable<Guid> groupIds, int[] propagationVector, IQuestionnaire questionnare)
+            IEnumerable<Guid> groupIds, int[] propagationVector, IQuestionnaire questionnare, Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             int vectorPropagationLevel = propagationVector.Length;
 
@@ -1287,9 +1306,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatGroupForException(groupId, questionnare), vectorPropagationLevel, groupPropagationLevel));
 
                 Guid[] propagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupId).ToArray();
-                IEnumerable<int[]> groupPropagationVectors = this.ExtendPropagationVector(propagationVector,
-                                                                                          groupPropagationLevel,
-                                                                                          propagatableGroupsStartingFromTop);
+                IEnumerable<int[]> groupPropagationVectors = this.ExtendPropagationVector(
+                    propagationVector, groupPropagationLevel, propagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
 
                 foreach (int[] groupPropagationVector in groupPropagationVectors)
                 {
@@ -1342,8 +1360,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(idOfGroupBeingPropagated);
 
-            IEnumerable<Identity> underlyingQuestionInstances
-                = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(underlyingQuestionIds, outerScopePropagationVector, questionnaire);
+            IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                underlyingQuestionIds, outerScopePropagationVector, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
             return
                 from question in underlyingQuestionInstances
@@ -1435,7 +1453,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IEnumerable<Guid> mandatoryQuestionIds = questionnaire.GetAllMandatoryQuestions();
             IEnumerable<Identity> mandatoryQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
-                mandatoryQuestionIds, EmptyPropagationVector, questionnaire);
+                mandatoryQuestionIds, EmptyPropagationVector, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
             return mandatoryQuestions.Any(
                 question => !this.WasQuestionAnswered(question) && !this.IsQuestionOrParentGroupDisabled(question, questionnaire));
@@ -1500,8 +1518,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>
         /// If propagation vector should be extended, result will be a set of vectors depending on propagation count of correspondifg groups.
         /// </remarks>
-        private IEnumerable<int[]> ExtendPropagationVector(int[] propagationVector, int length,
-                                                           Guid[] propagatableGroupsStartingFromTop)
+        private IEnumerable<int[]> ExtendPropagationVector(int[] propagationVector, int length, Guid[] propagatableGroupsStartingFromTop,
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             if (length < propagationVector.Length)
                 throw new ArgumentException(string.Format(
@@ -1516,7 +1534,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (length == propagationVector.Length + 1)
             {
                 int countOfInstances =
-                    this.GetCountOfPropagatableGroupInstances(propagatableGroupsStartingFromTop.Last(), propagationVector);
+                    getCountOfPropagatableGroupInstances(propagatableGroupsStartingFromTop.Last(), propagationVector);
 
                 for (int instanceIndex = 0; instanceIndex < countOfInstances; instanceIndex++)
                 {
