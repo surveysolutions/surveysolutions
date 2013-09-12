@@ -49,6 +49,11 @@
                         break;
                     case 6:
                         item = new model.GpsQuestion();
+                        item.latitude(dto.Answer.Latitude);
+                        item.longitude(dto.Answer.Longitude);
+                        item.accuracy(dto.Answer.Accuracy);
+                        item.altitude(dto.Answer.Altitude);
+                        item.timestamp(dto.Answer.Timestamp);
                         break;
                 }
                 var comments = _.map(dto.Comments, function (comment) {
