@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_validation_expression_execution_throw_exception_for_questions_in_valid_state : InterviewTestsContext
+    internal class when_validation_expression_execution_throw_exception_for_question_in_valid_state : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -26,18 +26,17 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             validatingQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-            var validationWithDivision = "1/[this] > 5 ";
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaire = Mock.Of<IQuestionnaire>(_
                                                         => _.HasQuestion(validatingQuestionId) == true
                                                         && _.GetQuestionType(validatingQuestionId) == QuestionType.Numeric
-                                                        && _.GetCustomValidationExpression(validatingQuestionId) == validationWithDivision
                                                         && _.GetQuestionsInvolvedInCustomValidation(validatingQuestionId) == new Guid[] { validatingQuestionId }
                                                         && _.IsCustomValidationDefined(validatingQuestionId)==true
                                                         );
+            var expressionProcessor = new Mock<IExpressionProcessor>();
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionaire);
+                                                                                                questionnaire);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
@@ -45,11 +44,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IExpressionProcessor>())
-                .Returns(new ExpressionProcessor());
+                .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.AnswerNumericQuestion(userId, validatingQuestionId, new int[] {}, DateTime.Now, (decimal)1/10);
+            //setup expression processor throw exception
+            expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>())).Throws(new Exception());
             
             eventContext = new EventContext();
         };
@@ -61,14 +61,14 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-         interview.AnswerNumericQuestion(userId, validatingQuestionId, new int[] { }, DateTime.Now, 0);
+            interview.AnswerNumericQuestion(userId, validatingQuestionId, new int[] { }, DateTime.Now, 0);
 
         It should_not_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_validatingQuestionId = () =>
-          eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
+            eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
               => @event.QuestionId == validatingQuestionId);
 
         It should_raise_AnswerDeclaredInvalid_event_with_QuestionId_equal_to_validatingQuestionId = () =>
-         eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
+            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
              => @event.QuestionId == validatingQuestionId);
 
         private static EventContext eventContext;

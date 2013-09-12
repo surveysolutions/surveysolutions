@@ -61,7 +61,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             breadcrumbs.SetPadding(0, 0, 0, 10);
             llTop.AddView(breadcrumbs);
 
-            llContent.Adapter = new ScreenContentAdapter(Model.Items, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
+            llContent.Adapter = new ScreenContentAdapter(Model, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
             //llContent.fil.SetFillViewport()
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
