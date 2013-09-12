@@ -1,6 +1,14 @@
 ﻿define('app/config', ['knockout', 'knockout.validation'],
     function(ko) {
         var commands = {
+            
+            answerDateTimeQuestionCommand: "AnswerDateTimeQuestionCommand",
+            answerMultipleOptionsQuestionCommand: "AnswerMultipleOptionsQuestionCommand",
+            answerNumericQuestionCommand: "AnswerNumericQuestionCommand",
+            answerSingleOptionQuestionCommand: "AnswerSingleOptionQuestionCommand",
+            answerTextQuestionCommand: "AnswerTextQuestionCommand",
+            answerGeoLocationQuestionCommand:"AnswerGeoLocationQuestionCommand",
+            
             setCommentCommand: "CommentAnswerCommand",
             setAnswerCommand: "SetAnswerCommand",
             setFlagToAnswer: "SetFlagToAnswerCommand",

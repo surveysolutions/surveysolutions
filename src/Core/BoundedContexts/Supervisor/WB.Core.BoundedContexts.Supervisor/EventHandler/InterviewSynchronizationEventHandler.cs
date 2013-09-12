@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerCommented>,
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
+        IEventHandler<GroupEnabled>,
         /*,
                                                         IEventHandler<InterviewRejected>,
                                                         IEventHandler<InterviewCompleted>,
@@ -234,6 +235,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         public void Handle(IPublishedEvent<FlagSetToAnswer> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<GroupEnabled> evnt)
         {
         }
     }

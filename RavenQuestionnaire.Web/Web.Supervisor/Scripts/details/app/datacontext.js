@@ -84,6 +84,65 @@ define('app/datacontext',
 
         var commands = {};
 
+        var prepareQuestionCommand = function(question) {
+            return {
+                questionId: question.id(),
+                propagationVector: question.propagationVector(),
+                interviewId: questionnaire.id(),
+                userId: user.id(),
+                answerTime: new Date()
+            };
+        };
+        
+        commands[config.commands.answerDateTimeQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.answer = question.answer();
+            return command;
+
+        };
+        
+        commands[config.commands.answerGeoLocationQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.answer = {};
+            command.answer.timestamp = question.answer.timestamp();
+            command.answer.latitude = question.answer.latitude();
+            command.answer.longitude = question.answer.longitude();
+            command.answer.accuracy = question.answer.accuracy();
+            return command;
+        };
+        
+        commands[config.commands.answerMultipleOptionsQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.selectedValues = _.map(question.selectedOptions(), function (selectedOption) {
+                return selectedOption.value();
+            });
+            return command;
+        };
+        
+        commands[config.commands.answerNumericQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.answer = question.answer();
+            return command;
+        };
+
+        commands[config.commands.answerSingleOptionQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.selectedValue = question.selectedOption().value();
+            return command;
+        };
+        
+        commands[config.commands.answerTextQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.answer = question.answer();
+            return command;
+        };
+
         commands[config.commands.setFlagToAnswer] = function (args) {
             var question = questions.getLocalById(args.questionId);
             return {

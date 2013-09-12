@@ -252,6 +252,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
                 {
                     question.Answer = answer;
+                    question.IsAnswered = true;
                     return true;
                 });
         }
@@ -331,7 +332,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                         answeredQuestion = new InterviewQuestion(questionId);
                         questionsAtTheLevel.Questions.Add(answeredQuestion);
                     }
-                    answeredQuestion.IsAnswered = true;
+                   
                     return action(answeredQuestion);
                 });
         }

@@ -90,7 +90,7 @@
                                                     <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
                                                         <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
                                                         <ul class="dropdown-menu pull-right">
-                                                            <li data-bind="visible: isReadonly == false"><a class="" href="#" data-bind="click: $root.showDetails">Answer</a></li>
+                                                            <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="click: $root.showDetails">Answer</a></li>
                                                             <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
                                                             <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
                                                         </ul>
@@ -169,20 +169,20 @@
         <!-- /ko -->
     </script>
     <script type="text/html" id="NumericFull">
-        <!-- ko text: answer -->
-        <!-- /ko -->
+        <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="DateTimeFull">
-        <!-- ko text: answer -->
+        <!-- ko text: moment(answer()).format('l') -->
         <!-- /ko -->
     </script>
     <script type="text/html" id="AutoPropagateFull">
-        <!-- ko text: answer -->
-        <!-- /ko -->
+        <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="TextFull">
-        <!-- ko text: answer -->
-        <!-- /ko -->
+        <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="GpsCoordinatesFull">
         <div>latitude: <span data-bind="text: latitude"></span></div>
@@ -206,7 +206,7 @@
         <!-- /ko -->
     </script>
     <script type="text/html" id="DateTime">
-        <!-- ko text: answer -->
+        <!-- ko text: moment(answer()).format('l') -->
         <!-- /ko -->
     </script>
     <script type="text/html" id="AutoPropagate">
