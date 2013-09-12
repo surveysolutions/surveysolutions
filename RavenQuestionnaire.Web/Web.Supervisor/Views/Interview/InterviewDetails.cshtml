@@ -161,8 +161,8 @@
         <!-- /ko -->
     </script>
     <script type="text/html" id="MultyOptionFull">
-        <!-- ko foreach: selectedOptions -->
-        <label class="radio" data-bind='attr: { "for": optionFor }'>
+        <!-- ko foreach: options -->
+        <label class="checkbox" data-bind='attr: { "for": optionFor }'>
             <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value, disable: $parent.isReadonly">
             <span data-bind="text: label"></span>
         </label>
