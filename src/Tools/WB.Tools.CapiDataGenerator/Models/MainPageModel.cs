@@ -31,6 +31,8 @@ using WB.UI.Shared.Web;
 
 namespace CapiDataGenerator
 {
+    using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+
     public class MainPageModel : MvxViewModel
     {
         private ICommandService commandService
@@ -65,10 +67,34 @@ namespace CapiDataGenerator
             }
         }
 
+        private IRavenReadSideRepositoryWriterRegistry writerRegistry
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IRavenReadSideRepositoryWriterRegistry>();
+            }
+        }
+
         readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
         private UserLight _headquarterUser;
+
+        private void EnableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.EnableCache();
+            }
+        }
+
+        private void DisableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.DisableCache();
+            }
+        }
 
         public MainPageModel()
         {
@@ -390,6 +416,7 @@ namespace CapiDataGenerator
 
                     TotalCount = icount + icount*qcount*(acount + ccount + 2) + scount;
 
+                    this.EnableCacheInAllRepositoryWriters();
                     try
                     {
                         AppSettings.Instance.IsSupervisorEvents = true;
@@ -399,15 +426,20 @@ namespace CapiDataGenerator
                         CreateComments(ccount, questionnaries, questions);
                         ChangeStatuses(scount, questionnaries, onlyForSupervisor);
 
-                        Log("create backup");
-                        string backupPath = backupService.Backup();
-                        Log(string.Format("backup was saved to {0}", backupPath));
+                        if (!onlyForSupervisor)
+                        {
+                            Log("create backup");
+                            string backupPath = backupService.Backup();
+                            Log(string.Format("backup was saved to {0}", backupPath));
+                        }
+
                         Log("end");
                     }
                     catch (Exception e)
                     {
                         this.Log(e.Message);
                     }
+                    this.DisableCacheInAllRepositoryWriters();
                 }
 
                 _timer.Stop();
@@ -521,11 +553,12 @@ namespace CapiDataGenerator
                                                                            userId: interview.Value,
                                                                            questionnaireId: template.PublicKey,
                                                                            questionnaireVersion: 1,
-                                                                           answers: null, disabledGroups: null,
-                                                                           disabledQuestions: null,
-                                                                           validAnsweredQuestions: null,
-                                                                           invalidAnsweredQuestions: null,
-                                                                           propagatedGroupInstanceCounts: null)));
+                                                                           answers: new AnsweredQuestionSynchronizationDto[0], 
+                                                                           disabledGroups: new HashSet<InterviewItemId>(), 
+                                                                           disabledQuestions: new HashSet<InterviewItemId>(), 
+                                                                           validAnsweredQuestions: new HashSet<InterviewItemId>(), 
+                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(), 
+                                                                           propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>())));
                 UpdateProgress();
             }
 
