@@ -34,10 +34,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.commandService = commandService;
         }
 
-        public void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback)
+        public void AnswerOnQuestion(Context context, AnswerQuestionCommand command, Action<Exception> errorCallback)
         {
             UpdateExecutionFlow(new CommandAndErrorCallback(command, errorCallback));
-
+           /* Toast.MakeText(context,
+                           string.Format("in line: {0}, commandQueue: {1}", executionLine.Count, commandQueue.Count),
+                           ToastLength.Short).Show();*/
             if (!isRunning)
             {
                 isRunning = true;
@@ -74,8 +76,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 }
 
                 InterviewItemId key = executionLine.Dequeue();
-                nextCommand = commandQueue[key];
-                commandQueue.Remove(key);
+
+                if (commandQueue.ContainsKey(key))
+                {
+                    nextCommand = commandQueue[key];
+                    commandQueue.Remove(key);
+                }
             }
 
             try
@@ -87,12 +93,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 if (nextCommand != null)
                     nextCommand.ErrorCallback(ex);
-                /*((Activity)this.Context).RunOnUiThread(() =>
-                {
-                    tvError.Visibility = ViewStates.Visible;
-                    tvError.Text = GetDippestException(ex).Message;
-                    SaveAnswerErrorHappend();
-                });*/
             }
 
             ExecuteSaveAnswerCommandAndRunNextIfExist();
