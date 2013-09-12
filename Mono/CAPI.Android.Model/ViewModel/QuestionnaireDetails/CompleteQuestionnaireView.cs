@@ -280,11 +280,30 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Questions[key];
             question.SetValid(valid);
         }
-        public void SetScreenStatus(InterviewItemId key, bool enebled)
+
+        public void SetScreenStatus(InterviewItemId key, bool enabled)
         {
             var screen =
                 this.Screens[key];
-            screen.SetEnabled(enebled);
+            screen.SetEnabled(enabled);
+
+            var plainScreen = screen as QuestionnaireScreenViewModel;
+            if (plainScreen == null)
+                return;
+
+            foreach (var child in plainScreen.Items)
+            {
+                var question = child as QuestionViewModel;
+                if (question != null)
+                {
+                    question.SetEnabled(enabled);
+                }
+                var group = child as QuestionnaireNavigationPanelItem;
+                if (group != null)
+                {
+                    SetScreenStatus(group.PublicKey, enabled);
+                }
+            }
         }
 
         public IEnumerable<QuestionViewModel> FindQuestion(Func<QuestionViewModel, bool> filter)

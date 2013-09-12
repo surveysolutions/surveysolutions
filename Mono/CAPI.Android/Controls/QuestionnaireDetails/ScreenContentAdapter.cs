@@ -25,13 +25,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly Context context;
         private readonly Guid questionnaireId;
         private readonly InterviewStatus status;
+        
         private readonly IQuestionViewFactory questionViewFactory;
         private readonly EventHandler<ScreenChangedEventArgs> screenChangeEventHandler;
 
-        public ScreenContentAdapter(IList<IQuestionnaireItemViewModel> items, Context context, Guid questionnaireId,
+        public ScreenContentAdapter(QuestionnaireScreenViewModel screen, Context context, Guid questionnaireId,
                                     InterviewStatus status, 
                                     EventHandler<ScreenChangedEventArgs> screenChangeEventHandler)
-            : base(items)
+            : base(screen.Items)
         {
             this.context = context;
             this.questionnaireId = questionnaireId;
