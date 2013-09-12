@@ -43,13 +43,6 @@
         return countSelectedItems() == 1;
     });
 
-    self.ChangeState = function () {
-        var interview = ko.utils.arrayFirst(self.ListView.Items(), function (item) {
-            return item.IsSelected();
-        });
-        window.location = "/Interview/ChangeState/" + interview.InterviewId();
-    };
-
     self.Assign = function (user) {
 
         self.ListView.CheckForRequestComplete();
