@@ -121,9 +121,20 @@ h4.heading {
     }
 
 .panel-container {
-    position: relative;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 80px;
 }
-
+#list {
+    bottom: 0;
+    left: 0;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 #details {
     display: none;
 }

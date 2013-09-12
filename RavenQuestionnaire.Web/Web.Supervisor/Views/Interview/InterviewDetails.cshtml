@@ -173,8 +173,7 @@
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="DateTimeFull">
-        <!-- ko text: moment(answer()).format('l') -->
-        <!-- /ko -->
+       <input type="text" data-date-format="mm/dd/yy" data-bind="datepicker: answer, datepickerOptions: {date: answer }" />
     </script>
     <script type="text/html" id="AutoPropagateFull">
         <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
