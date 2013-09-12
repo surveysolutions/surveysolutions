@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return new InterviewSynchronizationDto(interview.InterviewId,
                                                    status,
                                                    userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
-                                                   answeredQuestions, disabledGroups, disabledQuestions,
+                                                   answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
                                                    validQuestions, invalidQuestions, propagatedGroupInstanceCounts);
         }
 
