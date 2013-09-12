@@ -29,7 +29,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                         IEventHandler<InterviewRejected>,
                                                         IEventHandler<InterviewCompleted>,
                                                         IEventHandler<InterviewDeleted>, */
-        IEventHandler<AnswerDeclaredValid>,IEventHandler<GroupPropagated>,IEventHandler<QuestionEnabled>,IEventHandler<AnswerDeclaredInvalid>,IEventHandler<QuestionDisabled>,IEventHandler<GroupDisabled>,IEventHandler<InterviewCompleted>,
+        IEventHandler<AnswerDeclaredValid>, IEventHandler<GroupPropagated>, IEventHandler<QuestionEnabled>,
+        IEventHandler<AnswerDeclaredInvalid>, IEventHandler<QuestionDisabled>, IEventHandler<GroupDisabled>,
+        IEventHandler<GroupEnabled>,IEventHandler<InterviewSynchronized>,
+    IEventHandler<InterviewCompleted>,IEventHandler<InterviewDeclaredValid>,
     IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
@@ -37,9 +40,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
 
         public InterviewSynchronizationEventHandler(ISynchronizationDataStorage syncStorage,
-                                                    IReadSideRepositoryWriter<InterviewData> interviewDataWriter,
-                                                    IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>
-                                                        questionnriePropagationStructures)
+            IReadSideRepositoryWriter<InterviewData> interviewDataWriter,
+            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>
+                questionnriePropagationStructures)
         {
             this.syncStorage = syncStorage;
             this.interviewDataWriter = interviewDataWriter;
@@ -66,10 +69,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             }
         }
 
-        private  bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
+        private bool IsInterviewWithStatusNeedToBeResendToCapi(InterviewStatus newStatus)
         {
             return newStatus == InterviewStatus.RejectedBySupervisor;
         }
+
         private bool IsInterviewWithStatusNeedToBeDeletedOnCapi(InterviewStatus newStatus)
         {
             return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
@@ -80,7 +84,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var interview = interviewDataWriter.GetById(interviewId);
 
             var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
-                                                                                 interview.ResponsibleId, status);
+                interview.ResponsibleId, status);
 
             syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
@@ -91,7 +95,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         }
 
-        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId, InterviewStatus status)
+        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId,
+            InterviewStatus status)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
@@ -100,22 +105,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var invalidQuestions = new HashSet<InterviewItemId>();
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, int>();
 
-            var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnariePropagationStructure = this.questionnriePropagationStructures.GetById(interview.QuestionnaireId,
+                interview.QuestionnaireVersion);
 
             foreach (var interviewLevel in interview.Levels.Values)
             {
                 foreach (var interviewQuestion in interviewLevel.Questions)
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
-                                                                                  interviewQuestion.Answer,
-                                                                                  interviewQuestion.Comments.Any() ?
-                                                                                        interviewQuestion.Comments.Last().Text :
-                                                                                        null);
+                        interviewQuestion.Answer,
+                        interviewQuestion.Comments.Any()
+                            ? interviewQuestion.Comments.Last().Text
+                            : null);
                     answeredQuestions.Add(answeredQuestion);
                     if (!interviewQuestion.Enabled)
                         disabledQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
 
-                    #warning TLK: validness flag misses undefined state
+#warning TLK: validness flag misses undefined state
                     if (!interviewQuestion.Valid)
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Id, interviewLevel.PropagationVector));
                     if (interviewQuestion.Valid)
@@ -126,13 +132,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.PropagationVector));
                 }
 
-                FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel, propagatedGroupInstanceCounts);
+                FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
+                    propagatedGroupInstanceCounts);
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
-                                                   status,
-                                                   userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
-                                                   answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
-                                                   validQuestions, invalidQuestions, propagatedGroupInstanceCounts);
+                status,
+                userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
+                answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
+                validQuestions, invalidQuestions, propagatedGroupInstanceCounts);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
@@ -153,7 +160,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         private void AddPropagatedGroupToDictionary(Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
-                                                    InterviewItemId groupKey)
+            InterviewItemId groupKey)
         {
             if (propagatedGroupInstanceCounts.ContainsKey(groupKey))
             {
@@ -180,7 +187,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return GetType().Name; }
         }
 
-        public Type[] UsesViews {
+        public Type[] UsesViews
+        {
             get { return new Type[] {typeof (InterviewData), typeof (QuestionnairePropagationStructure)}; }
         }
 
@@ -189,52 +197,30 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] {typeof (SynchronizationDelta)}; }
         }
 
-        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupPropagated> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<GroupPropagated> evnt) {}
 
-        public void Handle(IPublishedEvent<QuestionEnabled> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
 
-        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) {}
 
-        public void Handle(IPublishedEvent<QuestionDisabled> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
 
-        public void Handle(IPublishedEvent<GroupDisabled> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<GroupDisabled> evnt) {}
 
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
-        {
-            
-        }
+        public void Handle(IPublishedEvent<InterviewCompleted> evnt) {}
 
-        public void Handle(IPublishedEvent<AnswerCommented> evnt)
-        {
+        public void Handle(IPublishedEvent<AnswerCommented> evnt) {}
 
-        }
+        public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt) {}
 
-        public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt)
-        {
-        }
+        public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
 
-        public void Handle(IPublishedEvent<FlagSetToAnswer> evnt)
-        {
-        }
+        public void Handle(IPublishedEvent<GroupEnabled> evnt){}
+
+        public void Handle(IPublishedEvent<InterviewSynchronized> evnt){}
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt){}
     }
 }
