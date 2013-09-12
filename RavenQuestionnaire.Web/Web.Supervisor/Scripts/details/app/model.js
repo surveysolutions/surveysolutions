@@ -76,14 +76,14 @@ function (ko) {
         SingleOptionQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.selectedOption = ko.observable();
+            self.selectedOption = ko.observable(new Option());
             self.options = ko.observableArray();
             return self;
         },
         MultyOptionQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.selectedOptions = ko.observableArray();
+            self.selectedOptions = ko.observableArray([]);
             self.options = ko.observableArray();
             return self;
         },

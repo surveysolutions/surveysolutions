@@ -71,26 +71,28 @@
                         <table class="table table-bordered table-hover">
                             <tbody data-bind="foreach: questions">
                                 <tr data-bind="visible : isVisible,css: {success: isSelected, error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
-                                    <td style="width: 60%" class="question-text">
+                                    <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                         <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                             <span class="icon-star"></span>
                                             <span data-bind="text: title"></span>
                                         </div>
                                     </td>
-                                    <td class="question-answer">
+                                    <td class="question-answer" data-bind="click: $root.showDetails">
                                         <div class="cell-content" data-bind="visible: isEnabled">
-                                            <div class="question-clickable" data-bind="click: $root.showDetails">
+                                            <div class="question-clickable" >
                                                 <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                 <span data-bind="template: { name: questionType() }"></span>
                                                 <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
                                                 <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
                                             </div>
-                                            <div class="actions pull-right">
-                                                <div class="action-content">
+                                        </div>
+                                    </td>
+                                    <td style="width: 120px;" >
+                                        <div class="actions pull-right">
                                                     <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
                                                         <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
                                                         <ul class="dropdown-menu pull-right">
-                                                            <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="click: $root.showDetails">Answer</a></li>
+                                                            <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
                                                             <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
                                                             <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
                                                         </ul>
@@ -101,9 +103,7 @@
                                                     <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
                                                         <i class="icon-flag icon-white"></i></a>
                                                     <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
-                                                </div>
                                             </div>
-                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

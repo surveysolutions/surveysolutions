@@ -20,7 +20,6 @@ namespace Core.Supervisor.Views.Interview
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore;
         private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures;
-        private readonly ICompleteQuestionFactory questionFactory;
 
         public InterviewDetailsViewFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
@@ -31,8 +30,6 @@ namespace Core.Supervisor.Views.Interview
             this.userStore = userStore;
             this.questionnarieStore = questionnarieStore;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
-
-            this.questionFactory = new CompleteQuestionFactory();
         }
 
         public InterviewDetailsView Load(InterviewDetailsInputModel input)
@@ -48,7 +45,14 @@ namespace Core.Supervisor.Views.Interview
             {
                 return null; // or throw?
             }
-            
+
+            var variablesMap = questionnarie.Questionnaire.GetAllQuestions().Select(x => new
+            {
+                Id = x.PublicKey,
+                Variable = x.StataExportCaption
+            }).ToDictionary(x => x.Id, x => x.Variable);
+
+
             if (!input.CurrentGroupPublicKey.HasValue)
             {
                 input.CurrentGroupPublicKey = interview.InterviewId;
@@ -60,7 +64,7 @@ namespace Core.Supervisor.Views.Interview
                 return null; // or throw?
             }
 
-            var questionnriePropagation = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnairePropagation = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             var interviewDetails = new InterviewDetailsView()
                 {
@@ -79,18 +83,18 @@ namespace Core.Supervisor.Views.Interview
             while (groupStack.Count > 0)
             {
                 var currentGroup = groupStack.Pop();
-                
+
                 if (currentGroup.Key.Propagated == Propagate.AutoPropagated)
                 {
-                    var propagatedGroups = GetPropagatedLevels(currentGroup.Key.PublicKey, interview, questionnriePropagation).ToList();
+                    var propagatedGroups = GetPropagatedLevels(currentGroup.Key.PublicKey, interview, questionnairePropagation).ToList();
 
-                    if (propagatedGroups.Any()) 
+                    if (propagatedGroups.Any())
                     {
                         //we have at least one completed propagated group
                         //so for every layer we are creating propagated group
                         foreach (var propagatedGroup in propagatedGroups)
                         {
-                            var completedPropGroup = GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value);
+                            var completedPropGroup = this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value, variablesMap);
 
                             interviewDetails.Groups.Add(completedPropGroup);
                         }
@@ -100,17 +104,17 @@ namespace Core.Supervisor.Views.Interview
                 {
                     var rootLevel = interview.Levels.FirstOrDefault(w => w.Value.ScopeId == interview.InterviewId).Value;
 
-         
-                    interviewDetails.Groups.Add(GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel));
+
+                    interviewDetails.Groups.Add(this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, variablesMap));
 
                     foreach (var group in currentGroup.Key.Children.OfType<IGroup>().Reverse())
                     {
                         group.SetParent(currentGroup.Key);
                         groupStack.Push(new KeyValuePair<IGroup, int>(group, currentGroup.Value + 1));
-                    }    
+                    }
                 }
             }
-            
+
             return interviewDetails;
         }
 
@@ -136,22 +140,23 @@ namespace Core.Supervisor.Views.Interview
             return interviewData.Levels.Where(w => w.Value.ScopeId == propagationScope);
         }
 
-        
-        private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel)
-        {
 
-            var completedGroup = new InterviewGroupView(currentGroup.PublicKey);
-            completedGroup.Depth = depth;
-            completedGroup.Title = currentGroup.Title;
-            completedGroup.PropagationVector = interviewLevel.PropagationVector;
-            completedGroup.ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null;
+        private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, Dictionary<Guid, string> variablesMap)
+        {
+            var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
+            {
+                Depth = depth,
+                Title = currentGroup.Title,
+                PropagationVector = interviewLevel.PropagationVector,
+                ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
+            };
 
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
                 var answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
-                
-                var interviewQuestion = new InterviewQuestionView(questionFactory.ConvertToCompleteQuestion(question), answeredQuestion);
-                
+
+                var interviewQuestion = new InterviewQuestionView(question, answeredQuestion, variablesMap);
+
                 completedGroup.Questions.Add(interviewQuestion);
             }
 

@@ -1,32 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
     public class InterviewQuestionView
     {
-        public InterviewQuestionView(ICompleteQuestion question, InterviewQuestion answeredQuestion)
+        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap)
         {
-            Id = question.PublicKey;
-            Title = question.QuestionText;
-            QuestionType = question.QuestionType;
-            IsMandatory = question.Mandatory;
-            IsFeatured = question.Featured;
-            IsCapital = question.Capital;
-            ValidationMessage = question.ValidationMessage;
-            ValidationExpression = question.ValidationExpression;
-            Variable = question.StataExportCaption;
+            this.Id = question.PublicKey;
+            this.Title = question.QuestionText;
+            this.QuestionType = question.QuestionType;
+            this.IsMandatory = question.Mandatory;
+            this.IsFeatured = question.Featured;
+            this.IsCapital = question.Capital;
+            this.ValidationMessage = question.ValidationMessage;
+            this.ValidationExpression = question.ValidationExpression;
+            this.Variable = question.StataExportCaption;
 
             if (question.Answers != null)
             {
-                Options = question.Answers.Select(a => new QuestionOptionView()
+                this.Options = question.Answers.Select(a => new QuestionOptionView
                 {
                     Value = decimal.Parse(a.AnswerValue),
                     Label = a.AnswerText
@@ -35,10 +31,10 @@ namespace Core.Supervisor.Views.Interview
 
             if (answeredQuestion == null) return;
 
-            IsAnswered = answeredQuestion.IsAnswered;
-            IsEnabled = answeredQuestion.Enabled;
-            IsFlagged = answeredQuestion.IsFlagged;
-            Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
+            this.IsAnswered = answeredQuestion.IsAnswered;
+            this.IsEnabled = answeredQuestion.Enabled;
+            this.IsFlagged = answeredQuestion.IsFlagged;
+            this.Comments = answeredQuestion.Comments.Select(x => new InterviewQuestionCommentView
             {
                 Id = x.Id,
                 Text = x.Text,
@@ -46,9 +42,9 @@ namespace Core.Supervisor.Views.Interview
                 CommenterName = x.CommenterName,
                 Date = x.Date
             }).ToList();
-            IsValid = answeredQuestion.Valid;
-            Scope = question.QuestionScope;
-            Answer = answeredQuestion.Answer;
+            this.IsValid = answeredQuestion.Valid;
+            this.Scope = question.QuestionScope;
+            this.Answer = answeredQuestion.Answer;
         }
 
         public string Variable { get; set; }
