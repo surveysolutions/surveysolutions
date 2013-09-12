@@ -1108,12 +1108,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
-                IEnumerable<Guid> underlyingGroupIds = questionnaire.GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
+                IEnumerable<Guid> affectedGroupIds = questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                IEnumerable<Identity> underlyingGroups
-                    = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(underlyingGroupIds, outerScopePropagationVector, questionnaire);
+                IEnumerable<Identity> affectedGroups
+                    = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(affectedGroupIds, outerScopePropagationVector, questionnaire);
 
-                foreach (Identity group in underlyingGroups)
+                foreach (Identity group in affectedGroups)
                 {
                     PutToCorrespondingListAccordingToEnablementStateChange(group, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(group, questionnaire, getAnswer),

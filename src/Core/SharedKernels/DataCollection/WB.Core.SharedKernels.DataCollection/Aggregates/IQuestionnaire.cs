@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
-        IEnumerable<Guid> GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
+        IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
 
         IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId);
     }
