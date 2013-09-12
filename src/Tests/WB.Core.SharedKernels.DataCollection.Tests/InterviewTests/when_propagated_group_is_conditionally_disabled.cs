@@ -42,7 +42,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                                                         && _.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroupId) == new Guid[] { propagatedGroupId });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
-            //setup expression processor throw exception
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(it.IsAny<string>(), it.IsAny<Func<string, object>>())).Returns(false);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

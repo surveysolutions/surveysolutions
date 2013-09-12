@@ -9,6 +9,7 @@ using Main.Core.Events.Questionnaire.Completed;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -256,6 +257,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         #region Dependencies
+
+        private ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
 
         /// <remarks>
         /// Repository operations are time-consuming.
@@ -1084,7 +1090,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Guid> involvedQuestionIds = questionnaire.GetQuestionsInvolvedInCustomValidation(question.Id);
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, question.PropagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(validationExpression, involvedQuestions, getAnswer, resultInCaseOfExceptionDuringEvaluation: false, thisIdentifierQuestionId: question.Id);
+            return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(
+                validationExpression, involvedQuestions, getAnswer, resultIfExecutionFailsWhenAnswersAreEnough: false,
+                thisIdentifierQuestionId: question.Id);
         }
 
 
@@ -1208,7 +1216,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<Identity> involvedQuestions = GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(involvedQuestionIds, propagationVector, questionnaire);
 
-            return this.EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(enablementCondition, involvedQuestions, getAnswer, resultInCaseOfExceptionDuringEvaluation: true)
+            return this.EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(
+                enablementCondition, involvedQuestions, getAnswer, resultIfExecutionFailsWhenAnswersAreEnough: true)
                 ?? ShouldBeEnabledIfSomeInvolvedQuestionsAreNotAnswered;
         }
 
@@ -1380,16 +1389,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private bool? EvaluateBooleanExpressionOrReturnNullIfNotEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
-            Func<Identity, object> getAnswer, bool? resultInCaseOfExceptionDuringEvaluation, Guid? thisIdentifierQuestionId = null)
+        private bool? EvaluateBooleanExpressionOrReturnNullIfExecutionFailsWhenNotEnoughAnswers(string expression, IEnumerable<Identity> involvedQuestions,
+            Func<Identity, object> getAnswer, bool? resultIfExecutionFailsWhenAnswersAreEnough, Guid? thisIdentifierQuestionId = null)
         {
             Dictionary<Guid, object> involvedAnswers = involvedQuestions.ToDictionary(
                 involvedQuestion => involvedQuestion.Id,
                 involvedQuestion => getAnswer(involvedQuestion));
-
-            bool someOfInvolvedQuestionsAreNotAnswered = involvedAnswers.Values.Any(answer => answer == null);
-            if (someOfInvolvedQuestionsAreNotAnswered)
-                return null;
 
             bool isSpecialThisIdentifierSupportedByExpression = thisIdentifierQuestionId.HasValue;
 
@@ -1400,11 +1405,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             try
             {
                 return this.ExpressionProcessor.EvaluateBooleanExpression(expression,
-                    getValueForIdentifier: idetifier => involvedAnswers[mapIdentifierToQuestionId(idetifier)]);
+                    getValueForIdentifier: identifier => involvedAnswers[mapIdentifierToQuestionId(identifier)]);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return resultInCaseOfExceptionDuringEvaluation;
+                bool areAllInvolvedQuestionsAnswered = involvedAnswers.Values.All(answer => answer != null);
+
+                if (areAllInvolvedQuestionsAnswered)
+                {
+                    this.Logger.Warn(
+                        string.Format("Failed to evaluate boolean expression '{0}' which has all involved answers given.", expression),
+                        exception);
+                }
+
+                return areAllInvolvedQuestionsAnswered
+                    ? resultIfExecutionFailsWhenAnswersAreEnough
+                    : null;
             }
         }
 
