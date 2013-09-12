@@ -29,6 +29,7 @@ namespace Web.Supervisor.Code.CommandDeserialization
                         { "AnswerNumericQuestionCommand", typeof (AnswerNumericQuestionCommand ) },
                         { "AnswerSingleOptionQuestionCommand", typeof (AnswerSingleOptionQuestionCommand ) },
                         { "AnswerTextQuestionCommand", typeof (AnswerTextQuestionCommand ) },
+                        { "AnswerGeoLocationQuestionCommand", typeof(AnswerGeoLocationQuestionCommand)},
                         // statuses
                         { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
                         { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },

@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 statistics = CreateNewStatisticsLine(interviewBriefItem);
             }
-            IncreaseByStatus(statistics, interviewBriefItem.Status);
+            IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
             interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             StoreStatisticsItem(interviewBriefItem, statistics);
         }
@@ -65,9 +65,18 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
             var statistics = this.GetStatisticItem(interviewBriefItem);
-            DecreaseByStatus(statistics, interviewBriefItem.Status);
-
+            
             interviewBriefItem.IsDeleted = true;
+            interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
+            StoreStatisticsItem(interviewBriefItem, statistics);
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestored> evnt)
+        {
+            var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
+            var statistics = this.GetStatisticItem(interviewBriefItem);
+
+            interviewBriefItem.IsDeleted = false;
             interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             StoreStatisticsItem(interviewBriefItem, statistics);
         }
@@ -76,11 +85,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
             var statistics = this.GetStatisticItem(interviewBriefItem);
-            if (evnt.Payload.Status != InterviewStatus.Deleted)
-            {
-                DecreaseByStatus(statistics, interviewBriefItem.Status);
-                IncreaseByStatus(statistics, evnt.Payload.Status);
-            }
+            
+            DecreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            IncreaseStatisticsByStatus(statistics, evnt.Payload.Status);
+            
             interviewBriefItem.Status = evnt.Payload.Status;
             interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             StoreStatisticsItem(interviewBriefItem, statistics);
@@ -101,7 +109,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var interviewBriefItem = this.interviewBriefStorage.GetById(interviewId);
             //update old statistics
             var oldStatistics = this.GetStatisticItem(interviewBriefItem);
-            this.DecreaseByStatus(oldStatistics, interviewBriefItem.Status);
+            this.DecreaseStatisticsByStatus(oldStatistics, interviewBriefItem.Status);
             this.StoreStatisticsItem(interviewBriefItem, oldStatistics);
 
             interviewBriefItem.ResponsibleId = interviewerId;
@@ -110,7 +118,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 statistics = this.CreateNewStatisticsLine(interviewBriefItem);
             }
-            this.IncreaseByStatus(statistics, interviewBriefItem.Status);
+            this.IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
             this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             this.StoreStatisticsItem(interviewBriefItem, statistics);
         }
@@ -148,12 +156,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 };
         }
 
-        private void DecreaseByStatus(StatisticsLineGroupedByUserAndTemplate statistics, InterviewStatus status)
+        private void DecreaseStatisticsByStatus(StatisticsLineGroupedByUserAndTemplate statistics, InterviewStatus status)
         {
-            this.IncreaseByStatus(statistics, status, false);
+            this.ChangeByStatus(statistics, status, false);
         }
 
-        private void IncreaseByStatus(StatisticsLineGroupedByUserAndTemplate summary, InterviewStatus status, bool isIncrease = true)
+        private void IncreaseStatisticsByStatus(StatisticsLineGroupedByUserAndTemplate statistics, InterviewStatus status)
+        {
+            this.ChangeByStatus(statistics, status, true);
+        }
+
+        private void ChangeByStatus(StatisticsLineGroupedByUserAndTemplate summary, InterviewStatus status, bool isIncrease)
         {
             int incCount = isIncrease ? 1 : -1;
 
@@ -165,7 +178,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             summary.ApprovedBySupervisorCount += status == InterviewStatus.ApprovedBySupervisor ? incCount : 0;
             summary.RejectedBySupervisorCount += status == InterviewStatus.RejectedBySupervisor ? incCount : 0;
             summary.RestoredCount += status == InterviewStatus.Restored ? incCount : 0;
-            summary.TotalCount += incCount;
+
+            if (status == InterviewStatus.Deleted)
+            {
+                summary.TotalCount += incCount == 1 ? -1 : 0;
+            }
+            else
+            {
+                summary.TotalCount += incCount;
+            }
         }
 
         private StatisticsLineGroupedByUserAndTemplate GetStatisticItem(InterviewBrief interviewBriefItem)
@@ -202,15 +223,5 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new Type[] { typeof(StatisticsLineGroupedByUserAndTemplate), typeof(InterviewBrief) }; }
         }
         
-        public void Handle(IPublishedEvent<InterviewRestored> evnt)
-        {
-            var interviewBriefItem = interviewBriefStorage.GetById(evnt.EventSourceId);
-            var statistics = this.GetStatisticItem(interviewBriefItem);
-            IncreaseByStatus(statistics, interviewBriefItem.Status);
-
-            interviewBriefItem.IsDeleted = false;
-            interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
-            StoreStatisticsItem(interviewBriefItem, statistics);
-        }
     }
 }

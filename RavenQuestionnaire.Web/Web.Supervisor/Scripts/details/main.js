@@ -1,7 +1,8 @@
 ﻿requirejs.config({
     baseUrl: '../../Scripts/lib',
     paths: {
-        app: '../details/app'
+        app: '../details/app',
+        datepicker: '../bootstrap-datepicker'
     },
     shim: {
         'jquery': {
@@ -21,19 +22,22 @@
             exports: "Router",
             deps: ['jquery'],
         },
-        'moment' : {
-            exports : 'moment'
+        'moment': {
+            exports: 'moment'
+        },
+        'datepicker': {
+            deps: ['jquery'],
         }
     }
 });
-requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid','moment'],
+requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid', 'moment', 'datepicker'],
 function ($, ko, amplify, _, viewmodel, input, datacontext) {
     ko.validation.configure({
         insertMessages: false,
         decorateElement: true,
         errorElementClass: 'error'
     });
-    
+
     ko.bindingHandlers.datepicker = {
         init: function (element, valueAccessor, allBindingsAccessor) {
             //initialize datepicker with some optional options
@@ -90,7 +94,7 @@ function ($, ko, amplify, _, viewmodel, input, datacontext) {
         var dd = this.getDate().toString();
         return (mm[1] ? mm : "0" + mm[0]) + '/' + (dd[1] ? dd : "0" + dd[0]) + '/' + yyyy; // padding
     };
-    
+
     ko.validation.rules['notempty'] = {
         validator: function (array) {
             return array.length > 0;
@@ -98,11 +102,11 @@ function ($, ko, amplify, _, viewmodel, input, datacontext) {
         message: 'The array must contain at least one valid element.'
     };
 
-    
+
     $.when(datacontext.parseData(input))
 		.done(function () {
-			$('#umbrella').attr('data-bind', 'visible:isSaving');
-			viewmodel.init();
-			ko.applyBindings(viewmodel);
-		});    
+		    $('#umbrella').attr('data-bind', 'visible:isSaving');
+		    viewmodel.init();
+		    ko.applyBindings(viewmodel);
+		});
 });

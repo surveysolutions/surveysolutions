@@ -9,7 +9,6 @@ using CAPI.Android.Core.Model.ReadSideStore;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo;
 using CAPI.Android.Core.Model.ViewModel.Login;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core;
 using Main.Core.Commands;
@@ -46,12 +45,14 @@ namespace CapiDataGenerator
 {
     using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
     using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+    using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 
     public class MainModelModule : NinjectModule
     {
         private const string ProjectionStoreName = "Projections";
         private const string EventStoreDatabaseName = "EventStore";
 
+        private IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> capiTemplateVersionedWriter;
 
         public override void Load()
         {
@@ -66,7 +67,10 @@ namespace CapiDataGenerator
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
             var changeLogStore = new FileChangeLogStore(interviewMetaInfoFactory);
-            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
+
+            var capiTemplateWriter = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
+
+            this.capiTemplateVersionedWriter = new VersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(capiTemplateWriter);
 
             ClearCapiDb(capiEvenStore, denormalizerStore, changeLogStore);
 
@@ -79,7 +83,7 @@ namespace CapiDataGenerator
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
 
             this.Bind<IReadSideRepositoryWriter<InterviewData>, IReadSideRepositoryReader<InterviewData>>().To<InterviewDataRepositoryWriterWithCache>().InSingletonScope();
-            this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
+            
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryWriter<SurveyDto>>().ToConstant(surveyStore);
@@ -91,7 +95,7 @@ namespace CapiDataGenerator
             this.Bind<IChangeLogManipulator>().ToConstant(new ChangeLogManipulator(publicStore, draftStore, capiEvenStore, changeLogStore));
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
 
-            this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, denormalizerStore, templateStore));
+            this.Bind<IBackup>().ToConstant(new DefaultBackup(capiEvenStore, changeLogStore, denormalizerStore, capiTemplateWriter));
             
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(Kernel));
             this.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
@@ -119,8 +123,8 @@ namespace CapiDataGenerator
             
             #region register handlers
 
-            InitTemplateStorage(bus);
-
+            InitCapiTemplateStorage(bus);
+            
             InitUserStorage(bus);
 
             InitDashboard(bus);
@@ -160,9 +164,9 @@ namespace CapiDataGenerator
             }
         }
 
-        private void InitTemplateStorage(InProcessEventBus bus)
+        private void InitCapiTemplateStorage(InProcessEventBus bus)
         {
-            var fileSorage = new QuestionnaireDenormalizer(Kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+            var fileSorage = new QuestionnaireDenormalizer(this.capiTemplateVersionedWriter);
             bus.RegisterHandler(fileSorage, typeof(TemplateImported));
         }
 
@@ -178,7 +182,7 @@ namespace CapiDataGenerator
             var dashboardeventHandler =
                 new DashboardDenormalizer(Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                                           Kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
-                                          Kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+                                          this.capiTemplateVersionedWriter);
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));

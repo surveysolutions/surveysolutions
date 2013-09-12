@@ -65,7 +65,7 @@
                     c.userId(comment.CommenterId);
                     return c;
                 });
-                item.isReadonly(dto.scope != 1);
+                item.isReadonly(dto.Scope != 1);
                 item.variable(dto.Variable);
                 item.comments(comments);
                 item.scope(dto.Scope);
