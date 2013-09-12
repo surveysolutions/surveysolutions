@@ -31,6 +31,8 @@ using WB.UI.Shared.Web;
 
 namespace CapiDataGenerator
 {
+    using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+
     public class MainPageModel : MvxViewModel
     {
         private ICommandService commandService
@@ -65,10 +67,34 @@ namespace CapiDataGenerator
             }
         }
 
+        private IRavenReadSideRepositoryWriterRegistry writerRegistry
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IRavenReadSideRepositoryWriterRegistry>();
+            }
+        }
+
         readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
         private UserLight _headquarterUser;
+
+        private void EnableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.EnableCache();
+            }
+        }
+
+        private void DisableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.DisableCache();
+            }
+        }
 
         public MainPageModel()
         {
@@ -233,6 +259,22 @@ namespace CapiDataGenerator
             }
         }
 
+        private bool _onlyForSupervisor = false;
+        public bool OnlyForSupervisor
+        {
+            get
+            {
+                return _onlyForSupervisor;
+            }
+            set
+            {
+                _onlyForSupervisor = value;
+                RaisePropertyChanged(() => OnlyForSupervisor);
+            }
+        }
+
+        
+
         private UserListItem _selectedSupervisor = null;
         public UserListItem SelectedSupervisor
         {
@@ -363,6 +405,8 @@ namespace CapiDataGenerator
                         StatusesCount = scount.ToString();
                     }
 
+                    var onlyForSupervisor = this.OnlyForSupervisor;
+
                     var questions = ((CompleteQuestionnaireDocument) template).GetQuestions().Where(x => !x.Featured);
                     var questionsCount = questions.Count();
 
@@ -372,24 +416,30 @@ namespace CapiDataGenerator
 
                     TotalCount = icount + icount*qcount*(acount + ccount + 2) + scount;
 
+                    this.EnableCacheInAllRepositoryWriters();
                     try
                     {
                         AppSettings.Instance.IsSupervisorEvents = true;
                         var users = CreateUsers(icount);
-                        var questionnaries = this.CreateInterviews(template, qcount, users);
+                        var questionnaries = this.CreateInterviews(template, qcount, users, onlyForSupervisor);
                         CreateAnswers(acount, questionnaries, questions);
                         CreateComments(ccount, questionnaries, questions);
-                        ChangeStatuses(scount, questionnaries);
+                        ChangeStatuses(scount, questionnaries, onlyForSupervisor);
 
-                        Log("create backup");
-                        string backupPath = backupService.Backup();
-                        Log(string.Format("backup was saved to {0}", backupPath));
+                        if (!onlyForSupervisor)
+                        {
+                            Log("create backup");
+                            string backupPath = backupService.Backup();
+                            Log(string.Format("backup was saved to {0}", backupPath));
+                        }
+
                         Log("end");
                     }
                     catch (Exception e)
                     {
                         this.Log(e.Message);
                     }
+                    this.DisableCacheInAllRepositoryWriters();
                 }
 
                 _timer.Stop();
@@ -399,12 +449,17 @@ namespace CapiDataGenerator
             });
         }
 
-        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews)
+        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews, bool onlyForSupervisor)
         {
             for (int z = 0; z < statusesCount; z++)
             {
                 var interview = interviews.ElementAt(z);
                 commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value));
+
+                if (onlyForSupervisor)
+                {
+                    commandService.Execute(new ApproveInterviewCommand(interview.Key, interview.Value, "auto approve comment"));
+                }
 
                 UpdateProgress();
                 LogStatus("set complete status", z, statusesCount);
@@ -454,7 +509,7 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users)
+        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
         {
             Log("import template");
             commandService.Execute(new ImportQuestionnaireCommand(_headquarterUser.Id, template));
@@ -485,7 +540,7 @@ namespace CapiDataGenerator
                     UpdateProgress();
                 }
             }
-            AppSettings.Instance.IsSupervisorEvents = false;
+            AppSettings.Instance.IsSupervisorEvents = onlyForSupervisor;
             for (int i = 0; i < interviews.Count; i++)
             {
                 LogStatus("synchronize interview", i, interviews.Count);
@@ -498,11 +553,12 @@ namespace CapiDataGenerator
                                                                            userId: interview.Value,
                                                                            questionnaireId: template.PublicKey,
                                                                            questionnaireVersion: 1,
-                                                                           answers: null, disabledGroups: null,
-                                                                           disabledQuestions: null,
-                                                                           validAnsweredQuestions: null,
-                                                                           invalidAnsweredQuestions: null,
-                                                                           propagatedGroupInstanceCounts: null)));
+                                                                           answers: new AnsweredQuestionSynchronizationDto[0], 
+                                                                           disabledGroups: new HashSet<InterviewItemId>(), 
+                                                                           disabledQuestions: new HashSet<InterviewItemId>(), 
+                                                                           validAnsweredQuestions: new HashSet<InterviewItemId>(), 
+                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(), 
+                                                                           propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>())));
                 UpdateProgress();
             }
 

@@ -44,6 +44,9 @@ using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CapiDataGenerator
 {
+    using WB.Core.BoundedContexts.Supervisor.Implementation.ReadSide;
+    using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+
     public class MainModelModule : NinjectModule
     {
         private const string ProjectionStoreName = "Projections";
@@ -75,6 +78,7 @@ namespace CapiDataGenerator
 
             this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
 
+            this.Bind<IReadSideRepositoryWriter<InterviewData>, IReadSideRepositoryReader<InterviewData>>().To<InterviewDataRepositoryWriterWithCache>().InSingletonScope();
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
