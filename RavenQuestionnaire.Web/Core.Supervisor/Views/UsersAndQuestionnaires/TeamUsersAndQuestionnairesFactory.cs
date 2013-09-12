@@ -49,7 +49,7 @@ namespace Core.Supervisor.Views.UsersAndQuestionnaires
                                           Expression<Func<InterviewSummary, T>> selector)
         {
             return this.interviews.Query(
-                _ => _.Where(predicate).Select(selector).Distinct())
+                _ => _.Where(predicate).Select(selector).Distinct().Take(1024))
                 .ToList();
         }
     }
