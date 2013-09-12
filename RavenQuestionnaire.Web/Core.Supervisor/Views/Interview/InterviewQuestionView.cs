@@ -17,7 +17,7 @@ namespace Core.Supervisor.Views.Interview
             this.IsFeatured = question.Featured;
             this.IsCapital = question.Capital;
             this.ValidationMessage = question.ValidationMessage;
-            this.ValidationExpression = question.ValidationExpression;
+            this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
 
             if (question.Answers != null)
@@ -45,6 +45,21 @@ namespace Core.Supervisor.Views.Interview
             this.IsValid = answeredQuestion.Valid;
             this.Scope = question.QuestionScope;
             this.Answer = answeredQuestion.Answer;
+        }
+
+        private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
+        {
+            if (string.IsNullOrWhiteSpace(expression))
+                return expression;
+
+            string expression1 = expression;
+
+            foreach (var pair in variablesMap)
+            {
+                expression1 = expression1.Replace(string.Format("[{0}]", pair.Key), string.Format("[{0}]", pair.Value));
+            }
+
+            return expression1;
         }
 
         public string Variable { get; set; }
