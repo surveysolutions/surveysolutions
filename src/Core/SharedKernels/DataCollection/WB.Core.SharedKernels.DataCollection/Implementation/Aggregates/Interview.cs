@@ -1417,6 +1417,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         string.Format("Failed to evaluate boolean expression '{0}' which has all involved answers given.", expression),
                         exception);
                 }
+                else
+                {
+                    this.Logger.Info(
+                        string.Format("Failed to evaluate boolean expression '{0}' which has some involved answers missing.", expression),
+                        exception);
+                }
 
                 return areAllInvolvedQuestionsAnswered
                     ? resultIfExecutionFailsWhenAnswersAreEnough
