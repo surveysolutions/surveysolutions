@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
-        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.cacheOfGroupsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
-            this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         }
 
@@ -454,12 +454,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.cacheOfUnderlyingQuestions[groupId];
         }
 
-        public IEnumerable<Guid> GetUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId)
+        public IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId)
         {
-            if (!this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions.ContainsKey(groupId))
-                this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions[groupId] = this.GetUnderlyingGroupsWithNotEmptyCustomEnablementConditionsImpl(groupId);
+            if (!this.cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions.ContainsKey(groupId))
+                this.cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions[groupId]
+                    = this.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditionsImpl(groupId);
 
-            return this.cacheOfUnderlyingGroupsWithNotEmptyCustomEnablementConditions[groupId];
+            return this.cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions[groupId];
         }
 
         public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId)
@@ -543,13 +544,22 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .ToList();
         }
 
-        private IEnumerable<Guid> GetUnderlyingGroupsWithNotEmptyCustomEnablementConditionsImpl(Guid groupId)
+        private IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditionsImpl(Guid groupId)
         {
-            return this
-                .GetGroupOrThrow(groupId)
-                .Find<IGroup>(group => IsExpressionDefined(group.ConditionExpression))
-                .Select(group => group.PublicKey)
+            IGroup group = this.GetGroupOrThrow(groupId);
+
+            List<Guid> groupsWithNotEmptyCustomEnablementConditions
+                = group
+                .Find<IGroup>(g => IsExpressionDefined(g.ConditionExpression))
+                .Select(g => g.PublicKey)
                 .ToList();
+
+            if (IsExpressionDefined(group.ConditionExpression))
+            {
+                groupsWithNotEmptyCustomEnablementConditions.Add(group.PublicKey);
+            }
+
+            return groupsWithNotEmptyCustomEnablementConditions;
         }
 
         private IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditionsImpl(Guid groupId)
