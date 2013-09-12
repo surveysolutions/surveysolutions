@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using Core.Supervisor.Views.Interviewer;
 using Core.Supervisor.Views.User;
 using Main.Core.Commands.User;
 using Main.Core.Entities.SubEntities;
@@ -22,9 +21,7 @@ namespace Web.Supervisor.Controllers
         public TeamController(ICommandService commandService, 
                               IGlobalInfoProvider globalInfo, 
                               ILogger logger,
-                              IViewFactory<UserViewInputModel, UserView> userViewFactory,
-                              IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
-                              IViewFactory<InterviewersInputModel, InterviewersView> interviewersViewFactory)
+                              IViewFactory<UserViewInputModel, UserView> userViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.userViewFactory = userViewFactory;
@@ -34,26 +31,26 @@ namespace Web.Supervisor.Controllers
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddInterviewer(Guid id)
         {
-            return this.View(new InterviewerViewModel {Id = id});
+            return this.View(new UserCreateModel() {Id = id});
         }
 
         [HttpPost]
         [Authorize(Roles = "Headquarter")]
-        public ActionResult AddInterviewer(InterviewerViewModel model)
+        public ActionResult AddInterviewer(UserCreateModel model)
         {
             if (this.ModelState.IsValid)
             {
                 UserView user =
                     this.userViewFactory.Load(
-                        new UserViewInputModel(UserName: model.Name, UserEmail: null));
+                        new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
                                                     publicKey: Guid.NewGuid(),
-                                                    userName: model.Name,
+                                                    userName: model.UserName,
                                                     password: SimpleHash.ComputeHash(model.Password),
                                                     email: model.Email,
-                                                    isLocked: false,
+                                                    isLocked: model.IsLocked,
                                                     roles: new[] {UserRoles.Operator},
                                                     supervsor: this.GetUser(model.Id).GetUseLight()));
                     this.Success("Interviewer was successfully created");
@@ -71,26 +68,26 @@ namespace Web.Supervisor.Controllers
         [Authorize(Roles = "Headquarter")]
         public ActionResult AddSupervisor()
         {
-            return this.View(new SupervisorViewModel());
+            return this.View(new UserCreateModel());
         }
 
         [HttpPost]
         [Authorize(Roles = "Headquarter")]
-        public ActionResult AddSupervisor(SupervisorViewModel model)
+        public ActionResult AddSupervisor(UserCreateModel model)
         {
             if (this.ModelState.IsValid)
             {
                 UserView user =
                     this.userViewFactory.Load(
-                        new UserViewInputModel(UserName: model.Name, UserEmail: null));
+                        new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (user == null)
                 {
                     this.CommandService.Execute(new CreateUserCommand(
                                                     publicKey: Guid.NewGuid(),
-                                                    userName: model.Name,
+                                                    userName: model.UserName,
                                                     password: SimpleHash.ComputeHash(model.Password),
                                                     email: model.Email,
-                                                    isLocked: false,
+                                                    isLocked: model.IsLocked,
                                                     roles: new[] {UserRoles.Supervisor},
                                                     supervsor: null));
 
@@ -133,7 +130,7 @@ namespace Web.Supervisor.Controllers
 
             if(user == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new UserEditModel()
+            return this.View(new UserViewModel()
                 {
                     Id = user.PublicKey,
                     Email = user.Email,
@@ -144,7 +141,7 @@ namespace Web.Supervisor.Controllers
 
         [Authorize(Roles = "Headquarter, Supervisor")]
         [HttpPost]
-        public ActionResult Details(UserEditModel model)
+        public ActionResult Details(UserViewModel model)
         {
             if (this.ModelState.IsValid)
             {
