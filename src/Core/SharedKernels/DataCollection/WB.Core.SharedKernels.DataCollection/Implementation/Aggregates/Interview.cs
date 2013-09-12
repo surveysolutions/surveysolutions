@@ -54,12 +54,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
 
-            this.answersSupportedInExpressions = @event.InterviewData
-                .Answers
-                .Where(question => !(question.Answer is GeoPosition))
-                .ToDictionary(
-                    question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
-                    question => question.Answer);
+            this.answersSupportedInExpressions = @event.InterviewData.Answers == null
+                ? new Dictionary<string, object>()
+                : @event.InterviewData
+                    .Answers
+                    .Where(question => !(question.Answer is GeoPosition))
+                    .ToDictionary(
+                        question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                        question => question.Answer);
 
             this.answeredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector)));
