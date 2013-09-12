@@ -316,6 +316,8 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Controllers\UsersApiController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
@@ -323,7 +325,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\SupervisorCoreRegistry.cs" />
-    <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ApproveRedoModel.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\AssignSuveyData.cs" />
@@ -343,7 +344,6 @@
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
-    <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
@@ -352,7 +352,6 @@
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SummaryRequestModel.cs" />
     <Compile Include="Models\SupervisorModel.cs" />
-    <Compile Include="Models\SupervisorViewModel.cs" />
     <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

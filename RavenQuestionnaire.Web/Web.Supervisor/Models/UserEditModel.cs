@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Web.Supervisor.Models
@@ -9,8 +8,9 @@ namespace Web.Supervisor.Models
         [Key]
         public Guid Id { get; set; }
         
-        [ReadOnly(true)]
         [Display(Name = "User name", Order = 1)]
+        [RegularExpression("^[a-zA-Z0-9_]{3,15}$",
+            ErrorMessage = "Name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol")]
         public string UserName { get; set; }
 
         [RegularExpression("(?=^.{6,255}$)((?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]))^.*", ErrorMessage = "Password must contain at least one number, one upper case character and one lower case character. Length must be between 6 and 255 characters")]
