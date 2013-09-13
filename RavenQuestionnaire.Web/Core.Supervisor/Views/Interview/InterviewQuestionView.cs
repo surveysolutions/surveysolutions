@@ -19,6 +19,8 @@ namespace Core.Supervisor.Views.Interview
             this.ValidationMessage = question.ValidationMessage;
             this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
+            this.IsValid = true;
+            this.IsEnabled = false;
 
             if (question.Answers != null)
             {

@@ -329,7 +329,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
             initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
@@ -382,7 +382,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
         public Interview(Guid id, Guid userId, Guid questionnaireId, InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta):base(id)
@@ -405,7 +405,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, 
                                                           interviewStatus,
                                                           featuredQuestionsMeta));
-            ApplyEvent(new InterviewStatusChanged(interviewStatus));
+            ApplyEvent(new InterviewStatusChanged(interviewStatus, comment: null));
         }
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, string answer)
@@ -687,7 +687,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
         public void AssignInterviewer(Guid userId, Guid interviewerId)
@@ -698,7 +698,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
             if (!interviewWasCompleted)
             {
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
         }
 
@@ -709,7 +709,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restored);
 
             this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
         }
 
         public void Restore(Guid userId)
@@ -717,7 +717,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Deleted);
 
             this.ApplyEvent(new InterviewRestored(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
         }
 
         public void Complete(Guid userId)
@@ -729,7 +729,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isInterviewValid = this.HasInvalidAnswers() || this.HasNotAnsweredMandatoryQuestions(questionnaire);
 
             this.ApplyEvent(new InterviewCompleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment: null));
 
             this.ApplyEvent(isInterviewValid
                 ? new InterviewDeclaredValid() as object
@@ -741,14 +741,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
             this.ApplyEvent(new InterviewRestarted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment: null));
         }
 
         public void Approve(Guid userId, string comment)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor);
 
-            this.ApplyEvent(new InterviewApproved(userId));
+            this.ApplyEvent(new InterviewApproved(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
         }
 
@@ -756,7 +756,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor);
 
-            this.ApplyEvent(new InterviewRejected(userId));
+            this.ApplyEvent(new InterviewRejected(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
@@ -1145,20 +1145,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Guid idOfGroupBeingPropagated in idsOfGroupsBeingPropagated)
             {
-                bool isPropagationCountBeingIncreased = propagationCount > this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+                int oldPropagationCount = this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+
+                bool isPropagationCountBeingIncreased = propagationCount > oldPropagationCount;
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
+                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
+
                 IEnumerable<Guid> affectedGroupIds = questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                IEnumerable<Identity> affectedGroups = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
-                    affectedGroupIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
+                IEnumerable<Identity> affectedGroups = this
+                    .GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
+                        affectedGroupIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances)
+                    .Where(group => IsInstanceBeingInitializedByIncreasedPropagation(group.PropagationVector, oldPropagationCount, indexOfGroupBeingPropagatedInPropagationVector));
 
                 foreach (Identity group in affectedGroups)
                 {
                     PutToCorrespondingListAccordingToEnablementStateChange(group, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(group, questionnaire, getAnswer),
-                        isOldStateEnabled: !this.IsGroupDisabled(group));
+                        isOldStateEnabled: true);
                 }
             }
         }
@@ -1173,20 +1179,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Guid idOfGroupBeingPropagated in idsOfGroupsBeingPropagated)
             {
-                bool isPropagationCountBeingIncreased = propagationCount > this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+                int oldPropagationCount = this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+
+                bool isPropagationCountBeingIncreased = propagationCount > oldPropagationCount;
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
-                IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
+                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
 
-                IEnumerable<Identity> underlyingQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
-                    underlyingQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
+                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                foreach (Identity question in underlyingQuestions)
+                IEnumerable<Identity> affectedQuestions = this
+                    .GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                        affectedQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances)
+                    .Where(group => IsInstanceBeingInitializedByIncreasedPropagation(group.PropagationVector, oldPropagationCount, indexOfGroupBeingPropagatedInPropagationVector));
+
+                foreach (Identity question in affectedQuestions)
                 {
                     PutToCorrespondingListAccordingToEnablementStateChange(question, questionsToBeEnabled, questionsToBeDisabled,
                         isNewStateEnabled: this.ShouldQuestionBeEnabledByCustomEnablementCondition(question, questionnaire, getAnswer),
-                        isOldStateEnabled: !this.IsQuestionDisabled(question));
+                        isOldStateEnabled: true);
                 }
             }
         }
@@ -1368,6 +1380,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!isPropagationCountBeingDecreased)
                 return Enumerable.Empty<Identity>();
 
+            int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
+
             IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(idOfGroupBeingPropagated);
 
             IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
@@ -1376,15 +1390,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return
                 from question in underlyingQuestionInstances
                 where this.WasQuestionAnswered(question)
-                let indexOfPropagatedGroupInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(question, idOfGroupBeingPropagated, questionnaire)
-                where question.PropagationVector[indexOfPropagatedGroupInPropagationVector] >= propagationCount
+                where IsInstanceBeingRemovedByDecreasedPropagation(question.PropagationVector, propagationCount, indexOfGroupBeingPropagatedInPropagationVector)
                 select question;
         }
 
-        private static int GetIndexOfPropagatedGroupInPropagationVector(Identity question, Guid propagatedGroup, IQuestionnaire questionnaire)
+        private static bool IsInstanceBeingInitializedByIncreasedPropagation(int[] instancePropagationVector, int oldPropagationCount, int indexOfGroupBeingPropagatedInPropagationVector)
+        {
+            return instancePropagationVector[indexOfGroupBeingPropagatedInPropagationVector] >= oldPropagationCount;
+        }
+
+        private static bool IsInstanceBeingRemovedByDecreasedPropagation(int[] instancePropagationVector, int newPropagationCount, int indexOfGroupBeingPropagatedInPropagationVector)
+        {
+            return instancePropagationVector[indexOfGroupBeingPropagatedInPropagationVector] >= newPropagationCount;
+        }
+
+        private static int GetIndexOfPropagatedGroupInPropagationVector(Guid propagatedGroup, IQuestionnaire questionnaire)
         {
             return questionnaire
-                .GetParentPropagatableGroupsForQuestionStartingFromTop(question.Id)
+                .GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroup)
                 .ToList()
                 .IndexOf(propagatedGroup);
         }
