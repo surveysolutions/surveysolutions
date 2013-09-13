@@ -143,6 +143,10 @@
                     title: 'Cant save',
                     text: "Save parent item first"
                 },
+                cantMoveAutoPropagatedGroupOutsideGroup: {
+                    title: 'Cant move group',
+                    text: "You can't move AutoPropagate group outside any chapter"
+                },
                 savedData: 'Data saved successfully'
             },
             // methods
