@@ -14,16 +14,6 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         public AndroidSnapshotStore()
         {
-            if (!Directory.Exists(SnapshotStoreDirPath))
-                Directory.CreateDirectory(SnapshotStoreDirPath);
-        }
-
-        private const string snapshotTemp = "snapshotTemp";
-        protected string SnapshotStoreDirPath {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), snapshotTemp);
-            }
         }
 
         public void SaveShapshot(Snapshot snapshot)
@@ -43,49 +33,12 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
         {
-            var inMemorySnapshot = this.TryGetSnapshot(eventSourceId, maxVersion);
-            if (inMemorySnapshot != null)
-                return inMemorySnapshot;
-
-
-            var filePath = GetFileName(eventSourceId);
-            if (!File.Exists(filePath))
-                return null;
-            var snapshot = JsonUtils.GetObject<Snapshot>(File.ReadAllText(filePath));
-            this.SaveShapshot(snapshot);
-            return snapshot;
-        }
-
-        public void FlushSnapshot(Guid eventSourceId)
-        {
-            var snapshot = this.TryGetSnapshot(eventSourceId, long.MaxValue);
-            if(snapshot==null)
-                return;
-
-            var path = GetFileName(eventSourceId);
-            File.WriteAllText(path, JsonUtils.GetJsonData(snapshot));
-
-            //here we have to Remove item from snapshot store
-            //to minimize memory usage
-            _snapshots.Remove(eventSourceId);
+            return this.TryGetSnapshot(eventSourceId, maxVersion);
         }
 
         public void DeleteSnapshot(Guid eventSourceId)
         {
-            var path = GetFileName(eventSourceId);
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-
-            //here we have to Remove item from snapshot store
-            //to minimize memory usage
             _snapshots.Remove(eventSourceId);
-        }
-
-        private string GetFileName(Guid id)
-        {
-            return Path.Combine(SnapshotStoreDirPath,id.ToString());
         }
 
         public string GetPathToBakupFile()
@@ -95,10 +48,6 @@ namespace CAPI.Android.Core.Model.SnapshotStore
 
         public void RestoreFromBakupFolder(string path)
         {
-            foreach (var file in Directory.EnumerateFiles(SnapshotStoreDirPath))
-            {
-                File.Delete(file);
-            }
 
             _snapshots = new Dictionary<Guid, Snapshot>();
         }

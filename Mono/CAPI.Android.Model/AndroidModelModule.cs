@@ -35,7 +35,7 @@ namespace CAPI.Android.Core.Model
         public override void Load()
         {
             var evenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
-            var snapshotStore = new InMemoryEventStore();
+            var snapshotStore = new AndroidSnapshotStore();
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
             var bigSurveyStore = new BackupableInMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>();
