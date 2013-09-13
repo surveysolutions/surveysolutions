@@ -6,7 +6,7 @@
                 var item = {};
                 var uiId = dto.Id + "_" + dto.PropagationVector;
                 switch (dto.QuestionType) {
-                    case 0:
+                    case "SingleOption":
                         item = new model.SingleOptionQuestion();
 
                         item.options(_.map(dto.Options, function (option) {
@@ -21,7 +21,7 @@
                         }));
 
                         break;
-                    case 3:
+                    case "MultyOption":
                         item = new model.MultyOptionQuestion();
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
@@ -34,20 +34,20 @@
                             return o;
                         }));
                         break;
-                    case 7:
+                    case "Text":
                         item = new model.TextQuestion();
                         item.answer(dto.Answer);
                         break;
-                    case 4:
-                    case 8:
+                    case "Numeric":
+                    case "AutoPropagate":
                         item = new model.NumericQuestion();
                         item.answer(dto.Answer * 1);
                         break;
-                    case 5:
+                    case "DateTime":
                         item = new model.DateTimeQuestion();
                         item.answer(new Date(dto.Answer));
                         break;
-                    case 6:
+                    case "GpsCoordinates":
                         item = new model.GpsQuestion();
                         item.latitude(dto.Answer.Latitude);
                         item.longitude(dto.Answer.Longitude);
@@ -65,7 +65,7 @@
                     c.userId(comment.CommenterId);
                     return c;
                 });
-                item.isReadonly(dto.Scope != 1);
+                item.isReadonly(dto.Scope != "Supervisor");
                 item.variable(dto.Variable);
                 item.comments(comments);
                 item.scope(dto.Scope);
@@ -74,7 +74,7 @@
                 item.id(dto.Id);
                 item.title(dto.Title);
                 item.isFlagged(dto.IsFlagged);
-                item.questionType(config.questionTypeMap[dto.QuestionType]);
+                item.questionType(dto.QuestionType);
                 item.isCapital(dto.IsCapital);
                 item.isEnabled(dto.IsEnabled);
                 item.isFeatured(dto.IsFeatured);
@@ -109,7 +109,7 @@
 			        var item = new model.Interview();
 			        item.id(dto.PublicKey);
 			        item.title(dto.Title);
-			        item.status(dto.Status);
+			        item.status(config.statusMap[dto.Status]);
 			        item.questionnaireId(dto.QuestionnairePublicKey);
 			        return item;
 			    }
