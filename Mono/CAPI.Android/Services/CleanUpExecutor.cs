@@ -33,6 +33,10 @@ namespace CAPI.Android.Services
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as MvvmCrossSqliteEventStore;
             if (eventStore != null)
                 eventStore.CleanStream(id);
+
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
+            if (snapshotStore != null)
+                snapshotStore.DeleteSnapshot(id);
             
             //todo: notify denormalizes
             
