@@ -25,6 +25,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly Context context;
         private readonly Guid questionnaireId;
         private readonly InterviewStatus status;
+        private readonly bool enabled;
         
         private readonly IQuestionViewFactory questionViewFactory;
         private readonly EventHandler<ScreenChangedEventArgs> screenChangeEventHandler;
@@ -39,6 +40,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.status = status;
             this.questionViewFactory = new DefaultQuestionViewFactory(CapiApplication.Kernel.Get<IAnswerOnQuestionCommandService>());
             this.screenChangeEventHandler = screenChangeEventHandler;
+            this.enabled = screen.Enabled;
         }
 
         protected override View BuildViewItem(IQuestionnaireItemViewModel questionnaireItemViewModel, int position)
@@ -48,7 +50,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             if (question != null)
             {
                 var questionView = this.questionViewFactory.CreateQuestionView(context, question, questionnaireId);
-                if (status==InterviewStatus.Completed)
+                if (status == InterviewStatus.Completed || !enabled)
                 {
                     questionView.EnableDisableView(false);
                 }
@@ -62,7 +64,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 var groupView = new GroupView(context, group);
 
                 var layoutParams = new ListView.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.WrapContent);
+                    ViewGroup.LayoutParams.WrapContent);
                 //layoutParams.SetMargins(0, 0, 0, 10);
                 groupView.LayoutParameters = layoutParams;
                 groupView.ScreenChanged += screenChangeEventHandler;
