@@ -270,10 +270,12 @@
                         success: function() {
                             group.isNew(false);
                             group.dirtyFlag().reset();
+                            group.fillChildren();
                             calcStatistics();
                             isOutputVisible(false);
                             group.canUpdate(true);
                             group.commit();
+                               
                         },
                         error: function(d) {
                             showError(d);

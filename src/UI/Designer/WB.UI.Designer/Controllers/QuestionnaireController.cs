@@ -3,6 +3,7 @@ using Main.Core.Domain;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using System.Linq;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -31,6 +32,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IExpressionReplacer expressionReplacer;
+        private readonly ILogger logger;
 
         public QuestionnaireController(
             ICommandService commandService,
@@ -38,7 +40,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            IExpressionReplacer expressionReplacer)
+            IExpressionReplacer expressionReplacer,
+            ILogger logger)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -46,6 +49,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.expressionReplacer = expressionReplacer;
+            this.logger = logger;
         }
 
         public ActionResult Clone(Guid id)
@@ -78,9 +82,12 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (Exception e)
                 {
+                    logger.Error("Error on questionnaire cloning.", e);
+
                     if (e.InnerException is DomainException)
                     {
                         this.Error(e.InnerException.Message);
+                        logger.Error("Inner exception: " + e.InnerException.Message, e.InnerException);
                     }
                     else
                     {

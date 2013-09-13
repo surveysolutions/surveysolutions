@@ -1008,7 +1008,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     return;
                 case InterviewStatus.RejectedBySupervisor:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.Restored,
-                                                                  InterviewStatus.ApprovedBySupervisor);
+                        InterviewStatus.InterviewerAssigned,
+                        InterviewStatus.ApprovedBySupervisor);
                     return;
                 case InterviewStatus.InterviewerAssigned:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(
