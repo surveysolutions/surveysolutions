@@ -443,7 +443,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             return
                 this.Screens.Select(
-                    s => s.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(s => s.ScreenId.Id == publicKey).ToList();
+                    s => s.Value)
+                    .OfType<QuestionnairePropagatedScreenViewModel>()
+                    .Where(s => s.ScreenId.Id == publicKey)
+                    .OrderBy(s => s.ScreenId.PropagationVector.Last())
+                    .ToList();
         }
 
         protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)
