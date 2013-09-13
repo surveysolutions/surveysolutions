@@ -1144,20 +1144,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Guid idOfGroupBeingPropagated in idsOfGroupsBeingPropagated)
             {
-                bool isPropagationCountBeingIncreased = propagationCount > this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+                int oldPropagationCount = this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+
+                bool isPropagationCountBeingIncreased = propagationCount > oldPropagationCount;
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
+                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
+
                 IEnumerable<Guid> affectedGroupIds = questionnaire.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                IEnumerable<Identity> affectedGroups = this.GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
-                    affectedGroupIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
+                IEnumerable<Identity> affectedGroups = this
+                    .GetInstancesOfGroupsWithSameAndDeeperPropagationLevelOrThrow(
+                        affectedGroupIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances)
+                    .Where(group => IsInstanceBeingInitializedByIncreasedPropagation(group.PropagationVector, oldPropagationCount, indexOfGroupBeingPropagatedInPropagationVector));
 
                 foreach (Identity group in affectedGroups)
                 {
                     PutToCorrespondingListAccordingToEnablementStateChange(group, groupsToBeEnabled, groupsToBeDisabled,
                         isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(group, questionnaire, getAnswer),
-                        isOldStateEnabled: !this.IsGroupDisabled(group));
+                        isOldStateEnabled: true);
                 }
             }
         }
@@ -1172,20 +1178,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Guid idOfGroupBeingPropagated in idsOfGroupsBeingPropagated)
             {
-                bool isPropagationCountBeingIncreased = propagationCount > this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+                int oldPropagationCount = this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+
+                bool isPropagationCountBeingIncreased = propagationCount > oldPropagationCount;
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
-                IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
+                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
 
-                IEnumerable<Identity> underlyingQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
-                    underlyingQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
+                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(idOfGroupBeingPropagated);
 
-                foreach (Identity question in underlyingQuestions)
+                IEnumerable<Identity> affectedQuestions = this
+                    .GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                        affectedQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances)
+                    .Where(group => IsInstanceBeingInitializedByIncreasedPropagation(group.PropagationVector, oldPropagationCount, indexOfGroupBeingPropagatedInPropagationVector));
+
+                foreach (Identity question in affectedQuestions)
                 {
                     PutToCorrespondingListAccordingToEnablementStateChange(question, questionsToBeEnabled, questionsToBeDisabled,
                         isNewStateEnabled: this.ShouldQuestionBeEnabledByCustomEnablementCondition(question, questionnaire, getAnswer),
-                        isOldStateEnabled: !this.IsQuestionDisabled(question));
+                        isOldStateEnabled: true);
                 }
             }
         }
@@ -1367,6 +1379,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!isPropagationCountBeingDecreased)
                 return Enumerable.Empty<Identity>();
 
+            int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
+
             IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(idOfGroupBeingPropagated);
 
             IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
@@ -1375,15 +1389,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return
                 from question in underlyingQuestionInstances
                 where this.WasQuestionAnswered(question)
-                let indexOfPropagatedGroupInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(question, idOfGroupBeingPropagated, questionnaire)
-                where question.PropagationVector[indexOfPropagatedGroupInPropagationVector] >= propagationCount
+                where IsInstanceBeingRemovedByDecreasedPropagation(question.PropagationVector, propagationCount, indexOfGroupBeingPropagatedInPropagationVector)
                 select question;
         }
 
-        private static int GetIndexOfPropagatedGroupInPropagationVector(Identity question, Guid propagatedGroup, IQuestionnaire questionnaire)
+        private static bool IsInstanceBeingInitializedByIncreasedPropagation(int[] instancePropagationVector, int oldPropagationCount, int indexOfGroupBeingPropagatedInPropagationVector)
+        {
+            return instancePropagationVector[indexOfGroupBeingPropagatedInPropagationVector] >= oldPropagationCount;
+        }
+
+        private static bool IsInstanceBeingRemovedByDecreasedPropagation(int[] instancePropagationVector, int newPropagationCount, int indexOfGroupBeingPropagatedInPropagationVector)
+        {
+            return instancePropagationVector[indexOfGroupBeingPropagatedInPropagationVector] >= newPropagationCount;
+        }
+
+        private static int GetIndexOfPropagatedGroupInPropagationVector(Guid propagatedGroup, IQuestionnaire questionnaire)
         {
             return questionnaire
-                .GetParentPropagatableGroupsForQuestionStartingFromTop(question.Id)
+                .GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(propagatedGroup)
                 .ToList()
                 .IndexOf(propagatedGroup);
         }
