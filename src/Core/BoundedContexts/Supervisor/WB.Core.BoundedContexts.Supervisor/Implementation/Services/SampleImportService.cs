@@ -155,6 +155,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                 }
                 catch
                 {
+                   // result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
                 }
             }
             result.CompleteProcess();
@@ -241,11 +242,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
         {
-            /*
+            
    
-            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+           /* var featuredAnswers =*/ CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption);
-         template.CreateInterviewWithFeaturedQuestions(interviewId, new UserLight(Guid.NewGuid(), "test"),
+          /*  new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Interview(Guid.NewGuid(), Guid.NewGuid(),
+                template.EventSourceId, featuredAnswers, DateTime.Now, Guid.NewGuid());*/
+            /*   template.CreateInterviewWithFeaturedQuestions(interviewId, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
  */
         }
@@ -278,7 +281,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         break;
 
                     case QuestionType.DateTime:
-                        featuredAnswers.Add(question.PublicKey, DateTime.ParseExact(values[i],"d", CultureInfo.InvariantCulture));
+                        DateTime date;
+                        if (DateTime.TryParse(values[i], out date))
+                        {
+                            featuredAnswers.Add(question.PublicKey, date);
+                        }
                         break;
 
                     case QuestionType.SingleOption:
