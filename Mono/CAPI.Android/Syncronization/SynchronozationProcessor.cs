@@ -163,7 +163,6 @@ namespace CAPI.Android.Syncronization
                     string message = "connecting...";
                     OnStatusChanged(
                         new SynchronizationEventArgs(message, Operation.Handshake, true));
-                    Thread.Sleep(1000);
                     var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
                     clientRegistrationId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, clientRegistrationId);
                 });
