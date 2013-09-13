@@ -5,7 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewApproved : InterviewActiveEvent
     {
-        public InterviewApproved(Guid userId)
-            : base(userId) {}
+        public string Comment { get; private set; }
+
+        public InterviewApproved(Guid userId, string comment)
+            : base(userId)
+        {
+            this.Comment = comment;
+        }
     }
 }
