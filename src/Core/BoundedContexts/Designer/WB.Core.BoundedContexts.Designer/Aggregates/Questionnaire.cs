@@ -100,13 +100,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             description: g.Description,
                             condition: g.ConditionExpression,
                             responsibleId: createdBy);
+                        return;
                     }
-                });
-            source.Children.ApplyAction(
-                x => x.Children,
-                (parent, x) =>
-                {
-                    Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
                     var q = x as IQuestion;
                     if (q != null)
@@ -129,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
                             optionsOrder: q.AnswerOrder,
                             maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray(), 
+                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray(),
                             responsibleId: createdBy,
                             linkedToQuestionId: q.LinkedToQuestionId);
                     }
