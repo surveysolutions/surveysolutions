@@ -696,7 +696,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
-            if (!interviewWasCompleted)
+            if (!interviewWasCompleted && this.status != InterviewStatus.InterviewerAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
             }
