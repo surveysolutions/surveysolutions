@@ -33,6 +33,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Instructions = instructions;
             Comments = comments;
 
+            Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
             {
                 Status = Status | QuestionStatus.Enabled;
@@ -103,14 +104,31 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 Status &= ~QuestionStatus.Valid;
             RaisePropertyChanged("Status");
         }
+
+        public bool IsEnabled()
+        {
+            return this.Status.HasFlag(QuestionStatus.Enabled) && this.Status.HasFlag(QuestionStatus.ParentEnabled);
+        }
+
+        public void SetParentEnabled(bool enabled)
+        {
+            if (Status.HasFlag(QuestionStatus.ParentEnabled) == enabled)
+                return;
+            if (enabled)
+                Status = Status | QuestionStatus.ParentEnabled;
+            else
+                Status &= ~QuestionStatus.ParentEnabled;
+            RaisePropertyChanged("Status");
+        }
     }
 
     [Flags]
     public enum QuestionStatus
     {
-        None=0,
-        Enabled=1,
-        Valid=2,
-        Answered=4
+        None = 0,
+        Enabled = 1,
+        Valid = 2,
+        Answered = 4,
+        ParentEnabled = 8
     }
 }

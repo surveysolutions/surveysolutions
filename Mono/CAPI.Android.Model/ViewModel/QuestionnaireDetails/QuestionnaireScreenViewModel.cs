@@ -35,7 +35,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                     var question = item as QuestionViewModel;
                     if (question != null)
                     {
-                        if (question.Status.HasFlag(QuestionStatus.Enabled))
+                        if (question.IsEnabled())
                         {
                             Total++;
                             if (question.Status.HasFlag(QuestionStatus.Answered))
@@ -109,7 +109,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 var question = item as QuestionViewModel;
                 if (question != null)
                 {
-                    if (question.Status.HasFlag(QuestionStatus.Enabled))
+                    if (question.IsEnabled())
                     {
                         total++;
                         if (question.Status.HasFlag(QuestionStatus.Answered))

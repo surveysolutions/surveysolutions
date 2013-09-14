@@ -56,7 +56,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
         }
         protected override void OnAttachedToWindow()
         {
-            llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            llWrapper.EnableDisableView(this.Model.IsEnabled());
             base.OnAttachedToWindow();
         }
 
