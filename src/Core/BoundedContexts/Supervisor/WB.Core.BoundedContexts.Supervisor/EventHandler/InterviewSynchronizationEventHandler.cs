@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -51,7 +47,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            ResendInterviewInStatus(evnt.EventSourceId, InterviewStatus.InterviewerAssigned);
+            ResendInterviewForPerson(evnt.EventSourceId, evnt.Payload.InterviewerId);
         }
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
@@ -60,7 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             if (IsInterviewWithStatusNeedToBeResendToCapi(newStatus))
             {
-                ResendInterviewInStatus(evnt.EventSourceId, newStatus);
+                ResendInterviewInNewStatus(evnt.EventSourceId, newStatus);
             }
 
             if (IsInterviewWithStatusNeedToBeDeletedOnCapi(newStatus))
@@ -79,12 +75,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             return newStatus == InterviewStatus.Completed || newStatus == InterviewStatus.Deleted;
         }
 
-        public void ResendInterviewInStatus(Guid interviewId, InterviewStatus status)
+        public void ResendInterviewInNewStatus(Guid interviewId, InterviewStatus status)
         {
             var interview = interviewDataWriter.GetById(interviewId);
 
-            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedTpUser(interview,
-                interview.ResponsibleId, status);
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview, interview.ResponsibleId, status);
+
+            syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
+        }
+
+        public void ResendInterviewForPerson(Guid interviewId,  Guid responsibleId)
+        {
+            var interview = interviewDataWriter.GetById(interviewId);
+
+            var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview,
+                responsibleId, interview.Status);
 
             syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
@@ -95,7 +100,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         }
 
-        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedTpUser(InterviewData interview, Guid userId,
+        private InterviewSynchronizationDto BuildSynchronizationDtoWhichIsAssignedToUser(InterviewData interview, Guid userId,
             InterviewStatus status)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
