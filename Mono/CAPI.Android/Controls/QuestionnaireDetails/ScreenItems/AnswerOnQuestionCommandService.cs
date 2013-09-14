@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -26,63 +27,57 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private readonly Queue<InterviewItemId> executionLine = new Queue<InterviewItemId>();
         private readonly ICommandService commandService;
-        private readonly object locker = new object();
-        private bool isRunning;
+
 
         public AnswerOnQuestionCommandService(ICommandService commandService)
         {
             this.commandService = commandService;
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    this.ExecuteFirstInLineSaveAnswerCommand();
+                    Thread.Sleep(1000);
+                }
+            });
         }
 
         public void AnswerOnQuestion(Context context, AnswerQuestionCommand command, Action<Exception> errorCallback)
         {
             UpdateExecutionFlow(new CommandAndErrorCallback(command, errorCallback));
-           /* Toast.MakeText(context,
-                           string.Format("in line: {0}, commandQueue: {1}", executionLine.Count, commandQueue.Count),
-                           ToastLength.Short).Show();*/
-            if (!isRunning)
-            {
-                isRunning = true;
-                Task.Factory.StartNew(ExecuteSaveAnswerCommandAndRunNextIfExist);
-            }
         }
 
         private void UpdateExecutionFlow(CommandAndErrorCallback command)
         {
             var key = new InterviewItemId(command.Command.QuestionId, command.Command.PropagationVector);
 
-            lock (locker)
-            {
-                commandQueue[key] = command;
+            commandQueue[key] = command;
 
-                if (executionLine.Count > 0 && executionLine.Peek() == key)
-                    return;
+            if (executionLine.Count > 0 && executionLine.Peek() == key)
+                return;
 
-                executionLine.Enqueue(key);
-            }
+            executionLine.Enqueue(key);
+
         }
 
 
-        private void ExecuteSaveAnswerCommandAndRunNextIfExist()
+        private void ExecuteFirstInLineSaveAnswerCommand()
         {
             CommandAndErrorCallback nextCommand = null;
 
-            lock (locker)
+            if (executionLine.Count == 0)
             {
-                if (executionLine.Count == 0)
-                {
-                    isRunning = false;
-                    return;
-                }
-
-                InterviewItemId key = executionLine.Dequeue();
-
-                if (commandQueue.ContainsKey(key))
-                {
-                    nextCommand = commandQueue[key];
-                    commandQueue.Remove(key);
-                }
+                return;
             }
+
+            InterviewItemId key = executionLine.Dequeue();
+
+            if (commandQueue.ContainsKey(key))
+            {
+                nextCommand = commandQueue[key];
+                commandQueue.Remove(key);
+            }
+
 
             try
             {
@@ -94,8 +89,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 if (nextCommand != null)
                     nextCommand.ErrorCallback(ex);
             }
-
-            ExecuteSaveAnswerCommandAndRunNextIfExist();
         }
 
         class CommandAndErrorCallback
