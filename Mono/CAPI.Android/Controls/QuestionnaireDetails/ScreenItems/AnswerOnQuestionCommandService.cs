@@ -22,8 +22,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class AnswerOnQuestionCommandService : IAnswerOnQuestionCommandService
     {
-        private readonly Dictionary<InterviewItemId, CommandAndErrorCallback> commandQueue =
-            new Dictionary<InterviewItemId, CommandAndErrorCallback>();
+        private readonly ConcurrentDictionary<InterviewItemId, CommandAndErrorCallback> commandQueue =
+            new ConcurrentDictionary<InterviewItemId, CommandAndErrorCallback>();
 
         private readonly Queue<InterviewItemId> executionLine = new Queue<InterviewItemId>();
         private readonly ICommandService commandService;
@@ -51,7 +51,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var key = new InterviewItemId(command.Command.QuestionId, command.Command.PropagationVector);
 
-            commandQueue[key] = command;
+            commandQueue.AddOrUpdate(key, command, (k, oldValue) => command);
 
             if (executionLine.Count > 0 && executionLine.Peek() == key)
                 return;
@@ -63,7 +63,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private void ExecuteFirstInLineSaveAnswerCommand()
         {
-            CommandAndErrorCallback nextCommand = null;
+            CommandAndErrorCallback nextCommand;
 
             if (executionLine.Count == 0)
             {
@@ -72,22 +72,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             InterviewItemId key = executionLine.Dequeue();
 
-            if (commandQueue.ContainsKey(key))
+            if (!commandQueue.TryRemove(key, out nextCommand) || nextCommand == null)
             {
-                nextCommand = commandQueue[key];
-                commandQueue.Remove(key);
+                this.ExecuteFirstInLineSaveAnswerCommand();
+                return;
             }
-
 
             try
             {
-                if (nextCommand != null)
-                    commandService.Execute(nextCommand.Command);
+                commandService.Execute(nextCommand.Command);
             }
             catch (Exception ex)
             {
-                if (nextCommand != null)
-                    nextCommand.ErrorCallback(ex);
+                nextCommand.ErrorCallback(ex);
             }
         }
 
