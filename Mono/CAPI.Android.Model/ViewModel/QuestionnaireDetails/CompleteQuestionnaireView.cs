@@ -286,6 +286,19 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var screen =
                 this.Screens[key];
             screen.SetEnabled(enabled);
+
+            var plainScreen = screen as QuestionnaireScreenViewModel;
+            if (plainScreen == null)
+                return;
+
+            foreach (var child in plainScreen.Items)
+            {
+                var question = child as QuestionViewModel;
+                if (question != null)
+                {
+                    question.SetParentEnabled(enabled);
+                }
+            }
         }
 
         public IEnumerable<QuestionViewModel> FindQuestion(Func<QuestionViewModel, bool> filter)
@@ -443,7 +456,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             return
                 this.Screens.Select(
-                    s => s.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(s => s.ScreenId.Id == publicKey).ToList();
+                    s => s.Value)
+                    .OfType<QuestionnairePropagatedScreenViewModel>()
+                    .Where(s => s.ScreenId.Id == publicKey)
+                    .ToList();
         }
 
         protected IList<InterviewItemId> BuildBreadCrumbs(IList<IGroup> rout, InterviewItemId key)

@@ -24,7 +24,8 @@ namespace CAPI.Android.Bindings
             var status = (QuestionStatus) value;
 
             int bgId = Resource.Drawable.questionShape;
-            if (!status.HasFlag(QuestionStatus.Enabled))
+            var enabled = status.HasFlag(QuestionStatus.Enabled) && status.HasFlag(QuestionStatus.ParentEnabled);
+            if (!enabled)
                 bgId = Resource.Drawable.questionDisabledShape;
             else if (!status.HasFlag(QuestionStatus.Valid))
                 bgId = Resource.Drawable.questionInvalidShape;
@@ -37,7 +38,7 @@ namespace CAPI.Android.Bindings
 
             if (llWrapper != null)
             {
-                llWrapper.EnableDisableView(status.HasFlag(QuestionStatus.Enabled));
+                llWrapper.EnableDisableView(enabled);
             }
         }
 

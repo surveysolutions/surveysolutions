@@ -61,6 +61,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             {
                 record.Start = start;
                 draftChangeLog.Store(record, Guid.Parse(record.Id));
+                return;
             }
             var recordId = Guid.NewGuid();
             draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null), recordId);

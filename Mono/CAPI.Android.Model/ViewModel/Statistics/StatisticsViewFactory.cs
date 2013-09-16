@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
             var doc = this.documentStorage.GetById(input.QuestionnaireId);
             var enabledQuestion =
                 doc.FindQuestion(
-                    q => q.Status.HasFlag(QuestionStatus.Enabled));
+                    q => q.IsEnabled());
             
             var answered =
                 enabledQuestion.Where(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(

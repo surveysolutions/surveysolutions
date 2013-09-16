@@ -50,7 +50,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             if (question != null)
             {
                 var questionView = this.questionViewFactory.CreateQuestionView(context, question, questionnaireId);
-                if (status == InterviewStatus.Completed || !enabled)
+                if (status == InterviewStatus.Completed)
                 {
                     questionView.EnableDisableView(false);
                 }

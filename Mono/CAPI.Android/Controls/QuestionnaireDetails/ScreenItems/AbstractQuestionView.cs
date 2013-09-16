@@ -147,7 +147,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected virtual void SaveAnswerErrorHandler(Exception ex)
         {
-            if (!Model.Status.HasFlag(QuestionStatus.Enabled))
+            if (!Model.IsEnabled())
                 return;
             tvError.Visibility = ViewStates.Visible;
             tvError.Text = GetDippestException(ex).Message;
@@ -191,7 +191,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected override void OnAttachedToWindow()
         {
-            llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            llWrapper.EnableDisableView(this.Model.IsEnabled());
             base.OnAttachedToWindow();
         }
         protected virtual void PostInit()
