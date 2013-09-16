@@ -28,7 +28,7 @@
                 },
                 {
                     key: "DateTime",
-                    value: "Date and time"
+                    value: "Date"
                 },
                 {
                     key: "Text",
