@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Supervisor.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using Web.Supervisor.Models;
@@ -33,6 +34,14 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
 
+        private readonly InterviewStatus[] interviewStatusesToSkip =
+        {
+            InterviewStatus.Created,
+            InterviewStatus.ReadyForInterview,
+            InterviewStatus.Restarted,
+            InterviewStatus.SentToCapi,
+            InterviewStatus.Deleted
+        };
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
@@ -157,12 +166,12 @@ namespace Web.Supervisor.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.SurveyStatusViewItems());
+            return this.View(StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems();
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
