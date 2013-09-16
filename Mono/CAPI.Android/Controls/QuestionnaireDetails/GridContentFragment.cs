@@ -97,6 +97,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             const int columnCount = 2;
             llTablesContainer.Adapter = new GridContentAdapter(Model, columnCount, this.Activity, OnScreenChanged,
                                                                tvEmptyLabelDescription, llTablesContainer);
+            llTablesContainer.ScrollingCacheEnabled = false;
+
             top.AddView(llTablesContainer);
         }
 

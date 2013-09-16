@@ -65,6 +65,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             //llContent.fil.SetFillViewport()
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
+            llContent.ScrollingCacheEnabled = false;
+
             var nextBtn = new GroupView(inflater.Context,
                                         PropagatedModel == null
                                             ? null
