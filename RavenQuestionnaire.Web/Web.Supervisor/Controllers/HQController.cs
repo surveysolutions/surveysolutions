@@ -78,7 +78,7 @@ namespace Web.Supervisor.Controllers
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
+            this.ViewBag.CurrentUser = new UsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
             return this.View(this.Filters());
         }
 
@@ -172,7 +172,7 @@ namespace Web.Supervisor.Controllers
                     Users =
                         this.supervisorsFactory.Load(new UserListViewInputModel {PageSize = int.MaxValue})
                             .Items.Where(u => !u.IsLocked)
-                            .Select(u => new SurveyUsersViewItem
+                            .Select(u => new UsersViewItem
                                 {
                                     UserId = u.UserId,
                                     UserName = u.UserName

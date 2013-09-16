@@ -6,7 +6,7 @@
     {
         #region Public Properties
 
-        public IEnumerable<SurveyUsersViewItem> Items { get; set; }
+        public IEnumerable<UsersViewItem> Items { get; set; }
 
         #endregion
     }

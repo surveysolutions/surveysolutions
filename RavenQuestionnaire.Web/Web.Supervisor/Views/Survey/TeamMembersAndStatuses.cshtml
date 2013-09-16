@@ -1,11 +1,12 @@
 ﻿@using System.Web.Optimization
-@model IEnumerable<Core.Supervisor.Views.Summary.SummaryTemplateViewItem>
+@model IEnumerable<Core.Supervisor.Views.Reposts.Views.TemplateViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/lib/lodash.js")
     @Scripts.Render("~/Scripts/vm/summarylistview.js")
     @Html.Partial("_ListViewStatusesScript")
     <script type="text/javascript">
@@ -34,11 +35,11 @@
             <select data-bind="value: SelectedTemplate" class="input-block-level">
                 @if (Model.Count() > 1)
                 {
-                    <option>Any</option>
+                    <option value="">Any</option>
                 }
                 @foreach (var item in Model)
                 {
-                    <option value="@item.TemplateId">@item.TemplateName</option>
+                    <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
                 }
             </select>
         </li>

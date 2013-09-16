@@ -45,6 +45,11 @@ namespace Core.Supervisor.Views.Interview
                 predicate = predicate.AndCondition(x => (x.QuestionnaireId == input.QuestionnaireId));
             }
 
+            if (input.QuestionnaireVersion.HasValue)
+            {
+                predicate = predicate.AndCondition(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
+            }
+
             var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize).ToList();

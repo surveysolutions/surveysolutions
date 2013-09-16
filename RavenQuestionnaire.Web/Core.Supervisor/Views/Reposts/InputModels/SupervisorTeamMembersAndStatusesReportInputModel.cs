@@ -16,5 +16,7 @@ namespace Core.Supervisor.Views.Reposts.InputModels
         public Guid ViewerId { get; set; }
 
         public Guid? TemplateId { get; set; }
+
+        public long? TemplateVersion { get; set; }
     }
 }

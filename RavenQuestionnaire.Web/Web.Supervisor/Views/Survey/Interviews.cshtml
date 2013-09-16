@@ -7,6 +7,7 @@
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/lib/lodash.js")
     @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
 
     <script type="text/javascript">
@@ -103,7 +104,7 @@
                 }
                 @foreach (var item in Model.Templates)
                 {
-                    <option value="@item.TemplateId">@item.TemplateName</option>
+                    <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
                 }
             </select>
         </li>

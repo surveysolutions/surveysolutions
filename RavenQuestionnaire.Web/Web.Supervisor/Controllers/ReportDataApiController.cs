@@ -61,6 +61,7 @@ namespace Web.Supervisor.Controllers
                 if (data.Request != null)
                 {
                     input.TemplateId = data.Request.TemplateId;
+                    input.TemplateVersion = data.Request.TemplateVersion;
                 }
             }
 
@@ -107,6 +108,7 @@ namespace Web.Supervisor.Controllers
                 if (data.Request != null)
                 {
                     input.TemplateId = data.Request.TemplateId;
+                    input.TemplateVersion = data.Request.TemplateVersion;
                 }
             }
 

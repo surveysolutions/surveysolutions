@@ -273,7 +273,7 @@
     <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\Interviewer\InterviewerView.cs" />
     <Compile Include="Views\Interviewer\InterviewerViewFactory.cs" />
-    <Compile Include="Views\Reposts\Views\SurveyUsersViewItem.cs" />
+    <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
     <Compile Include="Views\Survey\WhereClouseHelper.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />

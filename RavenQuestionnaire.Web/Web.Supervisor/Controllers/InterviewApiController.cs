@@ -30,7 +30,6 @@ namespace Web.Supervisor.Controllers
                 {
                     Orders = data.SortOrder
                 };
-
             if (data.Pager != null)
             {
                 input.Page = data.Pager.Page;
@@ -40,6 +39,7 @@ namespace Web.Supervisor.Controllers
             if (data.Request != null)
             {
                 input.QuestionnaireId = data.Request.TemplateId;
+                input.QuestionnaireVersion = data.Request.TemplateVersion;
                 input.TeamLeadId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
             }
@@ -64,6 +64,7 @@ namespace Web.Supervisor.Controllers
             if (data.Request != null)
             {
                 input.QuestionnaireId = data.Request.TemplateId;
+                input.QuestionnaireVersion = data.Request.TemplateVersion;
                 input.ResponsibleId = data.Request.ResponsibleId;
                 input.Status = data.Request.Status;
             }

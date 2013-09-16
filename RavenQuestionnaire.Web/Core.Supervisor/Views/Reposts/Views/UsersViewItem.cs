@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class SurveyUsersViewItem
+    public class UsersViewItem
     {
         public Guid UserId { get; set; }
 

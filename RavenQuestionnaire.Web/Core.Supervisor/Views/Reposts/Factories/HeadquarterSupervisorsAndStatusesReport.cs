@@ -29,6 +29,11 @@ namespace Core.Supervisor.Views.Reposts.Factories
                         ? items.Where(x => x.QuestionnaireId == input.TemplateId)
                         : items.Where(x => x.QuestionnaireId == Guid.Empty);
 
+            if (input.TemplateVersion.HasValue)
+            {
+                items = items.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
+            }
+
             List<HeadquarterSupervisorsAndStatusesReportLine> all = items.OrderUsingSortExpression(input.Order)
                                                                          .Skip((input.Page - 1)*input.PageSize)
                                                                          .Take(input.PageSize)
