@@ -2,7 +2,7 @@
     ['pnotify', 'ko', 'amplify'],
     function(toastr, ko, amplify) {
 
-        var// properties
+        var // properties
             //-----------------
             questionTypes = {
                 "SingleOption": "Categorical: one answer",
@@ -135,7 +135,7 @@
                     title: 'Cant move',
                     text: "You can't move unsaved items"
                 },
-                cantMoveIntoUnsavedItem : {
+                cantMoveIntoUnsavedItem: {
                     title: 'Cant move',
                     text: "You can't move items to unsaved groups or chapters"
                 },
@@ -146,6 +146,18 @@
                 cantMoveAutoPropagatedGroupOutsideGroup: {
                     title: 'Cant move group',
                     text: "You can't move AutoPropagate group outside any chapter"
+                },
+                cantMoveFeaturedQuestionIntoAutoGroup: {
+                    title: 'Cant move question',
+                    text: "You can't move featured question into propagated group"
+                },
+                cantMoveAutoQuestionIntoAutoGroup: {
+                    title: 'Cant move question',
+                    text: "You can't move AutoPropagate question into propagated group"
+                },
+                cantMoveHeadQuestionOutsideAutoGroup: {
+                    title: 'Cant move question',
+                    text: "You can't move head question outside any propagated group"
                 },
                 savedData: 'Data saved successfully'
             },
