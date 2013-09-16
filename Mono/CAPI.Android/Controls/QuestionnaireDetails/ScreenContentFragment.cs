@@ -79,6 +79,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return top;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (llContent != null)
+            {
+                if (llContent.Adapter != null)
+                {
+                    llContent.Adapter.Dispose();
+                }
+
+                llContent.Dispose();
+            }
+        }
+
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);

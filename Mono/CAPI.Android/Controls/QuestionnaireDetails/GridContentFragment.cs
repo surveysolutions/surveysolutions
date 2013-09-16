@@ -133,5 +133,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 return questionnaire;
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (llTablesContainer != null)
+            {
+                if (llTablesContainer.Adapter != null)
+                {
+                    llTablesContainer.Adapter.Dispose();
+                }
+
+                llTablesContainer.Dispose();
+            }
+        }
     }
 }

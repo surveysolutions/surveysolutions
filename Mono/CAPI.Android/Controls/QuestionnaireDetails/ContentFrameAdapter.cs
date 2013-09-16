@@ -90,16 +90,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             return PositionNone;
         }
+
         public override void DestroyItem(global::Android.Views.ViewGroup p0, int p1, Java.Lang.Object p2)
         {
             var fragment = p2 as Fragment;
-            
+
             FragmentTransaction trans = fragment.FragmentManager.BeginTransaction();
             trans.Remove(fragment);
             trans.Commit();
             base.DestroyItem(p0, p1, p2);
-           
+
+            if (mFragments.Length > p1)
+                mFragments[p1] = null;
         }
+
         public int GetScreenIndex(InterviewItemId? screenId)
         {
             if (!screenId.HasValue)
