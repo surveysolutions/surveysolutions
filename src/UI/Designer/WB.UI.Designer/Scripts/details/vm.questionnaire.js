@@ -395,6 +395,12 @@
                     return;
                 }
 
+                if (isDropedOutsideAnyChapter && moveItemType == "group" && arg.item.gtype() == "AutoPropagated") {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
+                    return;
+                }
+
                 if (isDropedOutsideAnyChapter && moveItemType == "question") {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveQuestionOutsideGroup);

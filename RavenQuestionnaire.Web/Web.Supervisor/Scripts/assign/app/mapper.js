@@ -40,11 +40,11 @@
             }
         },
             option = {
-                getDtoId: function (dto) { return dto.PublicKey; },
+                getDtoId: function (dto) { return dto.AnswerValue; },
                 fromDto: function (dto) {
 
                     var item = new model.Option();
-                    item.id(dto.PublicKey);
+                    item.id(dto.AnswerValue);
                     item.title(dto.Title);
                     item.value(dto.AnswerValue);
                     item.isSelected(dto.Selected || false);

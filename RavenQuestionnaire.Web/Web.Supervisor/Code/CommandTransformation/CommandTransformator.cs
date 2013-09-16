@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding;
+using Newtonsoft.Json.Linq;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
@@ -76,15 +77,22 @@ namespace Web.Supervisor.Code.CommandTransformation
                     break;
 
                 case QuestionType.SingleOption:
-                    return new KeyValuePair<Guid, object>(answer.Id, Guid.Parse(answer.Answer.ToString()));
+                    return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
 
                 case QuestionType.MultyOption:
-                    var answerAsDecimalArray = ((string[])answer.Answer).Select(decimal.Parse);
+                    decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(decimal.Parse).ToArray();
                     return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
+                
                 case QuestionType.GpsCoordinates:
                     return new KeyValuePair<Guid, object>(answer.Id, new GeoPosition(answer.Answer as string));
             }
+
             throw new Exception("Unknown question type");
+        }
+
+        private static string[] JsonArrayToStringArray(object jsonArray)
+        {
+            return ((JArray) jsonArray).ToObject<string[]>();
         }
     }
 }
