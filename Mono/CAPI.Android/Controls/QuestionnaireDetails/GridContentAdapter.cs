@@ -43,6 +43,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.tvEmptyLabelDescription = tvEmptyLabelDescription;
             this.QuestionnaireId = model.QuestionnaireId;
             this.listView = listView;
+            this.listView.ScrollingCacheEnabled = false;
         }
 
         private static IList<RosterTable> CreateItemList(QuestionnaireGridViewModel model, int columnCount)
