@@ -116,6 +116,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var invalidQuestionsView = new ListView(this.Activity);
             invalidQuestionsView.Adapter = new StatisticsDataAdapter(questions, valueFucntions, this.Activity,
                                                                      OnScreenChanged);
+
+            invalidQuestionsView.ScrollingCacheEnabled = false;
             return invalidQuestionsView;
         }
 

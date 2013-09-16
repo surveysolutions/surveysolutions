@@ -65,6 +65,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             //llContent.fil.SetFillViewport()
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
+            llContent.ScrollingCacheEnabled = false;
+
             var nextBtn = new GroupView(inflater.Context,
                                         PropagatedModel == null
                                             ? null
@@ -77,6 +79,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
 
             return top;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (llContent != null)
+            {
+                if (llContent.Adapter != null)
+                {
+                    llContent.Adapter.Dispose();
+                }
+
+                llContent.Dispose();
+            }
         }
 
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)

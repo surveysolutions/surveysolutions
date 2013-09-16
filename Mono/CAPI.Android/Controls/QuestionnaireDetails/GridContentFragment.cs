@@ -97,6 +97,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             const int columnCount = 2;
             llTablesContainer.Adapter = new GridContentAdapter(Model, columnCount, this.Activity, OnScreenChanged,
                                                                tvEmptyLabelDescription, llTablesContainer);
+            llTablesContainer.ScrollingCacheEnabled = false;
+
             top.AddView(llTablesContainer);
         }
 
@@ -131,6 +133,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                         new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
                 }
                 return questionnaire;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (llTablesContainer != null)
+            {
+                if (llTablesContainer.Adapter != null)
+                {
+                    llTablesContainer.Adapter.Dispose();
+                }
+
+                llTablesContainer.Dispose();
             }
         }
     }
