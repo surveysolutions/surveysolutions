@@ -3,6 +3,8 @@ body {
     padding-bottom: 40px;
 }
 
+input[type=text]::-ms-clear { display: none; }
+
 .network-name {
     float: left;
     width: 300px;
