@@ -217,7 +217,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewApproved @event) {}
 
-        private void Apply(InterviewRejected @event) {}
+        private void Apply(InterviewRejected @event)
+        {
+            interviewWasCompleted = false;
+        }
 
         private void Apply(InterviewDeclaredValid @event) {}
 
@@ -649,10 +652,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Linked);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
+        
 
             this.ApplyEvent(new LinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
+        }
+
+        public void ReevaluateSynchronizedInterview()
+        {
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+
+            List<Identity> questionsToBeEnabled=new List<Identity>();
+            List<Identity> questionsToBeDisabled = new List<Identity>();
+
+            List<Identity> groupsToBeEnabled = new List<Identity>();
+            List<Identity> groupsToBeDisabled = new List<Identity>();
+
+            List<Identity> questionsDeclaredValid = new List<Identity>();
+            List<Identity> questionsDeclaredInvalid = new List<Identity>();
+
+            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
+            {
+                Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, new int[0]);
+
+                PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled, questionsToBeDisabled,
+                    isNewStateEnabled:
+                        this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionIdAtInterview, questionnaire,
+                            GetAnswerSupportedInExpressionsOrNull),
+                    isOldStateEnabled: !this.IsQuestionDisabled(questionIdAtInterview));
+            }
+
+            foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
+            {
+                Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, new int[0]);
+                PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
+                    isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(groupIdAtInterview, questionnaire,
+                            GetAnswerSupportedInExpressionsOrNull),
+                    isOldStateEnabled: !this.IsGroupDisabled(groupIdAtInterview));
+            }
+
+            foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
+            {
+                Identity questionIdAtInterview = new Identity(questionWithNotEmptyValidationExpression, new int[0]);
+                bool? dependentQuestionValidationResult = this.PerformCustomValidationOfQuestion(questionIdAtInterview, questionnaire, GetAnswerSupportedInExpressionsOrNull);
+                switch (dependentQuestionValidationResult)
+                {
+                    case true: questionsDeclaredValid.Add(questionIdAtInterview); break;
+                    case false: questionsDeclaredInvalid.Add(questionIdAtInterview); break;
+                }
+            }
+
+            questionsDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
+            questionsDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
+
+            questionsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
+
+            questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+        
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime,string comment)

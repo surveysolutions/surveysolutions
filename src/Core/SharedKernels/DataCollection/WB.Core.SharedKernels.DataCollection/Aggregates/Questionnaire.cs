@@ -187,6 +187,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.cacheOfQuestionsInvolvedInCustomValidationOfQuestion[questionId];
         }
 
+        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions()
+        {
+            return
+              from question in this.GetAllQuestions()
+              where IsExpressionDefined(question.ValidationExpression)
+              select question.PublicKey;
+        }
+
         public string GetCustomValidationExpression(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
