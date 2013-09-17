@@ -57,6 +57,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var tvLastCount = lastView.FindViewById<TextView>(Resource.Id.tvCount);
             tvLastItem.Text = model.Status == InterviewStatus.Completed ? "Summary" : "Complete";
             tvLastCount.Visibility = ViewStates.Gone;
+            lastView.Click += view_Click;
             linearLayout.AddView(lastView);
 
             linearLayout.GetChildAt(0).SetBackgroundColor(Color.LightBlue);
