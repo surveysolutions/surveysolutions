@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots
 {
     internal class InterviewState
     {
@@ -14,16 +11,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions)
         {
-            QuestionnaireId = questionnaireId;
-            QuestionnaireVersion = questionnaireVersion;
-            Status = status;
-            AnswersSupportedInExpressions = answersSupportedInExpressions;
-            AnsweredQuestions = answeredQuestions;
-            DisabledGroups = disabledGroups;
-            DisabledQuestions = disabledQuestions;
-            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
-            ValidAnsweredQuestions = validAnsweredQuestions;
-            InvalidAnsweredQuestions = invalidAnsweredQuestions;
+            this.QuestionnaireId = questionnaireId;
+            this.QuestionnaireVersion = questionnaireVersion;
+            this.Status = status;
+            this.AnswersSupportedInExpressions = answersSupportedInExpressions;
+            this.AnsweredQuestions = answeredQuestions;
+            this.DisabledGroups = disabledGroups;
+            this.DisabledQuestions = disabledQuestions;
+            this.PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
+            this.ValidAnsweredQuestions = validAnsweredQuestions;
+            this.InvalidAnsweredQuestions = invalidAnsweredQuestions;
         }
 
         public Guid QuestionnaireId { get; private set; }

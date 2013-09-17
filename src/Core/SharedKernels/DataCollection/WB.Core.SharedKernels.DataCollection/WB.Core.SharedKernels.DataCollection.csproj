@@ -52,8 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
-    <Compile Include="Aggregates\Questionnaire.cs" />
-    <Compile Include="Aggregates\QuestionnaireState.cs" />
+    <Compile Include="Factories\IQuestionnaireFactory.cs" />
+    <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
+    <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerLinkedQuestionCommand.cs" />
@@ -126,7 +127,8 @@
     <Compile Include="Exceptions\InterviewException.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Implementation\Aggregates\Interview.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewState.cs" />
+    <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
+    <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryReader.cs" />
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />

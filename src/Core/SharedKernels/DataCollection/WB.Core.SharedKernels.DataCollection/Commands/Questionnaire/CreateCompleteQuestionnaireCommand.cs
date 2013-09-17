@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
     /// The create complete questionnaire command.
     /// </summary>
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CreateCompletedQ")]
+    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Questionnaire), "CreateCompletedQ")]
     public class CreateCompleteQuestionnaireCommand : CommandBase
     {
         #region Constructors and Destructors
