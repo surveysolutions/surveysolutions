@@ -22,8 +22,6 @@ namespace CAPI.Android
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
-           
-
             registry.RegisterFactory(new MvxCustomBindingFactory<ViewGroup>("Background", (button) => new BackgroundBinding(button)));
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("Html", (button) => new HtmlBinding(button)));
             registry.RegisterFactory(new MvxCustomBindingFactory<View>("Visible", (button) => new VisibilityBinding(button)));

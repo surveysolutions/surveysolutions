@@ -46,6 +46,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
 
             base.Dispose(disposing);
+            if (instructionDialog != null)
+                instructionDialog.Dispose();
         }
 
         protected View Content { get; set; }
@@ -207,10 +209,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         void btnInstructions_Click(object sender, EventArgs e)
         {
-            var instructionsBuilder = new AlertDialog.Builder(this.Context);
-            instructionsBuilder.SetMessage(Model.Instructions);
-            instructionsBuilder.Show();
+            if (this.instructionDialog == null)
+            {
+                this.instructionDialog = new AlertDialog.Builder(this.Context);
+                this.instructionDialog.SetMessage(Model.Instructions);
+            }
+            this.instructionDialog.Show();
         }
+
+        private AlertDialog.Builder instructionDialog = null;
 
         protected LinearLayout llRoot
         {

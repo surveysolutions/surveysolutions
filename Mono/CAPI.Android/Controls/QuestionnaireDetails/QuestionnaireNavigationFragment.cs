@@ -104,10 +104,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         public override void OnDetach()
         {
             ScreenChanged = null;
-            adapter.Detach();
+
             base.OnDetach();
+            if (adapter != null)
+                adapter.Dispose();
+            this.Dispose();
         }
-      
+
         public override void OnSaveInstanceState(Bundle p0)
         {
             base.OnSaveInstanceState(p0);
