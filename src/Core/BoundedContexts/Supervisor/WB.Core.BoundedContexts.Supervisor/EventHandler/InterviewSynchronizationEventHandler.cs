@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var interview = interviewDataWriter.GetById(interviewId);
 
             var interviewSyncData = BuildSynchronizationDtoWhichIsAssignedToUser(interview,
-                responsibleId, interview.Status);
+                responsibleId, InterviewStatus.InterviewerAssigned);
 
             syncStorage.SaveInterview(interviewSyncData, interview.ResponsibleId);
         }
