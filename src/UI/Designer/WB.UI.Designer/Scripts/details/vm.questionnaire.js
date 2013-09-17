@@ -53,7 +53,6 @@
                     getChapters();
                     questionnaire(datacontext.questionnaire);
                     calcStatistics();
-                    $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
                 }
                 if (!_.isUndefined(selectedGroup())) {
                     selectedGroup().isSelected(false);
@@ -114,8 +113,6 @@
             openDetails = function(style) {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').addClass('detail-visible').addClass(style);
-                $('#details-question .body').css('top', ($('#details-question .title').outerHeight() + 'px'));
-                $('#details-group .body').css('top', ($('#details-group .title').outerHeight() + 'px'));
             },
             closeDetails = function() {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
