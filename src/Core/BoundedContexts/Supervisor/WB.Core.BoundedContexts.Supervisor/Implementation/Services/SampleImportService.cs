@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
@@ -26,17 +27,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
         private readonly ITemporaryDataStorage<TempFileImportData> tempImportStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
+        private readonly IQuestionnaireFactory questionnaireFactory;
 
 
         public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository,
                                    IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, 
             ITemporaryDataStorage<TempFileImportData> tempImportStorage,
-            ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage)
+            ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
+            IQuestionnaireFactory questionnaireFactory)
         {
             this.templateRepository = templateRepository;
             this.templateSmallRepository = templateSmallRepository;
             this.tempImportStorage = tempImportStorage;
             this.tempSampleCreationStorage = tempSampleCreationStorage;
+            this.questionnaireFactory = questionnaireFactory;
         }
 
         public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
@@ -112,12 +116,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                 tempSampleCreationStorage.Store(result, id.ToString());
                 return;
             }
-            Questionnaire questionnarie;
+            IQuestionnaire questionnarie;
             //return;
             
             using (new ObliviousEventContext())
             {
-                questionnarie = new Questionnaire(Guid.NewGuid(), bigTemplate);
+                questionnarie = questionnaireFactory.CreateTemporaryInstance(bigTemplate);
             }
             int i = 0;
             foreach (var value in item.Values)
@@ -240,7 +244,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                 CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id.ToString());
         }
 
-        private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
+        private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, IQuestionnaire template)
         {
             
    
