@@ -1,23 +1,16 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
-using Core.Supervisor.Views.Interviews;
+using Core.Supervisor.Views.Interview;
 using Core.Supervisor.Views.Survey;
-using Main.Core.Entities;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
-using Raven.Client.Linq;
-using Raven.Database.Linq.PrivateExtensions;
+using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace Core.Supervisor.Views.Interview
+namespace Core.Supervisor.Views.Interviews
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.View;
-
     public class TeamInterviewsFactory : IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
@@ -41,13 +34,17 @@ namespace Core.Supervisor.Views.Interview
                 predicate = predicate.AndCondition(x => (x.QuestionnaireId == input.QuestionnaireId));
             }
 
+            if (input.QuestionnaireVersion.HasValue)
+            {
+                predicate = predicate.AndCondition(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
+            }
 
             predicate = input.ResponsibleId.HasValue
                 ? predicate.AndCondition(x => x.ResponsibleId == input.ResponsibleId)
                 : predicate.AndCondition(x => x.TeamLeadId != null && x.TeamLeadId == input.ViewerId);
             
 
-            var interviewItems = DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
+            var interviewItems = this.DefineOrderBy(this.interviews.Query(_ => _.Where(predicate)), input)
                             .Skip((input.Page - 1) * input.PageSize)
                             .Take(input.PageSize).ToList();
 

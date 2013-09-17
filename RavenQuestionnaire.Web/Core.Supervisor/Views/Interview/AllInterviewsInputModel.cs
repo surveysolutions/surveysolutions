@@ -13,5 +13,7 @@ namespace Core.Supervisor.Views.Interview
         public Guid? InterviewId { get; set; }
 
         public InterviewStatus? Status { get; set; }
+
+        public long? QuestionnaireVersion { get; set; }
     }
 }

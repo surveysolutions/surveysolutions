@@ -90,7 +90,7 @@ namespace Web.Supervisor.Controllers
         {
             ChangeStatusView model = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new SurveyUsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
+            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(model);
         }
 

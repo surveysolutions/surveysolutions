@@ -31,6 +31,10 @@ namespace Core.Supervisor.Views.Reposts.Factories
                         ? items.Where(x => x.QuestionnaireId == input.TemplateId)
                         : items.Where(x => x.QuestionnaireId == Guid.Empty);
 
+            if (input.TemplateVersion.HasValue)
+            {
+                items = items.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
+            }
 
             List<SupervisorTeamMembersAndStatusesReportLine> all =
                 items.OrderUsingSortExpression(input.Order)

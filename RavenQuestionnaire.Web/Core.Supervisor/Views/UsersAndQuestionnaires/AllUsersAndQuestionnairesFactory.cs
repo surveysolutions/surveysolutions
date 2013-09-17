@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Supervisor.Views.Summary;
+using Core.Supervisor.Views.Reposts.Views;
 using Core.Supervisor.Views.Survey;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -26,8 +26,8 @@ namespace Core.Supervisor.Views.UsersAndQuestionnaires
 
             var interviewItems = items.ToList();
 
-            var users = interviewItems.Select(x => new SurveyUsersViewItem { UserId = x.ResponsibleId, UserName = x.ResponsibleName }).Distinct(new SurveyUsersViewItemComparer());
-            var questionnaires = interviewItems.Select(x => new SummaryTemplateViewItem { TemplateId = x.QuestionnaireId, TemplateName = x.QuestionnaireTitle }).Distinct(new SummaryTemplateItemComparer());
+            var users = interviewItems.Select(x => new UsersViewItem { UserId = x.ResponsibleId, UserName = x.ResponsibleName }).Distinct(new SurveyUsersViewItemComparer());
+            var questionnaires = interviewItems.Select(x => new TemplateViewItem { TemplateId = x.QuestionnaireId, TemplateName = x.QuestionnaireTitle, TemplateVersion = x.QuestionnaireVersion }).Distinct(new SummaryTemplateItemComparer());
 
             return new AllUsersAndQuestionnairesView
             {
@@ -36,9 +36,9 @@ namespace Core.Supervisor.Views.UsersAndQuestionnaires
             };
         }
 
-        public class SummaryTemplateItemComparer : IEqualityComparer<SummaryTemplateViewItem>
+        public class SummaryTemplateItemComparer : IEqualityComparer<TemplateViewItem>
         {
-            public bool Equals(SummaryTemplateViewItem x, SummaryTemplateViewItem y)
+            public bool Equals(TemplateViewItem x, TemplateViewItem y)
             {
                 if (ReferenceEquals(y, null)) return false;
 
@@ -47,15 +47,15 @@ namespace Core.Supervisor.Views.UsersAndQuestionnaires
                 return x.TemplateId.Equals(y.TemplateId) && x.TemplateName.Equals(y.TemplateName);
             }
 
-            public int GetHashCode(SummaryTemplateViewItem x)
+            public int GetHashCode(TemplateViewItem x)
             {
-                return 37 + x.TemplateId.GetHashCode() * 23 + x.TemplateName.GetHashCode() * 29;
+                return 37 + x.TemplateId.GetHashCode() * 23 + x.TemplateName.GetHashCode() * 29 + x.TemplateVersion.GetHashCode() * 47;
             }
         }
 
-        public class SurveyUsersViewItemComparer : IEqualityComparer<SurveyUsersViewItem>
+        public class SurveyUsersViewItemComparer : IEqualityComparer<UsersViewItem>
         {
-            public bool Equals(SurveyUsersViewItem x, SurveyUsersViewItem y)
+            public bool Equals(UsersViewItem x, UsersViewItem y)
             {
                 if (ReferenceEquals(y, null)) return false;
 
@@ -64,7 +64,7 @@ namespace Core.Supervisor.Views.UsersAndQuestionnaires
                 return x.UserId.Equals(y.UserId) && x.UserName.Equals(y.UserName);
             }
 
-            public int GetHashCode(SurveyUsersViewItem x)
+            public int GetHashCode(UsersViewItem x)
             {
                 return 41 + x.UserId.GetHashCode() * 37 + x.UserName.GetHashCode() * 17;
             }

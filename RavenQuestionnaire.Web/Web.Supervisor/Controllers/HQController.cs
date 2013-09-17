@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Supervisor.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using Web.Supervisor.Models;
@@ -33,6 +34,14 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
 
+        private readonly InterviewStatus[] interviewStatusesToSkip =
+        {
+            InterviewStatus.Created,
+            InterviewStatus.ReadyForInterview,
+            InterviewStatus.Restarted,
+            InterviewStatus.SentToCapi,
+            InterviewStatus.Deleted
+        };
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
@@ -78,7 +87,7 @@ namespace Web.Supervisor.Controllers
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new SurveyUsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
+            this.ViewBag.CurrentUser = new UsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
             return this.View(this.Filters());
         }
 
@@ -157,12 +166,12 @@ namespace Web.Supervisor.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.SurveyStatusViewItems());
+            return this.View(StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip));
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems();
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip);
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
@@ -172,7 +181,7 @@ namespace Web.Supervisor.Controllers
                     Users =
                         this.supervisorsFactory.Load(new UserListViewInputModel {PageSize = int.MaxValue})
                             .Items.Where(u => !u.IsLocked)
-                            .Select(u => new SurveyUsersViewItem
+                            .Select(u => new UsersViewItem
                                 {
                                     UserId = u.UserId,
                                     UserName = u.UserName

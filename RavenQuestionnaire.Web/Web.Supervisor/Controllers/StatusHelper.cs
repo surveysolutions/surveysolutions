@@ -10,10 +10,10 @@ namespace Web.Supervisor.Controllers
 {
     public static class StatusHelper
     {
-        internal static IEnumerable<SurveyStatusViewItem> SurveyStatusViewItems()
+        internal static IEnumerable<SurveyStatusViewItem> SurveyStatusViewItems(InterviewStatus[] skipStatuses)
         {
             return from InterviewStatus status in Enum.GetValues(typeof (InterviewStatus))
-                   where status != InterviewStatus.Restarted
+                   where !skipStatuses.Contains(status)
                    select new SurveyStatusViewItem
                        {
                            Status = status,

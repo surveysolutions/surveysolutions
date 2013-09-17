@@ -113,8 +113,12 @@
 
     self.load = function () {
         self.ListView.GetFilterMethod = function () {
+            var selectedTemplate = _.isEmpty(self.SelectedTemplate())
+                ? { templateId: '', version: '' }
+                : JSON.parse(self.SelectedTemplate());
             return {
-                TemplateId: self.SelectedTemplate,
+                TemplateId: selectedTemplate.templateId,
+                TemplateVersion: selectedTemplate.version,
                 ResponsibleId: self.SelectedResponsible,
                 Status: self.SelectedStatus
             };

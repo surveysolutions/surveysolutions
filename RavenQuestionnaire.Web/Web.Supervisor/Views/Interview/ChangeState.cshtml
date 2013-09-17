@@ -1,41 +1,26 @@
-﻿@using System.Runtime.Serialization.Formatters
-@using Main.Core.View.CompleteQuestionnaire.Statistics
-@using Newtonsoft.Json
-@using Web.Supervisor.Models
+﻿@using Newtonsoft.Json
 @model Core.Supervisor.Views.ChangeStatus.ChangeStatusView
 @{
     ViewBag.Title = "Change state survey";
 }
 <h2>@Model.QuestionnaireTitle <small>(ver. @Model.QuestionnaireVersion)</small></h2>
 <div class="row-fluid">
-    <div class="span6">
-        <div class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="approveComment">Approve comment</label>
-                <div class="controls">
-                    <textarea rows="3" class="input-block-level" id="approveComment" data-bind="value: approveComment"></textarea>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <button class="btn" data-bind="click: $root.approve">Approve</button>
-                </div>
+    <div class="span12">
+        <div class="control-group">
+            <label class="control-label" for="comment">Comment</label>
+            <div class="controls">
+                <textarea rows="3" class="input-block-level" id="comment" data-bind="value: $root.comment"></textarea>
             </div>
         </div>
     </div>
-    <div class="span6" id="state-right">
-         <div class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="rejectComment">Reject comment</label>
-                <div class="controls">
-                    <textarea class="input-block-level" rows="3" id="rejectComment"  data-bind="value: rejectComment"></textarea>
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <button class="btn" data-bind="click: $root.reject">Reject</button>
-                </div>
-            </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        <button class="btn btn-success" data-bind="click: $root.approve">Approve</button>
+    </div>
+    <div class="span6">
+        <div class="pull-right">
+            <button class="btn btn-danger" data-bind="click: $root.reject">Reject</button>
         </div>
     </div>
 </div>
@@ -61,9 +46,7 @@
                             @ch.Status
                         </td>
                         <td>
-                            <div class="expander">
-                                @ch.Comment
-                            </div>
+                            @ch.Comment
                         </td>
                         <td>
                             @ch.Date.ToLocalTime()

@@ -85,41 +85,43 @@
                 }
                 @foreach (var item in Model.Templates)
                 {
-                    <option value="@item.TemplateId">@item.TemplateName</option>
+                    <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
                 }
             </select>
 
         </li>
         <li>Responsible:
             
-                <select data-bind="value: SelectedResponsible" class="input-block-level">
-                    @if (Model.Responsibles.Count() > 1)
-                    {
-                        <option value="">Any</option>
-                    }
-                    @foreach (var item in Model.Responsibles)
-                    {
-                        <option value="@item.UserId">@item.UserName</option>
-                    }
-                </select>
+            <select data-bind="value: SelectedResponsible" class="input-block-level">
+                @if (Model.Responsibles.Count() > 1)
+                {
+                    <option value="">Any</option>
+                }
+                @foreach (var item in Model.Responsibles)
+                {
+                    <option value="@item.UserId">@item.UserName</option>
+                }
+            </select>
 
         </li>
         <li>Status:
             
-                <select data-bind="value: SelectedStatus" class="input-block-level">
-                    <option value="">Any</option>
-                    @foreach (var item in Model.Statuses)
-                    {
-                        <option value="@item.Status">@item.StatusName</option>
-                    }
-                </select>
+            <select data-bind="value: SelectedStatus" class="input-block-level">
+                <option value="">Any</option>
+                @foreach (var item in Model.Statuses)
+                {
+                    <option value="@item.Status">@item.StatusName</option>
+                }
+            </select>
         </li>
     </ul>
 }
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/lib/lodash.js")
     @Scripts.Render("~/Scripts/vm/hqDocumentlistview.js")
+
 
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';

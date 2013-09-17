@@ -42,7 +42,7 @@ namespace Core.Supervisor.Views.Survey
             return new SurveyUsersView
             {
                 Items = items.ToList().Distinct(new SurveyItemByUserNameComparer())
-                        .Select(x => new SurveyUsersViewItem
+                        .Select(x => new UsersViewItem
                                 {
                                     UserId = x.ResponsibleId,
                                     UserName = x.ResponsibleName

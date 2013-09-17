@@ -12,7 +12,13 @@
         self.SelectedTemplate.subscribe(self.ListView.filter);
 
         self.ListView.GetFilterMethod = function() {
-            return { TemplateId: self.SelectedTemplate };
+            var selectedTemplate = _.isEmpty(self.SelectedTemplate())
+                 ? { templateId: '', version: '' }
+                 : JSON.parse(self.SelectedTemplate());
+            return {
+                TemplateId: selectedTemplate.templateId,
+                TemplateVersion: selectedTemplate.version
+            };
         };
         self.ListView.search();
     };

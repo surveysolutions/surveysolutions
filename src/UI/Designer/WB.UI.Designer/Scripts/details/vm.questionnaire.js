@@ -385,17 +385,28 @@
                 var fromId = arg.sourceParent.id;
                 var toId = arg.targetParent.id;
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
+                var isItemFeaturedQuestion = false;
+                var isItemHeadQuestion = false;
+                var isItemAutoQuestion = false;
+                var targetGroupIsAuto = false;
+                if (moveItemType == "question") {
+                    isItemAutoQuestion = arg.item.qtype() == "AutoPropagate";
+                    isItemHeadQuestion = arg.item.isHead();
+                    isItemFeaturedQuestion = arg.item.isFeatured();
+                }
+                
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
+                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.gtype() == "AutoPropagated";
 
                 if (arg.item.isNew()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveUnsavedItem);
                     return;
                 }
-
-                if (isDropedOutsideAnyChapter && moveItemType == "group" && arg.item.gtype() == "AutoPropagated") {
+                
+                if (isDropedOutsideAnyChapter && itemIsAutopropagateGroup) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
                     return;
@@ -409,9 +420,29 @@
                 var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
 
+                targetGroupIsAuto = target.gtype() == "AutoPropagated";
+
                 if (target.isNew()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveIntoUnsavedItem);
+                    return;
+                }
+                
+                if (isItemFeaturedQuestion && targetGroupIsAuto) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveFeaturedQuestionIntoAutoGroup);
+                    return;
+                }
+                
+                if (isItemAutoQuestion && targetGroupIsAuto) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveAutoQuestionIntoAutoGroup);
+                    return;
+                }
+                
+                if (isItemHeadQuestion && targetGroupIsAuto == false) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveHeadQuestionOutsideAutoGroup);
                     return;
                 }
 

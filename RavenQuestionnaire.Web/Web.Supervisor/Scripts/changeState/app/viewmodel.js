@@ -44,15 +44,14 @@
         },
         savingMessage = ko.observable('Loading, please wait'),
         isSaving = ko.observable(false),
-        approveComment = ko.observable(''),
-        rejectComment = ko.observable(''),
+        comment = ko.observable(''),
         approve = function() {
             savingMessage('Approving this interview, please wait');
-            changeState("ApproveInterviewCommand", approveComment().trim(), "approved");
+            changeState("ApproveInterviewCommand", comment().trim(), "approved");
         },
         reject = function() {
             savingMessage('Rejecting this interview, please wait');
-            changeState("RejectInterviewCommand", rejectComment().trim(), 'rejected');
+            changeState("RejectInterviewCommand", comment().trim(), 'rejected');
         },
         changeState = function(commandName, comment, status) {
             var command = {
@@ -79,9 +78,8 @@
         };
     init();
     return {
-        approveComment: approveComment,
+        comment: comment,
         approve : approve,
-        rejectComment: rejectComment,
         reject: reject,
         isSaving: isSaving,
         savingMessage : savingMessage,

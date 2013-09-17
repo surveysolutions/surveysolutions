@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Core.Supervisor.Views.Summary;
+using Core.Supervisor.Views.Reposts.Views;
 using Core.Supervisor.Views.Survey;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
@@ -27,15 +27,16 @@ namespace Core.Supervisor.Views.UsersAndQuestionnaires
             predicate = predicate.AndCondition(x => x.TeamLeadId != null && x.TeamLeadId == input.ViewerId);
 
             var users = GetDistinctInterviews(predicate, i => new {i.ResponsibleId, i.ResponsibleName})
-                .Select(x => new SurveyUsersViewItem {UserId = x.ResponsibleId, UserName = x.ResponsibleName});
+                .Select(x => new UsersViewItem {UserId = x.ResponsibleId, UserName = x.ResponsibleName});
 
-            var questionnaires = GetDistinctInterviews(predicate, i => new {i.QuestionnaireId, i.QuestionnaireTitle})
+            var questionnaires = GetDistinctInterviews(predicate, i => new { i.QuestionnaireId, i.QuestionnaireTitle, i.QuestionnaireVersion })
                 .Select(
                     x =>
-                    new SummaryTemplateViewItem
+                    new TemplateViewItem
                         {
                             TemplateId = x.QuestionnaireId,
-                            TemplateName = x.QuestionnaireTitle
+                            TemplateName = x.QuestionnaireTitle,
+                            TemplateVersion = x.QuestionnaireVersion
                         });
 
             return new TeamUsersAndQuestionnairesView
