@@ -5,10 +5,10 @@
 
     using Main.Core.Entities.SubEntities;
 
-    public class DataQuestion
+    public class QuestionData
     {
-        public DataQuestion(){}
-        public DataQuestion(
+        public QuestionData(){}
+        public QuestionData(
             Guid publicKey,
             QuestionType questionType,
             QuestionScope questionScope,
