@@ -58,6 +58,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             tvLastItem.Text = model.Status == InterviewStatus.Completed ? "Summary" : "Complete";
             tvLastCount.Visibility = ViewStates.Gone;
             linearLayout.AddView(lastView);
+
+            linearLayout.GetChildAt(0).SetBackgroundColor(Color.LightBlue);
         }
 
         private void view_Click(object sender, EventArgs e)
