@@ -1,4 +1,5 @@
 using System;
+using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.App;
@@ -11,59 +12,84 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
-    public class QuestionnaireNavigationFragment : ListFragment, IScreenChanging
+    public class QuestionnaireNavigationFragment : ScrollView
     {
         #region public fields
-        public QuestionnaireNavigationFragment()
+
+        private readonly LinearLayout linearLayout;
+
+        public QuestionnaireNavigationFragment(Context context, CompleteQuestionnaireView model)
+            : base(context)
         {
-        }
-        private const string QUESTIONNAIRE_ID = "questionnaireId";
-
-        public static QuestionnaireNavigationFragment NewInstance(Guid questionnaireId)
-        {
-            QuestionnaireNavigationFragment myFragment = new QuestionnaireNavigationFragment();
-
-            Bundle args = new Bundle();
-            args.PutString(QUESTIONNAIRE_ID, questionnaireId.ToString());
-            myFragment.Arguments = args;
-
-            return myFragment;
+            this.model = model;
+            linearLayout = new LinearLayout(context);
+            linearLayout.Orientation = Orientation.Vertical;
+            this.BuildChildren();
+            this.AddView(linearLayout);
         }
 
-        public override void OnCreate(Bundle p0)
+        private void BuildChildren()
         {
-            base.OnCreate(p0);
-            //this.ListView.ChoiceMode = ChoiceMode.Single;
+            LayoutInflater layoutInflater = (LayoutInflater) Context.GetSystemService(Context.LayoutInflaterService);
 
-            if (p0 != null)
+            foreach (var chapter in model.Chapters)
             {
-                selectedItemIndex = p0.GetInt("SelectedItem");
-            }
-            adapter = new QuestionnaireNavigationAdapter(this.Activity, Model, selectedItemIndex);
-            this.ListAdapter = adapter;
-            // }
-        }
+                var view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
+                var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
+                var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
 
-        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
-        public CompleteQuestionnaireView Model
-        {
-            get
-            {
-                if (model == null)
+                chapter.PropertyChanged += (s, e) =>
                 {
-                    model = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
-                        new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
-                }
-                return model;
+                    if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+                        return;
+
+                    UpdateCounters(chapter, tvCount);
+                };
+                tvITem.Text = chapter.ScreenName;
+                UpdateCounters(chapter, tvCount);
+                view.SetTag(Resource.Id.ScreenId, chapter.ScreenId.ToString());
+                view.Click += view_Click;
+                linearLayout.AddView(view);
             }
+
+            var lastView = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
+            var tvLastItem = lastView.FindViewById<TextView>(Resource.Id.tvITem);
+            var tvLastCount = lastView.FindViewById<TextView>(Resource.Id.tvCount);
+            tvLastItem.Text = model.Status == InterviewStatus.Completed ? "Summary" : "Complete";
+            tvLastCount.Visibility = ViewStates.Gone;
+            linearLayout.AddView(lastView);
         }
-        private CompleteQuestionnaireView model;
-        public int SelectedIndex
+
+        private void view_Click(object sender, EventArgs e)
         {
-            get { return selectedItemIndex; }
+            var view = sender as View;
+            if (view == null)
+                return;
+            SelectItem(view);
+            var tag = view.GetTag(Resource.Id.ScreenId);
+            InterviewItemId? screenId = null;
+            if (tag != null)
+            {
+                screenId = InterviewItemId.Parse(view.GetTag(Resource.Id.ScreenId).ToString());
+            }
+            OnItemClick(screenId);
         }
-        private int selectedItemIndex=0;
-        private QuestionnaireNavigationAdapter adapter;
+
+
+        private static void UpdateCounters(QuestionnaireScreenViewModel dataItem, TextView tvCount)
+        {
+            tvCount.Text = string.Format("{0}/{1}", dataItem.Answered, dataItem.Total);
+            if (dataItem.Total == dataItem.Answered)
+                tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
+            else
+                tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+        }
+        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
+        private CompleteQuestionnaireView model;
+
+
+        private View selectedView = null;
+
         #endregion
 
         protected void OnItemClick(InterviewItemId? groupKey)
@@ -73,59 +99,25 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 handler(this, new ScreenChangedEventArgs(groupKey));
         }
 
-        public void SelectItem(int ind)
+        public void SelectItem(View view)
         {
-            if (selectedItemIndex == ind)
+            if (selectedView == view)
                 return;
-            selectedItemIndex = ind;
+            selectedView = view;
 
-            for (int i = 0; i < this.ListView.ChildCount; i++)
+            for (int i = 0; i < linearLayout.ChildCount; i++)
             {
-                var element = this.ListView.GetChildAt(i);
+                var element = linearLayout.GetChildAt(i);
                 if (element == null)
                     continue;
-                element.SetBackgroundColor(i == ind ? Color.LightBlue : Color.Transparent);
+                element.SetBackgroundColor(element == selectedView ? Color.LightBlue : Color.Transparent);
             }
         }
-
-        public override void OnListItemClick(ListView l, View v, int pos, long id)
+        public void SelectItem(int position)
         {
-            
-            SelectItem(pos);
-            var tag = v.GetTag(Resource.Id.ScreenId);
-            InterviewItemId? screenId = null;
-            if (tag != null)
-            {
-                screenId = InterviewItemId.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
-            }
-            OnItemClick(screenId);
+            var view =linearLayout.GetChildAt(position);
+            SelectItem(view);
         }
-
-        public override void OnDetach()
-        {
-            ScreenChanged = null;
-
-            base.OnDetach();
-            if (adapter != null)
-                adapter.Dispose();
-            this.Dispose();
-        }
-
-        public override void OnSaveInstanceState(Bundle p0)
-        {
-            base.OnSaveInstanceState(p0);
-            p0.PutInt("SelectedItem", selectedItemIndex);
-        }
-       /* public override void OnViewStateRestored(Bundle p0)
-        {
-            base.OnViewStateRestored(p0);
-            if (p0 != null)
-            {
-                selectedItemIndex = p0.GetInt("SelectedItem");
-            }
-        }*/
 
     }
-
-
 }

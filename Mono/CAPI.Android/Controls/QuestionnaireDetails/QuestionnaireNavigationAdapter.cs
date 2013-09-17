@@ -27,35 +27,49 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         protected override View BuildViewItem(QuestionnaireScreenViewModel dataItem, int position)
         {
-            LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
 
-            View view;
-
-            if (position < Count - 1)
-            {
-                view = new QuestionnarieNavigationItem(context, dataItem);
-                view.SetTag(Resource.Id.ScreenId, dataItem.ScreenId.ToString());
-            }
-            else
-            {
-                view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
-
-               
-
-                var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
-                var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
-
-                tvITem.Text = status == InterviewStatus.Completed ? "Summary" : "Complete";
-                tvCount.Visibility = ViewStates.Gone;
-            }
+            LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
+            // no view to re-use, create new
+            var view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
 
             if (position == selectedItem)
             {
                 view.SetBackgroundColor(Color.LightBlue);
             }
 
+            var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
+
+            var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
+            if (position < Count - 1)
+            {
+                dataItem.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+                        return;
+
+                    UpdateCounters(dataItem, tvCount);
+                };
+                tvITem.Text = dataItem.ScreenName;
+                UpdateCounters(dataItem, tvCount);
+                view.SetTag(Resource.Id.ScreenId, dataItem.ScreenId.ToString());
+            }
+            else
+            {
+                tvITem.Text = status == InterviewStatus.Completed ? "Summary" : "Complete";
+                tvCount.Visibility = ViewStates.Gone;
+            }
             return view;
         }
+
+        private static void UpdateCounters(QuestionnaireScreenViewModel dataItem, TextView tvCount)
+        {
+            tvCount.Text = string.Format("{0}/{1}", dataItem.Answered, dataItem.Total);
+            if (dataItem.Total == dataItem.Answered)
+                tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
+            else
+                tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+        }
+
         public override QuestionnaireScreenViewModel this[int position]
         {
             get
@@ -65,10 +79,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 return base[position];
             }
         }
+
         public override int Count
         {
             get { return base.Count + 1; }
         }
-
     }
 }
