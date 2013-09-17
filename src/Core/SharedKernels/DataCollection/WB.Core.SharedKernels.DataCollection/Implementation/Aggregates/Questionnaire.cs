@@ -2,27 +2,23 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Domain;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
-namespace WB.Core.SharedKernels.DataCollection.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire, ISnapshotable<QuestionnaireState>
+    internal class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire, ISnapshotable<QuestionnaireState>
     {
         #region State
 
@@ -110,7 +106,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
-            ImportQuestionnaire(createdBy, source);
+            this.ImportQuestionnaire(createdBy, source);
         }
 
 
@@ -122,9 +118,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 throw new DomainException(DomainExceptionType.TemplateIsInvalid
                                           , "only QuestionnaireDocuments are supported for now");
             document.CreatedBy = this.innerDocument.CreatedBy;
-            ApplyEvent(new TemplateImported() {Source = document});
+            this.ApplyEvent(new TemplateImported() {Source = document});
            
         }
+
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
@@ -780,14 +777,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         public QuestionnaireState CreateSnapshot()
         {
-            return new QuestionnaireState(innerDocument,questionCache,groupCache);
+            return new QuestionnaireState(this.innerDocument,this.questionCache,this.groupCache);
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
         {
-            innerDocument = snapshot.Document;
-            groupCache = snapshot.GroupCache;
-            questionCache = snapshot.QuestionCache;
+            this.innerDocument = snapshot.Document;
+            this.groupCache = snapshot.GroupCache;
+            this.questionCache = snapshot.QuestionCache;
         }
     }
 }

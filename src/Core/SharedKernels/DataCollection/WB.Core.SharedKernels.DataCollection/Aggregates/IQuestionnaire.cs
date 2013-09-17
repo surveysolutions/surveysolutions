@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        IQuestion GetQuestionByStataCaption(string stataCaption);
+
         bool HasQuestion(Guid questionId);
 
         bool HasGroup(Guid groupId);
