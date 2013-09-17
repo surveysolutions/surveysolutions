@@ -111,7 +111,6 @@ body.loading .loading-backdrop {
         background: #fff;
         border-radius: 5px 5px 5px 5px;
         height: 100%;
-        position: relative;
         border: 1px solid #DDDDDD;
     }
 
@@ -128,30 +127,22 @@ body.loading .loading-backdrop {
         -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         -o-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 24px;
-        min-height: 24px;
         padding: 8px;
         text-shadow: 0 1px 0 white;
-        word-wrap: break-word;
+        height: 1px;
+        max-height: 250px;
+    }
+
+    .stack .title .control-group, .stack .title textarea {
+        margin-bottom: 0;
     }
 
     .stack .body {
-        overflow: auto;
-        position: absolute;
-        top: 55px;
-        bottom: 43px;
-        right: 0;
-        left: 0;
-        overflow-y: scroll;
+        padding-top: 15px;
+        vertical-align: top;
     }
 
     .stack .pane-bottom {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
         -webkit-border-radius: 0 0 5px 5px;
         -moz-border-radius: 0 0 5px 5px;
         -ms-border-radius: 0 0 5px 5px;
@@ -167,10 +158,10 @@ body.loading .loading-backdrop {
         height: 42px;
     }
 
-        .stack .pane-bottom .inner {
+    .stack .pane-bottom .inner {
             padding: 6px 8px 0 8px;
-        }
-
+    }
+    
 #output {
     left: 0;
     width: 100%;
