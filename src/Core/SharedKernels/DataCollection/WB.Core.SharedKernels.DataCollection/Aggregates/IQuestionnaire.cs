@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions();
 
+        IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions();
+
         IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId);
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
