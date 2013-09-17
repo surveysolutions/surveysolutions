@@ -95,7 +95,7 @@
                 }
                 question.isSelected(true);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
-                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagateableGroups());
+                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
                 selectedQuestion.valueHasMutated();
                 openDetails("show-question");
