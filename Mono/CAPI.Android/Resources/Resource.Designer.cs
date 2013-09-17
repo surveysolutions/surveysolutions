@@ -219,9 +219,6 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04001f
 			public const int flDetails = 2130968607;
 			
-			// aapt resource value: 0x7f04001c
-			public const int flSpaceFiller = 2130968604;
-			
 			// aapt resource value: 0x7f040024
 			public const int footer = 2130968612;
 			
@@ -260,6 +257,9 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0x7f04002d
 			public const int llScreen = 2130968621;
+			
+			// aapt resource value: 0x7f04001c
+			public const int llSpaceFiller = 2130968604;
 			
 			// aapt resource value: 0x7f040028
 			public const int llSurveyHolder = 2130968616;

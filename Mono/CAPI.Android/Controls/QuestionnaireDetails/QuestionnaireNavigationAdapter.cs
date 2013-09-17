@@ -15,7 +15,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     {
         private readonly Context context;
         private readonly int selectedItem;
-        private readonly UpdateTotalClosure[] subscribers;
         private readonly InterviewStatus status;
 
         public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
@@ -24,13 +23,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.context = context;
             this.selectedItem = selectedItem;
             this.status = model.Status;
-            this.subscribers=new UpdateTotalClosure[model.Chapters.Count];
         }
 
         protected override View BuildViewItem(QuestionnaireScreenViewModel dataItem, int position)
         {
 
-            LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
             // no view to re-use, create new
             var view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
 
@@ -44,11 +42,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
             if (position < Count - 1)
             {
-                var closure = new UpdateTotalClosure(tvCount, dataItem);
-                closure.UpdateCounter();
-                this.subscribers[position] = closure;
-                tvITem.Text = dataItem.ScreenName;
+                dataItem.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+                        return;
 
+                    UpdateCounters(dataItem, tvCount);
+                };
+                tvITem.Text = dataItem.ScreenName;
+                UpdateCounters(dataItem, tvCount);
                 view.SetTag(Resource.Id.ScreenId, dataItem.ScreenId.ToString());
             }
             else
@@ -59,25 +61,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return view;
         }
 
-        public void Detach()
+        private static void UpdateCounters(QuestionnaireScreenViewModel dataItem, TextView tvCount)
         {
-            foreach (var subscriber in subscribers)
-            {
-                if(subscriber==null)
-                    continue;
-                subscriber.Detach();
-            }
+            tvCount.Text = string.Format("{0}/{1}", dataItem.Answered, dataItem.Total);
+            if (dataItem.Total == dataItem.Answered)
+                tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
+            else
+                tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
         }
 
-        public void Attach()
-        {
-            foreach (var subscriber in subscribers)
-            {
-                if (subscriber == null)
-                    continue;
-                subscriber.Attach();
-            }
-        }
         public override QuestionnaireScreenViewModel this[int position]
         {
             get
@@ -87,48 +79,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 return base[position];
             }
         }
+
         public override int Count
         {
             get { return base.Count + 1; }
-        }
-
-        public class  UpdateTotalClosure
-        {
-            private readonly TextView tvCount;
-            private readonly QuestionnaireScreenViewModel model;
-
-            public UpdateTotalClosure(TextView tvCount, QuestionnaireScreenViewModel model)
-            {
-                this.tvCount = tvCount;
-                this.model = model;
-                Attach();
-            }
-
-            protected void TotalChangedHandler(object sender, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName != "Answered" && e.PropertyName != "Total")
-                    return;
-
-                UpdateCounter();
-            }
-            public void UpdateCounter()
-            {
-                tvCount.Text = string.Format("{0}/{1}", model.Answered, model.Total);
-                if (model.Total == model.Answered)
-                    tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
-                else
-                    tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
-            }
-
-            public void Attach()
-            {
-                this.model.PropertyChanged += TotalChangedHandler;
-            }
-
-            public void Detach()
-            {
-                this.model.PropertyChanged -= TotalChangedHandler;
-            }
         }
     }
 }
