@@ -31,8 +31,8 @@
                  "~/Content/main-not-logged.css"));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
-                "~/Scripts/jquery-{version}.js", 
-                "~/Scripts/bootstrap.js", 
+                "~/Scripts/jquery-{version}.js",
+                "~/Scripts/bootstrap.js",
                 "~/Scripts/query-string.js",
                 "~/Scripts/lib/jquery.pnotify.js",
                 "~/Scripts/bootstrap-datepicker.js"
@@ -40,7 +40,7 @@
 
             bundles.Add(
                 new ScriptBundle("~/validate").Include(
-                    "~/Scripts/jquery.validate.js", 
+                    "~/Scripts/jquery.validate.js",
                     "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/css/list").Include("~/Content/listview.css"));
@@ -54,22 +54,9 @@
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
                 "~/Content/bootstrap-editable.css",
-                "~/Content/datepicker.css", 
-                "~/Content/main.css", 
+                "~/Content/datepicker.css",
+                "~/Content/main.css",
                 "~/Content/details.css"));
-
-            bundles.Add(new ScriptBundle("~/js/interview").Include(
-                "~/Scripts/jquery.validate.min.js",
-                "~/Scripts/jquery.validate.unobtrusive.min.js",
-                "~/Scripts/jquery-ui-1.10.0.min.js",
-                "~/Scripts/knockout-2.2.1.js",
-                "~/Scripts/knockout.validation.js",
-                "~/Scripts/bootstrap-datepicker.js",
-                "~/Scripts/bootstrap-editable.js",
-                "~/Scripts/shorten.js",
-                "~/Scripts/director.min.js",
-                "~/Scripts/date.js", 
-                "~/Scripts/details.js"));
         }
     }
 }

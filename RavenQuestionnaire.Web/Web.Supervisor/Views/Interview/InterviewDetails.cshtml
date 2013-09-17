@@ -25,7 +25,7 @@
         <ul id="groups-menu">
             <!-- ko foreach: groups -->
             <li data-bind="css: css">
-                <a data-bind="text: title, attr: {href : href}"></a>
+                <a data-bind="html: title, attr: {href : href}"></a>
             </li>
             <!-- /ko -->
         </ul>
@@ -75,7 +75,7 @@
                                     <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                         <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                             <span class="icon-star"></span>
-                                            <span data-bind="text: title"></span>
+                                            <span data-bind="html: title"></span>
                                         </div>
                                     </td>
                                     <td class="question-answer" data-bind="click: $root.showDetails">
@@ -116,7 +116,7 @@
         </div>
         <div id="details" data-bind="with: currentQuestion">
             <button class="close" data-bind="click: $root.closeDetails">&times;</button>
-            <h3 class="heading" data-bind="text: title"></h3>
+            <h3 class="heading" data-bind="html: title"></h3>
             <div data-bind="template: { name: questionType() + 'Full' }"></div>
             <h4 class="heading">Comments</h4>
             <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
@@ -157,7 +157,7 @@
         <!-- ko foreach: options -->
         <label class="radio" data-bind='attr: { "for": optionFor }'>
             <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption().value, value: value, disable: $parent.isReadonly">
-            <span data-bind="text: label"></span>
+            <span data-bind="html: label"></span>
         </label>
         <!-- /ko -->
     </script>
@@ -165,7 +165,7 @@
         <!-- ko foreach: options -->
         <label class="checkbox" data-bind='attr: { "for": optionFor }'>
             <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value, disable: $parent.isReadonly">
-            <span data-bind="text: label"></span>
+            <span data-bind="html: label"></span>
         </label>
         <!-- /ko -->
     </script>
@@ -193,12 +193,12 @@
 
     <script type="text/html" id="SingleOption">
         <!-- ko with: selectedOption -->
-        <span data-bind="text: label"></span>
+        <span data-bind="html: label"></span>
         <!-- /ko -->
     </script>
     <script type="text/html" id="MultyOption">
         <!-- ko foreach: selectedOptions -->
-        <span data-bind="text: label"></span>,
+        <span data-bind="html: label"></span>,
         <!-- /ko -->
     </script>
     <script type="text/html" id="Numeric">
@@ -236,7 +236,7 @@
                         Converters = new List<JsonConverter>()
                         {
                             new EnumToStringConverter(),
-                                 new HtmlEncodeStringPropertiesConverter()
+                            new HtmlEncodeStringPropertiesConverter()
                         }
                     })),
                 u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
