@@ -102,11 +102,12 @@ function ($, ko, amplify, _, viewmodel, input, datacontext) {
         message: 'The array must contain at least one valid element.'
     };
 
-
-    $.when(datacontext.parseData(input))
-		.done(function () {
-		    $('#umbrella').attr('data-bind', 'visible:isSaving');
-		    viewmodel.init();
-		    ko.applyBindings(viewmodel);
-		});
+    $(document).ready(function() {
+        $.when(datacontext.parseData(input))
+            .done(function() {
+                $('#umbrella').attr('data-bind', 'visible:isSaving');
+                viewmodel.init();
+                ko.applyBindings(viewmodel);
+            });
+    });
 });

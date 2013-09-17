@@ -21,6 +21,9 @@ function ($, ko, amplify, _, viewmodel) {
     $('#umbrella').attr('data-bind', 'visible:isSaving');
     $('#umbrella-message').attr('data-bind', 'text:savingMessage');
     
-    viewmodel.init();
-    ko.applyBindings(viewmodel);
+    $(document).ready(function () {
+        viewmodel.init();
+        ko.applyBindings(viewmodel);
+    });
+    
 });
