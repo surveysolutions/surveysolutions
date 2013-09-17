@@ -79,19 +79,11 @@
             }
 
             function boot() {
-                require(['jquery', 'config', 'presenter', 'dataprimer', 'binder', 'route-config'],
-                    function($, config, presenter, dataprimer, binder, routeConfig) {
-
-                        $.fn.activity.defaults.color = "#fff";
-
-                        presenter.toggleActivity(true);
-
+                require(['jquery', 'config', 'dataprimer', 'binder', 'route-config'],
+                    function($, config, dataprimer, binder, routeConfig) {
                         $.when(dataprimer.fetch())
                             .done(binder.bind)
-                            .done(routeConfig.register)
-                            .always(function() {
-                                presenter.toggleActivity(false);
-                            });
+                            .done(routeConfig.register);
                     });
             }
         })();
@@ -99,7 +91,6 @@
 
 }
 
-<div id="busyindicator"></div>
 <div id="unsavedWarningMessageContainer" class="statistics" data-bind="with: statistics">
     <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
         <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
