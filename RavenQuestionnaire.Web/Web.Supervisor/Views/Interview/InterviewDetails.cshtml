@@ -80,7 +80,7 @@
                                     </td>
                                     <td class="question-answer" data-bind="click: $root.showDetails">
                                         <div class="cell-content" data-bind="visible: isEnabled">
-                                            <div class="question-clickable" >
+                                            <div class="question-clickable">
                                                 <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                 <span data-bind="template: { name: questionType() }"></span>
                                                 <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
@@ -88,23 +88,23 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td style="width: 120px;" >
+                                    <td style="width: 120px;">
                                         <div class="actions pull-right">
-                                                    <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
-                                                        <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                                                        <ul class="dropdown-menu pull-right">
-                                                            <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
-                                                            <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
-                                                            <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
-                                                        <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
-                                                    </a>
-                                                    <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
-                                                        <i class="icon-flag icon-white"></i></a>
-                                                    <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                            <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
+                                                <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
+                                                    <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
+                                                    <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
+                                                </ul>
                                             </div>
+                                            <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
+                                                <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
+                                            </a>
+                                            <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
+                                                <i class="icon-flag icon-white"></i></a>
+                                            <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -174,7 +174,7 @@
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="DateTimeFull">
-       <input type="text" data-date-format="mm/dd/yy" data-bind="datepicker: answer, datepickerOptions: {date: answer }" />
+        <input type="text" data-date-format="mm/dd/yy" data-bind="datepicker: answer, datepickerOptions: {date: answer }" />
     </script>
     <script type="text/html" id="AutoPropagateFull">
         <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
@@ -235,7 +235,8 @@
                         TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
                         Converters = new List<JsonConverter>()
                         {
-                            new EnumToStringConverter()
+                            new EnumToStringConverter(),
+                                 new HtmlEncodeStringPropertiesConverter()
                         }
                     })),
                 u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
