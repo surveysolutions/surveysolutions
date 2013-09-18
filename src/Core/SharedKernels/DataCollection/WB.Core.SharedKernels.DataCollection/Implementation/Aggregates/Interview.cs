@@ -672,34 +672,56 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> questionsDeclaredValid = new List<Identity>();
             List<Identity> questionsDeclaredInvalid = new List<Identity>();
 
-            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
-            {
-                Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, new int[0]);
-
-                PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled, questionsToBeDisabled,
-                    isNewStateEnabled:
-                        this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionIdAtInterview, questionnaire,
-                            GetAnswerSupportedInExpressionsOrNull),
-                    isOldStateEnabled: !this.IsQuestionDisabled(questionIdAtInterview));
-            }
-
             foreach (var groupWithNotEmptyCustomEnablementCondition in questionnaire.GetAllGroupsWithNotEmptyCustomEnablementConditions())
             {
-                Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, new int[0]);
-                PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
-                    isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(groupIdAtInterview, questionnaire,
+                var availablePropagationLevels = this.AvailablePropagationLevelsForGroup(questionnaire, groupWithNotEmptyCustomEnablementCondition);
+
+                foreach (var availablePropagationLevel in availablePropagationLevels)
+                {
+                    Identity groupIdAtInterview = new Identity(groupWithNotEmptyCustomEnablementCondition, availablePropagationLevel);
+
+                    PutToCorrespondingListAccordingToEnablementStateChange(groupIdAtInterview, groupsToBeEnabled, groupsToBeDisabled,
+                        isNewStateEnabled: this.ShouldGroupBeEnabledByCustomEnablementCondition(groupIdAtInterview, questionnaire,
                             GetAnswerSupportedInExpressionsOrNull),
-                    isOldStateEnabled: !this.IsGroupDisabled(groupIdAtInterview));
+                        isOldStateEnabled: !this.IsGroupDisabled(groupIdAtInterview));
+                }
+            }
+
+            foreach (var questionWithNotEmptyEnablementCondition in questionnaire.GetAllQuestionsWithNotEmptyCustomEnablementConditions())
+            {
+                var availablePropagationLevels = this.AvailablePropagationLevelsForQuestion(questionnaire, questionWithNotEmptyEnablementCondition);
+
+                foreach (var availablePropagationLevel in availablePropagationLevels)
+                {
+                    Identity questionIdAtInterview = new Identity(questionWithNotEmptyEnablementCondition, availablePropagationLevel);
+
+                    PutToCorrespondingListAccordingToEnablementStateChange(questionIdAtInterview, questionsToBeEnabled,
+                        questionsToBeDisabled,
+                        isNewStateEnabled:
+                            this.ShouldQuestionBeEnabledByCustomEnablementCondition(questionIdAtInterview, questionnaire,
+                                GetAnswerSupportedInExpressionsOrNull),
+                        isOldStateEnabled: !this.IsQuestionDisabled(questionIdAtInterview));
+                }
             }
 
             foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
             {
-                Identity questionIdAtInterview = new Identity(questionWithNotEmptyValidationExpression, new int[0]);
-                bool? dependentQuestionValidationResult = this.PerformCustomValidationOfQuestion(questionIdAtInterview, questionnaire, GetAnswerSupportedInExpressionsOrNull);
-                switch (dependentQuestionValidationResult)
+                var availablePropagationLevels = this.AvailablePropagationLevelsForQuestion(questionnaire, questionWithNotEmptyValidationExpression);
+
+                foreach (var availablePropagationLevel in availablePropagationLevels)
                 {
-                    case true: questionsDeclaredValid.Add(questionIdAtInterview); break;
-                    case false: questionsDeclaredInvalid.Add(questionIdAtInterview); break;
+                    Identity questionIdAtInterview = new Identity(questionWithNotEmptyValidationExpression, availablePropagationLevel);
+                    bool? dependentQuestionValidationResult = this.PerformCustomValidationOfQuestion(questionIdAtInterview, questionnaire,
+                        GetAnswerSupportedInExpressionsOrNull);
+                    switch (dependentQuestionValidationResult)
+                    {
+                        case true:
+                            questionsDeclaredValid.Add(questionIdAtInterview);
+                            break;
+                        case false:
+                            questionsDeclaredInvalid.Add(questionIdAtInterview);
+                            break;
+                    }
                 }
             }
 
@@ -711,7 +733,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
-        
+        }
+
+        private IEnumerable<int[]> AvailablePropagationLevelsForGroup(IQuestionnaire questionnaire, Guid groupdId)
+        {
+            int groupPropagationLevel = questionnaire.GetPropagationLevelForGroup(groupdId);
+
+            Guid[] parentPropagatableGroupsStartingFromTop =
+                questionnaire.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupdId)
+                    .ToArray();
+
+            var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, groupPropagationLevel,
+                parentPropagatableGroupsStartingFromTop, this.GetCountOfPropagatableGroupInstances);
+            return availablePropagationLevels;
+        }
+
+        private IEnumerable<int[]> AvailablePropagationLevelsForQuestion(IQuestionnaire questionnaire, Guid questionId)
+        {
+            int questionPropagationLevel = questionnaire.GetPropagationLevelForQuestion(questionId);
+
+            Guid[] parentPropagatableGroupsStartingFromTop =
+                questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId)
+                    .ToArray();
+
+            var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, questionPropagationLevel,
+                parentPropagatableGroupsStartingFromTop, this.GetCountOfPropagatableGroupInstances);
+
+            return availablePropagationLevels;
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime,string comment)
@@ -1342,6 +1390,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
 
                 Guid[] parentPropagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
+
                 IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(
                     propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
 
