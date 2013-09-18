@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
-            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, evnt.Payload.Name, evnt.Payload.Password, evnt.Payload.IsLocked),
+            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, evnt.Payload.Name.ToLower(), evnt.Payload.Password, evnt.Payload.IsLocked),
                                    evnt.EventSourceId);
         }
 
@@ -37,7 +37,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var user = this.documentStorage.GetById(evnt.EventSourceId);
             if(user==null)
                 return;
-            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, user.Login, evnt.Payload.PasswordHash, user.IsLocked),
+            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, user.Login.ToLower(), evnt.Payload.PasswordHash, user.IsLocked),
                                     evnt.EventSourceId);
         }
     }

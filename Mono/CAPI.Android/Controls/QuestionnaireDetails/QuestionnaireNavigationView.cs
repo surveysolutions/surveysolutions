@@ -12,13 +12,13 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
-    public class QuestionnaireNavigationFragment : ScrollView
+    public class QuestionnaireNavigationView : ScrollView
     {
         #region public fields
 
         private readonly LinearLayout linearLayout;
 
-        public QuestionnaireNavigationFragment(Context context, CompleteQuestionnaireView model)
+        public QuestionnaireNavigationView(Context context, CompleteQuestionnaireView model)
             : base(context)
         {
             this.model = model;
