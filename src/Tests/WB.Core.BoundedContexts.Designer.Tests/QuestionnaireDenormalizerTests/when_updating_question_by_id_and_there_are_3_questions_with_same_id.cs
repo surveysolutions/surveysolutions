@@ -43,8 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
             var questionFactory = Mock.Of<ICompleteQuestionFactory>();
 
             Mock.Get(questionFactory)
-                .Setup(factory => factory.CreateQuestion(it.IsAny<DataQuestion>()))
-                .Returns((DataQuestion question) => new CompleteQuestionFactory().CreateQuestion(question));
+                .Setup(factory => factory.CreateQuestion(it.IsAny<QuestionData>()))
+                .Returns((QuestionData question) => new CompleteQuestionFactory().CreateQuestion(question));
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionFactory: questionFactory);
         };
