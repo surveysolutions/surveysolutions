@@ -34,7 +34,9 @@ namespace Core.Supervisor.Views.Reposts.Factories
                 items = items.Where(x => x.QuestionnaireVersion == input.TemplateVersion);
             }
 
-            List<HeadquarterSupervisorsAndStatusesReportLine> all = items.OrderUsingSortExpression(input.Order)
+            var totalCount = items.Count();
+
+            List<HeadquarterSupervisorsAndStatusesReportLine> currentPage = items.OrderUsingSortExpression(input.Order)
                                                                          .Skip((input.Page - 1)*input.PageSize)
                                                                          .Take(input.PageSize)
                                                                          .ToList()
@@ -58,8 +60,8 @@ namespace Core.Supervisor.Views.Reposts.Factories
 
             return new HeadquarterSupervisorsAndStatusesReportView
                 {
-                    TotalCount = all.Count(),
-                    Items = all
+                    TotalCount = totalCount,
+                    Items = currentPage
                 };
         }
     }
