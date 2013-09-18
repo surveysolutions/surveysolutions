@@ -128,9 +128,9 @@
             };
         };
 
-        self.SelectedTemplate("{\"templateId\": \"" + location.queryString['templateid'] + "\",\"version\": \"" + location.queryString['templateversion'] + "\"}");
+        self.SelectedTemplate("{\"templateId\": \"" + location.queryString['templateId'] + "\",\"version\": \"" + location.queryString['templateVersion'] + "\"}");
         self.SelectedStatus(location.queryString['status']);
-        self.SelectedResponsible(location.queryString['interviewerid']);
+        self.SelectedResponsible(location.queryString['interviewerId']);
 
 
         self.SelectedTemplate.subscribe(self.ListView.filter);
