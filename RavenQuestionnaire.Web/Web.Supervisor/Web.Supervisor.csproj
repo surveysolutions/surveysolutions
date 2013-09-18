@@ -481,14 +481,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Include="Scripts\changeState\main.js" />
     <Content Include="Scripts\changeState\app\viewmodel.js" />
     <Content Include="Scripts\details\app\config.js" />
     <Content Include="Scripts\details\app\datacontext.js" />
     <Content Include="Scripts\details\app\dataservice.js" />
     <Content Include="Scripts\details\app\mapper.js" />
     <Content Include="Scripts\details\app\model.js" />
-    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
@@ -533,7 +531,6 @@
     <Content Include="Scripts\lib\lodash.js" />
     <Content Include="Scripts\lib\moment.js" />
     <Content Include="Scripts\lib\require.js" />
-    <Content Include="Scripts\assign\main.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />

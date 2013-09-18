@@ -57,6 +57,45 @@
                 "~/Content/datepicker.css",
                 "~/Content/main.css",
                 "~/Content/details.css"));
+
+
+            bundles.Add(
+                new ScriptBundle("~/js/lib-modules").Include(
+                    "~/Scripts/lib/lodash.js",
+                    "~/Scripts/lib/moment.js",
+                    "~/Scripts/lib/jquery.pnotify.js",
+                    "~/Scripts/lib/knockout.js",
+                    "~/Scripts/lib/knockout.validation.js",
+                    "~/Scripts/lib/require.js",
+                    "~/Scripts/lib/amplify.js",
+                    "~/Scripts/lib/director.js",
+                    "~/Scripts/lib/Math.uuid.js"
+                    ));
+
+            bundles.Add(
+                new ScriptBundle("~/js/interview-details").Include(
+                    "~/Scripts/details/app/config.js",
+                    "~/Scripts/details/app/datacontext.js",
+                    "~/Scripts/details/app/dataservice.js",
+                    "~/Scripts/details/app/mapper.js",
+                    "~/Scripts/details/app/model.js",
+                    "~/Scripts/details/app/viewmodel.js"
+                    ));
+
+            bundles.Add(
+                new ScriptBundle("~/js/interview-assign").Include(
+                    "~/Scripts/assign/app/datacontext.js",
+                    "~/Scripts/assign/app/dataservice.js",
+                    "~/Scripts/assign/app/mapper.js",
+                    "~/Scripts/assign/app/model.js",
+                    "~/Scripts/assign/app/viewmodel.js"
+                    ));
+
+            bundles.Add(
+               new ScriptBundle("~/js/interview-changeState").Include(
+                   "~/Scripts/changeState/app/viewmodel.js"
+                   ));
+
         }
     }
 }
