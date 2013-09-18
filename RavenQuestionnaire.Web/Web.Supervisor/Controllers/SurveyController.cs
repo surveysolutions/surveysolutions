@@ -10,7 +10,6 @@ using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -23,15 +22,6 @@ namespace Web.Supervisor.Controllers
 
         private readonly IViewFactory<TeamUsersAndQuestionnairesInputModel, TeamUsersAndQuestionnairesView>
             teamUsersAndQuestionnairesFactory;
-
-        private readonly InterviewStatus[] interviewStatusesToSkip =
-        {
-            InterviewStatus.Created,
-            InterviewStatus.ReadyForInterview,
-            InterviewStatus.Restarted,
-            InterviewStatus.SentToCapi,
-            InterviewStatus.Deleted
-        };
 
         public SurveyController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                                 IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
@@ -76,12 +66,12 @@ namespace Web.Supervisor.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems());
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip);
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems();
             Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
 
             TeamUsersAndQuestionnairesView usersAndQuestionnaires =
