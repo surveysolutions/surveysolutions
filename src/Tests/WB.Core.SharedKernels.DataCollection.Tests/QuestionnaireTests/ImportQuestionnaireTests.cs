@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                     () =>
                     questionnaire.ImportQuestionnaire(Guid.NewGuid(), docMock.Object);
                 // assert
-                Assert.Throws<DomainException>(act);
+                Assert.Throws<QuestionnaireException>(act);
             }
         }
     }
