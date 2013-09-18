@@ -706,13 +706,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var questionWithNotEmptyValidationExpression in questionnaire.GetAllQuestionsWithNotEmptyValidationExpressions())
             {
-                var availablePropagationLevels = this.AvailablePropagationLevelsForQuestion(questionnaire, questionWithNotEmptyValidationExpression);
+                var availablePropagationLevels = this.AvailablePropagationLevelsForQuestion(questionnaire,
+                    questionWithNotEmptyValidationExpression);
 
                 foreach (var availablePropagationLevel in availablePropagationLevels)
                 {
                     Identity questionIdAtInterview = new Identity(questionWithNotEmptyValidationExpression, availablePropagationLevel);
+                   
+
+                    if(IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire, groupsToBeDisabled.Contains, questionsToBeDisabled.Contains))
+                        continue;
+
                     bool? dependentQuestionValidationResult = this.PerformCustomValidationOfQuestion(questionIdAtInterview, questionnaire,
                         GetAnswerSupportedInExpressionsOrNull);
+
                     switch (dependentQuestionValidationResult)
                     {
                         case true:
@@ -728,7 +735,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
             questionsDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
-            questionsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
+            groupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
             groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
 
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
@@ -1610,18 +1617,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 mandatoryQuestionIds, EmptyPropagationVector, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
             return mandatoryQuestions.Any(
-                question => !this.WasQuestionAnswered(question) && !this.IsQuestionOrParentGroupDisabled(question, questionnaire));
+                question => !this.WasQuestionAnswered(question) && !this.IsQuestionOrParentGroupDisabled(question, questionnaire, this.IsGroupDisabled, this.IsQuestionDisabled));
         }
 
-        private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire)
+        private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, Func<Identity, bool> isGroupDisabled, Func<Identity, bool> isQuestionDisabled)
         {
-            if (this.IsQuestionDisabled(question))
+            if (isQuestionDisabled(question))
                 return true;
 
             IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
             IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperPropagationLevelOrThrow(parentGroupIds, question.PropagationVector, questionnaire);
 
-            return parentGroups.Any(this.IsGroupDisabled);
+            return parentGroups.Any(isGroupDisabled);
         }
 
         private bool IsGroupDisabled(Identity group)
