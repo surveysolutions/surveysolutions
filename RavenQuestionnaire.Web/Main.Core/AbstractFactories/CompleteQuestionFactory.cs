@@ -101,7 +101,7 @@
             return completeQuestion;
         }
         
-        public AbstractQuestion CreateQuestion(DataQuestion data)
+        public AbstractQuestion CreateQuestion(QuestionData data)
         {
             AbstractQuestion q = CreateQuestion(data.questionType, data.publicKey);
 

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
@@ -74,13 +77,41 @@ namespace CAPI.Android.Core.Model.ChangeLog
                 return;
             if (record.Start > end)
                 throw new ArgumentException("end is more than start");
-            record.End = end;
-            var storedEvents = eventStore.ReadFrom(eventSourceId, record.Start, end);
-            var events =
-                storedEvents.Select(e => new AggregateRootEvent(e)).ToArray();
+            var recordId = Guid.Parse(record.Id);
 
-            fileChangeLogStore.SaveChangeset(events, Guid.Parse(record.Id));
-            draftChangeLog.Store(record, Guid.Parse(record.Id));
+            record.End = end;
+
+            var events = BuildEventStreamForSendByEventSourceId(eventSourceId, record.Start, end);
+
+            fileChangeLogStore.SaveChangeset(events, recordId);
+            draftChangeLog.Store(record, recordId);
+        }
+
+        private AggregateRootEvent[] BuildEventStreamForSendByEventSourceId(Guid eventSourceId, long start, long end)
+        {
+            var storedEvents = eventStore.ReadFrom(eventSourceId, start, end);
+            var events =
+                storedEvents.Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
+            return events;
+        }
+
+        private bool EventIsActive(CommittedEvent committedEvent)
+        {
+            var eventType = committedEvent.Payload;
+
+            if (eventType is AnswerCommented)
+                return true;
+
+            if (eventType is AnswerRemoved)
+                return true;
+
+            if (eventType is QuestionAnswered)
+                return true;
+
+            if (eventType is GroupPropagated)
+                return true;
+
+            return false;
         }
 
         public void ReopenDraftRecord(Guid eventSourceId)
@@ -89,9 +120,11 @@ namespace CAPI.Android.Core.Model.ChangeLog
             if (record == null)
                 return;
             record.End = null;
-            var recodId = Guid.Parse(record.Id);
-            fileChangeLogStore.DeleteDraftChangeSet(recodId);
-            draftChangeLog.Store(record, recodId);
+
+            var recordId = Guid.Parse(record.Id);
+
+            fileChangeLogStore.DeleteDraftChangeSet(recordId);
+            draftChangeLog.Store(record, recordId);
         }
 
         public void CleanUpChangeLogByRecordId(Guid recordId)

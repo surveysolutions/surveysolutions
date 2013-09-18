@@ -7,6 +7,6 @@
     public interface ICompleteQuestionFactory
     {
         ICompleteQuestion ConvertToCompleteQuestion(IQuestion question);
-        AbstractQuestion CreateQuestion(DataQuestion question);
+        AbstractQuestion CreateQuestion(QuestionData question);
     }
 }

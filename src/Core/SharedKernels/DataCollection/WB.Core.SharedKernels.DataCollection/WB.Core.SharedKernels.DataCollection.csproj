@@ -72,6 +72,7 @@
     <Compile Include="Commands\Interview\Base\InterviewCommand.cs" />
     <Compile Include="Commands\Interview\DeleteInterviewCommand.cs" />
     <Compile Include="Commands\Interview\CompleteInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\ReevaluateSynchronizedInterview.cs" />
     <Compile Include="Commands\Interview\RejectInterviewCommand.cs" />
     <Compile Include="Commands\Interview\RemoveFlagFromAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RestartInterviewCommand.cs" />
