@@ -72,7 +72,7 @@
         <div class="controls">
             <!-- ko foreach: options -->
             <label class="radio" data-bind='attr: { "for": optionFor }'>
-                <input type='radio' data-bind="attr: { value: id, name: title, id: optionFor }, checked: $parent.selectedOption" />
+                <input type='radio' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOption" />
                 <span data-bind="text: title"></span>
             </label>
             <!-- /ko -->
@@ -86,7 +86,7 @@
         <div class="controls">
             <!-- ko foreach: options -->
             <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-                <input type='checkbox' data-bind="attr: { value: id, name: title, id: optionFor }, checked: $parent.selectedOptions" />
+                <input type='checkbox' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOptions" />
                 <span data-bind="text: title"></span>
             </label>
             <!-- /ko -->

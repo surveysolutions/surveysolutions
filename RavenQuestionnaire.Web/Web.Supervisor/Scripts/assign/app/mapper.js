@@ -7,6 +7,7 @@
                 item.id(dto.PublicKey);
                 item.title(dto.Title);
                 item.type(dto.QuestionType);
+                item.variable(dto.StataExportCaption);
                 item.instructions(dto.Instructions);
                 item.selectedOption(dto.Answer);
                 if (!_.isNull(dto.Answers)) {
@@ -45,6 +46,7 @@
 
                     var item = new model.Option();
                     item.id(dto.AnswerValue);
+                    item.questionId(dto.PublicKey);
                     item.title(dto.Title);
                     item.value(dto.AnswerValue);
                     item.isSelected(dto.Selected || false);

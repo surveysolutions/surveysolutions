@@ -13,6 +13,7 @@ function (ko) {
             self.title = ko.observable();
             self.id = ko.observable();
             self.type = ko.observable();
+            self.variable = ko.observable();
             self.options = ko.observableArray([]);
             self.instructions = ko.observable();
             self.selectedOption = ko.observable();
@@ -33,11 +34,12 @@ function (ko) {
         Option: function () {
             var self = this;
             self.id = ko.observable();
+            self.questionId = ko.observable();
             self.title = ko.observable();
             self.value = ko.observable();
             self.isSelected = ko.observable(false);
             self.optionFor = ko.computed(function () {
-                return "optionFor" + "_" + self.id();
+                return "optionFor" + "_" + self.questionId ()+ "_" + self.id();
             });
             return self;
         }
