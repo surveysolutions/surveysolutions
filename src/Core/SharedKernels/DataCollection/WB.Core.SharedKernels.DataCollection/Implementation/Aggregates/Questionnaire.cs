@@ -53,6 +53,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         }
 
+        public QuestionnaireState CreateSnapshot()
+        {
+            return new QuestionnaireState(this.innerDocument, this.questionCache, this.groupCache);
+        }
+
+        public void RestoreFromSnapshot(QuestionnaireState snapshot)
+        {
+            this.innerDocument = snapshot.Document;
+            this.groupCache = snapshot.GroupCache;
+            this.questionCache = snapshot.QuestionCache;
+        }
+
         private Dictionary<Guid, IQuestion> QuestionCache
         {
             get
@@ -112,14 +124,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
-           
-            var document = source as QuestionnaireDocument;
-            if (document == null)
-                throw new DomainException(DomainExceptionType.TemplateIsInvalid
-                                          , "only QuestionnaireDocuments are supported for now");
+            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
+
             document.CreatedBy = this.innerDocument.CreatedBy;
+
             this.ApplyEvent(new TemplateImported() {Source = document});
-           
         }
 
 
@@ -469,6 +479,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
+        private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
+        {
+            var document = source as QuestionnaireDocument;
+
+            if (document == null)
+                throw new QuestionnaireException(string.Format("Cannot import questionnaire with a document of a not supported type {0}.", source.GetType()));
+
+            return document;
+        }
+
+        private static void ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(QuestionnaireDocument document)
+        {
+            IEnumerable<IQuestion> questions = document.Find<IQuestion>(_ => true);
+
+            var propagatingQuestionsWithNoAssociatedGroups =
+                from question in questions
+                where question is IAutoPropagateQuestion
+                let propogatingQuestion = (IAutoPropagateQuestion) question
+                where propogatingQuestion.Triggers.Count == 0
+                select propogatingQuestion;
+
+            if (propagatingQuestionsWithNoAssociatedGroups.Any())
+                throw new QuestionnaireException(string.Format(
+                    "Following questions are propogating and are expected to have associated groups, but they have no groups associated:{0}{1}",
+                    Environment.NewLine,
+                    string.Join(Environment.NewLine, propagatingQuestionsWithNoAssociatedGroups.Select(FormatQuestionForException))));
+        }
+
+
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
             string validationExpression = this.GetCustomValidationExpression(questionId);
@@ -775,16 +814,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-        public QuestionnaireState CreateSnapshot()
-        {
-            return new QuestionnaireState(this.innerDocument,this.questionCache,this.groupCache);
-        }
 
-        public void RestoreFromSnapshot(QuestionnaireState snapshot)
+        private static string FormatQuestionForException(IQuestion question)
         {
-            this.innerDocument = snapshot.Document;
-            this.groupCache = snapshot.GroupCache;
-            this.questionCache = snapshot.QuestionCache;
+            return string.Format("[{0}] {1} ({2:N})",
+                question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
+                question.QuestionText ?? "<<NO QUESTION TITLE>>",
+                question.PublicKey);
         }
     }
 }
