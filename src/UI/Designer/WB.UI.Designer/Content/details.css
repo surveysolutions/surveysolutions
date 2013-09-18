@@ -750,10 +750,10 @@ a.btn.btn-help {
 .row-fluid .btn-group {
     margin-bottom: 10px;
 }
-#unsavedWarningMessageContainer{
+.informationContainer{
     left: 0;
     position: absolute;
-    top: 0;
+    top: 77px;
     width: 100%;
     z-index: 10999;
     text-align: center;
@@ -761,7 +761,7 @@ a.btn.btn-help {
     overflow: visible;
      margin-top: -1px;
 }
-#unsavedWarningMessage{
+.informationMessage{
     display: inline-block;
     background-color: #F39106;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
