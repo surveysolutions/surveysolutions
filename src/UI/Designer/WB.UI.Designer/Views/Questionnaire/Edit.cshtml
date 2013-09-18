@@ -91,9 +91,9 @@
 
 }
 
-<div id="unsavedWarningMessageContainer" class="statistics" data-bind="with: statistics">
-    <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
-        <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+<div class="informationContainer statistics" data-bind="with: statistics">
+    <div class="informationMessage alert" data-bind="visible: hasUnsaved()">
+        <span data-bind="html: unsavedWarningMessage">Loading...</span>
     </div>
 </div>
 <div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
