@@ -1,5 +1,8 @@
 ﻿requirejs.config({
     baseUrl: '../../Scripts/lib',
+    config: {
+        'waitSeconds': 15
+    },
     paths: {
         app: '../changeState/app'
     },
