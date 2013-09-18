@@ -147,7 +147,6 @@ body.loading .loading-backdrop {
         padding-top: 15px;
             position: absolute;
             top: 0;
-            bottom: 0;
             right: 0;
             left: 0;
             overflow: auto;
@@ -193,7 +192,6 @@ body.loading .loading-backdrop {
     }
 
     #output .body {
-        top: 41px;
         bottom: 0;
     }
 
