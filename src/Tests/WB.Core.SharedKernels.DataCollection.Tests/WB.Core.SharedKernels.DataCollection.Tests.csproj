@@ -67,6 +67,9 @@
     <Compile Include="InterviewTests\when_condition_expression_execution_throw_exception_for_group_in_disabled_state.cs" />
     <Compile Include="InterviewTests\when_condition_expression_execution_throw_exception_for_question_in_disabled_state.cs" />
     <Compile Include="InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_custom_enablement_condition.cs" />
+    <Compile Include="InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_question_with_validation_expression.cs" />
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="InterviewTests\when_creating_interview.cs" />
