@@ -53,9 +53,9 @@ namespace Web.Supervisor.Controllers
             return this.View(usersAndQuestionnaires.Users);
         }
 
-        public ActionResult Interviews(string status)
+        public ActionResult Interviews(string status, string templateid, string interviewerid, string statchange)
         {
-            if (!string.IsNullOrWhiteSpace(status))
+            if (!string.IsNullOrWhiteSpace(statchange))
             {
                 this.Success(string.Format(@"Status was successfully changed. Interview is {0}", status));
             }

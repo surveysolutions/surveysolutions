@@ -83,7 +83,7 @@
                 interviewId: '@Model.InterviewId',
                 currentUser: currentUser,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "Survey", new { status = "_______" }, Request.Url.Scheme)',
+                backUrl: '@Url.Action("Interviews", "Survey", new { statchange = "_______" }, Request.Url.Scheme)',
             };
         });
     </script>

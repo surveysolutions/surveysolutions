@@ -139,8 +139,10 @@
             };
         };
 
-        self.SelectedTemplate(location.queryString['templateid']);
+        self.SelectedTemplate("{\"templateId\": \"" + location.queryString['templateid'] + "\",\"version\": \"" + location.queryString['templateversion'] + "\"}");
         self.SelectedStatus(location.queryString['status']);
+        self.SelectedResponsible(location.queryString['interviewerid']);
+
 
         self.SelectedTemplate.subscribe(self.ListView.filter);
         self.SelectedResponsible.subscribe(self.ListView.filter);
