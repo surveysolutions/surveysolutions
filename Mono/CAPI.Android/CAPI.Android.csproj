@@ -164,8 +164,7 @@
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\GridContentFragment.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemClickEventArgs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
@@ -225,7 +224,6 @@
     <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
