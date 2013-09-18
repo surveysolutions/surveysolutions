@@ -651,7 +651,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             AbstractQuestion question =
                 new CompleteQuestionFactory().CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -681,7 +681,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             AbstractQuestion question =
                 new CompleteQuestionFactory().CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -722,7 +722,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
                 this.questionFactory.CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         question.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,

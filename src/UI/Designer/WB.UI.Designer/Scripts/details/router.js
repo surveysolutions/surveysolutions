@@ -1,6 +1,6 @@
 ﻿define('router',
-    ['jquery', 'underscore', 'sammy', 'presenter', 'config', 'route-mediator'],
-    function ($, _, Sammy, presenter, config, routeMediator) {
+    ['jquery', 'underscore', 'sammy', 'config', 'route-mediator'],
+    function ($, _, Sammy, config, routeMediator) {
         var
             currentHash = '',
             defaultRoute = '',
