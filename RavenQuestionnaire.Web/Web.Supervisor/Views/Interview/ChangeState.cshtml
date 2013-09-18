@@ -1,4 +1,6 @@
-﻿@using Newtonsoft.Json
+﻿@using System.Runtime.Serialization.Formatters
+@using System.Web.Optimization
+@using Newtonsoft.Json
 @model Core.Supervisor.Views.ChangeStatus.ChangeStatusView
 @{
     ViewBag.Title = "Change state survey";
@@ -74,17 +76,70 @@
 </div>
 @section scripts
 {
-    <script data-main="../../Scripts/changeState/main.js" src="~/Scripts/lib/require.js"></script>
-
     <script type="text/javascript">
-        define('input', [], function() {
-            var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
+        var input = window.input || (function(document) {
+            'use strict';
+            var currentUser = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
             return {
                 interviewId: '@Model.InterviewId',
                 currentUser: currentUser,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
                 backUrl: '@Url.Action("Interviews", "Survey", new { statchange = "_______" }, Request.Url.Scheme)',
             };
-        });
+        }(document));
+
+            window.input = input;
+    </script>
+
+    @Scripts.Render("~/js/lib-modules")
+    @Scripts.Render("~/js/interview-changeState")
+
+    <script type="text/javascript">
+        (function() {
+            var root = this;
+
+            define3RdPartyModules();
+            loadPluginsAndBoot();
+
+            function define3RdPartyModules() {
+                // These are already loaded via bundles. 
+                // We define them and put them in the root object.
+                define('jquery', [], function() { return root.jQuery; });
+                define('ko', [], function() { return root.ko; });
+                define('amplify', [], function() { return root.amplify; });
+                define('moment', [], function() { return root.moment; });
+                define('lodash', [], function() { return root._; });
+                define('director', [], function() { return root.Router; });
+                define('input', [], function() { return root.input; });
+            }
+
+            function loadPluginsAndBoot() {
+                requirejs.config({
+                    baseUrl: '@Url.Content("~/Scripts/lib/")',
+                    config: {
+                        'waitSeconds': 15
+                    },
+                    paths: {
+                        app: '@Url.Content("~/Scripts/changeState/app/")'
+                    }
+                });
+
+                boot();
+            }
+
+            function boot() {
+                requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel'],
+                    function($, ko, amplify, _, viewmodel) {
+                        $('#umbrella').attr('data-bind', 'visible:isSaving');
+                        $('#umbrella-message').attr('data-bind', 'text:savingMessage');
+
+                        $(document).ready(function() {
+                            viewmodel.init();
+                            ko.applyBindings(viewmodel);
+                        });
+
+                    });
+            }
+        })();
     </script>
 }
