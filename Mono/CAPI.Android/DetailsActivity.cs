@@ -26,10 +26,7 @@ namespace CAPI.Android
     public class DetailsActivity : MvxFragmentActivity
     {
         protected InterviewItemId? ScreenId;
-        protected FrameLayout FlDetails
-        {
-            get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
-        }
+
         protected Guid QuestionnaireId
         {
             get { return Guid.Parse(Intent.GetStringExtra("publicKey")); }
@@ -67,7 +64,7 @@ namespace CAPI.Android
             get { return this.FindViewById<TextView>(Resource.Id.btnNavigation); }
         }
         protected ContentFrameAdapter Adapter { get; set; }
-        protected QuestionnaireNavigationFragment NavList { get; set; }
+        protected QuestionnaireNavigationView NavList { get; set; }
 
         protected CleanUpExecutor cleanUpExecutor { get; set; }
 
@@ -104,13 +101,13 @@ namespace CAPI.Android
 
             if (bundle == null)
             {
-                NavList = new QuestionnaireNavigationFragment(this, Model);
+                NavList = new QuestionnaireNavigationView(this, Model);
                 llNavigationHolder.AddView(NavList);
                 NavList.ScreenChanged += ContentFrameAdapter_ScreenChanged;
             }
             else
             {
-                NavList = llNavigationHolder.GetChildAt(0) as QuestionnaireNavigationFragment;
+                NavList = llNavigationHolder.GetChildAt(0) as QuestionnaireNavigationView;
             }
 
             btnNavigation.Click += llNavigationHolder_Click;
