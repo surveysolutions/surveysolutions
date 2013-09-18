@@ -67,8 +67,7 @@
 
                     // Knockout and its plugins
                     "~/Scripts/knockout-{version}.js",
-                    "~/Scripts/lib/knockout.mapping.js",
-                    "~/Scripts/lib/knockout.activity.js", 
+                    "~/Scripts/lib/knockout.mapping.js", 
                     "~/Scripts/lib/knockout.asyncCommand.js", 
                     "~/Scripts/lib/knockout.dirtyFlag.js", 
                     "~/Scripts/knockout.validation.debug.js", 
@@ -94,7 +93,6 @@
                     "~/Scripts/details/route-config.js",
                     "~/Scripts/details/route-mediator.js",
                     "~/Scripts/details/utils.js",
-                    "~/Scripts/details/presenter.js",
 
                     "~/Scripts/details/datacontext.js",
                     "~/Scripts/details/dataprimer.js",
