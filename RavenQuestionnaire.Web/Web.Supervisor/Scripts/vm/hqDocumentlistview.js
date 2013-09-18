@@ -17,6 +17,19 @@
     self.ToggleFilter = function () {
         self.ListView.ToggleFilter();
     };
+    
+
+    self.HideOutput = function () {
+        self.ListView.HideOutput();
+    };
+
+    self.ShowOutput = function () {
+        self.ListView.ShowOutput();
+    };
+
+    self.Errors = ko.computed(function() {
+        return self.ListView.Errors();
+    });
 
     var myChildModel = function (data) {
         ko.mapping.fromJS(data, {}, this);
@@ -89,11 +102,13 @@
                     }
 
                     self.ListView.TotalCount(self.ListView.TotalCount() - deletedInterviews.length);
+                    
+                    self.ListView.ShowErrors(data);
                 }
                 self.ListView.IsAjaxComplete(true);
             },
-            error: function () {
-
+            error: function (data) {
+                self.ListView.ShowErrors(data);
             },
             dataType: "json",
             traditional: true
