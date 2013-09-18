@@ -12,7 +12,7 @@
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
                             o.value(option.Value);
-                            o.label(_.unescape(option.Label));
+                            o.label(_.unescape(option.Label) + "");
                             if (dto.Answer == option.Value) {
                                 item.selectedOption(o);
                                 o.isSelected(true);
@@ -26,7 +26,7 @@
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
                             o.value(option.Value);
-                            o.label(_.unescape(option.Label));
+                            o.label(_.unescape(option.Label) + "");
                             if (_.contains(dto.Answer, option.Value)) {
                                 item.selectedOptions.push(o);
                                 o.isSelected(true);
