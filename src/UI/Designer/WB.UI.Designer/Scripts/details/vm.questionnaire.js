@@ -53,7 +53,6 @@
                     getChapters();
                     questionnaire(datacontext.questionnaire);
                     calcStatistics();
-                    $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
                 }
                 if (!_.isUndefined(selectedGroup())) {
                     selectedGroup().isSelected(false);
@@ -96,7 +95,7 @@
                 }
                 question.isSelected(true);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
-                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagateableGroups());
+                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
                 selectedQuestion.valueHasMutated();
                 openDetails("show-question");
@@ -114,8 +113,6 @@
             openDetails = function(style) {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').addClass('detail-visible').addClass(style);
-                $('#details-question .body').css('top', ($('#details-question .title').outerHeight() + 'px'));
-                $('#details-group .body').css('top', ($('#details-group .title').outerHeight() + 'px'));
             },
             closeDetails = function() {
                 $('#stacks').removeClass("show-question").removeClass("show-group");

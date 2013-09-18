@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             FullQuestionDataEvent e = evnt.Payload;
             AbstractQuestion result =
                 new CompleteQuestionFactory().CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             FullQuestionDataEvent e = evnt.Payload;
             AbstractQuestion result =
                 new CompleteQuestionFactory().CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionChanged e = evnt.Payload;
             IQuestion newQuestion =
                 this.questionFactory.CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         question.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
