@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
+            this.interviewWasCompleted = @event.InterviewData.InterviewWasCompleted;
 
             this.answersSupportedInExpressions = @event.InterviewData.Answers == null
                 ? new Dictionary<string, object>()
@@ -237,7 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewState CreateSnapshot()
         {
             return new InterviewState(questionnaireId, questionnaireVersion, status, answersSupportedInExpressions, answeredQuestions, disabledGroups,
-                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions);
+                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions, interviewWasCompleted);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
@@ -252,6 +253,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
             validAnsweredQuestions = snapshot.ValidAnsweredQuestions;
             invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
+            interviewWasCompleted = snapshot.InterviewWasCompleted;
         }
 
         #endregion
