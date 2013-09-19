@@ -25,7 +25,7 @@
         <ul id="groups-menu">
             <!-- ko foreach: groups -->
             <li data-bind="css: css">
-                <a data-bind="text: title, attr: {href : href}"></a>
+                <a data-bind="html: title, attr: {href : href}"></a>
             </li>
             <!-- /ko -->
         </ul>
@@ -75,12 +75,12 @@
                                     <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
                                         <div class="cell-content" data-bind="css: {featured : isFeatured}">
                                             <span class="icon-star"></span>
-                                            <span data-bind="text: title"></span>
+                                            <span data-bind="html: title"></span>
                                         </div>
                                     </td>
                                     <td class="question-answer" data-bind="click: $root.showDetails">
                                         <div class="cell-content" data-bind="visible: isEnabled">
-                                            <div class="question-clickable" >
+                                            <div class="question-clickable">
                                                 <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                 <span data-bind="template: { name: questionType() }"></span>
                                                 <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
@@ -88,23 +88,23 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td style="width: 120px;" >
+                                    <td style="width: 120px;">
                                         <div class="actions pull-right">
-                                                    <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
-                                                        <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                                                        <ul class="dropdown-menu pull-right">
-                                                            <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
-                                                            <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
-                                                            <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
-                                                        <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
-                                                    </a>
-                                                    <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
-                                                        <i class="icon-flag icon-white"></i></a>
-                                                    <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                            <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
+                                                <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
+                                                    <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
+                                                    <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
+                                                </ul>
                                             </div>
+                                            <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
+                                                <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
+                                            </a>
+                                            <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
+                                                <i class="icon-flag icon-white"></i></a>
+                                            <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -116,7 +116,7 @@
         </div>
         <div id="details" data-bind="with: currentQuestion">
             <button class="close" data-bind="click: $root.closeDetails">&times;</button>
-            <h3 class="heading" data-bind="text: title"></h3>
+            <h3 class="heading" data-bind="html: title"></h3>
             <div data-bind="template: { name: questionType() + 'Full' }"></div>
             <h4 class="heading">Comments</h4>
             <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
@@ -134,7 +134,7 @@
 <div id="output">
     <div class="inner">
         <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times</button>
+            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
             <span>Errors log</span>
         </div>
         <div class="body">
@@ -154,27 +154,27 @@
 @section scripts
 {
     <script type="text/html" id="SingleOptionFull">
-        <!-- ko foreach: options -->
-        <label class="radio" data-bind='attr: { "for": optionFor }'>
-            <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption().value, value: value, disable: $parent.isReadonly">
-            <span data-bind="text: label"></span>
-        </label>
-        <!-- /ko -->
+        <div data-bind="foreach: options">
+            <label class="radio" data-bind='attr: { "for": optionFor }'>
+                <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption().value, value: value, disable: $parent.isReadonly">
+                <span data-bind="html: label"></span>
+            </label>
+        </div>
     </script>
     <script type="text/html" id="MultyOptionFull">
-        <!-- ko foreach: options -->
-        <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-            <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value, disable: $parent.isReadonly">
-            <span data-bind="text: label"></span>
-        </label>
-        <!-- /ko -->
+        <div data-bind="foreach: options">
+            <label class="checkbox" data-bind='attr: { "for": optionFor }'>
+                <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : isSelected, value: value, disable: $parent.isReadonly">
+                <span data-bind="html: label"></span>
+            </label>
+        </div>
     </script>
     <script type="text/html" id="NumericFull">
         <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="DateTimeFull">
-       <input type="text" data-date-format="mm/dd/yy" data-bind="datepicker: answer, datepickerOptions: {date: answer }" />
+        <input type="text" data-date-format="mm/dd/yy" data-bind="datepicker: answer, datepickerOptions: {date: answer }" />
     </script>
     <script type="text/html" id="AutoPropagateFull">
         <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
@@ -192,30 +192,24 @@
     </script>
 
     <script type="text/html" id="SingleOption">
-        <!-- ko with: selectedOption -->
-        <span data-bind="text: label"></span>
-        <!-- /ko -->
+        <span data-bind=" with: selectedOption">
+            <span data-bind="html: label"></span>
+        </span>
     </script>
     <script type="text/html" id="MultyOption">
-        <!-- ko foreach: selectedOptions -->
-        <span data-bind="text: label"></span>,
-        <!-- /ko -->
+        <span data-bind="foreach: selectedOptions"><span data-bind="    html: label"></span>,</span>
     </script>
     <script type="text/html" id="Numeric">
-        <!-- ko text: answer -->
-        <!-- /ko -->
+        <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="DateTime">
-        <!-- ko text: moment(answer()).format('l') -->
-        <!-- /ko -->
+        <span data-bind=" text: moment(answer()).format('l')"></span>
     </script>
     <script type="text/html" id="AutoPropagate">
-        <!-- ko text: answer -->
-        <!-- /ko -->
+        <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="Text">
-        <!-- ko text: answer -->
-        <!-- /ko -->
+        <span data-bind=" text: answer"></span>
     </script>
     <script type="text/html" id="GpsCoordinates">
         <div>latitude: <span data-bind="text: latitude"></span></div>
@@ -223,19 +217,17 @@
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
         <div>time stamp: <span data-bind="text: moment(timestamp()).format('lll')"></span></div>
     </script>
-
-
-    <script data-main="../../Scripts/details/main.js" src="~/Scripts/lib/require.js"></script>
-
     <script type="text/javascript">
-        define('input', [], function() {
+        var input = window.input || (function(document) {
+            'use strict';
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.None,
                         TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
                         Converters = new List<JsonConverter>()
                         {
-                            new EnumToStringConverter()
+                            new EnumToStringConverter(),
+                            new HtmlEncodeStringPropertiesConverter()
                         }
                     })),
                 u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
@@ -249,6 +241,133 @@
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
                 backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
             };
-        });
+        }(document));
+
+        window.input = input;
+    </script>
+    
+    @Scripts.Render("~/js/lib-modules")
+    @Scripts.Render("~/js/interview-details")
+
+    <script type="text/javascript">
+        (function() {
+            var root = this;
+
+            define3RdPartyModules();
+            loadPluginsAndBoot();
+
+            function define3RdPartyModules() {
+                // These are already loaded via bundles. 
+                // We define them and put them in the root object.
+                define('jquery', [], function() { return root.jQuery; });
+                define('ko', [], function() { return root.ko; });
+                define('amplify', [], function() { return root.amplify; });
+                define('moment', [], function() { return root.moment; });
+                define('lodash', [], function() { return root._; });
+                define('director', [], function() { return root.Router; });
+                define('input', [], function() { return root.input; });
+            }
+
+            function loadPluginsAndBoot() {
+                requirejs.config({
+                    baseUrl: '@Url.Content("~/Scripts/lib/")',
+                    config: {
+                        'waitSeconds': 15
+                    },
+                    paths: {
+                        app: '@Url.Content("~/Scripts/details/app/")'
+                    },
+                    shim: {
+                        
+                    }
+                });
+               
+                boot();
+            }
+
+            function boot() {
+                require(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid', 'moment'],
+                    function($, ko, amplify, _, viewmodel, input, datacontext) {
+                        ko.validation.configure({
+                            insertMessages: false,
+                            decorateElement: true,
+                            errorElementClass: 'error'
+                        });
+
+                        ko.bindingHandlers.datepicker = {
+                            init: function(element, valueAccessor, allBindingsAccessor) {
+                                //initialize datepicker with some optional options
+                                var options = allBindingsAccessor().datepickerOptions || {};
+                                $(element).datepicker(options);
+
+                                //when a user changes the date, update the view model
+                                ko.utils.registerEventHandler(element, "changeDate", function(event) {
+                                    var value = valueAccessor();
+                                    if (ko.isObservable(value)) {
+                                        value(event.date);
+                                    }
+                                });
+                            },
+                            update: function(element, valueAccessor) {
+                                var widget = $(element).data("datepicker");
+                                //when the view model is updated, update the widget
+                                if (widget) {
+                                    widget.date = ko.utils.unwrapObservable(valueAccessor());
+                                    if (widget.date) {
+                                        widget.setValue();
+                                    }
+                                }
+                            }
+                        };
+
+                        ko.bindingHandlers.popover = {
+                            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                                var cssSelectorForPopoverTemplate = ko.utils.unwrapObservable(valueAccessor());
+                                var popOverTemplate = "<div id='my-knockout-popver'>" + $(cssSelectorForPopoverTemplate).html() + "</div>";
+                                $(element).popover({ content: popOverTemplate, html: true, trigger: 'manual' });
+
+                                $(element).click(function() {
+                                    $(this).popover('toggle');
+                                    var thePopover = document.getElementById("my-knockout-popver");
+                                    ko.applyBindings(viewModel, thePopover);
+                                });
+                            }
+                        };
+
+                        ko.bindingHandlers.date = {
+                            update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+                                var value = valueAccessor(),
+                                    allBindings = allBindingsAccessor();
+                                var valueUnwrapped = ko.utils.unwrapObservable(value);
+                                var pattern = allBindings.datePattern || 'MM/dd/yyyy';
+                                $(element).text(valueUnwrapped.toString(pattern));
+                            }
+                        };
+
+                        Date.prototype.mmddyyyy = function() {
+                            var yyyy = this.getFullYear().toString();
+                            var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+                            var dd = this.getDate().toString();
+                            return (mm[1] ? mm : "0" + mm[0]) + '/' + (dd[1] ? dd : "0" + dd[0]) + '/' + yyyy; // padding
+                        };
+
+                        ko.validation.rules['notempty'] = {
+                            validator: function(array) {
+                                return array.length > 0;
+                            },
+                            message: 'The array must contain at least one valid element.'
+                        };
+
+                        $(document).ready(function() {
+                            $.when(datacontext.parseData(input))
+                                .done(function() {
+                                    $('#umbrella').attr('data-bind', 'visible:isSaving');
+                                    viewmodel.init();
+                                    ko.applyBindings(viewmodel);
+                                });
+                        });
+                    });
+            }
+        })();
     </script>
 }

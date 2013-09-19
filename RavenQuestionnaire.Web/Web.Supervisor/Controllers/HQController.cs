@@ -34,15 +34,6 @@ namespace Web.Supervisor.Controllers
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
 
-        private readonly InterviewStatus[] interviewStatusesToSkip =
-        {
-            InterviewStatus.Created,
-            InterviewStatus.ReadyForInterview,
-            InterviewStatus.Restarted,
-            InterviewStatus.SentToCapi,
-            InterviewStatus.Deleted
-        };
-
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
                             IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
                             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
@@ -166,12 +157,12 @@ namespace Web.Supervisor.Controllers
         public ActionResult Status()
         {
             this.ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip));
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems());
         }
 
         private DocumentFilter Filters()
         {
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.SurveyStatusViewItems(skipStatuses: this.interviewStatusesToSkip);
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems();
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

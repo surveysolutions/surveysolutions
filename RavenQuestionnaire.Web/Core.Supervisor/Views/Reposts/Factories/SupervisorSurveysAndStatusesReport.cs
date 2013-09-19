@@ -31,7 +31,9 @@ namespace Core.Supervisor.Views.Reposts.Factories
                         : items.Where(x => x.ResponsibleId == Guid.Empty);
 
 
-            List<SupervisorSurveysAndStatusesReportLine> all =
+            var totalCount = items.Count();
+
+            List<SupervisorSurveysAndStatusesReportLine> currentPage =
                 items.OrderUsingSortExpression(input.Order)
                      .Skip((input.Page - 1)*input.PageSize)
                      .Take(input.PageSize)
@@ -54,8 +56,8 @@ namespace Core.Supervisor.Views.Reposts.Factories
 
             return new SupervisorSurveysAndStatusesReportView
                 {
-                    TotalCount = all.Count(),
-                    Items = all
+                    TotalCount = totalCount,
+                    Items = currentPage
                 };
         }
     }

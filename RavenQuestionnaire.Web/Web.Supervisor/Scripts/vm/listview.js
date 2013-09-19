@@ -11,6 +11,7 @@
         return null;
     };
     self.IsFilterOpen = ko.observable(true);
+
     self.ToggleFilter = function () {
         if (self.IsFilterOpen()) {
             $('#wrapper').addClass('menu-hidden');
@@ -19,6 +20,34 @@
         }
         self.IsFilterOpen(!self.IsFilterOpen());
     };
+    
+    self.HideOutput = function () {
+        $('body').removeClass('output-visible');
+    };
+    
+    self.ShowOutput = function () {
+        $('body').addClass('output-visible');
+    };
+
+    self.ShowErrors = function (response) {
+        if (!_.isUndefined(response.error)) {
+            self.Errors.removeAll();
+            self.Errors.push({
+                error: response.error
+            });
+        }
+        if (!_.isUndefined(response.errors)) {
+            self.Errors.removeAll();
+            _.each(response.errors, function (error) {
+                self.Errors.push({
+                    error: error
+                });
+            });
+        }
+        self.ShowOutput();
+    };
+
+    self.Errors = ko.observableArray([]);
 
     self.Items = ko.observableArray([]);
     self.ItemsSummary = ko.observable(null);

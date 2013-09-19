@@ -18,6 +18,21 @@
     background: #ddd;
     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
 }
+#wrapper {
+    position: absolute;
+    top: 40px;
+    margin-top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+#menu,
+#menu #menuInner {
+      margin-bottom: 0;
+  padding-bottom: 0;
+    height: 100%;
+    background: #F5F5F5;
+}
 #menu #menuInner > ul {
     margin: 0;
 }
@@ -28,6 +43,42 @@
 #menu #groups-menu li a
 {
     padding: 0 10px;
+}
+#menu #groups-menu li.level1 a{
+    padding-left: 10px;
+}
+#menu #groups-menu li.level2 a{
+    padding-left: 22px;
+}
+#menu #groups-menu li.level3 a{
+    padding-left: 30px;
+}
+#menu #groups-menu li.level4  a{
+    padding-left: 38px;
+}
+#menu #groups-menu li.level5 a,
+#menu #groups-menu li.level6 a,
+#menu #groups-menu li.level7 a,
+#menu #groups-menu li.level8 a,
+#menu #groups-menu li.level9 a,
+#menu #groups-menu li.level10 a
+ {
+    padding-left: 42px;
+}
+#menu > ul li a, #menu .slim-scroll > ul li a {
+    
+}
+#groups-menu {
+    position: absolute;
+    top: 71px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+}
+
+#content {
+        height: 100%;
 }
 .heading {
     color: #0088CC;

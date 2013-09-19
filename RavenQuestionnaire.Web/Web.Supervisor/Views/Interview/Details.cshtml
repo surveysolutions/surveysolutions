@@ -5,6 +5,7 @@
 @using Core.Supervisor.Views.Survey
 @using Newtonsoft.Json
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using Web.Supervisor.Code
 @model SurveyScreenView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,7 +23,11 @@
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                         {
                             TypeNameHandling = TypeNameHandling.None,
-                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                            Converters = new List<JsonConverter>()
+                            {
+                                 new HtmlEncodeStringPropertiesConverter()
+                            }
                         })) ,
                 u= @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
                         {
@@ -107,7 +112,7 @@
     <div id="groups" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: closeMenu">&times</button>
+                <button type="button" class="close" data-bind="click: closeMenu">&times;</button>
                 <span data-bind="text: title"></span>. Responsible: <span data-bind="text: responsible.name"></span>. Status: <span data-bind="text: status.name"></span>
             </div>
             <div class="body">
@@ -238,7 +243,7 @@
     <div id="details" data-bind="with: currentAnswer" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+                <button type="button" class="close" data-bind="click: $root.closeDetails">&times;</button>
                 <span data-bind="text: question"></span>
             </div>
             <div class="body">

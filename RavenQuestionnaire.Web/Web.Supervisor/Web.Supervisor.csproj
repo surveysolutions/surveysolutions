@@ -148,6 +148,9 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXssLibrary">
+      <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ExpressionEvaluator\Binaries\Antlr3.Runtime.dll</HintPath>
@@ -157,6 +160,9 @@
     </Reference>
     <Reference Include="Elmah.Mvc">
       <HintPath>..\..\packages\Elmah.MVC.2.0.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary">
+      <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
@@ -295,6 +301,7 @@
     <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
     <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Code\EnumToStringConverter.cs" />
+    <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
@@ -474,14 +481,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Include="Scripts\changeState\main.js" />
     <Content Include="Scripts\changeState\app\viewmodel.js" />
     <Content Include="Scripts\details\app\config.js" />
     <Content Include="Scripts\details\app\datacontext.js" />
     <Content Include="Scripts\details\app\dataservice.js" />
     <Content Include="Scripts\details\app\mapper.js" />
     <Content Include="Scripts\details\app\model.js" />
-    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
@@ -526,7 +531,6 @@
     <Content Include="Scripts\lib\lodash.js" />
     <Content Include="Scripts\lib\moment.js" />
     <Content Include="Scripts\lib\require.js" />
-    <Content Include="Scripts\assign\main.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
@@ -573,6 +577,7 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Scripts\lib\jquery.min.map" />
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
     </None>

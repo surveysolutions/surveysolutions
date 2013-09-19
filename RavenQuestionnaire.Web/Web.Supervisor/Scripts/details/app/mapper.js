@@ -12,7 +12,7 @@
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
                             o.value(option.Value);
-                            o.label(option.Label);
+                            o.label(_.unescape(option.Label) + "");
                             if (dto.Answer == option.Value) {
                                 item.selectedOption(o);
                                 o.isSelected(true);
@@ -26,7 +26,7 @@
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
                             o.value(option.Value);
-                            o.label(option.Label);
+                            o.label(_.unescape(option.Label) + "");
                             if (_.contains(dto.Answer, option.Value)) {
                                 item.selectedOptions.push(o);
                                 o.isSelected(true);
@@ -36,7 +36,7 @@
                         break;
                     case "Text":
                         item = new model.TextQuestion();
-                        item.answer(dto.Answer);
+                        item.answer(_.unescape(dto.Answer));
                         break;
                     case "Numeric":
                     case "AutoPropagate":
@@ -74,7 +74,7 @@
                 item.isAnswered(dto.IsAnswered);
                 item.uiId(uiId);
                 item.id(dto.Id);
-                item.title(dto.Title);
+                item.title(_.unescape(dto.Title));
                 item.isFlagged(dto.IsFlagged);
                 item.questionType(dto.QuestionType);
                 item.isCapital(dto.IsCapital);

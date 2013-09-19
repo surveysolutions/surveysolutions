@@ -165,7 +165,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(), evnt.EventTimeStamp);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, 
+                                string.Format("{0},{1}[{2}]", evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy), 
+                                evnt.EventTimeStamp);
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, string answer, DateTime updateDate)

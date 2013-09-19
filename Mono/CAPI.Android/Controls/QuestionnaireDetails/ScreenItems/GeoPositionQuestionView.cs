@@ -42,7 +42,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             locationText = new TextView(this.Context);
             
             locationText.SetTypeface(null, TypefaceStyle.Bold);
-            locationText.Text = RenderPositionAsText(Model.AnswerObject as GeoPosition);
+            var position = Model.AnswerObject as GeoPosition;
+            if (position!= null)
+                locationText.Text = RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy);
 
             var updateLocationButton = new Button(this.Context) {Text = "Get Location"};
             var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, 
@@ -109,17 +111,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 }
                 else
                 {
-                    var position = new GeoPosition()
-                        {
-                            Latitude = t.Result.Latitude,
-                            Longitude = t.Result.Longitude,
-                            Accuracy = t.Result.Accuracy,
-                            Timestamp = t.Result.Timestamp
-                        };
-                    
-                    CommandService.Execute(new AnswerGeoLocationQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
-                                                                  this.Model.PublicKey.PropagationVector, DateTime.UtcNow, position));
-                    var positionAsText = RenderPositionAsText(position);
+                    CommandService.Execute(new AnswerGeoLocationQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,
+                        Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, 
+                        t.Result.Latitude, t.Result.Longitude, t.Result.Accuracy, t.Result.Timestamp));
+
+                    var positionAsText = RenderPositionAsText(t.Result.Latitude, t.Result.Longitude, t.Result.Accuracy);
 
                     locationText.Text = positionAsText;
                     //locationDisplay = CreateTable(position);
@@ -174,19 +170,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             table.AddView(th);
         }*/
 
-        private string RenderPositionAsText(GeoPosition position)
+        private string RenderPositionAsText(double latitude, double longitude, double accuracy)
         {
             StringBuilder sb = new StringBuilder();
-            if (position != null)
-            {
-                sb.AppendLine(string.Format("Latitude:\u0009\u0009\u0009{0}{1:N4}", position.Latitude > 0 ? " " : "", position.Latitude));
-                sb.AppendLine(string.Format("Longitude:\u0009\u0009{0}{1:N4}", position.Longitude > 0 ? " " : "", position.Longitude));
-                sb.AppendLine(string.Format("Accuracy:\u0009\u0009 {0:N2}m", position.Accuracy));
-            }
-            else
-            {
-                sb.Append("N/A");
-            }
+            
+                sb.AppendLine(string.Format("Latitude:\u0009\u0009\u0009{0}{1:N4}", latitude > 0 ? " " : "", latitude));
+                sb.AppendLine(string.Format("Longitude:\u0009\u0009{0}{1:N4}", longitude > 0 ? " " : "", longitude));
+                sb.AppendLine(string.Format("Accuracy:\u0009\u0009 {0:N2}m", accuracy));
+            
             return sb.ToString();
         }
     }

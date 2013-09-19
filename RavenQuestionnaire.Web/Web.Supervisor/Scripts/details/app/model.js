@@ -44,7 +44,19 @@ function (ko) {
         };
         return self;
     };
+    var Option = function(questionId) {
+        var self = this;
+        self.label = ko.observable();
+        self.value = ko.observable();
+        self.isSelected = ko.observable(false);
+        self.optionFor = ko.computed(function() {
+            return 'option-' + questionId + '-' + self.value();
+        });
+        return self;
+    };
+    
     var model = {
+        Option : Option,
         GpsQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
@@ -126,16 +138,7 @@ function (ko) {
             self.name = ko.observable();
             return self;
         },
-        Option: function (questionId) {
-            var self = this;
-            self.label = ko.observable();
-            self.value = ko.observable();
-            self.isSelected = ko.observable(false);
-            self.optionFor = ko.computed(function () {
-                return 'option-' + questionId + '-' + self.value();
-            });
-            return self;
-        },
+        
         Comment: function () {
             var self = this;
             self.id = ko.observable();

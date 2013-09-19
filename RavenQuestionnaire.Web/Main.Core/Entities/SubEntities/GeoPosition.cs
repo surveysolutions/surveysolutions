@@ -18,6 +18,15 @@
         {
         }
 
+        public GeoPosition(double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
+        {
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Accuracy = accuracy;
+            this.Timestamp = timestamp;
+        }
+
+
         public GeoPosition(string position)
         {
             var coordinates = position.Split(',');

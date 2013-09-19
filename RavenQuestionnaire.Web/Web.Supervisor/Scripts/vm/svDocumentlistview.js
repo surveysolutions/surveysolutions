@@ -18,6 +18,18 @@
         self.ListView.ToggleFilter();
     };
 
+    self.HideOutput = function () {
+        self.ListView.HideOutput();
+    };
+
+    self.ShowOutput = function () {
+        self.ListView.ShowOutput();
+    };
+
+    self.Errors = ko.computed(function () {
+        return self.ListView.Errors();
+    });
+
     var myChildModel = function (data) {
         ko.mapping.fromJS(data, {}, this);
 
@@ -81,12 +93,12 @@
                     });
                 }
                 if (data.status == "error") {
-
+                    self.ListView.ShowErrors(data);
                 }
                 self.ListView.IsAjaxComplete(true);
             },
             error: function () {
-
+                self.ListView.ShowErrors(data);
             },
             dataType: "json",
             traditional: true
@@ -116,8 +128,10 @@
             };
         };
 
-        self.SelectedTemplate(location.queryString['templateid']);
+        self.SelectedTemplate("{\"templateId\": \"" + location.queryString['templateId'] + "\",\"version\": \"" + location.queryString['templateVersion'] + "\"}");
         self.SelectedStatus(location.queryString['status']);
+        self.SelectedResponsible(location.queryString['interviewerId']);
+
 
         self.SelectedTemplate.subscribe(self.ListView.filter);
         self.SelectedResponsible.subscribe(self.ListView.filter);

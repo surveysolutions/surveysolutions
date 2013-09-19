@@ -30,7 +30,9 @@ namespace Core.Supervisor.Views.Reposts.Factories
                 ? lines.Where(x => x.ResponsibleId == input.UserId) 
                 : lines.Where(x => x.ResponsibleId == Guid.Empty);
 
-            var all = lines.OrderUsingSortExpression(input.Order)
+            var totalCount = lines.Count();
+
+            var currentPage = lines.OrderUsingSortExpression(input.Order)
                            .Skip((input.Page - 1)*input.PageSize)
                            .Take(input.PageSize)
                            .ToList()
@@ -51,13 +53,12 @@ namespace Core.Supervisor.Views.Reposts.Factories
                                    QuestionnaireTitle = doc.QuestionnaireTitle,
 
                                    ResponsibleId = doc.ResponsibleId
-                               });
+                               }).ToList();
 
-            var headquarterSurveysAndStatusesReportLines = all as IList<HeadquarterSurveysAndStatusesReportLine> ?? all.ToList();
             return new HeadquarterSurveysAndStatusesReportView
                 {
-                    TotalCount = headquarterSurveysAndStatusesReportLines.Count(),
-                    Items = headquarterSurveysAndStatusesReportLines
+                    TotalCount = totalCount,
+                    Items = currentPage
                 };
         }
     }

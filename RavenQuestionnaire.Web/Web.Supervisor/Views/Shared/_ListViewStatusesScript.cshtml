@@ -2,33 +2,33 @@
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
 <script type="text/html" id="CreatedCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : CreatedCount(), Status : '@InterviewStatus.Created.ToString()' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : CreatedCount(), Status : '@InterviewStatus.Created.ToString()' }}"></span>
 </script>
 <script type="text/html" id="SupervisorAssignedCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : SupervisorAssignedCount(), Status : '@InterviewStatus.SupervisorAssigned    ' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : SupervisorAssignedCount(), Status : '@InterviewStatus.SupervisorAssigned' }}"></span>
 </script>
 <script type="text/html" id="InterviewerAssignedCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : InterviewerAssignedCount(), Status : '@InterviewStatus.InterviewerAssigned    ' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : InterviewerAssignedCount(), Status : '@InterviewStatus.InterviewerAssigned' }}"></span>
 </script>
 <script type="text/html" id="SentToCapiCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : SentToCapiCount(), Status : '@InterviewStatus.SentToCapi    ' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : SentToCapiCount(), Status : '@InterviewStatus.SentToCapi' }}"></span>
 </script>
 <script type="text/html" id="CompletedCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : CompletedCount(), Status : '@InterviewStatus.Completed    ' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : CompletedCount(), Status : '@InterviewStatus.Completed' }}"></span>
 </script>
 <script type="text/html" id="ApprovedBySupervisorCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : ApprovedBySupervisorCount(), Status : '@InterviewStatus.ApprovedBySupervisor' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : ApprovedBySupervisorCount(), Status : '@InterviewStatus.ApprovedBySupervisor' }}"></span>
 </script>
 <script type="text/html" id="RejectedBySupervisorCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : RejectedBySupervisorCount(), Status : '@InterviewStatus.RejectedBySupervisor' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RejectedBySupervisorCount(), Status : '@InterviewStatus.RejectedBySupervisor' }}"></span>
 </script>
 <script type="text/html" id="RestoredCountTemplate">
-    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Count : RestoredCount(), Status : '@SurveyStatus.Approve.PublicId' }}"></span>
+    <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: ResponsibleId(), Count : RestoredCount(), Status : '@SurveyStatus.Approve.PublicId' }}"></span>
 </script>
 
 <script type="text/html" id="statusTemplate">
     <!-- ko if:Count == 0 -->0<!-- /ko -->
     <!-- ko ifnot:Count == 0 -->
-    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + Template + '&status=' + Status }, text: Count"></a>
+    <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + Template + '&templateVersion=' + Version +'&interviewerId=' + Responsible + '&status=' + Status}, text: Count"></a>
     <!-- /ko -->
 </script>

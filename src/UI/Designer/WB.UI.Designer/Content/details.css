@@ -147,7 +147,6 @@ body.loading .loading-backdrop {
         padding-top: 15px;
             position: absolute;
             top: 0;
-            bottom: 0;
             right: 0;
             left: 0;
             overflow: auto;
@@ -193,7 +192,6 @@ body.loading .loading-backdrop {
     }
 
     #output .body {
-        top: 41px;
         bottom: 0;
     }
 
@@ -214,6 +212,10 @@ body.loading .loading-backdrop {
                 -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
                 box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
             }
+
+    #output .inner .title {
+        height: 20px;
+    }
 
     #output .inner .title {
         height: 20px;
@@ -752,10 +754,10 @@ a.btn.btn-help {
 .row-fluid .btn-group {
     margin-bottom: 10px;
 }
-#unsavedWarningMessageContainer{
+.informationContainer{
     left: 0;
     position: absolute;
-    top: 0;
+    top: 77px;
     width: 100%;
     z-index: 10999;
     text-align: center;
@@ -763,7 +765,7 @@ a.btn.btn-help {
     overflow: visible;
      margin-top: -1px;
 }
-#unsavedWarningMessage{
+.informationMessage{
     display: inline-block;
     background-color: #F39106;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
