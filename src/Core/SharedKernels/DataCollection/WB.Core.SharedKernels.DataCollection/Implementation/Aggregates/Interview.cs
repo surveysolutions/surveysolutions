@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private Guid questionnaireId;
         private long questionnaireVersion;
-        private bool interviewWasCompleted;
+        private bool wasCompleted;
         private InterviewStatus status;
         private Dictionary<string, object> answersSupportedInExpressions = new Dictionary<string, object>();
         private HashSet<string> answeredQuestions = new HashSet<string>();
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.status = @event.InterviewData.Status;
-            this.interviewWasCompleted = @event.InterviewData.InterviewWasCompleted;
+            this.wasCompleted = @event.InterviewData.WasCompleted;
 
             this.answersSupportedInExpressions = @event.InterviewData.Answers == null
                 ? new Dictionary<string, object>()
@@ -212,7 +212,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewCompleted @event)
         {
-            interviewWasCompleted = true;
+            this.wasCompleted = true;
         }
 
         private void Apply(InterviewRestarted @event) {}
@@ -221,7 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void Apply(InterviewRejected @event)
         {
-            interviewWasCompleted = false;
+            this.wasCompleted = false;
         }
 
         private void Apply(InterviewDeclaredValid @event) {}
@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewState CreateSnapshot()
         {
             return new InterviewState(questionnaireId, questionnaireVersion, status, answersSupportedInExpressions, answeredQuestions, disabledGroups,
-                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions, interviewWasCompleted);
+                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions, this.wasCompleted);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
@@ -257,7 +257,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
             validAnsweredQuestions = snapshot.ValidAnsweredQuestions;
             invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
-            interviewWasCompleted = snapshot.InterviewWasCompleted;
+            this.wasCompleted = snapshot.WasCompleted;
         }
 
         #endregion
@@ -811,7 +811,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId));
-            if (!interviewWasCompleted && this.status != InterviewStatus.InterviewerAssigned)
+            if (!this.wasCompleted && this.status != InterviewStatus.InterviewerAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
@@ -898,7 +898,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfInterviewWasCompleted()
         {
-            if (interviewWasCompleted)
+            if (this.wasCompleted)
                 throw new InterviewException(string.Format("Interview was completed by interviewer and cannot be deleted"));
         }
 

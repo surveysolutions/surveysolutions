@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             Dictionary<string, object> answersSupportedInExpressions, HashSet<string> answeredQuestions,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
-            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool interviewWasCompleted)
+            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             this.PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
             this.ValidAnsweredQuestions = validAnsweredQuestions;
             this.InvalidAnsweredQuestions = invalidAnsweredQuestions;
-            InterviewWasCompleted = interviewWasCompleted;
+            this.WasCompleted = wasCompleted;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -34,6 +34,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public Dictionary<string, int> PropagatedGroupInstanceCounts { get; private set; }
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
-        public bool InterviewWasCompleted { get; private set; }
+        public bool WasCompleted { get; private set; }
     }
 }

@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 status,
                 userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
                 answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
-                validQuestions, invalidQuestions, propagatedGroupInstanceCounts, interview.InterviewWasCompleted);
+                validQuestions, invalidQuestions, propagatedGroupInstanceCounts, interview.WasCompleted);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
