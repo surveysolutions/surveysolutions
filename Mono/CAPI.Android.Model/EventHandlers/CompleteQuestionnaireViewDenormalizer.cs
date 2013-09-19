@@ -1,11 +1,8 @@
 using System;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -88,7 +85,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
-                                evnt.Payload.Answer);
+                new GeoPosition(evnt.Payload.Latitude,evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp));
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)

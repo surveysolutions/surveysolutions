@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             {
                 var realHeader = expectedHeader.FirstOrDefault(h => h.Caption == header[i]);
                 if(realHeader==null)
-                    throw new ArgumentException("invalid header Capiton");
+                    throw new ArgumentException("invalid header Caption");
                 newHeader.Add(realHeader);
             }
             tempImportStorage.Store(
@@ -297,9 +297,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         }
                         break;
                     case QuestionType.GpsCoordinates:
-                        featuredAnswers.Add(question.PublicKey, new GeoPosition(values[i]));
-                        break;
-
                     case QuestionType.MultyOption:
                         //throw new Exception("Unsupported featured question type in sample");
                         break;
