@@ -50,6 +50,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviews = interviews;
         }
 
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new[] { typeof(UserDocument), typeof(QuestionnairePropagationStructure) }; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new[] { typeof(InterviewData) }; }
+        }
+
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
             var responsible = this.users.GetById(evnt.Payload.UserId);
@@ -92,33 +107,19 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviews.Store(interview, interview.InterviewId);
         }
 
-        public string Name
-        {
-            get { return GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new[] { typeof(UserDocument), typeof(QuestionnairePropagationStructure) }; }
-        }
-        public Type[] BuildsViews
-        {
-            get { return new[] { typeof(InterviewData) }; }
-        }
-
         public void Handle(IPublishedEvent<GroupPropagated> evnt)
         {
-            var interview = this.interviews.GetById(evnt.EventSourceId);
+            InterviewData interview = this.interviews.GetById(evnt.EventSourceId);
 
-            var scopeOfCurrentGroup = GetScopeOfPassedGroup(interview,
+            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(interview,
                                                             evnt.Payload.GroupId);
             /*if (scopeOfCurrentGroup == null)
                 return;*/
 
-            var keysOfLevelsByScope =
+            List<string> keysOfLevelsByScope =
                 GetLevelsByScopeFromInterview(interview: interview, scopeId: scopeOfCurrentGroup);
 
-            var countOfLevelByScope = keysOfLevelsByScope.Count();
+            int countOfLevelByScope = keysOfLevelsByScope.Count();
 
             if (evnt.Payload.Count == countOfLevelByScope)
                 return;
@@ -380,14 +381,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
             var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+
             foreach (var scopeId in questionnarie.PropagationScopes.Keys)
             {
-                foreach (var trigger in questionnarie.PropagationScopes[scopeId])
+                if (questionnarie.PropagationScopes[scopeId].Contains(groupId))
                 {
-                    if (trigger == groupId)
-                        return scopeId;
+                    return scopeId;
                 }
             }
+
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire",
                                                       groupId));
         }
