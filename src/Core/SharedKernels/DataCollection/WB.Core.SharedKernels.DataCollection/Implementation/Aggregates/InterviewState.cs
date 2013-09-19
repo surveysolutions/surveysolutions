@@ -9,10 +9,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     internal class InterviewState
     {
-        public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
-            Dictionary<string, object> answersSupportedInExpressions, HashSet<string> answeredQuestions,
+        public InterviewState(Guid questionnaireId, long questionnaireVersion,
+            InterviewStatus status, Dictionary<string, object> answersSupportedInExpressions, HashSet<string> answeredQuestions,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
-            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions)
+            HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool interviewWasCompleted)
         {
             QuestionnaireId = questionnaireId;
             QuestionnaireVersion = questionnaireVersion;
@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
+            InterviewWasCompleted = interviewWasCompleted;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -36,5 +37,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Dictionary<string, int> PropagatedGroupInstanceCounts { get; private set; }
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
+        public bool InterviewWasCompleted { get; private set; }
     }
 }
