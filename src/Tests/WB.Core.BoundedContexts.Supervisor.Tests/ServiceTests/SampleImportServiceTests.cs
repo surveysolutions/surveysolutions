@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             var status = WhaitForCompletedImportResult(target, importId);
 
             //assert
-            Assert.That(status.ErrorMessage, Is.EqualTo("invalid header Capiton"));
+            Assert.That(status.ErrorMessage, Is.EqualTo("invalid header Caption"));
         }
 
         [Test]
