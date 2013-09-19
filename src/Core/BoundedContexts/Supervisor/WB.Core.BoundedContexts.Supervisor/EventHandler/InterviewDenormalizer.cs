@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
@@ -72,6 +73,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var interview = this.interviews.GetById(evnt.EventSourceId);
 
             interview.Status = evnt.Payload.Status;
+
+            if (!interview.InterviewWasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
+            {
+                interview.InterviewWasCompleted = true;
+            }
 
             this.interviews.Store(interview, interview.InterviewId);
         }
