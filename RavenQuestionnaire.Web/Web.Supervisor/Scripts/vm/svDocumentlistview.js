@@ -89,7 +89,9 @@
                         item.IsSelected(false);
                         item.ResponsibleId(user.UserId);
                         item.ResponsibleName(user.UserName);
-                        item.Status("InterviewerAssigned");
+                        if (item.Status() != "RejectedBySupervisor") {
+                            item.Status("InterviewerAssigned");
+                        }
                     });
                 }
                 if (data.status == "error") {
