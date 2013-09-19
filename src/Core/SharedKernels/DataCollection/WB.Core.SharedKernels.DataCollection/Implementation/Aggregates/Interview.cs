@@ -348,30 +348,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 switch (questionType)
                 {
                     case QuestionType.Text:
-                        this.AnswerTextQuestion(userId, questionId, EmptyPropagationVector, answersTime, (string) answer);
+                        this.AnswerTextQuestion(userId, questionId, EmptyPropagationVector, answersTime, (string)answer);
                         break;
 
                     case QuestionType.AutoPropagate:
                     case QuestionType.Numeric:
-                        this.AnswerNumericQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal) answer);
+                        this.AnswerNumericQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal)answer);
                         break;
 
                     case QuestionType.DateTime:
-                        this.AnswerDateTimeQuestion(userId, questionId, EmptyPropagationVector, answersTime, (DateTime) answer);
+                        this.AnswerDateTimeQuestion(userId, questionId, EmptyPropagationVector, answersTime, (DateTime)answer);
                         break;
 
                     case QuestionType.SingleOption:
-                        this.AnswerSingleOptionQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal) answer);
+                        this.AnswerSingleOptionQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal)answer);
                         break;
 
                     case QuestionType.MultyOption:
-                        this.AnswerMultipleOptionsQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal[]) answer);
+                        this.AnswerMultipleOptionsQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal[])answer);
                         break;
 
                     case QuestionType.GpsCoordinates:
-                        this.AnswerGeoLocationQuestion(userId, questionId, EmptyPropagationVector, answersTime, (GeoPosition) answer);
-                        break;
-
                     case QuestionType.Linked:
                     default:
                         throw new InterviewException(string.Format(
@@ -624,7 +621,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
-        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, GeoPosition answer)
+        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, 
+            double latitude, double longitude, double accuracy, DateTimeOffset timestamp)
         {
             var answeredQuestion = new Identity(questionId, propagationVector);
 
@@ -634,7 +632,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
-            this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
+            this.ApplyEvent(new GeoLocationQuestionAnswered(userId, questionId, propagationVector, answerTime, latitude, longitude, accuracy, timestamp));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
@@ -1590,7 +1588,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             throw new NotImplementedException(
-                "This method doed not support propagated groups inside propagated groups, but may easily support it when needed.");
+                "This method does not support propagated groups inside propagated groups, but may easily support it when needed.");
         }
 
         private static int[] ExtendPropagationVectorWithOneValue(int[] propagationVector, int value)
