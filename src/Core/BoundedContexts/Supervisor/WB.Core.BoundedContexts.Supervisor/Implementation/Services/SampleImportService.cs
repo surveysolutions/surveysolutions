@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -237,7 +238,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             {
                 var realHeader = expectedHeader.FirstOrDefault(h => h.Caption == header[i]);
                 if(realHeader==null)
-                    throw new ArgumentException("invalid header Capiton");
+                    throw new ArgumentException("invalid header Caption");
                 newHeader.Add(realHeader);
             }
             tempImportStorage.Store(
@@ -266,6 +267,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
         }
         private Dictionary<Guid, object> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
         {
+            if (values.Length < header.Length)
+            {
+                throw new ArgumentOutOfRangeException("Values doesn't much header");
+            }
+
             var featuredAnswers = new Dictionary<Guid, object>();
             for (int i = 0; i < header.Length; i++)
             {
@@ -301,9 +307,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         }
                         break;
                     case QuestionType.GpsCoordinates:
-                        featuredAnswers.Add(question.PublicKey, new GeoPosition(values[i]));
-                        break;
-
                     case QuestionType.MultyOption:
                         //throw new Exception("Unsupported featured question type in sample");
                         break;
