@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -262,6 +263,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
         }
         private Dictionary<Guid, object> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
         {
+            if (values.Length < header.Length)
+            {
+                throw new ArgumentOutOfRangeException("Values doesn't much header");
+            }
+
             var featuredAnswers = new Dictionary<Guid, object>();
             for (int i = 0; i < header.Length; i++)
             {
