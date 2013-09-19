@@ -74,9 +74,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             interview.Status = evnt.Payload.Status;
 
-            if (!interview.InterviewWasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
+            if (!interview.WasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
             {
-                interview.InterviewWasCompleted = true;
+                interview.WasCompleted = true;
             }
 
             this.interviews.Store(interview, interview.InterviewId);
