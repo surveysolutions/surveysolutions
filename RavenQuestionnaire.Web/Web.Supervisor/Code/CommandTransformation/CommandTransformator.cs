@@ -83,8 +83,6 @@ namespace Web.Supervisor.Code.CommandTransformation
                     decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(decimal.Parse).ToArray();
                     return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
                 
-                case QuestionType.GpsCoordinates:
-                    return new KeyValuePair<Guid, object>(answer.Id, new GeoPosition(answer.Answer as string));
             }
 
             throw new Exception("Unknown question type");
