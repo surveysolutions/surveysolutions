@@ -19,7 +19,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         #region Implementation of IQuestionViewFactory
 
         public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model,
-                                                       Guid questionnairePublicKey)
+            Guid questionnairePublicKey)
         {
             var bindingActivity = context.ToBindingContext();
 
@@ -29,17 +29,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 case QuestionType.Text:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
-                 case QuestionType.Numeric:
+                case QuestionType.Numeric:
                     itemView = new NumericQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.DateTime:
                     itemView = new DateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.SingleOption:
-                    itemView = new SingleOptionQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
-                    break;
-                case QuestionType.LinkedSingleOption:
-                    itemView = new SingleOptionLinkedQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                    if (model is LinkedQuestionViewModel)
+                        itemView = new SingleOptionLinkedQuestionView(context, bindingActivity, model, questionnairePublicKey,
+                            commandService);
+                    else
+                        itemView = new SingleOptionQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.MultyOption:
                     itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);

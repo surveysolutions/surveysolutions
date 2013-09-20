@@ -538,10 +538,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         private QuestionViewModel CreateQuestionView(IQuestion question)
         {
             var newType = CalculateViewType(question.QuestionType);
-            if(selectableQuestionTypes.Contains(question.QuestionType))
+            if (selectableQuestionTypes.Contains(question.QuestionType))
+            {
+                if (question.LinkedToQuestionId.HasValue)
+                    return CreateLinkedQuestion(question, newType);
                 return CreateSelectableQuestion(question, newType);
-            if(linkedQuestionTypes.Contains(question.QuestionType) && question.LinkedToQuestionId.HasValue)
-                return CreateLinkedQuestion(question, newType) ;
+            }
             return CreateValueQuestion(question, newType);
         }
 
@@ -597,8 +599,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private readonly QuestionType[] selectableQuestionTypes = new[]
             {QuestionType.SingleOption, QuestionType.MultyOption};
-
-        private readonly QuestionType[] linkedQuestionTypes = new[] { QuestionType.LinkedMultyOption, QuestionType.LinkedSingleOption };
 
         private readonly QuestionType[] singleOptionTypeVariation = new[]
             {QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo};

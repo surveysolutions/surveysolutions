@@ -28,7 +28,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
-        IEventHandler<SynchronizationMetadataApplied>
+        IEventHandler<SynchronizationMetadataApplied>,
+        IEventHandler<AnswerRemoved>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -110,6 +112,17 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                            evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.SelectedPropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            //here need to be logic for clean up linked question
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)

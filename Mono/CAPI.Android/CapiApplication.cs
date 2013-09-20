@@ -130,6 +130,8 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
+            bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
            
         }
 
