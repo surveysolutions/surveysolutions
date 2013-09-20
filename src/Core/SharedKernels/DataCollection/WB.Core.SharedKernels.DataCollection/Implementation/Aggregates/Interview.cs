@@ -977,7 +977,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfQuestionHasNoLinkedQuestionId(Guid questionId, IQuestionnaire questionnaire)
         {
-            Guid? linkedQuestionId = questionnaire.GetQuestionLinkedQuestionId(questionnaireId);
+            Guid? linkedQuestionId = questionnaire.GetQuestionLinkedQuestionId(questionId);
             if(!linkedQuestionId.HasValue)
                 throw new InterviewException(string.Format(
                    "Question {0} wasn't linked on any question",
