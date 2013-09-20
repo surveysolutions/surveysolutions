@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<NumericQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
@@ -195,6 +196,12 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                        new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp));
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                      evnt.Payload.SelectedPropagationVector);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
@@ -425,6 +432,5 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             this.interviews.Store(interview, interview.InterviewId);
         }
-
     }
 }
