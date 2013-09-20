@@ -368,7 +368,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 interview.Levels.Add(levelKey, new InterviewLevel(scopeId, newVecor));
             }
             else
-            {
+            { 
                 var level = interview.Levels[levelKey];
                 if (level.ScopeId == scopeId)
                     return;
@@ -413,7 +413,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             for (int i = startIndex; i < startIndex + count; i++)
             {
-                AddLevelToInterview(interview, outerVecor, startIndex, scopeId);
+                AddLevelToInterview(interview, outerVecor, i, scopeId);
             }
         }
 
