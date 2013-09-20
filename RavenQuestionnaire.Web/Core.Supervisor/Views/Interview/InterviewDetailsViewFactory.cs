@@ -41,7 +41,7 @@ namespace Core.Supervisor.Views.Interview
             var questionnarie = this.questionnarieStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
             if (questionnarie == null)
                 throw new ArgumentException(string.Format(
-                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion)) 
+                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion)); 
 
             var variablesMap = questionnarie.Questionnaire.GetAllQuestions().Select(x => new
             {

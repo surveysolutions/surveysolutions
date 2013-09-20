@@ -856,10 +856,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private static string FormatQuestionForException(IQuestion question)
+        {
             return string.Format("'{0} [{1}] ({2:N})'",
                 question.QuestionText ?? "<<NO QUESTION TITLE>>",
                 question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
                 question.PublicKey);
+        }
 
         private static string FormatGroupForException(IGroup group)
         {
