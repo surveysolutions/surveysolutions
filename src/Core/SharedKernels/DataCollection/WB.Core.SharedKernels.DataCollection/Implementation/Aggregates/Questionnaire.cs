@@ -126,6 +126,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
+            ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
+            ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(document);
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
@@ -156,6 +158,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;
+        }
+
+        public string GetQuestionVariableName(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).StataExportCaption;
         }
 
         public string GetGroupTitle(Guid groupId)
@@ -499,20 +506,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(QuestionnaireDocument document)
         {
-            IEnumerable<IQuestion> questions = document.Find<IQuestion>(_ => true);
-
-            var propagatingQuestionsWithNoAssociatedGroups =
-                from question in questions
-                where question is IAutoPropagateQuestion
-                let propogatingQuestion = (IAutoPropagateQuestion) question
-                where propogatingQuestion.Triggers.Count == 0
-                select propogatingQuestion;
+            IEnumerable<IAutoPropagateQuestion> propagatingQuestionsWithNoAssociatedGroups
+                = document.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0);
 
             if (propagatingQuestionsWithNoAssociatedGroups.Any())
                 throw new QuestionnaireException(string.Format(
-                    "Following questions are propogating and are expected to have associated groups, but they have no groups associated:{0}{1}",
+                    "Following questions are propagating and are expected to have associated groups, but they have no groups associated:{0}{1}",
                     Environment.NewLine,
                     string.Join(Environment.NewLine, propagatingQuestionsWithNoAssociatedGroups.Select(FormatQuestionForException))));
+        }
+
+        private static void ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(QuestionnaireDocument document)
+        {
+            IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = document.Find<IGroup>(group
+                => group.Propagated == Propagate.AutoPropagated
+                && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() == 0);
+
+            if (propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Any())
+                throw new QuestionnaireException(string.Format(
+                    "Following groups are propagated but there are no propagating questions which point to these groups:{0}{1}",
+                    Environment.NewLine,
+                    string.Join(Environment.NewLine, propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Select(FormatGroupForException))));
+        }
+
+        private void ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(QuestionnaireDocument document)
+        {
+            IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = document.Find<IGroup>(group
+                => group.Propagated == Propagate.AutoPropagated
+                && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() > 1);
+
+            if (propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Any())
+                throw new QuestionnaireException(string.Format(
+                    "Following groups are propagated but there is more than one propagating question which points to these groups:{0}{1}",
+                    Environment.NewLine,
+                    string.Join(Environment.NewLine, propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(FormatGroupForException))));
+        }
+
+
+        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(IGroup group, QuestionnaireDocument document)
+        {
+            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(group.PublicKey));
         }
 
 
@@ -822,13 +855,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-
         private static string FormatQuestionForException(IQuestion question)
         {
-            return string.Format("[{0}] {1} ({2:N})",
-                question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
+            return string.Format("'{0} [{1}] ({2:N})'",
                 question.QuestionText ?? "<<NO QUESTION TITLE>>",
+                question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
                 question.PublicKey);
+        }
+
+        private static string FormatGroupForException(IGroup group)
+        {
+            return string.Format("'{0} ({1:N})'",
+                group.Title ?? "<<NO GROUP TITLE>>",
+                group.PublicKey);
         }
     }
 }
