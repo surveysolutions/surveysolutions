@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "AnswerSingleOptionLinkedQuestionCommand")]
+    [MapsToAggregateRootMethod(typeof(Implementation.Aggregates.Interview), "AnswerSingleOptionLinkedQuestion")]
     public class AnswerSingleOptionLinkedQuestionCommand : AnswerQuestionCommand
     {
         public int[] SelectedPropagationVector { get; private set; }
