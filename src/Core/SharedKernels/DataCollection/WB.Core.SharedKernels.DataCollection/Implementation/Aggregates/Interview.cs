@@ -1733,22 +1733,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static string FormatQuestionForException(Identity question, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1:N} [{2}])'",
+            return string.Format("'{0} [{1}] ({2:N} <{3}>)'",
                 GetQuestionTitleForException(question.Id, questionnaire),
+                GetQuestionVariableNameForException(question.Id, questionnaire),
                 question.Id,
                 string.Join("-", question.PropagationVector));
         }
 
         private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1:N})'",
+            return string.Format("'{0} [{1}] ({2:N})'",
                 GetQuestionTitleForException(questionId, questionnaire),
+                GetQuestionVariableNameForException(questionId, questionnaire),
                 questionId);
         }
 
         private static string FormatGroupForException(Identity group, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1:N} [{2}])'",
+            return string.Format("'{0} ({1:N} <{2}>)'",
                 GetGroupTitleForException(group.Id, questionnaire),
                 group.Id,
                 string.Join("-", group.PropagationVector));
@@ -1765,6 +1767,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return questionnaire.HasQuestion(questionId)
                 ? questionnaire.GetQuestionTitle(questionId) ?? "<<NO QUESTION TITLE>>"
+                : "<<MISSING QUESTION>>";
+        }
+
+        private static string GetQuestionVariableNameForException(Guid questionId, IQuestionnaire questionnaire)
+        {
+            return questionnaire.HasQuestion(questionId)
+                ? questionnaire.GetQuestionVariableName(questionId) ?? "<<NO VARIABLE NAME>>"
                 : "<<MISSING QUESTION>>";
         }
 

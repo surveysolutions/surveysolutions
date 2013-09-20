@@ -21,6 +21,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetQuestionTitle(Guid questionId);
 
+        string GetQuestionVariableName(Guid questionId);
+
         string GetGroupTitle(Guid groupId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
