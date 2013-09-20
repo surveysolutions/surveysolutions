@@ -373,8 +373,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.GpsCoordinates:
-                    case QuestionType.LinkedMultyOption:
-                    case QuestionType.LinkedSingleOption:
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial featured question.",
@@ -649,7 +647,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.LinkedSingleOption);
+            this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
         
@@ -975,6 +973,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "Question {0} has type {1}. But one of the following types was expected: {2}.",
                     FormatQuestionForException(questionId, questionnaire), questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
+        }
+
+        private void ThrowIfQuestionHasNoLinkedQuestionId(Guid questionId, IQuestionnaire questionnaire)
+        {
+            Guid? linkedQuestionId = questionnaire.GetQuestionLinkedQuestionId(questionnaireId);
+            if(!linkedQuestionId.HasValue)
+                throw new InterviewException(string.Format(
+                   "Question {0} wasn't linked on any question",
+                   FormatQuestionForException(questionId, questionnaire)));
         }
 
         private static void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
