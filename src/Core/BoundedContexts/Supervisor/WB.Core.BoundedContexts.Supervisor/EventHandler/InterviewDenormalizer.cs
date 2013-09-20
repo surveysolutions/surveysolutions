@@ -89,11 +89,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             interview.Status = evnt.Payload.Status;
 
-            if (!interview.InterviewWasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
-            {
-                interview.InterviewWasCompleted = true;
-            }
-
             if (!interview.WasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
             {
                 interview.WasCompleted = true;
