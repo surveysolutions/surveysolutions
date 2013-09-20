@@ -419,7 +419,7 @@ namespace CapiDataGenerator
                     this.EnableCacheInAllRepositoryWriters();
                     try
                     {
-                        AppSettings.Instance.IsSupervisorEvents = true;
+                        AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
                         var users = CreateUsers(icount);
                         var questionnaries = this.CreateInterviews(template, qcount, users, onlyForSupervisor);
                         CreateAnswers(acount, questionnaries, questions);
@@ -439,7 +439,10 @@ namespace CapiDataGenerator
                     {
                         this.Log(e.Message);
                     }
-                    this.DisableCacheInAllRepositoryWriters();
+                    finally
+                    {
+                        this.DisableCacheInAllRepositoryWriters();
+                    }
                 }
 
                 _timer.Stop();
@@ -540,7 +543,7 @@ namespace CapiDataGenerator
                     UpdateProgress();
                 }
             }
-            AppSettings.Instance.IsSupervisorEvents = onlyForSupervisor;
+            AppSettings.Instance.AreSupervisorEventsNowPublishing = onlyForSupervisor;
             for (int i = 0; i < interviews.Count; i++)
             {
                 LogStatus("synchronize interview", i, interviews.Count);
