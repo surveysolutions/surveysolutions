@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
+    <Compile Include="Commands\Interview\AnswerMultipleOptionLinkedQuestionCommand.cs" />
+    <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />

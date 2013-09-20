@@ -140,6 +140,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
+        private void Apply(MultipleOptionsLinkedQuestionAnswered @event)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answeredQuestions.Add(questionKey);
+        }
+
         private void Apply(AnswerDeclaredValid @event)
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
@@ -642,7 +649,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
 
-        public void AnswerSingleOptionLinkedQuestionCommand(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
+        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
         {
             var answeredQuestion = new Identity(questionId, propagationVector);
 
@@ -650,11 +657,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
             this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
         
 
             this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
+
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
+        }
+
+        public void AnswerMultipleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
+        {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
+
+
+
+            this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVectors));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
