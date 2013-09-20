@@ -155,6 +155,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.GetQuestionOrThrow(questionId).QuestionType;
         }
 
+        public Guid? GetQuestionLinkedQuestionId(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).LinkedToQuestionId;
+        }
+
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;

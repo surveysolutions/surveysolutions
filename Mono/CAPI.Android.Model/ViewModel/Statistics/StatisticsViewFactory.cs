@@ -13,9 +13,9 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
     public class StatisticsViewFactory : IViewFactory<StatisticsInput, StatisticsViewModel>
     {
-        private readonly IReadSideRepositoryReader<CompleteQuestionnaireView> documentStorage;
+        private readonly IReadSideRepositoryReader<InterviewViewModel> documentStorage;
 
-        public StatisticsViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireView> documentStorage)
+        public StatisticsViewFactory(IReadSideRepositoryReader<InterviewViewModel> documentStorage)
         {
             this.documentStorage = documentStorage;
         }
@@ -52,7 +52,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
         }
 
         #endregion
-        protected InterviewItemId CalculateScreen(CompleteQuestionnaireView doc, InterviewItemId key)
+        protected InterviewItemId CalculateScreen(InterviewViewModel doc, InterviewItemId key)
         {
             return
                 doc.Screens.Select(s=>s.Value).OfType<QuestionnaireScreenViewModel>().FirstOrDefault(

@@ -19,8 +19,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     /// </summary>
     public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
-        #region Implementation of IQuestionnaireViewModel
-     
         private  Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, InterviewItemId screenId, bool enabled, IEnumerable<InterviewItemId> siblings,
             IEnumerable<InterviewItemId> breadcrumbs, IList<HeaderItem> header
@@ -76,10 +74,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             RaisePropertyChanged("Enabled");
         }
 
-       
-        private QuestionnaireNavigationPanelItem shortVersion;
-
-        #endregion
         public void RestoreRowFunction(Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
         {
             this.rowsValue = rows;

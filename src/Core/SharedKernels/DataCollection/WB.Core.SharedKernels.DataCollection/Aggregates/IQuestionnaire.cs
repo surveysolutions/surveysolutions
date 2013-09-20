@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
+        Guid? GetQuestionLinkedQuestionId(Guid questionId);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
