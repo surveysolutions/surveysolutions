@@ -158,6 +158,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.GetQuestionOrThrow(questionId).QuestionText;
         }
 
+        public string GetQuestionVariableName(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).StataExportCaption;
+        }
+
         public string GetGroupTitle(Guid groupId)
         {
             return this.GetGroupOrThrow(groupId).Title;
