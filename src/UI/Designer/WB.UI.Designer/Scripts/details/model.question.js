@@ -24,10 +24,20 @@
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
 
-              self.qtype = ko.observable("Text"); // Questoin type
+            
               self.isHead = ko.observable(false);
               self.isFeatured = ko.observable(false);
               self.isMandatory = ko.observable(false);
+              self.qtype = ko.observable("Text").extend({
+                  validation: [{
+                      validator: function (val, someOtherVal) {
+                          if (self.isFeatured() == false) return true;
+                          return (val !== someOtherVal);
+                      },
+                      message: 'Geo Location cannot be featured',
+                      params: "GpsCoordinates"
+                  }]
+              }); // Questoin type
               self.scope = ko.observable();
               self.condition = ko.observable('');
               self.validationExpression = ko.observable('');
