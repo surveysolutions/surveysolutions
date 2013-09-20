@@ -34,12 +34,22 @@
                           if (self.isFeatured() == false) return true;
                           return (val !== someOtherVal);
                       },
-                      message: 'Geo Location cannot be featured',
+                      message: 'Geo Location question cannot be featured',
                       params: "GpsCoordinates"
                   }]
               }); // Questoin type
               self.scope = ko.observable();
-              self.condition = ko.observable('');
+              self.condition = ko.observable('').extend({
+                  validation: [{
+                      validator: function (val) {
+                          if (val.indexOf("[this]") != -1) return false;
+                          var variable = "" + self.alias();
+                          if (val.indexOf(variable) != -1) return false;
+                          return true;
+                      },
+                      message: 'You cannot use self-reference in conditions'
+                  }]
+              });
               self.validationExpression = ko.observable('');
               self.validationMessage = ko.observable('');
               self.instruction = ko.observable('');
