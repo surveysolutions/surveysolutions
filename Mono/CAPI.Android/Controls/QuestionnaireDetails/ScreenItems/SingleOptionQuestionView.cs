@@ -22,14 +22,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             IAnswerOnQuestionCommandService commandService)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
-            typedMode = Model as SelectebleQuestionViewModel;
         }
 
-        private readonly SelectebleQuestionViewModel typedMode;
+        protected SelectebleQuestionViewModel TypedMode
+        {
+            get { return Model as SelectebleQuestionViewModel; }
+        }
+
 
         protected override IEnumerable<AnswerViewModel> Answers
         {
-            get { return typedMode.Answers; }
+            get { return TypedMode.Answers; }
         }
 
         protected override bool IsAnswerSelected(AnswerViewModel answer)

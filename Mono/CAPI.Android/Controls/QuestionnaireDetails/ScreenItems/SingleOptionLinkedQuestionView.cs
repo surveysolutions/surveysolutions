@@ -22,14 +22,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             )
             : base(context, bindingActivity, model, questionnairePublicKey, commandService)
         {
-            typedMode = Model as LinkedQuestionViewModel;
         }
 
-        private readonly LinkedQuestionViewModel typedMode;
+        protected LinkedQuestionViewModel TypedMode {
+            get { return Model as LinkedQuestionViewModel; }
+        }
 
         protected override IEnumerable<LinkedAnswerViewModel> Answers
         {
-            get { return typedMode.Answers; }
+            get { return TypedMode.Answers; }
         }
 
         protected override string GetAnswerId(LinkedAnswerViewModel answer)
@@ -59,7 +60,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override bool IsAnswerSelected(LinkedAnswerViewModel answer)
         {
-            return typedMode.SelectedAnswers.Contains(answer.PropagationVector);
+            return TypedMode.SelectedAnswers.Contains(answer.PropagationVector);
         }
     }
 }

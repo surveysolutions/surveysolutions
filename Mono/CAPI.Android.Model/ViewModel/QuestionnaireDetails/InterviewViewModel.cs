@@ -582,7 +582,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected IEnumerable<LinkedAnswerViewModel> CollectOptionOfLinkedQuestion(int[] propagationVector, Guid linkedQuestionId)
         {
-            if (propagationVector.Length > 1)
+            if (propagationVector!=null && propagationVector.Length > 1)
                 throw new NotImplementedException(
                     "linked questions is not supported for propagation level more then one. Question is: do we need to show all available answers by all level or only by parent level?");
             var questions = this.Questions.Where(q => q.Key.Id == linkedQuestionId).Select(q => q.Value);
