@@ -57,7 +57,7 @@
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
-    <Compile Include="Commands\Interview\AnswerLinkedQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="Events\Interview\InterviewApproved.cs" />
     <Compile Include="Events\Interview\InterviewCreated.cs" />
     <Compile Include="Events\Interview\InterviewDeclaredInvalid.cs" />
-    <Compile Include="Events\Interview\LinkedQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\SingleOptionLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\SynchronizationMetadataApplied.cs" />
     <Compile Include="Events\Interview\InterviewSynchronized.cs" />
     <Compile Include="Events\Interview\InterviewDeclaredValid.cs" />
