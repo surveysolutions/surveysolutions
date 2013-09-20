@@ -6,8 +6,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
 {
     internal class InterviewState
     {
-        public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
-            Dictionary<string, object> answersSupportedInExpressions, HashSet<string> answeredQuestions,
+        public InterviewState(Guid questionnaireId, long questionnaireVersion,
+            InterviewStatus status, Dictionary<string, object> answersSupportedInExpressions, HashSet<string> answeredQuestions,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
