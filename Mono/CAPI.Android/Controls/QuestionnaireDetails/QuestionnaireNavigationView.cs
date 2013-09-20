@@ -18,7 +18,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private readonly LinearLayout linearLayout;
 
-        public QuestionnaireNavigationView(Context context, CompleteQuestionnaireView model)
+        public QuestionnaireNavigationView(Context context, InterviewViewModel model)
             : base(context)
         {
             this.model = model;
@@ -88,7 +88,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
         }
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
-        private CompleteQuestionnaireView model;
+        private InterviewViewModel model;
 
 
         private View selectedView = null;

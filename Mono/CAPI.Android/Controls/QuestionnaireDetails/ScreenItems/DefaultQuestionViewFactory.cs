@@ -1,8 +1,8 @@
 using System;
 using Android.Content;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
-using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
@@ -21,7 +21,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model,
                                                        Guid questionnairePublicKey)
         {
-            var bindingActivity = (context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext;
+            var bindingActivity = context.ToBindingContext();
 
             AbstractQuestionView itemView;
             switch (model.QuestionType)
@@ -29,14 +29,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 case QuestionType.Text:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
-                case QuestionType.Numeric:
+                 case QuestionType.Numeric:
                     itemView = new NumericQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.DateTime:
                     itemView = new DateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.SingleOption:
-                    itemView = new SingleChoiseQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                    itemView = new SingleOptionQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                    break;
+                case QuestionType.LinkedSingleOption:
+                    itemView = new SingleOptionLinkedQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.MultyOption:
                     itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);

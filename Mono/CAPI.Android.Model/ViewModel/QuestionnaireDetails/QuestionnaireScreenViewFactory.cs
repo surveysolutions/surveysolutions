@@ -17,9 +17,9 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>
+    public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, InterviewViewModel>
     {
-        private readonly IReadSideRepositoryReader<CompleteQuestionnaireView> documentStorage;
+        private readonly IReadSideRepositoryReader<InterviewViewModel> documentStorage;
         private readonly IEventStore eventStore;
         private readonly IEventBus bus;
         private readonly ISyncCacher syncCacher;
@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         private readonly ICommandService commandService;
         private bool isWorking = false;
 
-        public QuestionnaireScreenViewFactory(IReadSideRepositoryReader<CompleteQuestionnaireView> documentStorage, ISyncCacher syncCacher)
+        public QuestionnaireScreenViewFactory(IReadSideRepositoryReader<InterviewViewModel> documentStorage, ISyncCacher syncCacher)
         {
             this.documentStorage = documentStorage;
             this.syncCacher = syncCacher;
@@ -39,9 +39,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
 
-        public CompleteQuestionnaireView Load(QuestionnaireScreenInput input)
+        public InterviewViewModel Load(QuestionnaireScreenInput input)
         {
-            CompleteQuestionnaireView result = null;
+            InterviewViewModel result = null;
 
             result = this.documentStorage.GetById(input.QuestionnaireId);
 

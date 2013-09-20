@@ -109,8 +109,8 @@ namespace CAPI.Android
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(
-                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+                new InterviewViewModelDenormalizer(
+                    kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -244,8 +244,8 @@ namespace CAPI.Android
             this.ClearAllBackStack<SplashScreen>();
 
             var questionnarieDenormalizer =
-                kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as
-                InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>;
+                kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() as
+                InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
             if (questionnarieDenormalizer != null)
                 questionnarieDenormalizer.Clear();
         }

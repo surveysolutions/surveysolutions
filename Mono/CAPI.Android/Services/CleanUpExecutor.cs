@@ -42,7 +42,7 @@ namespace CAPI.Android.Services
             
             //think about more elegant solution
             CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>().Remove(id);
-            CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>().Remove(id);
+            CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>().Remove(id);
 
         }
     }
