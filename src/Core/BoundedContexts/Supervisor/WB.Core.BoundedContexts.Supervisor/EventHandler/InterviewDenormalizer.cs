@@ -200,8 +200,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
-            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                      evnt.Payload.SelectedPropagationVector);
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVector);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
