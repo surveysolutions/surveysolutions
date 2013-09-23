@@ -4,6 +4,32 @@ function ($, ko) {
     var unwrap = ko.utils.unwrapObservable;
     $('#toggleAllChapters').tooltip();
 
+    ko.subscribable.fn.trimmed = function () {
+        return ko.computed({
+            read: function () {
+                return this().trim();
+            },
+            write: function (value) {
+                this(value.trim());
+                this.valueHasMutated();
+            },
+            owner: this
+        });
+    };
+
+    ko.subscribable.fn.trimmedNumber = function () {
+        return ko.computed({
+            read: function () {
+                return this() * 1;
+            },
+            write: function (value) {
+                this(value * 1);
+                this.valueHasMutated();
+            },
+            owner: this
+        });
+    };
+
     ko.bindingHandlers.tooltip = {
         update: function(element, valueAccessor) {
             var options = ko.utils.unwrapObservable(valueAccessor());
