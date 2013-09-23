@@ -310,7 +310,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
+            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
+            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
@@ -448,7 +448,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
-            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
+            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
@@ -1002,7 +1002,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfLinkedQuestionIsInvalid(
-            QuestionType questionType, Option[] options, Guid? linkedToQuestionId)
+            QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured, bool isHead)
         {
             bool isQuestionWithOptions = questionType == QuestionType.MultyOption ||
                                          questionType == QuestionType.SingleOption;
@@ -1047,18 +1047,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                 "Linked question can be only type of number, text or date");
                         }
 
-                        if (linkedToQuestion.Featured)
+                        if (isFeatured)
                         {
                             throw new DomainException(
-                                DomainExceptionType.LinkedQuestionCanNotBeFeatured,
-                                "Linked question can not be featured");
+                                DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
+                                "Question that linked to another question can not be featured");
                         }
 
-                        if (linkedToQuestion.Capital)
+                        if (isHead)
                         {
                             throw new DomainException(
-                                DomainExceptionType.LinkedQuestionCanNotBeHead,
-                                "Linked question can not be head");
+                                DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
+                                "Question that linked to another question can not be head");
                         }
 
                         this.innerDocument.ConnectChildsWithParent();
