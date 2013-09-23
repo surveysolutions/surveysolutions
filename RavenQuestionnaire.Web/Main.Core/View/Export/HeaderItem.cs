@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.View.Export
@@ -28,7 +29,7 @@ namespace Main.Core.View.Export
         }
         public HeaderItem(IQuestion question,int index):this(question)
         {
-            this.Caption += GetIndexLeter(index/*, question.Answers.Count*/);
+            this.Caption += GetIntAsWord(index);
             this.Title += string.Format(":{0}", question.Answers[index].AnswerText);
         }
 
@@ -63,20 +64,19 @@ namespace Main.Core.View.Export
             return new string(result);
         }*/
 
-        protected string GetIndexLeter(int index)
+        protected string GetIntAsWord(int num)
         {
-            if (index < alpha.Length)
-                return alpha[index].ToString();
-
-            var resultToReturn = "";
-
-            resultToReturn += GetIndexLeter(index / 26 - 1);
-            resultToReturn +=  GetIndexLeter(index % 26);
-
-            return resultToReturn;
+            var word = "";
+            decimal t = num + 1;
+            while (t > 0)
+            {
+                t--;
+                word = alpha[((int)t % 26)].ToString(CultureInfo.InvariantCulture) + word;
+                t = Math.Floor(t / 26);
+            }
+            return word;
         }
 
-        
         char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     }
 

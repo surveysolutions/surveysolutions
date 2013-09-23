@@ -22,82 +22,32 @@ namespace Main.Core.Tests.Export
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
         }
 
-        [Test]
-        public void GetIndexLeter_IndexIs0CountIs2_LetterA()
-        {
-            HeaderItemTestable target=new HeaderItemTestable();
-            Assert.AreEqual(target.GetIndexLeterTestable(0), "A");
-        }
-        [Test]
-        public void GetIndexLeter_IndexIs0CountIs1000_LetterAA()
-        {
-            HeaderItemTestable target = new HeaderItemTestable();
-            var result = target.GetIndexLeterTestable(1000);
-            Console.WriteLine(result);
-            Assert.AreEqual(result, "ALM");
-        }
-
-        [Test]
-        public void GetIndexLeter_IndexIs6CountIs44_LetterAG()
+        [TestCase(0, "A")]
+        [TestCase(1, "B")]
+        [TestCase(6, "G")]
+        [TestCase(25, "Z")]
+        [TestCase(26, "AA")]
+        [TestCase(132, "EC")]
+        [TestCase(720, "AAS")]
+        [TestCase(1000, "ALM")]
+        [TestCase(10000, "NTQ")]
+        [TestCase(100000, "EQXE")]
+        [TestCase(int.MaxValue - 1, "FXSHRXW")]
+        public void GetIntAsWord_Returns_CorrectResult(int index, string expectedWord)
         {
             HeaderItemTestable target = new HeaderItemTestable();
-            var result = target.GetIndexLeterTestable(6);
-            Console.WriteLine(result);
-            Assert.AreEqual(result, "G");
-        }
-        [Test]
-        public void GetIndexLeter_IndexIs32CountIs44_LetterBG()
-        {
-            HeaderItemTestable target = new HeaderItemTestable();
-            var result = target.GetIndexLeterTestable(32);
-            Console.WriteLine(result);
-            Assert.AreEqual(result, "AG");
+            Assert.AreEqual(target.GetIndexLeterTestable(index), expectedWord);
         }
 
-        [Test]
-        public void GetIndexLeter_IndexIs720CountIs800_LetterBBS()
-        {
-            HeaderItemTestable target = new HeaderItemTestable();
-            var result = target.GetIndexLeterTestable(720);
-            Console.WriteLine(result);
-            Assert.AreEqual(result, "AAS");
-        }
-
-        [Test]
-        public void GetIndexLeter_IndexIs26_LetterBBS()
-        {
-            HeaderItemTestable target = new HeaderItemTestable();
-            var result = target.GetIndexLeterTestable(26);
-            Console.WriteLine(result);
-            Assert.AreEqual(result, "AA");
-        }
-        
-
-        [Test]
-        public void GetIndexLeter_IndexIs32_LetterBBS()
-        {
-            HeaderItemTestable target = new HeaderItemTestable();
-            var result = target.GetIndexLeterTestable(132);
-            Console.WriteLine(result);
-            Assert.AreEqual(result, "EC");
-        }
-
-        /*public class HeaderItemTestable : HeaderItem
-        {
-
-            public  string GetIndexLeterTestable(int index, int count)
-             {
-                 return base.GetIndexLeter(index, count);
-             }
-        }*/
 
         public class HeaderItemTestable : HeaderItem
         {
 
             public string GetIndexLeterTestable(int index)
             {
-                return base.GetIndexLeter(index);
+                return base.GetIntAsWord(index);
             }
         }
+
     }
 }
