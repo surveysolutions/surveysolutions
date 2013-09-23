@@ -159,6 +159,12 @@
             return propagatable;
         };
 
+        groups.getQuestionsFromPropagateableGroups = function() {
+            return _.filter(questions.getAllLocal(), function (item) {
+                return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().gtype() !== "None";
+            });
+        };
+
         questions.search = function (query) {
             var items = _.filter(questions.getAllLocal(), function (item) {
                 return item.title().toLowerCase().indexOf(query) !== -1;
@@ -318,13 +324,18 @@
             case "DropDownList":
             case "MultyOption":
                 command.optionsOrder = question.answerOrder();
-                command.options = _.map(question.answerOptions(), function(item) {
-                    return {
-                        id: item.id(),
-                        title: item.title(),
-                        value: item.value()
-                    };
-                });
+                
+                if (question.isLinked() == 1) {
+                    command.linkedToQuestionId = question.selectedLinkTo();
+                } else {
+                    command.options = _.map(question.answerOptions(), function(item) {
+                        return {
+                            id: item.id(),
+                            title: item.title(),
+                            value: item.value()
+                        };
+                    });
+                }
                 break;
             case "Numeric":
             case "DateTime":

@@ -8,6 +8,7 @@ namespace WB.UI.Designer.WebServices
     using Main.Core.View;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.WebServices.Questionnaire;
+    using WB.UI.Shared.Web;
     using WB.UI.Shared.Web.Membership;
 
     public class PublicService : IPublicService
@@ -31,21 +32,27 @@ namespace WB.UI.Designer.WebServices
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
         {
-            string data = this.exportService.GetQuestionnaireTemplate(request.QuestionnaireId);
+            var templateInfo = this.exportService.GetQuestionnaireTemplate(request.QuestionnaireId);
 
-            if (string.IsNullOrEmpty(data))
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
                 return null;
             }
 
-            Stream stream = this.zipUtils.Compress(data);
+            Stream stream = this.zipUtils.Compress(templateInfo.Source);
 
-            return new RemoteFileInfo { FileName = "template.zip", Length = stream.Length, FileByteStream = stream };
+            return new RemoteFileInfo
+                       {
+                           FileName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName()),
+                           Length = stream.Length,
+                           FileByteStream = stream
+                       };
         }
 
         public string DownloadQuestionnaireSource(Guid request)
         {
-            return this.exportService.GetQuestionnaireTemplate(request);
+            var templateInfo = this.exportService.GetQuestionnaireTemplate(request);
+            return templateInfo == null ? string.Empty : templateInfo.Source;
         }
 
         public void Dummy()

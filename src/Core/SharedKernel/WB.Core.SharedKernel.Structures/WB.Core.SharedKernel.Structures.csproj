@@ -46,6 +46,7 @@
     <Compile Include="Synchronization\HandshakePackage.cs" />
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />
     <Compile Include="Synchronization\PullInitPackage.cs" />
+    <Compile Include="Synchronization\SynchronizationChunkMeta.cs" />
     <Compile Include="Synchronization\SyncItem.cs" />
     <Compile Include="Synchronization\SyncItemsMetaContainer.cs" />
     <Compile Include="Synchronization\SyncItemType.cs" />

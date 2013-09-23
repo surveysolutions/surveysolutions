@@ -44,6 +44,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString Pager(this HtmlHelper helper,
             int currentPage, int totalPages, 
             Func<int, string> pageUrl, 
+            int pageSlides,
             string additionalPagerCssClass = "")
         {
             if (totalPages <= 1)
@@ -55,24 +56,80 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
             var ul = new TagBuilder("ul");
 
-            for (var i = 1; i < totalPages + 1; i++)
+            if (currentPage > 1)
             {
-                var li = new TagBuilder("li");
-                if (i == (currentPage + 1))
-                    li.AddCssClass("active");
+                MakePagingItem(isActive: false, text: pageUrl(1), title: "<<", root: ul);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), title: "<", root: ul);
+            }
+            else
+            {
+                MakeDisabledPagingItem(text: "<<", root: ul);
+                MakeDisabledPagingItem(text: "<", root: ul);
+            }
 
-                var a = new TagBuilder("a");
-                a.MergeAttribute("href", pageUrl(i));
-                a.SetInnerText(i.ToString());
+            var pageFrom = Math.Max(1, currentPage - pageSlides);
+            var pageTo = Math.Min(totalPages, currentPage + pageSlides);
+            pageFrom = Math.Max(1, Math.Min(pageTo - 2 * pageSlides, pageFrom));
+            pageTo = Math.Min(totalPages, Math.Max(pageFrom + 2 * pageSlides, pageTo));
 
-                li.InnerHtml = a.ToString();
-                
-                ul.InnerHtml += li;
+            for (var i = pageFrom; i <= pageTo; i++)
+            {
+                MakePagingItem(isActive: i == currentPage, text: pageUrl(i), 
+                               title: i.ToString(), root: ul);
+            }
+
+            if (currentPage < totalPages)
+            {
+                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), title: ">", root: ul);
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), title: ">>", root: ul);
+            }
+            else
+            {
+                MakeDisabledPagingItem(text: ">", root: ul);
+                MakeDisabledPagingItem(text: ">>", root: ul);
             }
 
             div.InnerHtml = ul.ToString();
 
             return MvcHtmlString.Create(div.ToString());
+        }
+
+        private static void MakeDisabledPagingItem(string text, TagBuilder root)
+        {
+            var li = new TagBuilder("li");
+            li.AddCssClass("disabled");
+            var a = new TagBuilder("a");
+            a.MergeAttribute("href", "#");
+            a.SetInnerText(text);
+            a.AddCssClass("disabledPage");
+
+            li.InnerHtml = a.ToString();
+            root.InnerHtml += li;
+        }
+
+        private static void MakePagingItem(bool isActive, string text, string title, TagBuilder root)
+        {
+            var li = new TagBuilder("li");
+
+            if (isActive)
+            {
+                li.AddCssClass("active");
+                var span = new TagBuilder("span");
+                span.AddCssClass("currentPage");
+                span.SetInnerText(title);
+
+                li.InnerHtml += span;
+            }
+            else
+            {
+                var a = new TagBuilder("a");
+                a.MergeAttribute("href", text);
+                a.SetInnerText(title);
+
+                li.InnerHtml += a;    
+            }
+                
+            root.InnerHtml += li;
         }
     }
 

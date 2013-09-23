@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 
 namespace WB.Core.Synchronization.SyncStorage
@@ -13,7 +15,7 @@ namespace WB.Core.Synchronization.SyncStorage
     internal class SimpleSynchronizationDataStorage : ISynchronizationDataStorage
     {
         private readonly IQueryableReadSideRepositoryWriter<UserDocument> userStorage;
-
+        private readonly IMetaInfoBuilder metaBuilder;
         private readonly IChunkWriter chunkStorageWriter;
         private readonly IChunkReader chunkStorageReader;
 
@@ -22,28 +24,38 @@ namespace WB.Core.Synchronization.SyncStorage
 
         public SimpleSynchronizationDataStorage(
             IQueryableReadSideRepositoryWriter<UserDocument> userStorage,
-            IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader
+            IChunkWriter chunkStorageWriter, IChunkReader chunkStorageReader, IMetaInfoBuilder metaBuilder
             )
         {
             this.userStorage = userStorage;
             this.chunkStorageWriter = chunkStorageWriter;
             this.chunkStorageReader = chunkStorageReader;
+            this.metaBuilder = metaBuilder;
         }
 
-        public void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId)
+        public void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId)
         {
-            var interview = CreateQuestionnarieDocument(doc);
-            
-            
             var syncItem = new SyncItem
                 {
-                    Id = doc.PublicKey,
+                    Id = doc.Id,
                     ItemType = SyncItemType.Questionnare,
                     IsCompressed = UseCompression,
-                    Content = GetItemAsContent(interview),
-                    MetaInfo = GetItemAsContent(new MetaInfoBuilder().GetInterviewMetaInfo(interview)) 
+                    Content = GetItemAsContent(doc),
+                    MetaInfo = GetItemAsContent(metaBuilder.GetInterviewMetaInfo(doc)) 
                 };
             chunkStorageWriter.StoreChunk(syncItem, responsibleId);
+        }
+
+        public void SaveQuestionnaire(QuestionnaireDocument doc, long version)
+        {
+            var syncItem = new SyncItem
+            {
+                Id = doc.PublicKey.Combine(version),
+                ItemType = SyncItemType.Template,
+                IsCompressed = UseCompression,
+                Content = GetItemAsContent(doc)
+            };
+            chunkStorageWriter.StoreChunk(syncItem, null);
         }
 
         public void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId)
@@ -96,18 +108,11 @@ namespace WB.Core.Synchronization.SyncStorage
             return result;
         }
 
-        public IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(long sequence, Guid userId)
         {
             var users = GetUserTeamates(userId);
             return
-                chunkStorageReader.GetChunksCreatedAfterForUsers(sequence, users);
-        }
-
-        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, Guid userId)
-        {
-            var users = GetUserTeamates(userId);
-            return
-                chunkStorageReader.GetChunkPairsCreatedAfter(sequence, users);
+                chunkStorageReader.GetChunkMetaDataCreatedAfter(sequence, users);
         }
 
         private IEnumerable<Guid> GetUserTeamates(Guid userId)
@@ -143,32 +148,11 @@ namespace WB.Core.Synchronization.SyncStorage
 
         #region from sync provider
 
-
-        private CompleteQuestionnaireDocument CreateQuestionnarieDocument(CompleteQuestionnaireStoreDocument data)
-        {
-            var retval = new CompleteQuestionnaireDocument();
-
-            retval.CreatedBy = data.CreatedBy;
-            retval.CreationDate = data.CreationDate;
-            retval.Creator = data.Creator;
-
-            retval.LastEntryDate = data.LastEntryDate;
-            retval.PublicKey = data.PublicKey;
-            retval.Responsible = data.Responsible;
-            retval.Status = data.Status;
-            retval.TemplateId = data.TemplateId;
-            retval.Title = data.Title;
-
-            retval.Children = data.Children;
-            return retval;
-        }
-
-
         private string GetItemAsContent(object item)
         {
             var settings = new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.Objects, 
+                    TypeNameHandling = TypeNameHandling.All, 
                     NullValueHandling = NullValueHandling.Ignore
                 };
 

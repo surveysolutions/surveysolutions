@@ -1,66 +1,47 @@
-﻿<script type="text/html" id="SingleOption">
-    <div class="form-horizontal">
-        <div class="row-fluid">
-            <div class="control-group">
-                <label  class="control-label">Sort categories by</label>
-                <div class="controls">
-                    <select class="span12" data-bind="options: orderOptions, optionsValue: 'key', optionsText: 'value', value: answerOrder"></select>
+﻿<script type="text/html" id="Categorical">
+    <div style="margin-top: 20px">
+        <div data-bind="visible: isLinked() == 0">
+            <label class="control-label required">Categories</label>
+            <div class="answer-options">
+                <!-- ko foreach: answerOptions -->
+                <div class="row-fluid">
+                    <div class="controls  controls-row">
+                        <div class="span3 control-group" data-bind="validationElement: value">
+                            <input type="number" placeholder="Value" class="input-block-level" data-bind="value: value, valueUpdate: 'afterkeydown'">
+                        </div>
+                        <div class="span8 control-group" data-bind="validationElement: title">
+                            <input type="text" placeholder="Label" class="input-block-level" data-bind="value: title, valueUpdate: 'afterkeydown'">
+                        </div>
+                        <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+            <p class="text-center">
+                <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i>Add category</button>
+            </p>
+        </div>
+        <div data-bind="visible: isLinked() == 1">
+            <label class="control-label required">Bind to question from auto propagated group</label>
+            <div class="row-fluid">
+                <div class="controls  controls-row">
+                    <div class="control-group" data-bind="validationElement: selectedLinkTo">
+                        <select class="input-block-level" data-bind="options: questionsFromProragatedGroups, optionsValue: 'questionId', optionsText: 'title', value: selectedLinkTo, optionsCaption: 'Choose...'"></select>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <label class="control-label required">Categories</label>
-    <div class="answer-options">
-        <!-- ko foreach: answerOptions -->
-        <div class="row-fluid">
-            <div class="controls  controls-row">
-                <div class="span3 control-group" data-bind="validationElement: value">
-                    <input type="number" placeholder="Value" class="input-block-level" data-bind="value: value, valueUpdate: 'afterkeydown'">
-                </div>
-                <div class="span8 control-group" data-bind="validationElement: title">
-                    <input type="text" placeholder="Label" class="input-block-level" data-bind="value: title, valueUpdate: 'afterkeydown'">
-                </div>
-                <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
-            </div>
-        </div>
-        <!-- /ko -->
-    </div>
-    <p class="text-center">
-        <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i>Add category</button>
-    </p>
+    <br />
+</script>
+<script type="text/html" id="SingleOption">
+    <div data-bind="template: { name: 'Categorical', data: $parent }"></div>
 </script>
 
 <script type="text/html" id="MultyOption">
-    <div class="form-horizontal">
-        <div class="row-fluid">
-            <div class="control-group">
-                <label class="control-label">Sort categories by</label>
-                <div class="controls">
-                    <select class="span12" data-bind="options: orderOptions, optionsValue: 'key', optionsText: 'value', value: answerOrder"></select>
-                </div>
-            </div>
-        </div>
-    </div>
-    <label class="control-label required">Categories</label>
-    <div class="answer-options">
-        <!-- ko foreach: answerOptions -->
-        <div class="row-fluid">
-            <div class="controls  controls-row">
-                <div class="span3 control-group" data-bind="validationElement: value">
-                    <input type="number" placeholder="Value" class="input-block-level" data-bind="value: value, valueUpdate: 'afterkeydown'">
-                </div>
-                <div class="span8 control-group" data-bind="validationElement: title">
-                    <input type="text" placeholder="Label" class="input-block-level" data-bind="value: title, valueUpdate: 'afterkeydown'">
-                </div>
-                <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
-            </div>
-        </div>
-        <!-- /ko -->
-    </div>
-    <p class="text-center">
-        <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i>Add category</button>
-    </p>
+    <div data-bind="template: { name: 'Categorical', data: $parent }"></div>
 </script>
+
 <script type="text/html" id="Numeric">
     <div></div>
 </script>
@@ -92,4 +73,7 @@
             <button class="btn btn-success" type="button" data-bind="click: $parent.addTrigger, enable: hasPropagatedGroups"><i class="icon-plus icon-white"></i></button>
         </div>
     </div>
+</script>
+<script type="text/html" id="GpsCoordinates">
+    <div></div>
 </script>
