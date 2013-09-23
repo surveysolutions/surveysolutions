@@ -132,7 +132,15 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
             bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
-           
+            bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
+
+
+            var answerOptionsForLinkedQuestionsDenormalizer = kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
+
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)

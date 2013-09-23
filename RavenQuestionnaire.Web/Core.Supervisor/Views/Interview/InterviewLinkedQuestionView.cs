@@ -19,8 +19,8 @@ namespace Core.Supervisor.Views.Interview
                     Value = a.Key,
                     Label = a.Value
                 }).ToList();
-
-            this.Answer = answeredQuestion.Answer;
+            if (answeredQuestion != null)
+                this.Answer = answeredQuestion.Answer;
         }
     }
 }

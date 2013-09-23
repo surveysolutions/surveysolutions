@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using Android.Content;
@@ -9,62 +10,68 @@ using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class MultyQuestionView : AbstractQuestionView
+    public class MultyQuestionView : AbstractMultyQuestionView<AnswerViewModel>
     {
-        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
-            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
+        public MultyQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source,
+            Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService) {}
+
+        protected SelectebleQuestionViewModel TypedMode
         {
+            get { return Model as SelectebleQuestionViewModel; }
         }
 
-        #region Overrides of AbstractQuestionView
-
-        protected override void Initialize()
+        protected override IEnumerable<AnswerViewModel> Answers
         {
-            base.Initialize();
-            this.Orientation = Orientation.Vertical;
-
-            typedMode = Model as SelectebleQuestionViewModel;
-            var optionsWrapper = new LinearLayout(this.Context);
-            optionsWrapper.Orientation = Orientation.Vertical;
-            optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
-            foreach (var answer in typedMode.Answers)
-            {
-                CheckBox cb = new CheckBox(this.Context);
-                cb.Text = answer.Title;
-                cb.Checked = answer.Selected;
-                cb.CheckedChange += cb_CheckedChange;
-                cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
-
-                cb.AttachImage(answer);
-                optionsWrapper.AddView(cb);
-            }
-            llWrapper.AddView(optionsWrapper);
+            get { return TypedMode.Answers; }
         }
 
-        private SelectebleQuestionViewModel typedMode;
-        #endregion
-
-        void cb_CheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
+        protected override string GetAnswerId(AnswerViewModel answer)
         {
-            var cb = sender as CheckBox;
-            var answerGuid = Guid.Parse(cb.GetTag(Resource.Id.AnswerId).ToString());
-            var answered = typedMode.Answers.Where(a => a.Selected).Select(a => a.Value).ToList();
-            var selectedAnswer = typedMode.Answers.FirstOrDefault(a => a.PublicKey == answerGuid);
-            if(e.IsChecked)
+            return answer.PublicKey.ToString();
+        }
+
+        protected override string GetAnswerTitle(AnswerViewModel answer)
+        {
+            return answer.Title;
+        }
+
+        protected override AnswerViewModel FindAnswerInModelByCheckBoxTag(string tag)
+        {
+            var answerGuid = Guid.Parse(tag);
+            return Answers.FirstOrDefault(
+                a => a.PublicKey == answerGuid);
+        }
+
+        protected override AnswerQuestionCommand CreateSaveAnswerCommand(AnswerViewModel selectedAnswer, bool isChecked)
+        {
+            var answered = Answers.Where(a => a.Selected).Select(a => a.Value).ToList();
+
+            if (isChecked)
                 answered.Add(selectedAnswer.Value);
             else
             {
                 answered.Remove(selectedAnswer.Value);
             }
 
-            ExecuteSaveAnswerCommand(new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
-                                                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answered.ToArray()));
-            SaveAnswer(Model.AnswerString);
+            return new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey,
+                CapiApplication.Membership.CurrentUser.Id,
+                Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answered.ToArray());
+        }
 
+        protected override bool IsAnswerSelected(AnswerViewModel answer)
+        {
+            return answer.Selected;
+        }
+
+        protected override void AddAdditionalAttributes(CheckBox checkBox, AnswerViewModel answer)
+        {
+            base.AddAdditionalAttributes(checkBox, answer);
+            checkBox.AttachImage(answer);
         }
     }
 }

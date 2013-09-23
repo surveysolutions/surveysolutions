@@ -144,11 +144,13 @@
     <Compile Include="Controls\QuestionnaireDetails\QuestionnarieNavigationItem.cs" />
     <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractMultyQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractSingleOptionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyOptionLinkedQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionLinkedQuestionView.cs" />
     <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
     <Compile Include="Core\AjustableListView.cs" />

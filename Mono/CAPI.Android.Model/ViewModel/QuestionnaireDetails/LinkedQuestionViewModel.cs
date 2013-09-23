@@ -9,26 +9,20 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     public class LinkedQuestionViewModel : QuestionViewModel
     {
         public LinkedQuestionViewModel(
-            InterviewItemId publicKey,
-            string text,
-            QuestionType questionType,
-            bool enabled,
-            string instructions,
-            bool valid,
-            bool mandatory,
-            bool capital,
-            string validationMessage, Func<int[], IEnumerable<LinkedAnswerViewModel>> getAnswers)
+            InterviewItemId publicKey, string text, QuestionType questionType, bool enabled, string instructions, bool valid,
+            bool mandatory, bool capital, string validationMessage, Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions)
             : base(
                 publicKey, text, questionType, enabled, instructions, null, valid, mandatory, capital, null, validationMessage)
         {
-            this.getAnswers = getAnswers;
+            this.getAnswerOptions = getAnswerOptions;
             this.SelectedAnswers = new int[0][];
         }
 
-        private Func<int[], IEnumerable<LinkedAnswerViewModel>> getAnswers;
+        private Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions;
 
-        public IEnumerable<LinkedAnswerViewModel> Answers {
-            get { return getAnswers(this.PublicKey.PropagationVector); }
+        public IEnumerable<LinkedAnswerViewModel> AnswerOptions
+        {
+            get { return this.getAnswerOptions(); }
         }
 
         public int[][] SelectedAnswers { get; private set; }
@@ -38,7 +32,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return new LinkedQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                 this.Text, this.QuestionType, 
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions, this.Status.HasFlag(QuestionStatus.Valid),
-                this.Mandatory, this.Capital, this.ValidationMessage, getAnswers);
+                this.Mandatory, this.Capital, this.ValidationMessage, this.getAnswerOptions);
         }
 
         public override void SetAnswer(object answer)
@@ -76,6 +70,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 return this.QuestionType == QuestionType.MultyOption && this.Status.HasFlag(QuestionStatus.Answered) &&
                     this.SelectedAnswers.Length == 0;
             }
+        }
+
+        public void HandleAnswerListChange()
+        {
+            this.RaisePropertyChanged("AnswerOptions");
         }
     }
 }

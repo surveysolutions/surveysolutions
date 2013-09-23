@@ -1,7 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+
+using Android.App;
 using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -9,11 +16,11 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class SingleOptionLinkedQuestionView : AbstractSingleOptionQuestionView<LinkedAnswerViewModel>
+    public class MultyOptionLinkedQuestionView: AbstractMultyQuestionView<LinkedAnswerViewModel>
     {
         private const char Separator = ',';
 
-        public SingleOptionLinkedQuestionView(
+        public MultyOptionLinkedQuestionView(
             Context context,
             IMvxAndroidBindingContext bindingActivity,
             QuestionViewModel model,
@@ -22,16 +29,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             )
             : base(context, bindingActivity, model, questionnairePublicKey, commandService)
         {
-            this.Model.PropertyChanged += Model_PropertyChanged;
-        }
-
-        void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            bool answerOptionsChanged = e.PropertyName == "AnswerOptions";
-            if (!answerOptionsChanged)
-                return;
-
-            this.FillRadioButtonGroupWithAnswers();
         }
 
         protected LinkedQuestionViewModel TypedMode {
@@ -53,11 +50,27 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             return answer.Title;
         }
 
-        protected override LinkedAnswerViewModel FindAnswerInModelByRadioButtonTag(string tag)
+        protected override LinkedAnswerViewModel FindAnswerInModelByCheckBoxTag(string tag)
         {
             var vector = tag.Split(Separator).Select(int.Parse).ToArray();
             return Answers.FirstOrDefault(
               a => this.IsVectorsEqual(a.PropagationVector, vector));
+        }
+
+        protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel selectedAnswer, bool isChecked)
+        {
+            var answered = TypedMode.SelectedAnswers.ToList();
+
+            if (isChecked)
+                answered.Add(selectedAnswer.PropagationVector);
+            else
+            {
+                answered.RemoveAll(answer => IsVectorsEqual(selectedAnswer.PropagationVector, answer));
+            }
+            return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
+                CapiApplication.Membership.CurrentUser.Id,
+                Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
+                answered.ToArray());
         }
 
         private bool IsVectorsEqual(int[] vector1, int[] vector2)
@@ -65,14 +78,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (vector1.Length != vector2.Length)
                 return false;
             return !vector1.Where((t, i) => t != vector2[i]).Any();
-        }
-
-        protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel selectedAnswer)
-        {
-            return new AnswerSingleOptionLinkedQuestionCommand(this.QuestionnairePublicKey,
-                 CapiApplication.Membership.CurrentUser.Id,
-                 Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
-                 selectedAnswer.PropagationVector);
         }
 
         protected override bool IsAnswerSelected(LinkedAnswerViewModel answer)
