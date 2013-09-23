@@ -158,15 +158,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             if (question.Answer == null)
                 return new string[0];
-            var answerType = question.Answer.GetType();
-            if (!answerType.IsArray)
-                return new string[] {question.Answer.ToString()};
 
-#warning bad bad code
-            var decimalAnswers = question.Answer as decimal[];
-            if (decimalAnswers == null)
-                return new string[0];
-            return decimalAnswers.Select(a => a.ToString(CultureInfo.InvariantCulture)).ToArray();
+            var listOfAnswers = question.Answer as IEnumerable<object>;
+            if (listOfAnswers == null)
+                return new string[] {question.Answer.ToString()};
+            return listOfAnswers.Select(a => a.ToString()).ToArray();
         }
 
         private QuestionnaireDocumentVersioned GetQuestionnaireOrThrow(Guid questionnaireId, long version)

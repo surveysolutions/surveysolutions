@@ -159,7 +159,12 @@
                     title: 'Cant move question',
                     text: "You can't move head question outside any propagated group"
                 },
-                savedData: 'Data saved successfully'
+                savedData: 'Data saved successfully',
+                weWillClearCondition: {
+                    message: "Featured question can't have condition expression. We can clear condition and make this questuion featured.",
+                    okBtn: "Yes, clear condition",
+                    cancelBtn: "No, do not clear condition"
+    }
             },
             // methods
             //-----------------
