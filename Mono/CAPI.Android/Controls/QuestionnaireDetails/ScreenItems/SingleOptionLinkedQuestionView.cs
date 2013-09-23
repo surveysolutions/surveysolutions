@@ -22,6 +22,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             )
             : base(context, bindingActivity, model, questionnairePublicKey, commandService)
         {
+            this.Model.PropertyChanged += Model_PropertyChanged;
+        }
+
+        void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            bool answerOptionsChanged = e.PropertyName == "AnswerOptions";
+            if (!answerOptionsChanged)
+                return;
+
+            this.FillRadioButtonGroupWithAnswers();
         }
 
         protected LinkedQuestionViewModel TypedMode {
@@ -30,7 +40,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override IEnumerable<LinkedAnswerViewModel> Answers
         {
-            get { return TypedMode.Answers; }
+            get { return TypedMode.AnswerOptions; }
         }
 
         protected override string GetAnswerId(LinkedAnswerViewModel answer)
