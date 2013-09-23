@@ -105,7 +105,7 @@ namespace Core.Supervisor.Views.Interview
 
     public class QuestionOptionView
     {
-        public decimal Value { get; set; }
+        public object Value { get; set; }
         public string Label { get; set; }
     }
 }
