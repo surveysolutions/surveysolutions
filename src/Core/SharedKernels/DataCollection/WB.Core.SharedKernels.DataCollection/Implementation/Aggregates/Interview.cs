@@ -667,7 +667,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
 
-        public void AnswerMultipleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
+        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
         {
             var answeredQuestion = new Identity(questionId, propagationVector);
 
