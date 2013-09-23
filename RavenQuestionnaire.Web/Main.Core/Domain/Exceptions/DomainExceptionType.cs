@@ -144,6 +144,8 @@
 
         QuestionCanNotBeFeatured,
 
+        QuestionCanNotContainValidation,
+
         ConflictBetweenLinkedQuestionAndOptions,
 
         NotSupportedQuestionForLinkedQuestion,

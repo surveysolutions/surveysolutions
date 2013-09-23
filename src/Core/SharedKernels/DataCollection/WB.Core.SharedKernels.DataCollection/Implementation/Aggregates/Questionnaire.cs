@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(string.Format(
-                    "Cannot return answer options for queston with id '{0}' because it's type {1} does not support answer options.",
+                    "Cannot return answer options for question with id '{0}' because it's type {1} does not support answer options.",
                     questionId, question.QuestionType));
 
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
