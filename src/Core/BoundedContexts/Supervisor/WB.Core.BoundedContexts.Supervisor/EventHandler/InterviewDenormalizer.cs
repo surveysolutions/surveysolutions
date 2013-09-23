@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
@@ -201,6 +202,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVectors);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
