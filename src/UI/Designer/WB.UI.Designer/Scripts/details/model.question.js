@@ -145,6 +145,18 @@
               self.errors = ko.validation.group(self);
               this.cache = function () { };
               self.canUpdate = ko.observable(true);
+              
+              self.isFeatured.subscribe(function (value) {
+                  if (value && _.isEmpty(self.condition()) == false) {
+                      bootbox.confirm(config.warnings.weWillClearCondition, function (result) {
+                          if (result == false) {
+                              self.isFeatured(false);
+                              return;
+                          }
+                          self.condition('');
+                      });
+                  }
+              });
 
               return self;
           };
