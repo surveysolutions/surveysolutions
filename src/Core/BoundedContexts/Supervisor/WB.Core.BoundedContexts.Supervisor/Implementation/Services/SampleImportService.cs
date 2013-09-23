@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -13,6 +15,7 @@ using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -20,13 +23,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 {
     internal class SampleImportService : ISampleImportService
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
         private readonly ITemporaryDataStorage<TempFileImportData> tempImportStorage;
         private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
-        
 
-        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
+
+        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository,
                                    IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, 
             ITemporaryDataStorage<TempFileImportData> tempImportStorage,
             ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage)
@@ -101,7 +104,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                     return;
                 }
 
-            var bigTemplate = this.templateRepository.GetById(item.TemplateId);
+            var bigTemplateObject = this.templateRepository.GetById(item.TemplateId);
+
+            var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
             if (bigTemplate == null)
             {
                 result.SetErrorMessage("Template is absent");
@@ -151,6 +156,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                 }
                 catch
                 {
+                   // result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
                 }
             }
             result.CompleteProcess();
@@ -228,7 +234,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             {
                 var realHeader = expectedHeader.FirstOrDefault(h => h.Caption == header[i]);
                 if(realHeader==null)
-                    throw new ArgumentException("invalid header Capiton");
+                    throw new ArgumentException("invalid header Caption");
                 newHeader.Add(realHeader);
             }
             tempImportStorage.Store(
@@ -237,47 +243,69 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+            
+   
+           /* var featuredAnswers =*/ CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption);
-
-            template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
+          /*  new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Interview(Guid.NewGuid(), Guid.NewGuid(),
+                template.EventSourceId, featuredAnswers, DateTime.Now, Guid.NewGuid());*/
+            /*   template.CreateInterviewWithFeaturedQuestions(interviewId, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
+ */
         }
-        private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template, Guid headqarter, Guid supervisor)
+        private void BuiltInterview(Guid interviewId, string[] values, string[] header, QuestionnaireDocument template, Guid headqarterId, Guid supervisorId)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+            var answersToFeaturedQuestions = CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: stataCaption => template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption));
 
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey, template.PublicKey,
-                                                                                   new UserLight(headqarter, ""),
-                                                                                   new UserLight(supervisor, ""),
-                                                                                   featuredAnswers));
+            commandInvoker.Execute(new CreateInterviewCommand(interviewId, headqarterId, template.PublicKey, answersToFeaturedQuestions, DateTime.UtcNow, supervisorId));
         }
-        private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
+        private Dictionary<Guid, object> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
         {
-            var featuredAnswers = new List<QuestionAnswer>();
+            if (values.Length < header.Length)
+            {
+                throw new ArgumentOutOfRangeException("Values doesn't much header");
+            }
+
+            var featuredAnswers = new Dictionary<Guid, object>();
             for (int i = 0; i < header.Length; i++)
             {
-                var question =
-                    getQuestionByStataCaption(header[i]);
+                var question = getQuestionByStataCaption(header[i]);
                 if (question == null)
                     continue;
 
-                var singleOption = question as SingleQuestion;
-                if (singleOption != null)
+                switch (question.QuestionType)
                 {
-                    var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
-                    featuredAnswers.Add(new QuestionAnswer() {Answers = new Guid[] {answer.PublicKey}, Id = question.PublicKey});
-                }
-                else
-                {
-                    featuredAnswers.Add(new QuestionAnswer()
+                    case QuestionType.Text:
+                        featuredAnswers.Add(question.PublicKey, values[i]);                        
+                        break;
+
+                    case QuestionType.AutoPropagate:
+                    case QuestionType.Numeric:
+                        featuredAnswers.Add(question.PublicKey, decimal.Parse(values[i]));
+                        break;
+
+                    case QuestionType.DateTime:
+                        DateTime date;
+                        if (DateTime.TryParse(values[i], out date))
                         {
-                            Answer = values[i],
-                            Answers = new Guid[] {},
-                            Id = question.PublicKey
-                        });
+                            featuredAnswers.Add(question.PublicKey, date);
+                        }
+                        break;
+
+                    case QuestionType.SingleOption:
+                        var singleOption = question as SingleQuestion;
+                        if (singleOption != null)
+                        {
+                            var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
+                            featuredAnswers.Add(question.PublicKey, answer.PublicKey);
+                        }
+                        break;
+                    case QuestionType.GpsCoordinates:
+                    case QuestionType.MultyOption:
+                        //throw new Exception("Unsupported featured question type in sample");
+                        break;
                 }
             }
             return featuredAnswers;

@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             var status = WhaitForCompletedImportResult(target, importId);
 
             //assert
-            Assert.That(status.ErrorMessage, Is.EqualTo("invalid header Capiton"));
+            Assert.That(status.ErrorMessage, Is.EqualTo("invalid header Caption"));
         }
 
         [Test]
@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
             ITemporaryDataStorage<TempFileImportData> tempStorage = null,
             IReadSideRepositoryWriter<QuestionnaireBrowseItem> smallTemplateRepository = null)
         {
-            return new SampleImportService(new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>().Object,
+            return new SampleImportService(new Mock<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().Object,
                                            smallTemplateRepository ??
                                            new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>(),
                                            tempStorage ?? new InMemoryTemporaryDataRepositoryAccessor<TempFileImportData>(),

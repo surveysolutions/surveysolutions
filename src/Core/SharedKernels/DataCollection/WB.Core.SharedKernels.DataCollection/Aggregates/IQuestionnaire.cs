@@ -39,9 +39,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
 
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForGroup(Guid groupId);
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfGroup(Guid groupId);
 
-        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionForQuestion(Guid questionId);
+        IEnumerable<Guid> GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(Guid questionId);
 
         IEnumerable<Guid> GetGroupsWhichCustomEnablementConditionDependsOnSpecifiedQuestion(Guid questionId);
 
@@ -61,12 +61,24 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId);
 
-        IEnumerable<Guid> GetParentPropagatableGroupsForGroupStartingFromTop(Guid groupId);
+        IEnumerable<Guid> GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(Guid groupId);
 
         int GetPropagationLevelForQuestion(Guid questionId);
 
         int GetPropagationLevelForGroup(Guid groupId);
 
         IEnumerable<Guid> GetAllMandatoryQuestions();
+
+        IEnumerable<Guid> GetAllQuestionsWithNotEmptyCustomEnablementConditions();
+
+        IEnumerable<Guid> GetAllGroupsWithNotEmptyCustomEnablementConditions();
+
+        bool IsGroupPropagatable(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
+
+        IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
+
+        IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId);
     }
 }

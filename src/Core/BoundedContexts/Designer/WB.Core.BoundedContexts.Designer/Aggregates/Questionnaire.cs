@@ -18,6 +18,8 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
+    using Main.Core.Entities;
+
     public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
@@ -34,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.DateTime,
             QuestionType.Text,
             QuestionType.AutoPropagate,
+            QuestionType.GpsCoordinates
         };
 
         public Questionnaire()
@@ -97,13 +100,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             description: g.Description,
                             condition: g.ConditionExpression,
                             responsibleId: createdBy);
+                        return;
                     }
-                });
-            source.Children.ApplyAction(
-                x => x.Children,
-                (parent, x) =>
-                {
-                    Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
                     var q = x as IQuestion;
                     if (q != null)
@@ -126,8 +124,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
                             optionsOrder: q.AnswerOrder,
                             maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray(), 
-                            responsibleId: createdBy);
+                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray(),
+                            responsibleId: createdBy,
+                            linkedToQuestionId: q.LinkedToQuestionId);
                     }
                 });
         }
@@ -148,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (document == null)
                 throw new DomainException(DomainExceptionType.TemplateIsInvalid
                                           , "only QuestionnaireDocuments are supported for now");
-            document.CreatedBy = this.innerDocument.CreatedBy;
+            document.CreatedBy = createdBy;
             ApplyEvent(new TemplateImported() {Source = document});
            
         }
@@ -300,7 +299,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
         {
             alias = alias.Trim();
 
@@ -311,7 +310,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
+
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
             var group = this.innerDocument.Find<IGroup>(groupId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -346,7 +347,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
-                ResponsibleId = responsibleId
+                ResponsibleId = responsibleId,
+                LinkedToQuestionId = linkedToQuestionId
             });
         }
 
@@ -354,7 +356,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            Guid groupId, string title, QuestionType type, string alias,
            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
            QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId)
+           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
         {
             alias = alias.Trim();
 
@@ -365,9 +367,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(type, options);
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
 
-            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
             var group = this.innerDocument.Find<IGroup>(groupId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -401,7 +403,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AnswerOrder = optionsOrder,
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
-                ResponsibleId = responsibleId
+                ResponsibleId = responsibleId,
+                LinkedToQuestionId = linkedToQuestionId
             });
         }
 
@@ -435,7 +438,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -445,12 +448,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
-            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
-            this.ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(type, options);
-
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+            
             IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
@@ -479,7 +482,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AnswerOrder = optionsOrder,
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
-                ResponsibleId = responsibleId
+                ResponsibleId = responsibleId,
+                LinkedToQuestionId = linkedToQuestionId
             });
         }
 
@@ -645,7 +649,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
-            AbstractQuestion question = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
+            AbstractQuestion question =
+                new CompleteQuestionFactory().CreateQuestion(
+                    new DataQuestion(
+                        e.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        e.AnswerOrder,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        e.Answers,
+                        e.LinkedToQuestionId));
             if (question == null)
             {
                 return;
@@ -656,7 +679,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
-            AbstractQuestion question = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
+            AbstractQuestion question =
+                new CompleteQuestionFactory().CreateQuestion(
+                    new DataQuestion(
+                        e.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        e.AnswerOrder,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        e.Answers,
+                        e.LinkedToQuestionId));
             if (question == null)
             {
                 return;
@@ -678,7 +720,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingSpecifiedData(question, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(
+                    new DataQuestion(
+                        question.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        e.AnswerOrder,
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        e.Answers,
+                        e.LinkedToQuestionId));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
@@ -825,7 +886,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new DomainException(
                     DomainExceptionType.GroupTitleRequired,
-                    "The titles of groups and chapters can not be empty or contains whitespaces only");
+                    "The titles of groups and chapters can not be empty or contains whitespace only");
             }
         }
 
@@ -835,7 +896,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new DomainException(
                     DomainExceptionType.QuestionnaireTitleRequired,
-                    "Questionnaire's title can not be empty or contains whitespaces only");
+                    "Questionnaire's title can not be empty or contains whitespace only");
             }
         }
 
@@ -919,23 +980,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfCategoryQuestionHasLessThanTwoOptions(QuestionType questionType, Option[] options)
-        {
-            bool isQuestionIsCategoruQuestion = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
-
-            if (!isQuestionIsCategoruQuestion)
-            {
-                return;
-            }
-
-            if (options.Length < 2)
-            {
-                //throw new DomainException(DomainExceptionType.TooFewOptionsInCategoryQuestion,
-                //                          string.Format(
-                //                              "Categorical questions should contains two or more answer options"));
-            }
-        }
-
         private void ThrowDomainExceptionIfQuestionTypeIsNotAllowed(QuestionType type)
         {
             bool isQuestionTypeAllowed = AllowedQuestionTypes.Contains(type);
@@ -946,46 +990,57 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
-            QuestionType questionType, Option[] options)
+            QuestionType questionType, Option[] options, Guid? linkedToQuestionId)
         {
             bool isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
             if (!isQuestionWithOptions)
                 return;
 
-            if (!options.Any())
+            if (linkedToQuestionId.HasValue)
             {
-                throw new DomainException(
-                    DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
+                if (!this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).Any())
+                {
+                    throw new DomainException(
+                        DomainExceptionType.LinkedToQuestionDoesNotExist, "Question that you are linked to does not exist");
+                }
             }
-
-            if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+            else
             {
-                throw new DomainException(
-                    DomainExceptionType.SelectorValueRequired, "Answer option value is required");
-            }
+                if (!options.Any())
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
+                }
 
-            if (options.Any(x => !x.Value.IsInteger()))
-            {
-                throw new DomainException(
-                    DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Answer option value should have only number characters");
-            }
+                if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValueRequired, "Answer option value is required");
+                }
 
-            if (!AreElementsUnique(options.Select(x => x.Value)))
-            {
-                throw new DomainException(
-                    DomainExceptionType.SelectorValueNotUnique,
-                    "Answer option value should have unique in options scope");
-            }
+                if (options.Any(x => !x.Value.IsInteger()))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValueSpecialCharacters,
+                        "Answer option value should have only number characters");
+                }
 
-            if (options.Any(x => string.IsNullOrEmpty(x.Title)))
-            {
-                throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
-            }
+                if (!AreElementsUnique(options.Select(x => x.Value)))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValueNotUnique,
+                        "Answer option value should have unique in options scope");
+                }
 
-            if (!AreElementsUnique(options.Select(x => x.Title)))
-            {
-                throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
+                if (options.Any(x => string.IsNullOrEmpty(x.Title)))
+                {
+                    throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
+                }
+
+                if (!AreElementsUnique(options.Select(x => x.Title)))
+                {
+                    throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
+                }
             }
         }
 
@@ -1066,6 +1121,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
             }
+        }
+
+        private void ThrowDomainExceptionIfQuestionCanNotBeFeatured(QuestionType questionType, bool isFeatured)
+        {
+            if (isFeatured && questionType == QuestionType.GpsCoordinates)
+                throw new DomainException(
+                    DomainExceptionType.QuestionCanNotBeFeatured, 
+                    "Question can't be featured");
         }
     }
 }

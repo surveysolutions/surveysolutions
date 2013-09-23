@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.SyncProvider
 {
@@ -11,9 +12,7 @@ namespace WB.Core.Synchronization.SyncProvider
         
         IEnumerable<SyncItem> GetSyncItemBulk(Guid userId, Guid clientRegistrationKey, long sequence);
 
-        IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey);
-
-        IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence);
+        IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence);
 
         HandshakePackage CheckAndCreateNewSyncActivity(ClientIdentifier identifier);
 

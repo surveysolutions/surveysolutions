@@ -15,7 +15,7 @@
               self.alias = ko.observable('').extend({
                   required: true, maxLength: 32,
                   pattern: {
-                      message: "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit",
+                      message: "Valid variable name should contain only letters, digits and the underscore character and should not start with a digit",
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
                   },
                   notEqual : 'this'
@@ -33,18 +33,38 @@
               self.validationExpression = ko.observable('');
               self.validationMessage = ko.observable('');
               self.instruction = ko.observable('');
+              
+              self.isLinked = ko.observable(0);
+              self.isLinkedDurty = ko.computed(function () {
+                  return self.isLinked() == 1;
+              });
+              self.selectedLinkTo = ko.observable().extend({
+                  required: {
+                      onlyIf: function () {
+                          return self.isLinked() == 1;
+                      }
+                  }
+              });
+              self.localQuestionsFromProragatedGroups = ko.observableArray();
+              self.questionsFromProragatedGroups = ko.computed(function () {
+                  return _.filter(self.localQuestionsFromProragatedGroups(), function (item) {
+                      return item.id() != self.id();
+                  }).map(function (item) {
+                      return { questionId: item.id(), title: item.alias() + ": " + item.title() };
+                  });
+              });
 
               self.answerOrder = ko.observable();
               self.answerOptions = ko.observableArray([]).extend({
                   required: {
                       onlyIf: function () {
-                          return self.qtype() === "SingleOption" || self.qtype() === "MultyOption";
+                          return self.isLinked() == 0 && (self.qtype() === "SingleOption" || self.qtype() === "MultyOption");
                       }
                   },
                   minLength: {
                       params: 2,
                       onlyIf: function () {
-                          return self.qtype() === "SingleOption" || self.qtype() === "MultyOption";
+                          return self.isLinked() == 0 && (self.qtype() === "SingleOption" || self.qtype() === "MultyOption");
                       }
                   }
               });
@@ -67,6 +87,7 @@
                       return { key: item.id(), value: item.title() };
                   });
               }).extend({ throttle: 500 });
+              
               self.hasPropagatedGroups = ko.computed(function () {
                   return self.propagatedGroups().length != 0;
               });
@@ -99,7 +120,7 @@
               self.isNullo = false;
               self.cloneSource = ko.observable();
 
-              self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers]);
+              self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty]);
               self.dirtyFlag().reset();
               self.errors = ko.validation.group(self);
               this.cache = function () { };
@@ -181,6 +202,9 @@
                     item.alias('');
                     item.alias.valueHasMutated();
 
+                    item.isLinked(this.isLinked());
+                    item.selectedLinkTo(this.selectedLinkTo());
+
                     return item;
                 };
             
@@ -217,6 +241,9 @@
                 this.triggers(_.map(data.triggers, function (trigger) {
                     return {key: trigger.key, value: trigger.value};
                 }));
+
+                this.isLinked(data.isLinked);
+                this.selectedLinkTo(data.selectedLinkTo);
 
                 //save off the latest data for later use
                 this.cache.latestData = data;

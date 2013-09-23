@@ -11,7 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
 
         public Guid UserId { get; private set; }
 
-        protected InterviewCommand(Guid interviewId, Guid userId)
+        protected InterviewCommand(Guid interviewId, Guid userId) 
+            : base(interviewId)
         {
             ThrowArgumentExceptionIfGuidIsEmpty(userId);
 
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
             this.UserId = userId;
         }
 
-        private void ThrowArgumentExceptionIfGuidIsEmpty(Guid guid)
+        protected void ThrowArgumentExceptionIfGuidIsEmpty(Guid guid)
         {
             if (guid == Guid.Empty)
                 throw new ArgumentException("Guid cannot be empty.");
