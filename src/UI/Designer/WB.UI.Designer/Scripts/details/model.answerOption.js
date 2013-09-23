@@ -6,7 +6,7 @@
             
             self.id = ko.observable(Math.uuid());
             self.title = ko.observable().extend({ required: true });
-            self.value = ko.observable().extend({ required: true, number: true });
+            self.value = ko.observable().extend({ required: true, number: true }).trimmedNumber();
             
             self.image = ko.observable();
             
