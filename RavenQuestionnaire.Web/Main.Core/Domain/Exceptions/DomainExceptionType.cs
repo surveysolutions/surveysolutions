@@ -152,8 +152,8 @@
 
         NotCategoricalQuestionLinkedToAnoterQuestion,
 
-        LinkedQuestionCanNotBeFeatured,
+        QuestionWithLinkedQuestionCanNotBeFeatured,
 
-        LinkedQuestionCanNotBeHead
+        QuestionWithLinkedQuestionCanNotBeHead
     }
 }

@@ -157,8 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
             Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
-            QuestionType questionType, QuestionType autoQuestionType = QuestionType.Text,
-            bool isAutoQuestionFeatured = false, bool isAutoQuestionHead = false)
+            QuestionType questionType, QuestionType autoQuestionType = QuestionType.Text)
         {
             Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey,
                                                                                           secondGroup, responsibleId);
@@ -171,8 +170,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     QuestionType = autoQuestionType,
                     StataExportCaption = "auto",
                     Mandatory = false,
-                    Featured = isAutoQuestionFeatured,
-                    Capital = isAutoQuestionHead,
+                    Featured = false,
+                    Capital = false,
                     QuestionScope = QuestionScope.Interviewer,
                     ConditionExpression = string.Empty,
                     ValidationExpression = string.Empty,
