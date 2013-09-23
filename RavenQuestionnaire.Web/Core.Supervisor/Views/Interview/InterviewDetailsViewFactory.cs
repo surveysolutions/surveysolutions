@@ -36,15 +36,12 @@ namespace Core.Supervisor.Views.Interview
         {
             var interview = this.interviewStore.GetById(input.CompleteQuestionnaireId);
             if (interview == null || interview.IsDeleted)
-            {
                 return null;
-            }
 
             var questionnarie = this.questionnarieStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
             if (questionnarie == null)
-            {
-                return null; // or throw?
-            }
+                throw new ArgumentException(string.Format(
+                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion)); 
 
             var variablesMap = questionnarie.Questionnaire.GetAllQuestions().Select(x => new
             {
@@ -60,9 +57,7 @@ namespace Core.Supervisor.Views.Interview
 
             var user = this.userStore.GetById(interview.ResponsibleId);
             if (user == null)
-            {
-                return null; // or throw?
-            }
+                throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
 
             var questionnairePropagation = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
@@ -153,7 +148,7 @@ namespace Core.Supervisor.Views.Interview
 
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
-                var answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
+                InterviewQuestion answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
 
                 var interviewQuestion = new InterviewQuestionView(question, answeredQuestion, variablesMap);
 

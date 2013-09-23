@@ -113,7 +113,7 @@ namespace CAPI.Androids.Core.Model.Tests
         }
     }
 
-    public class CompleteQuestionnaireViewTestable : CompleteQuestionnaireView
+    public class CompleteQuestionnaireViewTestable : InterviewViewModel
     {
         public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, QuestionViewModel> questions)
             : this(Guid.NewGuid())

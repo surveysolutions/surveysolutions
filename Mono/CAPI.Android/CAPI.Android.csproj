@@ -144,10 +144,12 @@
     <Compile Include="Controls\QuestionnaireDetails\QuestionnarieNavigationItem.cs" />
     <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractSingleOptionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionLinkedQuestionView.cs" />
     <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
     <Compile Include="Core\AjustableListView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
@@ -175,7 +177,7 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IQuestionViewFactory.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
+    <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="GeolocationServices\GeoService.cs" />
     <Compile Include="GeolocationServices\IGeoService.cs" />

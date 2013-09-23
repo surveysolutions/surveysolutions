@@ -34,9 +34,9 @@ namespace WB.Tools.CapiDataGenerator.Models
 
         public void Store(UncommittedEventStream eventStream)
         {
-            Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.IsSupervisorEvents;
+            Func<object, bool> isSupervisorEvent = (o) => AppSettings.Instance.AreSupervisorEventsNowPublishing;
 
-            Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.IsSupervisorEvents || o is NewUserCreated ||
+            Func<object, bool> isCapiEvent = (o) => !AppSettings.Instance.AreSupervisorEventsNowPublishing || o is NewUserCreated ||
                                                     o is TemplateImported;
 
             var committedEvents = eventStream.Select(x => x.Payload);

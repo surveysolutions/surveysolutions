@@ -121,15 +121,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
         }
 
-        private CompleteQuestionnaireView questionnaire;
+        private InterviewViewModel questionnaire;
 
-        protected CompleteQuestionnaireView Questionnaire
+        protected InterviewViewModel Questionnaire
         {
             get
             {
                 if (questionnaire == null)
                 {
-                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                         new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
                 }
                 return questionnaire;
