@@ -310,7 +310,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
+            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
+            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
@@ -448,7 +448,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
-            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options, linkedToQuestionId);
+            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
@@ -989,58 +989,130 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question type {0} is not allowed", type));
         }
 
-        private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
+        private bool IsParentAutopropagateGroup(IComposite item)
+        {
+            if (item != null)
+            {
+                var parentGroup = (IGroup)item.GetParent();
+                return parentGroup != null && ((parentGroup.Propagated == Propagate.AutoPropagated) ||
+                       IsParentAutopropagateGroup(parentGroup.GetParent()));
+            }
+
+            return false;
+        }
+
+        private void ThrowDomainExceptionIfLinkedQuestionIsInvalid(
             QuestionType questionType, Option[] options, Guid? linkedToQuestionId)
         {
-            bool isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
-            if (!isQuestionWithOptions)
-                return;
+            bool isQuestionWithOptions = questionType == QuestionType.MultyOption ||
+                                         questionType == QuestionType.SingleOption;
 
-            if (linkedToQuestionId.HasValue)
+            if (linkedToQuestionId.HasValue && !isQuestionWithOptions)
             {
-                if (!this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).Any())
-                {
-                    throw new DomainException(
-                        DomainExceptionType.LinkedToQuestionDoesNotExist, "Question that you are linked to does not exist");
-                }
+                throw new DomainException(
+                    DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion,
+                    "Only categorical question can be linked to another question");
             }
             else
             {
-                if (!options.Any())
+                if (!isQuestionWithOptions)
+                    return;
+
+                if (linkedToQuestionId.HasValue && options != null && options.Any())
                 {
                     throw new DomainException(
-                        DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
+                        DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
+                        "Categorical question cannot be with answers and linked to anoter question in the same time");
                 }
 
-                if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+                if (linkedToQuestionId.HasValue)
                 {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorValueRequired, "Answer option value is required");
-                }
+                    var linkedToQuestion =
+                        this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).FirstOrDefault();
+                    if (linkedToQuestion == null)
+                    {
+                        throw new DomainException(
+                            DomainExceptionType.LinkedQuestionDoesNotExist,
+                            "Question that you are linked to does not exist");
+                    }
+                    else
+                    {
+                        if (
+                            !(linkedToQuestion.QuestionType == QuestionType.DateTime ||
+                              linkedToQuestion.QuestionType == QuestionType.Numeric ||
+                              linkedToQuestion.QuestionType == QuestionType.Text))
+                        {
+                            throw new DomainException(
+                                DomainExceptionType.NotSupportedQuestionForLinkedQuestion,
+                                "Linked question can be only type of number, text or date");
+                        }
 
-                if (options.Any(x => !x.Value.IsInteger()))
-                {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorValueSpecialCharacters,
-                        "Answer option value should have only number characters");
-                }
+                        if (linkedToQuestion.Featured)
+                        {
+                            throw new DomainException(
+                                DomainExceptionType.LinkedQuestionCanNotBeFeatured,
+                                "Linked question can not be featured");
+                        }
 
-                if (!AreElementsUnique(options.Select(x => x.Value)))
-                {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorValueNotUnique,
-                        "Answer option value should have unique in options scope");
-                }
+                        if (linkedToQuestion.Capital)
+                        {
+                            throw new DomainException(
+                                DomainExceptionType.LinkedQuestionCanNotBeHead,
+                                "Linked question can not be head");
+                        }
 
-                if (options.Any(x => string.IsNullOrEmpty(x.Title)))
-                {
-                    throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
+                        this.innerDocument.ConnectChildsWithParent();
+                        if (!IsParentAutopropagateGroup(linkedToQuestion))
+                        {
+                            throw new DomainException(
+                                DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
+                                "Question that you are linked to is not in the propagated group");
+                        }
+                    }
                 }
+                else
+                {
+                    ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(options);
+                }
+            }
+        }
 
-                if (!AreElementsUnique(options.Select(x => x.Title)))
-                {
-                    throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
-                }
+        private static void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(Option[] options)
+        {
+            if (!options.Any())
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
+            }
+
+            if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorValueRequired, "Answer option value is required");
+            }
+
+            if (options.Any(x => !x.Value.IsInteger()))
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorValueSpecialCharacters,
+                    "Answer option value should have only number characters");
+            }
+
+            if (!AreElementsUnique(options.Select(x => x.Value)))
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorValueNotUnique,
+                    "Answer option value should have unique in options scope");
+            }
+
+            if (options.Any(x => string.IsNullOrEmpty(x.Title)))
+            {
+                throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
+            }
+
+            if (!AreElementsUnique(options.Select(x => x.Title)))
+            {
+                throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
             }
         }
 

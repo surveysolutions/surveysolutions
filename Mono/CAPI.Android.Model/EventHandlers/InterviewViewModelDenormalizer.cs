@@ -30,7 +30,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<AnswerDeclaredValid>,
         IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<AnswerRemoved>,
-        IEventHandler<SingleOptionLinkedQuestionAnswered>
+        IEventHandler<SingleOptionLinkedQuestionAnswered>, IEventHandler<MultipleOptionsLinkedQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
@@ -118,6 +118,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                           evnt.Payload.SelectedPropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.SelectedPropagationVectors);
         }
 
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)

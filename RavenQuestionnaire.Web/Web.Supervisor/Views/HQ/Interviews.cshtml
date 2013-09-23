@@ -17,7 +17,7 @@
         <ul class="dropdown-menu" data-bind="foreach: Users">
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>*@
-        <button type="button" class="btn btn-default" data-bind="css: { disabled: ListView.IsNothingSelected }, click: $root.deleteInterview">Delete interview</button>
+        <button type="button" class="btn btn-default" data-bind="disabled: ListView.IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
     </div>
 
 }

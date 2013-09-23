@@ -31,8 +31,7 @@
 
 @section  actionbar{
     <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign interviewer <span class="caret"></span>
-        </a>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-bind="disabled: ListView.IsNothingSelected">Assign interviewer <span class="caret"></span></button>
         <ul class="dropdown-menu" data-bind="foreach: Users">
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>

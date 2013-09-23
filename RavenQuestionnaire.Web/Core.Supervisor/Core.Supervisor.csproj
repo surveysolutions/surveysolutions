@@ -204,6 +204,7 @@
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewDetailsView.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
+    <Compile Include="Views\Interview\InterviewLinkedQuestionView.cs" />
     <Compile Include="Views\Interview\InterviewQuestionView.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSupervisorsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquarterSurveysAndStatusesReport.cs" />
