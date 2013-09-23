@@ -37,7 +37,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override IEnumerable<LinkedAnswerViewModel> Answers
         {
-            get { return TypedMode.Answers; }
+            get { return TypedMode.AnswerOptions; }
         }
 
         protected override string GetAnswerId(LinkedAnswerViewModel answer)
@@ -67,7 +67,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 answered.RemoveAll(answer => IsVectorsEqual(selectedAnswer.PropagationVector, answer));
             }
-            return new AnswerMultipleOptionLinkedQuestionCommand(this.QuestionnairePublicKey,
+            return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,
                 answered.ToArray());
