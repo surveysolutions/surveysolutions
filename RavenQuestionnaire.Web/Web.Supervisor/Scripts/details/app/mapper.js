@@ -13,7 +13,7 @@
                             var o = new model.Option(uiId);
                             o.value(option.Value);
                             o.label(_.unescape(option.Label) + "");
-                            if (dto.Answer == option.Value) {
+                            if (dto.Answer == option.Value || _.isEqual(dto.Answer, option.Value)) {
                                 item.selectedOption(o);
                                 o.isSelected(true);
                             }

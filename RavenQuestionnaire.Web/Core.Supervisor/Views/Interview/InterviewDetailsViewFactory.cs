@@ -18,18 +18,21 @@ namespace Core.Supervisor.Views.Interview
     {
         private readonly IReadSideRepositoryReader<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore;
-        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnairePropagationStructures;
+        private readonly IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
         public InterviewDetailsViewFactory(IReadSideRepositoryReader<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnarieStore,
-            IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnriePropagationStructures)
+            IVersionedReadSideRepositoryReader<QuestionnaireDocumentVersioned> questionnaireStore,
+            IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnairePropagationStructures,
+            IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
-            this.questionnarieStore = questionnarieStore;
-            this.questionnriePropagationStructures = questionnriePropagationStructures;
+            this.questionnaireStore = questionnaireStore;
+            this.questionnairePropagationStructures = questionnairePropagationStructures;
+            this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
         }
 
         public InterviewDetailsView Load(InterviewDetailsInputModel input)
@@ -38,12 +41,14 @@ namespace Core.Supervisor.Views.Interview
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            var questionnarie = this.questionnarieStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
-            if (questionnarie == null)
+            var questionnaire = this.questionnaireStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            if (questionnaire == null)
                 throw new ArgumentException(string.Format(
                     "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion)); 
 
-            var variablesMap = questionnarie.Questionnaire.GetAllQuestions().Select(x => new
+             var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+
+            var variablesMap = questionnaire.Questionnaire.GetAllQuestions().Select(x => new
             {
                 Id = x.PublicKey,
                 Variable = x.StataExportCaption
@@ -59,22 +64,22 @@ namespace Core.Supervisor.Views.Interview
             if (user == null)
                 throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
 
-            var questionnairePropagation = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnairePropagation = this.questionnairePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             var interviewDetails = new InterviewDetailsView()
                 {
                     User = input.User,
                     Responsible = new UserLight(interview.ResponsibleId, user.UserName),
                     QuestionnairePublicKey = interview.QuestionnaireId,
-                    Title = questionnarie.Questionnaire.Title,
-                    Description = questionnarie.Questionnaire.Description,
+                    Title = questionnaire.Questionnaire.Title,
+                    Description = questionnaire.Questionnaire.Description,
                     PublicKey = interview.InterviewId,
                     Status = interview.Status
                 };
-
+            Func<Guid, Dictionary<int[], string>> getAvailableOptions = (questionId) => this.GetAvailableOptions(questionId, interview, questionnaireReferenceInfo);
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
 
-            groupStack.Push(new KeyValuePair<IGroup, int>(questionnarie.Questionnaire, 0));
+            groupStack.Push(new KeyValuePair<IGroup, int>(questionnaire.Questionnaire, 0));
             while (groupStack.Count > 0)
             {
                 var currentGroup = groupStack.Pop();
@@ -89,7 +94,7 @@ namespace Core.Supervisor.Views.Interview
                         //so for every layer we are creating propagated group
                         foreach (var propagatedGroup in propagatedGroups)
                         {
-                            var completedPropGroup = this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value, variablesMap);
+                            var completedPropGroup = this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value, variablesMap, getAvailableOptions);
 
                             interviewDetails.Groups.Add(completedPropGroup);
                         }
@@ -100,7 +105,7 @@ namespace Core.Supervisor.Views.Interview
                     var rootLevel = interview.Levels.FirstOrDefault(w => w.Value.ScopeId == interview.InterviewId).Value;
 
 
-                    interviewDetails.Groups.Add(this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, variablesMap));
+                    interviewDetails.Groups.Add(this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, variablesMap, getAvailableOptions));
 
                     foreach (var group in currentGroup.Key.Children.OfType<IGroup>().Reverse())
                     {
@@ -113,13 +118,14 @@ namespace Core.Supervisor.Views.Interview
             return interviewDetails;
         }
 
-        private IEnumerable<KeyValuePair<string, InterviewLevel>> GetPropagatedLevels(Guid groupId, InterviewData interviewData, QuestionnairePropagationStructure questionnriePropagation)
+        private IEnumerable<KeyValuePair<string, InterviewLevel>> GetPropagatedLevels(Guid groupId, InterviewData interviewData,
+            QuestionnairePropagationStructure questionnairePropagation)
         {
             Guid? propagationScope = null;
             //totally not efficient
-            foreach (var scopeId in questionnriePropagation.PropagationScopes.Keys)
+            foreach (var scopeId in questionnairePropagation.PropagationScopes.Keys)
             {
-                foreach (var trigger in questionnriePropagation.PropagationScopes[scopeId])
+                foreach (var trigger in questionnairePropagation.PropagationScopes[scopeId])
                 {
                     if (trigger == groupId)
                     {
@@ -129,28 +135,31 @@ namespace Core.Supervisor.Views.Interview
                 }
             }
             if (!propagationScope.HasValue)
-                throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnarie", groupId));
+                throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire", groupId));
 
 
             return interviewData.Levels.Where(w => w.Value.ScopeId == propagationScope);
         }
 
 
-        private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, Dictionary<Guid, string> variablesMap)
+        private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
+            Dictionary<Guid, string> variablesMap, Func<Guid, Dictionary<int[], string>> getAvailableOptions)
         {
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
-            {
-                Depth = depth,
-                Title = currentGroup.Title,
-                PropagationVector = interviewLevel.PropagationVector,
-                ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
-            };
+                {
+                    Depth = depth,
+                    Title = currentGroup.Title,
+                    PropagationVector = interviewLevel.PropagationVector,
+                    ParentId = currentGroup.GetParent() != null ? currentGroup.GetParent().PublicKey : (Guid?) null
+                };
 
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
                 InterviewQuestion answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
 
-                var interviewQuestion = new InterviewQuestionView(question, answeredQuestion, variablesMap);
+                var interviewQuestion = question.LinkedToQuestionId.HasValue
+                    ? new InterviewLinkedQuestionView(question, answeredQuestion, variablesMap, getAvailableOptions)
+                    : new InterviewQuestionView(question, answeredQuestion, variablesMap);
 
                 completedGroup.Questions.Add(interviewQuestion);
             }
@@ -158,5 +167,41 @@ namespace Core.Supervisor.Views.Interview
             return completedGroup;
         }
 
+        private Dictionary<int[], string> GetAvailableOptions(Guid questionId, InterviewData interview,
+            ReferenceInfoForLinkedQuestions referenceQuestions)
+        {
+            var optionsSource = GetQuestionReferencedQuestion(questionId, referenceQuestions);
+            if (optionsSource == null)
+                return EmptyOptions;
+
+            IEnumerable<InterviewLevel> allAvailableLevelsByScope = this.GetAllAvailableLevelsByScope(interview, optionsSource);
+
+            return allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.PropagationVector,
+                interviewLevel => this.GetOptionTitleByReferencedQuestionId(optionsSource.ReferencedQuestionId, interviewLevel.Questions));
+        }
+
+        private string GetOptionTitleByReferencedQuestionId(Guid referencedQuestionId, IEnumerable<InterviewQuestion> questionsInLevel)
+        {
+            var referencedQuestion = questionsInLevel.FirstOrDefault(question => question.Id == referencedQuestionId);
+            if (referencedQuestion == null)
+                return string.Empty;
+            return (referencedQuestion.Answer ?? string.Empty).ToString();
+        }
+
+        private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, ReferenceInfoByQuestion optionsSource)
+        {
+            return interview.Levels.Values.Where(level => level.ScopeId == optionsSource.ScopeId);
+        }
+
+        private ReferenceInfoByQuestion GetQuestionReferencedQuestion(Guid questionId, ReferenceInfoForLinkedQuestions referenceQuestions)
+        {
+            if (!referenceQuestions.ReferencesOnLinkedQuestions.ContainsKey(questionId))
+                return null;
+            return referenceQuestions.ReferencesOnLinkedQuestions[questionId];
+        }
+
+        private Dictionary<int[], string> EmptyOptions {
+            get { return new Dictionary<int[], string>(); }
+        }
     }
 }
