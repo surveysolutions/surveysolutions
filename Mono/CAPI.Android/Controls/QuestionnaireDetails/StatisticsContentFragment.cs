@@ -72,11 +72,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             tvErrorWarning.Visibility = btnInvalid.Enabled ? ViewStates.Visible : ViewStates.Gone;
 
             var popupBuilder = new AlertDialog.Builder(this.Activity);
-            var unansweredQuestionsView = CreatePopupView(Model.UnansweredQuestions, new Func
-                                                                                         <StatisticsQuestionViewModel,
-                                                                                         string>
-                                                                                         [1
-                                                                                         ]
+            var unansweredQuestionsView = CreatePopupView(Model.UnansweredQuestions, 
+                new Func<StatisticsQuestionViewModel,string>[1]
                 {
                     (s) => s.Text
                 });
@@ -84,24 +81,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             unansweredDilog = popupBuilder.Create();
 
             popupBuilder = new AlertDialog.Builder(this.Activity);
-            var invalidQuestionsView = CreatePopupView(Model.InvalidQuestions, new Func
-                                                                                   <StatisticsQuestionViewModel, string>
-                                                                                   [3]
-                {
-                    (s) => s.Text,
-                    (s) => s.AnswerString,
-                    (s) => s.ErrorMessage
-                });
+            var invalidQuestionsView = CreatePopupView(Model.InvalidQuestions, 
+                new Func<StatisticsQuestionViewModel, string>[3]
+                    {
+                        (s) => s.Text,
+                        (s) => s.AnswerString,
+                        (s) => s.ErrorMessage
+                    });
 
             popupBuilder.SetView(invalidQuestionsView);
             invaliDilog = popupBuilder.Create();
 
             popupBuilder = new AlertDialog.Builder(this.Activity);
-            var answeredQuestionsView =
-
-                CreatePopupView(Model.AnsweredQuestions, new Func
-                                                             <StatisticsQuestionViewModel, string>[2
-                                                             ]
+            var answeredQuestionsView = CreatePopupView(Model.AnsweredQuestions, 
+                new Func<StatisticsQuestionViewModel, string>[2]
                     {
                         (s) => s.Text,
                         (s) => s.AnswerString
@@ -144,11 +137,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             if (Model.Status == InterviewStatus.Completed)
             {
-                CapiApplication.CommandService.Execute(new RestartInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id));
+                CapiApplication.CommandService.Execute(
+                    new RestartInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id, etComments.Text));
             }
             else
             {
-                CapiApplication.CommandService.Execute(new CompleteInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id));
+                CapiApplication.CommandService.Execute(
+                    new CompleteInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id, etComments.Text));
             }
             this.Activity.Finish();
         }
