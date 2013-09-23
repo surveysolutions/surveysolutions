@@ -43,6 +43,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                         itemView = new SingleOptionQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.MultyOption:
+                    if (model is LinkedQuestionViewModel)
+                        itemView = new MultyOptionLinkedQuestionView(context, bindingActivity, model, questionnairePublicKey,
+                            commandService);
+                    else
                     itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.AutoPropagate:
