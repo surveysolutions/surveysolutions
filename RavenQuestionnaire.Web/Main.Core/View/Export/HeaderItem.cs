@@ -28,7 +28,7 @@ namespace Main.Core.View.Export
         }
         public HeaderItem(IQuestion question,int index):this(question)
         {
-            this.Caption += GetIndexLeter(index, question.Answers.Count);
+            this.Caption += GetIndexLeter(index/*, question.Answers.Count*/);
             this.Title += string.Format(":{0}", question.Answers[index].AnswerText);
         }
 
@@ -37,7 +37,7 @@ namespace Main.Core.View.Export
         public string Title { get; private set; }
         public Dictionary<Guid, LabelItem> Labels { get; private set; }
 
-        protected string GetIndexLeter(int index, int count)
+        /*protected string GetIndexLeter(int index, int count)
         {
             if (count < alpha.Length)
                 return alpha[index].ToString();
@@ -61,7 +61,21 @@ namespace Main.Core.View.Export
                     tempIndex = tempIndexMinusByte;
             }
             return new string(result);
+        }*/
+
+        protected string GetIndexLeter(int index)
+        {
+            if (index < alpha.Length)
+                return alpha[index].ToString();
+
+            var resultToReturn = "";
+
+            resultToReturn += GetIndexLeter(index / 26 - 1);
+            resultToReturn +=  GetIndexLeter(index % 26);
+
+            return resultToReturn;
         }
+
         
         char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     }
