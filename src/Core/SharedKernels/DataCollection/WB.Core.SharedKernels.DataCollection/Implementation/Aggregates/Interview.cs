@@ -133,7 +133,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.answeredQuestions.Add(questionKey);
         }
 
-        private void Apply(LinkedQuestionAnswered @event)
+        private void Apply(SingleOptionLinkedQuestionAnswered @event)
+        {
+            string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
+
+            this.answeredQuestions.Add(questionKey);
+        }
+
+        private void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
@@ -375,7 +382,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.GpsCoordinates:
-                    case QuestionType.Linked:
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial featured question.",
@@ -643,19 +649,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
 
-        public void AnswerLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
+        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[] selectedPropagationVector)
         {
             var answeredQuestion = new Identity(questionId, propagationVector);
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Linked);
+            this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
         
 
-            this.ApplyEvent(new LinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
+            this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
+
+            this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
+        }
+
+        public void AnswerMultipleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
+        {
+            var answeredQuestion = new Identity(questionId, propagationVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
+            this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
+            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
+
+
+
+            this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVectors));
 
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
@@ -976,6 +1001,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "Question {0} has type {1}. But one of the following types was expected: {2}.",
                     FormatQuestionForException(questionId, questionnaire), questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
+        }
+
+        private void ThrowIfQuestionHasNoLinkedQuestionId(Guid questionId, IQuestionnaire questionnaire)
+        {
+            Guid? linkedQuestionId = questionnaire.GetQuestionLinkedQuestionId(questionId);
+            if(!linkedQuestionId.HasValue)
+                throw new InterviewException(string.Format(
+                   "Question {0} wasn't linked on any question",
+                   FormatQuestionForException(questionId, questionnaire)));
         }
 
         private static void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
@@ -1733,22 +1767,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static string FormatQuestionForException(Identity question, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1:N} [{2}])'",
+            return string.Format("'{0} [{1}] ({2:N} <{3}>)'",
                 GetQuestionTitleForException(question.Id, questionnaire),
+                GetQuestionVariableNameForException(question.Id, questionnaire),
                 question.Id,
                 string.Join("-", question.PropagationVector));
         }
 
         private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1:N})'",
+            return string.Format("'{0} [{1}] ({2:N})'",
                 GetQuestionTitleForException(questionId, questionnaire),
+                GetQuestionVariableNameForException(questionId, questionnaire),
                 questionId);
         }
 
         private static string FormatGroupForException(Identity group, IQuestionnaire questionnaire)
         {
-            return string.Format("'{0} ({1:N} [{2}])'",
+            return string.Format("'{0} ({1:N} <{2}>)'",
                 GetGroupTitleForException(group.Id, questionnaire),
                 group.Id,
                 string.Join("-", group.PropagationVector));
@@ -1765,6 +1801,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return questionnaire.HasQuestion(questionId)
                 ? questionnaire.GetQuestionTitle(questionId) ?? "<<NO QUESTION TITLE>>"
+                : "<<MISSING QUESTION>>";
+        }
+
+        private static string GetQuestionVariableNameForException(Guid questionId, IQuestionnaire questionnaire)
+        {
+            return questionnaire.HasQuestion(questionId)
+                ? questionnaire.GetQuestionVariableName(questionId) ?? "<<NO VARIABLE NAME>>"
                 : "<<MISSING QUESTION>>";
         }
 
