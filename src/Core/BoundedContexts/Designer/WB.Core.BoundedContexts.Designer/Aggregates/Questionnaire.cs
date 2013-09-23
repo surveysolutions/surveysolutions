@@ -311,9 +311,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
-
+            
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
+            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
+            
             var group = this.innerDocument.Find<IGroup>(groupId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
@@ -370,6 +372,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+
+            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
 
             var group = this.innerDocument.Find<IGroup>(groupId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -453,6 +457,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+
+            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
             
             IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
@@ -1022,7 +1028,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     throw new DomainException(
                         DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
-                        "Categorical question cannot be with answers and linked to anoter question in the same time");
+                        "Categorical question cannot be with answers and linked to another question in the same time");
                 }
 
                 if (linkedToQuestionId.HasValue)
@@ -1202,5 +1208,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionCanNotBeFeatured, 
                     "Question can't be featured");
         }
+
+        private void ThrowDomainExceptionIfQuestionCanNotContainValidations(QuestionType questionType, string validationExpression)
+        {
+            if (!String.IsNullOrEmpty(validationExpression) && questionType == QuestionType.GpsCoordinates)
+                throw new DomainException(
+                    DomainExceptionType.QuestionCanNotContainValidation,
+                    "Question cannot contain validations");
+        }
+
     }
 }
