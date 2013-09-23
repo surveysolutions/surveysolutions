@@ -148,7 +148,10 @@
               
               self.isFeatured.subscribe(function (value) {
                   if (value && _.isEmpty(self.condition()) == false) {
-                      bootbox.confirm(config.warnings.weWillClearCondition, function (result) {
+                      bootbox.confirm(config.warnings.weWillClearCondition.message,
+                          config.warnings.weWillClearCondition.cancelBtn,
+                          config.warnings.weWillClearCondition.okBtn,
+                          function (result) {
                           if (result == false) {
                               self.isFeatured(false);
                               return;
