@@ -9,12 +9,15 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Entities.SubEntities;
+using Ninject;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class ScreenContentFragment : AbstractScreenChangingFragment
     {
-        public static ScreenContentFragment NewInstance(ItemPublicKey screenId, Guid questionnaireId)
+        public static ScreenContentFragment NewInstance(InterviewItemId screenId, Guid questionnaireId)
         {
             ScreenContentFragment myFragment = new ScreenContentFragment();
 
@@ -28,14 +31,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private const string SCREEN_ID = "screenId";
         private const string QUESTIONNAIRE_ID = "questionnaireId";
-        private readonly IQuestionViewFactory questionViewFactory;
-        
-        protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
         protected View top;
+
         public ScreenContentFragment()
         {
-            this.questionViewFactory = new DefaultQuestionViewFactory();
-            this.bindableElements = new List<AbstractQuestionView>();
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -52,7 +51,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                               ? null
                                               : PropagatedModel.Previous as QuestionnaireNavigationPanelItem, global::Android.Resource.Drawable.ArrowUpFloat);
 
-            previousBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+            previousBtn.ScreenChanged += groupView_ScreenChanged;
             llTop.AddView(previousBtn);
             //  top.Orientation = Orientation.Vertical;
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
@@ -62,32 +61,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             breadcrumbs.SetPadding(0, 0, 0, 10);
             llTop.AddView(breadcrumbs);
 
-          
-
-
-
-            foreach (var item in Model.Items)
-            {
-                var question = item as QuestionViewModel;
-                View itemView = null;
-                if (question != null)
-                {
-                    var questionView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,
-                                                                                   Model.QuestionnaireId);
-                    this.bindableElements.Add(questionView);
-                    itemView = questionView;
-                }
-                var group = item as QuestionnaireNavigationPanelItem;
-                if (group != null)
-                {
-                    var groupView = new GroupView(inflater.Context, group);
-                    groupView.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
-                    itemView = groupView;
-                }
-                if (itemView != null)
-                    llContent.AddView(itemView);
-            }
-            llContent.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
+            llContent.Adapter = new ScreenContentAdapter(Model, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
+            //llContent.fil.SetFillViewport()
+            llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
+            llContent.ItemsCanFocus = true;
+            llContent.ScrollingCacheEnabled = false;
 
             var nextBtn = new GroupView(inflater.Context,
                                         PropagatedModel == null
@@ -95,7 +73,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                             : PropagatedModel.Next as QuestionnaireNavigationPanelItem, global::Android.Resource.Drawable.ArrowDownFloat);
 
 
-            nextBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+            nextBtn.ScreenChanged += groupView_ScreenChanged;
 
             llButtom.AddView(nextBtn);
 
@@ -103,16 +81,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return top;
         }
 
-        public override void OnDetach()
+        protected override void Dispose(bool disposing)
         {
-
-            base.OnDetach();
-            foreach (AbstractQuestionView abstractQuestionView in bindableElements)
+            base.Dispose(disposing);
+            if (llContent != null)
             {
-                abstractQuestionView.Dispose();
+                if (llContent.Adapter != null)
+                {
+                    llContent.Adapter.Dispose();
+                }
+
+                llContent.Dispose();
             }
-            bindableElements=new List<AbstractQuestionView>();
         }
+
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);
@@ -124,7 +106,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             get {
                 if (model == null)
                 {
-                    model = Questionnaire.Screens[ItemPublicKey.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireScreenViewModel;
+                    model = Questionnaire.Screens[InterviewItemId.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireScreenViewModel;
                 }
                 return model;
             }
@@ -150,9 +132,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             get { return Model as QuestionnairePropagatedScreenViewModel; }
         }
 
-        protected LinearLayout llContent
+        protected ListView llContent
         {
-            get { return top.FindViewById<LinearLayout>(Resource.Id.llContent); }
+            get { return top.FindViewById<ListView>(Resource.Id.llContent); }
         }
         protected LinearLayout llTop
         {

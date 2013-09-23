@@ -69,7 +69,7 @@ namespace Main.Core.Tests.Domain
             bool isLocked = true;
 
             // act
-            user.ChangeUser("mail@domain.net", isLocked, new UserRoles[] { });
+            user.ChangeUser("mail@domain.net", isLocked, new UserRoles[] { }, string.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
@@ -83,7 +83,7 @@ namespace Main.Core.Tests.Domain
             bool isLocked = false;
 
             // act
-            user.ChangeUser("mail@domain.net", isLocked, new UserRoles[] { });
+            user.ChangeUser("mail@domain.net", isLocked, new UserRoles[] { }, string.Empty);
 
             // assert
             Assert.That(this.GetRaisedEvents<UserUnlocked>().Count(), Is.EqualTo(1));
@@ -97,7 +97,7 @@ namespace Main.Core.Tests.Domain
             string specifiedEmail = "user@example.com";
 
             // act
-            user.ChangeUser(specifiedEmail, false, new UserRoles[] { });
+            user.ChangeUser(specifiedEmail, false, new UserRoles[] { }, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<UserChanged>().Email, Is.EqualTo(specifiedEmail));
@@ -111,7 +111,7 @@ namespace Main.Core.Tests.Domain
             IEnumerable<UserRoles> twoSpecifedRoles = new [] { UserRoles.Administrator, UserRoles.User };
 
             // act
-            user.ChangeUser("mail@domain.net", false, twoSpecifedRoles.ToArray());
+            user.ChangeUser("mail@domain.net", false, twoSpecifedRoles.ToArray(), string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<UserChanged>().Roles, Is.EquivalentTo(twoSpecifedRoles));

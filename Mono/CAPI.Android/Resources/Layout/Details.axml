@@ -25,8 +25,8 @@ android:focusableInTouchMode="true"
       android:layout_alignParentRight="true"
       android:layout_width="40dp"
       android:layout_height="fill_parent">
-      <FrameLayout android:id="@+id/flSpaceFiller" android:layout_width="40dp" android:layout_height="fill_parent">
-      </FrameLayout>
+      <LinearLayout android:id="@+id/llSpaceFiller" android:layout_width="40dp" android:layout_height="fill_parent">
+      </LinearLayout>
       <TextView android:id="@+id/btnNavigation"
         android:clickable="true"
         android:focusable="true"

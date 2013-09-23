@@ -496,7 +496,6 @@ hr.separator {
   margin: 0 0 0 234px;
   background: #fff;
   min-width: 320px;
-  min-height: 800px;
 }
 #wrapper #content.no-menu {
     margin: 0;
@@ -4541,3 +4540,18 @@ a.pseudo-link:hover {
  #alerts .alert {
      margin-top: 5px;
  }
+ #content .alert {
+     margin-bottom: 0;
+ }
+ #splash-screen {
+     position: absolute;
+     position: fixed;
+     top: 40px;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     display: none;
+     background: red;
+     z-index: 109999;
+ }
+ 

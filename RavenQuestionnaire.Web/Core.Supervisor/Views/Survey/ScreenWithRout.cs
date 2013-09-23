@@ -109,7 +109,7 @@
                         continue;
                     }
 
-                    var item = new DetailsMenuItem(doc, node);
+                    var item = new DetailsMenuItem();
                        
                     this.MenuItems.Add(item);
                 }

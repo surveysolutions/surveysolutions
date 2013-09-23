@@ -23,5 +23,6 @@ namespace Main.Core.Events.Questionnaire
         public string ValidationMessage { get; set; }
         public List<Guid> Triggers { get; set; }
         public int MaxValue { get; set; }
+        public Guid? LinkedToQuestionId { get; set; }
     }
 }

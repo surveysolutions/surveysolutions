@@ -9,7 +9,7 @@
     /// <summary>
     /// The gps coordinate complete question.
     /// </summary>
-    public sealed class GpsCoordinateCompleteQuestion : AbstractCompleteQuestion, IGpsCoordinatesQuestion, ICompelteValueQuestion<string>
+    public sealed class GpsCoordinateCompleteQuestion : AbstractCompleteQuestion, IGpsCoordinatesQuestion, ICompelteValueQuestion<GeoPosition>
     {
 
         #region Constructors and Destructors
@@ -34,59 +34,8 @@
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the add gps coordinate attr.
-        /// </summary>
-        public string AddGpsCoordinateAttr { get; set; }
-
-        /*/// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>();
-            }
-
-            set
-            {
-            }
-        }*/
-
-        /// <summary>
-        /// Gets or sets the int attr.
-        /// </summary>
-        public char IntAttr { get; set; }
-
-        #endregion
-
         #region Public Methods and Operators
-
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public override void Add(IComposite c, Guid? parent)
-        {
-            throw new NotImplementedException();
-
-            /*var question = c as ICompleteQuestion;
-            if (question == null || question.PublicKey != this.PublicKey)
-                throw new CompositeException();
-            this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;#1#
-        }*/
-
+        
         public override void AddAnswer(IAnswer answer)
         {
             throw new NotImplementedException();
@@ -123,7 +72,7 @@
         /// </returns>
         public override string GetAnswerString()
         {
-            return this.Answer;
+            return this.Answer == null ? string.Empty : this.Answer.ToString();
         }
 
         /// <summary>
@@ -137,7 +86,7 @@
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this.Answer = answerValue;
+            //this.Answer = answerValue;
         }
 
         public override void ThrowDomainExceptionIfAnswerInvalid(List<Guid> answerKeys, string answerValue)
@@ -149,8 +98,9 @@
 
         #region Implementation of ICompelteValueQuestion<string>
 
-        public string Answer { get; set; }
+        public GeoPosition Answer { get; set; }
 
         #endregion
+
     }
 }

@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class UserDenormalizer : IEventHandler<NewUserCreated>
+    public class UserDenormalizer : IEventHandler<NewUserCreated>, IEventHandler<UserChanged>
     {
         private readonly IReadSideRepositoryWriter<LoginDTO> documentStorage;
 
@@ -22,31 +22,23 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
 
             this.documentStorage = documentStorage;
-         /*   var fromStore = persistanceStore.RestoreProjection<List<UserView>>(Guid.Empty);
-            var userList = fromStore??
-                           new List<UserView>();
-            foreach (UserView userView in userList)
-            {
-                _documentStorage.Store(userView, userView.PublicKey);
-            }*/
         }
 
-        #region Implementation of IEventHandler<in NewUserCreated>
 
         public void Handle(IPublishedEvent<NewUserCreated> evnt)
         {
-            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, evnt.Payload.Name, evnt.Payload.Password, evnt.Payload.IsLocked),
+            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, evnt.Payload.Name.ToLower(), evnt.Payload.Password, evnt.Payload.IsLocked),
                                    evnt.EventSourceId);
-            /*    _documentStorage.Store(
-                    new UserView(evnt.Payload.PublicKey, evnt.Payload.Name, evnt.Payload.Password,
-                                 evnt.Payload.Email,
-                                 DateTime.Now, evnt.Payload.Roles, evnt.Payload.IsLocked,
-                                 evnt.Payload.Supervisor,
-                                 Guid.NewGuid()), evnt.EventSourceId);*/
         }
 
-        #endregion
 
-         
+        public void Handle(IPublishedEvent<UserChanged> evnt)
+        {
+            var user = this.documentStorage.GetById(evnt.EventSourceId);
+            if(user==null)
+                return;
+            this.documentStorage.Store(new LoginDTO(evnt.EventSourceId, user.Login.ToLower(), evnt.Payload.PasswordHash, user.IsLocked),
+                                    evnt.EventSourceId);
+        }
     }
 }

@@ -9,10 +9,10 @@
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "SetComment")]
-    public class SetCommentCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "SetComment")]
+    public class _SetCommentCommand : CommandBase
     {
-        public SetCommentCommand(
+        public _SetCommentCommand(
             Guid completeQuestionnaireId,
             Guid questionPublicKey,
             string comments,

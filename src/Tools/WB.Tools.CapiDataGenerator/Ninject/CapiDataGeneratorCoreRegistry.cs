@@ -1,5 +1,5 @@
 ﻿using System.Configuration;
-using Core.Supervisor.Denormalizer;
+using Core.Supervisor.Views.User;
 using Main.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,7 @@ using Ninject;
 using Ninject.Activation;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using UserDenormalizer = WB.Core.BoundedContexts.Supervisor.EventHandler.UserDenormalizer;
 
 namespace CapiDataGenerator
 {
@@ -20,6 +21,7 @@ namespace CapiDataGenerator
                 GetType().Assembly,
                 typeof(UserDenormalizer).Assembly,
                 typeof(ImportQuestionnaireCommand).Assembly,
+                typeof(UserListViewFactory).Assembly
             });
         }
 

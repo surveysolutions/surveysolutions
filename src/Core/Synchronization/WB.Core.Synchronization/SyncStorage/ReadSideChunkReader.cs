@@ -35,25 +35,23 @@ namespace WB.Core.Synchronization.SyncStorage
                 };
         }
 
-        public IEnumerable<Guid> GetChunksCreatedAfterForUsers(long sequence, IEnumerable<Guid> users)
-        {
-            return queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
-                .Select(d => d.PublicKey)
-                .Distinct()
-                .ToList();
-        }
-
-        public IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, IEnumerable<Guid> users)
+        public IEnumerable<SynchronizationChunkMeta> GetChunkMetaDataCreatedAfter(long sequence, IEnumerable<Guid> users)
         {
             //todo: query is not optimal but will be replaced shortly
-            var elements = queryableStorage.QueryAll(d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
-                .ToList()
-                .Select(s => new KeyValuePair<long, Guid>(s.Sequence, s.PublicKey));
+            return
+                queryableStorage.QueryAll(
+                    d => d.Sequence > sequence && (d.UserId.HasValue && d.UserId.Value.In(users) || !d.UserId.HasValue))
+                                .OrderBy(o => o.Sequence).Where((package) => FilterDeleteNotificationsWithInterviewWasnotSend(package,sequence))
+                                .Select(s => new SynchronizationChunkMeta(s.PublicKey, s.Sequence)).ToList();
+        }
 
-            return elements.GroupBy(g => g.Value)
-                   .Select(pair => pair.First(x => x.Key == pair.Max(y => y.Key)))
-                   .OrderBy(o=>o.Key)
-                   .ToList();
+        private bool FilterDeleteNotificationsWithInterviewWasnotSend(SynchronizationDelta package, long sequence)
+        {
+            if (package.ItemType != SyncItemType.DeleteQuestionnare)
+                return true;
+            if (sequence > 0)
+                return true;
+            return false;
         }
     }
 }

@@ -69,7 +69,7 @@ namespace CAPI.Android
 
             if (!this.geoservice.IsGeolocationAvailable || !this.geoservice.IsGeolocationEnabled)
             {
-                Toast.MakeText(this, "Geolocation is unavailable", ToastLength.Long).Show();
+                Toast.MakeText(this, "Geo location is unavailable", ToastLength.Long).Show();
                 return;
             }
             
@@ -89,7 +89,7 @@ namespace CAPI.Android
         private void GetLocation()
         {
             cancelSource = new CancellationTokenSource();
-            geoservice.GetPositionAsync(20000, cancelSource.Token).ContinueWith(t => RunOnUiThread(() =>
+            geoservice.GetPositionAsync(20000, cancelSource.Token).ContinueWith((Task<Position> t) => RunOnUiThread(() =>
                 {
                     if (progress != null)
                         progress.Dismiss();
@@ -100,7 +100,7 @@ namespace CAPI.Android
                         messageToShow = "Canceled or Timeout.";
                     else if (t.IsFaulted)
                     {
-                        messageToShow = "Error occured on location retrieving. ";
+                        messageToShow = "Error occurred on location retrieving. ";
                         if (t.Exception != null && t.Exception.InnerException != null)
                         {
                             var innerException = t.Exception.InnerException as GeolocationException;
@@ -117,7 +117,7 @@ namespace CAPI.Android
                         infoMessageBuilder.AppendLine(String.Format(format, "Longitude", t.Result.Longitude.ToString("N4")));
                         //infoMessageBuilder.AppendLine(String.Format(format, "Altitude", t.Result.Altitude.ToString("N4")));
 
-                        infoMessageBuilder.AppendLine(String.Format(format, "Time", t.Result.Timestamp.ToString("G")));
+                        infoMessageBuilder.AppendLine(String.Format(format, "Time", t.Result.Timestamp.ToLocalTime().ToString("G")));
 
                         messageToShow = infoMessageBuilder.ToString();
                     }
@@ -173,7 +173,7 @@ namespace CAPI.Android
 
                     if (!newVersionExists.HasValue)
                     {
-                        alert.SetMessage("Error occured on version check. Please, check settings or try again later.");
+                        alert.SetMessage("Error occurred on version check. Please, check settings or try again later.");
                     }
                     else if (newVersionExists.Value)
                     {

@@ -1,8 +1,8 @@
 ﻿define('config',
     ['pnotify', 'ko', 'amplify'],
-    function(toastr, ko, amplify) {
+    function (toastr, ko, amplify) {
 
-        var// properties
+        var // properties
             //-----------------
             questionTypes = {
                 "SingleOption": "Categorical: one answer",
@@ -10,7 +10,8 @@
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
-                "AutoPropagate": "AutoPropagate"
+                "AutoPropagate": "AutoPropagate",
+                "GpsCoordinates": "Geo Location"
             },
             questionTypeOptions = [
                 {
@@ -27,7 +28,7 @@
                 },
                 {
                     key: "DateTime",
-                    value: "Date and time"
+                    value: "Date"
                 },
                 {
                     key: "Text",
@@ -36,12 +37,16 @@
                 {
                     key: "AutoPropagate",
                     value: "Auto propagate"
+                },
+                {
+                    key: "GpsCoordinates",
+                    value: "Geo Location"
                 }
             ],
             questionScopes = [
                 "Interviewer",
                 "Supervisor",
-                "Headquarter"
+                "Headquarters"
             ],
             answerOrders = [
                 {
@@ -103,7 +108,7 @@
             tips = {
                 newGroup: {
                     title: "Save this group",
-                    content: "You should save this group to perfome some actions with it",
+                    content: "You should save this group to perform any actions with it",
                     placement: "top",
                     trigger: "hover"
                 }
@@ -115,35 +120,53 @@
             loggerTmeout = 2000,
             warnings = {
                 propagatedGroupCantBecomeChapter: {
-                    title: 'Cant move',
-                    text: "Auto propagate group can't become a chapter"
+                    title: "Can't move",
+                    text: "AutoPropagate group can't become a chapter"
                 },
                 cantMoveQuestionOutsideGroup: {
-                    title: 'Cant move',
-                    text: "You can't move question outside any group"
+                    title: "Can't move",
+                    text: "You can't move a question outside of any group"
                 },
                 cantMoveGroupIntoPropagatedGroup: {
-                    title: 'Cant move',
-                    text: "You can't move group into propagated group"
+                    title: "Can't move",
+                    text: "You can't move a group into a propagated group"
                 },
                 cantMoveUnsavedItem: {
-                    title: 'Cant move',
+                    title: "Can't move",
                     text: "You can't move unsaved items"
                 },
-                cantMoveIntoUnsavedItem : {
-                    title: 'Cant move',
+                cantMoveIntoUnsavedItem: {
+                    title: "Can't move",
                     text: "You can't move items to unsaved groups or chapters"
                 },
                 saveParentFirst: {
-                    title: 'Cant save',
-                    text: "Save parent item first"
+                    title: "Can't move",
+                    text: "Save the parent item first"
+                },
+                cantMoveAutoPropagatedGroupOutsideGroup: {
+                    title: "Can't move group",
+                    text: "You can't move an AutoPropagate group outside any chapter"
+                },
+                cantMoveFeaturedQuestionIntoAutoGroup: {
+                    title: "Can't move question",
+                    text: "You can't move a featured question into a propagated group"
+                },
+                cantMoveAutoQuestionIntoAutoGroup: {
+                    title: "Can't move question",
+
+                    text: "You can't move an AutoPropagate question into a propagated group"
+                },
+                cantMoveHeadQuestionOutsideAutoGroup: {
+                    title: "Can't move question",
+
+                    text: "You can't move a head question outside of any propagated group"
                 },
                 savedData: 'Data saved successfully'
             },
             // methods
             //-----------------
 
-            init = function() {
+            init = function () {
                 logger.defaults.delay = loggerTmeout;
 
                 ko.validation.configure({

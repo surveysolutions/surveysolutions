@@ -1,18 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using Core.Supervisor.DenormalizerStorageItem;
-using Core.Supervisor.RavenIndexes;
 using Main.Core.Entities;
-using Raven.Client.Document;
+using Main.Core.Utility;
+using Main.Core.View;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Core.Supervisor.Views.Survey
 {
-    using System;
-    using System.Linq;
-
-    using Main.Core.Utility;
-    using Main.Core.View;
-
     public class SurveysViewFactory : IViewFactory<SurveysInputModel, SurveysView>
     {
         private readonly IReadSideRepositoryIndexAccessor indexAccessor;
@@ -28,36 +24,20 @@ namespace Core.Supervisor.Views.Survey
 
             if (input.ViewerStatus == ViewerStatus.Supervisor)
             {
-                items =
-                    indexAccessor.Query<SummaryItem>(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Name)
+                items = this.indexAccessor.Query<SummaryItem>(typeof(SupervisorReportsSurveysAndStatusesGroupByTeamMember).Name)
                                  .Where(x => x.ResponsibleSupervisorId == input.ViewerId);
             }
             else
             {
 
-                items = indexAccessor.Query<SummaryItem>(typeof(HeadquarterReportsSurveysAndStatusesGroupByTeam).Name);
+                items = this.indexAccessor.Query<SummaryItem>(typeof(HeadquarterReportsSurveysAndStatusesGroupByTeam).Name);
             }
 
-            if (input.UserId.HasValue)
-            {
-              /*  if (input.ViewerStatus == ViewerStatus.Headquarter)
-                {
-                    items = items.Where(x => x.ResponsibleId == input.UserId);
-                }
-                else
-                {*/
-                    items = items.Where(x => x.ResponsibleId == input.UserId);
-               // }
-
-            }
-            else
-            {
-                items = items.Where(x => x.ResponsibleId == Guid.Empty);
-            }
+            items = input.UserId.HasValue ? items.Where(x => x.ResponsibleId == input.UserId) : items.Where(x => x.ResponsibleId == Guid.Empty);
 
             var all =
                 items.OrderUsingSortExpression(input.Order)
-                     .Skip((input.Page - 1)*input.PageSize)
+                     .Skip((input.Page - 1) * input.PageSize)
                      .Take(input.PageSize)
                      .ToList()
                      .Select(y => new SurveysViewItem()

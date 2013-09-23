@@ -10,10 +10,10 @@ using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 namespace Main.Core.Commands.Questionnaire.Completed
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "AssignInterviewToUser")]
-    public class AssignInterviewToUserCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "AssignInterviewToUser")]
+    public class _AssignInterviewToUserCommand : CommandBase
     {
-        public AssignInterviewToUserCommand(Guid interviewId, Guid userId)
+        public _AssignInterviewToUserCommand(Guid interviewId, Guid userId)
         {
             this.UserId = userId;
             this.InterviewId = interviewId;

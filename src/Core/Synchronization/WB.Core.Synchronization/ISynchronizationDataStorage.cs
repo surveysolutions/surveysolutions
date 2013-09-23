@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization
 {
     public interface ISynchronizationDataStorage
     {
-        void SaveInterview(CompleteQuestionnaireStoreDocument doc, Guid responsibleId);
+        void SaveInterview(InterviewSynchronizationDto doc, Guid responsibleId);
+        void SaveQuestionnaire(QuestionnaireDocument doc, long version);
         void DeleteInterview(Guid id);
         void MarkInterviewForClientDeleting(Guid id, Guid? responsibleId);
         void SaveImage(Guid publicKey, string title, string desc, string origData);
@@ -16,9 +19,7 @@ namespace WB.Core.Synchronization
 
         SyncItem GetLatestVersion(Guid id);
 
-        IEnumerable<Guid> GetChunksCreatedAfter(long sequence, Guid userId);
-
-        IEnumerable<KeyValuePair<long, Guid>> GetChunkPairsCreatedAfter(long sequence, Guid userId);
+        IEnumerable<SynchronizationChunkMeta> GetChunkPairsCreatedAfter(long sequence, Guid userId);
 
     }
 }

@@ -31,11 +31,8 @@ namespace CAPI.Android.Core.Model.Authorization
             if(!IsLoggedIn)
                 throw new InvalidOperationException("Please login first.");
 
-            LoginDTO user =
-                 this.documentStorage.Filter(
-                     u =>
-                     u.Login == CurrentUser.Name)
-                                 .FirstOrDefault();
+            LoginDTO user = this.documentStorage.Filter(u =>u.Login == CurrentUser.Name).FirstOrDefault();
+
             return new SyncCredentials(user.Login, user.Password);
         }
 
@@ -49,25 +46,14 @@ namespace CAPI.Android.Core.Model.Authorization
             try
             {
                 var hash = SimpleHash.ComputeHash(password);
+                var userNameToLower = userName.ToLower();
 
-                LoginDTO user =
-                    this.documentStorage.Filter(
-                        u =>
-                        u.Login == userName/* && u.Password == hash && !u.IsLocked*/)
-                                    .FirstOrDefault();
-                
-                
-              /*  UserView user =
-                    CapiApplication.LoadView<UserViewInputModel, UserView>(
-                        new UserViewInputModel(
-                            userName.ToLower(),
-                            // bad hack due to key insensitivity of login
-                            SimpleHash.ComputeHash(password)));*/
+                LoginDTO user = this.documentStorage.Filter(u => u.Login == userNameToLower).FirstOrDefault();
+
                 if (user == null || user.Password!=hash || user.IsLocked)
                     return false;
 
                 currentUser = new UserLight(Guid.Parse(user.Id), user.Login);
-              //  currentUser = new UserLight(Guid.NewGuid(), userName);
                 return true;
             }
             catch(Exception e)

@@ -7,25 +7,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Cirrious.MvvmCross.ViewModels;
+using Core.Supervisor;
 using Core.Supervisor.Views.User;
-using Main.Core;
-using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
-using Main.Core.Entities.Extensions;
+using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tools.CapiDataGenerator;
+using WB.UI.Shared.Web;
 
 namespace CapiDataGenerator
 {
+    using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+
     public class MainPageModel : MvxViewModel
     {
         private ICommandService commandService
@@ -60,10 +67,34 @@ namespace CapiDataGenerator
             }
         }
 
+        private IRavenReadSideRepositoryWriterRegistry writerRegistry
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IRavenReadSideRepositoryWriterRegistry>();
+            }
+        }
+
         readonly Random _rand = new Random();
         readonly Timer _timer = new Timer(1000);
         private DateTime _startTime;
         private UserLight _headquarterUser;
+
+        private void EnableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.EnableCache();
+            }
+        }
+
+        private void DisableCacheInAllRepositoryWriters()
+        {
+            foreach (IRavenReadSideRepositoryWriter writer in this.writerRegistry.GetAll())
+            {
+                writer.DisableCache();
+            }
+        }
 
         public MainPageModel()
         {
@@ -228,6 +259,22 @@ namespace CapiDataGenerator
             }
         }
 
+        private bool _onlyForSupervisor = false;
+        public bool OnlyForSupervisor
+        {
+            get
+            {
+                return _onlyForSupervisor;
+            }
+            set
+            {
+                _onlyForSupervisor = value;
+                RaisePropertyChanged(() => OnlyForSupervisor);
+            }
+        }
+
+        
+
         private UserListItem _selectedSupervisor = null;
         public UserListItem SelectedSupervisor
         {
@@ -352,34 +399,52 @@ namespace CapiDataGenerator
                     int.TryParse(CommentsCount, out ccount);
                     int.TryParse(StatusesCount, out scount);
 
-                    var questions = ((CompleteQuestionnaireDocument)template).GetQuestions().Where(x=>!x.Featured);
+                    if (scount > 100)
+                    {
+                        scount = 100;
+                        StatusesCount = scount.ToString();
+                    }
+
+                    var onlyForSupervisor = this.OnlyForSupervisor;
+
+                    var questions = ((CompleteQuestionnaireDocument) template).GetQuestions().Where(x => !x.Featured);
                     var questionsCount = questions.Count();
 
                     acount = (int) (questionsCount*((double) acount/100));
                     ccount = (int) (questionsCount*((double) ccount/100));
                     scount = (int) (icount*qcount*((double) scount/100));
 
-                    TotalCount = icount + icount * qcount * (acount + ccount + 1) + scount;
+                    TotalCount = icount + icount*qcount*(acount + ccount + 2) + scount;
 
+                    this.EnableCacheInAllRepositoryWriters();
                     try
                     {
+                        AppSettings.Instance.AreSupervisorEventsNowPublishing = true;
                         var users = CreateUsers(icount);
-                        var questionnaries = CreateQuestionnaires(template, qcount, users);
+                        var questionnaries = this.CreateInterviews(template, qcount, users, onlyForSupervisor);
                         CreateAnswers(acount, questionnaries, questions);
                         CreateComments(ccount, questionnaries, questions);
-                        ChangeStatuses(scount, questionnaries);
+                        ChangeStatuses(scount, questionnaries, onlyForSupervisor);
+
+                        if (!onlyForSupervisor)
+                        {
+                            Log("create backup");
+                            string backupPath = backupService.Backup();
+                            Log(string.Format("backup was saved to {0}", backupPath));
+                        }
+
+                        Log("end");
                     }
                     catch (Exception e)
                     {
-                        Log(e.Message);
+                        this.Log(e.Message);
+                    }
+                    finally
+                    {
+                        this.DisableCacheInAllRepositoryWriters();
                     }
                 }
 
-                Log("create backup");
-                string backupPath = backupService.Backup();
-                Log(string.Format("backup was saved to {0}", backupPath));
-
-                Log("end");
                 _timer.Stop();
                 Progress = 0;
                 CanGenerate = true;
@@ -387,40 +452,41 @@ namespace CapiDataGenerator
             });
         }
 
-        private void ChangeStatuses(int statusesCount, List<Guid> questionnaires)
+        private void ChangeStatuses(int statusesCount, Dictionary<Guid, Guid> interviews, bool onlyForSupervisor)
         {
             for (int z = 0; z < statusesCount; z++)
             {
-                var qId = questionnaires.ElementAt(_rand.Next(questionnaires.Count()));
-                commandService.Execute(new ChangeStatusCommand()
+                var interview = interviews.ElementAt(z);
+                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value));
+
+                if (onlyForSupervisor)
                 {
-                    CompleteQuestionnaireId = qId,
-                    Responsible = new UserLight(Guid.NewGuid(), string.Empty),
-                    Status = SurveyStatus.Complete
-                });
+                    commandService.Execute(new ApproveInterviewCommand(interview.Key, interview.Value, "auto approve comment"));
+                }
 
                 UpdateProgress();
-                LogStatus("change statuses", z, statusesCount);
+                LogStatus("set complete status", z, statusesCount);
             }
         }
 
-        private void CreateComments(int commentsCount, List<Guid> questionnaires, IEnumerable<ICompleteQuestion> questions)
+        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<ICompleteQuestion> questions)
         {
-            for (int j = 0; j < questionnaires.Count; j++)
+            for (int j = 0; j < interviews.Count; j++)
             {
-                var qId = questionnaires[j];
+                var interview = interviews.ElementAt(j);
                 for (int z = 0; z < commentsCount; z++)
                 {
                     var question = questions.ElementAt(_rand.Next(questions.Count()));
-                    var isAutoQuestion = question is IAutoPropagate;
-                    commandService.Execute(new SetCommentCommand(completeQuestionnaireId: qId,
-                        questionPublicKey: question.PublicKey, 
-                        propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey,
-                        comments: "auto comment",
-                        user: new UserLight(Guid.NewGuid(), string.Empty)));
+
+                    commandService.Execute(new CommentAnswerCommand(interviewId: interview.Key,
+                                                                    userId: interview.Value,
+                                                                    questionId: question.PublicKey,
+                                                                    propagationVector: new int[0],
+                                                                    commentTime: DateTime.UtcNow,
+                                                                    comment: "auto comment"));
 
                     UpdateProgress();
-                    LogStatus("set comments", (j*commentsCount) + z, questionnaires.Count*commentsCount);
+                    LogStatus("set comments", (j*commentsCount) + z, interviews.Count*commentsCount);
                 }
             }
         }
@@ -446,121 +512,185 @@ namespace CapiDataGenerator
             return users;
         }
 
-        private List<Guid> CreateQuestionnaires(QuestionnaireDocument template, int questionnariesCount, List<UserLight> users)
+        private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
         {
             Log("import template");
             commandService.Execute(new ImportQuestionnaireCommand(_headquarterUser.Id, template));
 
-            var completeDocument = (CompleteQuestionnaireDocument)template;
+            var featuredQuestions = template.GetFeaturedQuestions();
 
-            var questionnaires = new List<Guid>();
+            var interviews = new Dictionary<Guid, Guid>();
             for (int i = 0; i < users.Count; i++)
             {
                 var interviewer = users[i];
                 for (int j = 0; j < questionnariesCount; j++)
                 {
-                    LogStatus("create questionnaires", (i * questionnariesCount) + j, questionnariesCount * users.Count);
+                    LogStatus("create interviews", (i * questionnariesCount) + j, questionnariesCount * users.Count);
 
-                    completeDocument.Creator = new UserLight(SelectedSupervisor.UserId, SelectedSupervisor.UserName);
-                    completeDocument.Status = SurveyStatus.Initial;
-                    completeDocument.PublicKey = Guid.NewGuid();
-                    completeDocument.Responsible = interviewer;
+                    Guid interviewId = Guid.NewGuid();
 
-                    commandService.Execute(new CreateCompleteQuestionnaireCommand(completeDocument.PublicKey,
-                        template.PublicKey, _headquarterUser));
-                    commandService.Execute(new ChangeAssignmentCommand(completeDocument.PublicKey, completeDocument.Creator));
-                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = completeDocument.PublicKey, Status = SurveyStatus.Unassign, Responsible = completeDocument.Creator });
-                    commandService.Execute(new ChangeAssignmentCommand(completeDocument.PublicKey, interviewer));
-                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = completeDocument.PublicKey, Status = SurveyStatus.Initial, Responsible = interviewer });
+                    commandService.Execute(new CreateInterviewCommand(interviewId: interviewId,
+                        questionnaireId: template.PublicKey,
+                        supervisorId: SelectedSupervisor.UserId,
+                        userId: interviewer.Id,
+                        answersTime: DateTime.UtcNow,
+                        answersToFeaturedQuestions: this.GetAnswersByFeaturedQuestions(featuredQuestions)));
 
-                    questionnaires.Add(completeDocument.PublicKey);
-
-                    commandService.Execute(new CreateNewAssigment(completeDocument));
+                    commandService.Execute(new AssignInterviewerCommand(interviewId: interviewId, userId: SelectedSupervisor.UserId, interviewerId: interviewer.Id));
+                    
+                    interviews.Add(interviewId, interviewer.Id);
 
                     UpdateProgress();
                 }
             }
+            AppSettings.Instance.AreSupervisorEventsNowPublishing = onlyForSupervisor;
+            for (int i = 0; i < interviews.Count; i++)
+            {
+                LogStatus("synchronize interview", i, interviews.Count);
 
-            return questionnaires;
+                var interview = interviews.ElementAt(i);
+                commandService.Execute(new SynchronizeInterviewCommand(interviewId: interview.Key, userId: interview.Value,
+                                                                       sycnhronizedInterview: new InterviewSynchronizationDto(
+                                                                           id: interview.Key,
+                                                                           status: InterviewStatus.InterviewerAssigned,
+                                                                           userId: interview.Value,
+                                                                           questionnaireId: template.PublicKey,
+                                                                           questionnaireVersion: 1,
+                                                                           answers: new AnsweredQuestionSynchronizationDto[0], 
+                                                                           disabledGroups: new HashSet<InterviewItemId>(), 
+                                                                           disabledQuestions: new HashSet<InterviewItemId>(), 
+                                                                           validAnsweredQuestions: new HashSet<InterviewItemId>(), 
+                                                                           invalidAnsweredQuestions: new HashSet<InterviewItemId>(), 
+                                                                           propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>(),
+                                                                           interviewWasCompleted: false)));
+                UpdateProgress();
+            }
+
+            return interviews;
         }
 
-        private void CreateAnswers(int answersCount, List<Guid> questionnaires, IEnumerable<ICompleteQuestion> questions)
+        private Dictionary<Guid, object> GetAnswersByFeaturedQuestions(IEnumerable<IQuestion> featuredQuestions)
         {
-            for (int j = 0; j < questionnaires.Count; j++)
+            return featuredQuestions.ToDictionary(featuredQuestion => featuredQuestion.PublicKey, this.GetAnswerByQuestion);
+        }
+
+        private object GetAnswerByQuestion(IQuestion question)
+        {
+            object answer = null;
+            switch (question.QuestionType)
             {
-                var qId = questionnaires[j];
+                case QuestionType.SingleOption:
+                    if (question.Answers.Count > 0)
+                    {
+                        try
+                        {
+                            answer = decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
+                                               CultureInfo.InvariantCulture);
+                        }
+                        catch{}
+                    }
+                    break;
+                case QuestionType.MultyOption:
+                    if (question.Answers.Count > 0)
+                    {
+                        var selectedAnswersCount = _rand.Next(1, question.Answers.Count);
+                        var answers = new List<decimal>();
+                        for (int i = 0; i < selectedAnswersCount; i++)
+                        {
+                            try
+                            {
+                                answers.Add(decimal.Parse(question.Answers[_rand.Next(0, question.Answers.Count - 1)].AnswerValue,
+                                                      CultureInfo.InvariantCulture));
+                            }
+                            catch{}
+                        }
+                        answer = answers.Distinct().ToArray();
+                    }
+                    break;
+                case QuestionType.Numeric:
+                    answer = new decimal(_rand.Next(100));
+                    break;
+                case QuestionType.DateTime:
+                    answer = new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29));
+                    break;
+                case QuestionType.Text:
+                    answer = "value " + _rand.Next();
+                    break;
+                case QuestionType.AutoPropagate:
+                    return new decimal(_rand.Next(((AutoPropagateCompleteQuestion) question).MaxValue));
+                    break;
+            }
+            return answer;
+        }
+
+        private void CreateAnswers(int answersCount, Dictionary<Guid, Guid> interviews, IEnumerable<ICompleteQuestion> questions)
+        {
+            for (var j = 0; j < interviews.Count; j++)
+            {
+                var interview = interviews.ElementAt(j);
                 for (int z = 0; z < answersCount; z++)
                 {
-
-                    var question = questions.ElementAt(_rand.Next(questions.Count()));
-                    var isAutoQuestion = question is IAutoPropagate;
-                    commandService.Execute(new SetAnswerCommand(completeQuestionnaireId: qId,
-                        questionPublicKey: question.PublicKey, сompleteAnswers: GetDummyCompleteAnswers(question),
-                        сompleteAnswerValue: GetDummyAnswer(question),
-                        propogationPublicKey: isAutoQuestion ? null : question.PropagationPublicKey));
+                    var command = this.SendAnswerCommand(question: questions.ElementAt(_rand.Next(questions.Count())),
+                                                         responsibleId: interview.Value, interviewId: interview.Key);
+                    if (command != null)
+                    {
+                        try
+                        {
+                            commandService.Execute(command);
+                        }
+                        catch {}
+                    }
 
                     UpdateProgress();
-                    LogStatus("answer questions", (j*answersCount) + z, questionnaires.Count*answersCount);
+                    LogStatus("answer questions", (j*answersCount) + z, interviews.Count*answersCount);
                 }
             }
         }
 
-        private string GetDummyAnswer(IQuestion q)
+        private ICommand SendAnswerCommand(IQuestion question, Guid interviewId, Guid responsibleId)
         {
-            if (q is IMultyOptionsQuestion)
-            {
-                return null;
-            }
-            if (q is ISingleQuestion)
-            {
-                return null;
-            }
-            if (q is IDateTimeQuestion)
-            {
-                return (new DateTime(_rand.Next(1940, 2003), _rand.Next(1, 13), _rand.Next(1, 29))).ToString(CultureInfo.InvariantCulture);
-            }
-            if (q is INumericQuestion)
-            {
-                return _rand.Next(100).ToString(CultureInfo.InvariantCulture);
-            }
-            if (q is IAutoPropagate)
-            {
-                var question = (AutoPropagateCompleteQuestion)q;
-                var maxValue = question.MaxValue;
-                return _rand.Next(maxValue).ToString(CultureInfo.InvariantCulture);
-            }
-            if (q is ITextCompleteQuestion)
-            {
-                return "value " + _rand.Next();
-            }
-            return string.Empty;
-        }
+            ICommand command = null;
 
-        private List<Guid> GetDummyCompleteAnswers(IQuestion q)
-        {
-            if (q is IMultyOptionsQuestion)
+            int[] emptyPropagationVector = {};
+            Guid questionId = question.PublicKey;
+            Guid userId = responsibleId;
+            DateTime answersTime = DateTime.UtcNow;
+
+            object answer = this.GetAnswerByQuestion(question);
+
+            if (answer != null)
             {
-                var question = (MultyOptionsCompleteQuestion)q;
-                var answersCount = question.Answers.Count;
-                var selectedAnswersCount = _rand.Next(1, answersCount + 1);
-                var result = new List<Guid>();
-                for (int i = 0; i < selectedAnswersCount; i++)
+                switch (question.QuestionType)
                 {
-                    var answer = question.Answers[_rand.Next(0, answersCount)];
-                    result.Add(answer.PublicKey);
+                    case QuestionType.Text:
+                        command = new AnswerTextQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
+                                                                (string) answer);
+                        break;
+
+                    case QuestionType.AutoPropagate:
+                    case QuestionType.Numeric:
+                        command = new AnswerNumericQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
+                                                                   (decimal) answer);
+                        break;
+
+                    case QuestionType.DateTime:
+                        command = new AnswerDateTimeQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
+                                                                    (DateTime) answer);
+                        break;
+
+                    case QuestionType.SingleOption:
+                        command = new AnswerSingleOptionQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
+                                                                        (decimal) answer);
+                        break;
+
+                    case QuestionType.MultyOption:
+                        command = new AnswerMultipleOptionsQuestionCommand(interviewId, userId, questionId, emptyPropagationVector,
+                                                                           answersTime, (decimal[]) answer);
+                        break;
                 }
-                return result.Distinct().ToList();
             }
-            if (q is ISingleQuestion)
-            {
-                var question = (SingleCompleteQuestion)q;
-                var answersCount = question.Answers.Count;
-                return new List<Guid>()
-                    {
-                        question.Answers[_rand.Next(answersCount)].PublicKey
-                    };
-            }
-            return new List<Guid>() { Guid.NewGuid() };
+
+            return command;
         }
 
         private QuestionnaireDocument ReadTemplate(string path)

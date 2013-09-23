@@ -1,26 +1,25 @@
-﻿UserListViewModel = function (lockUrl, listViewUrl) {
+﻿UserListViewModel = function (listViewUrl) {
     var self = this;
-
-    self.LockUrl = lockUrl;
+    
     self.ListView = new ListViewModel(listViewUrl);
+
+    self.HideOutput = function () {
+        self.ListView.HideOutput();
+    };
+
+    self.ShowOutput = function () {
+        self.ListView.ShowOutput();
+    };
+
+    self.Errors = ko.computed(function () {
+        return self.ListView.Errors();
+    });
+    
+   
     self.ToggleFilter = function () {
         self.ListView.ToggleFilter();
     };
-    self.lock = function () {
-
-        self.ListView.CheckForRequestComplete();
-        
-        self.ListView.IsAjaxComplete(false);
-        
-        var user = this;
-        $.post(self.LockUrl, { UserId: user.UserId, IsLocked: user.IsLocked }, null, "json")
-            .done(function(o) {
-                user.IsLocked(!user.IsLocked());
-                
-                self.ListView.IsAjaxComplete(true);
-            });
-    };
-
+    
     self.load = function() {
         self.ListView.search();
     };

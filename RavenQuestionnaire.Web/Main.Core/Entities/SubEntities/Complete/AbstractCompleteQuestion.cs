@@ -210,6 +210,8 @@
         /// </summary>
         public List<Guid> Triggers { get; set; }
 
+        public Guid? LinkedToQuestionId { get; set; }
+
 
         #endregion
 

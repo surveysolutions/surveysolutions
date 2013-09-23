@@ -8,6 +8,18 @@ namespace WB.UI.Designer
 
     public sealed class AppSettings : WebConfigHelper
     {
+        public static bool IsDebugRelease
+        {
+            get
+            {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
+            }
+        }
+
         public static readonly AppSettings Instance = new AppSettings(ConfigurationManager.AppSettings);
 
         const string ISRECATPCHAENABLED = "IsReCaptchaEnabled";

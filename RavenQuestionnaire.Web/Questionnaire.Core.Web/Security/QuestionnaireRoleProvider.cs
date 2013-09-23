@@ -206,27 +206,18 @@ namespace Questionnaire.Core.Web.Security
         public override bool IsUserInRole(string username, string roleName)
         {
             string contextKey = "user-in-role:" + username.ToLower() + ":" + roleName;
-            var retval = (bool?)HttpContext.Current.Items[contextKey];
-            if (!retval.HasValue)
-            {
-                retval = false;
-                string[] roles =
-                    this.UserViewFactory.Load(
-                        new UserViewInputModel(username.ToLower(), null)).Roles.Select(r => r.ToString()).ToArray();
+            var cachedValue = (bool?)HttpContext.Current.Items[contextKey];
 
-                foreach (string dr in roles)
-                {
-                    if (dr.Equals(roleName))
-                    {
-                        retval = true;
-                        break;
-                    }
-                }
+            if (cachedValue.HasValue)
+                return cachedValue.Value;
 
-                HttpContext.Current.Items.Add(contextKey, retval);
-            }
+            UserView user = this.UserViewFactory.Load(new UserViewInputModel(username.ToLower(), null));
 
-            return retval.Value;
+            bool hasRole = user.Roles.Any(role => role.ToString().Equals(roleName));
+
+            HttpContext.Current.Items.Add(contextKey, hasRole);
+
+            return hasRole;
         }
 
         /// <summary>

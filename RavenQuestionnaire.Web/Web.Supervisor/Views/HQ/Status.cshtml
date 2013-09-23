@@ -14,7 +14,7 @@
     @Html.Partial("_ListViewStatusesScript")
 
     <script type="text/javascript">
-        var $surveysUrl = '@Url.Action("Surveys", "HQ")';
+        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
         $(function () {
             var model = new StatusListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "StatusApi", action = "Status" })');
@@ -38,7 +38,7 @@
                 <option>Any</option>
                 @foreach (var item in Model)
                 {
-                    <option value="@item.StatusId">@item.StatusName</option>
+                    <option value="@item.Status">@item.StatusName</option>
                 }
             </select>
         </li>

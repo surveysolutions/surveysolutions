@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Settings;
 using CAPI.Android.Syncronization.Handshake;
 using CAPI.Android.Syncronization.Pull;
@@ -17,6 +18,8 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 
 namespace CAPI.Android.Syncronization
 {
@@ -39,7 +42,7 @@ namespace CAPI.Android.Syncronization
         private readonly PullDataProcessor pullDataProcessor;
         private readonly PushDataProcessor pushDataProcessor;
 
-        private IDictionary<KeyValuePair<long,Guid>, bool> remoteChuncksForDownload;
+        private IDictionary<SynchronizationChunkMeta, bool> remoteChuncksForDownload;
 
         private readonly ISyncAuthenticator authentificator;
         private SyncCredentials credentials;
@@ -55,8 +58,8 @@ namespace CAPI.Android.Syncronization
             set { SettingsManager.SetSetting(SettingsNames.LastHandledSequence, value); }
             get { return SettingsManager.GetSetting(SettingsNames.LastHandledSequence); }
         }
-        
-        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
+
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog, IReadSideRepositoryReader<LoginDTO> userStorage)
         {
             this.context = context;
             
@@ -69,7 +72,7 @@ namespace CAPI.Android.Syncronization
             handshake = new RestHandshake(executor);
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            pullDataProcessor = new PullDataProcessor(changelog, commandService);
+            pullDataProcessor = new PullDataProcessor(changelog, commandService, userStorage);
             pushDataProcessor = new PushDataProcessor(changelog);
 
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
@@ -94,14 +97,14 @@ namespace CAPI.Android.Syncronization
 
                         try
                         {
-                            var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Value, chunckId.Key, clientRegistrationId, ct);
+                            var data = pull.RequestChunck(credentials.Login, credentials.Password, chunckId.Id, chunckId.Sequence, clientRegistrationId, ct);
 
                             pullDataProcessor.Save(data);
                             remoteChuncksForDownload[chunckId] = true;
 
                             pullDataProcessor.Proccess(chunckId);
                             //save last handled item
-                            lastSequence = chunckId.Key.ToString();
+                            lastSequence = chunckId.Sequence.ToString();
                         }
                         catch (Exception e)
                         {
@@ -160,7 +163,6 @@ namespace CAPI.Android.Syncronization
                     string message = "connecting...";
                     OnStatusChanged(
                         new SynchronizationEventArgs(message, Operation.Handshake, true));
-                    Thread.Sleep(1000);
                     var registrationKey = SettingsManager.GetSetting(SettingsNames.RegistrationKeyName);
                     clientRegistrationId = handshake.Execute(credentials.Login, credentials.Password, androidId, appId, clientRegistrationId);
                 });

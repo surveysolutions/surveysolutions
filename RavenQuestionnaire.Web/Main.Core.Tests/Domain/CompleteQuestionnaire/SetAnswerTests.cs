@@ -138,7 +138,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             //arrange
             var document = new QuestionnaireDocument();
             document.Add(question, null, null);
-            CompleteQuestionnaireAR target = this.CreateCompleteQuestionnaireAR(document);
+            _CompleteQuestionnaireAR target = this.CreateCompleteQuestionnaireAR(document);
 
             //act
             TestDelegate act = () => target.SetAnswer(question.PublicKey, null, answer, answerKeys, DateTime.Now);
@@ -154,7 +154,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
                 //arrange
                 var document = new QuestionnaireDocument();
                 document.Add(question, null, null);
-                CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
+                _CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
 
                 //act
                 target.SetAnswer(question.PublicKey, null, answer, null, DateTime.Now);
@@ -172,7 +172,7 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
                 //arrange
                 var document = new QuestionnaireDocument();
                 document.Add(question, null, null);
-                CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
+                _CompleteQuestionnaireAR target = CreateCompleteQuestionnaireAR(document);
 
                 //act
                 target.SetAnswer(question.PublicKey, null, null, answerKeys, DateTime.Now);
@@ -183,9 +183,9 @@ namespace Main.Core.Tests.Domain.CompleteQuestionnaire
             }
         }
 
-        private CompleteQuestionnaireAR CreateCompleteQuestionnaireAR(QuestionnaireDocument template)
+        private _CompleteQuestionnaireAR CreateCompleteQuestionnaireAR(QuestionnaireDocument template)
         {
-            return new CompleteQuestionnaireAR(Guid.NewGuid(), template,
+            return new _CompleteQuestionnaireAR(Guid.NewGuid(), template,
                                                new UserLight(Guid.NewGuid(), null));
         }
         public static T GetSingleEvent<T>(EventContext eventContext)

@@ -13,7 +13,7 @@
                     return (self.unsavedQuestion() + self.unsavedGroups()) > 0;
                 });
                 self.unsavedWarningMessage = ko.computed(function() {
-                    var message = "You have ";
+                    var message = "<strong>Warning!</strong> You have ";
                     if (self.unsavedQuestion() > 0) {
                         message += self.unsavedQuestion() + " unsaved" + (self.unsavedQuestion() > 1 ? " questions" : " question");
                     }

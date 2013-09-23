@@ -2,6 +2,7 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
+using CAPI.Android.Controls.QuestionnaireDetails.ScreenItems;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.SyncCacher;
@@ -18,6 +19,7 @@ using CommonServiceLocator.NinjectAdapter;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Events.File;
+using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Main.Core.Services;
@@ -29,12 +31,16 @@ using Mono.Android.Crasher.Attributes;
 using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
@@ -103,14 +109,34 @@ namespace CAPI.Android
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>());
-            bus.RegisterHandler(eventHandler, typeof(NewAssigmentCreated));
-            bus.RegisterHandler(eventHandler, typeof (AnswerSet));
-            bus.RegisterHandler(eventHandler, typeof (CommentSet));
-            bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
-            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
-            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
-            bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
+                new CompleteQuestionnaireViewDenormalizer(
+                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+
+            bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
+            bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (GroupDisabled));
+            bus.RegisterHandler(eventHandler, typeof (GroupEnabled));
+            bus.RegisterHandler(eventHandler, typeof (QuestionDisabled));
+            bus.RegisterHandler(eventHandler, typeof (QuestionEnabled));
+            bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredInvalid));
+            bus.RegisterHandler(eventHandler, typeof (AnswerDeclaredValid));
+            bus.RegisterHandler(eventHandler, typeof(AnswerCommented));
+            bus.RegisterHandler(eventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(eventHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
+            bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
+            bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
+           
+        }
+
+        private void InitTemplateStorage(InProcessEventBus bus)
+        {
+            var fileSorage = new QuestionnaireDenormalizer(kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+            bus.RegisterHandler(fileSorage, typeof(TemplateImported));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
@@ -126,16 +152,20 @@ namespace CAPI.Android
             var usereventHandler =
                 new UserDenormalizer(kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
             bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
+            bus.RegisterHandler(usereventHandler, typeof(UserChanged));
         }
 
         private void InitDashboard(InProcessEventBus bus)
         {
             var dashboardeventHandler =
                 new DashboardDenormalizer(kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                                          kernel.Get<IReadSideRepositoryWriter<SurveyDto>>());
-            bus.RegisterHandler(dashboardeventHandler, typeof(NewAssigmentCreated));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewMetaInfoUpdated));
-            bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
+                                          kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
+                                          kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             
         }
 
@@ -143,8 +173,10 @@ namespace CAPI.Android
         {
            
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(NewAssigmentCreated));
-            bus.RegisterHandler(changeLogHandler, typeof(QuestionnaireStatusChanged));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
         }
 
         public override void OnCreate()
@@ -162,17 +194,27 @@ namespace CAPI.Android
             kernel = new StandardKernel(
                 new AndroidCoreRegistry(),
                 new AndroidModelModule(),
-                new AndroidLoggingModule());
+                new AndroidLoggingModule(),
+                new DataCollectionSharedKernelModule());
+
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));
             this.kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
             NcqrsInit.Init(kernel);
+       
             NcqrsEnvironment.SetDefault<ISnapshotStore>(Kernel.Get<ISnapshotStore>());
             NcqrsEnvironment.SetDefault(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-
+            var domainrepository = new DomainRepository(NcqrsEnvironment.Get<IAggregateRootCreationStrategy>(), NcqrsEnvironment.Get<IAggregateSnapshotter>());
+            kernel.Bind<IDomainRepository>().ToConstant(domainrepository);
+            Kernel.Unbind<IAnswerOnQuestionCommandService>();
+            Kernel.Bind<IAnswerOnQuestionCommandService>()
+                  .ToConstant(new AnswerOnQuestionCommandService(CommandService));
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+
+            InitTemplateStorage(bus);
 
             InitQuestionnariesStorage(bus);
 

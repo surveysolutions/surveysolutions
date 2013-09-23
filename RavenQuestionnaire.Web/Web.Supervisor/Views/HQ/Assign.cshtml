@@ -25,6 +25,7 @@
     </script>
 }
 
+
 <h3 data-bind="text: questionnaire().title"></h3>
 <div class="row-fluid">
     <div class="span12">
@@ -49,7 +50,7 @@
 <div id="output" class="stack">
     <div class="inner">
         <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times</button>
+            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
             <span>Errors log</span>
         </div>
         <div class="body">
@@ -122,6 +123,15 @@
 
 </script>
 <script type="text/html" id="Text">
+    <div class="control-group" data-bind="validationElement: selectedOption">
+        <label class="control-label" data-bind="text: title"></label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
+            <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="GpsCoordinates">
     <div class="control-group" data-bind="validationElement: selectedOption">
         <label class="control-label" data-bind="text: title"></label>
         <div class="controls">

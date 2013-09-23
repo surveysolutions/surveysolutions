@@ -1,14 +1,25 @@
-﻿@using Web.Supervisor.Utils
+﻿@using System.ComponentModel
+@using Web.Supervisor.Utils
 @model Object
 
 @foreach (var property in Model.VisibleProperties())
 {
     using (Html.ControlGroupFor(property.Name))
-    {
-        @Html.Label(property.Name.ToSeparatedWords(), new { @class = "control-label" })
-        <div class="controls">
-            @Html.Editor(property.Name, new { @class = "input-xlarge" })
-            @Html.ValidationMessage(property.Name, null, new { @class = "help-inline" })
-        </div>
-    }
+        {
+            @Html.Label(property.Name.ToSeparatedWords(), new { @class = "control-label" })
+            <div class="controls">
+                @if (property.GetAttribute<ReadOnlyAttribute>() == null)
+                {
+                    @Html.Editor(property.Name, new { @class = "input-xlarge" })
+                    @Html.ValidationMessage(property.Name, null, new { @class = "help-inline" })
+
+                }
+                else
+                {
+                    <div style="margin-top: 5px;">
+                        @Html.Display(property.Name)
+                    </div>
+                }
+            </div>
+        }
 }

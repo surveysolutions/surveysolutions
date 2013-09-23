@@ -1,9 +1,8 @@
-﻿namespace Web.Supervisor.Controllers
+﻿using System.Web.Mvc;
+using Main.Core;
+
+namespace Web.Supervisor.Controllers
 {
-    using System.Web.Mvc;
-
-    using Main.Core;
-
     public class MaintenanceController : Controller
     {
         public ActionResult WaitForReadLayerRebuild(string returnUrl)

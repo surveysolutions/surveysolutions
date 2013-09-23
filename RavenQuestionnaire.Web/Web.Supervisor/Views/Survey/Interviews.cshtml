@@ -7,15 +7,17 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/documentlistview.js")
+    @Scripts.Render("~/Scripts/lib/lodash.js")
+    @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
 
     <script type="text/javascript">
-        var $detailsUrl = '@Url.Action("Details", "Interview")';
+        var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
+        var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "Interviews" })','',commandExecutionUrl, users);
+            var model = new DocumentListViewModel(currentUser, '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })', commandExecutionUrl, users);
             ko.applyBindings(model);
             model.load();
         });
@@ -54,9 +56,9 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
-                <th data-bind='sortby: "Responsible.Name"'>Responsible</th>
-                <th data-bind='sortby: "LastEntryDate"'>Last Update</th>
-                <th data-bind='sortby: "Status.Name"'>Status</th>
+                <th data-bind='sortby: "ResponsibleName"'>Responsible</th>
+                <th data-bind='sortby: "UpdateDate"'>Last Update</th>
+                <th data-bind='sortby: "Status"'>Status</th>
                 <th></th>
             </tr>
         </thead>
@@ -75,7 +77,7 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + Responsible.Id() }, text: Responsible.Name"></a>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td data-bind="text: Status"></td>
@@ -102,7 +104,7 @@
                 }
                 @foreach (var item in Model.Templates)
                 {
-                    <option value="@item.TemplateId">@item.TemplateName</option>
+                    <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
                 }
             </select>
         </li>
@@ -125,7 +127,7 @@
                 <option value="">Any</option>
                 @foreach (var item in Model.Statuses)
                 {
-                    <option value="@item.StatusId">@item.StatusName</option>
+                    <option value="@item.Status">@item.StatusName</option>
                 }
             </select>
         </li>

@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Http;
-using Core.Supervisor.Views;
+﻿using System.Web.Http;
 using Core.Supervisor.Views.Interview;
-using Core.Supervisor.Views.Summary;
-using Core.Supervisor.Views.Survey;
-using Main.Core.Commands.Questionnaire.Completed;
-using Main.Core.Domain;
-using Main.Core.Entities.SubEntities;
+using Core.Supervisor.Views.Interviews;
 using Main.Core.View;
-using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
@@ -19,23 +11,25 @@ namespace Web.Supervisor.Controllers
 {
     public class InterviewApiController : BaseApiController
     {
-        private readonly IViewFactory<InterviewInputModel, InterviewView> interviewViewFactory;
+        private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
+        private readonly IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory;
 
         public InterviewApiController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IViewFactory<InterviewInputModel, InterviewView> interviewViewFactory)
+                                      IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory,
+                                      IViewFactory<TeamInterviewsInputModel, TeamInterviewsView> teamInterviewViewFactory)
             : base(commandService, globalInfo, logger)
         {
-            this.interviewViewFactory = interviewViewFactory;
+            this.allInterviewsViewFactory = allInterviewsViewFactory;
+            this.teamInterviewViewFactory = teamInterviewViewFactory;
         }
 
-        public InterviewView Interviews(DocumentListViewModel data)
+        [HttpPost]
+        public AllInterviewsView AllInterviews(DocumentListViewModel data)
         {
-            var input = new InterviewInputModel(viewerId: this.GlobalInfo.GetCurrentUser().Id,
-                viewerStatus: this.GlobalInfo.IsHeadquarter ? ViewerStatus.Headquarter : ViewerStatus.Supervisor)
-            {
-                Orders = data.SortOrder
-            };
-            
+            var input = new AllInterviewsInputModel
+                {
+                    Orders = data.SortOrder
+                };
             if (data.Pager != null)
             {
                 input.Page = data.Pager.Page;
@@ -44,84 +38,38 @@ namespace Web.Supervisor.Controllers
 
             if (data.Request != null)
             {
-                input.TemplateId = data.Request.TemplateId;
-                input.ResponsibleId = data.Request.ResponsibleId;
-                input.StatusId = data.Request.StatusId;
-                input.OnlyNotAssigned = data.Request.OnlyAssigned;
+                input.QuestionnaireId = data.Request.TemplateId;
+                input.QuestionnaireVersion = data.Request.TemplateVersion;
+                input.TeamLeadId = data.Request.ResponsibleId;
+                input.Status = data.Request.Status;
             }
 
-            return this.interviewViewFactory.Load(input);
+            return this.allInterviewsViewFactory.Load(input);
         }
 
         [HttpPost]
-        public DeleteInterviewResult DeleteInterview(DeleteInterviewsModel model)
+        public TeamInterviewsView TeamInterviews(DocumentListViewModel data)
         {
-            var blockedInterviews = new List<Guid>();
-            if (model != null)
-            {
-                var responsibleId = this.GlobalInfo.GetCurrentUser().Id;
-                foreach (var interviewId in model.Interviews)
+            var input = new TeamInterviewsInputModel(viewerId: this.GlobalInfo.GetCurrentUser().Id)
                 {
-                    try
-                    {
-                        this.CommandService.Execute(new DeleteInterviewCommand(interviewId: interviewId,
-                            deletedBy: responsibleId));
-                    }
-                    catch
-                    {
-                        blockedInterviews.Add(interviewId);
-                    }
+                    Orders = data.SortOrder
+                };
 
-                }
+            if (data.Pager != null)
+            {
+                input.Page = data.Pager.Page;
+                input.PageSize = data.Pager.PageSize;
             }
-            return new DeleteInterviewResult() {BlockedInterviews = blockedInterviews};
+
+            if (data.Request != null)
+            {
+                input.QuestionnaireId = data.Request.TemplateId;
+                input.QuestionnaireVersion = data.Request.TemplateVersion;
+                input.ResponsibleId = data.Request.ResponsibleId;
+                input.Status = data.Request.Status;
+            }
+
+            return this.teamInterviewViewFactory.Load(input);
         }
-
-        public class DeleteInterviewResult
-        {
-            public IEnumerable<Guid> BlockedInterviews { get; set; }
-        }
-
-        public void Assign()
-        {
-            //UserLight responsible = null;
-            //CompleteQuestionnaireStatisticView stat = null;
-
-            //var user = this.userViewFactory.Load(new UserViewInputModel(value));
-            //stat = this.completeQuestionnaireStatisticViewFactory.Load(new CompleteQuestionnaireStatisticViewInputModel(cqId) { Scope = QuestionScope.Supervisor });
-            //responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
-
-            //this.CommandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
-
-            //if (stat.Status.PublicId == SurveyStatus.Unassign.PublicId)
-            //{
-            //    this.CommandService.Execute(
-            //        new ChangeStatusCommand()
-            //        {
-            //            CompleteQuestionnaireId = cqId,
-            //            Status = SurveyStatus.Initial,
-            //            Responsible = responsible
-            //        });
-            //}
-
-            //if (Request.IsAjaxRequest())
-            //{
-            //    return this.Json(
-            //            new
-            //            {
-            //                status = "ok",
-            //                userId = responsible.Id,
-            //                userName = responsible.Name,
-            //                cqId = cqId,
-            //                statusName = stat.Status.Name,
-            //                statusId = stat.Status.PublicId
-            //            },
-            //            JsonRequestBehavior.AllowGet);
-            //}
-
-            //return this.RedirectToAction("Documents", "Survey", new { id = tmptId });
-        }
-
-        
     }
 }

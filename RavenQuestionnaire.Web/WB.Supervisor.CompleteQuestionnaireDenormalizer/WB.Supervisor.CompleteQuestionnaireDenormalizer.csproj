@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="CompleteQuestionnarieDenormalizerModule.cs" />
-    <Compile Include="InterviewSynchronizationEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenReadSideRepositoryWriterWithCacheAndZip.cs" />
     <Compile Include="TemporaryViewWriter.cs" />

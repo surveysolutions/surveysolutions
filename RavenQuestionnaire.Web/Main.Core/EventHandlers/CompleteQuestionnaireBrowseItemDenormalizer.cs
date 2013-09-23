@@ -18,9 +18,11 @@ namespace Main.Core.EventHandlers
     public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
                                                                IEventHandler<AnswerSet>,
                                                                IEventHandler<QuestionnaireStatusChanged>,
-                                                               IEventHandler<QuestionnaireAssignmentChanged>,
+                                                               IEventHandler<QuestionnaireAssignmentChanged>/*,
                                                                IEventHandler<InterviewDeleted>,
-        IEventHandler<InterviewMetaInfoUpdated>,
+                                                               IEventHandler<InterviewRestored>*/
+        /*,
+        IEventHandler<InterviewMetaInfoUpdated>*/,
          IEventHandler
 
     {
@@ -85,14 +87,14 @@ namespace Main.Core.EventHandlers
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        /*public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
                 this.documentItemStore.GetById(evnt.EventSourceId);
 
             item.IsDeleted = true;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
-        }
+        }*/
 
         private UserLight FillResponsiblesName(UserLight responsible)
         {
@@ -214,7 +216,7 @@ namespace Main.Core.EventHandlers
         }
 
         #endregion
-
+        /*
         public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
@@ -224,7 +226,7 @@ namespace Main.Core.EventHandlers
             item.LastEntryDate = evnt.EventTimeStamp;
             item.IsDeleted = false;
             this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
-        }
+        }*/
 
         public string Name
         {

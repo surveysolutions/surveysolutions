@@ -2,7 +2,6 @@
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Documents;
-using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
@@ -19,6 +18,8 @@ namespace WB.UI.Designer.Tests
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.BootstrapSupport;
     using WB.UI.Shared.Web.Membership;
+
+    using TemplateInfo = WB.Core.BoundedContexts.Designer.Services.TemplateInfo;
 
     [TestFixture]
     public class SynchronizationControllerTests
@@ -91,15 +92,15 @@ namespace WB.UI.Designer.Tests
             // arrange
             SynchronizationController controller = CreateSynchronizationController();
             Guid templateId = Guid.NewGuid();
-            string dataForZip = "zipped data";
+            TemplateInfo dataForZip = new TemplateInfo() { Source = "zipped data", Title = "template" };
             ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(dataForZip);
-            ZipUtilsMock.Setup(x => x.Compress(dataForZip)).Returns(new MemoryStream());
+            ZipUtilsMock.Setup(x => x.Compress(dataForZip.Source)).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
             ExportServiceMock.Verify(x => x.GetQuestionnaireTemplate(templateId), Times.Once());
-            ZipUtilsMock.Verify(x => x.Compress(dataForZip), Times.Once());
+            ZipUtilsMock.Verify(x => x.Compress(dataForZip.Source), Times.Once());
         }
 
         [Test]
@@ -110,7 +111,8 @@ namespace WB.UI.Designer.Tests
             // arrange
             SynchronizationController target = CreateSynchronizationController();
             Guid templateId = Guid.NewGuid();
-            ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(data);
+            ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId))
+                             .Returns(new TemplateInfo() { Source = data });
 
             // act
             var result = target.Export(templateId);

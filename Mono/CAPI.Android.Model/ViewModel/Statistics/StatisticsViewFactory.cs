@@ -6,6 +6,8 @@ using Main.DenormalizerStorage;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.Statistics
 {
@@ -25,7 +27,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
             var doc = this.documentStorage.GetById(input.QuestionnaireId);
             var enabledQuestion =
                 doc.FindQuestion(
-                    q => q.Status.HasFlag(QuestionStatus.Enabled));
+                    q => q.IsEnabled());
             
             var answered =
                 enabledQuestion.Where(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(
@@ -50,7 +52,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
         }
 
         #endregion
-        protected ItemPublicKey CalculateScreen(CompleteQuestionnaireView doc, ItemPublicKey key)
+        protected InterviewItemId CalculateScreen(CompleteQuestionnaireView doc, InterviewItemId key)
         {
             return
                 doc.Screens.Select(s=>s.Value).OfType<QuestionnaireScreenViewModel>().FirstOrDefault(

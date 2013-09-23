@@ -4,6 +4,8 @@
 @using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Survey
 @using Newtonsoft.Json
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using Web.Supervisor.Code
 @model SurveyScreenView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,7 +23,11 @@
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
                         {
                             TypeNameHandling = TypeNameHandling.None,
-                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                            Converters = new List<JsonConverter>()
+                            {
+                                 new HtmlEncodeStringPropertiesConverter()
+                            }
                         })) ,
                 u= @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
                         {
@@ -97,12 +103,16 @@
     <script type="text/html" id="Text">
         <input type="text" data-bind="value: selectedOption, disable: isReadonly" />
     </script>
+    <script type="text/html" id="GpsCoordinates">
+        <input type="text" data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+    
 }
 <div id="stacks">
     <div id="groups" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: closeMenu">&times</button>
+                <button type="button" class="close" data-bind="click: closeMenu">&times;</button>
                 <span data-bind="text: title"></span>. Responsible: <span data-bind="text: responsible.name"></span>. Status: <span data-bind="text: status.name"></span>
             </div>
             <div class="body">
@@ -116,7 +126,7 @@
                 <div class="inner">
                     <a class="btn btn-info nav-link" id="ref-link-statusHistoryLink" href="#/status_history">Status history</a>
                     
-                    @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId || Model.Status.PublicId == SurveyStatus.Error.PublicId)
+                    @if (Model.Status == InterviewStatus.Completed)
                     {
                        <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
                             <i class="icon-ok-sign icon-white"></i>Change state</a>
@@ -233,7 +243,7 @@
     <div id="details" data-bind="with: currentAnswer" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+                <button type="button" class="close" data-bind="click: $root.closeDetails">&times;</button>
                 <span data-bind="text: question"></span>
             </div>
             <div class="body">

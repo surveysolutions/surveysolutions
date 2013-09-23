@@ -138,6 +138,10 @@
 
         UserExistInShareList,
 
-        OwnerCannotBeInShareList
+        OwnerCannotBeInShareList,
+
+        LinkedToQuestionDoesNotExist,
+
+        QuestionCanNotBeFeatured
     }
 }

@@ -1,21 +1,19 @@
-﻿using System.Web.Security;
+﻿using System;
+using System.Web.Mvc;
+using System.Web.Security;
+using Main.Core.Commands.User;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
 using WB.Core.GenericSubdomains.Logging;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Web.Mvc;
-
-    using Main.Core.Commands.User;
-    using Main.Core.Entities.SubEntities;
-    using Ncqrs.Commanding.ServiceModel;
-    using Questionnaire.Core.Web.Helpers;
-    using Web.Supervisor.Models;
-
     /// <summary>
-    /// User controller responsible for dispay users, lock/unlock users, counting statistics
+    ///     User controller responsible for dispay users, lock/unlock users, counting statistics
     /// </summary>
     [Authorize]
     public class UserController : BaseController
@@ -36,7 +34,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult CreateSupervisor()
         {
             var supervisor = new SupervisorModel(Guid.NewGuid(), "supervisor") {Role = UserRoles.Headquarter};
-            
+
             return this.View(supervisor);
         }
 
@@ -44,14 +42,14 @@ namespace Web.Supervisor.Controllers
         [AllowAnonymous]
         public ActionResult CreateSupervisor(SupervisorModel user)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
-                                                             user.Name + "@worldbank.org", new[] {user.Role},
-                                                             false, null));
-  
-                var isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());
-                var isHeadquarter = Roles.IsUserInRole(user.Name, UserRoles.Headquarter.ToString());
+                this.CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
+                                                                  user.Name + "@worldbank.org", new[] {user.Role},
+                                                                  false, null));
+
+                bool isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());
+                bool isHeadquarter = Roles.IsUserInRole(user.Name, UserRoles.Headquarter.ToString());
                 if (isSupervisor || isHeadquarter)
                 {
                     this.authentication.SignIn(user.Name, false);

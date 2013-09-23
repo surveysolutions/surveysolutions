@@ -4,7 +4,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
-using Main.Core.View.Card;
 
 namespace Main.Core.View.Question
 {
@@ -57,11 +56,6 @@ namespace Main.Core.View.Question
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
             this.Comments = doc.LastComment;
-            if (doc.Cards != null)
-            {
-                this.Cards =
-                    doc.Cards.Select(card => new CardView(doc.PublicKey, card)).OrderBy(a => Guid.NewGuid()).ToArray();
-            }
         }
 
         /// <summary>

@@ -9,35 +9,46 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public class DefaultQuestionViewFactory : IQuestionViewFactory
     {
+        private readonly IAnswerOnQuestionCommandService commandService;
+
+        public DefaultQuestionViewFactory(IAnswerOnQuestionCommandService commandService)
+        {
+            this.commandService = commandService;
+        }
+
         #region Implementation of IQuestionViewFactory
 
         public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model,
                                                        Guid questionnairePublicKey)
         {
             var bindingActivity = (context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext;
+
             AbstractQuestionView itemView;
             switch (model.QuestionType)
             {
                 case QuestionType.Text:
-                    itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.Numeric:
-                    itemView = new NumericQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new NumericQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.DateTime:
-                    itemView = new DateQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new DateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.SingleOption:
-                    itemView = new SingleChoiseQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new SingleChoiseQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.MultyOption:
-                    itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.AutoPropagate:
-                    itemView = new AutoPropagateQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new AutoPropagateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                    break;
+                case QuestionType.GpsCoordinates:
+                    itemView = new GeoPositionQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 default:
-                    itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
             }
             return itemView;

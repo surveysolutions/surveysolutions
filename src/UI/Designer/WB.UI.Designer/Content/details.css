@@ -1,4 +1,9 @@
-﻿/* Let's get this party started */
+﻿.details.stack table {
+    width: 100%;
+    height: 100%;
+}
+
+/* Let's get this party started */
 #busyindicator {
     position: fixed;
     top: 50%;
@@ -111,7 +116,6 @@ body.loading .loading-backdrop {
         background: #fff;
         border-radius: 5px 5px 5px 5px;
         height: 100%;
-        position: relative;
         border: 1px solid #DDDDDD;
     }
 
@@ -128,30 +132,32 @@ body.loading .loading-backdrop {
         -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         -o-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 24px;
-        min-height: 24px;
         padding: 8px;
         text-shadow: 0 1px 0 white;
-        word-wrap: break-word;
+        height: 1px;
+    }
+
+    .stack .title .control-group, .stack .title textarea {
+        margin-bottom: 0;
     }
 
     .stack .body {
-        overflow: auto;
-        position: absolute;
-        top: 55px;
-        bottom: 43px;
-        right: 0;
-        left: 0;
-        overflow-y: scroll;
+        
+        vertical-align: top;
+        position: relative;
+        overflow-y: auto;
+    }
+
+    .stack .body .container-fluid {
+        padding-top: 15px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            overflow: auto;
     }
 
     .stack .pane-bottom {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
         -webkit-border-radius: 0 0 5px 5px;
         -moz-border-radius: 0 0 5px 5px;
         -ms-border-radius: 0 0 5px 5px;
@@ -167,10 +173,10 @@ body.loading .loading-backdrop {
         height: 42px;
     }
 
-        .stack .pane-bottom .inner {
+    .stack .pane-bottom .inner {
             padding: 6px 8px 0 8px;
-        }
-
+    }
+    
 #output {
     left: 0;
     width: 100%;
@@ -191,7 +197,6 @@ body.loading .loading-backdrop {
     }
 
     #output .body {
-        top: 41px;
         bottom: 0;
     }
 
@@ -212,6 +217,10 @@ body.loading .loading-backdrop {
                 -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
                 box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
             }
+
+    #output .inner .title {
+        height: 20px;
+    }
 
 .details.stack .body .input-append {
     display: inline;
@@ -746,10 +755,10 @@ a.btn.btn-help {
 .row-fluid .btn-group {
     margin-bottom: 10px;
 }
-#unsavedWarningMessageContainer{
+.informationContainer{
     left: 0;
     position: absolute;
-    top: 0;
+    top: 77px;
     width: 100%;
     z-index: 10999;
     text-align: center;
@@ -757,7 +766,7 @@ a.btn.btn-help {
     overflow: visible;
      margin-top: -1px;
 }
-#unsavedWarningMessage{
+.informationMessage{
     display: inline-block;
     background-color: #F39106;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
