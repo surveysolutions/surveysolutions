@@ -414,19 +414,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     autoQuestionId: autoQuestionId,
                     questionId: questionId,
                     responsibleId: responsibleId,
-                    questionType: questionType,
-                    isAutoQuestionFeatured: true);
+                    questionType: questionType);
 
             // act
             TestDelegate act =
                 () =>
-                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, true, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                             string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionCanNotBeFeatured));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured));
         }
 
         [Test]
@@ -447,19 +446,18 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     autoQuestionId: autoQuestionId,
                     questionId: questionId,
                     responsibleId: responsibleId,
-                    questionType: questionType,
-                    isAutoQuestionHead: true);
+                    questionType: questionType);
 
             // act
             TestDelegate act =
                 () =>
-                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, true,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                             string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionCanNotBeHead));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
         }
 
     
