@@ -48,8 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             var linkedQuestions =
                 GetAllLinkedQuestions(template);
 
-            var autoPropagatebleQuestions =
-              GetAllPropagatebleQuestions(template);
+            var groupsMappedOnPropagatableQuestion =
+              this.GetAllPropagatebleGroupsMappedOnPropagatableQuestion(template);
 
             foreach (var linkedQuestion in linkedQuestions)
             {
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     template.FirstOrDefault<IQuestion>(question => question.PublicKey == linkedQuestion.LinkedToQuestionId.Value);
 
                 referenceInfo[linkedQuestion.PublicKey] =
-                    new ReferenceInfoByQuestion(GetScopeOfReferencedQuestions(referencedQuestion, autoPropagatebleQuestions),
+                    new ReferenceInfoByQuestion(GetScopeOfReferencedQuestions(referencedQuestion, groupsMappedOnPropagatableQuestion),
                         referencedQuestion.PublicKey);
             }
 
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             questionnaires.Store(questionnaire, evnt.EventSourceId);
         }
 
-        private Guid GetScopeOfReferencedQuestions(IQuestion referencedQuestion, IDictionary<Guid, Guid> propagationStructure)
+        private Guid GetScopeOfReferencedQuestions(IQuestion referencedQuestion, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
         {
             var questionParent = referencedQuestion.GetParent();
 
@@ -75,14 +75,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 var group = questionParent as IGroup;
                 if (group != null && group.Propagated!=Propagate.None)
                 {
-                    return propagationStructure[group.PublicKey];
+                    return groupsMappedOnPropagatableQuestion[group.PublicKey];
                 }
-                questionParent = referencedQuestion.GetParent();
+                questionParent = questionParent.GetParent();
             }
             return questionParent.PublicKey;
         }
 
-        private IDictionary<Guid, Guid> GetAllPropagatebleQuestions(QuestionnaireDocument template)
+        private IDictionary<Guid, Guid> GetAllPropagatebleGroupsMappedOnPropagatableQuestion(QuestionnaireDocument template)
         {
             var result = new Dictionary<Guid, Guid>();
             foreach (var scope in template.Find<IAutoPropagateQuestion>(
