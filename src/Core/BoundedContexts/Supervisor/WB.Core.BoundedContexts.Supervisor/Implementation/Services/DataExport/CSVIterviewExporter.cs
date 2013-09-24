@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 writer.WriteField("InterviewId");
                 writer.WriteField("Id");
 
-                foreach (HeaderItem question in items.Header)
+                foreach (ExportedHeaderItem question in items.Header)
                 {
                     writer.WriteField(question.Caption);
                 }
@@ -50,7 +50,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                     {
                         if (!item.Questions.ContainsKey(guid))
                         {
-                            writer.WriteField(string.Empty);
+                            for (int i = 0; i < items.Header.GetAvailableHeaderForQuestion(guid).Count(); i++)
+                            {
+                                writer.WriteField(string.Empty);
+                            }
+
                             continue;
                         }
                         foreach (string itemValue in item.Questions[guid].Answers)
