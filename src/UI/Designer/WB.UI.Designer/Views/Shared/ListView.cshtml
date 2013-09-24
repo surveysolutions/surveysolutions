@@ -9,7 +9,7 @@
     string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
 
     IMembershipUserService userHelper = ViewBag.UserHelper;
-    
+
     var propertyList = Model.VisibleProperties(userHelper);
 
     var sortOrder = (int?)ViewBag.SortOrder;
@@ -19,7 +19,7 @@
     <caption></caption>
     <thead>
         <tr>
-            @for (int i=0;i<propertyList.Count(); i++)
+            @for (int i = 0; i < propertyList.Count(); i++)
             {
                 var property = propertyList[i];
                 var w = propertyList[i].IsDateTimePropertyValue() ? "135px" : "auto";
@@ -39,7 +39,7 @@
                     }
                     else
                     { 
-                        <i class="icon-filter"></i>
+                        <i class="icon-chevron-up icon-white"></i>
                     }
                 </th>
 
@@ -62,57 +62,57 @@
 
                 <td style="width: 110px">
                     @{
-                        var actionModel = model as IActionItem;
-                        if (actionModel != null)
-                        {
-                            if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize)
-                            {
+                var actionModel = model as IActionItem;
+                if (actionModel != null)
+                {
+                    if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint || actionModel.CanSynchronize)
+                    {
                                 <div class="btn-group pull-right">
                                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         @{
-                                            var routevalues = model.GetIdValue();
-                                            var itemId = model.GetId();
-                                            var itemType = model.GetLabel();
-                                            var itemName = Uri.EscapeDataString(model.GetName());
+                        var routevalues = model.GetIdValue();
+                        var itemId = model.GetId();
+                        var itemType = model.GetLabel();
+                        var itemName = Uri.EscapeDataString(model.GetName());
 
-                                            if (actionModel.CanEdit)
-                                            {
+                        if (actionModel.CanEdit)
+                        {
                                                 <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanSynchronize)
-                                            {
+                        }
+                        if (actionModel.CanSynchronize)
+                        {
                                                 <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanPreview)
-                                            {
+                        }
+                        if (actionModel.CanPreview)
+                        {
                                                 <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanCopy)
-                                            {
+                        }
+                        if (actionModel.CanCopy)
+                        {
                                                 <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanExportToPdf)
-                                            {
+                        }
+                        if (actionModel.CanExportToPdf)
+                        {
                                                 <li class="divider"></li>
                                                 <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
-                                            }
-                                            if (actionModel.CanDelete)
-                                            {
+                        }
+                        if (actionModel.CanDelete)
+                        {
                                                 <li class="divider"></li>
-                                                <li><a  href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
-                                            }
+                                                <li><a  href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId    ", "@itemType    ", "@itemName    ")' data-toggle="modal">Delete</a></li>
+                        }
                                         }
                                     </ul>
                                 </div>
-                            }
-                        }
+                    }
+                }
                     }
                 </td>
             </tr>
-            index++;
+                index++;
         }
     </tbody>
 </table>
