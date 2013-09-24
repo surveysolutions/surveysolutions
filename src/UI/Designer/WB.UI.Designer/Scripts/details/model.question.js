@@ -34,7 +34,7 @@
                           if (self.isFeatured() == false) return true;
                           return (val !== someOtherVal);
                       },
-                      message: 'Geo Location question cannot be featured',
+                      message: 'Geo Location question cannot be pre-filled',
                       params: "GpsCoordinates"
                   }]
               }); // Questoin type
