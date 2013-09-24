@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -29,6 +30,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             )
             : base(context, bindingActivity, model, questionnairePublicKey, commandService)
         {
+            this.Model.PropertyChanged += ModelOnPropertyChanged;
+        }
+
+        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            bool answerOptionsChanged = propertyChangedEventArgs.PropertyName == "AnswerOptions";
+            if (!answerOptionsChanged)
+                return;
+
+            this.CreateCheckBoxesByOptions();
         }
 
         protected LinkedQuestionViewModel TypedMode {
