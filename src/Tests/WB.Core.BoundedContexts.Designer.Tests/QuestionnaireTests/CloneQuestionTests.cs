@@ -461,6 +461,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
     
+#warnign following tests are commented because they were copy pasted from add command tests but Slava had not enough time to uncomment them and make them test for Clone feature (when he wrote such tests in his spare time)
+
 
 //        [Test]
 //        [TestCase(QuestionType.SingleOption)]
