@@ -294,8 +294,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
-            
+            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
@@ -353,7 +354,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
@@ -436,7 +438,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
-            this.ThrowDomainExceptionIfLinkedQuestionIsInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            
+            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
@@ -984,95 +988,117 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question type {0} is not allowed", type));
         }
 
-        private bool IsParentAutopropagateGroup(IComposite item)
+        private bool IsUnderPropagatableGroup(IComposite item)
         {
-            if (item != null)
-            {
-                var parentGroup = (IGroup)item.GetParent();
-                return parentGroup != null && ((parentGroup.Propagated == Propagate.AutoPropagated) ||
-                       IsParentAutopropagateGroup(parentGroup.GetParent()));
-            }
+            this.innerDocument.ConnectChildsWithParent();
 
-            return false;
+            return this.IsUnderPropagatableGroupImpl(item);
         }
 
-        private void ThrowDomainExceptionIfLinkedQuestionIsInvalid(
-            QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured, bool isHead)
+        private bool IsUnderPropagatableGroupImpl(IComposite item)
         {
-            bool isQuestionWithOptions = questionType == QuestionType.MultyOption ||
-                                         questionType == QuestionType.SingleOption;
+            if (item == null)
+                return false;
 
-            if (linkedToQuestionId.HasValue && !isQuestionWithOptions)
+            var parentGroup = (IGroup) item.GetParent();
+
+            return parentGroup != null
+                && ((parentGroup.Propagated == Propagate.AutoPropagated) || this.IsUnderPropagatableGroupImpl(parentGroup.GetParent()));
+        }
+
+        private static void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
+        {
+            bool isCategoricalQuestion = questionType == QuestionType.MultyOption ||
+                questionType == QuestionType.SingleOption;
+
+            bool notCategoricalQuestionHasLinkedQuestonId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
+
+            if (notCategoricalQuestionHasLinkedQuestonId)
             {
                 throw new DomainException(
                     DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion,
                     "Only categorical question can be linked to another question");
             }
+        }
+
+        private void ThrowIfQuestionIsCategoricalAndInvalid(QuestionType questionType, Option[] options, Guid? linkedToQuestionId, bool isFeatured,
+            bool isHead)
+        {
+            bool isCategoricalQuestion =
+                questionType == QuestionType.MultyOption ||
+                questionType == QuestionType.SingleOption;
+
+            if (!isCategoricalQuestion)
+                return;
+
+            bool questionIsLinked = linkedToQuestionId.HasValue;
+            bool questionHasOptions = options != null && options.Any();
+
+            if (questionIsLinked && questionHasOptions)
+            {
+                throw new DomainException(
+                    DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
+                    "Categorical question cannot be with answers and linked to another question in the same time");
+            }
+
+            if (questionIsLinked)
+            {
+                this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured, isHead);
+            }
             else
             {
-                if (!isQuestionWithOptions)
-                    return;
-
-                if (linkedToQuestionId.HasValue && options != null && options.Any())
-                {
-                    throw new DomainException(
-                        DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
-                        "Categorical question cannot be with answers and linked to another question in the same time");
-                }
-
-                if (linkedToQuestionId.HasValue)
-                {
-                    var linkedToQuestion =
-                        this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).FirstOrDefault();
-                    if (linkedToQuestion == null)
-                    {
-                        throw new DomainException(
-                            DomainExceptionType.LinkedQuestionDoesNotExist,
-                            "Question that you are linked to does not exist");
-                    }
-                    else
-                    {
-                        if (
-                            !(linkedToQuestion.QuestionType == QuestionType.DateTime ||
-                              linkedToQuestion.QuestionType == QuestionType.Numeric ||
-                              linkedToQuestion.QuestionType == QuestionType.Text))
-                        {
-                            throw new DomainException(
-                                DomainExceptionType.NotSupportedQuestionForLinkedQuestion,
-                                "Linked question can be only type of number, text or date");
-                        }
-
-                        if (isFeatured)
-                        {
-                            throw new DomainException(
-                                DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
-                                "Question that linked to another question can not be pre-filled");
-                        }
-
-                        if (isHead)
-                        {
-                            throw new DomainException(
-                                DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
-                                "Question that linked to another question can not be head");
-                        }
-
-                        this.innerDocument.ConnectChildsWithParent();
-                        if (!IsParentAutopropagateGroup(linkedToQuestion))
-                        {
-                            throw new DomainException(
-                                DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
-                                "Question that you are linked to is not in the propagated group");
-                        }
-                    }
-                }
-                else
-                {
-                    ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(options);
-                }
+                ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
             }
         }
 
-        private static void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(Option[] options)
+        private void ThrowIfLinkedCategoricalQuestionIsInvalid(Guid? linkedToQuestionId, bool isFeatured, bool isHead)
+        {
+            var linkedToQuestion =
+                this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).FirstOrDefault();
+
+            if (linkedToQuestion == null)
+            {
+                throw new DomainException(
+                    DomainExceptionType.LinkedQuestionDoesNotExist,
+                    "Question that you are linked to does not exist");
+            }
+
+
+            bool typeOfLinkedQuestionIsNotSupported = !(
+                linkedToQuestion.QuestionType == QuestionType.DateTime ||
+                linkedToQuestion.QuestionType == QuestionType.Numeric ||
+                linkedToQuestion.QuestionType == QuestionType.Text);
+
+            if (typeOfLinkedQuestionIsNotSupported)
+            {
+                throw new DomainException(
+                    DomainExceptionType.NotSupportedQuestionForLinkedQuestion,
+                    "Linked question can be only type of number, text or date");
+            }
+
+            if (isFeatured)
+            {
+                throw new DomainException(
+                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
+                    "Question that linked to another question can not be pre-filled");
+            }
+
+            if (isHead)
+            {
+                throw new DomainException(
+                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead,
+                    "Question that linked to another question can not be head");
+            }
+
+            if (!this.IsUnderPropagatableGroup(linkedToQuestion))
+            {
+                throw new DomainException(
+                    DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
+                    "Question that you are linked to is not in the propagated group");
+            }
+        }
+
+        private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
         {
             if (!options.Any())
             {
