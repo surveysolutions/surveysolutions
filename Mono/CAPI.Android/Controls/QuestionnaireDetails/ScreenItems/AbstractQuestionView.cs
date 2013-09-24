@@ -52,6 +52,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 instructionDialog.Dispose();
                 instructionDialog = null;
             }
+
+            if (Content != null)
+            {
+                Content.Dispose();
+                Content = null;
+            }
         }
 
         protected View Content { get; set; }
