@@ -667,7 +667,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerDeclaredValid(questionId, propagationVector));
         }
 
-        public void AnswerMultipleOptionLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
+        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, int[][] selectedPropagationVectors)
         {
             var answeredQuestion = new Identity(questionId, propagationVector);
 
@@ -860,7 +860,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
         }
 
-        public void Complete(Guid userId)
+        public void Complete(Guid userId, string comment)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
@@ -869,19 +869,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isInterviewValid = this.HasInvalidAnswers() || this.HasNotAnsweredMandatoryQuestions(questionnaire);
 
             this.ApplyEvent(new InterviewCompleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
             this.ApplyEvent(isInterviewValid
                 ? new InterviewDeclaredValid() as object
                 : new InterviewDeclaredInvalid() as object);
         }
 
-        public void Restart(Guid userId)
+        public void Restart(Guid userId, string comment)
         {
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
             this.ApplyEvent(new InterviewRestarted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
         }
 
         public void Approve(Guid userId, string comment)

@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredValid>, IEventHandler<GroupPropagated>, IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>, IEventHandler<QuestionDisabled>, IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>, IEventHandler<InterviewSynchronized>,
-        IEventHandler<InterviewCompleted>, IEventHandler<InterviewDeclaredValid>, IEventHandler
+        IEventHandler<InterviewCompleted>, IEventHandler<InterviewDeclaredValid>, IEventHandler<SingleOptionLinkedQuestionAnswered>,IEventHandler<MultipleOptionsLinkedQuestionAnswered>, IEventHandler
     {
 
 
@@ -46,12 +46,20 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt) {}
 
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) { }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) { }
+
         public string Name {
             get { return "Dummy event handler"; }
         }
         public Type[] UsesViews {
             get { return  new Type[0]; }
         }
-        public Type[] BuildsViews { get { return new Type[0]; } }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[0]; }
+        }
     }
 }
