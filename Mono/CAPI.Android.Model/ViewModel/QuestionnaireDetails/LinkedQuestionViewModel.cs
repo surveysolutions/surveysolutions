@@ -35,6 +35,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Mandatory, this.Capital, this.ValidationMessage, this.getAnswerOptions);
         }
 
+        public override string AnswerString
+        {
+            get
+            {
+                var selectedAnswers =
+                    Answers.Where(a => SelectedAnswers.Any(selected => IsVectorsEqual(selected, a.PropagationVector)))
+                        .Select(answer => answer.Title)
+                        .ToList();
+                return string.Join(", ", selectedAnswers);
+            }
+        }
+
         public override void SetAnswer(object answer)
         {
             if (answer == null)
@@ -72,9 +84,17 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
         }
 
-        public void HandleAnswerListChange()
+public void HandleAnswerListChange()
         {
             this.RaisePropertyChanged("AnswerOptions");
+        }
+
+
+        public static bool IsVectorsEqual(int[] vector1, int[] vector2)
+        {
+            if (vector1.Length != vector2.Length)
+                return false;
+            return !vector1.Where((t, i) => t != vector2[i]).Any();
         }
     }
 }

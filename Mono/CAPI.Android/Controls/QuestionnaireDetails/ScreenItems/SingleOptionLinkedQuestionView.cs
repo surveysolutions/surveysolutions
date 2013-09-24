@@ -57,14 +57,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var vector = tag.Split(Separator).Select(int.Parse).ToArray();
             return Answers.FirstOrDefault(
-              a => this.IsVectorsEqual(a.PropagationVector, vector));
-        }
-
-        private bool IsVectorsEqual(int[] vector1, int[] vector2)
-        {
-            if (vector1.Length != vector2.Length)
-                return false;
-            return !vector1.Where((t, i) => t != vector2[i]).Any();
+              a => LinkedQuestionViewModel.IsVectorsEqual(a.PropagationVector, vector));
         }
 
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel selectedAnswer)
@@ -77,7 +70,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override bool IsAnswerSelected(LinkedAnswerViewModel answer)
         {
-            return TypedMode.SelectedAnswers.Any(a => this.IsVectorsEqual(a, answer.PropagationVector));
+            return TypedMode.SelectedAnswers.Any(a => LinkedQuestionViewModel.IsVectorsEqual(a, answer.PropagationVector));
         }
     }
 }
