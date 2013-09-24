@@ -15,7 +15,7 @@
               self.alias = ko.observable('').extend({
                   required: true, maxLength: 32,
                   pattern: {
-                      message: "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit",
+                      message: "Valid variable name should contain only letters, digits and the underscore character and should not start with a digit",
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
                   },
                   notEqual : 'this'

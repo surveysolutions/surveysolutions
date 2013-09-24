@@ -8,9 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -18,11 +16,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class InterviewViewModel : MvxViewModel, IView
     {
-        public InterviewViewModel(Guid id)
+        protected InterviewViewModel(Guid id)
         {
             this.PublicKey = id;
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
+            this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
+
             this.Templates = new TemplateCollection();
         }
 
@@ -44,6 +44,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             CreateInterviewChapters(questionnarie);
 
             CreateInterviewTitle(questionnarie);
+
+            this.referencedQuestionToLinkedQuestionsMap = questionnarie
+                .Find<IQuestion>(question => question.LinkedToQuestionId != null)
+                .GroupBy(question => question.LinkedToQuestionId.Value)
+                .ToDictionary(
+                    keySelector: grouping => grouping.Key,
+                    elementSelector: grouping => grouping.Select(question => question.PublicKey).ToArray());
         }
 
         private void SetAnswers(InterviewSynchronized interviewData)
@@ -51,11 +58,17 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             foreach (var answeredQuestion in interviewData.InterviewData.Answers)
             {
                 var questionKey = new InterviewItemId(answeredQuestion.Id, answeredQuestion.PropagationVector);
-                if (!this.Questions.ContainsKey(questionKey))
-                    continue;
+                if (this.Questions.ContainsKey(questionKey))
+                {
+                    SetAnswer(questionKey, answeredQuestion.Answer);
+                    SetComment(questionKey, answeredQuestion.Comments);
+                }
+                else if (this.FeaturedQuestions.ContainsKey(questionKey))
+                {
+                    var question = this.FeaturedQuestions[questionKey];
+                    question.SetAnswer(answeredQuestion.Answer);
+                }
 
-                SetAnswer(questionKey, answeredQuestion.Answer);
-                SetComment(questionKey, answeredQuestion.Comments);
             }
         }
 
@@ -100,16 +113,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void CreateInterviewTitle(IQuestionnaireDocument questionnarie)
         {
-            this.Title = string.Format("{0} - ", questionnarie.Title);
-            var answersOnFeaturedQuestions = new List<string>();
-            foreach (var featuredQuestionFromTemplate in questionnarie.Find<IQuestion>(q => q.Featured))
+            string featuredTitle = "";
+            foreach (var questionViewModel in FeaturedQuestions)
             {
-                var key = new InterviewItemId(featuredQuestionFromTemplate.PublicKey);
-                if (!this.Questions.ContainsKey(key))
-                    continue;
-                answersOnFeaturedQuestions.Add(Questions[key].AnswerString);
+                featuredTitle += string.Format("| {0} ", questionViewModel.Value.AnswerString);
             }
-            this.Title += string.Join(" ", answersOnFeaturedQuestions);
+
+            this.Title = string.Format("{0} {1}", questionnarie.Title, featuredTitle);
         }
 
         protected void BuildInterviewStructureFromTemplate(IGroup document)
@@ -181,6 +191,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected TemplateCollection Templates { get; set; }
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
+        private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = new Dictionary<Guid, HashSet<InterviewItemId>>();
+        private Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
+        protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
+        
 
         #endregion
 
@@ -309,7 +323,43 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return this.Questions.Select(q => q.Value).Where(filter);
         }
 
+        public void AddInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(Guid questionId, int[] propagationVector)
+        {
+            if (!this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(questionId))
+                this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.Add(questionId, new HashSet<InterviewItemId>());
 
+            var questionInstanceId = new InterviewItemId(questionId, propagationVector);
+
+            this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[questionId].Add(questionInstanceId);
+
+            this.NotifyAffectedLinkedQuestions(questionId);
+        }
+
+        public void RemoveInstanceOfAnsweredQuestionUsableAsLinkedQuestionsOption(Guid questionId, int[] propagationVector)
+        {
+            if (!this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(questionId))
+                return;
+
+            var questionInstanceId = new InterviewItemId(questionId, propagationVector);
+
+            this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[questionId].Remove(questionInstanceId);
+
+            this.NotifyAffectedLinkedQuestions(questionId);
+        }
+
+        private void NotifyAffectedLinkedQuestions(Guid referencedQuestionId)
+        {
+            this.referencedQuestionToLinkedQuestionsMap[referencedQuestionId]
+                .SelectMany(
+                    linkedQuestionId =>
+                        this.Questions.Values.OfType<LinkedQuestionViewModel>()
+                            .Where(questionViemModel => questionViemModel.PublicKey.Id == linkedQuestionId))
+                .ToList()
+                .ForEach(linkedQuestionViewModel =>
+                {
+                    linkedQuestionViewModel.HandleAnswerListChange();
+                });
+        }
 
         #endregion
 
@@ -426,9 +476,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected IList<IQuestionnaireItemViewModel> BuildItems(IGroup screen, bool updateHash)
         {
             IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
-            foreach (var children in screen.Children)
+            foreach (var child in screen.Children)
             {
-                var item = CreateView(children);
+                var item = CreateView(child);
                 if (item == null)
                     continue;
                 var question = item as QuestionViewModel;
@@ -503,6 +553,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
                 QuestionViewModel questionView = CreateQuestionView(question);
 
+                if (question.Featured)
+                {
+                    this.FeaturedQuestions.Add(questionView.PublicKey, questionView);
+                    return null;
+                }
+
                 HandleQuestionPossibleTriggers(question);
 
                 return questionView;
@@ -532,7 +588,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private bool IfQuestionNeedToBeSkipped(IQuestion question)
         {
-            return question.QuestionScope != QuestionScope.Interviewer || question.Featured;
+            return question.QuestionScope != QuestionScope.Interviewer && !question.Featured;
         }
 
         private QuestionViewModel CreateQuestionView(IQuestion question)
@@ -565,7 +621,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newType,
                 true, question.Instructions,
                 true, question.Mandatory, question.Capital, question.ValidationMessage,
-                (propagationVector) => this.CollectOptionOfLinkedQuestion(propagationVector, question.LinkedToQuestionId.Value));
+                () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value));
         }
 
         private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
@@ -580,13 +636,15 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 true, question.Mandatory, question.Capital, null, question.ValidationMessage);
         }
 
-        protected IEnumerable<LinkedAnswerViewModel> CollectOptionOfLinkedQuestion(int[] propagationVector, Guid linkedQuestionId)
+        protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId)
         {
-            if (propagationVector!=null && propagationVector.Length > 1)
-                throw new NotImplementedException(
-                    "linked questions is not supported for propagation level more then one. Question is: do we need to show all available answers by all level or only by parent level?");
-            var questions = this.Questions.Where(q => q.Key.Id == linkedQuestionId).Select(q => q.Value);
-            return questions.Select(q => new LinkedAnswerViewModel(q.PublicKey.PropagationVector, q.AnswerString));
+            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId)
+                ? Enumerable.Empty<LinkedAnswerViewModel>()
+                : this
+                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
+                    .Select(instanceId => this.Questions[instanceId])
+                    .Where(questionInstance => questionInstance.IsEnabled())
+                    .Select(questionInstance => new LinkedAnswerViewModel(questionInstance.PublicKey.PropagationVector, questionInstance.AnswerString));
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)
@@ -605,5 +663,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
 
         #endregion
+
+        public bool IsQuestionReferencedByAnyLinkedQuestion(Guid questionId)
+        {
+            return this.referencedQuestionToLinkedQuestionsMap.ContainsKey(questionId)
+                && this.referencedQuestionToLinkedQuestionsMap[questionId].Any();
+        }
     }
 }

@@ -1423,8 +1423,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     autoQuestionId: autoQuestionId,
                     questionId: questionId,
                     responsibleId: responsibleId,
-                    questionType: questionType,
-                    isAutoQuestionFeatured:true);
+                    questionType: questionType);
 
             // act
             TestDelegate act =
@@ -1435,7 +1434,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     type: questionType,
                     alias: "test",
                     isMandatory: false,
-                    isFeatured: false,
+                    isFeatured: true,
                     isHeaderOfPropagatableGroup: false,
                     scope: QuestionScope.Interviewer,
                     condition: string.Empty,
@@ -1451,7 +1450,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionCanNotBeFeatured));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured));
         }
         [Test]
         [TestCase(QuestionType.SingleOption)]
@@ -1471,8 +1470,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     autoQuestionId: autoQuestionId,
                     questionId: questionId,
                     responsibleId: responsibleId,
-                    questionType: questionType,
-                    isAutoQuestionHead:true);
+                    questionType: questionType);
 
             // act
             TestDelegate act =
@@ -1484,7 +1482,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     alias: "test",
                     isMandatory: false,
                     isFeatured: false,
-                    isHeaderOfPropagatableGroup: false,
+                    isHeaderOfPropagatableGroup: true,
                     scope: QuestionScope.Interviewer,
                     condition: string.Empty,
                     validationExpression: string.Empty,
@@ -1499,7 +1497,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionCanNotBeHead));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
         }
     }
 }

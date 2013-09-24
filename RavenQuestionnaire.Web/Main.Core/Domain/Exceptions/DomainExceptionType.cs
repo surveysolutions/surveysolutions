@@ -144,6 +144,8 @@
 
         QuestionCanNotBeFeatured,
 
+        QuestionCanNotContainValidation,
+
         ConflictBetweenLinkedQuestionAndOptions,
 
         NotSupportedQuestionForLinkedQuestion,
@@ -152,8 +154,8 @@
 
         NotCategoricalQuestionLinkedToAnoterQuestion,
 
-        LinkedQuestionCanNotBeFeatured,
+        QuestionWithLinkedQuestionCanNotBeFeatured,
 
-        LinkedQuestionCanNotBeHead
+        QuestionWithLinkedQuestionCanNotBeHead
     }
 }
