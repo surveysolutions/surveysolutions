@@ -62,7 +62,7 @@
             <!-- ko foreach:ListView.Items -->
             <tr>
                 <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + QuestionnaireId() }, text: QuestionnaireTitle() + ' (ver.' + QuestionnaireVersion() + ')'"></a>
+                    <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: QuestionnaireTitle() + ' (ver.' + QuestionnaireVersion() + ')'"></a>
                 </td>
                 <td data-bind="template: { name: 'SupervisorAssignedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>
@@ -70,7 +70,7 @@
                 <td data-bind="template: { name: 'ApprovedBySupervisorCountTemplate' }"></td>
                 <td data-bind="template: { name: 'RejectedBySupervisorCountTemplate' }"></td>
                 <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateid=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: TotalCount"></a>
+                    <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: TotalCount"></a>
                 </td>
             </tr>
             <!-- /ko -->
