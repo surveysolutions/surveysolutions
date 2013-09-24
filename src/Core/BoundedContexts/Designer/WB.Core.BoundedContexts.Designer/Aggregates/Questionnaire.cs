@@ -863,7 +863,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new DomainException(
                     DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
-                    "Question inside propagated group can not be featured");
+                    "Question inside propagated group can not be pre-filled");
             }
         }
 
@@ -1046,7 +1046,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         {
                             throw new DomainException(
                                 DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
-                                "Question that linked to another question can not be featured");
+                                "Question that linked to another question can not be pre-filled");
                         }
 
                         if (isHead)
@@ -1194,8 +1194,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             if (isFeatured && questionType == QuestionType.GpsCoordinates)
                 throw new DomainException(
-                    DomainExceptionType.QuestionCanNotBeFeatured, 
-                    "Question can't be featured");
+                    DomainExceptionType.QuestionCanNotBeFeatured,
+                    "Question can't be pre-filled");
         }
 
         private void ThrowDomainExceptionIfQuestionCanNotContainValidations(QuestionType questionType, string validationExpression)
