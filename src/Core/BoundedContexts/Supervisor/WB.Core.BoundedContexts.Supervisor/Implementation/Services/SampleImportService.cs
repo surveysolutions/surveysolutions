@@ -308,7 +308,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         break;
                     case QuestionType.GpsCoordinates:
                     case QuestionType.MultyOption:
-                        //throw new Exception("Unsupported featured question type in sample");
+                        //throw new Exception("Unsupported pre-filled question type in sample");
                         break;
                 }
             }
