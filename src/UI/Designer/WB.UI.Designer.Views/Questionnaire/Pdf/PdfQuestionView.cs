@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
@@ -95,6 +96,14 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                 } while (next != null);
 
                 return next;
+            }
+        }
+
+        public string StringItemNumber {
+            get
+            {
+                var questionNumberSections = this.GetQuestionNumberSections();
+                return string.Join(".", questionNumberSections.Select(x => x.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')));
             }
         }
     }
