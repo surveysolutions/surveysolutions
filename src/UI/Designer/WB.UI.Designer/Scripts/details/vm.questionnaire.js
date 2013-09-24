@@ -550,7 +550,11 @@
             },
             showError = function(message) {
                 errors.removeAll();
-                errors.push(message);
+                if (!_.isUndefined(message.error)) {
+                    errors.push(message.error);
+                } else {
+                    errors.push(message);
+                }
                 isOutputVisible(true);
             };
 
