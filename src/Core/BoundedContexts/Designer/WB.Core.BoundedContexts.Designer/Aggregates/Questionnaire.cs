@@ -1,4 +1,6 @@
 ﻿using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     using Main.Core.Entities;
 
-    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
+    public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
@@ -81,63 +83,45 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {}
 
         public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
-            : this(publicKey, title, createdBy, isPublic)
+            : base(publicKey)
         {
-            source.Children.ApplyAction(
-                x => x.Children,
-                (parent, x) =>
-                {
-                    Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
-                    var g = x as IGroup;
-                    if (g != null)
-                    {
-                        this.NewAddGroup(
-                            groupId: g.PublicKey,
-                            parentGroupId: parentId,
-                            title: g.Title,
-                            propagationKind: g.Propagated,
-                            description: g.Description,
-                            condition: g.ConditionExpression,
-                            responsibleId: createdBy);
-                        return;
-                    }
+            var clock = NcqrsEnvironment.Get<IClock>();
 
-                    var q = x as IQuestion;
-                    if (q != null)
-                    {
-                        var autoQuestion = q as IAutoPropagate;
-                        this.NewAddQuestion(
-                            questionId: q.PublicKey,
-                            groupId: parentId.Value,
-                            title: q.QuestionText,
-                            type: q.QuestionType,
-                            alias: q.StataExportCaption,
-                            isMandatory: q.Mandatory,
-                            isFeatured: q.Featured,
-                            isHeaderOfPropagatableGroup: q.Capital,
-                            scope: q.QuestionScope,
-                            condition: q.ConditionExpression,
-                            validationExpression: q.ValidationExpression,
-                            validationMessage: q.ValidationMessage,
-                            instructions: q.Instructions,
-                            options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
-                            optionsOrder: q.AnswerOrder,
-                            maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray(),
-                            responsibleId: createdBy,
-                            linkedToQuestionId: q.LinkedToQuestionId);
-                    }
-                });
+            var document = source as QuestionnaireDocument;
+            if (document == null)
+                throw new DomainException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
+
+            document.PublicKey = this.EventSourceId;
+            document.CreatedBy = createdBy;
+            document.CreationDate = clock.UtcNow();
+            document.Title = title;
+            document.IsPublic = isPublic;
+            if (document.SharedPersons != null)
+            {
+                document.SharedPersons.Clear();
+            }
+
+            ApplyEvent(new QuestionnaireCloned
+            {
+                QuestionnaireDocument = document,
+                ClonedFromQuestionnaireId = document.PublicKey,
+                ClonedFromQuestionnaireVersion = document.LastEventSequence
+            });
         }
 
-        public QuestionnaireDocument CreateSnapshot()
+        public QuestionnaireState CreateSnapshot()
         {
-            return this.innerDocument;
+            return new QuestionnaireState
+            {
+                QuestionnaireDocument = this.innerDocument,
+                Version = this.Version
+            };
         }
-        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+        public void RestoreFromSnapshot(QuestionnaireState snapshot)
        {
-            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
+            this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
         }
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
@@ -633,6 +617,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
+        }
+
+        protected internal void OnQuestionnaireCloned(QuestionnaireCloned e)
+        {
+            this.innerDocument = e.QuestionnaireDocument;
         }
 
         protected internal void OnGroupCloned(GroupCloned e)
