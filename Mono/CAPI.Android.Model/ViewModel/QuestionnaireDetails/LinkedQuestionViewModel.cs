@@ -40,7 +40,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             get
             {
                 var selectedAnswers =
-                    Answers.Where(a => SelectedAnswers.Any(selected => IsVectorsEqual(selected, a.PropagationVector)))
+                    AnswerOptions.Where(a => SelectedAnswers.Any(selected => IsVectorsEqual(selected, a.PropagationVector)))
                         .Select(answer => answer.Title)
                         .ToList();
                 return string.Join(", ", selectedAnswers);
