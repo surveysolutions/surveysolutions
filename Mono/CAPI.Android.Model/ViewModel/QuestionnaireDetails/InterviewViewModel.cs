@@ -109,7 +109,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string featuredTitle = "";
             foreach (var questionViewModel in FeaturedQuestions)
             {
-                featuredTitle = featuredTitle + string.Format("| {0} " + questionViewModel.Value.AnswerString);
+                featuredTitle += string.Format("| {0} ", questionViewModel.Value.AnswerString);
             }
 
             this.Title = string.Format("{0} {1}", questionnarie.Title, featuredTitle);
