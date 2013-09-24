@@ -8,9 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -23,6 +21,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             this.PublicKey = id;
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
+            this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
+
             this.Templates = new TemplateCollection();
         }
 
@@ -58,11 +58,17 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             foreach (var answeredQuestion in interviewData.InterviewData.Answers)
             {
                 var questionKey = new InterviewItemId(answeredQuestion.Id, answeredQuestion.PropagationVector);
-                if (!this.Questions.ContainsKey(questionKey))
-                    continue;
+                if (this.Questions.ContainsKey(questionKey))
+                {
+                    SetAnswer(questionKey, answeredQuestion.Answer);
+                    SetComment(questionKey, answeredQuestion.Comments);
+                }
+                else if (this.FeaturedQuestions.ContainsKey(questionKey))
+                {
+                    var question = this.FeaturedQuestions[questionKey];
+                    question.SetAnswer(answeredQuestion.Answer);
+                }
 
-                SetAnswer(questionKey, answeredQuestion.Answer);
-                SetComment(questionKey, answeredQuestion.Comments);
             }
         }
 
@@ -107,16 +113,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void CreateInterviewTitle(IQuestionnaireDocument questionnarie)
         {
-            this.Title = string.Format("{0} - ", questionnarie.Title);
-            var answersOnFeaturedQuestions = new List<string>();
-            foreach (var featuredQuestionFromTemplate in questionnarie.Find<IQuestion>(q => q.Featured))
+            string featuredTitle = "";
+            foreach (var questionViewModel in FeaturedQuestions)
             {
-                var key = new InterviewItemId(featuredQuestionFromTemplate.PublicKey);
-                if (!this.Questions.ContainsKey(key))
-                    continue;
-                answersOnFeaturedQuestions.Add(Questions[key].AnswerString);
+                featuredTitle += string.Format("| {0} ", questionViewModel.Value.AnswerString);
             }
-            this.Title += string.Join(" ", answersOnFeaturedQuestions);
+
+            this.Title = string.Format("{0} {1}", questionnarie.Title, featuredTitle);
         }
 
         protected void BuildInterviewStructureFromTemplate(IGroup document)
@@ -190,6 +193,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = new Dictionary<Guid, HashSet<InterviewItemId>>();
         private Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
+        protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
+        
 
         #endregion
 
@@ -471,9 +476,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected IList<IQuestionnaireItemViewModel> BuildItems(IGroup screen, bool updateHash)
         {
             IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
-            foreach (var children in screen.Children)
+            foreach (var child in screen.Children)
             {
-                var item = CreateView(children);
+                var item = CreateView(child);
                 if (item == null)
                     continue;
                 var question = item as QuestionViewModel;
@@ -548,6 +553,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
                 QuestionViewModel questionView = CreateQuestionView(question);
 
+                if (question.Featured)
+                {
+                    this.FeaturedQuestions.Add(questionView.PublicKey, questionView);
+                    return null;
+                }
+
                 HandleQuestionPossibleTriggers(question);
 
                 return questionView;
@@ -577,7 +588,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private bool IfQuestionNeedToBeSkipped(IQuestion question)
         {
-            return question.QuestionScope != QuestionScope.Interviewer || question.Featured;
+            return question.QuestionScope != QuestionScope.Interviewer && !question.Featured;
         }
 
         private QuestionViewModel CreateQuestionView(IQuestion question)
