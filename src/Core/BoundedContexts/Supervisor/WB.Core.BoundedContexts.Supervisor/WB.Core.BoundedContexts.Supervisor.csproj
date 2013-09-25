@@ -72,6 +72,8 @@
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
+    <Compile Include="Views\DataExport\ExportedHeaderCollection.cs" />
+    <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportFactory.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportInputModel.cs" />

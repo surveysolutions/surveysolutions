@@ -1,9 +1,17 @@
 ﻿define('ko.bindingHandlers',
-['jquery', 'ko'],
-function ($, ko) {
+['jquery', 'ko', 'underscore'],
+function ($, ko, _) {
     var unwrap = ko.utils.unwrapObservable;
     $('#toggleAllChapters').tooltip();
 
+    var replaceLeadingZeros = function (val) {
+        if (_.isNull(val) || _.isUndefined(val)) {
+            return val;
+        }
+        var re = /^(-?)(0+)(0\.|[1-9])/;
+        return val.toString().replace(re, '$1$3');
+    };
+    
     ko.subscribable.fn.trimmed = function () {
         return ko.computed({
             read: function () {
@@ -20,10 +28,10 @@ function ($, ko) {
     ko.subscribable.fn.trimmedNumber = function () {
         return ko.computed({
             read: function () {
-                return this() * 1;
+                return replaceLeadingZeros(this());
             },
             write: function (value) {
-                this(value * 1);
+                this(replaceLeadingZeros(value));
                 this.valueHasMutated();
             },
             owner: this
