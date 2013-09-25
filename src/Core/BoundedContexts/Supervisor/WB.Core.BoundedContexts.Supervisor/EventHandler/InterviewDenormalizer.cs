@@ -37,7 +37,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
         IEventHandler<FlagRemovedFromAnswer>,
-        IEventHandler<FlagSetToAnswer>
+        IEventHandler<FlagSetToAnswer>,
+        IEventHandler<InterviewDeclaredInvalid>,
+        IEventHandler<InterviewDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
@@ -434,6 +436,25 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             interview.ResponsibleId = evnt.Payload.InterviewerId;
             interview.ResponsibleRole = UserRoles.Operator;
+
+            this.interviews.Store(interview, interview.InterviewId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, false);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, true);
+        }
+
+        private void SetInterviewValidity(Guid interviewId, bool isValid)
+        {
+            var interview = this.interviews.GetById(interviewId);
+
+            interview.HasErrors = !isValid;
 
             this.interviews.Store(interview, interview.InterviewId);
         }

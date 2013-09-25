@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
         public Guid ResponsibleId { get; set; }
         public InterviewStatus Status { get; set; }
         public bool IsDeleted { get; set; }
+        public bool HasErrors { get; set; }
     }
 }
