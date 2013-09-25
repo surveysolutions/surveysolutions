@@ -1069,9 +1069,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Cannot create interview from questionnaire '{1}' because following questions in it have invalid validation expressions:{0}{2}",
                     Environment.NewLine, questionnaireId,
                     string.Join(
-                        Environment.NewLine,
-                        invalidQuestions.Select(questionId
-                            => string.Format("{0} : {1}", FormatQuestionForException(questionId, questionnaire), questionnaire.GetCustomValidationExpression(questionId))))));
+                        Environment.NewLine + Environment.NewLine,
+                        invalidQuestions.Select(questionId => string.Format(
+                            "Question: {0}, expression: {1}",
+                            FormatQuestionForException(questionId, questionnaire),
+                            questionnaire.GetCustomValidationExpression(questionId))))));
         }
 
         private static void ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(IQuestionnaire questionnaire, Guid questionnaireId)
