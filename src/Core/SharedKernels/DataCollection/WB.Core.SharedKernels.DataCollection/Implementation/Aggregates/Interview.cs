@@ -781,33 +781,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
         }
 
-        private IEnumerable<int[]> AvailablePropagationLevelsForGroup(IQuestionnaire questionnaire, Guid groupdId)
-        {
-            int groupPropagationLevel = questionnaire.GetPropagationLevelForGroup(groupdId);
-
-            Guid[] parentPropagatableGroupsStartingFromTop =
-                questionnaire.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupdId)
-                    .ToArray();
-
-            var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, groupPropagationLevel,
-                parentPropagatableGroupsStartingFromTop, this.GetCountOfPropagatableGroupInstances);
-            return availablePropagationLevels;
-        }
-
-        private IEnumerable<int[]> AvailablePropagationLevelsForQuestion(IQuestionnaire questionnaire, Guid questionId)
-        {
-            int questionPropagationLevel = questionnaire.GetPropagationLevelForQuestion(questionId);
-
-            Guid[] parentPropagatableGroupsStartingFromTop =
-                questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId)
-                    .ToArray();
-
-            var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, questionPropagationLevel,
-                parentPropagatableGroupsStartingFromTop, this.GetCountOfPropagatableGroupInstances);
-
-            return availablePropagationLevels;
-        }
-
         public void CommentAnswer(Guid userId, Guid questionId, int[] propagationVector, DateTime commentTime,string comment)
         {
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1653,6 +1626,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.propagatedGroupInstanceCounts.ContainsKey(propagatableGroupKey)
                 ? this.propagatedGroupInstanceCounts[propagatableGroupKey]
                 : 0;
+        }
+
+        private IEnumerable<int[]> AvailablePropagationLevelsForGroup(IQuestionnaire questionnaire, Guid groupdId)
+        {
+            int groupPropagationLevel = questionnaire.GetPropagationLevelForGroup(groupdId);
+
+            Guid[] parentPropagatableGroupsStartingFromTop =
+                questionnaire.GetParentPropagatableGroupsAndGroupItselfIfPropagatableStartingFromTop(groupdId)
+                    .ToArray();
+
+            var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, groupPropagationLevel,
+                parentPropagatableGroupsStartingFromTop, this.GetCountOfPropagatableGroupInstances);
+            return availablePropagationLevels;
+        }
+
+        private IEnumerable<int[]> AvailablePropagationLevelsForQuestion(IQuestionnaire questionnaire, Guid questionId)
+        {
+            int questionPropagationLevel = questionnaire.GetPropagationLevelForQuestion(questionId);
+
+            Guid[] parentPropagatableGroupsStartingFromTop =
+                questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId)
+                    .ToArray();
+
+            var availablePropagationLevels = this.ExtendPropagationVector(EmptyPropagationVector, questionPropagationLevel,
+                parentPropagatableGroupsStartingFromTop, this.GetCountOfPropagatableGroupInstances);
+
+            return availablePropagationLevels;
         }
 
         private bool IsQuestionAnsweredValid(Identity question)
