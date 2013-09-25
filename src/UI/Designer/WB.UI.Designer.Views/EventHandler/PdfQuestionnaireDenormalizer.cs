@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts.View;
@@ -25,7 +27,8 @@ namespace WB.UI.Designer.Views.EventHandler
         IEventHandler<QuestionDeleted>,
         IEventHandler<QuestionnaireItemMoved>,
         IEventHandler<QuestionnaireUpdated>,
-        IEventHandler<TemplateImported>
+        IEventHandler<TemplateImported>,
+        IEventHandler<QuestionnaireCloned>
     {
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
         private readonly ILogger logger;
@@ -277,18 +280,26 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            this.HandleUpdateEvent(evnt, handle: (@event, questionnaire) => this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(@event.Source));
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) => this.CreatePdfQuestionnaireViewFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument));
+        }
+
+        private PdfQuestionnaireView CreatePdfQuestionnaireViewFromQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
+        {
+            var accountView = this.userViewFactory.Load(new AccountViewInputModel(questionnaireDocument.CreatedBy));
+            var pdf = new PdfQuestionnaireView
             {
-                var pdf = new PdfQuestionnaireView();
-                pdf.Title = @event.Source.Title;
-                pdf.CreationDate = @event.Source.CreationDate;
-                var accountView = userViewFactory.Load(new AccountViewInputModel(@event.Source.CreatedBy));
+                Title = questionnaireDocument.Title,
+                CreationDate = questionnaireDocument.CreationDate,
+                CreatedBy = accountView != null ? accountView.UserName : "n/a"
+            };
 
-                pdf.CreatedBy = accountView != null ? accountView.UserName : "n/a";
-
-                pdf.FillFrom(@event.Source);
-                return pdf;
-            });
+            pdf.FillFrom(questionnaireDocument);
+            return pdf;
         }
     }
 }
