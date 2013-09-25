@@ -656,11 +656,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
-            this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
+            
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
-        
+            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+            var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedPropagationVector);
+
+            this.ThrowIfPropagationVectorIsIncorrect(linkedQuestionId, selectedPropagationVector, questionnaire);
+            this.ThrowIfQuestionOrParentGroupIsDisabled(answeredLinkedQuestion, questionnaire);
+            this.ThrowIfLinkedQuestionDoesNotHaveAnswer(answeredQuestion, answeredLinkedQuestion, questionnaire);
+
 
             this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVector));
 
@@ -674,11 +680,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
-            this.ThrowIfQuestionHasNoLinkedQuestionId(questionId, questionnaire);
+            this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
-
+            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+            foreach (var answeredLinkedQuestion in selectedPropagationVectors.Select(selectedPropagationVector => new Identity(linkedQuestionId, selectedPropagationVector)))
+            {
+                this.ThrowIfPropagationVectorIsIncorrect(linkedQuestionId, answeredLinkedQuestion.PropagationVector, questionnaire);    
+                this.ThrowIfQuestionOrParentGroupIsDisabled(answeredLinkedQuestion, questionnaire);
+                this.ThrowIfLinkedQuestionDoesNotHaveAnswer(answeredQuestion, answeredLinkedQuestion, questionnaire);
+            }
+            
 
             this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedPropagationVectors));
 
@@ -1003,13 +1016,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
         }
 
-        private void ThrowIfQuestionHasNoLinkedQuestionId(Guid questionId, IQuestionnaire questionnaire)
+        private Guid GetLinkedQuestionIdOrThrow(Guid questionId, IQuestionnaire questionnaire)
         {
             Guid? linkedQuestionId = questionnaire.GetQuestionLinkedQuestionId(questionId);
             if(!linkedQuestionId.HasValue)
                 throw new InterviewException(string.Format(
                    "Question {0} wasn't linked on any question",
                    FormatQuestionForException(questionId, questionnaire)));
+
+            return linkedQuestionId.Value;
+        }
+
+        private void ThrowIfLinkedQuestionDoesNotHaveAnswer(Identity answeredQuestion, Identity answeredLinkedQuestion, IQuestionnaire questionnaire)
+        {
+            if (!this.WasQuestionAnswered(answeredLinkedQuestion))
+            {
+                throw new InterviewException(string.Format(
+                    "Could not set answer for question {0} because his dependent linked question {1} does not have answer",
+                    FormatQuestionForException(answeredQuestion, questionnaire),
+                    FormatQuestionForException(answeredLinkedQuestion, questionnaire)));
+            }
         }
 
         private static void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
@@ -1043,9 +1069,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Cannot create interview from questionnaire '{1}' because following questions in it have invalid validation expressions:{0}{2}",
                     Environment.NewLine, questionnaireId,
                     string.Join(
-                        Environment.NewLine,
-                        invalidQuestions.Select(questionId
-                            => string.Format("{0} : {1}", FormatQuestionForException(questionId, questionnaire), questionnaire.GetCustomValidationExpression(questionId))))));
+                        Environment.NewLine + Environment.NewLine,
+                        invalidQuestions.Select(questionId => string.Format(
+                            "Question: {0}, expression: {1}",
+                            FormatQuestionForException(questionId, questionnaire),
+                            questionnaire.GetCustomValidationExpression(questionId))))));
         }
 
         private static void ThrowIfSomeGroupsHaveInvalidCustomEnablementConditions(IQuestionnaire questionnaire, Guid questionnaireId)
