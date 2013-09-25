@@ -99,11 +99,17 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
             }
         }
 
+        private string stringItemNumber = null;
+
         public string StringItemNumber {
             get
             {
-                var questionNumberSections = this.GetQuestionNumberSections();
-                return string.Join(".", questionNumberSections.Select(x => x.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')));
+                if (stringItemNumber == null)
+                {
+                    stringItemNumber = string.Join(".", QuestionNumberSections.Select(x => x.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')));
+                }
+
+                return stringItemNumber;
             }
         }
     }
