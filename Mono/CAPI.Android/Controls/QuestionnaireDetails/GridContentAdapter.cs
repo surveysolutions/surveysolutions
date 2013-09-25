@@ -31,6 +31,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
        
         private readonly Guid QuestionnaireId;
         private readonly ListView listView;
+        private bool isDisposed = false;
         public GridContentAdapter(QuestionnaireGridViewModel model,int columnCount, Context context,
                                   Action<ScreenChangedEventArgs> onScreenChanged,
                                   TextView tvEmptyLabelDescription, ListView listView)
@@ -43,7 +44,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.tvEmptyLabelDescription = tvEmptyLabelDescription;
             this.QuestionnaireId = model.QuestionnaireId;
             this.listView = listView;
-            this.listView.ScrollingCacheEnabled = false;
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            isDisposed = true;
         }
 
         private static IList<RosterTable> CreateItemList(QuestionnaireGridViewModel model, int columnCount)
@@ -184,6 +192,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         private void HideOrShowTableRows(RosterTable row, QuestionnaireScreenViewModel item, string propertyName, LinearLayout rosterRecordView)
         {
+            if (isDisposed)
+            {
+                return;
+            }
+
             if (propertyName != "Enabled")
             {
                 return;

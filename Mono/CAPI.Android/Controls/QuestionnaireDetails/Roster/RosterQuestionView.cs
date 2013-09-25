@@ -95,6 +95,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             }
 
             base.Dispose(disposing);
+
+            if (Content != null)
+            {
+                Content.Dispose();
+                Content = null;
+            }
         }
     }
 }
