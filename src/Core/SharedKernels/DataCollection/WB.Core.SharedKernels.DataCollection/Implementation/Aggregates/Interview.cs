@@ -384,7 +384,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.GpsCoordinates:
                     default:
                         throw new InterviewException(string.Format(
-                            "Question {0} has type {1} which is not supported as initial featured question.",
+                            "Question {0} has type {1} which is not supported as initial pre-filled question.",
                             questionId, questionType));
                 }
             }

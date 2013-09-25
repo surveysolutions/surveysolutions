@@ -99,19 +99,25 @@ namespace CAPI.Android.Core.Model.ChangeLog
         {
             var eventType = committedEvent.Payload;
 
-            if (eventType is AnswerCommented)
-                return true;
+            if (eventType is AnswerDeclaredInvalid)
+                return false;
 
-            if (eventType is AnswerRemoved)
-                return true;
+            if (eventType is AnswerDeclaredValid)
+                return false;
 
-            if (eventType is QuestionAnswered)
-                return true;
+            if (eventType is GroupDisabled)
+                return false;
 
-            if (eventType is GroupPropagated)
-                return true;
+            if (eventType is GroupEnabled)
+                return false;
 
-            return false;
+            if (eventType is QuestionDisabled)
+                return false;
+
+            if (eventType is QuestionEnabled)
+                return false;
+            
+            return true;
         }
 
         public void ReopenDraftRecord(Guid eventSourceId)

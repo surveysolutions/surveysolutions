@@ -638,11 +638,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId)
         {
-            return this
-                .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
-                .Select(instanceId => this.Questions[instanceId])
-                .Where(questionInstance => questionInstance.IsEnabled())
-                .Select(questionInstance => new LinkedAnswerViewModel(questionInstance.PublicKey.PropagationVector, questionInstance.AnswerString));
+            return !this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions.ContainsKey(referencedQuestionId)
+                ? Enumerable.Empty<LinkedAnswerViewModel>()
+                : this
+                    .instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions[referencedQuestionId]
+                    .Select(instanceId => this.Questions[instanceId])
+                    .Where(questionInstance => questionInstance.IsEnabled())
+                    .Select(questionInstance => new LinkedAnswerViewModel(questionInstance.PublicKey.PropagationVector, questionInstance.AnswerString));
         }
 
         protected QuestionType CalculateViewType(QuestionType questionType)
