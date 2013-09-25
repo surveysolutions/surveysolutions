@@ -40,6 +40,7 @@
                 <!-- /ko -->
                 <th data-bind='sortby: "ResponsibleName"'>Responsible</th>
                 <th data-bind='sortby: "UpdateDate"'>Last Update</th>
+                <th data-bind='sortby: "HasErrors"'>Нas Errors</th>
                 <th data-bind='sortby: "Status"'>Status</th>
                 <th></th>
             </tr>
@@ -62,6 +63,9 @@
                     <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
+                <td>
+                    <input type="checkbox" data-bind="checked: HasErrors, enable: false" />
+                </td>
                 <td data-bind="text: Status"></td>
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
