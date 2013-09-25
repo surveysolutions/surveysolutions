@@ -25,7 +25,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                 IEventHandler<GeoLocationQuestionAnswered>,
                                                 IEventHandler<InterviewerAssigned>,
                                                 IEventHandler<InterviewDeleted>,
-                                                IEventHandler<InterviewRestored>
+                                                IEventHandler<InterviewRestored>,
+        IEventHandler<InterviewDeclaredInvalid>,
+        IEventHandler<InterviewDeclaredValid>
         
 
     {
@@ -189,6 +191,25 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             interview.IsDeleted = false;
             interview.UpdateDate = evnt.EventTimeStamp;
+
+            this.interviews.Store(interview, interview.InterviewId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, false);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, true);
+        }
+
+        private void SetInterviewValidity(Guid interviewId, bool isValid)
+        {
+            InterviewSummary interview = this.interviews.GetById(interviewId);
+
+            interview.HasErrors = !isValid;
 
             this.interviews.Store(interview, interview.InterviewId);
         }

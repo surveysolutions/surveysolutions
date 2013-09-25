@@ -866,14 +866,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-            bool isInterviewValid = this.HasInvalidAnswers() || this.HasNotAnsweredMandatoryQuestions(questionnaire);
+            bool isInterviewInvalid = this.HasInvalidAnswers() || this.HasNotAnsweredMandatoryQuestions(questionnaire);
 
             this.ApplyEvent(new InterviewCompleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
-            this.ApplyEvent(isInterviewValid
-                ? new InterviewDeclaredValid() as object
-                : new InterviewDeclaredInvalid() as object);
+            this.ApplyEvent(isInterviewInvalid
+                ? new InterviewDeclaredInvalid() as object
+                : new InterviewDeclaredValid() as object);
         }
 
         public void Restart(Guid userId, string comment)
