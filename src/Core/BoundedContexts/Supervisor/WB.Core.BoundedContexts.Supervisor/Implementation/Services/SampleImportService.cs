@@ -302,8 +302,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         var singleOption = question as SingleQuestion;
                         if (singleOption != null)
                         {
-                            var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
-                            featuredAnswers.Add(question.PublicKey, answer.PublicKey);
+                            decimal answerValue;
+                            if (decimal.TryParse(values[i], out answerValue))
+                            {
+                                featuredAnswers.Add(question.PublicKey, answerValue);
+                            }
                         }
                         break;
                     case QuestionType.GpsCoordinates:
