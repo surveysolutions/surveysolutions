@@ -70,6 +70,7 @@ namespace Core.Supervisor.Views.Interview
                             ResponsibleId = x.ResponsibleId,
                             ResponsibleName = x.ResponsibleName,
                             ResponsibleRole = x.ResponsibleRole,
+                            HasErrors = x.HasErrors,
                             Status = x.Status.ToString(),
                             CanDelete =    x.Status == InterviewStatus.Created
                                         || x.Status == InterviewStatus.SupervisorAssigned

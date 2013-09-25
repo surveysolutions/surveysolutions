@@ -33,6 +33,8 @@ namespace CAPI.Android
         protected EventHandler<EventArgs> versionCheckEventHandler;
         protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
+        const string defaultTemplate = "http://";
+
         protected override void OnStart()
         {
             base.OnStart();
@@ -46,18 +48,18 @@ namespace CAPI.Android
             this.SetContentView(Resource.Layout.settings_dialog);
 
             buttonChange.Click += this.buttonChange_Click;
-            editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
             buttonCollect.Click += this.buttonCollect_Click;
             buttonCollectMajor.Click += this.buttonCollectMajor_Click;
             textSyncPoint.Click += textSyncPoint_Click;
             llContainer.Click += llContainer_Click;
-
+            btnWhereAmI.Click += btnWhereAmI_Click;
             btnVersion.Click += this.btnVersion_Click;
             btnVersion.Text = string.Format("Version: {0}. Check for a new version.", SettingsManager.AppVersionName());
-
-            btnWhereAmI.Click += btnWhereAmI_Click;
-
+            
             geoservice = new GeoService(this);
+
+            string addressPoint = SettingsManager.GetSyncAddressPoint();
+            editSettingsSync.Text = string.IsNullOrEmpty(addressPoint) ? defaultTemplate : addressPoint;
 
             textMem.Text = GetResourceUsage();
         }

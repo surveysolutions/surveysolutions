@@ -65,6 +65,7 @@ namespace Core.Supervisor.Views.Interviews
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     Status = x.Status.ToString(),
+                    HasErrors = x.HasErrors,
                     CanBeReassigned = x.Status == InterviewStatus.Created
                                       || x.Status == InterviewStatus.SupervisorAssigned
                                       || x.Status == InterviewStatus.InterviewerAssigned
