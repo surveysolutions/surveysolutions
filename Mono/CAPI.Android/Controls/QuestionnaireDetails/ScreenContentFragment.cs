@@ -84,14 +84,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (llContent != null)
-            {
-                if (llContent.Adapter != null)
-                {
-                    llContent.Adapter.Dispose();
-                }
 
-                llContent.Dispose();
+            if (disposing)
+            {
+                if (llContent != null)
+                {
+                    if (llContent.Adapter != null)
+                    {
+                        llContent.Adapter.Dispose();
+                    }
+
+                    llContent.Dispose();
+                }
             }
         }
 

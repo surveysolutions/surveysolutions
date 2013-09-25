@@ -89,17 +89,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                this.ClearAllBindings();
-            }
-
             base.Dispose(disposing);
 
-            if (Content != null)
+            if (disposing)
             {
-                Content.Dispose();
-                Content = null;
+                Console.WriteLine(string.Format("disposing roster question '{0}'", Model.Text));
+
+                this.ClearAllBindings();
+
+                if (Content != null)
+                {
+                    Content.Dispose();
+                    Content = null;
+                }
             }
         }
     }

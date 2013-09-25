@@ -21,19 +21,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class GridContentFragment : AbstractScreenChangingFragment
     {
-        protected TextView tvEmptyLabelDescription;
-        protected ListView llTablesContainer;
-        protected LinearLayout top;
-        private const string SCREEN_ID = "screenId";
-        private const string QUESTIONNAIRE_ID = "questionnaireId";
+        protected TextView TvEmptyLabelDescription;
+        protected ListView LlTablesContainer;
+        protected LinearLayout Top;
+        private const string ScreenId = "screenId";
+        private const string QuestionnaireId = "questionnaireId";
 
         public static GridContentFragment NewInstance(InterviewItemId screenId, Guid questionnaireId)
         {
             GridContentFragment myFragment = new GridContentFragment();
 
             Bundle args = new Bundle();
-            args.PutString(SCREEN_ID, screenId.ToString());
-            args.PutString(QUESTIONNAIRE_ID, questionnaireId.ToString());
+            args.PutString(ScreenId, screenId.ToString());
+            args.PutString(QuestionnaireId, questionnaireId.ToString());
             myFragment.Arguments = args;
 
             return myFragment;
@@ -51,55 +51,85 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 return null;
             }
 
-            top = new LinearLayout(inflater.Context);
-            top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+            this.Top = new LinearLayout(inflater.Context);
+            this.Top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);
-            top.Orientation = Orientation.Vertical;
+            this.Top.Orientation = Orientation.Vertical;
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
                                                   Questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
                                                   OnScreenChanged);
             breadcrumbs.SetPadding(0, 0, 0, 10);
-            top.AddView(breadcrumbs);
+            this.Top.AddView(breadcrumbs);
             
             BuildEmptyLabelDescription(inflater.Context);
             BuildTabels(inflater.Context);
 
             AjustControlVisibility();
 
-            return top;
+            this.SubscribeModelOnRowDisable();
+
+            return this.Top;
+        }
+
+        private void SubscribeModelOnRowDisable()
+        {
+            foreach (var row in this.Model.Rows)
+            {
+                row.PropertyChanged += this.Model_PropertyChanged;
+            }
+        }
+
+        private void UnSubscribeModelOnRowDisable()
+        {
+            if (Model == null || Model.Rows == null)
+                return;
+
+            foreach (var row in this.Model.Rows)
+            {
+                row.PropertyChanged -= this.Model_PropertyChanged;
+            }
+        }
+
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Enabled")
+            {
+                var tableVisible = Model.Rows.Any(r => r.Enabled);
+                this.LlTablesContainer.Visibility = tableVisible ? ViewStates.Visible : ViewStates.Invisible;
+                this.TvEmptyLabelDescription.Visibility = tableVisible ? ViewStates.Gone : ViewStates.Visible;
+            }
         }
 
         private void AjustControlVisibility()
         {
             if (IsRostersAreVisible())
-                tvEmptyLabelDescription.Visibility = ViewStates.Gone;
+                this.TvEmptyLabelDescription.Visibility = ViewStates.Gone;
             else
-                llTablesContainer.Visibility = ViewStates.Invisible;
+                this.LlTablesContainer.Visibility = ViewStates.Invisible;
         }
 
         protected void BuildEmptyLabelDescription(Context context)
         {
-            tvEmptyLabelDescription = new TextView(context);
-            tvEmptyLabelDescription.Gravity = GravityFlags.Center;
-            tvEmptyLabelDescription.TextSize = 22;
-            tvEmptyLabelDescription.SetPadding(10, 10, 10, 10);
-            tvEmptyLabelDescription.Text = "Questions are absent";
-            tvEmptyLabelDescription.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+            this.TvEmptyLabelDescription = new TextView(context);
+            this.TvEmptyLabelDescription.Gravity = GravityFlags.Center;
+            this.TvEmptyLabelDescription.TextSize = 22;
+            this.TvEmptyLabelDescription.SetPadding(10, 10, 10, 10);
+            this.TvEmptyLabelDescription.Text = "Questions are absent";
+            this.TvEmptyLabelDescription.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.WrapContent);
-            top.AddView(tvEmptyLabelDescription);
+            this.Top.AddView(this.TvEmptyLabelDescription);
         }
 
         protected void BuildTabels(Context context)
         {
-            llTablesContainer = new ListView(context);
-            llTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+            this.LlTablesContainer = new ListView(context);
+            this.LlTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             const int columnCount = 2;
-            llTablesContainer.Adapter = new GridContentAdapter(Model, columnCount, this.Activity, OnScreenChanged,
-                                                               tvEmptyLabelDescription, llTablesContainer);
-            llTablesContainer.ScrollingCacheEnabled = false;
+            this.LlTablesContainer.Adapter = new GridContentAdapter(Model, columnCount, this.Activity, OnScreenChanged);
+            this.LlTablesContainer.ScrollingCacheEnabled = false;
 
-            top.AddView(llTablesContainer);
+            this.Top.AddView(this.LlTablesContainer);
         }
 
         private bool IsRostersAreVisible()
@@ -115,7 +145,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             {
                 if (model == null)
                 {
-                    model = Questionnaire.Screens[InterviewItemId.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireGridViewModel;
+                    model = Questionnaire.Screens[InterviewItemId.Parse(Arguments.GetString(ScreenId))] as QuestionnaireGridViewModel;
                 }
                 return model;
             }
@@ -130,7 +160,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 if (questionnaire == null)
                 {
                     questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                        new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
+                        new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QuestionnaireId))));
                 }
                 return questionnaire;
             }
@@ -140,16 +170,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             base.Dispose(disposing);
 
-            if (llTablesContainer != null)
+            if (disposing)
             {
-                if (llTablesContainer.Adapter != null)
-                {
-                    llTablesContainer.Adapter.Dispose();
-                    llTablesContainer.Adapter = null;
-                }
+                UnSubscribeModelOnRowDisable();
 
-                llTablesContainer.Dispose();
-                llTablesContainer = null;
+                if (this.LlTablesContainer != null)
+                {
+                    if (this.LlTablesContainer.Adapter != null)
+                    {
+                        this.LlTablesContainer.Adapter.Dispose();
+                        this.LlTablesContainer.Adapter = null;
+                    }
+
+                    this.LlTablesContainer.Dispose();
+                    this.LlTablesContainer = null;
+                }
             }
         }
     }

@@ -141,6 +141,8 @@
     <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\GridContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\PartialRosterRowView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\PartOfRosterView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnarieNavigationItem.cs" />
     <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
