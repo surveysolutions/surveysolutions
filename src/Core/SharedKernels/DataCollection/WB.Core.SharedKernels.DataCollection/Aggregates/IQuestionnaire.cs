@@ -88,5 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
 
         IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId);
+        
+        IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId);
     }
 }

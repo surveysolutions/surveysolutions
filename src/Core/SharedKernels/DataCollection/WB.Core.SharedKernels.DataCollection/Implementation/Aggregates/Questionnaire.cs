@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>(); 
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -498,6 +499,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions[groupId];
         }
 
+        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
+                this.cacheOfUnderlyingMandatoryQuestions[groupId] = this.GetUnderlyingMandatoryQuestionsImpl(groupId);
+
+            return this.cacheOfUnderlyingMandatoryQuestions[groupId];
+        }
+
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
         {
@@ -653,6 +662,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .ToList();
         }
 
+        private IEnumerable<Guid> GetUnderlyingMandatoryQuestionsImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Find<IQuestion>(question => question.Mandatory)
+                .Select(question => question.PublicKey)
+                .ToList();
+        }
 
         private IEnumerable<IGroup> GetAllGroups()
         {
