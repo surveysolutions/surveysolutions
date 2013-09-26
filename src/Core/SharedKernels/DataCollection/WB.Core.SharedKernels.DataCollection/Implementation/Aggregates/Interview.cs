@@ -491,13 +491,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PerformCustomValidationOfAnsweredQuestionAndDependentQuestions(
                 answeredQuestion, questionnaire, getAnswer, out answersDeclaredValid, out answersDeclaredInvalid);
 
-            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled;
+            List<Identity> initializedGroupsToBeDisabled, initializedGroupsToBeEnabled, initializedQuestionsToBeDisabled, initializedQuestionsToBeEnabled, initializedQuestionsToBeInvalid;
             this.DetermineCustomEnablementStateOfGroupsInitializedByIncreasedPropagation(
                 idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
                 out initializedGroupsToBeDisabled, out initializedGroupsToBeEnabled);
             this.DetermineCustomEnablementStateOfQuestionsInitializedByIncreasedPropagation(
                 idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
                 out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
+            this.DetermineValidityStateOfQuestionsInitializedByIncreasedPropagation(
+                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getCountOfPropagatableGroupInstances,
+                out initializedQuestionsToBeInvalid);
+
 
             List<Identity> dependentGroupsToBeDisabled, dependentGroupsToBeEnabled, dependentQuestionsToBeDisabled, dependentQuestionsToBeEnabled;
             this.DetermineCustomEnablementStateOfDependentGroups(
@@ -521,6 +525,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             initializedGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             initializedQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             initializedQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+            initializedQuestionsToBeInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
             dependentGroupsToBeDisabled.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
             dependentGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
@@ -1379,6 +1384,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         isNewStateEnabled: this.ShouldQuestionBeEnabledByCustomEnablementCondition(question, questionnaire, getAnswer),
                         isOldStateEnabled: true);
                 }
+            }
+        }
+
+        private void DetermineValidityStateOfQuestionsInitializedByIncreasedPropagation(List<Guid> idsOfGroupsToBePropagated,
+            int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire,
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances, out List<Identity> questionsToBeInvalid)
+        {
+            questionsToBeInvalid = new List<Identity>();
+
+            foreach (Guid idOfGroupBeingPropagated in idsOfGroupsToBePropagated)
+            {
+                int oldPropagationCount = this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
+
+                bool isPropagationCountBeingIncreased = propagationCount > oldPropagationCount;
+                if (!isPropagationCountBeingIncreased)
+                    continue;
+
+                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
+
+                IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingMandatoryQuestions(idOfGroupBeingPropagated);
+
+                IEnumerable<Identity> affectedQuestions = this
+                    .GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                        affectedQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances)
+                    .Where(group => IsInstanceBeingInitializedByIncreasedPropagation(group.PropagationVector, oldPropagationCount, indexOfGroupBeingPropagatedInPropagationVector));
+
+                questionsToBeInvalid.AddRange(affectedQuestions);
             }
         }
 
