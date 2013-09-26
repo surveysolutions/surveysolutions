@@ -61,12 +61,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.answersSupportedInExpressions = @event.InterviewData.Answers == null
                 ? new Dictionary<string, object>()
-                : @event.InterviewData
-                    .Answers
-                    .Where(question => !(question.Answer is GeoPosition))
+                : @event.InterviewData.Answers
+                    .Where(question => !(question.Answer is GeoPosition || question.Answer is int[] || question.Answer is int[][]))
                     .ToDictionary(
                         question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
                         question => question.Answer);
+
+            this.linkedSingleOptionAnswers = @event.InterviewData.Answers == null
+                ? new Dictionary<string, Tuple<Identity, int[]>>()
+                : @event.InterviewData.Answers
+                    .Where(question => question.Answer is int[])
+                    .ToDictionary(
+                        question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                        question => Tuple.Create(new Identity(question.Id, question.PropagationVector), (int[]) question.Answer);
+
+            this.linkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
+                ? new Dictionary<string, Tuple<Identity, int[][]>>()
+                : @event.InterviewData.Answers
+                    .Where(question => question.Answer is int[][])
+                    .ToDictionary(
+                        question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
+                        question => Tuple.Create(new Identity(question.Id, question.PropagationVector), (int[][]) question.Answer);
 
             this.answeredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector)));
@@ -139,6 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
+            this.linkedSingleOptionAnswers[questionKey] = Tuple.Create(new Identity(@event.QuestionId, @event.PropagationVector), @event.SelectedPropagationVector);
             this.answeredQuestions.Add(questionKey);
         }
 
@@ -146,6 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
+            this.linkedMultipleOptionsAnswers[questionKey] = Tuple.Create(new Identity(@event.QuestionId, @event.PropagationVector), @event.SelectedPropagationVectors);
             this.answeredQuestions.Add(questionKey);
         }
 
@@ -242,6 +259,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
             this.answersSupportedInExpressions.Remove(questionKey);
+            this.linkedSingleOptionAnswers.Remove(questionKey);
+            this.linkedMultipleOptionsAnswers.Remove(questionKey);
             this.answeredQuestions.Remove(questionKey);
             this.disabledQuestions.Remove(questionKey);
             this.validAnsweredQuestions.Remove(questionKey);
@@ -250,23 +269,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewState CreateSnapshot()
         {
-            return new InterviewState(questionnaireId, questionnaireVersion, status, answersSupportedInExpressions, answeredQuestions, disabledGroups,
-                                      disabledQuestions, propagatedGroupInstanceCounts, validAnsweredQuestions, invalidAnsweredQuestions, this.wasCompleted);
+            return new InterviewState(
+                this.questionnaireId,
+                this.questionnaireVersion,
+                this.status,
+                this.answersSupportedInExpressions,
+                this.linkedSingleOptionAnswers,
+                this.linkedMultipleOptionsAnswers,
+                this.answeredQuestions,
+                this.disabledGroups,
+                this.disabledQuestions,
+                this.propagatedGroupInstanceCounts,
+                this.validAnsweredQuestions,
+                this.invalidAnsweredQuestions,
+                this.wasCompleted);
         }
 
         public void RestoreFromSnapshot(InterviewState snapshot)
         {
-            questionnaireId = snapshot.QuestionnaireId;
-            questionnaireVersion = snapshot.QuestionnaireVersion;
-            status = snapshot.Status;
-            answersSupportedInExpressions = snapshot.AnswersSupportedInExpressions;
-            answeredQuestions = snapshot.AnsweredQuestions;
-            disabledGroups = snapshot.DisabledGroups;
-            disabledQuestions = snapshot.DisabledQuestions;
-            propagatedGroupInstanceCounts = snapshot.PropagatedGroupInstanceCounts;
-            validAnsweredQuestions = snapshot.ValidAnsweredQuestions;
-            invalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
-            this.wasCompleted = snapshot.WasCompleted;
+            this.questionnaireId                = snapshot.QuestionnaireId;
+            this.questionnaireVersion           = snapshot.QuestionnaireVersion;
+            this.status                         = snapshot.Status;
+            this.answersSupportedInExpressions  = snapshot.AnswersSupportedInExpressions;
+            this.linkedSingleOptionAnswers      = snapshot.LinkedSingleOptionAnswers;
+            this.linkedMultipleOptionsAnswers   = snapshot.LinkedMultipleOptionsAnswers;
+            this.answeredQuestions              = snapshot.AnsweredQuestions;
+            this.disabledGroups                 = snapshot.DisabledGroups;
+            this.disabledQuestions              = snapshot.DisabledQuestions;
+            this.propagatedGroupInstanceCounts  = snapshot.PropagatedGroupInstanceCounts;
+            this.validAnsweredQuestions         = snapshot.ValidAnsweredQuestions;
+            this.invalidAnsweredQuestions       = snapshot.InvalidAnsweredQuestions;
+            this.wasCompleted                   = snapshot.WasCompleted;
         }
 
         #endregion
