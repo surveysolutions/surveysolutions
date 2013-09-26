@@ -37,8 +37,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
         private Dictionary<string, object> answersSupportedInExpressions = new Dictionary<string, object>();
-        private Dictionary<string, Tuple<Identity, int[]>> linkedSingleOptionAnswers = new Dictionary<string, Tuple<Identity, int[]>>();
-        private Dictionary<string, Tuple<Identity, int[][]>> linkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Identity, int[][]>>();
+        private Dictionary<string, Tuple<Guid, int[], int[]>> linkedSingleOptionAnswers = new Dictionary<string, Tuple<Guid, int[], int[]>>();
+        private Dictionary<string, Tuple<Guid, int[], int[][]>> linkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Guid, int[], int[][]>>();
         private HashSet<string> answeredQuestions = new HashSet<string>();
         private HashSet<string> disabledGroups = new HashSet<string>();
         private HashSet<string> disabledQuestions = new HashSet<string>();
@@ -68,20 +68,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         question => question.Answer);
 
             this.linkedSingleOptionAnswers = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<Identity, int[]>>()
+                ? new Dictionary<string, Tuple<Guid, int[], int[]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is int[])
                     .ToDictionary(
                         question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
-                        question => Tuple.Create(new Identity(question.Id, question.PropagationVector), (int[]) question.Answer);
+                        question => Tuple.Create(question.Id, question.PropagationVector, (int[]) question.Answer));
 
             this.linkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<Identity, int[][]>>()
+                ? new Dictionary<string, Tuple<Guid, int[], int[][]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is int[][])
                     .ToDictionary(
                         question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector),
-                        question => Tuple.Create(new Identity(question.Id, question.PropagationVector), (int[][]) question.Answer);
+                        question => Tuple.Create(question.Id, question.PropagationVector, (int[][]) question.Answer));
 
             this.answeredQuestions = new HashSet<string>(
                 @event.InterviewData.Answers.Select(question => ConvertIdAndPropagationVectorToString(question.Id, question.PropagationVector)));
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
-            this.linkedSingleOptionAnswers[questionKey] = Tuple.Create(new Identity(@event.QuestionId, @event.PropagationVector), @event.SelectedPropagationVector);
+            this.linkedSingleOptionAnswers[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVector);
             this.answeredQuestions.Add(questionKey);
         }
 
@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConvertIdAndPropagationVectorToString(@event.QuestionId, @event.PropagationVector);
 
-            this.linkedMultipleOptionsAnswers[questionKey] = Tuple.Create(new Identity(@event.QuestionId, @event.PropagationVector), @event.SelectedPropagationVectors);
+            this.linkedMultipleOptionsAnswers[questionKey] = Tuple.Create(@event.QuestionId, @event.PropagationVector, @event.SelectedPropagationVectors);
             this.answeredQuestions.Add(questionKey);
         }
 
@@ -1634,34 +1634,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answersToRemove = new List<Identity>();
 
-            foreach (Tuple<Identity, int[]> linkedSingleOptionAnswer in this.linkedSingleOptionAnswers.Values)
+            foreach (Tuple<Guid, int[], int[]> linkedSingleOptionAnswer in this.linkedSingleOptionAnswers.Values)
             {
-                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedSingleOptionAnswer.Item1, questionnaire);
+                var linkedQuestion = new Identity(linkedSingleOptionAnswer.Item1, linkedSingleOptionAnswer.Item2);
+                int[] linkedQuestionSelectedOption = linkedSingleOptionAnswer.Item3;
+
+                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedQuestion, questionnaire);
 
                 if (IsQuestionGoingToBeDisabled(questionReferencedByLinkedQuestion, groupsToBeDisabled, questionsToBeDisabled, questionnaire))
                 {
                     bool isSelectedOptionGoingToBeDisabled =
-                        AreEqualPropagationVectors(linkedSingleOptionAnswer.Item2, questionReferencedByLinkedQuestion.PropagationVector);
+                        AreEqualPropagationVectors(linkedQuestionSelectedOption, questionReferencedByLinkedQuestion.PropagationVector);
 
                     if (isSelectedOptionGoingToBeDisabled)
                     {
-                        answersToRemove.Add(linkedSingleOptionAnswer.Item1);
+                        answersToRemove.Add(linkedQuestion);
                     }
                 }
             }
 
-            foreach (Tuple<Identity, int[][]> linkedMultipleOptionsAnswer in this.linkedMultipleOptionsAnswers.Values)
+            foreach (Tuple<Guid, int[], int[][]> linkedMultipleOptionsAnswer in this.linkedMultipleOptionsAnswers.Values)
             {
-                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedMultipleOptionsAnswer.Item1, questionnaire);
+                var linkedQuestion = new Identity(linkedMultipleOptionsAnswer.Item1, linkedMultipleOptionsAnswer.Item2);
+                int[][] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item3;
+
+                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedQuestion, questionnaire);
 
                 if (IsQuestionGoingToBeDisabled(questionReferencedByLinkedQuestion, groupsToBeDisabled, questionsToBeDisabled, questionnaire))
                 {
-                    bool areSomeOfSelectedOptionsGoingToBeDisabled = linkedMultipleOptionsAnswer.Item2.Any(selectedOption =>
-                        AreEqualPropagationVectors(selectedOption, questionReferencedByLinkedQuestion.PropagationVector);
+                    bool areSomeOfSelectedOptionsGoingToBeDisabled = linkedQuestionSelectedOptions.Any(selectedOption =>
+                        AreEqualPropagationVectors(selectedOption, questionReferencedByLinkedQuestion.PropagationVector));
 
                     if (areSomeOfSelectedOptionsGoingToBeDisabled)
                     {
-                        answersToRemove.Add(linkedMultipleOptionsAnswer.Item1);
+                        answersToRemove.Add(linkedQuestion);
                     }
                 }
             }
