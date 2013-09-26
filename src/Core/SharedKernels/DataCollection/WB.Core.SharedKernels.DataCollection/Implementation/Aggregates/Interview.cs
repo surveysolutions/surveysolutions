@@ -339,6 +339,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> initiallyDisabledGroups = GetGroupsToBeDisabledInJustCreatedInterview(questionnaire);
             List<Identity> initiallyDisabledQuestions = GetQuestionsToBeDisabledInJustCreatedInterview(questionnaire);
+            List<Identity> initiallyInvalidQuestions = GetQuestionsToBeInvalidInJustCreatedInterview(questionnaire);
 
 
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
@@ -346,6 +347,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             initiallyDisabledGroups.ForEach(group => this.ApplyEvent(new GroupDisabled(group.Id, group.PropagationVector)));
             initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
+            initiallyInvalidQuestions.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
 
 
 #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
@@ -1533,6 +1535,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Where(questionId => !IsQuestionUnderPropagatableGroup(questionnaire, questionId))
                 .Select(questionId => new Identity(questionId, EmptyPropagationVector))
                 .ToList();
+        }
+
+        private List<Identity> GetQuestionsToBeInvalidInJustCreatedInterview(IQuestionnaire questionnaire)
+        {
+            return questionnaire
+             .GetAllMandatoryQuestions()
+             .Where(questionId => !IsQuestionUnderPropagatableGroup(questionnaire, questionId))
+             .Select(questionId => new Identity(questionId, EmptyPropagationVector))
+             .ToList();
         }
 
         private static bool IsGroupUnderPropagatableGroup(IQuestionnaire questionnaire, Guid groupId)
