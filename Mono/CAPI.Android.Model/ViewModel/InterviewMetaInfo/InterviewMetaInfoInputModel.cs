@@ -18,7 +18,6 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
         {
             InterviewId = interviewid;
         }
-
         public Guid InterviewId { get; private set; }
     }
 }

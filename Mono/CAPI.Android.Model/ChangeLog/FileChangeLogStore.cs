@@ -25,21 +25,24 @@ namespace CAPI.Android.Core.Model.ChangeLog
             }
         }
 
-        public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId)
+        public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId, bool validRecord)
         {
             if(recordData.Length==0)
                 return;
             var path = GetFileName(recordId);
             var eventSourceId = recordData[0].EventSourceId;
+
+            var metaData = metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId));
+            metaData.Valid = validRecord;
+
             var syncItem = new SyncItem()
                 {
                     Content = PackageHelper.CompressString(JsonUtils.GetJsonData(recordData)),
                     IsCompressed = true,
                     ItemType = SyncItemType.Questionnare,
-                    MetaInfo =
-                        PackageHelper.CompressString(
-                            JsonUtils.GetJsonData(
-                                metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId)))),
+                    MetaInfo = PackageHelper.CompressString(
+                        JsonUtils.GetJsonData(
+                            metaData)),
                     Id = eventSourceId
                 };
             File.WriteAllText(path, JsonUtils.GetJsonData(syncItem));

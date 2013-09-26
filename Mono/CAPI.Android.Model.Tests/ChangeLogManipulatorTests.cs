@@ -79,13 +79,13 @@ namespace CAPI.Androids.Core.Model.Tests
             int end = 6;
 
             // act
-            unitUnderTest.CloseDraftRecord(eventSourceId, end);
+            unitUnderTest.CloseDraftRecord(eventSourceId, end, true);
 
             // assert
             Assert.That(draftStorage.Count, Is.EqualTo(1));
             Assert.That(draftStorage[recordId].Start, Is.EqualTo(start));
             Assert.That(draftStorage[recordId].End, Is.EqualTo(end));
-            changeLogStoreMock.Verify(x => x.SaveChangeset(It.IsAny<AggregateRootEvent[]>(), recordId), Times.Once());
+            changeLogStoreMock.Verify(x => x.SaveChangeset(It.IsAny<AggregateRootEvent[]>(), recordId, true), Times.Once());
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace CAPI.Androids.Core.Model.Tests
             int end = 1;
 
             // act
-            Assert.Throws<ArgumentException>(() => unitUnderTest.CloseDraftRecord(eventSourceId, end));
+            Assert.Throws<ArgumentException>(() => unitUnderTest.CloseDraftRecord(eventSourceId, end, true));
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace CAPI.Androids.Core.Model.Tests
             int end = 6;
 
             // act
-            unitUnderTest.CloseDraftRecord(eventSourceId, end);
+            unitUnderTest.CloseDraftRecord(eventSourceId, end, true);
 
             // assert
             Assert.That(draftStorage.Count, Is.EqualTo(0));

@@ -70,7 +70,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null), recordId);
         }
 
-        public void CloseDraftRecord(Guid eventSourceId, long end)
+        public void CloseDraftRecord(Guid eventSourceId, long end, bool validRecord)
         {
             var record = GetLastDraftRecord(eventSourceId);
             if (record == null)
@@ -83,16 +83,34 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
             var events = BuildEventStreamForSendByEventSourceId(eventSourceId, record.Start, end);
 
-            fileChangeLogStore.SaveChangeset(events, recordId);
+            fileChangeLogStore.SaveChangeset(events, recordId, validRecord);
             draftChangeLog.Store(record, recordId);
         }
 
         private AggregateRootEvent[] BuildEventStreamForSendByEventSourceId(Guid eventSourceId, long start, long end)
         {
-            var storedEvents = eventStore.ReadFrom(eventSourceId, start, end);
+            var storedEvents = eventStore.ReadFrom(eventSourceId, start, end).ToList();
+
+            var indexOfLastCompleteEvent = GetIndexOfLastCompleteEvent(storedEvents);
+
             var events =
-                storedEvents.Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
+                storedEvents.Take(indexOfLastCompleteEvent).Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
+
             return events;
+        }
+
+        private static int GetIndexOfLastCompleteEvent(List<CommittedEvent> storedEvents)
+        {
+            int indexOfLastCompleteEvent = storedEvents.Count - 1;
+            for (int i = storedEvents.Count - 1; i >= 0; i--)
+            {
+                if (storedEvents[i].Payload is InterviewCompleted)
+                {
+                    indexOfLastCompleteEvent = i;
+                    break;
+                }
+            }
+            return indexOfLastCompleteEvent;
         }
 
         private bool EventIsActive(CommittedEvent committedEvent)

@@ -173,19 +173,20 @@ namespace CAPI.Android
                                           kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredValid));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredInvalid));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             
         }
 
         private void InitChangeLog(InProcessEventBus bus)
         {
-           
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
             bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
             bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
         }
 
