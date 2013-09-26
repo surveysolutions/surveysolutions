@@ -125,10 +125,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            document.ConnectChildsWithParent();
+
             ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
             ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
             ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(document);
             ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(document);
+            ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(document);
+            ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(document);
+
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
@@ -471,7 +476,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IGroup @group = this.GetGroupOrThrow(groupId);
 
-            return @group.Propagated == Propagate.AutoPropagated;
+            return IsGroupPropagatable(@group);
         }
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
@@ -537,7 +542,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static void ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(QuestionnaireDocument document)
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = document.Find<IGroup>(group
-                => group.Propagated == Propagate.AutoPropagated
+                => IsGroupPropagatable(group)
                 && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() == 0);
 
             if (propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Any())
@@ -547,10 +552,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Join(Environment.NewLine, propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Select(FormatGroupForException))));
         }
 
-        private void ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(QuestionnaireDocument document)
+        private static void ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(QuestionnaireDocument document)
         {
             IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = document.Find<IGroup>(group
-                => group.Propagated == Propagate.AutoPropagated
+                => IsGroupPropagatable(group)
                 && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() > 1);
 
             if (propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Any())
@@ -560,20 +565,56 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     string.Join(Environment.NewLine, propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(FormatGroupForException))));
         }
 
-        private void ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
+        private static void ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
         {
             Func<Guid, bool> isQuestionPresentInQuestionnaire = questionId => document.Find<IQuestion>(questionId) != null;
 
-            IEnumerable<IQuestion> linkedQuestionsReferencingNotExistingQuestions =
-                document.Find<IQuestion>(question
-                    => question.LinkedToQuestionId.HasValue
-                    && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value));
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                question => question.LinkedToQuestionId.HasValue && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value),
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire");
+        }
 
-            if (linkedQuestionsReferencingNotExistingQuestions.Any())
-                throw new QuestionnaireException(string.Format(
-                    "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire:{0}{1}",
+        private void ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isReferencedQuestionTypeSupported = questionId =>
+            {
+                var question = document.Find<IQuestion>(questionId);
+
+                return question.QuestionType == QuestionType.Text
+                    || question.QuestionType == QuestionType.Numeric
+                    || question.QuestionType == QuestionType.DateTime;
+            };
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value),
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire");
+        }
+
+        private void ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isQuestionUnderPropagatedGroup = questionId =>
+            {
+                var question = document.Find<IQuestion>(questionId);
+                IEnumerable<IGroup> parentGroups = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), document);
+
+                return parentGroups.Any(IsGroupPropagatable);
+            };
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value),
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire");
+        }
+
+        private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document, Func<IQuestion, bool> condition,
+            string exceptionTextDescribingFollowingQuestions)
+        {
+            IEnumerable<IQuestion> questionsSatisfyingTheCondition = document.Find<IQuestion>(condition);
+
+            if (questionsSatisfyingTheCondition.Any())
+                throw new QuestionnaireException(string.Format("{1}:{0}{2}",
                     Environment.NewLine,
-                    string.Join(Environment.NewLine, linkedQuestionsReferencingNotExistingQuestions.Select(FormatQuestionForException))));
+                    exceptionTextDescribingFollowingQuestions,
+                    string.Join(Environment.NewLine, questionsSatisfyingTheCondition.Select(FormatQuestionForException))));
         }
 
 
@@ -712,11 +753,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<Guid> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group)
         {
-            var parentGroups = new List<Guid>();
+            return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(group, this.innerDocument).Select(group => group.PublicKey);
+        }
 
-            while (group != this.innerDocument)
+        private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
+        {
+            var parentGroups = new List<IGroup>();
+
+            while (group != document)
             {
-                parentGroups.Add(group.PublicKey);
+                parentGroups.Add(group);
                 group = (IGroup) group.GetParent();
             }
 
@@ -837,6 +883,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return (question.QuestionType == QuestionType.Numeric || question.QuestionType == QuestionType.AutoPropagate)
                 && (question is IAutoPropagateQuestion);
+        }
+
+        private static bool IsGroupPropagatable(IGroup group)
+        {
+            return group.Propagated == Propagate.AutoPropagated;
         }
 
         private void ThrowIfQuestionDoesNotSupportPropagation(Guid questionId)
