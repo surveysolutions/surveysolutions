@@ -84,7 +84,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
         }
 
-public void HandleAnswerListChange()
+        public void HandleAnswerListChange()
         {
             this.RaisePropertyChanged("AnswerOptions");
         }
