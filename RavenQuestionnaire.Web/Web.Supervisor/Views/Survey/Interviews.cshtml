@@ -11,6 +11,7 @@
     @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
 
     <script type="text/javascript">
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new {templateId="_",templateVersion="_", interviewerId="_",status="_" }, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
