@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasCompleted;
         private InterviewStatus status;
         private Dictionary<string, object> answersSupportedInExpressions = new Dictionary<string, object>();
+        private Dictionary<string, Tuple<Identity, int[]>> linkedSingleOptionAnswers = new Dictionary<string, Tuple<Identity, int[]>>();
+        private Dictionary<string, Tuple<Identity, int[][]>> linkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Identity, int[][]>>();
         private HashSet<string> answeredQuestions = new HashSet<string>();
         private HashSet<string> disabledGroups = new HashSet<string>();
         private HashSet<string> disabledQuestions = new HashSet<string>();
@@ -348,7 +350,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             initiallyDisabledQuestions.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
 
 
-#warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
+            #warning TLK: this implementation is incorrect, I cannot use other methods here as is because there might be exceptions and events are raised
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
                 Guid questionId = answerToFeaturedQuestion.Key;
@@ -440,6 +442,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DetermineCustomEnablementStateOfDependentQuestions(
                 answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, getAnswer);
+
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
 
@@ -450,6 +456,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+
+            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
         }
 
         public void AnswerNumericQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal answer)
@@ -475,14 +483,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             Func<Guid, int[], bool> isGroupBeingPropagated = (groupId, groupOuterScopePropagationVector)
                 => idsOfGroupsToBePropagated.Contains(groupId)
-                && Enumerable.SequenceEqual(groupOuterScopePropagationVector, propagationVector);
+                && AreEqualPropagationVectors(groupOuterScopePropagationVector, propagationVector);
 
             Func<Guid, int[], int> getCountOfPropagatableGroupInstances = (groupId, groupOuterPropagationVector)
                 => isGroupBeingPropagated(groupId, groupOuterPropagationVector)
                     ? propagationCount
                     : this.GetCountOfPropagatableGroupInstances(groupId, groupOuterPropagationVector);
 
-            List<Identity> answersToRemove = this.GetAnswersToRemoveIfPropagationCountIsBeingDecreased(
+            List<Identity> answersToRemoveByDecreasedPropagationCount = this.GetAnswersToRemoveIfPropagationCountIsBeingDecreased(
                 idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire);
 
             List<Identity> answersDeclaredValid, answersDeclaredInvalid;
@@ -505,12 +513,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answeredQuestion, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
                 out dependentQuestionsToBeDisabled, out dependentQuestionsToBeEnabled);
 
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    Enumerable.Concat(initializedGroupsToBeDisabled, dependentGroupsToBeDisabled),
+                    Enumerable.Concat(initializedQuestionsToBeDisabled, dependentQuestionsToBeDisabled),
+                    questionnaire, getAnswer);
+
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
 
             idsOfGroupsToBePropagated.ForEach(groupId => this.ApplyEvent(new GroupPropagated(groupId, propagationVector, propagationCount)));
 
-            answersToRemove.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
+            answersToRemoveByDecreasedPropagationCount.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
 
             answersDeclaredValid.ForEach(question => this.ApplyEvent(new AnswerDeclaredValid(question.Id, question.PropagationVector)));
             answersDeclaredInvalid.ForEach(question => this.ApplyEvent(new AnswerDeclaredInvalid(question.Id, question.PropagationVector)));
@@ -524,6 +538,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             dependentGroupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             dependentQuestionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             dependentQuestionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+
+            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
         }
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, DateTime answer)
@@ -549,6 +565,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DetermineCustomEnablementStateOfDependentQuestions(
                 answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, getAnswer);
+
 
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
 
@@ -559,6 +579,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+
+            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
         }
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal selectedValue)
@@ -585,6 +607,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DetermineCustomEnablementStateOfDependentQuestions(
                 answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, getAnswer);
+
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValue));
 
@@ -595,6 +621,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+
+            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
         }
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, decimal[] selectedValues)
@@ -621,6 +649,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DetermineCustomEnablementStateOfDependentQuestions(
                 answeredQuestion, questionnaire, getAnswer, this.GetCountOfPropagatableGroupInstances, out questionsToBeDisabled, out questionsToBeEnabled);
 
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, getAnswer);
+
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValues));
 
@@ -631,6 +663,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             groupsToBeEnabled.ForEach(group => this.ApplyEvent(new GroupEnabled(group.Id, group.PropagationVector)));
             questionsToBeDisabled.ForEach(question => this.ApplyEvent(new QuestionDisabled(question.Id, question.PropagationVector)));
             questionsToBeEnabled.ForEach(question => this.ApplyEvent(new QuestionEnabled(question.Id, question.PropagationVector)));
+
+            answersForLinkedQuestionsToRemoveByDisabling.ForEach(question => this.ApplyEvent(new AnswerRemoved(question.Id, question.PropagationVector)));
         }
 
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, int[] propagationVector, DateTime answerTime, 
@@ -1402,21 +1436,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndUpperPropagationLevelOrThrow(
             IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare)
         {
+            return questionIds.Select(
+                questionId => GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(questionId, propagationVector, questionnare));
+        }
+
+        private static Identity GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(Guid questionId, int[] propagationVector, IQuestionnaire questionnare)
+        {
             int vectorPropagationLevel = propagationVector.Length;
+            int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
 
-            foreach (Guid questionId in questionIds)
-            {
-                int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
+            if (questionPropagationLevel > vectorPropagationLevel)
+                throw new InterviewException(string.Format(
+                    "Question {0} expected to have propagation level not deeper than {1} but it is {2}.",
+                    FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
 
-                if (questionPropagationLevel > vectorPropagationLevel)
-                    throw new InterviewException(string.Format(
-                        "Question {0} expected to have propagation level not deeper than {1} but it is {2}.",
-                        FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
+            int[] questionPropagationVector = ShrinkPropagationVector(propagationVector, questionPropagationLevel);
 
-                int[] questionPropagationVector = ShrinkPropagationVector(propagationVector, questionPropagationLevel);
-
-                yield return new Identity(questionId, questionPropagationVector);
-            }
+            return new Identity(questionId, questionPropagationVector);
         }
 
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
@@ -1554,6 +1590,72 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static bool IsInstanceBeingRemovedByDecreasedPropagation(int[] instancePropagationVector, int newPropagationCount, int indexOfGroupBeingPropagatedInPropagationVector)
         {
             return instancePropagationVector[indexOfGroupBeingPropagatedInPropagationVector] >= newPropagationCount;
+        }
+
+        private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+            IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire, Func<Identity, object> getAnswer)
+        {
+            bool nothingGoingToBeDisabled = !groupsToBeDisabled.Any() && !questionsToBeDisabled.Any();
+            if (nothingGoingToBeDisabled)
+                return new List<Identity>();
+
+            var answersToRemove = new List<Identity>();
+
+            foreach (Tuple<Identity, int[]> linkedSingleOptionAnswer in this.linkedSingleOptionAnswers.Values)
+            {
+                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedSingleOptionAnswer.Item1, questionnaire);
+
+                if (IsQuestionGoingToBeDisabled(questionReferencedByLinkedQuestion, groupsToBeDisabled, questionsToBeDisabled, questionnaire))
+                {
+                    bool isSelectedOptionGoingToBeDisabled =
+                        AreEqualPropagationVectors(linkedSingleOptionAnswer.Item2, questionReferencedByLinkedQuestion.PropagationVector);
+
+                    if (isSelectedOptionGoingToBeDisabled)
+                    {
+                        answersToRemove.Add(linkedSingleOptionAnswer.Item1);
+                    }
+                }
+            }
+
+            foreach (Tuple<Identity, int[][]> linkedMultipleOptionsAnswer in this.linkedMultipleOptionsAnswers.Values)
+            {
+                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedMultipleOptionsAnswer.Item1, questionnaire);
+
+                if (IsQuestionGoingToBeDisabled(questionReferencedByLinkedQuestion, groupsToBeDisabled, questionsToBeDisabled, questionnaire))
+                {
+                    bool areSomeOfSelectedOptionsGoingToBeDisabled = linkedMultipleOptionsAnswer.Item2.Any(selectedOption =>
+                        AreEqualPropagationVectors(selectedOption, questionReferencedByLinkedQuestion.PropagationVector);
+
+                    if (areSomeOfSelectedOptionsGoingToBeDisabled)
+                    {
+                        answersToRemove.Add(linkedMultipleOptionsAnswer.Item1);
+                    }
+                }
+            }
+
+            return answersToRemove;
+        }
+
+        private Identity GetQuestionReferencedByLinkedQuestion(Identity linkedQuestion, IQuestionnaire questionnaire)
+        {
+            Guid referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestion.Id);
+
+            return GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(referencedQuestionId, linkedQuestion.PropagationVector, questionnaire);
+        }
+
+        private bool IsQuestionGoingToBeDisabled(Identity question,
+            IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire)
+        {
+            bool questionIsListedToBeDisabled =
+                questionsToBeDisabled.Any(questionToBeDisabled => AreEqual(question, questionToBeDisabled));
+
+            IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
+            IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperPropagationLevelOrThrow(parentGroupIds, question.PropagationVector, questionnaire);
+
+            bool someOfQuestionParentGroupsAreListedToBeDisabled = parentGroups.Any(parentGroup =>
+                groupsToBeDisabled.Any(groupToBeDisabled => AreEqual(parentGroup, groupToBeDisabled)));
+
+            return questionIsListedToBeDisabled || someOfQuestionParentGroupsAreListedToBeDisabled;
         }
 
         private static int GetIndexOfPropagatedGroupInPropagationVector(Guid propagatedGroup, IQuestionnaire questionnaire)
@@ -1780,7 +1882,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static bool AreEqual(Identity identityA, Identity identityB)
         {
             return identityA.Id == identityB.Id
-                && Enumerable.SequenceEqual(identityA.PropagationVector, identityB.PropagationVector);
+                && AreEqualPropagationVectors(identityA.PropagationVector, identityB.PropagationVector);
+        }
+
+        private static bool AreEqualPropagationVectors(int[] propagationVectorA, int[] propagationVectorB)
+        {
+            return Enumerable.SequenceEqual(propagationVectorA, propagationVectorB);
         }
 
         private static int ToPropagationCount(decimal decimalValue)
