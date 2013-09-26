@@ -68,16 +68,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
               a => LinkedQuestionViewModel.IsVectorsEqual(a.PropagationVector, vector));
         }
 
-        protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel selectedAnswer, bool isChecked)
+        protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
         {
-            var answered = TypedMode.SelectedAnswers.ToList();
+            var answered = selectedAnswers.Select(a => a.PropagationVector);
 
-            if (isChecked)
-                answered.Add(selectedAnswer.PropagationVector);
-            else
-            {
-                answered.RemoveAll(answer => LinkedQuestionViewModel.IsVectorsEqual(selectedAnswer.PropagationVector, answer));
-            }
             return new AnswerMultipleOptionsLinkedQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow,

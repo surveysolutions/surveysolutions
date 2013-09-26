@@ -70,7 +70,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected abstract T FindAnswerInModelByCheckBoxTag(string tag);
 
-        protected abstract AnswerQuestionCommand CreateSaveAnswerCommand(T selectedAnswer, bool isChecked);
+        protected abstract AnswerQuestionCommand CreateSaveAnswerCommand(T[] selectedAnswers);
 
         protected abstract bool IsAnswerSelected(T answer);
 
@@ -89,13 +89,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         void RadioGroupCheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
         {
-            var cb = sender as CheckBox;
+            var selectedAnswers = new List<T>();
+            for (int i = 0; i < CheckBoxContainer.ChildCount; i++)
+            {
+                var checkBox = CheckBoxContainer.GetChildAt(i) as CheckBox;
+                if(checkBox==null)
+                    continue;
+                if(checkBox.Checked)
+                    selectedAnswers.Add(this.FindAnswerInModelByCheckBoxTag(checkBox.GetTag(Resource.Id.AnswerId).ToString()));
+                
+            }
 
-            var selectedAnswer = this.FindAnswerInModelByCheckBoxTag(cb.GetTag(Resource.Id.AnswerId).ToString());
+            ExecuteSaveAnswerCommand(CreateSaveAnswerCommand(selectedAnswers.ToArray()));
 
-            ExecuteSaveAnswerCommand(CreateSaveAnswerCommand(selectedAnswer, e.IsChecked));
-
-            SaveAnswer(GetAnswerTitle(selectedAnswer));
+            SaveAnswer(string.Join(",", selectedAnswers.Select(this.GetAnswerTitle)));
         }
     }
 }
