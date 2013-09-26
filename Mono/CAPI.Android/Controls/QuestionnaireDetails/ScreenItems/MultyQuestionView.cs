@@ -47,16 +47,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 a => a.PublicKey == answerGuid);
         }
 
-        protected override AnswerQuestionCommand CreateSaveAnswerCommand(AnswerViewModel selectedAnswer, bool isChecked)
+        protected override AnswerQuestionCommand CreateSaveAnswerCommand(AnswerViewModel[] selectedAnswers)
         {
-            var answered = Answers.Where(a => a.Selected).Select(a => a.Value).ToList();
-
-            if (isChecked)
-                answered.Add(selectedAnswer.Value);
-            else
-            {
-                answered.Remove(selectedAnswer.Value);
-            }
+            var answered = selectedAnswers.Select(a => a.Value).ToList();
 
             return new AnswerMultipleOptionsQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
