@@ -128,6 +128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
             ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
             ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(document);
+            ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(document);
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
@@ -498,6 +499,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions[groupId];
         }
 
+        public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+
+            if (!linkedQuestion.LinkedToQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return id of referenced question because specified question {0} is not linked.",
+                    FormatQuestionForException(linkedQuestion)));
+
+            return linkedQuestion.LinkedToQuestionId.Value;
+        }
+
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
         {
@@ -545,6 +558,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Following groups are propagated but there is more than one propagating question which points to these groups:{0}{1}",
                     Environment.NewLine,
                     string.Join(Environment.NewLine, propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(FormatGroupForException))));
+        }
+
+        private void ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isQuestionPresentInQuestionnaire = questionId => document.Find<IQuestion>(questionId) != null;
+
+            IEnumerable<IQuestion> linkedQuestionsReferencingNotExistingQuestions =
+                document.Find<IQuestion>(question
+                    => question.LinkedToQuestionId.HasValue
+                    && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value));
+
+            if (linkedQuestionsReferencingNotExistingQuestions.Any())
+                throw new QuestionnaireException(string.Format(
+                    "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire:{0}{1}",
+                    Environment.NewLine,
+                    string.Join(Environment.NewLine, linkedQuestionsReferencingNotExistingQuestions.Select(FormatQuestionForException))));
         }
 
 
