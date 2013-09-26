@@ -6,8 +6,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
 {
     internal class InterviewState
     {
-        public InterviewState(Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus status, Dictionary<string, object> answersSupportedInExpressions, HashSet<string> answeredQuestions,
+        public InterviewState(Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
+            Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, int[], int[]>> linkedSingleOptionAnswers,
+            Dictionary<string, Tuple<Guid, int[], int[][]>> linkedMultipleOptionsAnswers, HashSet<string> answeredQuestions,
             HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, int> propagatedGroupInstanceCounts,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted)
         {
@@ -15,6 +16,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             this.QuestionnaireVersion = questionnaireVersion;
             this.Status = status;
             this.AnswersSupportedInExpressions = answersSupportedInExpressions;
+            this.LinkedSingleOptionAnswers = linkedSingleOptionAnswers;
+            this.LinkedMultipleOptionsAnswers = linkedMultipleOptionsAnswers;
             this.AnsweredQuestions = answeredQuestions;
             this.DisabledGroups = disabledGroups;
             this.DisabledQuestions = disabledQuestions;
@@ -28,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public long QuestionnaireVersion { get; private set; }
         public InterviewStatus Status { get; private set; }
         public Dictionary<string, object> AnswersSupportedInExpressions { get; private set; }
+        public Dictionary<string, Tuple<Guid, int[], int[]>> LinkedSingleOptionAnswers { get; private set; }
+        public Dictionary<string, Tuple<Guid, int[], int[][]>> LinkedMultipleOptionsAnswers { get; private set; }
         public HashSet<string> AnsweredQuestions { get; private set; }
         public HashSet<string> DisabledGroups { get; private set; }
         public HashSet<string> DisabledQuestions { get; private set; }
