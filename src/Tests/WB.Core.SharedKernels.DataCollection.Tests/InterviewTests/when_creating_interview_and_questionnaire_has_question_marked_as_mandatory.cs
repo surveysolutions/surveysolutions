@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             answersTime = new DateTime(2013, 09, 01);
 
             var questionaire = Mock.Of<IQuestionnaire>(_
-                => true);
+                => _.GetAllMandatoryQuestions() == new Guid[] {mandatoryQuestionId}
+                );
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire);
@@ -39,23 +40,23 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             eventContext = new EventContext();
         };
-        
-        Because of = () =>
+
+        private Because of = () =>
             new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime, supervisorId);
 
-        Cleanup stuff = () =>
+        private Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
-        It should_not_raise_AnswerDeclaredValid_event = () =>
-             eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
-              => @event.QuestionId == mandatoryQuestionId);
+        private It should_not_raise_AnswerDeclaredValid_event = () =>
+            eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
+                => @event.QuestionId == mandatoryQuestionId);
 
-        It should_raise_AnswerDeclaredInvalid_event = () =>
-             eventContext.ShouldNotContainEvent<AnswerDeclaredInvalid>(@event
-              => @event.QuestionId == mandatoryQuestionId);
+        private It should_raise_AnswerDeclaredInvalid_event = () =>
+            eventContext.ShouldContainEvent<AnswerDeclaredInvalid>(@event
+                => @event.QuestionId == mandatoryQuestionId);
 
         private static EventContext eventContext;
         private static Guid interviewId;
