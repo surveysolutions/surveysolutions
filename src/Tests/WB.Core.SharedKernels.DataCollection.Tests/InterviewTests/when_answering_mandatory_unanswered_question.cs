@@ -28,7 +28,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                                                        => true);
+                                                        => _.GetAllMandatoryQuestions() == new Guid[] { mandatoryQuestionId } 
+                                                        && _.HasQuestion(mandatoryQuestionId) ==true
+                                                        && _.GetQuestionType(mandatoryQuestionId)== QuestionType.Numeric
+                                                        );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionnaire);
