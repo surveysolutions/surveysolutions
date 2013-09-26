@@ -42,8 +42,15 @@
               self.condition = ko.observable('').extend({
                   validation: [{
                       validator: function (val) {
+                          if (_.isUndefined(val) || _.isNull(val)) {
+                              return true;
+                          }
                           if (val.indexOf("[this]") != -1) return false;
-                          var variable = "" + self.alias();
+                          var variable = self.alias();
+                          if (_.isUndefined(variable) || _.isNull(variable) || _.isEmpty(variable)) {
+                              return true;
+                          }
+                          variable = "[" + variable + "]";
                           if (val.indexOf(variable) != -1) return false;
                           return true;
                       },
