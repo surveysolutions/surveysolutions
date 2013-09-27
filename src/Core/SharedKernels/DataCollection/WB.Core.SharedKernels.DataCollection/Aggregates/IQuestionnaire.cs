@@ -92,5 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId);
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
+        
+        bool IsQuestionMandatory(Guid questionId);
     }
 }
