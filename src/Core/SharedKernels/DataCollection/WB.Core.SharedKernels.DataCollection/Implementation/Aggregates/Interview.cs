@@ -479,7 +479,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    groupsToBeDisabled, questionsToBeDisabled, questionnaire);
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
 
             this.ApplyEvent(new TextQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -556,7 +556,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
                     Enumerable.Concat(initializedGroupsToBeDisabled, dependentGroupsToBeDisabled),
                     Enumerable.Concat(initializedQuestionsToBeDisabled, dependentQuestionsToBeDisabled),
-                    questionnaire);
+                    questionnaire, getCountOfPropagatableGroupInstances);
 
 
             this.ApplyEvent(new NumericQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -607,7 +607,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    groupsToBeDisabled, questionsToBeDisabled, questionnaire);
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
 
             this.ApplyEvent(new DateTimeQuestionAnswered(userId, questionId, propagationVector, answerTime, answer));
@@ -649,7 +649,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    groupsToBeDisabled, questionsToBeDisabled, questionnaire);
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
 
             this.ApplyEvent(new SingleOptionQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValue));
@@ -691,7 +691,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    groupsToBeDisabled, questionsToBeDisabled, questionnaire);
+                    groupsToBeDisabled, questionsToBeDisabled, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
 
             this.ApplyEvent(new MultipleOptionsQuestionAnswered(userId, questionId, propagationVector, answerTime, selectedValues));
@@ -1524,26 +1524,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
             IEnumerable<Guid> questionIds, int[] propagationVector, IQuestionnaire questionnare, Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
+            return questionIds.SelectMany(questionId =>
+                this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(questionId, propagationVector, questionnare, getCountOfPropagatableGroupInstances));
+        }
+
+        private IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+            Guid questionId, int[] propagationVector, IQuestionnaire questionnare, Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
+        {
             int vectorPropagationLevel = propagationVector.Length;
+            int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
 
-            foreach (Guid questionId in questionIds)
+            if (questionPropagationLevel < vectorPropagationLevel)
+                throw new InterviewException(string.Format(
+                    "Question {0} expected to have propagation level not upper than {1} but it is {2}.",
+                    FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
+
+            Guid[] parentPropagatableGroupsStartingFromTop =
+                questionnare.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
+
+            IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(
+                propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
+
+            foreach (int[] questionPropagationVector in questionPropagationVectors)
             {
-                int questionPropagationLevel = questionnare.GetPropagationLevelForQuestion(questionId);
-
-                if (questionPropagationLevel < vectorPropagationLevel)
-                    throw new InterviewException(string.Format(
-                        "Question {0} expected to have propagation level not upper than {1} but it is {2}.",
-                        FormatQuestionForException(questionId, questionnare), vectorPropagationLevel, questionPropagationLevel));
-
-                Guid[] parentPropagatableGroupsStartingFromTop = questionnare.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).ToArray();
-
-                IEnumerable<int[]> questionPropagationVectors = this.ExtendPropagationVector(
-                    propagationVector, questionPropagationLevel, parentPropagatableGroupsStartingFromTop, getCountOfPropagatableGroupInstances);
-
-                foreach (int[] questionPropagationVector in questionPropagationVectors)
-                {
-                    yield return new Identity(questionId, questionPropagationVector);
-                }
+                yield return new Identity(questionId, questionPropagationVector);
             }
         }
 
@@ -1630,14 +1634,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire.GetParentPropagatableGroupsForQuestionStartingFromTop(questionId).Any();
         }
 
-        private List<Identity> GetAnswersToRemoveIfPropagationCountIsBeingDecreased(IEnumerable<Guid> idsOfGroupsBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire)
+        private List<Identity> GetAnswersToRemoveIfPropagationCountIsBeingDecreased(
+            IEnumerable<Guid> idsOfGroupsBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire)
         {
             return idsOfGroupsBeingPropagated
                 .SelectMany(idOfGroupBeingPropagated => this.GetAnswersToRemoveIfPropagationCountIsBeingDecreased(idOfGroupBeingPropagated, propagationCount, outerScopePropagationVector, questionnaire))
                 .ToList();
         }
 
-        private IEnumerable<Identity> GetAnswersToRemoveIfPropagationCountIsBeingDecreased(Guid idOfGroupBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire)
+        private IEnumerable<Identity> GetAnswersToRemoveIfPropagationCountIsBeingDecreased(
+            Guid idOfGroupBeingPropagated, int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire)
         {
             bool isPropagationCountBeingDecreased = propagationCount < this.GetCountOfPropagatableGroupInstances(idOfGroupBeingPropagated, outerScopePropagationVector);
             if (!isPropagationCountBeingDecreased)
@@ -1658,7 +1664,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ).ToList();
 
             IEnumerable<Identity> linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved =
-                GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(underlyingQuestionsBeingRemovedByDecreasedPropagationCount, questionnaire);
+                GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
+                    underlyingQuestionsBeingRemovedByDecreasedPropagationCount, questionnaire, this.GetCountOfPropagatableGroupInstances);
 
             return Enumerable.Concat(
                 underlyingQuestionsBeingRemovedByDecreasedPropagationCount,
@@ -1676,29 +1683,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private IEnumerable<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
-            IEnumerable<Identity> questionsToRemove, IQuestionnaire questionnaire)
+            IEnumerable<Identity> questionsToRemove, IQuestionnaire questionnaire, 
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             bool nothingGoingToBeRemoved = !questionsToRemove.Any();
             if (nothingGoingToBeRemoved)
                 return Enumerable.Empty<Identity>();
 
-            return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(questionnaire,
+            return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(questionnaire, getCountOfPropagatableGroupInstances,
                 isQuestionAnswerGoingToDisappear: question => questionsToRemove.Contains(question));
         }
 
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-            IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire)
+            IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire,
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             bool nothingGoingToBeDisabled = !groupsToBeDisabled.Any() && !questionsToBeDisabled.Any();
             if (nothingGoingToBeDisabled)
                 return new List<Identity>();
 
-            return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(questionnaire,
+            return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(questionnaire, getCountOfPropagatableGroupInstances,
                 isQuestionAnswerGoingToDisappear: question => IsQuestionGoingToBeDisabled(question, groupsToBeDisabled, questionsToBeDisabled, questionnaire));
         }
 
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(IQuestionnaire questionnaire,
-            Func<Identity, bool> isQuestionAnswerGoingToDisappear)
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances, Func<Identity, bool> isQuestionAnswerGoingToDisappear)
         {
             var answersToRemove = new List<Identity>();
 
@@ -1707,17 +1716,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var linkedQuestion = new Identity(linkedSingleOptionAnswer.Item1, linkedSingleOptionAnswer.Item2);
                 int[] linkedQuestionSelectedOption = linkedSingleOptionAnswer.Item3;
 
-                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedQuestion, questionnaire);
+                IEnumerable<Identity> questionsReferencedByLinkedQuestion =
+                    this.GetQuestionsReferencedByLinkedQuestion(linkedQuestion, questionnaire, getCountOfPropagatableGroupInstances);
 
-                if (isQuestionAnswerGoingToDisappear(questionReferencedByLinkedQuestion))
+                Identity questionSelectedAsAnswer =
+                    questionsReferencedByLinkedQuestion
+                        .SingleOrDefault(
+                            question => AreEqualPropagationVectors(linkedQuestionSelectedOption, question.PropagationVector));
+
+                bool isSelectedOptionGoingToDisappear = questionSelectedAsAnswer != null && isQuestionAnswerGoingToDisappear(questionSelectedAsAnswer);
+                if (isSelectedOptionGoingToDisappear)
                 {
-                    bool isSelectedOptionGoingToDisappear =
-                        AreEqualPropagationVectors(linkedQuestionSelectedOption, questionReferencedByLinkedQuestion.PropagationVector);
-
-                    if (isSelectedOptionGoingToDisappear)
-                    {
-                        answersToRemove.Add(linkedQuestion);
-                    }
+                    answersToRemove.Add(linkedQuestion);
                 }
             }
 
@@ -1726,28 +1736,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var linkedQuestion = new Identity(linkedMultipleOptionsAnswer.Item1, linkedMultipleOptionsAnswer.Item2);
                 int[][] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item3;
 
-                Identity questionReferencedByLinkedQuestion = GetQuestionReferencedByLinkedQuestion(linkedQuestion, questionnaire);
+                IEnumerable<Identity> questionsReferencedByLinkedQuestion =
+                    this.GetQuestionsReferencedByLinkedQuestion(linkedQuestion, questionnaire, getCountOfPropagatableGroupInstances);
 
-                if (isQuestionAnswerGoingToDisappear(questionReferencedByLinkedQuestion))
+                IEnumerable<Identity> questionsSelectedAsAnswers =
+                    questionsReferencedByLinkedQuestion
+                        .Where(
+                            question => linkedQuestionSelectedOptions.Any(
+                                selectedOption => AreEqualPropagationVectors(selectedOption, question.PropagationVector)));
+
+                bool isSomeOfSelectedOptionsGoingToDisappear = questionsSelectedAsAnswers.Any(isQuestionAnswerGoingToDisappear);
+                if (isSomeOfSelectedOptionsGoingToDisappear)
                 {
-                    bool areSomeOfSelectedOptionsGoingToDisappear = linkedQuestionSelectedOptions.Any(selectedOption =>
-                        AreEqualPropagationVectors(selectedOption, questionReferencedByLinkedQuestion.PropagationVector));
-
-                    if (areSomeOfSelectedOptionsGoingToDisappear)
-                    {
-                        answersToRemove.Add(linkedQuestion);
-                    }
+                    answersToRemove.Add(linkedQuestion);
                 }
             }
 
             return answersToRemove;
         }
 
-        private static Identity GetQuestionReferencedByLinkedQuestion(Identity linkedQuestion, IQuestionnaire questionnaire)
+        private IEnumerable<Identity> GetQuestionsReferencedByLinkedQuestion(
+            Identity linkedQuestion, IQuestionnaire questionnaire, Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             Guid referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestion.Id);
 
-            return GetInstanceOfQuestionWithSameAndUpperPropagationLevelOrThrow(referencedQuestionId, linkedQuestion.PropagationVector, questionnaire);
+            return this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                referencedQuestionId, linkedQuestion.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
         }
 
         private static bool IsQuestionGoingToBeDisabled(Identity question,
