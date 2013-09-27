@@ -516,8 +516,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return linkedQuestion.LinkedToQuestionId.Value;
         }
-        
- public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
+
+        public bool IsQuestionMandatory(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return question.Mandatory;
+        }
+
+        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
                 this.cacheOfUnderlyingMandatoryQuestions[groupId] = this.GetUnderlyingMandatoryQuestionsImpl(groupId);
