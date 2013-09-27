@@ -881,6 +881,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire, (question) => groupsToBeDisabled.Any(q => AreEqual(q, question)), (question) => questionsToBeDisabled.Any(q => AreEqual(q, question))))
                         continue;
 
+                    string questionKey = ConvertIdAndPropagationVectorToString(questionIdAtInterview.Id, questionIdAtInterview.PropagationVector);
+
+                    if(!answeredQuestions.Contains(questionKey))
+                        continue;
+
                     bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(questionIdAtInterview, questionnaire,
                         GetAnswerSupportedInExpressionsForEnabledOrNull, a => null);
 
