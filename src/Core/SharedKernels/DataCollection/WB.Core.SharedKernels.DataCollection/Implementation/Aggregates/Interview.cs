@@ -549,7 +549,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getAnswer, getCountOfPropagatableGroupInstances,
                 out initializedQuestionsToBeDisabled, out initializedQuestionsToBeEnabled);
             this.DetermineValidityStateOfQuestionsInitializedByIncreasedPropagation(
-                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getCountOfPropagatableGroupInstances,
+                idsOfGroupsToBePropagated, propagationCount, propagationVector, questionnaire, getCountOfPropagatableGroupInstances,initializedGroupsToBeDisabled,initializedQuestionsToBeDisabled,
                 out initializedQuestionsToBeInvalid);
 
 
@@ -874,9 +874,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var availablePropagationLevel in availablePropagationLevels)
                 {
                     Identity questionIdAtInterview = new Identity(questionWithNotEmptyValidationExpression, availablePropagationLevel);
-                   
 
-                    if(IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire, groupsToBeDisabled.Contains, questionsToBeDisabled.Contains))
+
+                    if (IsQuestionOrParentGroupDisabled(questionIdAtInterview, questionnaire, (question) => groupsToBeDisabled.Any(q => AreEqual(q, question)), (question) => questionsToBeDisabled.Any(q => AreEqual(q, question))))
                         continue;
 
                     bool? dependentQuestionValidationResult = this.PerformCustomValidationOfQuestion(questionIdAtInterview, questionnaire,
@@ -1485,7 +1485,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void DetermineValidityStateOfQuestionsInitializedByIncreasedPropagation(List<Guid> idsOfGroupsToBePropagated,
             int propagationCount, int[] outerScopePropagationVector, IQuestionnaire questionnaire,
-            Func<Guid, int[], int> getCountOfPropagatableGroupInstances, out List<Identity> questionsToBeInvalid)
+            Func<Guid, int[], int> getCountOfPropagatableGroupInstances, List<Identity> groupsToBeDisabled,
+            List<Identity> questionsToBeDisabled, out List<Identity> questionsToBeInvalid)
         {
             questionsToBeInvalid = new List<Identity>();
 
@@ -1497,14 +1498,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (!isPropagationCountBeingIncreased)
                     continue;
 
-                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated, questionnaire);
+                int indexOfGroupBeingPropagatedInPropagationVector = GetIndexOfPropagatedGroupInPropagationVector(idOfGroupBeingPropagated,
+                    questionnaire);
 
                 IEnumerable<Guid> affectedQuestionIds = questionnaire.GetUnderlyingMandatoryQuestions(idOfGroupBeingPropagated);
 
                 IEnumerable<Identity> affectedQuestions = this
                     .GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
                         affectedQuestionIds, outerScopePropagationVector, questionnaire, getCountOfPropagatableGroupInstances)
-                    .Where(group => IsInstanceBeingInitializedByIncreasedPropagation(group.PropagationVector, oldPropagationCount, indexOfGroupBeingPropagatedInPropagationVector));
+                    .Where(
+                        question =>
+                            IsInstanceBeingInitializedByIncreasedPropagation(question.PropagationVector, oldPropagationCount,
+                                indexOfGroupBeingPropagatedInPropagationVector) &&
+                                !IsQuestionOrParentGroupDisabled(question, questionnaire, (questionId) => groupsToBeDisabled.Any(q => AreEqual(q, questionId)), (questionId) => questionsToBeDisabled.Any(q => AreEqual(q, questionId))));
 
                 questionsToBeInvalid.AddRange(affectedQuestions);
             }
@@ -1957,7 +1963,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
             IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperPropagationLevelOrThrow(parentGroupIds, question.PropagationVector, questionnaire);
 
-            return parentGroups.Any(isGroupDisabled);
+            var result = parentGroups.Any(isGroupDisabled);
+            return result;
         }
 
         private bool IsGroupDisabled(Identity group)
