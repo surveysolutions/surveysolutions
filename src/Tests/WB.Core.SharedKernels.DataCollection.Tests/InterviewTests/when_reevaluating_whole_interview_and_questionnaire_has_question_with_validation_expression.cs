@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
@@ -29,6 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
                                                         _.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
+                                                        && _.HasQuestion(conditionallyInvalidQuestionId)==true
+                                                        && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text
                                                         && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
@@ -49,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 .Returns(expressionProcessor.Object);
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-
+            interview.AnswerTextQuestion(userId, conditionallyInvalidQuestionId, new int[0], DateTime.Now, "answer");
 
             eventContext = new EventContext();
         };
