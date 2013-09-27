@@ -91,15 +91,15 @@ namespace CAPI.Android.Core.Model.ChangeLog
         {
             var storedEvents = eventStore.ReadFrom(eventSourceId, start, end).ToList();
 
-            var indexOfLastCompleteEvent = GetIndexOfLastCompleteEvent(storedEvents);
+            /*var indexOfLastCompleteEvent = GetIndexOfLastCompleteEvent(storedEvents);*/
 
             var events =
-                storedEvents.Take(indexOfLastCompleteEvent).Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
+                storedEvents/*.Take(indexOfLastCompleteEvent)*/.Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
 
             return events;
         }
 
-        private static int GetIndexOfLastCompleteEvent(List<CommittedEvent> storedEvents)
+        /*private static int GetIndexOfLastCompleteEvent(List<CommittedEvent> storedEvents)
         {
             int indexOfLastCompleteEvent = storedEvents.Count - 1;
             for (int i = storedEvents.Count - 1; i >= 0; i--)
@@ -111,7 +111,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
                 }
             }
             return indexOfLastCompleteEvent;
-        }
+        }*/
 
         private bool EventIsActive(CommittedEvent committedEvent)
         {
