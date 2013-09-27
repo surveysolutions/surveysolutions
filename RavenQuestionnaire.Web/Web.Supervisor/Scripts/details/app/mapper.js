@@ -42,7 +42,9 @@
                     case "Numeric":
                     case "AutoPropagate":
                         item = new model.NumericQuestion();
-                        item.answer(dto.Answer * 1);
+                        if (!_.isNull(dto.Answer)) {
+                            item.answer(dto.Answer * 1);
+                        }
                         break;
                     case "DateTime":
                         item = new model.DateTimeQuestion();

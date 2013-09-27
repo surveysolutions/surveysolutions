@@ -128,7 +128,7 @@
 
 
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {templateId="_",templateVersion="_", interviewerId="_",status="_" }, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
         var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));

@@ -1402,7 +1402,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool? questionChangedState = getNewQuestionState(question);
 
             //we treat newly disabled questions with validations as valid
-            if (questionChangedState.HasValue && !questionChangedState.Value)
+            if (questionChangedState == false)
+                return true;
+
+            if (questionChangedState == null && this.IsQuestionDisabled(question))
                 return true;
 
             string validationExpression = questionnaire.GetCustomValidationExpression(question.Id);
