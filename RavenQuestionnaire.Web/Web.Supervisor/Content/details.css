@@ -246,3 +246,32 @@ h4.heading {
 #menu .slim-scroll > ul li {
   border-bottom: 1px solid #fff;
 }
+#menu.invalid  #groups-menu .selected {
+    border-bottom-color: #EE5F5B;
+}
+#menu.invalid  #groups-menu li.selected a,
+#menu.invalid  #groups-menu li.selected a:hover  {
+    background: #DA4F49;
+    color: #fff;
+    border-bottom-color:#BD362F
+}
+
+#menu.flaged  #groups-menu .selected {
+    border-bottom-color: #5BC0DE;
+}
+#menu.flaged  #groups-menu li.selected a,
+#menu.flaged  #groups-menu li.selected a:hover  {
+    background: #49AFCD;
+    color: #fff;
+    border-bottom-color:#2F96B4
+}
+
+#menu.commented  #groups-menu .selected {
+    border-bottom-color: #62C462;
+}
+#menu.commented  #groups-menu li.selected a,
+#menu.commented  #groups-menu li.selected a:hover  {
+    background: #5BB75B;
+    color: #fff;
+    border-bottom-color:#51A351
+}
