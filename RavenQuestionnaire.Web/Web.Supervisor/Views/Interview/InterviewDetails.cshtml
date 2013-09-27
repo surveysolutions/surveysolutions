@@ -83,8 +83,8 @@
                                             <div class="question-clickable">
                                                 <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                 <span data-bind="template: { name: questionType() }"></span>
-                                                <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
-                                                <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
+                                                <small class="text-error" data-bind="html:validationExpression, visible: isValid()==false"></small>
+                                                <small class="text-error" data-bind="html:validationMessage, visible: isValid()==false"></small>
                                             </div>
                                         </div>
                                     </td>

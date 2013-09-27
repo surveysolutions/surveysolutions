@@ -44,8 +44,12 @@
 {
     padding: 0 10px;
 }
+#menu #groups-menu li.level0 a{
+    font-weight: bold;
+}
 #menu #groups-menu li.level1 a{
     padding-left: 10px;
+    font-weight: bold;
 }
 #menu #groups-menu li.level2 a{
     padding-left: 22px;
@@ -223,4 +227,22 @@ h4.heading {
 
 .comment-date {
     color: #999;
+}
+
+#menu > ul li a,
+#menu .slim-scroll > ul li a {
+  display: block;
+  width: auto;
+  border-bottom: 1px solid #DDDDDD;
+  padding: 0;
+  margin: 0;
+  color: #222222;
+  min-height: 26px;
+  line-height: 22px;
+  text-decoration: none;
+  font-size: 13px;
+}
+#menu > ul li,
+#menu .slim-scroll > ul li {
+  border-bottom: 1px solid #fff;
 }
