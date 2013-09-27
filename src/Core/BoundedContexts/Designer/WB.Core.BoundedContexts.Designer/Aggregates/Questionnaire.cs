@@ -93,21 +93,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (document == null)
                 throw new DomainException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
 
-            document.PublicKey = this.EventSourceId;
-            document.CreatedBy = createdBy;
-            document.CreationDate = clock.UtcNow();
-            document.Title = title;
-            document.IsPublic = isPublic;
-            if (document.SharedPersons != null)
+            var clonedDocument = (QuestionnaireDocument)document.Clone();
+            clonedDocument.PublicKey = this.EventSourceId;
+            clonedDocument.CreatedBy = createdBy;
+            clonedDocument.CreationDate = clock.UtcNow();
+            clonedDocument.Title = title;
+            clonedDocument.IsPublic = isPublic;
+            if (clonedDocument.SharedPersons != null)
             {
-                document.SharedPersons.Clear();
+                clonedDocument.SharedPersons.Clear();
             }
 
             ApplyEvent(new QuestionnaireCloned
             {
-                QuestionnaireDocument = document,
-                ClonedFromQuestionnaireId = document.PublicKey,
-                ClonedFromQuestionnaireVersion = document.LastEventSequence
+                QuestionnaireDocument = clonedDocument,
+                ClonedFromQuestionnaireId = clonedDocument.PublicKey,
+                ClonedFromQuestionnaireVersion = clonedDocument.LastEventSequence
             });
         }
 
