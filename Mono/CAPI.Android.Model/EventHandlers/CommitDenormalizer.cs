@@ -22,8 +22,9 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class CommitDenormalizer : IEventHandler<InterviewRestarted>,
-                                      IEventHandler<InterviewDeclaredValid>, IEventHandler<InterviewDeclaredInvalid>,
-                                      IEventHandler<InterviewSynchronized>
+                                      IEventHandler<InterviewSynchronized>,
+                                      IEventHandler<InterviewDeclaredValid>, 
+                                      IEventHandler<InterviewDeclaredInvalid>
     {
         public CommitDenormalizer(IChangeLogManipulator changeLog)
         {
@@ -44,12 +45,12 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
         {
-            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence);
+            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence, true);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
         {
-            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence);
+            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence, false);
         }
     }
 }

@@ -83,8 +83,9 @@ namespace Web.Supervisor.Controllers
                         {
                             this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, version, type);
                         }
-                        catch
+                        catch (Exception exc)
                         {
+                            logger.Error("Error occurred during export. " + exc.Message, exc);
                             this.AsyncManager.Parameters["result"] = null;
                         }
                     });

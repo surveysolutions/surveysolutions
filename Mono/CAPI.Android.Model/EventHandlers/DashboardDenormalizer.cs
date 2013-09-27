@@ -19,9 +19,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class DashboardDenormalizer :
                                       IEventHandler<SynchronizationMetadataApplied>,
-         IEventHandler<InterviewSynchronized>,
-                                      IEventHandler<InterviewCompleted>,
-                                      IEventHandler<InterviewRestarted>, 
+                                      IEventHandler<InterviewSynchronized>,
+                                      IEventHandler<InterviewDeclaredValid>,
+                                      IEventHandler<InterviewDeclaredInvalid>,
+                                      IEventHandler<InterviewStatusChanged>, 
                                       IEventHandler<TemplateImported>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
@@ -47,13 +48,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                                      IEnumerable<AnsweredQuestionSynchronizationDto>
                                                          answeredQuestions)
         {
-            var questionnarieTemplate = questionnaireStorage.GetById(questionnaireId);
-            if (questionnarieTemplate == null)
+            var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
+            if (questionnaireTemplate == null)
                 return;
             var items =
-                FilterNonFeaturedQuestionsByTemplate(questionnarieTemplate.Questionnaire, answeredQuestions).Select(
+                FilterNonFeaturedQuestionsByTemplate(questionnaireTemplate.Questionnaire, answeredQuestions).Select(
                     q =>
-                    new FeaturedItem(q.Id, questionnarieTemplate.Questionnaire.Find<IQuestion>(q.Id).QuestionText,
+                    new FeaturedItem(q.Id, questionnaireTemplate.Questionnaire.Find<IQuestion>(q.Id).QuestionText,
                                      q.Answer.ToString()))
                                                                                                             .ToList();
             questionnaireDtOdocumentStorage.Store(
@@ -77,30 +78,46 @@ namespace CAPI.Android.Core.Model.EventHandlers
                                             evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers);
         }
 
-
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt)
-        {
-            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
-            if (questionnaire == null)
-                return;
-            questionnaire.Status = (int)InterviewStatus.Completed;
-
-            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
-        {
-            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
-            if (questionnaire == null)
-                return;
-            questionnaire.Status = (int)InterviewStatus.Restarted;
-
-            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
-        }
-
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             surveyDtOdocumentStorage.Store(new SurveyDto(evnt.EventSourceId, evnt.Payload.Source.Title), evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
+        {
+            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            if (questionnaire == null)
+                return;
+            questionnaire.Valid = true;
+            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
+        {
+            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            if (questionnaire == null)
+                return;
+            questionnaire.Valid = false;
+            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        {
+            if(!IsInterviewCompletedOrRestarted(evnt.Payload.Status))
+                return;
+
+            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            if (questionnaire == null)
+                return;
+            questionnaire.Status = (int)evnt.Payload.Status;
+            questionnaire.Comments = evnt.Payload.Comment;
+
+            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
+        private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
+        {
+            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
     }
 }
