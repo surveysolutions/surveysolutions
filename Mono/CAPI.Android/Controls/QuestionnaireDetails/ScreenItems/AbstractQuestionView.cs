@@ -11,8 +11,10 @@ using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
@@ -163,8 +165,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (!Model.IsEnabled())
                 return;
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Error("Error on answer set.", ex);
             tvError.Visibility = ViewStates.Visible;
             tvError.Text = GetDippestException(ex).Message;
+            logger.Error("Error message: " + tvError.Text);
         }
 
         private Exception GetDippestException(Exception e)

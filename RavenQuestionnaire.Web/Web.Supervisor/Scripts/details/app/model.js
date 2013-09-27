@@ -105,8 +105,10 @@ function (ko) {
             self.uiId = ko.observable();
             self.id = ko.observable();
             self.depth = ko.observable();
+            self.isSelected = ko.observable(false);
+            
             self.css = ko.computed(function () {
-                return "level" + self.depth();
+                return "level" + self.depth() + (self.isSelected()? " selected": "");
             });
             self.href = ko.computed(function () {
                 return "#group/" + self.uiId();
@@ -116,6 +118,7 @@ function (ko) {
             self.propagationVector = ko.observable();
             self.questions = ko.observableArray();
             self.isVisible = ko.observable(true);
+            
             self.visibleQuestionsCount = ko.computed(function () {
                 return _.reduce(self.questions(), function (count, question) {
                     return count + (question.isVisible() ? 1 : 0);

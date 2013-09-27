@@ -586,8 +586,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Guid, bool> isQuestionPresentInQuestionnaire = questionId => document.Find<IQuestion>(questionId) != null;
 
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                question => question.LinkedToQuestionId.HasValue && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value),
-                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire");
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                question => question.LinkedToQuestionId.HasValue && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value));
         }
 
         private void ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(QuestionnaireDocument document)
@@ -602,8 +602,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value),
-                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire");
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
         }
 
         private void ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(QuestionnaireDocument document)
@@ -617,12 +617,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value),
-                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire");
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
         }
 
-        private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document, Func<IQuestion, bool> condition,
-            string exceptionTextDescribingFollowingQuestions)
+        private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document,
+            string exceptionTextDescribingFollowingQuestions, Func<IQuestion, bool> condition)
         {
             IEnumerable<IQuestion> questionsSatisfyingTheCondition = document.Find<IQuestion>(condition);
 
