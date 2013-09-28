@@ -883,7 +883,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     string questionKey = ConvertIdAndPropagationVectorToString(questionIdAtInterview.Id, questionIdAtInterview.PropagationVector);
 
-                    if(!answeredQuestions.Contains(questionKey))
+                    if(!this.answeredQuestions.Contains(questionKey))
                         continue;
 
                     bool? dependentQuestionValidationResult = this.PerformValidationOfQuestion(questionIdAtInterview, questionnaire,
@@ -1354,10 +1354,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Identity> dependentQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
                 dependentQuestionIds, question.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
-            IEnumerable<Identity> mandatoryQuestionsFromJustEnabledGroupsAndQuestions = GetMadatoryQuestionsFromJustEnabledGroupsAndQuestions(questionnaire,
-                groupsToBeEnabled, questionsToBeEnabled, getCountOfPropagatableGroupInstances);
+            IEnumerable<Identity> mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions =
+                this.GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(
+                    questionnaire, groupsToBeEnabled, questionsToBeEnabled, getCountOfPropagatableGroupInstances);
 
-            var dependendQuestionsAndJustEnabled = dependentQuestions.Concat(mandatoryQuestionsFromJustEnabledGroupsAndQuestions).Distinct().ToList();
+            var dependendQuestionsAndJustEnabled = dependentQuestions.Union(mandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions).ToList();
 
             foreach (Identity dependentQuestion in dependendQuestionsAndJustEnabled)
             {
@@ -1370,23 +1371,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private IEnumerable<Identity> GetMadatoryQuestionsFromJustEnabledGroupsAndQuestions(IQuestionnaire questionnaire,
+        private IEnumerable<Identity> GetMandatoryQuestionsAndQuestionsWithCustomValidationFromJustEnabledGroupsAndQuestions(IQuestionnaire questionnaire,
             List<Identity> groupsToBeEnabled, List<Identity> questionsToBeEnabled,
             Func<Guid, int[], int> getCountOfPropagatableGroupInstances)
         {
             foreach (var question in questionsToBeEnabled)
             {
-                if (questionnaire.IsQuestionMandatory(question.Id))
+                if (questionnaire.IsQuestionMandatory(question.Id) || questionnaire.IsCustomValidationDefined(question.Id))
                     yield return question;
             }
+
             foreach (var group in groupsToBeEnabled)
             {
-                IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetUnderlyingMandatoryQuestions(group.Id);
+                IEnumerable<Guid> affectedUnderlyingQuestionIds = 
+                    questionnaire.GetUnderlyingMandatoryQuestions(group.Id)
+                    .Union(questionnaire.GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(group.Id));
 
-                IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
-                    underlyingQuestionIds, group.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
+                IEnumerable<Identity> affectedUnderlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
+                    affectedUnderlyingQuestionIds, group.PropagationVector, questionnaire, getCountOfPropagatableGroupInstances);
 
-                foreach (var underlyingQuestionInstance in underlyingQuestionInstances)
+                foreach (var underlyingQuestionInstance in affectedUnderlyingQuestionInstances)
                 {
                     yield return underlyingQuestionInstance;
                 }
