@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -153,17 +155,59 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return questionnaire;
         }
 
-        public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestoinId, Guid questionId, Guid responsibleId)
+        public static Questionnaire CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+            Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
+            QuestionType questionType, QuestionType autoQuestionType = QuestionType.Text)
         {
-            Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey, secondGroup, responsibleId);
+            Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey,
+                                                                                          secondGroup, responsibleId);
 
-            questionnaire.NewAddQuestion(autoQuestoinId, autoGroupPublicKey, "Title", QuestionType.Text, "auto", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
+            questionnaire.OnNewQuestionAdded(new NewQuestionAdded()
+                {
+                    PublicKey = autoQuestionId,
+                    GroupPublicKey = autoGroupPublicKey,
+                    QuestionText = "Title",
+                    QuestionType = autoQuestionType,
+                    StataExportCaption = "auto",
+                    Mandatory = false,
+                    Featured = false,
+                    Capital = false,
+                    QuestionScope = QuestionScope.Interviewer,
+                    ConditionExpression = string.Empty,
+                    ValidationExpression = string.Empty,
+                    ValidationMessage = string.Empty,
+                    Instructions = string.Empty,
+                    Answers = null,
+                    AnswerOrder = Order.AsIs,
+                    MaxValue = 0,
+                    Triggers = new List<Guid>(),
+                    ResponsibleId = responsibleId,
+                    LinkedToQuestionId = null
+                });
+
+            questionnaire.NewAddQuestion(questionId, secondGroup, "Title", questionType, "manual", false, false,
+                                         false, QuestionScope.Interviewer, "", "", "", "",
+                                         new[] {new Option(Guid.NewGuid(), "1", "title")}, Order.AsIs, 0,
+                                         new Guid[0], responsibleId, null);
+            return questionnaire;
+        }
+
+        public static Questionnaire CreateQuestionnaireWithAutoAndRegularGroupsAnd1QuestionInAutoGroupAnd2QuestionsInRegular(
+            Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
+            QuestionType questionType, Guid questionThatLinkedButNotFromPropagateGroup, QuestionType autoQuestionType = QuestionType.Text)
+        {
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupPublicKey,
+                    secondGroup: secondGroup, autoQuestionId: autoQuestionId, questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType, autoQuestionType: autoQuestionType);
+
+            questionnaire.NewAddQuestion(questionThatLinkedButNotFromPropagateGroup, secondGroup, "Title",
+                                         autoQuestionType, "manual2", false, false,
+                                         false, QuestionScope.Interviewer, "", "", "", "", null, Order.AsIs, 0,
                                          new Guid[0], responsibleId, null);
 
-            questionnaire.NewAddQuestion(questionId, secondGroup, "Title", QuestionType.MultyOption, "manual", false, false,
-                                        false, QuestionScope.Interviewer, "", "", "", "", new [] { new Option(Guid.NewGuid(), "1", "title") }, Order.AsIs, 0,
-                                        new Guid[0], responsibleId, null);
             return questionnaire;
         }
 

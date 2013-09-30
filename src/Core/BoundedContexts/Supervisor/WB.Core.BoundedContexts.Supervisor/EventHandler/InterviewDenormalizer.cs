@@ -26,6 +26,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<NumericQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<GroupDisabled>,
@@ -35,7 +37,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
         IEventHandler<FlagRemovedFromAnswer>,
-        IEventHandler<FlagSetToAnswer>
+        IEventHandler<FlagSetToAnswer>,
+        IEventHandler<InterviewDeclaredInvalid>,
+        IEventHandler<InterviewDeclaredValid>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnriePropagationStructures;
@@ -48,6 +52,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.users = users;
             this.questionnriePropagationStructures = questionnriePropagationStructures;
             this.interviews = interviews;
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new[] { typeof(UserDocument), typeof(QuestionnairePropagationStructure) }; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new[] { typeof(InterviewData) }; }
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
@@ -74,9 +93,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             interview.Status = evnt.Payload.Status;
 
-            if (!interview.InterviewWasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
+            if (!interview.WasCompleted && evnt.Payload.Status == InterviewStatus.Completed)
             {
-                interview.InterviewWasCompleted = true;
+                interview.WasCompleted = true;
             }
 
             this.interviews.Store(interview, interview.InterviewId);
@@ -92,33 +111,19 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviews.Store(interview, interview.InterviewId);
         }
 
-        public string Name
-        {
-            get { return GetType().Name; }
-        }
-
-        public Type[] UsesViews
-        {
-            get { return new[] { typeof(UserDocument), typeof(QuestionnairePropagationStructure) }; }
-        }
-        public Type[] BuildsViews
-        {
-            get { return new[] { typeof(InterviewData) }; }
-        }
-
         public void Handle(IPublishedEvent<GroupPropagated> evnt)
         {
-            var interview = this.interviews.GetById(evnt.EventSourceId);
+            InterviewData interview = this.interviews.GetById(evnt.EventSourceId);
 
-            var scopeOfCurrentGroup = GetScopeOfPassedGroup(interview,
+            Guid scopeOfCurrentGroup = GetScopeOfPassedGroup(interview,
                                                             evnt.Payload.GroupId);
             /*if (scopeOfCurrentGroup == null)
                 return;*/
 
-            var keysOfLevelsByScope =
+            List<string> keysOfLevelsByScope =
                 GetLevelsByScopeFromInterview(interview: interview, scopeId: scopeOfCurrentGroup);
 
-            var countOfLevelByScope = keysOfLevelsByScope.Count();
+            int countOfLevelByScope = keysOfLevelsByScope.Count();
 
             if (evnt.Payload.Count == countOfLevelByScope)
                 return;
@@ -127,13 +132,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 AddNewLevelsToInterview(interview, startIndex: countOfLevelByScope,
                              count: evnt.Payload.Count - countOfLevelByScope,
-                             outerVecor: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
+                             outerVector: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
             }
             else
             {
                 var keysOfLevelToBeDeleted =
-                    keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(evnt.Payload.Count - countOfLevelByScope);
-                RemoveLevelsFromInterview(interview, keysOfLevelToBeDeleted);
+                    keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(countOfLevelByScope - evnt.Payload.Count);
+                RemoveLevelsFromInterview(interview, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
             }
 
             this.interviews.Store(interview, interview.InterviewId);
@@ -194,6 +199,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                        new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Timestamp));
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVectors);
         }
 
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
@@ -343,30 +358,30 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 });
         }
 
-        private void RemoveLevelFromInterview(InterviewData interview, string levelKey)
+        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid scopeId)
         {
             if (interview.Levels.ContainsKey(levelKey))
             {
-                interview.Levels.Remove(levelKey);
+                var level = interview.Levels[levelKey];
+                if(!level.ScopeIds.Contains(scopeId))
+                    return;
+                if (level.ScopeIds.Count == 1)
+                    interview.Levels.Remove(levelKey);
+                else
+                    level.ScopeIds.Remove(scopeId);
             }
         }
 
         private void AddLevelToInterview(InterviewData interview, int[] vector, int index, Guid scopeId)
         {
-            var newVecor = CreateNewVector(vector, index);
-            var levelKey = CreateLevelIdFromPropagationVector(newVecor);
-            if (!interview.Levels.ContainsKey(levelKey))
-            {
-                interview.Levels.Add(levelKey, new InterviewLevel(scopeId, newVecor));
-            }
+            var newVector = CreateNewVector(vector, index);
+            var levelKey = CreateLevelIdFromPropagationVector(newVector);
+            if(!interview.Levels.ContainsKey(levelKey))
+                interview.Levels[levelKey]= new InterviewLevel(scopeId, newVector);
             else
             {
-                var level = interview.Levels[levelKey];
-                if (level.ScopeId == scopeId)
-                    return;
-                AddLevelToInterview(interview, vector, index + 1, scopeId);
+                interview.Levels[levelKey].ScopeIds.Add(scopeId);
             }
-
         }
 
         private int[] CreateNewVector(int[] outerScopePropagationVector, int indexInScope)
@@ -380,37 +395,38 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private Guid GetScopeOfPassedGroup(InterviewData interview, Guid groupId)
         {
             var questionnarie = questionnriePropagationStructures.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+
             foreach (var scopeId in questionnarie.PropagationScopes.Keys)
             {
-                foreach (var trigger in questionnarie.PropagationScopes[scopeId])
+                if (questionnarie.PropagationScopes[scopeId].Contains(groupId))
                 {
-                    if (trigger == groupId)
-                        return scopeId;
+                    return scopeId;
                 }
             }
+
             throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire",
                                                       groupId));
         }
 
-        private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete)
+        private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete, Guid scopeId)
         {
             foreach (var levelKey in levelKeysForDelete)
             {
-                RemoveLevelFromInterview(interview, levelKey);
+                RemoveLevelFromInterview(interview, levelKey, scopeId);
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, int[] outerVecor, Guid scopeId)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, int[] outerVector, Guid scopeId)
         {
-            for (int i = startIndex; i < startIndex + count; i++)
+            for (int i = startIndex; i < startIndex + count; i ++)
             {
-                AddLevelToInterview(interview, outerVecor, startIndex, scopeId);
+                AddLevelToInterview(interview, outerVector, i, scopeId);
             }
         }
 
         private List<string> GetLevelsByScopeFromInterview(InterviewData interview, Guid scopeId)
         {
-            return interview.Levels.Where(level => level.Value.ScopeId == scopeId)
+            return interview.Levels.Where(level => level.Value.ScopeIds.Contains(scopeId))
                             .Select(level => level.Key).ToList();
         }
 
@@ -424,5 +440,23 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.interviews.Store(interview, interview.InterviewId);
         }
 
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, false);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, true);
+        }
+
+        private void SetInterviewValidity(Guid interviewId, bool isValid)
+        {
+            var interview = this.interviews.GetById(interviewId);
+
+            interview.HasErrors = !isValid;
+
+            this.interviews.Store(interview, interview.InterviewId);
+        }
     }
 }
