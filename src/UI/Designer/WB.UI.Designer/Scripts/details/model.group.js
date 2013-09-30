@@ -21,6 +21,9 @@
                 self.condition = ko.observable('').extend({
                     validation: [{
                         validator: function (val) {
+                            if (_.isUndefined(val) || _.isNull(val)) {
+                                return true;
+                            }
                             return (val.indexOf("[this]") == -1);
                         },
                         message: 'You cannot use self-reference in conditions'
