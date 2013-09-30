@@ -45,6 +45,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
+
             top = inflater.Inflate(Resource.Layout.ScreenContentFragment, null);
             var previousBtn = new GroupView(inflater.Context,
                                           PropagatedModel == null
@@ -62,7 +63,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             llTop.AddView(breadcrumbs);
 
             llContent.Adapter = new ScreenContentAdapter(Model, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
-            //llContent.fil.SetFillViewport()
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
             llContent.ScrollingCacheEnabled = false;
@@ -77,8 +77,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
             llButtom.AddView(nextBtn);
 
-
             return top;
+        }
+
+        public override void OnViewStateRestored(Bundle savedInstanceState)
+        {
+            base.OnViewStateRestored(savedInstanceState);
+            llContent.SetSelection(0);
         }
 
         protected override void Dispose(bool disposing)
