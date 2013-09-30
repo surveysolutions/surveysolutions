@@ -130,9 +130,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             if (!levelId.HasValue)
             {
-                return interview.Levels.Values.Where(level => level.ScopeId == interview.InterviewId);
+                return interview.Levels.Values.Where(level => level.ScopeIds.Contains(interview.InterviewId));
             }
-            return interview.Levels.Values.Where(level => level.ScopeId == levelId.Value);
+            return interview.Levels.Values.Where(level => level.ScopeIds.Contains(levelId.Value));
         }
 
         private void AddDataRecordFromInterviewLevel(List<InterviewDataExportRerord> dataRecords, InterviewLevel level,

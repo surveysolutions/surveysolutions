@@ -145,11 +145,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             var outerVector = CreateOuterVector(interviewLevel);
 
-            foreach (var groupId in questionnariePropagationStructure.PropagationScopes[interviewLevel.ScopeId])
+            foreach (var scopeId in interviewLevel.ScopeIds)
             {
-                var groupKey = new InterviewItemId(groupId, outerVector);
+                foreach (var groupId in questionnariePropagationStructure.PropagationScopes[scopeId])
+                {
+                    var groupKey = new InterviewItemId(groupId, outerVector);
 
-                AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
+                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
+                }
             }
         }
 

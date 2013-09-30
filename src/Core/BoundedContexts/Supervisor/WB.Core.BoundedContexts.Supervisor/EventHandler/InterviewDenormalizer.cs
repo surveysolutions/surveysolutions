@@ -132,13 +132,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             {
                 AddNewLevelsToInterview(interview, startIndex: countOfLevelByScope,
                              count: evnt.Payload.Count - countOfLevelByScope,
-                             outerVecor: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
+                             outerVector: evnt.Payload.OuterScopePropagationVector, scopeId: scopeOfCurrentGroup);
             }
             else
             {
                 var keysOfLevelToBeDeleted =
                     keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(evnt.Payload.Count - countOfLevelByScope);
-                RemoveLevelsFromInterview(interview, keysOfLevelToBeDeleted);
+                RemoveLevelsFromInterview(interview, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
             }
 
             this.interviews.Store(interview, interview.InterviewId);
@@ -358,30 +358,30 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 });
         }
 
-        private void RemoveLevelFromInterview(InterviewData interview, string levelKey)
+        private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid scopeId)
         {
             if (interview.Levels.ContainsKey(levelKey))
             {
-                interview.Levels.Remove(levelKey);
+                var level = interview.Levels[levelKey];
+                if(!level.ScopeIds.Contains(scopeId))
+                    return;
+                if (level.ScopeIds.Count == 1)
+                    interview.Levels.Remove(levelKey);
+                else
+                    level.ScopeIds.Remove(scopeId);
             }
         }
 
         private void AddLevelToInterview(InterviewData interview, int[] vector, int index, Guid scopeId)
         {
-            var newVecor = CreateNewVector(vector, index);
-            var levelKey = CreateLevelIdFromPropagationVector(newVecor);
-            if (!interview.Levels.ContainsKey(levelKey))
-            {
-                interview.Levels.Add(levelKey, new InterviewLevel(scopeId, newVecor));
-            }
+            var newVector = CreateNewVector(vector, index);
+            var levelKey = CreateLevelIdFromPropagationVector(newVector);
+            if(!interview.Levels.ContainsKey(levelKey))
+                interview.Levels[levelKey]= new InterviewLevel(scopeId, newVector);
             else
-            { 
-                var level = interview.Levels[levelKey];
-                if (level.ScopeId == scopeId)
-                    return;
-                AddLevelToInterview(interview, vector, index + 1, scopeId);
+            {
+                interview.Levels[levelKey].ScopeIds.Add(scopeId);
             }
-
         }
 
         private int[] CreateNewVector(int[] outerScopePropagationVector, int indexInScope)
@@ -408,25 +408,25 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                       groupId));
         }
 
-        private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete)
+        private void RemoveLevelsFromInterview(InterviewData interview, IEnumerable<string> levelKeysForDelete, Guid scopeId)
         {
             foreach (var levelKey in levelKeysForDelete)
             {
-                RemoveLevelFromInterview(interview, levelKey);
+                RemoveLevelFromInterview(interview, levelKey, scopeId);
             }
         }
 
-        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, int[] outerVecor, Guid scopeId)
+        private void AddNewLevelsToInterview(InterviewData interview, int startIndex, int count, int[] outerVector, Guid scopeId)
         {
-            for (int i = startIndex; i < startIndex + count; i++)
+            for (int i = startIndex; i < startIndex + count; i ++)
             {
-                AddLevelToInterview(interview, outerVecor, i, scopeId);
+                AddLevelToInterview(interview, outerVector, i, scopeId);
             }
         }
 
         private List<string> GetLevelsByScopeFromInterview(InterviewData interview, Guid scopeId)
         {
-            return interview.Levels.Where(level => level.Value.ScopeId == scopeId)
+            return interview.Levels.Where(level => level.Value.ScopeIds.Contains(scopeId))
                             .Select(level => level.Key).ToList();
         }
 
