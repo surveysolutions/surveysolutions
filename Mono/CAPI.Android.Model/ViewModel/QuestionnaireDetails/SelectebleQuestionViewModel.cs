@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -60,24 +61,50 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 return;
             }
-            var typedAnswers = answer as decimal[];
+
+            var typedAnswers = this.CastAnswerToSingleDimensionalArray(answer) ?? this.CastAnswerToDecimal(answer);
+
             if (typedAnswers == null)
             {
-                decimal decimalAnswer;
-                if (!decimal.TryParse(answer.ToString(), out decimalAnswer))
-                    return;
-                typedAnswers = new decimal[] {decimalAnswer};
+                return;
             }
+
             foreach (var item in this.Answers)
             {
                 item.Selected = typedAnswers.Contains(item.Value);
             }
+
             base.SetAnswer(answer);
-            if (QuestionType == QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a => a.Selected))
+
+            this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
+        }
+
+        private void RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions()
+        {
+            if (this.QuestionType == QuestionType.MultyOption && this.Status.HasFlag(QuestionStatus.Answered) && !this.Answers.Any(a => a.Selected))
             {
-                Status &= ~QuestionStatus.Answered;
-                RaisePropertyChanged("Status");
+                this.Status &= ~QuestionStatus.Answered;
+                this.RaisePropertyChanged("Status");
             }
+        }
+
+        private decimal[] CastAnswerToSingleDimensionalArray(object answer)
+        {
+            var simpleCast = answer as decimal[];
+            if (simpleCast != null)
+                return simpleCast;
+            var jArrayCast = this.GetValueFromJArray<decimal>(answer);
+            if (jArrayCast.Length > 0)
+                return jArrayCast;
+            return null;
+        }
+
+        private decimal[] CastAnswerToDecimal(object answer)
+        {
+            decimal decimalAnswer;
+            if (!decimal.TryParse(answer.ToString(), out decimalAnswer))
+                return null;
+            return new decimal[] { decimalAnswer };
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -119,6 +120,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             else
                 Status &= ~QuestionStatus.ParentEnabled;
             RaisePropertyChanged("Status");
+        }
+
+        protected T[] GetValueFromJArray<T>(object answer)
+        {
+            try
+            {
+                return ((JArray)answer).ToObject<T[]>();
+            }
+            catch (Exception)
+            {
+                return new T[0];
+            }
         }
     }
 
