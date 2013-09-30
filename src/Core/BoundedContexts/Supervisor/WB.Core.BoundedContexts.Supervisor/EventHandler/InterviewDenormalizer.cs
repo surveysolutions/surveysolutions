@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             else
             {
                 var keysOfLevelToBeDeleted =
-                    keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(evnt.Payload.Count - countOfLevelByScope);
+                    keysOfLevelsByScope.Skip(evnt.Payload.Count).Take(countOfLevelByScope - evnt.Payload.Count);
                 RemoveLevelsFromInterview(interview, keysOfLevelToBeDeleted, scopeOfCurrentGroup);
             }
 
