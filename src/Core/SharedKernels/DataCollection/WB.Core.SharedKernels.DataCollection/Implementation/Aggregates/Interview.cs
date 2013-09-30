@@ -1284,18 +1284,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 case InterviewStatus.Completed:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned,
-                                                                  InterviewStatus.Restarted, InterviewStatus.Restored,
-                                                                  InterviewStatus.RejectedBySupervisor);
+                                                                  InterviewStatus.Restored,
+                                                                  InterviewStatus.RejectedBySupervisor,
+                                                                  InterviewStatus.Restarted);
                     return;
                 case InterviewStatus.RejectedBySupervisor:
-                    this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.Restored,
+                    this.ThrowIfInterviewStatusIsNotOneOfExpected(
                         InterviewStatus.InterviewerAssigned,
+                        InterviewStatus.Restored,
+                        InterviewStatus.RejectedBySupervisor,
+                        InterviewStatus.Completed, 
                         InterviewStatus.ApprovedBySupervisor);
                     return;
                 case InterviewStatus.InterviewerAssigned:
                     this.ThrowIfInterviewStatusIsNotOneOfExpected(
-                        InterviewStatus.SupervisorAssigned, InterviewStatus.Restored,
-                        InterviewStatus.RejectedBySupervisor, InterviewStatus.InterviewerAssigned);
+                        InterviewStatus.InterviewerAssigned,
+                        InterviewStatus.Restored,
+                        InterviewStatus.RejectedBySupervisor,
+                        InterviewStatus.SupervisorAssigned);
                     return;
             }
             throw new InterviewException(string.Format(
