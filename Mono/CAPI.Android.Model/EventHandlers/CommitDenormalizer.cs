@@ -1,23 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using CAPI.Android.Core.Model.ChangeLog;
-using CAPI.Android.Core.Model.ViewModel.Dashboard;
-using CAPI.Android.Core.Model.ViewModel.Synchronization;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire.Completed;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
