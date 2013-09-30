@@ -1293,6 +1293,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         InterviewStatus.InterviewerAssigned,
                         InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor,
+                        InterviewStatus.Restarted,
                         InterviewStatus.Completed, 
                         InterviewStatus.ApprovedBySupervisor);
                     return;
