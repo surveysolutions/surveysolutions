@@ -24,12 +24,39 @@
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
 
-              self.qtype = ko.observable("Text"); // Questoin type
+            
               self.isHead = ko.observable(false);
               self.isFeatured = ko.observable(false);
               self.isMandatory = ko.observable(false);
+              self.qtype = ko.observable("Text").extend({
+                  validation: [{
+                      validator: function (val, someOtherVal) {
+                          if (self.isFeatured() == false) return true;
+                          return (val !== someOtherVal);
+                      },
+                      message: 'Geo Location question cannot be pre-filled',
+                      params: "GpsCoordinates"
+                  }]
+              }); // Questoin type
               self.scope = ko.observable();
-              self.condition = ko.observable('');
+              self.condition = ko.observable('').extend({
+                  validation: [{
+                      validator: function (val) {
+                          if (_.isUndefined(val) || _.isNull(val)) {
+                              return true;
+                          }
+                          if (val.indexOf("[this]") != -1) return false;
+                          var variable = self.alias();
+                          if (_.isUndefined(variable) || _.isNull(variable) || _.isEmpty(variable)) {
+                              return true;
+                          }
+                          variable = "[" + variable + "]";
+                          if (val.indexOf(variable) != -1) return false;
+                          return true;
+                      },
+                      message: 'You cannot use self-reference in conditions'
+                  }]
+              });
               self.validationExpression = ko.observable('');
               self.validationMessage = ko.observable('');
               self.instruction = ko.observable('');
@@ -125,6 +152,21 @@
               self.errors = ko.validation.group(self);
               this.cache = function () { };
               self.canUpdate = ko.observable(true);
+              
+              self.isFeatured.subscribe(function (value) {
+                  if (value && _.isEmpty(self.condition()) == false) {
+                      bootbox.confirm(config.warnings.weWillClearCondition.message,
+                          config.warnings.weWillClearCondition.cancelBtn,
+                          config.warnings.weWillClearCondition.okBtn,
+                          function (result) {
+                          if (result == false) {
+                              self.isFeatured(false);
+                              return;
+                          }
+                          self.condition('');
+                      });
+                  }
+              });
 
               return self;
           };

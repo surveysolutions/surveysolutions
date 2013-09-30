@@ -159,7 +159,7 @@
             return propagatable;
         };
 
-        groups.getQuestionsFromPropagateableGroups = function() {
+        groups.getQuestionsFromPropagatableGroups = function () {
             return _.filter(questions.getAllLocal(), function (item) {
                 return !_.isUndefined(item.parent()) && !_.isNull(item.parent()) && item.parent().gtype() !== "None";
             });

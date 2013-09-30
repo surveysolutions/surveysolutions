@@ -1,6 +1,8 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
@@ -9,7 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireUpdated>,
-        IEventHandler<QuestionnaireDeleted>
+        IEventHandler<QuestionnaireDeleted>,
+        IEventHandler<QuestionnaireCloned>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
@@ -52,7 +55,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = evnt.Payload.Source;
+            this.StoreNewBrowseItemFromQuestionnaireDocument(evnt.Payload.Source);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
+        {
+            this.StoreNewBrowseItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument);
+        }
+
+        private void StoreNewBrowseItemFromQuestionnaireDocument(QuestionnaireDocument document)
+        {
             var browseItem = new QuestionnaireBrowseItem(
                 document.PublicKey,
                 document.Title,
@@ -61,7 +73,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
                 document.CreatedBy,
                 document.IsPublic);
 
-            //}
             this.documentStorage.Store(browseItem, document.PublicKey);
         }
     }

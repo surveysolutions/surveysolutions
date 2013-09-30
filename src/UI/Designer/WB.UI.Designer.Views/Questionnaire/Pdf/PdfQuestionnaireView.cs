@@ -186,12 +186,12 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public IEnumerable<PdfQuestionView> GetQuestionsWithConditions()
         {
-            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => x.HasCodition);
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => x.HasCodition).OrderBy(x => x.StringItemNumber);
         }
 
         public IEnumerable<PdfQuestionView> GetQuestionsWithValidation()
         {
-            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.ValidationExpression));
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.ValidationExpression)).OrderBy(x => x.StringItemNumber);
         }
     }
 

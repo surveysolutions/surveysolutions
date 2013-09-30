@@ -222,6 +222,10 @@ body.loading .loading-backdrop {
         height: 20px;
     }
 
+    #output .inner .title {
+        height: 20px;
+    }
+
 .details.stack .body .input-append {
     display: inline;
 }

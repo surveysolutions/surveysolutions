@@ -2,27 +2,23 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Domain;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
-namespace WB.Core.SharedKernels.DataCollection.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire, ISnapshotable<QuestionnaireState>
+    internal class Questionnaire : AggregateRootMappedByConvention, IQuestionnaire, ISnapshotable<QuestionnaireState>
     {
         #region State
 
@@ -38,6 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
         private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions = new Dictionary<Guid, IEnumerable<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
 
         protected internal void OnTemplateImported(TemplateImported e)
         {
@@ -55,6 +53,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             this.cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
             this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions = new Dictionary<Guid, IEnumerable<Guid>>();
+            this.cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         }
 
         public QuestionnaireState CreateSnapshot()
@@ -122,21 +122,28 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
-            ImportQuestionnaire(createdBy, source);
+            this.ImportQuestionnaire(createdBy, source);
         }
 
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            document.ConnectChildsWithParent();
+
             ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
             ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
             ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(document);
+            ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(document);
+            ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(document);
+            ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(document);
+
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
             this.ApplyEvent(new TemplateImported() {Source = document});
         }
+
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
@@ -158,9 +165,19 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
             return this.GetQuestionOrThrow(questionId).QuestionType;
         }
 
+        public Guid? GetQuestionLinkedQuestionId(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).LinkedToQuestionId;
+        }
+
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;
+        }
+
+        public string GetQuestionVariableName(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).StataExportCaption;
         }
 
         public string GetGroupTitle(Guid groupId)
@@ -177,7 +194,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(string.Format(
-                    "Cannot return answer options for queston with id '{0}' because it's type {1} does not support answer options.",
+                    "Cannot return answer options for question with id '{0}' because it's type {1} does not support answer options.",
                     questionId, question.QuestionType));
 
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
@@ -197,6 +214,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     = this.GetQuestionsInvolvedInCustomValidationImpl(questionId);
 
             return this.cacheOfQuestionsInvolvedInCustomValidationOfQuestion[questionId];
+        }
+
+        public IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions()
+        {
+            return
+              from question in this.GetAllQuestions()
+              where IsExpressionDefined(question.ValidationExpression)
+              select question.PublicKey;
         }
 
         public string GetCustomValidationExpression(Guid questionId)
@@ -455,7 +480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         {
             IGroup @group = this.GetGroupOrThrow(groupId);
 
-            return @group.Propagated == Propagate.AutoPropagated;
+            return IsGroupPropagatable(@group);
         }
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
@@ -481,6 +506,41 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions[groupId] = this.GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditionsImpl(groupId);
 
             return this.cacheOfUnderlyingQuestionsWithNotEmptyCustomEnablementConditions[groupId];
+        }
+
+        public IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions.ContainsKey(groupId))
+                this.cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions[groupId] = this.GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressionsImpl(groupId);
+
+            return this.cacheOfUnderlyingQuestionsWithNotEmptyCustomValidationExpressions[groupId];
+        }
+
+        public Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+
+            if (!linkedQuestion.LinkedToQuestionId.HasValue)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return id of referenced question because specified question {0} is not linked.",
+                    FormatQuestionForException(linkedQuestion)));
+
+            return linkedQuestion.LinkedToQuestionId.Value;
+        }
+
+        public bool IsQuestionMandatory(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            return question.Mandatory;
+        }
+
+        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
+        {
+            if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
+                this.cacheOfUnderlyingMandatoryQuestions[groupId] = this.GetUnderlyingMandatoryQuestionsImpl(groupId);
+
+            return this.cacheOfUnderlyingMandatoryQuestions[groupId];
         }
 
 
@@ -509,7 +569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private static void ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(QuestionnaireDocument document)
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = document.Find<IGroup>(group
-                => group.Propagated == Propagate.AutoPropagated
+                => IsGroupPropagatable(group)
                 && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() == 0);
 
             if (propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Any())
@@ -519,10 +579,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     string.Join(Environment.NewLine, propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Select(FormatGroupForException))));
         }
 
-        private void ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(QuestionnaireDocument document)
+        private static void ThrowIfSomePropagatedGroupsHaveMoreThanOnePropagatingQuestionPointingToThem(QuestionnaireDocument document)
         {
             IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = document.Find<IGroup>(group
-                => group.Propagated == Propagate.AutoPropagated
+                => IsGroupPropagatable(group)
                 && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() > 1);
 
             if (propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Any())
@@ -530,6 +590,58 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                     "Following groups are propagated but there is more than one propagating question which points to these groups:{0}{1}",
                     Environment.NewLine,
                     string.Join(Environment.NewLine, propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(FormatGroupForException))));
+        }
+
+        private static void ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isQuestionPresentInQuestionnaire = questionId => document.Find<IQuestion>(questionId) != null;
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                question => question.LinkedToQuestionId.HasValue && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value));
+        }
+
+        private void ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isReferencedQuestionTypeSupported = questionId =>
+            {
+                var question = document.Find<IQuestion>(questionId);
+
+                return question.QuestionType == QuestionType.Text
+                    || question.QuestionType == QuestionType.Numeric
+                    || question.QuestionType == QuestionType.DateTime;
+            };
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
+        }
+
+        private void ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isQuestionUnderPropagatedGroup = questionId =>
+            {
+                var question = document.Find<IQuestion>(questionId);
+                IEnumerable<IGroup> parentGroups = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), document);
+
+                return parentGroups.Any(IsGroupPropagatable);
+            };
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
+        }
+
+        private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document,
+            string exceptionTextDescribingFollowingQuestions, Func<IQuestion, bool> condition)
+        {
+            IEnumerable<IQuestion> questionsSatisfyingTheCondition = document.Find<IQuestion>(condition);
+
+            if (questionsSatisfyingTheCondition.Any())
+                throw new QuestionnaireException(string.Format("{1}:{0}{2}",
+                    Environment.NewLine,
+                    exceptionTextDescribingFollowingQuestions,
+                    string.Join(Environment.NewLine, questionsSatisfyingTheCondition.Select(FormatQuestionForException))));
         }
 
 
@@ -638,6 +750,23 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 .ToList();
         }
 
+        private IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressionsImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Find<IQuestion>(question => IsExpressionDefined(question.ValidationExpression))
+                .Select(question => question.PublicKey)
+                .ToList();
+        }
+
+        private IEnumerable<Guid> GetUnderlyingMandatoryQuestionsImpl(Guid groupId)
+        {
+            return this
+                .GetGroupOrThrow(groupId)
+                .Find<IQuestion>(question => question.Mandatory)
+                .Select(question => question.PublicKey)
+                .ToList();
+        }
 
         private IEnumerable<IGroup> GetAllGroups()
         {
@@ -668,11 +797,16 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         private IEnumerable<Guid> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group)
         {
-            var parentGroups = new List<Guid>();
+            return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(group, this.innerDocument).Select(_ => _.PublicKey);
+        }
 
-            while (group != this.innerDocument)
+        private static IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
+        {
+            var parentGroups = new List<IGroup>();
+
+            while (group != document)
             {
-                parentGroups.Add(group.PublicKey);
+                parentGroups.Add(group);
                 group = (IGroup) group.GetParent();
             }
 
@@ -795,6 +929,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
                 && (question is IAutoPropagateQuestion);
         }
 
+        private static bool IsGroupPropagatable(IGroup group)
+        {
+            return group.Propagated == Propagate.AutoPropagated;
+        }
+
         private void ThrowIfQuestionDoesNotSupportPropagation(Guid questionId)
         {
             if (!this.DoesQuestionSupportPropagation(questionId))
@@ -856,7 +995,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         private static string FormatGroupForException(IGroup group)
         {
             return string.Format("'{0} ({1:N})'",
-                group.Title ?? "<<NO QUESTION TITLE>>",
+                group.Title ?? "<<NO GROUP TITLE>>",
                 group.PublicKey);
         }
     }

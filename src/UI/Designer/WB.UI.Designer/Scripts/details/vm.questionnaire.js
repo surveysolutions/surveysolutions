@@ -95,7 +95,7 @@
                 }
                 question.isSelected(true);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
-                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagateableGroups());
+                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
                 selectedQuestion.valueHasMutated();
                 openDetails("show-question");
@@ -550,7 +550,11 @@
             },
             showError = function(message) {
                 errors.removeAll();
-                errors.push(message);
+                if (!_.isUndefined(message.error)) {
+                    errors.push(message.error);
+                } else {
+                    errors.push(message);
+                }
                 isOutputVisible(true);
             };
 
