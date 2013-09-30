@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
@@ -49,19 +50,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public override void SetAnswer(object answer)
         {
-            if (answer == null)
+            int[][] typedAnswers = CastAnswer(answer);
+
+            if (IsAnswerNull(typedAnswers))
             {
                 return;
-            }
-
-            var typedAnswers = answer as int[][];
-
-            if (typedAnswers == null)
-            {
-                var selectedAnswer = answer as int[];
-                if (selectedAnswer==null)
-                    return;
-                typedAnswers = new int[][] { selectedAnswer };
             }
 
             SelectedAnswers = typedAnswers;
@@ -70,8 +63,73 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             if (this.IsMultyOptionQuestionHasNoSelectedOptions)
             {
-                Status &= ~QuestionStatus.Answered;
-                RaisePropertyChanged("Status");
+                this.RemoveAnsweredFromStatus();
+            }
+        }
+
+        private int[][] CastAnswer(object answer)
+        {
+            if (IsAnswerNull(answer))
+            {
+                return null;
+            }
+
+            int[][] typedAnswers = this.CastAnswerTo2DimensionalArray(answer);
+
+            if (typedAnswers == null)
+            {
+                var selectedAnswer = CastAnswerToSingleDimensionalArray(answer);
+
+                if (selectedAnswer == null)
+                    return null;
+
+                return new int[][] { selectedAnswer };
+            }
+            return typedAnswers;
+        }
+
+        private int[] CastAnswerToSingleDimensionalArray(object answer)
+        {
+            var simpleCast = answer as int[];
+            if (simpleCast != null)
+                return simpleCast;
+            var jArrayCast = this.GetValueFromJArray<int>(answer);
+            if (jArrayCast.Length > 0)
+                return jArrayCast;
+            return null;
+        }
+
+        private int[][] CastAnswerTo2DimensionalArray(object answer)
+        {
+            var simpleCast = answer as int[][];
+            if (simpleCast != null)
+                return simpleCast;
+            var jArrayCast = this.GetValueFromJArray<int[]>(answer);
+            if (jArrayCast.Length > 0)
+                return jArrayCast;
+            return null;
+        }
+
+        private void RemoveAnsweredFromStatus()
+        {
+            this.Status &= ~QuestionStatus.Answered;
+            this.RaisePropertyChanged("Status");
+        }
+
+        private bool IsAnswerNull(object answer)
+        {
+            return answer == null;
+        }
+
+        private T[] GetValueFromJArray<T>(object answer)
+        {
+            try
+            {
+                return ((JArray) answer).ToObject<T[]>();
+            }
+            catch (Exception)
+            {
+                return new T[0];
             }
         }
 
