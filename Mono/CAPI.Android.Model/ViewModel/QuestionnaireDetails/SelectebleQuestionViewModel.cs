@@ -8,27 +8,29 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class SelectebleQuestionViewModel:QuestionViewModel
+    public class SelectebleQuestionViewModel : QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            InterviewItemId publicKey, 
+            InterviewItemId publicKey,
             string text,
-            QuestionType questionType, 
-            IEnumerable<AnswerViewModel> answers, 
-            bool enabled, 
-            string instructions, 
-            string comments, 
-            bool valid, 
-            bool mandatory, 
+            QuestionType questionType,
+            IEnumerable<AnswerViewModel> answers,
+            bool enabled,
+            string instructions,
+            string comments,
+            bool valid,
+            bool mandatory,
             bool capital,
-            object answerObject, 
+            object answerObject,
             string validationMessage)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
+            : base(
+                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
         {
             Answers = answers;
         }
+
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        
+
         public override string AnswerString
         {
             get
@@ -46,10 +48,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
             return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
-                                                   this.Text, this.QuestionType, newAnswers,
-                                                   this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
-                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
+                this.Text, this.QuestionType, newAnswers,
+                this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
+                this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
+                this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
         }
 
         public override void SetAnswer(object answer)
@@ -62,7 +64,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             if (typedAnswers == null)
             {
                 decimal decimalAnswer;
-                if(!decimal.TryParse(answer.ToString(),out decimalAnswer))
+                if (!decimal.TryParse(answer.ToString(), out decimalAnswer))
                     return;
                 typedAnswers = new decimal[] {decimalAnswer};
             }
@@ -71,7 +73,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 item.Selected = typedAnswers.Contains(item.Value);
             }
             base.SetAnswer(answer);
-            if (QuestionType==QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a=>a.Selected))
+            if (QuestionType == QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a => a.Selected))
             {
                 Status &= ~QuestionStatus.Answered;
                 RaisePropertyChanged("Status");

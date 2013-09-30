@@ -140,8 +140,22 @@
 
         OwnerCannotBeInShareList,
 
-        LinkedToQuestionDoesNotExist,
+        LinkedQuestionDoesNotExist,
 
-        QuestionCanNotBeFeatured
+        QuestionCanNotBeFeatured,
+
+        QuestionCanNotContainValidation,
+
+        ConflictBetweenLinkedQuestionAndOptions,
+
+        NotSupportedQuestionForLinkedQuestion,
+
+        LinkedQuestionIsNotInPropagateGroup,
+
+        NotCategoricalQuestionLinkedToAnoterQuestion,
+
+        QuestionWithLinkedQuestionCanNotBeFeatured,
+
+        QuestionWithLinkedQuestionCanNotBeHead
     }
 }

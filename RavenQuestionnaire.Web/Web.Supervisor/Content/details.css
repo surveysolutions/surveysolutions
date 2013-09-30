@@ -44,8 +44,12 @@
 {
     padding: 0 10px;
 }
+#menu #groups-menu li.level0 a{
+    font-weight: bold;
+}
 #menu #groups-menu li.level1 a{
     padding-left: 10px;
+    font-weight: bold;
 }
 #menu #groups-menu li.level2 a{
     padding-left: 22px;
@@ -223,4 +227,51 @@ h4.heading {
 
 .comment-date {
     color: #999;
+}
+
+#menu > ul li a,
+#menu .slim-scroll > ul li a {
+  display: block;
+  width: auto;
+  border-bottom: 1px solid #DDDDDD;
+  padding: 0;
+  margin: 0;
+  color: #222222;
+  min-height: 26px;
+  line-height: 22px;
+  text-decoration: none;
+  font-size: 13px;
+}
+#menu > ul li,
+#menu .slim-scroll > ul li {
+  border-bottom: 1px solid #fff;
+}
+#menu.invalid  #groups-menu .selected {
+    border-bottom-color: #EE5F5B;
+}
+#menu.invalid  #groups-menu li.selected a,
+#menu.invalid  #groups-menu li.selected a:hover  {
+    background: #DA4F49;
+    color: #fff;
+    border-bottom-color:#BD362F
+}
+
+#menu.flaged  #groups-menu .selected {
+    border-bottom-color: #5BC0DE;
+}
+#menu.flaged  #groups-menu li.selected a,
+#menu.flaged  #groups-menu li.selected a:hover  {
+    background: #49AFCD;
+    color: #fff;
+    border-bottom-color:#2F96B4
+}
+
+#menu.commented  #groups-menu .selected {
+    border-bottom-color: #62C462;
+}
+#menu.commented  #groups-menu li.selected a,
+#menu.commented  #groups-menu li.selected a:hover  {
+    background: #5BB75B;
+    color: #fff;
+    border-bottom-color:#51A351
 }

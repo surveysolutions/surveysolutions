@@ -14,7 +14,7 @@
 }
 
 
-<div id="menu" class="hidden-phone">
+<div id="menu" class="hidden-phone" data-bind="css: filter">
     <div id="menuInner" class="slim-scroll">
         <div class="hide-panel-block text-right innerLR">
             &larr;&nbsp;<a class="pseudo-link" data-bind="click: toggleFilter">Hide filter</a>
@@ -48,12 +48,14 @@
             <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': filter() == 'flaged' }"><i class="icon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i>flagged (<span data-bind="    text: flagedCount"></span>)</a>
             <a href="#/commented" class="btn" data-bind="css: { 'btn-primary': filter() == 'commented' }"><i class="icon-comment " data-bind="    css: {'icon-white': filter() == 'commented' }"></i>commented (<span data-bind="    text: commentedCount"></span>)</a>
             <a href="#/answered"
-                class="btn" data-bind="css: { 'btn-primary': filter() == 'answered' }"><i class="icon-ok"
-                    data-bind="    css: { 'icon-white': filter() == 'answered' }"></i>answered
-                                    (<span data-bind="    text: answeredCount"></span>)</a><a href="#/invalid" class="btn "
-                                        data-bind="css: { 'btn-primary': filter() == 'invalid' }"><i class="icon-warning-sign"
-                                            data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span
-                                                data-bind="    text: invalidCount"></span>)</a><a href="#/supervisor" class="btn "
+               class="btn" data-bind="css: { 'btn-primary': filter() == 'answered' }"><i class="icon-ok"
+                                                                                         data-bind="    css: { 'icon-white': filter() == 'answered' }"></i>answered
+                (<span data-bind="    text: answeredCount"></span>)</a>
+            <a href="#/invalid" class="btn "
+               data-bind="css: { 'btn-primary': filter() == 'invalid' }"><i class="icon-warning-sign"
+                                                                            data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span
+                                                                                                                                                          data-bind="    text: invalidCount"></span>)</a>
+            <a href="#/supervisor" class="btn "
                                                     data-bind="css: { 'btn-primary': filter() == 'supervisor' }"><i class="icon-pencil"
                                                         data-bind="    css: { 'icon-white': filter() == 'supervisor' }"></i>supervisor's
                                                     (<span data-bind="    text: editableCount"></span>)</a>
@@ -83,8 +85,8 @@
                                             <div class="question-clickable">
                                                 <span data-bind="css: markerStyle()" class="question-marker"></span>
                                                 <span data-bind="template: { name: questionType() }"></span>
-                                                <small class="text-error" data-bind="text:validationExpression, visible: isValid()==false"></small>
-                                                <small class="text-error" data-bind="text:validationMessage, visible: isValid()==false"></small>
+                                                <small class="text-error" data-bind="html:validationExpression, visible: isValid()==false"></small>
+                                                <small class="text-error" data-bind="html:validationMessage, visible: isValid()==false"></small>
                                             </div>
                                         </div>
                                     </td>

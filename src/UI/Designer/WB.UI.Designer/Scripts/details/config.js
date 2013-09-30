@@ -149,7 +149,7 @@
                 },
                 cantMoveFeaturedQuestionIntoAutoGroup: {
                     title: "Can't move question",
-                    text: "You can't move a featured question into a propagated group"
+                    text: "You can't move a pre-filled question into a propagated group"
                 },
                 cantMoveAutoQuestionIntoAutoGroup: {
                     title: "Can't move question",
@@ -161,7 +161,12 @@
 
                     text: "You can't move a head question outside of any propagated group"
                 },
-                savedData: 'Data saved successfully'
+                savedData: 'Data saved successfully',
+                weWillClearCondition: {
+                    message: "Pre-filled question can't have condition expression. We can clear condition and make this questuion pre-filled.",
+                    okBtn: "Yes, clear condition",
+                    cancelBtn: "No, do not clear condition"
+    }
             },
             // methods
             //-----------------

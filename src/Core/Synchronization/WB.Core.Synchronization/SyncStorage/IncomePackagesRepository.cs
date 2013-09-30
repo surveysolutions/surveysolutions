@@ -46,7 +46,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
             NcqrsEnvironment.Get<ICommandService>()
                             .Execute(new ApplySynchronizationMetadata(
-                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, null));
+                                meta.PublicKey, meta.ResponsibleId, meta.TemplateId, (InterviewStatus) meta.Status, null, meta.Comments, meta.Valid));
         }
 
 
@@ -82,10 +82,12 @@ namespace WB.Core.Synchronization.SyncStorage
         private void StoreEvents(Guid id, IEnumerable<AggregateRootEvent> stream, long sequence)
         {
             var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
             var events = eventStore.ReadFrom(id, sequence + 1, long.MaxValue);
             var latestEventSequence = events.IsEmpty ? sequence : events.Last().EventSequence;
             var incomeEvents = this.BuildEventStreams(stream, latestEventSequence);
             eventStore.Store(incomeEvents);
+            commandService.Execute(new ReevaluateSynchronizedInterview(id));
         }
 
         protected UncommittedEventStream BuildEventStreams(IEnumerable<AggregateRootEvent> stream, long sequence)

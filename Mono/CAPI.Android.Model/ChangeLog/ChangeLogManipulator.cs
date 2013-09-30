@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
@@ -67,20 +70,72 @@ namespace CAPI.Android.Core.Model.ChangeLog
             draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null), recordId);
         }
 
-        public void CloseDraftRecord(Guid eventSourceId, long end)
+        public void CloseDraftRecord(Guid eventSourceId, long end, bool validRecord)
         {
             var record = GetLastDraftRecord(eventSourceId);
             if (record == null)
                 return;
             if (record.Start > end)
                 throw new ArgumentException("end is more than start");
-            record.End = end;
-            var storedEvents = eventStore.ReadFrom(eventSourceId, record.Start, end);
-            var events =
-                storedEvents.Select(e => new AggregateRootEvent(e)).ToArray();
+            var recordId = Guid.Parse(record.Id);
 
-            fileChangeLogStore.SaveChangeset(events, Guid.Parse(record.Id));
-            draftChangeLog.Store(record, Guid.Parse(record.Id));
+            record.End = end;
+
+            var events = BuildEventStreamForSendByEventSourceId(eventSourceId, record.Start, end);
+
+            fileChangeLogStore.SaveChangeset(events, recordId, validRecord);
+            draftChangeLog.Store(record, recordId);
+        }
+
+        private AggregateRootEvent[] BuildEventStreamForSendByEventSourceId(Guid eventSourceId, long start, long end)
+        {
+            var storedEvents = eventStore.ReadFrom(eventSourceId, start, end).ToList();
+
+            /*var indexOfLastCompleteEvent = GetIndexOfLastCompleteEvent(storedEvents);*/
+
+            var events =
+                storedEvents/*.Take(indexOfLastCompleteEvent)*/.Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
+
+            return events;
+        }
+
+        /*private static int GetIndexOfLastCompleteEvent(List<CommittedEvent> storedEvents)
+        {
+            int indexOfLastCompleteEvent = storedEvents.Count - 1;
+            for (int i = storedEvents.Count - 1; i >= 0; i--)
+            {
+                if (storedEvents[i].Payload is InterviewCompleted)
+                {
+                    indexOfLastCompleteEvent = i;
+                    break;
+                }
+            }
+            return indexOfLastCompleteEvent;
+        }*/
+
+        private bool EventIsActive(CommittedEvent committedEvent)
+        {
+            var eventType = committedEvent.Payload;
+
+            if (eventType is AnswerDeclaredInvalid)
+                return false;
+
+            if (eventType is AnswerDeclaredValid)
+                return false;
+
+            if (eventType is GroupDisabled)
+                return false;
+
+            if (eventType is GroupEnabled)
+                return false;
+
+            if (eventType is QuestionDisabled)
+                return false;
+
+            if (eventType is QuestionEnabled)
+                return false;
+            
+            return true;
         }
 
         public void ReopenDraftRecord(Guid eventSourceId)
@@ -89,9 +144,11 @@ namespace CAPI.Android.Core.Model.ChangeLog
             if (record == null)
                 return;
             record.End = null;
-            var recodId = Guid.Parse(record.Id);
-            fileChangeLogStore.DeleteDraftChangeSet(recodId);
-            draftChangeLog.Store(record, recodId);
+
+            var recordId = Guid.Parse(record.Id);
+
+            fileChangeLogStore.DeleteDraftChangeSet(recordId);
+            draftChangeLog.Store(record, recordId);
         }
 
         public void CleanUpChangeLogByRecordId(Guid recordId)

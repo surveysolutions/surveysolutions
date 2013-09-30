@@ -46,7 +46,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             : base(context)
         {
             this.context = context;
-            bindingContext = new MvxAndroidBindingContext(context, ((context as IMvxBindingContextOwner).BindingContext as IMvxAndroidBindingContext).LayoutInflater, source);
+            bindingContext = new MvxAndroidBindingContext(context, context.ToBindingContext().LayoutInflater, source);
             this.Model = source;
             this.questionnaireId = questionnarieId;
             this.questionViewFactory = new DefaultQuestionViewFactory(CapiApplication.Kernel.Get<IAnswerOnQuestionCommandService>());
@@ -89,12 +89,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
-                this.ClearAllBindings();
-            }
+                Console.WriteLine(string.Format("disposing roster question '{0}'", Model.Text));
 
-            base.Dispose(disposing);
+                this.ClearAllBindings();
+
+                if (Content != null)
+                {
+                    Content.Dispose();
+                    Content = null;
+                }
+            }
         }
     }
 }

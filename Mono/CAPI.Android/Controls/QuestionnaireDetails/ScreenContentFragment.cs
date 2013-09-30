@@ -84,14 +84,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (llContent != null)
-            {
-                if (llContent.Adapter != null)
-                {
-                    llContent.Adapter.Dispose();
-                }
 
-                llContent.Dispose();
+            if (disposing)
+            {
+                if (llContent != null)
+                {
+                    if (llContent.Adapter != null)
+                    {
+                        llContent.Adapter.Dispose();
+                    }
+
+                    llContent.Dispose();
+                }
             }
         }
 
@@ -112,15 +116,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
         }
 
-        private CompleteQuestionnaireView questionnaire;
+        private InterviewViewModel questionnaire;
 
-        protected CompleteQuestionnaireView Questionnaire
+        protected InterviewViewModel Questionnaire
         {
             get
             {
                 if (questionnaire == null)
                 {
-                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                         new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
                 }
                 return questionnaire;

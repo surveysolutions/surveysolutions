@@ -109,8 +109,8 @@ namespace CAPI.Android
         private void InitQuestionnariesStorage(InProcessEventBus bus)
         {
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(
-                    kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+                new InterviewViewModelDenormalizer(
+                    kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -130,7 +130,17 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(GroupPropagated));
             bus.RegisterHandler(eventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(eventHandler, typeof(GeoLocationQuestionAnswered));
-           
+            bus.RegisterHandler(eventHandler, typeof(AnswerRemoved));
+            bus.RegisterHandler(eventHandler, typeof(SingleOptionLinkedQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof(MultipleOptionsLinkedQuestionAnswered));
+
+
+            var answerOptionsForLinkedQuestionsDenormalizer = kernel.Get<AnswerOptionsForLinkedQuestionsDenormalizer>();
+
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
         private void InitTemplateStorage(InProcessEventBus bus)
@@ -163,19 +173,20 @@ namespace CAPI.Android
                                           kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredValid));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredInvalid));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             
         }
 
         private void InitChangeLog(InProcessEventBus bus)
         {
-           
             var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
             bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
+            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
             bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
         }
 
@@ -244,8 +255,8 @@ namespace CAPI.Android
             this.ClearAllBackStack<SplashScreen>();
 
             var questionnarieDenormalizer =
-                kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>() as
-                InMemoryReadSideRepositoryAccessor<CompleteQuestionnaireView>;
+                kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>() as
+                InMemoryReadSideRepositoryAccessor<InterviewViewModel>;
             if (questionnarieDenormalizer != null)
                 questionnarieDenormalizer.Clear();
         }

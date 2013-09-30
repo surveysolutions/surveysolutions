@@ -1,4 +1,6 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -14,6 +16,7 @@ namespace WB.UI.Designer.Views.EventHandler
                                              IEventHandler<QuestionnaireUpdated>,
                                              IEventHandler<QuestionnaireDeleted>,
                                              IEventHandler<TemplateImported>,
+                                             IEventHandler<QuestionnaireCloned>,
                                              IEventHandler<SharedPersonToQuestionnaireAdded>,
                                              IEventHandler<SharedPersonFromQuestionnaireRemoved>
     {
@@ -86,7 +89,16 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            var document = evnt.Payload.Source;
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.Source);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
+        {
+            this.CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(evnt.Payload.QuestionnaireDocument);
+        }
+
+        private void CreateAndStoreQuestionnaireListViewItemFromQuestionnaireDocument(QuestionnaireDocument document)
+        {
             var item = new QuestionnaireListViewItem(
                 document.PublicKey,
                 document.Title,
@@ -128,5 +140,6 @@ namespace WB.UI.Designer.Views.EventHandler
                 }
             }
         }
+
     }
 }

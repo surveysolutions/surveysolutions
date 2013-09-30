@@ -457,7 +457,7 @@ namespace CapiDataGenerator
             for (int z = 0; z < statusesCount; z++)
             {
                 var interview = interviews.ElementAt(z);
-                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value));
+                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment"));
 
                 if (onlyForSupervisor)
                 {
@@ -562,7 +562,7 @@ namespace CapiDataGenerator
                                                                            validAnsweredQuestions: new HashSet<InterviewItemId>(), 
                                                                            invalidAnsweredQuestions: new HashSet<InterviewItemId>(), 
                                                                            propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>(),
-                                                                           interviewWasCompleted: false)));
+                                                                           wasCompleted: false)));
                 UpdateProgress();
             }
 

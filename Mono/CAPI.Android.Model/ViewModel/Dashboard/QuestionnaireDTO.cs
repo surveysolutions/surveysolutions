@@ -27,6 +27,8 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public string Responsible { get; set; }
         public string Survey { get; set; }
         public string Properties { get; set; }
+        public string Comments { get; set; }
+        public bool Valid { get; set; }
 
         public DashboardQuestionnaireItem GetDashboardItem(string surveyKey, string title)
         {

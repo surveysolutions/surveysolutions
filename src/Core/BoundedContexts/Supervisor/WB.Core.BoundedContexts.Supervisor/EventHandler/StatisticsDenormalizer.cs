@@ -104,6 +104,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             this.AssignToOtherUser(evnt.EventSourceId, evnt.Payload.InterviewerId);
         }
 
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, false);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
+        {
+            this.SetInterviewValidity(evnt.EventSourceId, true);
+        }
+
         private void AssignToOtherUser(Guid interviewId, Guid interviewerId)
         {
             var interviewBriefItem = this.interviewBriefStorage.GetById(interviewId);
@@ -222,6 +232,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             get { return new Type[] { typeof(StatisticsLineGroupedByUserAndTemplate), typeof(InterviewBrief) }; }
         }
-        
+
+        private void SetInterviewValidity(Guid interviewId, bool isValid)
+        {
+            var interview = this.interviewBriefStorage.GetById(interviewId);
+
+            interview.HasErrors = !isValid;
+
+            this.interviewBriefStorage.Store(interview, interview.InterviewId);
+        }
     }
 }

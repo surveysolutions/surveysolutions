@@ -99,6 +99,8 @@ namespace Main.Core.Documents
 
         public List<Guid> SharedPersons { get; set; }
 
+        public long LastEventSequence { get; set; }
+
         #endregion
 
         public void Insert(int index, IComposite c, Guid? parent)

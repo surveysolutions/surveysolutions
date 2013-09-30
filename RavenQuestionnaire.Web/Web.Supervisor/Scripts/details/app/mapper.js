@@ -13,7 +13,7 @@
                             var o = new model.Option(uiId);
                             o.value(option.Value);
                             o.label(_.unescape(option.Label) + "");
-                            if (dto.Answer == option.Value) {
+                            if (_.isEqual(dto.Answer, option.Value)) {
                                 item.selectedOption(o);
                                 o.isSelected(true);
                             }
@@ -27,7 +27,8 @@
                             var o = new model.Option(uiId);
                             o.value(option.Value);
                             o.label(_.unescape(option.Label) + "");
-                            if (_.contains(dto.Answer, option.Value)) {
+
+                            if (_.any(dto.Answer, function (optionValue) { return _.isEqual(optionValue, option.Value); })) {
                                 item.selectedOptions.push(o);
                                 o.isSelected(true);
                             }
@@ -41,7 +42,9 @@
                     case "Numeric":
                     case "AutoPropagate":
                         item = new model.NumericQuestion();
-                        item.answer(dto.Answer * 1);
+                        if (!_.isNull(dto.Answer)) {
+                            item.answer(dto.Answer * 1);
+                        }
                         break;
                     case "DateTime":
                         item = new model.DateTimeQuestion();

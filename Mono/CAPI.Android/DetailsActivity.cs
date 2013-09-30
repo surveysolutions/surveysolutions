@@ -32,9 +32,9 @@ namespace CAPI.Android
             get { return Guid.Parse(Intent.GetStringExtra("publicKey")); }
         }
 
-        protected CompleteQuestionnaireView Model
+        protected InterviewViewModel Model
         {
-            get { return ViewModel as CompleteQuestionnaireView; }
+            get { return ViewModel as InterviewViewModel; }
         }
 
         protected LinearLayout llSpaceFiller
@@ -71,7 +71,7 @@ namespace CAPI.Android
         protected override void OnCreate(Bundle bundle)
         {
 
-            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId));
 
             base.OnCreate(bundle);

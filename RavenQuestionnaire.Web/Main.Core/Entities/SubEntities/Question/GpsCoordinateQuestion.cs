@@ -4,9 +4,7 @@ namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
     using System.Collections.Generic;
-
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities.Complete;
+    using Complete;
 
     public class GpsCoordinateQuestion : AbstractQuestion, IGpsCoordinatesQuestion
     {
@@ -77,6 +75,6 @@ namespace Main.Core.Entities.SubEntities.Question
         
         #endregion
 
-        public GeoPosition Position { get; set; }
+        //public GeoPosition Position { get; set; }
     }
 }

@@ -20,12 +20,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     /// </summary>
     public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
-        private readonly CompleteQuestionnaireView questionnaire;
+        private readonly InterviewViewModel questionnaire;
         private InterviewItemId? screenId;
         private bool isRoot;
         private IList<InterviewItemId> screensHolder;
         private AbstractScreenChangingFragment[] mFragments;
-        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, InterviewItemId? screenId)
+        public ContentFrameAdapter(FragmentManager fm, InterviewViewModel questionnaire, InterviewItemId? screenId)
             : base(fm)
         {
             this.questionnaire = questionnaire;

@@ -1,4 +1,6 @@
 ﻿using Ninject.Modules;
+using WB.Core.SharedKernels.DataCollection.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -12,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
             this.Bind<IExpressionProcessor>().To<ExpressionProcessor>();
+            this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
             this.Bind(typeof(IVersionedReadSideRepositoryWriter<>)).To(typeof(VersionedReadSideRepositoryWriter<>));
             this.Bind(typeof(IVersionedReadSideRepositoryReader<>)).To(typeof(VersionedReadSideRepositoryReader<>));
         }

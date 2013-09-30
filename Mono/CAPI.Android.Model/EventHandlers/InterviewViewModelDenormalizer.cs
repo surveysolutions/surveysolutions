@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer :
+    public class InterviewViewModelDenormalizer :
         IEventHandler<InterviewSynchronized>,
         IEventHandler<GroupPropagated>,
         IEventHandler<InterviewCompleted>,
@@ -28,13 +28,15 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<QuestionEnabled>,
         IEventHandler<AnswerDeclaredInvalid>,
         IEventHandler<AnswerDeclaredValid>,
-        IEventHandler<SynchronizationMetadataApplied>
+        IEventHandler<SynchronizationMetadataApplied>,
+        IEventHandler<AnswerRemoved>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>, IEventHandler<MultipleOptionsLinkedQuestionAnswered>
     {
-        private readonly IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage;
+        private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
 
-        public CompleteQuestionnaireViewDenormalizer(
-            IReadSideRepositoryWriter<CompleteQuestionnaireView> interviewStorage,
+        public InterviewViewModelDenormalizer(
+            IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
             IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
         {
             this.interviewStorage = interviewStorage;
@@ -48,7 +50,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             if (questionnarie == null)
                 return;
 
-            var view = new CompleteQuestionnaireView(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload);
+            var view = new InterviewViewModel(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload.InterviewData);
 
             interviewStorage.Store(view, evnt.EventSourceId);
         }
@@ -112,6 +114,23 @@ namespace CAPI.Android.Core.Model.EventHandlers
                            evnt.Payload.Answer);
         }
 
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.SelectedPropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.SelectedPropagationVectors);
+        }
+
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            //here need to be logic for clean up linked question
+        }
+
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             var doc = GetStoredObject(evnt.EventSourceId);
@@ -148,7 +167,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             doc.SetQuestionValidity(new InterviewItemId(evnt.Payload.QuestionId, evnt.Payload.PropagationVector), true);
         }
 
-        private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
+        private InterviewViewModel GetStoredObject(Guid publicKey)
         {
             var doc = interviewStorage.GetById(publicKey);
             return doc;

@@ -31,7 +31,7 @@ namespace CAPI.Android
 
         protected void Restore(Guid publicKey)
         {
-            var questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+            var questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                 new QuestionnaireScreenInput(publicKey));
             if (questionnaire == null)
             {

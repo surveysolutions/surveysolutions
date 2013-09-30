@@ -148,13 +148,13 @@ namespace CAPI.Android.Syncronization.Pull
             syncCacher.SaveItem(metaInfo.PublicKey, item.Content);
 
             commandService.Execute(new ApplySynchronizationMetadata(metaInfo.PublicKey, metaInfo.ResponsibleId, metaInfo.TemplateId,
-                                                                      (InterviewStatus) metaInfo.Status,
-                                                                      metaInfo.FeaturedQuestionsMeta.Select(
-                                                                          q =>
-                                                                          new AnsweredQuestionSynchronizationDto(
-                                                                              q.PublicKey, new int[0], q.Value,
-                                                                              string.Empty))
-                                                                              .ToArray()));
+                (InterviewStatus) metaInfo.Status,
+                metaInfo.FeaturedQuestionsMeta.Select(
+                    q =>
+                        new AnsweredQuestionSynchronizationDto(
+                            q.PublicKey, new int[0], q.Value,
+                            string.Empty))
+                    .ToArray(), string.Empty, true));
 
 
             /*    }
