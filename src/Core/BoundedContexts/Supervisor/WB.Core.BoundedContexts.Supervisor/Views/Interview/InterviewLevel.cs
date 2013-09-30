@@ -10,14 +10,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.Interview
     {
         public InterviewLevel(Guid scopeId, int[] vector)
         {
-            ScopeId = scopeId;
+            ScopeIds = new HashSet<Guid>(new[] {scopeId});
             PropagationVector = vector;
             Questions = new List<InterviewQuestion>();
             DisabledGroups = new HashSet<Guid>();
         }
 
         public int[] PropagationVector { get; private set; }
-        public Guid ScopeId { get; private set; }
+        public HashSet<Guid> ScopeIds { get; private set; }
         public List<InterviewQuestion> Questions { get; private set; }
         public HashSet<Guid> DisabledGroups { get; private set; }
     }

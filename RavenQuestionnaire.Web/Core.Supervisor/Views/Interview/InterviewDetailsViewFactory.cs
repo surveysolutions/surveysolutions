@@ -102,8 +102,7 @@ namespace Core.Supervisor.Views.Interview
                 }
                 else
                 {
-                    var rootLevel = interview.Levels.FirstOrDefault(w => w.Value.ScopeId == interview.InterviewId).Value;
-
+                    var rootLevel = this.GetRootLevel(interview);
 
                     interviewDetails.Groups.Add(this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, variablesMap, getAvailableOptions));
 
@@ -116,6 +115,11 @@ namespace Core.Supervisor.Views.Interview
             }
 
             return interviewDetails;
+        }
+
+        private InterviewLevel GetRootLevel(InterviewData interview)
+        {
+            return interview.Levels.FirstOrDefault(w => w.Value.ScopeIds.Count==1 && w.Value.ScopeIds.Contains(interview.InterviewId)).Value;
         }
 
         private IEnumerable<KeyValuePair<string, InterviewLevel>> GetPropagatedLevels(Guid groupId, InterviewData interviewData,
@@ -138,7 +142,7 @@ namespace Core.Supervisor.Views.Interview
                 throw new ArgumentException(string.Format("group {0} is missing in any propagation scope of questionnaire", groupId));
 
 
-            return interviewData.Levels.Where(w => w.Value.ScopeId == propagationScope);
+            return interviewData.Levels.Where(w => w.Value.ScopeIds.Contains(propagationScope.Value));
         }
 
 
@@ -190,7 +194,7 @@ namespace Core.Supervisor.Views.Interview
 
         private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, ReferenceInfoByQuestion optionsSource)
         {
-            return interview.Levels.Values.Where(level => level.ScopeId == optionsSource.ScopeId);
+            return interview.Levels.Values.Where(level => level.ScopeIds.Contains(optionsSource.ScopeId));
         }
 
         private ReferenceInfoByQuestion GetQuestionReferencedQuestion(Guid questionId, ReferenceInfoForLinkedQuestions referenceQuestions)
