@@ -9,7 +9,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
@@ -26,42 +26,50 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             this.Templates = new TemplateCollection();
         }
 
-        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnarie, InterviewSynchronized interviewData)
+        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, InterviewSynchronizationDto interview)
             : this(id)
         {
-            this.Status = interviewData.InterviewData.Status;
+            this.Status = interview.Status;
 
-            BuildInterviewStructureFromTemplate(questionnarie);
+            this.BuildInterviewStructureFromTemplate(questionnaire);
 
-            PropagateGroups(interviewData);
+            this.PropagateGroups(interview);
 
-            SetAnswers(interviewData);
+            this.SetAnswers(interview);
 
-            DisableInterviewElements(interviewData);
+            this.DisableInterviewElements(interview);
 
-            MarkAnswersAsInvalid(interviewData);
+            this.MarkAnswersAsInvalid(interview);
 
-            CreateInterviewChapters(questionnarie);
+            this.CreateInterviewChapters(questionnaire);
 
-            CreateInterviewTitle(questionnarie);
+            this.CreateInterviewTitle(questionnaire);
 
-            this.referencedQuestionToLinkedQuestionsMap = questionnarie
+            this.referencedQuestionToLinkedQuestionsMap = questionnaire
                 .Find<IQuestion>(question => question.LinkedToQuestionId != null)
                 .GroupBy(question => question.LinkedToQuestionId.Value)
                 .ToDictionary(
                     keySelector: grouping => grouping.Key,
                     elementSelector: grouping => grouping.Select(question => question.PublicKey).ToArray());
+
+            this.instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = interview
+                .Answers
+                .Where(answer => this.IsQuestionReferencedByAnyLinkedQuestion(answer.Id))
+                .GroupBy(answer => answer.Id)
+                .ToDictionary(
+                    keySelector: grouping => grouping.Key,
+                    elementSelector: grouping => new HashSet<InterviewItemId>(grouping.Select(answer => new InterviewItemId(answer.Id, answer.PropagationVector))));
         }
 
-        private void SetAnswers(InterviewSynchronized interviewData)
+        private void SetAnswers(InterviewSynchronizationDto interview)
         {
-            foreach (var answeredQuestion in interviewData.InterviewData.Answers)
+            foreach (var answeredQuestion in interview.Answers)
             {
                 var questionKey = new InterviewItemId(answeredQuestion.Id, answeredQuestion.PropagationVector);
                 if (this.Questions.ContainsKey(questionKey))
                 {
-                    SetAnswer(questionKey, answeredQuestion.Answer);
-                    SetComment(questionKey, answeredQuestion.Comments);
+                    this.SetAnswer(questionKey, answeredQuestion.Answer);
+                    this.SetComment(questionKey, answeredQuestion.Comments);
                 }
                 else if (this.FeaturedQuestions.ContainsKey(questionKey))
                 {
@@ -72,34 +80,34 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
         }
 
-        private void MarkAnswersAsInvalid(InterviewSynchronized interviewData)
+        private void MarkAnswersAsInvalid(InterviewSynchronizationDto interview)
         {
-            foreach (var question in interviewData.InterviewData.InvalidAnsweredQuestions)
+            foreach (var question in interview.InvalidAnsweredQuestions)
             {
-                SetQuestionValidity(new InterviewItemId(question.Id, question.PropagationVector), false);
+                this.SetQuestionValidity(new InterviewItemId(question.Id, question.PropagationVector), false);
             }
         }
 
-        private void DisableInterviewElements(InterviewSynchronized interviewData)
+        private void DisableInterviewElements(InterviewSynchronizationDto interview)
         {
-            foreach (var group in interviewData.InterviewData.DisabledGroups)
+            foreach (var group in interview.DisabledGroups)
             {
-                SetScreenStatus(new InterviewItemId(@group.Id, @group.PropagationVector), false);
+                this.SetScreenStatus(new InterviewItemId(@group.Id, @group.PropagationVector), false);
             }
 
-            foreach (var question in interviewData.InterviewData.DisabledQuestions)
+            foreach (var question in interview.DisabledQuestions)
             {
-                SetQuestionStatus(new InterviewItemId(question.Id, question.PropagationVector), false);
+                this.SetQuestionStatus(new InterviewItemId(question.Id, question.PropagationVector), false);
             }
         }
 
-        private void PropagateGroups(InterviewSynchronized interviewData)
+        private void PropagateGroups(InterviewSynchronizationDto interview)
         {
-            foreach (var propagatedGroupInstanceCount in interviewData.InterviewData.PropagatedGroupInstanceCounts)
+            foreach (var propagatedGroupInstanceCount in interview.PropagatedGroupInstanceCounts)
             {
                 for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
                 {
-                    AddPropagateGroup(propagatedGroupInstanceCount.Key.Id,
+                    this.AddPropagateGroup(propagatedGroupInstanceCount.Key.Id,
                         propagatedGroupInstanceCount.Key.PropagationVector, i);
                 }
             }
@@ -191,8 +199,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected TemplateCollection Templates { get; set; }
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
-        private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions = new Dictionary<Guid, HashSet<InterviewItemId>>();
-        private Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
+        private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
+        private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
         protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
         
 

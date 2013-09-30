@@ -50,7 +50,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             if (questionnarie == null)
                 return;
 
-            var view = new InterviewViewModel(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload);
+            var view = new InterviewViewModel(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload.InterviewData);
 
             interviewStorage.Store(view, evnt.EventSourceId);
         }
