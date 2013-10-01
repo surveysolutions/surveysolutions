@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -12,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
-        IEventHandler<QuestionnaireCloned>
+        IEventHandler<QuestionnaireCloned>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
@@ -74,6 +75,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
                 document.IsPublic);
 
             this.documentStorage.Store(browseItem, document.PublicKey);
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireBrowseItem) }; }
         }
     }
 }
