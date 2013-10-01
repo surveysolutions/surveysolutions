@@ -1,10 +1,20 @@
 using System;
 using System.Web;
 using Main.Core;
+using Main.Core.Commands;
+using Main.Core.Services;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
 using WB.UI.Designer.App_Start;
@@ -51,6 +61,7 @@ namespace WB.UI.Designer.App_Start
                 username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword);
 
             var kernel = new StandardKernel(
+                new DesignerRegistry(),
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
@@ -62,25 +73,37 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
-            RegisterServices(kernel);
-
-
-            return kernel;
-        }
-
-        /// <summary>
-        ///     Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
-        {
-            kernel.Load(new DesignerRegistry());
-
-            #warning TLK: move NCQRS initialization to Global.asax
-            NcqrsInit.Init(kernel);
+            PrepareNcqrsInfrastucture(kernel);
 
             kernel.Load<MainModule>();
             kernel.Load<MembershipModule>();
+            return kernel;
+        }
+
+        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
+        {
+            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(commandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
+            kernel.Bind<ICommandService>().ToConstant(commandService);
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+
+            CreateAndRegisterEventBus(kernel);
+        }
+
+        private static void CreateAndRegisterEventBus(StandardKernel kernel)
+        {
+            var bus = new ViewConstructorEventBus();
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);
+            foreach (var handler in kernel.GetAll(typeof(IEventHandler)))
+            {
+                bus.AddHandler(handler as IEventHandler);
+            }
+
         }
     }
 }
