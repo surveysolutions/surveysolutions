@@ -33,16 +33,16 @@ namespace WB.UI.Designer.Views.EventHandler
         IEventHandler<QuestionnaireCloned>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
+        private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
-        private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
 
         public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
-            IViewFactory<AccountViewInputModel, AccountView> userViewFactory)
+            IReadSideRepositoryWriter<AccountDocument> accounts)
         {
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
-            this.userViewFactory = userViewFactory;
+            this.accounts = accounts;
         }
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
@@ -218,7 +218,7 @@ namespace WB.UI.Designer.Views.EventHandler
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var accountView = userViewFactory.Load(new AccountViewInputModel(@event.CreatedBy));
+                AccountDocument accountView = @event.CreatedBy.HasValue ? accounts.GetById(@event.CreatedBy.Value) : null;
                 var createdBy = accountView != null ? accountView.UserName : "n/a";
                 var newQuestionnaire = new PdfQuestionnaireView
                 {
@@ -292,7 +292,7 @@ namespace WB.UI.Designer.Views.EventHandler
 
         private PdfQuestionnaireView CreatePdfQuestionnaireViewFromQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
-            var accountView = this.userViewFactory.Load(new AccountViewInputModel(questionnaireDocument.CreatedBy));
+            AccountDocument accountView = questionnaireDocument.CreatedBy.HasValue ? accounts.GetById(questionnaireDocument.CreatedBy.Value) : null;
             var pdf = new PdfQuestionnaireView
             {
                 Title = questionnaireDocument.Title,

@@ -352,7 +352,7 @@
         /// </param>
         public void Update(IMembershipAccount account, MembershipEventType eventType)
         {
-            var accountPublicKey = (Guid)account.ProviderUserKey;
+            var accountPublicKey = Guid.Parse(account.ProviderUserKey.ToString());
 
             ICommand command = null;
 
