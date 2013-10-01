@@ -165,7 +165,6 @@ namespace Web.Supervisor.App_Start
             {
                 bus.AddHandler(handler as IEventHandler);
             }
-
         }
 
         private static int? GetEventStorePageSize()

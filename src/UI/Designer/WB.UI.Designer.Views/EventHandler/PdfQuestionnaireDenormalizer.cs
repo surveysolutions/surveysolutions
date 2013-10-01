@@ -6,9 +6,11 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.View;
 using WB.UI.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Shared.Web.Membership;
@@ -28,7 +30,7 @@ namespace WB.UI.Designer.Views.EventHandler
         IEventHandler<QuestionnaireItemMoved>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<TemplateImported>,
-        IEventHandler<QuestionnaireCloned>
+        IEventHandler<QuestionnaireCloned>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
         private readonly ILogger logger;
@@ -49,7 +51,8 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 Guid questionnaireId = evnt.EventSourceId;
                 PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
-
+                if(initialQuestionnaire!=null)
+                    initialQuestionnaire.ReconnectWithParent();
                 PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
                 if (updatedQuestionnaire != null)
                 {
@@ -70,7 +73,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 var newGroup = new PdfGroupView
                 {
                     Title = @event.GroupText,
-                    Id = @event.PublicKey,
+                    PublicId = @event.PublicKey,
                     Depth = questionnaire.GetEntityDepth(@event.ParentGroupPublicKey) + 1
                 };
 
@@ -112,7 +115,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 var newGroup = new PdfGroupView
                     {
                         Title = @event.GroupText,
-                        Id = @event.PublicKey,
+                        PublicId = @event.PublicKey,
                         Depth = questionnaire.GetEntityDepth(@event.ParentGroupPublicKey) + 1
                     };
 
@@ -128,7 +131,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var newQuestion = new PdfQuestionView
                     {
-                        Id = @event.PublicKey,
+                        PublicId = @event.PublicKey,
                         Title = @event.QuestionText,
                         QuestionType = @event.QuestionType,
                         Answers = (@event.Answers ?? Enumerable.Empty<Answer>())
@@ -175,7 +178,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var newQuestion = new PdfQuestionView
                 {
-                    Id = @event.PublicKey,
+                    PublicId = @event.PublicKey,
                     Title = @event.QuestionText,
                     QuestionType = @event.QuestionType,
                     Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
@@ -222,7 +225,7 @@ namespace WB.UI.Designer.Views.EventHandler
                     Title = @event.Title,
                     CreationDate = @event.CreationDate,
                     CreatedBy = createdBy,
-                    Id = @event.PublicKey
+                    PublicId = @event.PublicKey
                 };
 
                 return newQuestionnaire;
@@ -234,26 +237,25 @@ namespace WB.UI.Designer.Views.EventHandler
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 PdfEntityView itemToMove = questionnaire.Children.TreeToEnumerable()
-                                                       .FirstOrDefault(x => x.Id == @event.PublicKey);
+                                                       .FirstOrDefault(x => x.PublicId == @event.PublicKey);
                 var targetContainer = questionnaire.Children.TreeToEnumerable()
-                                                            .FirstOrDefault(x => x.Id == @event.GroupKey) ?? questionnaire;
+                                                            .FirstOrDefault(x => x.PublicId == @event.GroupKey) ?? questionnaire;
 
 
-                itemToMove.Parent.Children.Remove(itemToMove);
+                itemToMove.GetParent().Children.Remove(itemToMove);
                 itemToMove.Depth = targetContainer.Depth + 1;
-                itemToMove.Parent = targetContainer;
                 if (@event.TargetIndex < 0)
                 {
-                    targetContainer.Children.Insert(0, itemToMove);
-                    
+                    targetContainer.InsertChild(itemToMove, 0);
+
                 }
                 else if (@event.TargetIndex >= targetContainer.Children.Count)
                 {
-                    targetContainer.Children.Add(itemToMove);
+                    targetContainer.AddChild(itemToMove);
                 }
                 else
                 {
-                    targetContainer.Children.Insert(@event.TargetIndex, itemToMove);
+                    targetContainer.InsertChild(itemToMove, @event.TargetIndex);
                 }
 
                 return questionnaire;
@@ -300,6 +302,21 @@ namespace WB.UI.Designer.Views.EventHandler
 
             pdf.FillFrom(questionnaireDocument);
             return pdf;
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[] { typeof(AccountDocument) }; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(PdfQuestionnaireView) }; }
         }
     }
 }

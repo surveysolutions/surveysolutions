@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                 Guid matchId = Guid.Empty;
                 if (Guid.TryParse(match.Groups[1].Value, out matchId))
                 {
-                    var question = Root.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.Id == matchId);
+                    var question = GetRoot().Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.PublicId == matchId);
                     return "[question " + question.ItemNumber +"]";
                 }
 
@@ -78,25 +78,22 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
             }
         }
 
-        private PdfEntityView Root
+        private PdfEntityView GetRoot()
         {
-            get
+            var next = this.GetParent();
+            do
             {
-                var next = Parent;
-                do
+                if (next.GetParent() != null)
                 {
-                    if (next.Parent != null)
-                    {
-                        next = next.Parent;
-                    }
-                    else
-                    {
-                        return next;
-                    }
-                } while (next != null);
+                    next = next.GetParent();
+                }
+                else
+                {
+                    return next;
+                }
+            } while (next != null);
 
-                return next;
-            }
+            return next;
         }
 
         private string stringItemNumber = null;

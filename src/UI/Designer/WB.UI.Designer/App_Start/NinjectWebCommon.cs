@@ -61,13 +61,15 @@ namespace WB.UI.Designer.App_Start
                 username: AppSettings.Instance.RavenUserName, password: AppSettings.Instance.RavenUserPassword);
 
             var kernel = new StandardKernel(
-                new DesignerRegistry(),
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule()
+                new DesignerBoundedContextModule(),
+                new MembershipModule(),
+                new MainModule(),
+                new DesignerRegistry()
                 );
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -75,8 +77,6 @@ namespace WB.UI.Designer.App_Start
 
             PrepareNcqrsInfrastucture(kernel);
 
-            kernel.Load<MainModule>();
-            kernel.Load<MembershipModule>();
             return kernel;
         }
 
