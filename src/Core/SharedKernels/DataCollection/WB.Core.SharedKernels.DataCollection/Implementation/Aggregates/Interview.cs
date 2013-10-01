@@ -1302,7 +1302,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         InterviewStatus.InterviewerAssigned,
                         InterviewStatus.Restored,
                         InterviewStatus.RejectedBySupervisor,
-                        InterviewStatus.SupervisorAssigned);
+                        InterviewStatus.SupervisorAssigned,
+                        InterviewStatus.Restarted);
                     return;
             }
             throw new InterviewException(string.Format(
