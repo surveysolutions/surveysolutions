@@ -69,7 +69,7 @@
         {
             return new QuestionnairePublicListViewModel
                        {
-                           Id = x.Id, 
+                           Id = x.PublicId, 
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
@@ -94,7 +94,7 @@
         {
             return new QuestionnaireListViewModel
                        {
-                           Id = x.Id,
+                           Id = x.PublicId,
                            Owner = x.Owner,
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 

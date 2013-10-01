@@ -83,7 +83,7 @@
         {
             AccountView account = this.GetUser(accountName: username);
 
-            this.commandService.Execute(new DeleteAccountCommand(account.PublicKey));
+            this.commandService.Execute(new DeleteAccountCommand(account.GetPublicKey()));
 
             return this.GetUser(accountName: username) == null;
         }

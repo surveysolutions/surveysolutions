@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
                 browseItem.Title = evnt.Payload.Title;
                 browseItem.IsPublic = evnt.Payload.IsPublic;
             }
+            this.documentStorage.Store(browseItem, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
@@ -52,6 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
             {
                 browseItem.IsDeleted = true;
             }
+            this.documentStorage.Store(browseItem, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

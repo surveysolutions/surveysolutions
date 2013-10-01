@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         {
             get
             {
-                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.Parent.Id == this.Id);
+                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.GetParent().PublicId == this.PublicId);
             }
         }
 
@@ -27,7 +27,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         {
             get
             {
-                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.Parent != null && x.Parent.Id != this.Id);
+                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.GetParent() != null && x.GetParent().PublicId != this.PublicId);
             }
         }
 
@@ -49,28 +49,28 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         internal void RemoveGroup(Guid groupId)
         {
-            var item = this.Children.TreeToEnumerable<PdfEntityView>().FirstOrDefault(x => x.Id == groupId);
+            var item = this.Children.TreeToEnumerable<PdfEntityView>().FirstOrDefault(x => x.PublicId == groupId);
             if (item != null)
             {
-                item.Parent.Children.Remove(item);
+                item.GetParent().Children.Remove(item);
             }
         }
 
         internal PdfGroupView GetGroup(Guid groupId)
         {
-            return this.Children.TreeToEnumerable().OfType<PdfGroupView>().FirstOrDefault(x => x.Id == groupId);
+            return this.Children.TreeToEnumerable().OfType<PdfGroupView>().FirstOrDefault(x => x.PublicId == groupId);
         }
 
         internal int GetEntityDepth(Guid? entityId)
         {
-            var item = this.Children.TreeToEnumerable().FirstOrDefault(x => x.Id == entityId);
+            var item = this.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == entityId);
             if (item != null)
             {
                 int result = 1;
-                var itemParent = item.Parent;
+                var itemParent = item.GetParent();
                 while (itemParent != null)
                 {
-                    itemParent = itemParent.Parent;
+                    itemParent = itemParent.GetParent();
                     result++;
                 }
 
@@ -87,13 +87,11 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
             if (parentId.HasValue)
             {
                 var pdfGroupView = this.GetGroup(parentId.Value);
-                pdfGroupView.Children.Add(newGroup);
-                newGroup.Parent = pdfGroupView;
+                pdfGroupView.AddChild(newGroup);
             }
             else
             {
-                this.Children.Add(newGroup);
-                newGroup.Parent = this;
+                this.AddChild(newGroup);
             }
         }
 
@@ -103,25 +101,24 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
             if (!groupPublicKey.HasValue)
             {
-                throw new ArgumentNullException("groupPublicKey", string.Format("Question {0} cant be created not inside group", newQuestion.Id));
+                throw new ArgumentNullException("groupPublicKey", string.Format("Question {0} cant be created not inside group", newQuestion.PublicId));
             }
 
             var group = this.GetGroup(groupPublicKey.Value);
-            group.Children.Add(newQuestion);
-            newQuestion.Parent = group;
+            group.AddChild(newQuestion);
         }
 
         public PdfQuestionView GetQuestion(Guid publicKey)
         {
-            return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.Id == publicKey);
+            return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.PublicId == publicKey);
         }
 
         public void RemoveQuestion(Guid questionId)
         {
-            var item = this.Children.TreeToEnumerable().FirstOrDefault(x => x.Id == questionId);
+            var item = this.Children.TreeToEnumerable().FirstOrDefault(x => x.PublicId == questionId);
             if (item != null)
             {
-                item.Parent.Children.Remove(item);
+                item.GetParent().Children.Remove(item);
             }
         }
 
@@ -136,7 +133,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                 {
                     var pdfGroupView = new PdfGroupView
                     {
-                        Id = childGroup.PublicKey,
+                        PublicId = childGroup.PublicKey,
                         Title = childGroup.Title,
                         Depth = 1
                     };
@@ -158,7 +155,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                     {
                         this.AddQuestion(new PdfQuestionView
                         {
-                            Id = childQuestion.PublicKey,
+                            PublicId = childQuestion.PublicKey,
                             Title = childQuestion.QuestionText,
                             Answers = (childQuestion.Answers ?? new List<IAnswer>()).Select(x => new PdfAnswerView
                             {
@@ -173,11 +170,11 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                     if (childGroup != null)
                     {
                         var pdfGroupView = new PdfGroupView {
-                            Id = childGroup.PublicKey, 
+                            PublicId = childGroup.PublicKey, 
                             Title = childGroup.Title, 
                             Depth = this.GetEntityDepth(item.PublicKey) + 1
                         };
-                        this.AddGroup(pdfGroupView, group.Id);
+                        this.AddGroup(pdfGroupView, group.PublicId);
                         Fill(pdfGroupView, child);
                     }
                 }
