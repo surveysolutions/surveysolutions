@@ -4,6 +4,7 @@
     this.ViewBag.Title = "Control Panel: Read Layer";
 }
 @model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
+
 <h3>Read Layer Control Panel</h3>
 
 <pre id="statusArea" style="height: 500px; overflow-y: scroll;">
@@ -57,7 +58,7 @@ Requesting status...
 }
 @section scripts
 {
-
+    @Scripts.Render("~/simplepage")
 
     <script type="text/javascript">
 
