@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web.Configuration;
 using Main.Core;
 using Ncqrs;
+using Ninject;
+using Ninject.Activation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Views.Questionnaire;
 
@@ -31,18 +35,25 @@ namespace WB.UI.Designer.Code
                         typeof(Questionnaire).Assembly,
                     });
         }
-        
-        public override void Load()
+
+        protected override object GetReadSideRepositoryWriter(IContext context)
         {
-            base.Load();
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
-        protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
+        /*protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {
             return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
             {
-                { typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider) },
+                { typeof(IFilterProvider)},
             });
+        }*/
+
+        private static bool ShouldUsePersistentReadLayer()
+        {
+            return bool.Parse(WebConfigurationManager.AppSettings["ShouldUsePersistentReadLayer"]);
         }
     }
 }

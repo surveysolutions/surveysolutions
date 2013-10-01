@@ -1,0 +1,85 @@
+﻿@{
+    this.ViewBag.Title = "Control Panel: Read Layer";
+}
+@model IEnumerable<WB.Core.Infrastructure.EventHandlerDescription>
+<h3>Read Layer Control Panel</h3>
+
+<pre id="statusArea" style="height: 500px; overflow-y: scroll;">
+Requesting status...
+</pre>
+@using (Html.BeginForm("RebuildReadLayerPartially", "ControlPanel", FormMethod.Post))
+{
+    <ul style="list-style: none;">
+
+
+        @foreach (var handler in Model)
+        {
+            <li>
+                <label>
+                    <input type='checkbox' value="@handler.Name" name="handlers" checked="@IsHandlerChecked(handler.Name)"/>
+                    <span><b>@handler.Name</b> , Builds:
+                        @foreach (var buildsView in handler.BuildsViews)
+                        {
+                            <i>@buildsView</i>
+                        }
+                        @if (handler.UsesViews.Length > 0)
+                        {
+
+                            <span>, Uses:</span>
+                            foreach (var usesView in handler.UsesViews)
+                            {
+                                <i>@usesView</i>
+                            }
+                        } </span>
+                </label>
+            </li>
+        }
+      
+    </ul>
+   
+    @Html.ActionLink("Rebuild All", "RebuildReadLayer", new { }, new { @class = "btn " })
+     <button class="btn" type="submit">Rebuild Selected</button>
+    @Html.ActionLink("Stop", "StopReadLayerRebuilding", new { }, new { @class = "btn " })
+}
+
+@functions{
+    public bool IsHandlerChecked(string handlerName)
+    {
+        if (!TempData.ContainsKey("CheckedHandlers"))
+            return false;
+        var checkedHandlers = TempData["CheckedHandlers"] as string[];
+        if (checkedHandlers == null)
+            return false;
+        return checkedHandlers.Contains(handlerName);
+    }
+}
+@section scripts
+{
+
+
+    <script type="text/javascript">
+
+        function updateReadLayerStatus() {
+            return $.ajax({
+                url: '@Url.Action("GetReadLayerStatus")',
+                data: { timestamp: new Date().getMilliseconds() }
+            }).done(function (result) {
+                $('#statusArea').text('Updated from server: ' + new Date().toTimeString() + '\r\n\r\n' + result);
+            }).fail(function (xhr, status, error) {
+                $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+            });
+        }
+
+        function updateReadLayerStatusNeverending() {
+            $.when(updateReadLayerStatus()).always(function () {
+                setTimeout(updateReadLayerStatusNeverending, 1000);
+            });
+        }
+
+        $(function () {
+            updateReadLayerStatusNeverending();
+        });
+
+    </script>
+
+}
