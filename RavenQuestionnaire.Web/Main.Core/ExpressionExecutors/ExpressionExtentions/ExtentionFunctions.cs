@@ -54,7 +54,7 @@
 
                 bool evaluation = false;
 
-                var values = (decimal[])parameter;
+                var values = parameter as decimal[];
 
                 if (values != null)
                 {
