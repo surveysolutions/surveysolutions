@@ -54,9 +54,10 @@ namespace WB.UI.Designer.App_Start
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule()
-            );
+                );
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
