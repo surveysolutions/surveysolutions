@@ -200,6 +200,7 @@
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
+    <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -547,6 +548,7 @@
     <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
+    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
