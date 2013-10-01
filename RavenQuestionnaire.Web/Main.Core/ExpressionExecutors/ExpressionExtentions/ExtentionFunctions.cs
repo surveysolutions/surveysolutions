@@ -54,7 +54,7 @@
 
                 bool evaluation = false;
 
-                var values = parameter as IEnumerable<object>;
+                var values = (decimal[])parameter;
 
                 if (values != null)
                 {
