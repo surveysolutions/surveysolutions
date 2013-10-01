@@ -2,7 +2,7 @@ using Main.Core.View;
 using System;
 using System.Linq;
 using Main.Core.Utility;
-
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.UI.Designer.Views.Questionnaire
@@ -36,52 +36,52 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The QuestionnaireBrowseView.
-        /// </returns>
+        
         public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
         {
-            Func<QuestionnaireListViewItem, bool> q =
-                (x) =>
-                string.IsNullOrEmpty(input.Filter)
-                || (x.Title.ContainsIgnoreCaseSensitive(input.Filter)
-                    || x.CreatorName.ContainsIgnoreCaseSensitive(input.Filter));
-             
+            var count =
+                this.documentGroupSession.Query(queryable => this.FilterQuestionnaires(queryable, input).Count());
+           var records=
+             this.documentGroupSession.Query(queryable =>
+            {
+                var queryResult =
+                    FilterQuestionnaires(queryable, input).OrderUsingSortExpression(input.Order)
+                        .Skip((input.Page - 1)*input.PageSize)
+                        .Take(input.PageSize)
+                        .ToList();
+                queryResult.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "me" : x.CreatorName);
+                return queryResult;
+
+            });
+           return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
+                  items: records,
+                  order: input.Order);
+        }
+
+        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> questionnaire,
+            QuestionnaireListViewInputModel input)
+        {
+            var result = questionnaire;
+            if (!string.IsNullOrEmpty(input.Filter))
+                result = result.Where((x) => 
+                  x.Title.StartsWith(  input.Filter)
+                    || x.CreatorName.StartsWith(input.Filter));
 
             if (input.IsAdminMode)
             {
-                q = q.AndAlso(x => (input.IsPublic || (x.CreatedBy == input.ViewerId || 
-                                    x.SharedPersons.Contains(input.ViewerId))));
+                if (!input.IsPublic)
+                    result = result.Where(x => x.CreatedBy == input.ViewerId || x.SharedPersons.Any(person => person == input.ViewerId));
             }
             else
             {
-                q =
-                    q.AndAlso(
-                        x =>
-                        !x.IsDeleted && (((x.CreatedBy == input.ViewerId || x.SharedPersons.Contains(input.ViewerId)) && !input.IsPublic) || 
-                        (input.IsPublic && x.IsPublic)));
+                result = result.Where(x =>!x.IsDeleted);
+                if (input.IsPublic)
+                    result = result.Where(x => x.IsPublic);
+                else
+                    result = result.Where(x => x.CreatedBy == input.ViewerId || x.SharedPersons.Any(person => person == input.ViewerId));
             }
-
-
-            return this.documentGroupSession.Query(queryable =>
-            {
-                var queryResult = queryable.Where(q).AsQueryable();
-                queryResult.ToList().ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "me" : x.CreatorName);
-
-                return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: queryResult.Count(),
-                    items: queryResult.OrderUsingSortExpression(input.Order).Skip((input.Page - 1)*input.PageSize).Take(input.PageSize),
-                    order: input.Order);
-            });
+            
+            return result;
         }
-
-        #endregion
     }
 }

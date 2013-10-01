@@ -43,13 +43,12 @@ namespace WB.UI.Designer.Code
                 : this.GetInMemoryReadSideRepositoryAccessor(context);
         }
 
-        /*protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
+        protected override object GetReadSideRepositoryReader(IContext context)
         {
-            return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
-            {
-                { typeof(IFilterProvider)},
-            });
-        }*/
+            return ShouldUsePersistentReadLayer()
+                ? this.Kernel.Get(typeof(RavenReadSideRepositoryReader<>).MakeGenericType(context.GenericArguments[0]))
+                : this.GetInMemoryReadSideRepositoryAccessor(context);
+        }
 
         private static bool ShouldUsePersistentReadLayer()
         {
