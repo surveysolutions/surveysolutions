@@ -10,6 +10,8 @@ using Main.Core.View.CompleteQuestionnaire.Statistics;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using Web.Supervisor.Code;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
@@ -88,9 +90,20 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult ChangeState(Guid id)
         {
+            if (this.GlobalInfo.IsHeadquarter)
+            {
+                return new HttpForbiddenResult("Only supervisors have access to page for interview change state");
+            }
+
             ChangeStatusView model = this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
+
+            if (model.Status != InterviewStatus.Completed)
+            {
+                return new HttpForbiddenResult("You can change state for interviews with status \"Complete\" only");
+            }
+
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
+            this.ViewBag.CurrentUser = new UsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
             return this.View(model);
         }
 
