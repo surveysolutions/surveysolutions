@@ -75,6 +75,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 browseItem.Title = evnt.Payload.Title;
                 browseItem.IsPublic = evnt.Payload.IsPublic;
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
 
@@ -86,6 +87,7 @@ namespace WB.UI.Designer.Views.EventHandler
             if (browseItem != null)
             {
                 browseItem.IsDeleted = true;
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
 
@@ -128,7 +130,9 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     browseItem.SharedPersons.Add(evnt.Payload.PersonId);
                 }
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
+            
         }
 
         public void Handle(IPublishedEvent<SharedPersonFromQuestionnaireRemoved> evnt)
@@ -140,6 +144,8 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     browseItem.SharedPersons.Remove(evnt.Payload.PersonId);
                 }
+
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
 
