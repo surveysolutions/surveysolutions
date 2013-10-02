@@ -38,3 +38,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Core.SharedKernels.DataCollection.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("WB.Tools.CapiDataGenerator")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration")]
