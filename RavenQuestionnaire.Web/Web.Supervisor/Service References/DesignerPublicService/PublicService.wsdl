@@ -88,10 +88,10 @@
     <wsdl:part name="PageSize" element="tns:PageSize" />
     <wsdl:part name="SortOrder" element="tns:SortOrder" />
   </wsdl:message>
-  <wsdl:message name="QuestionnaireListView">
-    <wsdl:part name="parameters" element="tns:QuestionnaireListView" />
+  <wsdl:message name="QuestionnaireListViewMessage">
+    <wsdl:part name="parameters" element="tns:QuestionnaireListViewMessage" />
   </wsdl:message>
-  <wsdl:message name="QuestionnaireListView_Headers">
+  <wsdl:message name="QuestionnaireListViewMessage_Headers">
     <wsdl:part name="Order" element="tns:Order" />
     <wsdl:part name="Page" element="tns:Page" />
     <wsdl:part name="PageSize" element="tns:PageSize" />
@@ -112,7 +112,7 @@
     </wsdl:operation>
     <wsdl:operation name="GetQuestionnaireList">
       <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireList" name="QuestionnaireListRequest" message="tns:QuestionnaireListRequest" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireListResponse" name="QuestionnaireListView" message="tns:QuestionnaireListView" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireListResponse" name="QuestionnaireListViewMessage" message="tns:QuestionnaireListViewMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="CustomBinding_IPublicService" type="tns:IPublicService">
@@ -157,11 +157,11 @@
         <soap12:header message="tns:QuestionnaireListRequest_Headers" part="SortOrder" use="literal" />
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="QuestionnaireListView">
-        <soap12:header message="tns:QuestionnaireListView_Headers" part="Order" use="literal" />
-        <soap12:header message="tns:QuestionnaireListView_Headers" part="Page" use="literal" />
-        <soap12:header message="tns:QuestionnaireListView_Headers" part="PageSize" use="literal" />
-        <soap12:header message="tns:QuestionnaireListView_Headers" part="TotalCount" use="literal" />
+      <wsdl:output name="QuestionnaireListViewMessage">
+        <soap12:header message="tns:QuestionnaireListViewMessage_Headers" part="Order" use="literal" />
+        <soap12:header message="tns:QuestionnaireListViewMessage_Headers" part="Page" use="literal" />
+        <soap12:header message="tns:QuestionnaireListViewMessage_Headers" part="PageSize" use="literal" />
+        <soap12:header message="tns:QuestionnaireListViewMessage_Headers" part="TotalCount" use="literal" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
