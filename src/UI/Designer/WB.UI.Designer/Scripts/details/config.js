@@ -43,11 +43,11 @@
                     value: "Geo Location"
                 }
             ],
-            questionScopes = [
-                "Interviewer",
-                "Supervisor",
-                "Headquarters"
-            ],
+            questionScopes = {
+                interviewer: "Interviewer",
+                supervisor: "Supervisor",
+                headquarters: "Headquarters"
+            },
             answerOrders = [
                 {
                     key: "AsIs",
@@ -166,7 +166,22 @@
                     message: "Pre-filled question can't have condition expression. We can clear condition and make this questuion pre-filled.",
                     okBtn: "Yes, clear condition",
                     cancelBtn: "No, do not clear condition"
-    }
+                },
+                weWillClearConditionAndValidation: {
+                    message: "Filled by supervisor questions can't have condition and validation expression. We can clear condition and validation and mark this questuion as filled by supervisor.",
+                    okBtn: "Yes, clear condition and validation",
+                    cancelBtn: "No, do not clear them"
+                },
+                weWillClearSupervisorFlag: {
+                    message: "Pre-filled question can't be answered by supervisor. We will clear filled by supervisor flag to make this questuion pre-filled.",
+                    okBtn: "Yes, clear filled by supervisor flag",
+                    cancelBtn: "No, do not clear it"
+                },
+                weWillClearHeadFlag:{
+                    message: "Filled by supervisor questions can't be head of group. We will clear head flag to mark this questuion as filled by supervisor.",
+                    okBtn: "Yes, clear head flag",
+                    cancelBtn: "No, do not clear it"
+                },
             },
             // methods
             //-----------------
