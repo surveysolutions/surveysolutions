@@ -74,6 +74,7 @@ function (ko) {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
             self.answer = ko.observable().extend({ required: true });
+            self.errors = ko.validation.group(self);
             return self;
         },
         NumericQuestion: function () {
@@ -92,7 +93,16 @@ function (ko) {
         SingleOptionQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.selectedOption = ko.observable();
+            self.selectedOption = ko.observable().extend({
+                validation: [{
+                    validator: function (val) {
+                        if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                            return false;
+                        return true;
+                    },
+                    message: 'At least one option should be checked'
+                }]
+            });
             self.options = ko.observableArray();
             self.answer = ko.computed(function () {
                 var o = _.find(ko.toJS(self.options), function (option) {
@@ -100,12 +110,22 @@ function (ko) {
                 });
                 return _.isEmpty(o) ? "" : o.label;
             });
+            self.errors = ko.validation.group(self);
             return self;
         },
         MultyOptionQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.selectedOptions = ko.observableArray([]);
+            self.selectedOptions = ko.observableArray([]).extend({
+                validation: [{
+                    validator: function (val) {
+                        if (_.isNull(val) || _.isUndefined(val) || _.isEmpty(val))
+                            return false;
+                        return val.length > 0;
+                    },
+                    message: 'At least one option should be checked'
+                }]
+            });
             self.options = ko.observableArray();
             self.answer = ko.computed(function () {
                 var selected = _.filter(ko.toJS(self.options), function(option) {
@@ -114,9 +134,13 @@ function (ko) {
                 self.selectedOptions(_.map(selected, 'value'));
                 var a = _.reduce(selected, function (result, option) {
                     return result + option.label + ", ";
-                },"");
-                return a.trim();
+                }, "").trim();
+                if (_.isEmpty(a) == false) {
+                    a = a.substring(0, a.length-1);
+                }
+                return a;
             });
+            self.errors = ko.validation.group(self);
             return self;
         },
         Group: function () {

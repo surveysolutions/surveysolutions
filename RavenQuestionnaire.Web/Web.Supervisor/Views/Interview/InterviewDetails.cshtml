@@ -156,22 +156,32 @@
 @section scripts
 {
     <script type="text/html" id="SingleOptionFull">
-        <div data-bind="foreach: options">
-            <label class="radio" data-bind='attr: { "for": optionFor }'>
-                <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption, value: value, disable: $parent.isReadonly">
-                <span data-bind="html: label"></span>
-            </label>
+        <div class="control-group" data-bind="validationElement: selectedOption">
+            <div class="controls">
+                <div data-bind="foreach: options">
+                    <label class="radio" data-bind='attr: { "for": optionFor }'>
+                        <input type="radio" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOption, value: value, disable: $parent.isReadonly">
+                        <span data-bind="html: label"></span>
+                    </label>
+                </div>
+                <span class="help-inline" data-bind="validationMessage: selectedOption"></span>
+            </div>
         </div>
-        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="MultyOptionFull">
-        <div data-bind="foreach: options">
-            <label class="checkbox" data-bind='attr: { "for": optionFor }'>
-                <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOptions, value: value, disable: $parent.isReadonly">
-                <span data-bind="html: label"></span>
-            </label>
+        <div class="control-group" data-bind="validationElement: selectedOptions">
+            <div class="controls">
+                <div data-bind="foreach: options">
+                    <label class="checkbox" data-bind='attr: { "for": optionFor }'>
+                        <input type="checkbox" data-bind="attr: { value: value, name: $parent.variable, id: optionFor }, checked : $parent.selectedOptions, value: value, disable: $parent.isReadonly">
+                        <span data-bind="html: label"></span>
+                    </label>
+                </div>
+                <span class="help-inline" data-bind="validationMessage: selectedOptions"></span>
+            </div>
         </div>
-        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="NumericFull">
         <div class="control-group" data-bind="validationElement: answer">
@@ -190,8 +200,13 @@
         <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
     </script>
     <script type="text/html" id="TextFull">
-        <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
-        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false">Save answer</button>
+        <div class="control-group" data-bind="validationElement: answer">
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: answer, disable: isReadonly" />
+                <span class="help-inline" data-bind="validationMessage: answer"></span>
+            </div>
+        </div>
+        <button class="btn btn-primary" data-bind="click: $root.saveAnswer, visible: isReadonly()==false, enable: errors().length == 0">Save answer</button>
     </script>
     <script type="text/html" id="GpsCoordinatesFull">
         <div>latitude: <span data-bind="text: latitude"></span></div>
@@ -360,7 +375,7 @@
 
                         ko.validation.rules['notempty'] = {
                             validator: function(array) {
-                                return array.length > 0;
+                                return array().length > 0;
                             },
                             message: 'The array must contain at least one valid element.'
                         };
