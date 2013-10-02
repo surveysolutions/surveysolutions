@@ -84,7 +84,9 @@ namespace WB.UI.Designer.Controllers
 
         private PdfQuestionnaireView LoadQuestionnaire(Guid id)
         {
-            return this.viewFactory.GetById(id);
+            var result = this.viewFactory.GetById(id);
+            result.ReconnectWithParent();
+            return result;
         }
     }
 }
