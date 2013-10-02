@@ -127,7 +127,7 @@
                                 IsPublic = isPublic, 
                                 IsAdminMode = this.userService.WebUser.IsAdmin, 
                                 Page = pageIndex ?? 1, 
-                                PageSize = GlobalHelper.GridPageItemsCount, 
+                                PageSize = 1024, 
                                 Order = sortBy, 
                                 Filter = filter
                             });
