@@ -1817,7 +1817,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return Enumerable.Empty<Identity>();
 
             return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(questionnaire, getCountOfPropagatableGroupInstances,
-                isQuestionAnswerGoingToDisappear: question => questionsToRemove.Contains(question));
+                isQuestionAnswerGoingToDisappear: question => questionsToRemove.Any(questionToRemove => AreEqual(question, questionToRemove)));
         }
 
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
