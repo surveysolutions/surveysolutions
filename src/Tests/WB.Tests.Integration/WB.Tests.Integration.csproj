@@ -61,6 +61,7 @@
     <Compile Include="InterviewTests\InterviewTestsContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InterviewTests\when_decreasing_propagation_count_and_latest_propagated_question_was_used_in_linked_multiple_options_question_as_selected_answer.cs" />
     <Compile Include="InterviewTests\when_decreasing_propagation_count_and_latest_propagated_question_was_used_in_linked_single_option_question_as_selected_answer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShouldExtensions.cs" />
