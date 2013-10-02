@@ -79,6 +79,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
         }
 
+        public override void RemoveAnswer()
+        {
+            foreach (var item in this.Answers)
+            {
+                item.Selected = false;
+            }
+
+            base.RemoveAnswer();
+
+            this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
+        }
+
         private void RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions()
         {
             if (this.QuestionType == QuestionType.MultyOption && this.Status.HasFlag(QuestionStatus.Answered) && !this.Answers.Any(a => a.Selected))

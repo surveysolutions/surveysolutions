@@ -274,9 +274,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public void SetAnswer(InterviewItemId key, object answer)
         {
-            var question =
-                this.Questions[key];
+            QuestionViewModel question = this.Questions[key];
             question.SetAnswer(answer);
+        }
+
+        public void RemoveAnswer(InterviewItemId questionInstanceId)
+        {
+            if (!this.Questions.ContainsKey(questionInstanceId))
+                return;
+
+            QuestionViewModel question = this.Questions[questionInstanceId];
+
+            question.RemoveAnswer();
         }
 
         public void SetComment(InterviewItemId key, string comment)

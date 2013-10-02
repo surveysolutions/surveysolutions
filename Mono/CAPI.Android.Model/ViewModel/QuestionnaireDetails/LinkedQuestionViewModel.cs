@@ -67,6 +67,18 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
         }
 
+        public override void RemoveAnswer()
+        {
+            this.SelectedAnswers = new int[][]{};
+
+            base.RemoveAnswer();
+
+            if (this.IsMultiOptionQuestionHasNoSelectedOptions)
+            {
+                this.RemoveAnsweredFromStatus();
+            }
+        }
+
         private int[][] CastAnswer(object answer)
         {
             if (IsAnswerNull(answer))
