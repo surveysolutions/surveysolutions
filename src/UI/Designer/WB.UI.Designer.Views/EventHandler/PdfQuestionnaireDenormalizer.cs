@@ -141,11 +141,11 @@ namespace WB.UI.Designer.Views.EventHandler
                                             AnswerType = x.AnswerType,
                                             AnswerValue = x.AnswerValue
                                         }).ToList(),
-                        Condition = @event.ConditionExpression,
-                        Variable = @event.StataExportCaption,
-                        ValidationExpression = @event.ValidationExpression
+                        Variable = @event.StataExportCaption
                     };
 
+                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });
@@ -156,7 +156,7 @@ namespace WB.UI.Designer.Views.EventHandler
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
-                existingQuestion.Condition = @event.ConditionExpression;
+                existingQuestion.ConditionExpression = @event.ConditionExpression;
                 existingQuestion.ValidationExpression = @event.ValidationExpression;
 
                 existingQuestion.Title = @event.QuestionText;
@@ -187,10 +187,10 @@ namespace WB.UI.Designer.Views.EventHandler
                         AnswerType = x.AnswerType,
                         AnswerValue = x.AnswerValue
                     }).ToList(),
-                    Condition= @event.ConditionExpression,
                     Variable = @event.StataExportCaption
                 };
 
+                newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });

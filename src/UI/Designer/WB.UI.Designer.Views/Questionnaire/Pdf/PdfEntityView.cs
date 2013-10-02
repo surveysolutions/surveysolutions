@@ -26,32 +26,29 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         {
             get
             {
-                return string.Join(".", this.QuestionNumberSections);
+                return string.Join(".", this.GetQuestionNumberSections());
             }
         }
 
         private List<int> questionNumberSections = null;
 
-        protected List<int> QuestionNumberSections 
+        protected List<int> GetQuestionNumberSections()
         {
-            get
+            if (this.questionNumberSections == null)
             {
-                if (questionNumberSections == null)
+                this.questionNumberSections = new List<int>();
+                var parent = this.GetParent();
+                var currentItem = this;
+                while (parent != null)
                 {
-                    questionNumberSections = new List<int>();
-                    var parent = this.GetParent();
-                    var currentItem = this;
-                    while (parent != null)
-                    {
-                        var currentItemNumber = parent.Children.IndexOf(currentItem) + 1;
-                        questionNumberSections.Insert(0, currentItemNumber);
-                        currentItem = parent;
-                        parent = parent.GetParent();
-                    }
+                    var currentItemNumber = parent.Children.IndexOf(currentItem) + 1;
+                    this.questionNumberSections.Insert(0, currentItemNumber);
+                    currentItem = parent;
+                    parent = parent.GetParent();
                 }
-
-                return questionNumberSections;
             }
+
+            return this.questionNumberSections;
         }
 
         private PdfEntityView parent;

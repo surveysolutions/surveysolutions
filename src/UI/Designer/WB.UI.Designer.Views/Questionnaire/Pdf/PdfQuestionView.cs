@@ -11,9 +11,6 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
     {
         private static Regex conditionRegex = new Regex(@"\[([^\]]*)\]", RegexOptions.Compiled);
 
-        private string _condition;
-        private string _validationExpression;
-
         public PdfQuestionView()
         {
             this.Answers = new List<PdfAnswerView>();
@@ -23,36 +20,29 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public List<PdfAnswerView> Answers { get; set; }
 
-        public string ValidationExpression
+        public string GetReadableValidationExpression()
         {
-            get
+            if (this.ValidationExpression == null)
             {
-                if (_validationExpression == null)
-                {
-                    return null;
-                }
-
-                return ReplaceGuidsWithQuestionNumbers(_validationExpression);
+                return null;
             }
-            set { _validationExpression = value; }
+
+            return this.ReplaceGuidsWithQuestionNumbers(this.ValidationExpression);
         }
 
-        public string Condition
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_condition))
-                {
-                    return null;
-                }
+        public string ValidationExpression { get; set; }
 
-                return ReplaceGuidsWithQuestionNumbers(_condition);
-            }
-            set
+        public string GetReadableConditionExpression()
+        {
+            if (string.IsNullOrEmpty(this.ConditionExpression))
             {
-                _condition = value;
+                return null;
             }
+
+            return this.ReplaceGuidsWithQuestionNumbers(this.ConditionExpression);
         }
+
+        public string ConditionExpression { get; set; }
 
         private string ReplaceGuidsWithQuestionNumbers(string expression)
         {
@@ -70,12 +60,9 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public string Variable { get; set; }
 
-        public bool HasCodition
+        public bool GetHasCondition()
         {
-            get
-            {
-                return !string.IsNullOrEmpty(Condition);
-            }
+            return !string.IsNullOrEmpty(this.GetReadableConditionExpression());
         }
 
         private PdfEntityView GetRoot()
@@ -98,16 +85,14 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         private string stringItemNumber = null;
 
-        public string StringItemNumber {
-            get
+        public string GetStringItemNumber()
+        {
+            if (this.stringItemNumber == null)
             {
-                if (stringItemNumber == null)
-                {
-                    stringItemNumber = string.Join(".", QuestionNumberSections.Select(x => x.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')));
-                }
-
-                return stringItemNumber;
+                this.stringItemNumber = string.Join(".", this.GetQuestionNumberSections().Select(x => x.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')));
             }
+
+            return this.stringItemNumber;
         }
     }
 }

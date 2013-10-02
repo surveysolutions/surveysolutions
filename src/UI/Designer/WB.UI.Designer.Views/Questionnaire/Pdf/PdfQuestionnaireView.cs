@@ -15,36 +15,25 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public DateTime CreationDate { get; set; }
 
-        public int ChaptersCount
+        public int GetChaptersCount()
         {
-            get
-            {
-                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.GetParent().PublicId == this.PublicId);
-            }
+            return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.GetParent().PublicId == this.PublicId);
         }
 
-        public int GroupsCount
+        public int GetGroupsCount()
         {
-            get
-            {
-                return this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.GetParent() != null && x.GetParent().PublicId != this.PublicId);
-            }
+            return
+                this.Children.TreeToEnumerable().OfType<PdfGroupView>().Count(x => x.GetParent() != null && x.GetParent().PublicId != this.PublicId);
         }
 
-        public int QuestionsCount
+        public int GetQuestionsCount()
         {
-            get
-            {
-                return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().Count();
-            }
+            return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().Count();
         }
 
-        public int QuestionsWithConditionsCount
+        public int GetQuestionsWithConditionsCount()
         {
-            get
-            {
-                return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().Count(x => x.HasCodition);
-            } 
+            return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().Count(x => x.GetHasCondition());
         }
 
         internal void RemoveGroup(Guid groupId)
@@ -153,7 +142,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                     var childGroup = child as IGroup;
                     if (childQuestion != null)
                     {
-                        this.AddQuestion(new PdfQuestionView
+                        var newQuestion=new PdfQuestionView
                         {
                             PublicId = childQuestion.PublicKey,
                             Title = childQuestion.QuestionText,
@@ -163,9 +152,11 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                                 AnswerType = x.AnswerType,
                                 AnswerValue = x.AnswerValue
                             }).ToList(),
-                            Condition = childQuestion.ConditionExpression,
                             Variable = childQuestion.StataExportCaption
-                        }, item.PublicKey);
+                        };
+
+                        newQuestion.ConditionExpression = childQuestion.ConditionExpression;
+                        this.AddQuestion(newQuestion, item.PublicKey);
                     }
                     if (childGroup != null)
                     {
@@ -183,12 +174,12 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public IEnumerable<PdfQuestionView> GetQuestionsWithConditions()
         {
-            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => x.HasCodition).OrderBy(x => x.StringItemNumber);
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => x.GetHasCondition()).OrderBy(x => x.GetStringItemNumber());
         }
 
         public IEnumerable<PdfQuestionView> GetQuestionsWithValidation()
         {
-            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.ValidationExpression)).OrderBy(x => x.StringItemNumber);
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.GetReadableValidationExpression())).OrderBy(x => x.GetStringItemNumber());
         }
     }
 
