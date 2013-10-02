@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Main.Core.View;
 using System;
 using System.Linq;
 using Main.Core.Utility;
 using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Designer.Views.Questionnaire.Indexes;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -12,37 +14,20 @@ namespace WB.UI.Designer.Views.Questionnaire
     /// </summary>
     public class QuestionnaireListViewFactory : IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView>
     {
-        #region Fields
+        private readonly IReadSideRepositoryIndexAccessor indexAccessor;
 
-        /// <summary>
-        /// The document group session.
-        /// </summary>
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> documentGroupSession;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireListViewFactory"/> class.
-        /// </summary>
-        /// <param name="documentGroupSession">
-        /// The document group session.
-        /// </param>
-        public QuestionnaireListViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> documentGroupSession)
+        public QuestionnaireListViewFactory(IReadSideRepositoryIndexAccessor indexAccessor)
         {
-            this.documentGroupSession = documentGroupSession;
+            this.indexAccessor = indexAccessor;
         }
-
-        #endregion
-
         
         public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
         {
+            var indexName = typeof(DesignerReportQuestionnaireListViewItem).Name;
             var count =
-                this.documentGroupSession.Query(queryable => this.FilterQuestionnaires(queryable, input).Count());
+                this.indexAccessor.Query<QuestionnaireListViewItem, int>(indexName, queryable => this.FilterQuestionnaires(queryable, input).Count());
            var records=
-             this.documentGroupSession.Query(queryable =>
+             this.indexAccessor.Query<QuestionnaireListViewItem, List<QuestionnaireListViewItem>>(indexName, queryable =>
             {
                 var queryResult =
                     FilterQuestionnaires(queryable, input).OrderUsingSortExpression(input.Order)
