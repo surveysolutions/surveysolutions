@@ -60,6 +60,7 @@
     <Compile Include="EventHandler\QuestionnaireListViewItemDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questionnaire\GroupView.cs" />
+    <Compile Include="Questionnaire\Indexes\DesignerReportQuestionnaireListViewItem.cs" />
     <Compile Include="Questionnaire\Pdf\PdfQuestionView.cs" />
     <Compile Include="Questionnaire\Pdf\PdfGroupView.cs" />
     <Compile Include="Questionnaire\Pdf\PdfAnswerView.cs" />
