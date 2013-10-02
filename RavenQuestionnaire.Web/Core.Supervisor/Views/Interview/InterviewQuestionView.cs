@@ -20,7 +20,8 @@ namespace Core.Supervisor.Views.Interview
             this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
             this.IsValid = true;
-            this.IsEnabled = false;
+            this.IsEnabled = question.QuestionScope == QuestionScope.Supervisor;
+            this.Scope = question.QuestionScope;
 
             if (question.Answers != null)
             {
@@ -45,7 +46,6 @@ namespace Core.Supervisor.Views.Interview
                 Date = x.Date
             }).ToList();
             this.IsValid = answeredQuestion.Valid;
-            this.Scope = question.QuestionScope;
             this.Answer = answeredQuestion.Answer;
         }
 

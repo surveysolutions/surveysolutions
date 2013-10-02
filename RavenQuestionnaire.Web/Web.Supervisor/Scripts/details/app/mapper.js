@@ -11,10 +11,10 @@
 
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
-                            o.value(option.Value);
+                            o.value(option.Value + "");
                             o.label(_.unescape(option.Label) + "");
                             if (_.isEqual(dto.Answer, option.Value)) {
-                                item.selectedOption(o);
+                                item.selectedOption(o.value());
                                 o.isSelected(true);
                             }
                             return o;
@@ -25,11 +25,11 @@
                         item = new model.MultyOptionQuestion();
                         item.options(_.map(dto.Options, function (option) {
                             var o = new model.Option(uiId);
-                            o.value(option.Value);
+                            o.value(option.Value + "");
                             o.label(_.unescape(option.Label) + "");
 
                             if (_.any(dto.Answer, function (optionValue) { return _.isEqual(optionValue, option.Value); })) {
-                                item.selectedOptions.push(o);
+                                item.selectedOptions.push(o.value() );
                                 o.isSelected(true);
                             }
                             return o;

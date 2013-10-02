@@ -26,7 +26,7 @@ function (ko) {
             if (self.isValid() == false) {
                 return "invalid";
             }
-            if (self.scope() == 1) {
+            if (self.scope() == "Supervisor") {
                 return "supervisor";
             }
             return "";
@@ -38,25 +38,28 @@ function (ko) {
                 case "commented": self.isVisible(self.comments().length > 0); break;
                 case "answered": self.isVisible(self.isAnswered()); break;
                 case "invalid": self.isVisible(self.isValid() == false); break;
-                case "supervisor": self.isVisible(self.scope() == 1); break;
+                case "supervisor": self.isVisible(self.scope() == "Supervisor"); break;
                 case "enabled": self.isVisible(self.isEnabled()); break;
             }
         };
+        
+       
+
         return self;
     };
-    var Option = function(questionId) {
+    var Option = function (questionId) {
         var self = this;
         self.label = ko.observable();
         self.value = ko.observable();
         self.isSelected = ko.observable(false);
-        self.optionFor = ko.computed(function() {
+        self.optionFor = ko.computed(function () {
             return 'option-' + questionId + '-' + self.value();
         });
         return self;
     };
-    
+
     var model = {
-        Option : Option,
+        Option: Option,
         GpsQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
@@ -70,13 +73,14 @@ function (ko) {
         TextQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.answer = ko.observable();
+            self.answer = ko.observable().extend({ required: true });
             return self;
         },
         NumericQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.answer = ko.observable();
+            self.answer = ko.observable().extend({required: true, number: true, digit: true });
+            self.errors = ko.validation.group(self);
             return self;
         },
         DateTimeQuestion: function () {
@@ -88,8 +92,14 @@ function (ko) {
         SingleOptionQuestion: function () {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.selectedOption = ko.observable(new Option());
+            self.selectedOption = ko.observable();
             self.options = ko.observableArray();
+            self.answer = ko.computed(function () {
+                var o = _.find(ko.toJS(self.options), function (option) {
+                    return (self.selectedOption() + "") == (option.value + "");
+                });
+                return _.isEmpty(o) ? "" : o.label;
+            });
             return self;
         },
         MultyOptionQuestion: function () {
@@ -97,6 +107,16 @@ function (ko) {
             ko.utils.extend(self, new QuestionModel());
             self.selectedOptions = ko.observableArray([]);
             self.options = ko.observableArray();
+            self.answer = ko.computed(function () {
+                var selected = _.filter(ko.toJS(self.options), function(option) {
+                    return _.contains(self.selectedOptions(), option.value + "");
+                });
+                self.selectedOptions(_.map(selected, 'value'));
+                var a = _.reduce(selected, function (result, option) {
+                    return result + option.label + ", ";
+                },"");
+                return a.trim();
+            });
             return self;
         },
         Group: function () {
@@ -106,9 +126,9 @@ function (ko) {
             self.id = ko.observable();
             self.depth = ko.observable();
             self.isSelected = ko.observable(false);
-            
+
             self.css = ko.computed(function () {
-                return "level" + self.depth() + (self.isSelected()? " selected": "");
+                return "level" + self.depth() + (self.isSelected() ? " selected" : "");
             });
             self.href = ko.computed(function () {
                 return "#group/" + self.uiId();
@@ -118,7 +138,7 @@ function (ko) {
             self.propagationVector = ko.observable();
             self.questions = ko.observableArray();
             self.isVisible = ko.observable(true);
-            
+
             self.visibleQuestionsCount = ko.computed(function () {
                 return _.reduce(self.questions(), function (count, question) {
                     return count + (question.isVisible() ? 1 : 0);
@@ -141,7 +161,7 @@ function (ko) {
             self.name = ko.observable();
             return self;
         },
-        
+
         Comment: function () {
             var self = this;
             self.id = ko.observable();
