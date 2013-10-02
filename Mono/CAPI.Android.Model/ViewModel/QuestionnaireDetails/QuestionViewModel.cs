@@ -78,6 +78,19 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             RaisePropertyChanged("AnswerString");
         }
 
+        public virtual void RemoveAnswer()
+        {
+            this.AnswerObject = null;
+
+            if (this.Status.HasFlag(QuestionStatus.Answered))
+            {
+                this.Status ^= QuestionStatus.Answered;
+                this.RaisePropertyChanged("Status");
+            }
+
+            this.RaisePropertyChanged("AnswerString");
+        }
+
         public virtual void SetComment(string comment)
         {
             this.Comments = comment;
