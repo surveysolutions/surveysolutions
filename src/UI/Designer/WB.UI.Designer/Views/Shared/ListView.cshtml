@@ -23,10 +23,10 @@
             {
                 var property = propertyList[i];
                 var w = propertyList[i].IsDateTimePropertyValue() ? "135px" : "auto";
-                
+                var sortPropertyName = property.Name == "Owner" ? "CreatorName" : property.Name;
                 <th style="min-width: @w" nowrap="nowrap">
-                    @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = property.Name, so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == property.Name), f = ViewBag.Filter })
-                    @if (ViewBag.SortBy == property.Name)
+                    @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = sortPropertyName, so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortPropertyName), f = ViewBag.Filter })
+                    @if (ViewBag.SortBy == sortPropertyName)
                     {
                         if (!sortOrder.ToBool())
                         {
