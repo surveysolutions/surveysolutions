@@ -126,8 +126,8 @@
                                 ViewerId = viewerId, 
                                 IsPublic = isPublic, 
                                 IsAdminMode = this.userService.WebUser.IsAdmin, 
-                                Page = pageIndex ?? 1, 
-                                PageSize = 1024, 
+                                Page = pageIndex ?? 1,
+                                PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
                                 Filter = filter
                             });

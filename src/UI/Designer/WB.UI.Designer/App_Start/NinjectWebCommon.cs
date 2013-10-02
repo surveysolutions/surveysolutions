@@ -17,9 +17,12 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Designer.Views.Questionnaire.Indexes;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -76,6 +79,9 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             PrepareNcqrsInfrastucture(kernel);
+
+            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
+            indexccessor.RegisterIndexesFromAssembly(typeof(DesignerReportQuestionnaireListViewItem).Assembly);
 
             return kernel;
         }
