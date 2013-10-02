@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using It = Machine.Specifications.It;
-using System.Linq;
 
 namespace WB.Tests.Integration.InterviewTests
 {
-    internal class when_decreasing_propagation_count_and_latest_propagated_question_was_used_in_linked_single_option_question_as_selected_answer : InterviewTestsContext
+    internal class when_decreasing_propagation_count_and_latest_propagated_question_was_used_in_linked_multiple_options_question_as_selected_answer : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -56,10 +52,10 @@ namespace WB.Tests.Integration.InterviewTests
                                     }
                                 }
                             },
-                            new SingleQuestion
+                            new MultyOptionsQuestion
                             {
                                 PublicKey = linkedQuestionId,
-                                QuestionType = QuestionType.SingleOption,
+                                QuestionType = QuestionType.MultyOption,
                                 LinkedToQuestionId = referencedQuestionId,
                             },
                         }
@@ -68,21 +64,21 @@ namespace WB.Tests.Integration.InterviewTests
             };
 
             interview = CreateInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(questionnaireDocument);
-            interview.AnswerNumericQuestion(userId, numericQuestionId, new int[] {}, answerTime, 3);
-            interview.AnswerTextQuestion(userId, referencedQuestionId, new int[] { 0 }, answerTime, "A");
-            interview.AnswerTextQuestion(userId, referencedQuestionId, new int[] { 2 }, answerTime, "C");
-            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new int[] {}, answerTime, new int[] { 2 });
+            interview.AnswerNumericQuestion(userId, numericQuestionId, new int[] { }, answerTime, 3);
+            interview.AnswerTextQuestion(userId, referencedQuestionId, new[] { 0 }, answerTime, "A");
+            interview.AnswerTextQuestion(userId, referencedQuestionId, new[] { 2 }, answerTime, "C");
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new int[] { }, answerTime, new[] { new[] { 0 }, new[] { 2 } });
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerNumericQuestion(userId, numericQuestionId, new int[] {}, answerTime, 2);
+            interview.AnswerNumericQuestion(userId, numericQuestionId, new int[] { }, answerTime, 2);
 
-        It should_raise_AnswerRemoved_event_with_linked_single_option_question_id_and_propagation_vector = () =>
+        It should_raise_AnswerRemoved_event_with_linked_multiple_options_question_id_and_propagation_vector = () =>
             eventContext.ShouldContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == linkedQuestionId
-                && @event.PropagationVector.SequenceEqual(new int[] {}));
+                && @event.PropagationVector.SequenceEqual(new int[] { }));
 
         Cleanup stuff = () =>
         {
