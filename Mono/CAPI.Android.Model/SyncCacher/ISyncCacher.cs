@@ -7,6 +7,8 @@ namespace CAPI.Android.Core.Model.SyncCacher
         bool SaveItem(Guid itemId, string itemContent);
 
         string LoadItem(Guid itemId);
+
+        bool DoesCachedItemExist(Guid itemId);
         
         bool DeleteItem(Guid itemId);
     }

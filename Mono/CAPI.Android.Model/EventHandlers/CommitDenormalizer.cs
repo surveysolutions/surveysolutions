@@ -17,22 +17,22 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt)
         {
-            changeLog.ReopenDraftRecord(evnt.EventSourceId);
+            changeLog.CreateOrReopenDraftRecord(evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            changeLog.OpenDraftRecord(evnt.EventSourceId, evnt.EventSequence + 1);
+            changeLog.CreateOrReopenDraftRecord(evnt.EventSourceId/*, evnt.EventSequence + 1*/);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
         {
-            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence, true);
+            changeLog.CloseDraftRecord(evnt.EventSourceId/*, evnt.EventSequence, true*/);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
         {
-            changeLog.CloseDraftRecord(evnt.EventSourceId, evnt.EventSequence, false);
+            changeLog.CloseDraftRecord(evnt.EventSourceId/*, evnt.EventSequence, false*/);
         }
     }
 }

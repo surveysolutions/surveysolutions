@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.Statistics;
+using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
 using CAPI.Android.Extensions;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Entities.SubEntities;
+using Ninject;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -132,18 +135,22 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             RecalculateStatistics();
             return containerView;
         }
-
+        
         void btnComplete_Click(object sender, EventArgs e)
         {
             if (Model.Status == InterviewStatus.Completed)
             {
                 CapiApplication.CommandService.Execute(
                     new RestartInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id, etComments.Text));
+
+                CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(Model.QuestionnaireId);
             }
             else
             {
                 CapiApplication.CommandService.Execute(
                     new CompleteInterviewCommand(Model.QuestionnaireId, CapiApplication.Membership.CurrentUser.Id, etComments.Text));
+
+                CapiApplication.Kernel.Get<IChangeLogManipulator>().CloseDraftRecord(Model.QuestionnaireId);
             }
             this.Activity.Finish();
         }

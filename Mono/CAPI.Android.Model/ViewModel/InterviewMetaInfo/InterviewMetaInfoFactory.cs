@@ -42,7 +42,8 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
                         Guid.Parse(interview.Responsible),
                     Status = (int) status,
                     TemplateId = Guid.Parse(interview.Survey),
-                    Comments = interview.Comments
+                    Comments = interview.Comments,
+                    Valid = interview.Valid
                 };
         }
     }

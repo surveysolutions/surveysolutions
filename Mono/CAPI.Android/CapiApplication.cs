@@ -235,7 +235,7 @@ namespace CAPI.Android
 
             InitDashboard(bus);
 
-            InitChangeLog(bus);
+            //InitChangeLog(bus);
 
             #endregion
         }
