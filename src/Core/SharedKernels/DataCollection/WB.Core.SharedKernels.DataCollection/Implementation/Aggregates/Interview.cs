@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire.Completed;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -978,11 +975,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment)
         {
-            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
-
-            bool isInterviewInvalid = this.HasInvalidAnswers() || this.HasNotAnsweredMandatoryQuestions(questionnaire);
+            
+            /*IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);*/
+            bool isInterviewInvalid = this.HasInvalidAnswers() /*|| this.HasNotAnsweredMandatoryQuestions(questionnaire)*/;
 
             this.ApplyEvent(new InterviewCompleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
@@ -2023,7 +2020,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.invalidAnsweredQuestions.Any();
         }
 
-        private bool HasNotAnsweredMandatoryQuestions(IQuestionnaire questionnaire)
+        /*private bool HasNotAnsweredMandatoryQuestions(IQuestionnaire questionnaire)
         {
             IEnumerable<Guid> mandatoryQuestionIds = questionnaire.GetAllMandatoryQuestions();
             IEnumerable<Identity> mandatoryQuestions = this.GetInstancesOfQuestionsWithSameAndDeeperPropagationLevelOrThrow(
@@ -2031,7 +2028,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return mandatoryQuestions.Any(
                 question => !this.WasQuestionAnswered(question) && !this.IsQuestionOrParentGroupDisabled(question, questionnaire, this.IsGroupDisabled, this.IsQuestionDisabled));
-        }
+        }*/
 
         private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, Func<Identity, bool> isGroupDisabled, Func<Identity, bool> isQuestionDisabled)
         {
