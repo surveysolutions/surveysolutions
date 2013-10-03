@@ -15,7 +15,7 @@
             contentType: 'application/json; charset=utf-8',
             decoder: function (data, status, xhr, success, error) {
                 if (xhr.status == 500) {
-                    error({ error: "Unexpected error occured. Try to refresh page to continue. If this problem persists, please contact support." }, status);
+                    error({ error: input.settings.messages.unhandledExceptionMessage }, status);
                 } else if (status === "success") {
                     var result = JSON.parse(xhr.responseText);
                     if (result.error == null) {

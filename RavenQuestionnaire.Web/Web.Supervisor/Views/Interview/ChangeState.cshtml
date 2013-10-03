@@ -1,5 +1,4 @@
-﻿@using System.Runtime.Serialization.Formatters
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
 @using Newtonsoft.Json
 @model Core.Supervisor.Views.ChangeStatus.ChangeStatusView
 @{
@@ -59,36 +58,13 @@
         </table>
     </div>
 </div>
-<div id="output">
-    <div class="inner">
-        <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
-            <span>Errors log</span>
-        </div>
-        <div class="body">
-            <ul data-bind="foreach: errors" class="error-list">
-                <li class="error">
-                    <span data-bind="html: error"></span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 @section scripts
 {
     <script type="text/javascript">
-        var input = window.input || (function(document) {
-            'use strict';
-            var currentUser = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
-            return {
-                interviewId: '@Model.InterviewId',
-                currentUser: currentUser,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "Survey", new { statchange = "_______" }, Request.Url.Scheme)',
-            };
-        }(document));
-
-            window.input = input;
+        input.interviewId = '@Model.InterviewId';
+        input.currentUser = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
+        input.commandExecutionUrl = '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)';
+        input.backUrl = '@Url.Action("Interviews", "Survey", new { statchange = "_______" }, Request.Url.Scheme)';
     </script>
 
     @Scripts.Render("~/js/lib-modules")

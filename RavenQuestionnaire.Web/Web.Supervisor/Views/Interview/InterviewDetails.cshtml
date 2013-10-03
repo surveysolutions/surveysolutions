@@ -1,9 +1,5 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Optimization
-@using System.Web.Script.Serialization
-@using Main.Core.Entities.SubEntities
-@using Core.Supervisor.Views.Survey
-@using Mono.CSharp
 @using Newtonsoft.Json
 @using Questionnaire.Core.Web.Helpers
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
@@ -17,7 +13,7 @@
 <div id="menu" class="hidden-phone" data-bind="css: filter">
     <div id="menuInner" class="slim-scroll">
         <div class="hide-panel-block text-right innerLR">
-            &larr;&nbsp;<a class="pseudo-link" data-bind="click: toggleFilter">Hide filter</a>
+            &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
         </div>
         <ul>
             <li class="heading"><span>FILTER</span></li>
@@ -37,7 +33,7 @@
         <!-- /ko -->
         <span data-bind="text: status"></span></h3>
     <div class="menubar">
-        <span data-bind="visible: isFilterOpen() == false"><a class="pseudo-link" data-bind="    click: toggleFilter">Show filter</a>&nbsp;&rarr;</span>
+        <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
         @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
         {
             <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
@@ -133,21 +129,7 @@
         </div>
     </div>
 </div>
-<div id="output">
-    <div class="inner">
-        <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
-            <span>Errors log</span>
-        </div>
-        <div class="body">
-            <ul data-bind="foreach: errors" class="error-list">
-                <li class="error">
-                    <span data-bind="html: error"></span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+
 @section styles
 {
     @Styles.Render("~/css/list")
@@ -220,32 +202,24 @@
         <div>time stamp: <span data-bind="text: moment(timestamp()).format('lll')"></span></div>
     </script>
     <script type="text/javascript">
-        var input = window.input || (function(document) {
-            'use strict';
-            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.None,
-                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
-                        Converters = new List<JsonConverter>()
-                        {
-                            new EnumToStringConverter(),
-                            new HtmlEncodeStringPropertiesConverter()
-                        }
-                    })),
-                u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.None,
-                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                    }));
-            return {
-                questionnaire: q,
-                user: u,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
-            };
-        }(document));
-
-        window.input = input;
+        input.questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                  {
+                                      TypeNameHandling = TypeNameHandling.None,
+                                      TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                                      Converters = new List<JsonConverter>()
+                                          {
+                                              new EnumToStringConverter(),
+                                              new HtmlEncodeStringPropertiesConverter()
+                                          }
+                                  }));
+        input.user = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
+                         {
+                             TypeNameHandling = TypeNameHandling.None,
+                             TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                         }));
+        input.commandExecutionUrl = '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)';
+        input.backUrl =
+            '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)';
     </script>
     
     @Scripts.Render("~/js/lib-modules")

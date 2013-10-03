@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding;
 using Newtonsoft.Json.Linq;
@@ -18,7 +17,7 @@ namespace Web.Supervisor.Code.CommandTransformation
             switch (type)
             {
                 case "CreateInterviewCommand":
-                    return GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
+                    command = GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
                     break;
                 case "AnswerDateTimeQuestionCommand":
                     break;
@@ -34,7 +33,12 @@ namespace Web.Supervisor.Code.CommandTransformation
                     break;
                 case "AssignInterviewerCommand":
                     var assignCommand = (AssignInterviewerCommand) command;
-                    return new AssignInterviewerCommand(assignCommand.InterviewId, globalInfo.GetCurrentUser().Id, assignCommand.InterviewerId);
+                    command = new AssignInterviewerCommand(assignCommand.InterviewId, globalInfo.GetCurrentUser().Id, assignCommand.InterviewerId);
+                    break;
+                case "DeleteInterviewCommand":
+                    var deleteCommand = (DeleteInterviewCommand) command;
+                    command = new DeleteInterviewCommand(deleteCommand.InterviewId, globalInfo.GetCurrentUser().Id);
+                    break;
             }
 
             return command;

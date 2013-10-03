@@ -15,18 +15,13 @@
 #warning: do not change name for this bundle, this name should match with phisical path to build right path to load fonts from css
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/css/bootstrap.css",
-                "~/Content/css/bootstrap.icon-large.css",
                 "~/Content/bootstrap-mvc-validation.css",
-                //"~/Content/css/bootstrap-responsive.css",
-                "~/Content/font-awesome.css",
                 "~/Content/jquery.pnotify.default.css",
-                "~/Content/datepicker.css",
                 "~/Content/supervisor.css",
                 "~/Content/main.css"));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
                 "~/Content/css/bootstrap.css",
-                "~/Content/css/bootstrap.icon-large.min.css",
                 "~/Content/bootstrap-mvc-validation.css",
                 "~/Content/css/bootstrap-responsive.css",
                  "~/Content/main-not-logged.css"));
@@ -35,9 +30,9 @@
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/query-string.js",
-                "~/Scripts/lib/jquery.pnotify.js",
-                "~/Scripts/bootstrap-datepicker.js"
-                ));
+                "~/Scripts/supervisor.framework.js",
+                "~/Scripts/viewmodels/viewmodelbase.js",
+                "~/Scripts/viewmodels/pagebase.js"));
 
             bundles.Add(
                 new ScriptBundle("~/validate").Include(
@@ -51,12 +46,15 @@
                     "~/Scripts/knockout-2.2.1.js",
                     "~/Scripts/knockout.mapping-latest.js",
                     "~/Scripts/ko.pager.js",
-                    "~/Scripts/vm/listview.js"));
+                    "~/Scripts/viewmodels/listview.js"));
+
+            bundles.Add(new StyleBundle("~/css/newinterview").Include(
+                "~/Content/bootstrap-editable.css",
+                "~/Content/datepicker.css"));
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
                 "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css",
-                "~/Content/main.css",
                 "~/Content/details.css"));
 
 
@@ -70,7 +68,8 @@
                     "~/Scripts/lib/require.js",
                     "~/Scripts/lib/amplify.js",
                     "~/Scripts/lib/director.js",
-                    "~/Scripts/lib/Math.uuid.js"
+                    "~/Scripts/lib/Math.uuid.js",
+                    "~/Scripts/bootstrap-datepicker.js"
                     ));
 
             bundles.Add(

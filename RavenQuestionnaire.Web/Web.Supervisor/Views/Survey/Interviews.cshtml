@@ -7,18 +7,16 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/lib/lodash.js")
-    @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/sv.interviews.js")
 
     <script type="text/javascript">
         var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new {}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
-        var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
-        var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
             var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel(currentUser, '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })', commandExecutionUrl, users);
+            var model = new Supervisor.VM.SVInterviews('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })', $interviewsPageUrl, users, commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -32,7 +30,7 @@
 
 @section  actionbar{
     <div class="btn-group">
-        <button class="btn dropdown-toggle" data-toggle="dropdown" data-bind="disabled: ListView.IsNothingSelected">Assign interviewer <span class="caret"></span></button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-bind="disable: IsNothingSelected">Assign interviewer <span class="caret"></span></button>
         <ul class="dropdown-menu" data-bind="foreach: Users">
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>
@@ -50,8 +48,8 @@
                 <th>Featured Questions</th>
                 <!-- /ko -->
                 <!-- ko ifnot:SelectedTemplate() == '' -->
-                <!-- ko if:ListView.Items().length > 0-->
-                <!-- ko foreach:ListView.Items()[0].FeaturedQuestions -->
+                <!-- ko if:Items().length > 0-->
+                <!-- ko foreach:Items()[0].FeaturedQuestions -->
                 <th data-bind='text: Question'></th>
                 <!-- /ko -->
                 <!-- /ko -->
@@ -64,7 +62,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:ListView.Items -->
+            <!-- ko foreach:Items -->
             <tr>
                 <td>
                     <input type="checkbox" data-bind="checked: IsSelected, enable: CanBeReassigned" />

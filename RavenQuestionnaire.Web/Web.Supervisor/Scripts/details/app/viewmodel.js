@@ -1,20 +1,11 @@
 define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'app/config', 'app/model'],
     function (ko, datacontext, Router, input, config, model) {
-        var questionnaire = ko.observable(),
+        var self = this,
+            questionnaire = ko.observable(),
             groups = ko.observableArray(),
             questions = ko.observableArray(),
-            errors = ko.observableArray(),
-            isFilterOpen = ko.observable(true),
             currentQuestion = ko.observable(),
             currentComment = ko.observable(''),
-            toggleFilter = function () {
-                if (isFilterOpen()) {
-                    $('#wrapper').addClass('menu-hidden');
-                } else {
-                    $('#wrapper').removeClass('menu-hidden');
-                }
-                isFilterOpen(!isFilterOpen());
-            },
             closeDetails = function () {
                 $('#content').removeClass('details-visible');
             },
@@ -91,7 +82,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                         isSaving(false);
                     },
                     error: function (response) {
-                        showErrors(response);
+                        self.ShowError(response.error);
                         isSaving(false);
                     }
                 });
@@ -109,7 +100,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                             isSaving(false);
                         },
                         error: function (response) {
-                            showErrors(response);
+                            self.ShowError(response.error);
                             isSaving(false);
                         }
                     });
@@ -134,24 +125,14 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                             isSaving(false);
                         },
                         error: function (response) {
-                            showErrors(response);
+                            self.ShowError(response.error);
                             isSaving(false);
                         }
                     });
             },
-            showErrors = function (response) {
-                errors.removeAll();
-                errors.push({
-                    error: response.error
-                });
-                $('body').addClass('output-visible');
-            },
-            hideOutput = function () {
-                $('body').removeClass('output-visible');
-            },
             filterClick = function (ui, e) {
-                console.log(ui);
-                console.log(e);
+                //console.log(ui);
+                //console.log(e);
             },
         init = function () {
             questionnaire(datacontext.questionnaire);
@@ -178,7 +159,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             }).init();
         };
 
-        return {
+        self = {
             filter: filter,
             commentedCount: commentedCount,
             flagedCount: flagedCount,
@@ -188,8 +169,6 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             enabledCount: enabledCount,
             questionnaire: questionnaire,
             groups: groups,
-            toggleFilter: toggleFilter,
-            isFilterOpen: isFilterOpen,
             isSaving: isSaving,
             init: init,
             closeDetails: closeDetails,
@@ -198,9 +177,11 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             currentComment: currentComment,
             addComment: addComment,
             flagAnswer: flagAnswer,
-            hideOutput: hideOutput,
-            errors: errors,
             saveAnswer: saveAnswer,
             filterClick: filterClick
         };
+
+        ko.utils.extend(self, new Supervisor.VM.BasePage());
+
+        return self;
     });

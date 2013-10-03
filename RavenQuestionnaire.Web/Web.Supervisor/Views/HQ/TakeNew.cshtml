@@ -1,10 +1,6 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Optimization
-@using Main.Core.View.Question
 @using Newtonsoft.Json
-@using Questionnaire.Core.Web.Helpers
-@using Web.Supervisor.Code
-@using Web.Supervisor.Models
 
 @model Core.Supervisor.Views.TakeNew.TakeNewInterviewView
 
@@ -14,24 +10,21 @@
 
 <h3>Take New Interview</h3>
 
+@section styles
+{
+    @Styles.Render("~/css/newinterview")
+}
+
 @section scripts
 {
     <script type="text/javascript">
-        var input = window.input || (function(document) {
-            'use strict';
-            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                })) ;
-            return {
-                questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
-            };
-        }(document));
-
-        window.input = input;
+        input.questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                  {
+                                      TypeNameHandling = TypeNameHandling.Objects,
+                                      TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                                  }));
+        input.commandExecutionUrl = '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)';
+        input.backUrl = '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)';
     </script>
 
     @Scripts.Render("~/js/lib-modules")
@@ -226,20 +219,5 @@
         <p id="assignmentButton">
             <button class="btn btn-success btn-large" data-bind="click: saveCommand, enable: isSaveEnable"><i class="icon-white icon-ok"></i>&nbsp;Save</button>
         </p>
-    </div>
-</div>
-<div id="output">
-    <div class="inner">
-        <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
-            <span>Errors log</span>
-        </div>
-        <div class="body">
-            <ul data-bind="foreach: errors" class="error-list">
-                <li class="error">
-                    <pre data-bind="html: error"></pre>
-                </li>
-            </ul>
-        </div>
     </div>
 </div>

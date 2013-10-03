@@ -5,13 +5,12 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/userlistview.js")
-
+    @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $detailsUrl = '@Url.Action("Details", "Team")';
-        $(function() {
-            var model = new UserListViewModel('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
-            model.ListView.GetFilterMethod = function () {
+        $(function () {
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
+            model.GetFilterMethod = function () {
                 return { SupervisorId: '@Model' };
             };
             ko.applyBindings(model);
@@ -48,7 +47,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:ListView.Items -->
+            <!-- ko foreach:Items -->
             <tr>
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>

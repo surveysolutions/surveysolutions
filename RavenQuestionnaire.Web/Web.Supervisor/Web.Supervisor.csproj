@@ -304,8 +304,13 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
+    <Compile Include="Controllers\CommandApiController.cs" />
+    <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
+    <Compile Include="Models\JsonBundleCommandResponse.cs" />
+    <Compile Include="Models\JsonCommandResponse.cs" />
+    <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\StatusHelper.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -324,6 +329,8 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Models\DesignerQuestionnairesRequestModel.cs" />
+    <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
@@ -387,11 +394,6 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
-    <Content Include="Content\font-awesome-ie7.css" />
-    <Content Include="Content\font-awesome-ie7.min.css" />
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\glyphicons.png" />
@@ -490,6 +492,7 @@
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\lib\jquery.pnotify.js" />
+    <Content Include="Scripts\lib\knockout.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -526,7 +529,6 @@
     <Content Include="Scripts\ko.pager.js" />
     <Content Include="Scripts\lib\amplify.js" />
     <Content Include="Scripts\lib\jquery.js" />
-    <Content Include="Scripts\lib\knockout.js" />
     <Content Include="Scripts\lib\knockout.validation.js" />
     <Content Include="Scripts\lib\lodash.js" />
     <Content Include="Scripts\lib\moment.js" />
@@ -536,13 +538,17 @@
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\query-string.js" />
-    <Content Include="Scripts\vm\svDocumentlistview.js" />
-    <Content Include="Scripts\vm\statuslistview.js" />
-    <Content Include="Scripts\vm\hqDocumentlistview.js" />
-    <Content Include="Scripts\vm\userlistview.js" />
-    <Content Include="Scripts\vm\surveylistview.js" />
-    <Content Include="Scripts\vm\summarylistview.js" />
-    <Content Include="Scripts\vm\listview.js" />
+    <Content Include="Scripts\supervisor.framework.js" />
+    <Content Include="Scripts\viewmodels\pagebase.js" />
+    <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
+    <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
+    <Content Include="Scripts\viewmodels\viewmodelbase.js" />
+    <Content Include="Scripts\viewmodels\pages\sv.interviews.js" />
+    <Content Include="Scripts\viewmodels\pages\hq.interviews.js" />
+    <Content Include="Scripts\viewmodels\pages\users.js" />
+    <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
+    <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
+    <Content Include="Scripts\viewmodels\listview.js" />
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
@@ -563,7 +569,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Template\Import.cshtml" />
-    <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Configuration\Vitalii.Supervisor.Web.config">
@@ -573,10 +578,6 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\font\fontawesome-webfont.woff" />
-    <Content Include="Content\font\fontawesome-webfont.ttf" />
-    <Content Include="Content\font\fontawesome-webfont.eot" />
-    <Content Include="Content\font\FontAwesome.otf" />
     <Content Include="Scripts\lib\jquery.min.map" />
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
@@ -597,7 +598,6 @@
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
-    <Content Include="Views\Interview\Details.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
@@ -746,13 +746,11 @@
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Interview\_StatusHistory.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
-    <Content Include="Views\Interview\Approve.cshtml" />
     <Content Include="Views\Interview\ChangeState.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>
       </SubType>
     </Content>
-    <Content Include="Views\Interview\Redo.cshtml" />
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />

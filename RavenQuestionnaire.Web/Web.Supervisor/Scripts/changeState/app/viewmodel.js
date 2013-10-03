@@ -1,6 +1,6 @@
 ﻿define('app/viewmodel', ['amplify', 'input', 'knockout'], function (amplify, input, ko) {
-    var host = input.url,
-        errors = ko.observableArray(),
+    var self = this,
+        host = input.url,
         init = function() {
 
             amplify.request.define('sendCommand', 'ajax', {
@@ -10,7 +10,7 @@
                 contentType: 'application/json; charset=utf-8',
                 decoder: function(data, status, xhr, success, error) {
                     if (xhr.status == 500) {
-                        error({ error: "Unexpected error occured. Try to refresh page to continue. If this problem persists, please contact support." }, status);
+                        error({ error: input.settings.messages.unhandledExceptionMessage }, status);
                     } else if (status === "success") {
                         var result = JSON.parse(xhr.responseText);
                         if (result.error == null) {
@@ -24,16 +24,6 @@
                 }
             });
         },
-        showErrors = function (response) {
-            errors.removeAll();
-            errors.push({
-                error: response.error
-            });
-            $('body').addClass('output-visible');
-        },
-         hideOutput = function () {
-             $('body').removeClass('output-visible');
-         },
         sendCommand = function(callbacks, command) {
             return amplify.request({
                 resourceId: 'sendCommand',
@@ -71,20 +61,22 @@
                     isSaving(false);
                 },
                 error: function(response) {
-                    showErrors(response);
+                    self.ShowError(response.error);
                     isSaving(false);
                 }
             }, command);
         };
     init();
-    return {
+    self = {
         comment: comment,
         approve : approve,
         reject: reject,
         isSaving: isSaving,
         savingMessage : savingMessage,
-        init: init,
-        hideOutput: hideOutput,
-        errors: errors
+        init: init
     };
+    
+    ko.utils.extend(self, new Supervisor.VM.BasePage());
+
+    return self;
 });

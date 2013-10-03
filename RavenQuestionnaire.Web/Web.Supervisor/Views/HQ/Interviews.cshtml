@@ -5,6 +5,24 @@
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 
+@section scripts
+{
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/hq.interviews.js")
+    <script type="text/javascript">
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme))';
+        var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
+        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
+        $(function () {
+            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
+            var model = new Supervisor.VM.HQInterviews(interviewsListUrl, $interviewsPageUrl, users, commandExecutionUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
 @section header
 {
     <h3 class="sinle-line-header">Interviews</h3>
@@ -12,14 +30,8 @@
 
 @section  actionbar{
     <div class="btn-group">
-        @*<a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign supervisor <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" data-bind="foreach: Users">
-            <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
-        </ul>*@
-        <button type="button" class="btn btn-default" data-bind="disabled: ListView.IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
+        <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.deleteInterview">Delete interview</button>
     </div>
-
 }
 
 @section grid
@@ -32,8 +44,8 @@
                 <th>Featured Questions</th>
                 <!-- /ko -->
                 <!-- ko ifnot:SelectedTemplate() == '' -->
-                <!-- ko if:ListView.Items().length > 0-->
-                <!-- ko foreach:ListView.Items()[0].FeaturedQuestions -->
+                <!-- ko if:Items().length > 0-->
+                <!-- ko foreach:Items()[0].FeaturedQuestions -->
                 <th data-bind='text: Question'></th>
                 <!-- /ko -->
                 <!-- /ko -->
@@ -46,7 +58,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:ListView.Items -->
+            <!-- ko foreach:Items -->
             <tr>
                 <td>
                     <input type="checkbox" data-bind="checked: IsSelected, enable: CanDelete" />
@@ -60,7 +72,7 @@
                 <!-- /ko -->
                 <!-- /ko -->
                 <td>
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
+                    <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
                 <td>
@@ -119,26 +131,4 @@
             </select>
         </li>
     </ul>
-}
-
-@section scripts
-{
-    @Scripts.Render("~/Scripts/lib/lodash.js")
-    @Scripts.Render("~/Scripts/vm/hqDocumentlistview.js")
-
-
-    <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme))';
-        var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
-        var $surveysUrl = '@Url.Action("SurveysAndStatuses", "HQ")';
-        var currentUser =  @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser));
-        var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
-        var interviewsListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "AllInterviews" })';
-        $(function () {
-            var users = @Html.Raw(JsonConvert.SerializeObject(Model.Users));
-            var model = new DocumentListViewModel(currentUser, interviewsListUrl, commandExecutionUrl, users);
-            ko.applyBindings(model);
-            model.load();
-        });
-    </script>
 }
