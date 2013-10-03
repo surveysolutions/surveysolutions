@@ -14329,7 +14329,7 @@ border-left: 0px;\
 border-bottom: 1px solid black;\
 }\
 .ace-designer .ace_marker-layer .ace_active-line {\
-background: rgb(255, 255, 204);\
+background:#fff;\
 }\
 .ace-designer .ace_marker-layer .ace_selection {\
 background: rgb(181, 213, 255);\
