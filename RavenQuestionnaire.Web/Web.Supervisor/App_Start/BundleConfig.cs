@@ -33,6 +33,7 @@
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/query-string.js",
                 "~/Scripts/lib/jquery.pnotify.js",

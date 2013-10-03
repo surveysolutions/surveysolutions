@@ -29,8 +29,9 @@
             
             self.Url.query['status'] = self.SelectedStatus() || "";
 
-            window.history.pushState({}, "Status", self.Url.toString());
-
+            if (Modernizr.history) {
+                window.history.pushState({}, "Status", self.Url.toString());
+            }
             return { StatusId: self.SelectedStatus };
         };
         
