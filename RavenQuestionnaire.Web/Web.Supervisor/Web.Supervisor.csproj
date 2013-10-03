@@ -302,6 +302,7 @@
     <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Code\EnumToStringConverter.cs" />
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
+    <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
@@ -613,6 +614,7 @@
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interview\InterviewDetails.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

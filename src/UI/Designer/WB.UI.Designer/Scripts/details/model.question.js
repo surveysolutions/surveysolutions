@@ -18,27 +18,72 @@
                       message: "Valid variable name should contain only letters, digits and the underscore character and should not start with a digit",
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
                   },
-                  notEqual : 'this'
+                  notEqual: 'this'
               });
 
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
 
-            
+
               self.isHead = ko.observable(false);
               self.isFeatured = ko.observable(false);
               self.isMandatory = ko.observable(false);
+              
+              self.isSupervisorQuestion = ko.observable();
+              
               self.qtype = ko.observable("Text").extend({
                   validation: [{
-                      validator: function (val, someOtherVal) {
-                          if (self.isFeatured() == false) return true;
-                          return (val !== someOtherVal);
+                      validator: function (val) {
+                          if (self.isFeatured() == true && val == "GpsCoordinates") return false;
+                          return true;
                       },
-                      message: 'Geo Location question cannot be pre-filled',
-                      params: "GpsCoordinates"
+                      message: 'Geo Location question cannot be pre-filled'
+                  },
+                  {
+                      validator: function (val) {
+                          if (self.isSupervisorQuestion() == true) {
+                              switch (val) {
+                                  case "Numeric":
+                                  case "Text":
+                                      return true;
+                                  case "SingleOption":
+                                  case "MultyOption":;
+                                      if (self.isLinked() == 1) {
+                                          return false;
+                                      }
+                                      return true;
+                                  case "DateTime":
+                                  case "AutoPropagate":
+                                  case "GpsCoordinates":
+                                      return false;
+                              }
+                          }
+                          return true;
+                      },
+                      message: 'Date, Auto propagate, Linked categorical and Geo Location questions cannot be filled by supervisor. '
                   }]
               }); // Questoin type
-              self.scope = ko.observable();
+              self.isSupervisorQuestion = ko.observable(false);
+
+              self.scope = ko.computed({
+                  read: function () {
+                      return this.isSupervisorQuestion() ? config.questionScopes.supervisor : config.questionScopes.interviewer;
+                  },
+                  write: function (value) {
+                      if (_.isUndefined(value) || _.isNull(value)) {
+                          this.isSupervisorQuestion(false);
+                      }
+                      if (value == config.questionScopes.supervisor) {
+                          this.isSupervisorQuestion(true);
+                          return;
+                      }
+                      this.isSupervisorQuestion(false);
+                  },
+                  owner: self
+              });
+
+              self.scope(config.questionScopes.interviewer);
+
               self.condition = ko.observable('').extend({
                   validation: [{
                       validator: function (val) {
@@ -60,7 +105,7 @@
               self.validationExpression = ko.observable('');
               self.validationMessage = ko.observable('');
               self.instruction = ko.observable('');
-              
+
               self.isLinked = ko.observable(0);
               self.isLinkedDurty = ko.computed(function () {
                   return self.isLinked() == 1;
@@ -114,15 +159,15 @@
                       return { key: item.id(), value: item.title() };
                   });
               }).extend({ throttle: 500 });
-              
+
               self.hasPropagatedGroups = ko.computed(function () {
                   return self.propagatedGroups().length != 0;
               });
               self.addAnswer = function () {
                   var answer = new answerOption().id(Math.uuid()).title('').value('');
-                  
+
                   answer.errors();
-                  
+
                   self.answerOptions.push(answer);
               };
               self.removeAnswer = function (answer) {
@@ -152,26 +197,72 @@
               self.errors = ko.validation.group(self);
               this.cache = function () { };
               self.canUpdate = ko.observable(true);
-              
+
               self.isFeatured.subscribe(function (value) {
                   if (value && _.isEmpty(self.condition()) == false) {
-                      bootbox.confirm(config.warnings.weWillClearCondition.message,
-                          config.warnings.weWillClearCondition.cancelBtn,
-                          config.warnings.weWillClearCondition.okBtn,
+                      var weWillClearCondition = config.warnings.weWillClearCondition;
+                      bootbox.confirm(weWillClearCondition.message,
+                          weWillClearCondition.cancelBtn,
+                          weWillClearCondition.okBtn,
                           function (result) {
-                          if (result == false) {
-                              self.isFeatured(false);
-                              return;
-                          }
-                          self.condition('');
-                      });
+                              if (result == false) {
+                                  self.isFeatured(false);
+                                  return;
+                              }
+                              self.condition('');
+                          });
+
+                  }
+                  if (self.isSupervisorQuestion()) {
+                      var weWillClearSupervisorFlag = config.warnings.weWillClearSupervisorFlag;
+                      bootbox.confirm(weWillClearSupervisorFlag.message,
+                          weWillClearSupervisorFlag.cancelBtn,
+                          weWillClearSupervisorFlag.okBtn,
+                          function (result) {
+                              if (result == false) {
+                                  self.isFeatured(false);
+                                  return;
+                              }
+                              self.scope("Interviewer");
+                          });
+                  }
+              });
+              
+              self.isSupervisorQuestion.subscribe(function (value) {
+                  if (value && (_.isEmpty(self.condition()) == false || _.isEmpty(self.validationExpression()) == false)) {
+                      var weWillClearConditionAndValidation = config.warnings.weWillClearConditionAndValidation;
+                      
+                      bootbox.confirm(weWillClearConditionAndValidation.message,
+                          weWillClearConditionAndValidation.cancelBtn,
+                          weWillClearConditionAndValidation.okBtn,
+                          function (result) {
+                              if (result == false) {
+                                  self.isSupervisorQuestion(false);
+                                  return;
+                              }
+                              self.condition('');
+                              self.validationExpression('');
+                          });
+                  }
+                  if (self.isHead()) {
+                      var weWillClearSupervisorFlag = config.warnings.weWillClearHeadFlag;
+                      bootbox.confirm(weWillClearSupervisorFlag.message,
+                          weWillClearSupervisorFlag.cancelBtn,
+                          weWillClearSupervisorFlag.okBtn,
+                          function (result) {
+                              if (result == false) {
+                                  self.isFeatured(false);
+                                  return;
+                              }
+                              self.scope("Interviewer");
+                          });
                   }
               });
 
               return self;
           };
-        
-       
+
+
 
         Question.Nullo = new Question().id(0).title('Title').type('QuestionView');
         Question.Nullo.isNullo = true;
@@ -249,7 +340,7 @@
 
                     return item;
                 };
-            
+
 
             return {
                 isNullo: false,
@@ -275,13 +366,13 @@
                 this.instruction(data.instruction);
                 this.answerOrder(data.answerOrder);
                 this.maxValue(data.maxValue);
-               
+
                 this.answerOptions(_.map(data.answerOptions, function (answer) {
                     return new answerOption().id(answer.id).title(answer.title).value(answer.value);
                 }));
 
                 this.triggers(_.map(data.triggers, function (trigger) {
-                    return {key: trigger.key, value: trigger.value};
+                    return { key: trigger.key, value: trigger.value };
                 }));
 
                 this.isLinked(data.isLinked);

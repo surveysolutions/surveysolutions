@@ -61,7 +61,19 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             base.SetAnswer(answer);
 
-            if (this.IsMultyOptionQuestionHasNoSelectedOptions)
+            if (this.IsMultiOptionQuestionHasNoSelectedOptions)
+            {
+                this.RemoveAnsweredFromStatus();
+            }
+        }
+
+        public override void RemoveAnswer()
+        {
+            this.SelectedAnswers = new int[][]{};
+
+            base.RemoveAnswer();
+
+            if (this.IsMultiOptionQuestionHasNoSelectedOptions)
             {
                 this.RemoveAnsweredFromStatus();
             }
@@ -110,30 +122,24 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return null;
         }
 
-        private void RemoveAnsweredFromStatus()
-        {
-            this.Status &= ~QuestionStatus.Answered;
-            this.RaisePropertyChanged("Status");
-        }
-
         private bool IsAnswerNull(object answer)
         {
             return answer == null;
         }
-
-        private T[] GetValueFromJArray<T>(object answer)
+        
+        public void HandleAnswerListChange()
         {
-            try
-            {
-                return ((JArray) answer).ToObject<T[]>();
-            }
-            catch (Exception)
-            {
-                return new T[0];
-            }
+            this.RaisePropertyChanged("AnswerOptions");
         }
 
-        private bool IsMultyOptionQuestionHasNoSelectedOptions
+        public static bool IsVectorsEqual(int[] vector1, int[] vector2)
+        {
+            if (vector1.Length != vector2.Length)
+                return false;
+            return !vector1.Where((t, i) => t != vector2[i]).Any();
+        }
+
+        private bool IsMultiOptionQuestionHasNoSelectedOptions
         {
             get
             {
@@ -142,17 +148,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
         }
 
-        public void HandleAnswerListChange()
+        private void RemoveAnsweredFromStatus()
         {
-            this.RaisePropertyChanged("AnswerOptions");
-        }
-
-
-        public static bool IsVectorsEqual(int[] vector1, int[] vector2)
-        {
-            if (vector1.Length != vector2.Length)
-                return false;
-            return !vector1.Where((t, i) => t != vector2[i]).Any();
+            this.Status &= ~QuestionStatus.Answered;
+            this.RaisePropertyChanged("Status");
         }
     }
 }

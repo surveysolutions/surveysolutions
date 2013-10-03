@@ -25,7 +25,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             }
         }
 
-        public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId, bool validRecord)
+        public void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId/*, bool validRecord*/)
         {
             if(recordData.Length==0)
                 return;
@@ -33,7 +33,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             var eventSourceId = recordData[0].EventSourceId;
 
             var metaData = metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId));
-            metaData.Valid = validRecord;
+            //metaData.Valid = validRecord;
 
             var syncItem = new SyncItem()
                 {

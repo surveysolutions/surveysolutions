@@ -41,7 +41,7 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
             }),
             editableCount = ko.computed(function () {
                 return _.reduce(questions(), function (count, question) {
-                    return count + (question.scope() == 1 ? 1 : 0);
+                    return count + (question.scope() == "Supervisor" ? 1 : 0);
                 }, 0);
             }),
             enabledCount = ko.computed(function () {
@@ -115,10 +115,11 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                     case "Numeric": commandName = config.commands.answerNumericQuestionCommand; break;
                     case "DateTime": commandName = config.commands.answerDateTimeQuestionCommand; break;
                     case "GpsCoordinates": commandName = config.commands.answerGeoLocationQuestionCommand; break;
-                    case "SingleOption": commandName = config.commands.answerSingleOptionQuestionCommand; break;
-                    case "MultyOption": commandName = config.commands.answerMultipleOptionsQuestionCommand; break;
+                    case "SingleOption":
+                        commandName = config.commands.answerSingleOptionQuestionCommand; break;
+                    case "MultyOption":
+                        commandName = config.commands.answerMultipleOptionsQuestionCommand; break;
                 }
-
                 datacontext.sendCommand(commandName, { questionId: question.uiId() },
                     {
                         success: function (response) {
