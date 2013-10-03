@@ -35,6 +35,12 @@ namespace CAPI.Android.Core.Model.SyncCacher
             return null;
         }
 
+        public bool DoesCachedItemExist(Guid itemId)
+        {
+            var longFileName = BuildFileName(itemId.ToString());
+            return File.Exists(longFileName);
+        }
+
         public bool DeleteItem(Guid itemId)
         {
             var longFileName = BuildFileName(itemId.ToString());

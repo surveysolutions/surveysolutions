@@ -9,12 +9,15 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
 using CAPI.Android.Core.Model;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -264,7 +267,9 @@ namespace CAPI.Android
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            btnNavigation.Click -= llNavigationHolder_Click;
             VpContent.PageSelected -= VpContent_PageSelected;
+            NavList.ScreenChanged -= ContentFrameAdapter_ScreenChanged;
             GC.Collect();
         }
 
@@ -273,5 +278,16 @@ namespace CAPI.Android
             base.OnLowMemory();
             GC.Collect();
         }
+
+        public override void Finish()
+        {
+            base.Finish();
+
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
+            if (snapshotStore != null)
+                snapshotStore.PersistShapshot(QuestionnaireId);
+        }
+
+        
     }
 }
