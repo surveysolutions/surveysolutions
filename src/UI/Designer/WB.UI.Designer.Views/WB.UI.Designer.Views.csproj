@@ -70,6 +70,7 @@
     <Compile Include="Questionnaire\QuestionnaireListViewItem.cs" />
     <Compile Include="Questionnaire\QuestionnaireListView.cs" />
     <Compile Include="Questionnaire\QuestionnaireListViewFactory.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListViewItemSearchable.cs" />
     <Compile Include="Questionnaire\QuestionnaireStataMapView.cs" />
     <Compile Include="Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Questionnaire\QuestionnaireViewFactory.cs" />
