@@ -71,7 +71,7 @@ namespace CAPI.Android
             backupManager = CapiApplication.Kernel.Get<IBackup>();
             btnSync.Click += this.ButtonSyncClick;
 
-            btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
+            //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
 
 
             btnBackup.Click += btnBackup_Click;
