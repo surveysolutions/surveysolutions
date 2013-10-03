@@ -126,7 +126,7 @@
                 </div>
                 <div class="span2">
                     <div id="footer-buttons" class="pull-right">
-                        <button class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
+                        <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
                             <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
                         </button>
                     </div>
@@ -154,7 +154,7 @@
             <div class="body">
                 <ul data-bind="with: questionnaire" class="list">
                     <li>
-                        <button id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
+                        <button type="button" id="toggleAllChapters" class="btn btn-info btn-mini" data-toggle="tooltip" data-bind="click: $root.toggleAllChapters, tooltip: $root.toggleAllChaptersTooltip">
                             <span data-bind="visible: $root.isAllChaptersExpanded"><sup><i class="icon-minus icon-white"></i></sup><sub><i class="icon-minus icon-white"></i></sub></span>
                             <span data-bind="visible:  $root.isAllChaptersExpanded()==false"><sup><i class="icon-plus icon-white"></i></sup><sub><i class="icon-plus icon-white"></i></sub></span>
                         </button>
@@ -215,7 +215,7 @@
 
 <script type="text/html" id="GroupView">
     <div class="ui-expander" data-bind="expand: isExpanded">
-        <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-plus icon-white"></i><i class="icon-minus icon-white"></i></button>
+        <button type="button" class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-plus icon-white"></i><i class="icon-minus icon-white"></i></button>
         <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
             <div class="handler"></div>
             <div class="q-item">
