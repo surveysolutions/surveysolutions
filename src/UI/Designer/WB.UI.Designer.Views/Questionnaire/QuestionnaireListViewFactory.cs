@@ -25,9 +25,9 @@ namespace WB.UI.Designer.Views.Questionnaire
         {
             var indexName = typeof(DesignerReportQuestionnaireListViewItem).Name;
             var count =
-                this.indexAccessor.Query<QuestionnaireListViewItem, int>(indexName, queryable => this.FilterQuestionnaires(queryable, input).Count());
+                this.indexAccessor.Query<QuestionnaireListViewItemSearchable, int>(indexName, queryable => this.FilterQuestionnaires(queryable, input).Count());
            var records=
-             this.indexAccessor.Query<QuestionnaireListViewItem, List<QuestionnaireListViewItem>>(indexName, queryable =>
+             this.indexAccessor.Query<QuestionnaireListViewItemSearchable, List<QuestionnaireListViewItem>>(indexName, queryable =>
             {
                 var queryResult =
                     FilterQuestionnaires(queryable, input).OrderUsingSortExpression(input.Order)
@@ -43,13 +43,13 @@ namespace WB.UI.Designer.Views.Questionnaire
                   order: input.Order);
         }
 
-        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> questionnaire,
+        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItemSearchable> questionnaire,
             QuestionnaireListViewInputModel input)
         {
             var result = questionnaire;
             if (!string.IsNullOrEmpty(input.Filter))
                 result = result.Where((x) => 
-                  x.Title.StartsWith(  input.Filter)
+                  x.TitleIndexed.StartsWith(  input.Filter)
                     || x.CreatorName.StartsWith(input.Filter));
 
             if (input.IsAdminMode)
