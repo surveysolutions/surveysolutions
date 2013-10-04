@@ -37,9 +37,6 @@ namespace CAPI.Android.Extensions
 
             if (navigation.SelectedItemIndex != null)
                 pagesSpinner.SetSelection(navigation.SelectedItemIndex.Value);            
-            /*activity.ActionBar.NavigationMode = ActionBarNavigationMode.List;
-            activity.ActionBar.DisplayOptions = ActionBarDisplayOptions.ShowHome;
-             * */
         }
 
         public static bool FinishIfNotLoggedIn(this Activity activity)
