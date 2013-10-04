@@ -74,7 +74,8 @@ namespace CAPI.Android.Core.Model.ChangeLog
             var record = GetLastDraftRecord(eventSourceId);
             if (record == null)
                 return;
-            
+
+            record.IsClosed = true;
             var recordId = Guid.Parse(record.Id);
             var events = BuildEventStreamOfLocalChangesToSend(eventSourceId);
                 //BuildEventStreamForSendByEventSourceId(eventSourceId, record.Start);
