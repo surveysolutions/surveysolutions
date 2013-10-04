@@ -100,7 +100,6 @@
     <Compile Include="ChangeLog\ChangeLogManipulator.cs" />
     <Compile Include="ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\CommitDenormalizer.cs" />
     <Compile Include="EventHandlers\InterviewViewModelDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\AnswerOptionsForLinkedQuestionsDenormalizer.cs" />
