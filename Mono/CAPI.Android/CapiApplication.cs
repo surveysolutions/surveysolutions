@@ -181,15 +181,7 @@ namespace CAPI.Android
             
         }
 
-        private void InitChangeLog(InProcessEventBus bus)
-        {
-            var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
-        }
-
+        
         public override void OnCreate()
         {
             base.OnCreate();
@@ -234,9 +226,7 @@ namespace CAPI.Android
             InitFileStorage(bus);
 
             InitDashboard(bus);
-
-            //InitChangeLog(bus);
-
+            
             #endregion
         }
 
