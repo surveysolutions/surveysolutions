@@ -4,7 +4,6 @@ using Android.Content;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -70,7 +69,7 @@ namespace CAPI.Android
                 var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
 
                 NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
-                CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
+                //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
             }
             syncCacher.DeleteItem(itemKey);
 

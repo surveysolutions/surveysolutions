@@ -55,12 +55,11 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         #region draft
 
-        public void CreateOrReopenDraftRecord(Guid eventSourceId/*, long start*/)
+        public void CreateOrReopenDraftRecord(Guid eventSourceId)
         {
             var record = GetLastDraftRecord(eventSourceId);
             if (record != null)
             {
-                //record.Start = start;
                 record.IsClosed = false;
                 draftChangeLog.Store(record, Guid.Parse(record.Id));
                 return;
@@ -72,31 +71,26 @@ namespace CAPI.Android.Core.Model.ChangeLog
         public void CloseDraftRecord(Guid eventSourceId)
         {
             var record = GetLastDraftRecord(eventSourceId);
-            if (record == null)
-                return;
+            Guid recordId;
 
-            record.IsClosed = true;
-            var recordId = Guid.Parse(record.Id);
+            if (record == null)
+            {
+                recordId = Guid.NewGuid();
+                record = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, true);
+            }
+            else
+            {
+                record.IsClosed = true;
+                recordId = Guid.Parse(record.Id);
+            }
+            
             var events = BuildEventStreamOfLocalChangesToSend(eventSourceId);
-                //BuildEventStreamForSendByEventSourceId(eventSourceId, record.Start);
 
             fileChangeLogStore.SaveChangeset(events, recordId);
             draftChangeLog.Store(record, recordId);
         }
 
-        /*private AggregateRootEvent[] BuildEventStreamForSendByEventSourceId(Guid eventSourceId, long start)
-        {
-            var storedEvents = eventStore.ReadFrom(eventSourceId, start, long.MaxValue).ToList();
-
-            /*var indexOfLastCompleteEvent = GetIndexOfLastCompleteEvent(storedEvents);#1#
-
-            var events =
-                storedEvents/*.Take(indexOfLastCompleteEvent)#1#.Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
-
-            return events;
-        }*/
-
-
+        
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid eventSourceId)
         {
             var storedEvents = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue).ToList();
