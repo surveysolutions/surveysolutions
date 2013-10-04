@@ -128,8 +128,9 @@
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
+                    
                     if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
-                        item.isNew(true);
+                    //    item.isNew(true);
                     }
                     return item;
                 },
