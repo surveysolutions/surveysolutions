@@ -22,8 +22,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class SynchronizationActivity : Activity
     {
         #region find for ui controls from xml

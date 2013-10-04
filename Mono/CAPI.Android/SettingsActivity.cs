@@ -21,7 +21,7 @@ namespace CAPI.Android
 {
     using global::Android.Content.PM;
 
-    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation |
                                ConfigChanges.KeyboardHidden |
                                 ConfigChanges.ScreenSize)]
     public class SettingsActivity : Activity

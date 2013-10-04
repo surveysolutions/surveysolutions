@@ -31,6 +31,7 @@ namespace CAPI.Android
             base.OnCreate(bundle);
             var pb=new ProgressBar(this);
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
+            this.ActionBar.SetDisplayShowHomeEnabled(false);
             restore.BeginInvoke(Guid.Parse(Intent.GetStringExtra("publicKey")), Callback, restore);
         }
         private void Callback(IAsyncResult asyncResult)

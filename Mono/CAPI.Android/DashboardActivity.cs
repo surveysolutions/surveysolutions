@@ -15,7 +15,7 @@ namespace CAPI.Android
 {
     using global::Android.Content.PM;
 
-    [Activity(Label = "CAPI", Icon = "@drawable/capi",
+    [Activity(Label = "CAPI",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class
         DashboardActivity : Activity

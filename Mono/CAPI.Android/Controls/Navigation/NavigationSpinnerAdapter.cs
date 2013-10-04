@@ -29,7 +29,6 @@ namespace CAPI.Android.Controls.Navigation
             var view = convertView as TextView ?? new TextView(parent.Context);
 
             view.Text = _spinnerItems[position].Title;
-            view.TextSize = 20;
             view.Gravity = GravityFlags.Right;
             view.SetPadding(10, 10, 10, 10);
 

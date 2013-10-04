@@ -1,38 +1,45 @@
+using System;
 using System.Collections.Generic;
 using Android.App;
-using Android.Content;
+using Android.Views;
+using Android.Widget;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace CAPI.Android.Controls.Navigation
 {
-    public class NavigationListener : Java.Lang.Object, ActionBar.IOnNavigationListener
+    public class NavigationListener : Java.Lang.Object, AdapterView.IOnItemSelectedListener
     {
-        private bool synthetic = true;
-
-        private readonly Context context;
-
         private readonly IList<NavigationItem> items;
 
-        public NavigationListener(Context context, IList<NavigationItem> items)
+        public NavigationListener(IList<NavigationItem> items)
         {
-            this.context = context;
             this.items = items;
         }
 
-        public bool OnNavigationItemSelected(int itemPosition, long itemId)
+
+        public void OnItemSelected(AdapterView parent, View view, int position, long id)
         {
             try
             {
-                if (synthetic)
-                {
-                    synthetic = false;
-                    return true;
-                }
-                return this.items[itemPosition].Handle(this);
+                this.items[position].Handle(this);
             }
-            catch
+            catch (Exception exception)
             {
-                return false;
+                this.Logger.Warn("Page switch failed", exception);
             }
+        }
+
+        public ILogger Logger
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ILogger>();
+            }
+        }
+
+        public void OnNothingSelected(AdapterView parent)
+        {
         }
     }
 }

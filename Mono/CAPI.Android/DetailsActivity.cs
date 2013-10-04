@@ -25,7 +25,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android
 {
-    [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxFragmentActivity
     {
         protected InterviewItemId? ScreenId;
@@ -101,6 +101,7 @@ namespace CAPI.Android
             }
 
             this.Title = Model.Title;
+            this.ActionBar.SetDisplayShowHomeEnabled(false);
 
             if (bundle == null)
             {
