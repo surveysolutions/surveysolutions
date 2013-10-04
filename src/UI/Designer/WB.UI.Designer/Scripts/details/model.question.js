@@ -213,7 +213,7 @@
                           });
 
                   }
-                  if (self.isSupervisorQuestion()) {
+                  if (value && self.isSupervisorQuestion()) {
                       var weWillClearSupervisorFlag = config.warnings.weWillClearSupervisorFlag;
                       bootbox.confirm(weWillClearSupervisorFlag.message,
                           weWillClearSupervisorFlag.cancelBtn,
