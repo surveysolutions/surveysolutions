@@ -163,24 +163,24 @@
                 },
                 savedData: 'Data saved successfully',
                 weWillClearCondition: {
-                    message: "Pre-filled question can't have condition expression. We can clear condition and make this questuion pre-filled.",
-                    okBtn: "Yes, clear condition",
-                    cancelBtn: "No, do not clear condition"
+                    message: "Pre-filled questions can't be conditionally enabled. Would you like to erase the condition expression?",
+                    okBtn: "Yes, erase the condition",
+                    cancelBtn: "No, keep the condition"
                 },
                 weWillClearConditionAndValidation: {
-                    message: "Filled by supervisor questions can't have condition and validation expression. We can clear condition and validation and mark this questuion as filled by supervisor.",
-                    okBtn: "Yes, clear condition and validation",
-                    cancelBtn: "No, do not clear them"
+                    message: "Questions filled in by the supervisor can't be conditionally enabled and don't support validation. Would you like to erase the condition and validation expressions?",
+                    okBtn: "Yes, erase the expressions",
+                    cancelBtn: "No, keep the expressions"
                 },
                 weWillClearSupervisorFlag: {
-                    message: "Pre-filled question can't be answered by supervisor. We will clear filled by supervisor flag to make this questuion pre-filled.",
-                    okBtn: "Yes, clear filled by supervisor flag",
-                    cancelBtn: "No, do not clear it"
+                    message: "If a question is pre-filled, it can't at the same time be marked as answered by the supervisor. Would you like to disable the 'answered by the supervisor' option for this question?",
+                    okBtn: "Yes, disable it",
+                    cancelBtn: "No, don't disable it"
                 },
                 weWillClearHeadFlag:{
-                    message: "Filled by supervisor questions can't be head of group. We will clear head flag to mark this questuion as filled by supervisor.",
-                    okBtn: "Yes, clear head flag",
-                    cancelBtn: "No, do not clear it"
+                    message: "Questions answered by supervisor can't serve as a header of a roster group. Would you like to disable the 'head' option for this question?",
+                    okBtn: "Yes, disable it",
+                    cancelBtn: "No, don't disable it"
                 },
             },
             // methods
