@@ -80,8 +80,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 this.Visibility = ViewStates.Gone;
             }
+        }
 
-          
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.Model != null)
+                {
+                    this.Model.PropertyChanged -= Model_PropertyChanged;
+                }
+            }
+
+            base.Dispose(disposing);
         }
 
         private void AddCounterText()
