@@ -45,6 +45,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
+
             top = inflater.Inflate(Resource.Layout.ScreenContentFragment, null);
             var previousBtn = new GroupView(inflater.Context,
                                           PropagatedModel == null
@@ -62,7 +63,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             llTop.AddView(breadcrumbs);
 
             llContent.Adapter = new ScreenContentAdapter(Model, this.Activity, Model.QuestionnaireId,questionnaire.Status, groupView_ScreenChanged);
-            //llContent.fil.SetFillViewport()
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
             llContent.ScrollingCacheEnabled = false;
@@ -77,21 +77,30 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
             llButtom.AddView(nextBtn);
 
-
             return top;
+        }
+
+        public override void OnViewStateRestored(Bundle savedInstanceState)
+        {
+            base.OnViewStateRestored(savedInstanceState);
+            llContent.SetSelection(0);
         }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (llContent != null)
-            {
-                if (llContent.Adapter != null)
-                {
-                    llContent.Adapter.Dispose();
-                }
 
-                llContent.Dispose();
+            if (disposing)
+            {
+                if (llContent != null)
+                {
+                    if (llContent.Adapter != null)
+                    {
+                        llContent.Adapter.Dispose();
+                    }
+
+                    llContent.Dispose();
+                }
             }
         }
 
@@ -112,15 +121,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
         }
 
-        private CompleteQuestionnaireView questionnaire;
+        private InterviewViewModel questionnaire;
 
-        protected CompleteQuestionnaireView Questionnaire
+        protected InterviewViewModel Questionnaire
         {
             get
             {
                 if (questionnaire == null)
                 {
-                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
                         new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
                 }
                 return questionnaire;

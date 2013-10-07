@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using CAPI.Android.Core.Model;
 using Cirrious.MvvmCross.ViewModels;
 using Core.Supervisor;
 using Core.Supervisor.Views.User;
@@ -72,6 +73,14 @@ namespace CapiDataGenerator
             get
             {
                 return ServiceLocator.Current.GetInstance<IRavenReadSideRepositoryWriterRegistry>();
+            }
+        }
+
+        private IChangeLogManipulator changeLogManipulator
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<IChangeLogManipulator>();
             }
         }
 
@@ -457,7 +466,9 @@ namespace CapiDataGenerator
             for (int z = 0; z < statusesCount; z++)
             {
                 var interview = interviews.ElementAt(z);
-                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value));
+                commandService.Execute(new CompleteInterviewCommand(interview.Key, interview.Value, "auto complete comment"));
+
+                changeLogManipulator.CloseDraftRecord(interview.Key);
 
                 if (onlyForSupervisor)
                 {
@@ -562,7 +573,8 @@ namespace CapiDataGenerator
                                                                            validAnsweredQuestions: new HashSet<InterviewItemId>(), 
                                                                            invalidAnsweredQuestions: new HashSet<InterviewItemId>(), 
                                                                            propagatedGroupInstanceCounts: new Dictionary<InterviewItemId, int>(),
-                                                                           interviewWasCompleted: false)));
+                                                                           wasCompleted: false)));
+                changeLogManipulator.CreateOrReopenDraftRecord(interview.Key);
                 UpdateProgress();
             }
 

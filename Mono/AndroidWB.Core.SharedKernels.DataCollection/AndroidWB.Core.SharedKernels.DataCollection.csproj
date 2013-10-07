@@ -52,26 +52,23 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\IQuestionnaire.cs">
       <Link>Aggregates\IQuestionnaire.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\Questionnaire.cs">
-      <Link>Aggregates\Questionnaire.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Aggregates\QuestionnaireState.cs">
-      <Link>Aggregates\QuestionnaireState.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerDateTimeQuestionCommand.cs">
       <Link>Commands\Interview\AnswerDateTimeQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerGeoLocationQuestionCommand.cs">
       <Link>Commands\Interview\AnswerGeoLocationQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerLinkedQuestionCommand.cs">
-      <Link>Commands\Interview\AnswerLinkedQuestionCommand.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs">
       <Link>Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerNumericQuestionCommand.cs">
       <Link>Commands\Interview\AnswerNumericQuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerSingleOptionQuestionCommand.cs">
       <Link>Commands\Interview\AnswerSingleOptionQuestionCommand.cs</Link>
@@ -111,6 +108,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\DeleteInterviewCommand.cs">
       <Link>Commands\Interview\DeleteInterviewCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\ReevaluateSynchronizedInterview.cs">
+      <Link>Commands\Interview\ReevaluateSynchronizedInterview.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\RejectInterviewCommand.cs">
       <Link>Commands\Interview\RejectInterviewCommand.cs</Link>
@@ -238,8 +238,8 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\InterviewSynchronized.cs">
       <Link>Events\Interview\InterviewSynchronized.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\LinkedQuestionAnswered.cs">
-      <Link>Events\Interview\LinkedQuestionAnswered.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs">
+      <Link>Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\MultipleOptionsQuestionAnswered.cs">
       <Link>Events\Interview\MultipleOptionsQuestionAnswered.cs</Link>
@@ -252,6 +252,9 @@
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionEnabled.cs">
       <Link>Events\Interview\QuestionEnabled.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SingleOptionLinkedQuestionAnswered.cs">
+      <Link>Events\Interview\SingleOptionLinkedQuestionAnswered.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\SingleOptionQuestionAnswered.cs">
       <Link>Events\Interview\SingleOptionQuestionAnswered.cs</Link>
@@ -274,11 +277,23 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireException.cs">
       <Link>Exceptions\QuestionnaireException.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireFactory.cs">
+      <Link>Factories\IQuestionnaireFactory.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Interview.cs">
       <Link>Implementation\Aggregates\Interview.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\InterviewState.cs">
-      <Link>Implementation\Aggregates\InterviewState.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Questionnaire.cs">
+      <Link>Implementation\Aggregates\Questionnaire.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Snapshots\InterviewState.cs">
+      <Link>Implementation\Aggregates\Snapshots\InterviewState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Aggregates\Snapshots\QuestionnaireState.cs">
+      <Link>Implementation\Aggregates\Snapshots\QuestionnaireState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Factories\QuestionnaireFactory.cs">
+      <Link>Implementation\Factories\QuestionnaireFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\ReadSide\VersionedReadSideRepositoryReader.cs">
       <Link>Implementation\ReadSide\VersionedReadSideRepositoryReader.cs</Link>

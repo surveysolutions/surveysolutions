@@ -6,10 +6,11 @@ namespace CAPI.Android.Core.Model
 {
     public interface IChangeLogManipulator
     {
-        void OpenDraftRecord(Guid eventSourceId, long start);
-        void CloseDraftRecord(Guid eventSourceId, long end);
-        void ReopenDraftRecord(Guid eventSourceId);
-
+        void CreateOrReopenDraftRecord(Guid eventSourceId/*, long start*/);
+        void CloseDraftRecord(Guid eventSourceId/*, bool validRecord*/);
+        
+        //void ReopenDraftRecord(Guid eventSourceId);
+        
         IList<ChangeLogShortRecord> GetClosedDraftChunksIds();
         string GetDraftRecordContent(Guid recordId);
 

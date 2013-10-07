@@ -33,14 +33,17 @@ namespace CAPI.Android.Core.Model.ViewModel.InterviewMetaInfo
             var interview = questionnaireDtoDocumentStorage.GetById(input.InterviewId);
             if (interview == null)
                 return null;
-            InterviewStatus status = (InterviewStatus) interview.Status;
+
+            var status = (InterviewStatus) interview.Status;
             return new WB.Core.SharedKernel.Structures.Synchronization.InterviewMetaInfo()
                 {
                     PublicKey = input.InterviewId,
                     ResponsibleId =
                         Guid.Parse(interview.Responsible),
                     Status = (int) status,
-                    TemplateId = Guid.Parse(interview.Survey)
+                    TemplateId = Guid.Parse(interview.Survey),
+                    Comments = interview.Comments,
+                    Valid = interview.Valid
                 };
         }
     }

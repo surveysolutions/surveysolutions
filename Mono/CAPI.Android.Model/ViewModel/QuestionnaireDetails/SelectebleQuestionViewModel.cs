@@ -3,32 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class SelectebleQuestionViewModel:QuestionViewModel
+    public class SelectebleQuestionViewModel : QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            InterviewItemId publicKey, 
+            InterviewItemId publicKey,
             string text,
-            QuestionType questionType, 
-            IEnumerable<AnswerViewModel> answers, 
-            bool enabled, 
-            string instructions, 
-            string comments, 
-            bool valid, 
-            bool mandatory, 
+            QuestionType questionType,
+            IEnumerable<AnswerViewModel> answers,
+            bool enabled,
+            string instructions,
+            string comments,
+            bool valid,
+            bool mandatory,
             bool capital,
-            object answerObject, 
+            object answerObject,
             string validationMessage)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
+            : base(
+                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
         {
             Answers = answers;
         }
+
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        
+
         public override string AnswerString
         {
             get
@@ -46,10 +49,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
             return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
-                                                   this.Text, this.QuestionType, newAnswers,
-                                                   this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
-                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
+                this.Text, this.QuestionType, newAnswers,
+                this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
+                this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
+                this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
         }
 
         public override void SetAnswer(object answer)
@@ -58,24 +61,62 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 return;
             }
-            var typedAnswers = answer as decimal[];
+
+            var typedAnswers = this.CastAnswerToSingleDimensionalArray(answer) ?? this.CastAnswerToDecimal(answer);
+
             if (typedAnswers == null)
             {
-                decimal decimalAnswer;
-                if(!decimal.TryParse(answer.ToString(),out decimalAnswer))
-                    return;
-                typedAnswers = new decimal[] {decimalAnswer};
+                return;
             }
+
             foreach (var item in this.Answers)
             {
                 item.Selected = typedAnswers.Contains(item.Value);
             }
+
             base.SetAnswer(answer);
-            if (QuestionType==QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a=>a.Selected))
+
+            this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
+        }
+
+        public override void RemoveAnswer()
+        {
+            foreach (var item in this.Answers)
             {
-                Status &= ~QuestionStatus.Answered;
-                RaisePropertyChanged("Status");
+                item.Selected = false;
             }
+
+            base.RemoveAnswer();
+
+            this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
+        }
+
+        private void RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions()
+        {
+            if (this.QuestionType == QuestionType.MultyOption && this.Status.HasFlag(QuestionStatus.Answered) && !this.Answers.Any(a => a.Selected))
+            {
+                this.Status &= ~QuestionStatus.Answered;
+                this.RaisePropertyChanged("Status");
+            }
+        }
+
+        private decimal[] CastAnswerToSingleDimensionalArray(object answer)
+        {
+            var simpleCast = answer as decimal[];
+            if (simpleCast != null)
+                return simpleCast;
+            var jArrayCast = this.GetValueFromJArray<decimal>(answer);
+            if (jArrayCast.Length > 0)
+                return jArrayCast;
+            return null;
+        }
+
+        private decimal[] CastAnswerToDecimal(object answer)
+        {
+            decimal decimalAnswer;
+            if (!decimal.TryParse(answer.ToString(), out decimalAnswer))
+                return null;
+            return new decimal[] { decimalAnswer };
         }
     }
 }

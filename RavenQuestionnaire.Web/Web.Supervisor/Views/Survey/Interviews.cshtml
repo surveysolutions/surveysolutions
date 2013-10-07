@@ -11,6 +11,7 @@
     @Scripts.Render("~/Scripts/vm/svDocumentlistview.js")
 
     <script type="text/javascript">
+        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new {}, Request.Url.Scheme))';
         var $detailsUrl = '@Url.Action("InterviewDetails", "Interview")';
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var commandExecutionUrl = '@Url.Action("ExecuteCommands", "Command", new { }, Request.Url.Scheme)';
@@ -31,8 +32,7 @@
 
 @section  actionbar{
     <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css: { disabled: ListView.IsNothingSelected }">Assign interviewer <span class="caret"></span>
-        </a>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-bind="disabled: ListView.IsNothingSelected">Assign interviewer <span class="caret"></span></button>
         <ul class="dropdown-menu" data-bind="foreach: Users">
             <li><a href="#" data-bind="click: $root.Assign, text: UserName">Action</a></li>
         </ul>
@@ -58,6 +58,7 @@
                 <!-- /ko -->
                 <th data-bind='sortby: "ResponsibleName"'>Responsible</th>
                 <th data-bind='sortby: "UpdateDate"'>Last Update</th>
+                <th data-bind='sortby: "HasErrors"'>Нas Errors</th>
                 <th data-bind='sortby: "Status"'>Status</th>
                 <th></th>
             </tr>
@@ -80,6 +81,9 @@
                     <a data-bind="attr: { href: $surveysUrl + '?interviewerid=' + ResponsibleId() }, text: ResponsibleName"></a>
                 </td>
                 <td data-bind="text: LastEntryDate"></td>
+                 <td>
+                    <input type="checkbox" data-bind="checked: HasErrors, enable: false"/>
+                </td>
                 <td data-bind="text: Status"></td>
                 <td>
                     <a class="btn btn-success" data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">

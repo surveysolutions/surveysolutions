@@ -21,9 +21,7 @@ namespace CAPI.Android.Core.Model.SyncCacher
 
         public bool SaveItem(Guid itemId, string itemContent)
         {
-            DeleteItem(itemId);
             File.WriteAllText(BuildFileName(itemId.ToString()), itemContent);
-
             return true;
         }
 
@@ -33,6 +31,12 @@ namespace CAPI.Android.Core.Model.SyncCacher
             if (File.Exists(longFileName))
                 return File.ReadAllText(longFileName);
             return null;
+        }
+
+        public bool DoesCachedItemExist(Guid itemId)
+        {
+            var longFileName = BuildFileName(itemId.ToString());
+            return File.Exists(longFileName);
         }
 
         public bool DeleteItem(Guid itemId)

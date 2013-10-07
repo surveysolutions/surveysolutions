@@ -12,7 +12,8 @@
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new StyleBundle("~/css/main").Include(
+#warning: do not change name for this bundle, this name should match with phisical path to build right path to load fonts from css
+            bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/css/bootstrap.css",
                 "~/Content/css/bootstrap.icon-large.css",
                 "~/Content/bootstrap-mvc-validation.css",
@@ -32,6 +33,7 @@
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/query-string.js",
                 "~/Scripts/lib/jquery.pnotify.js",

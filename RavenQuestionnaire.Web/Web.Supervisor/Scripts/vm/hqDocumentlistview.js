@@ -31,6 +31,8 @@
         return self.ListView.Errors();
     });
 
+    self.Url = new Url($interviewsPageUrl);
+
     var myChildModel = function (data) {
         ko.mapping.fromJS(data, {}, this);
 
@@ -128,9 +130,20 @@
 
     self.load = function () {
         self.ListView.GetFilterMethod = function () {
+
             var selectedTemplate = _.isEmpty(self.SelectedTemplate())
                 ? { templateId: '', version: '' }
                 : JSON.parse(self.SelectedTemplate());
+
+            self.Url.query['templateId'] = selectedTemplate.templateId;
+            self.Url.query['templateVersion'] = selectedTemplate.version;
+            self.Url.query['status'] = self.SelectedStatus() || "";
+            self.Url.query['interviewerId'] = self.SelectedResponsible() || "";
+
+            if (Modernizr.history) {
+                window.history.pushState({}, "Interviews", self.Url.toString());
+            }
+            
             return {
                 TemplateId: selectedTemplate.templateId,
                 TemplateVersion: selectedTemplate.version,
@@ -143,6 +156,11 @@
         self.SelectedStatus(location.queryString['status']);
         self.SelectedResponsible(location.queryString['interviewerId']);
 
+
+        self.Url.query['templateId'] = location.queryString['templateId'] || "";
+        self.Url.query['templateVersion'] = location.queryString['templateVersion'] || "";
+        self.Url.query['status'] = location.queryString['status'] || "";
+        self.Url.query['interviewerId'] = location.queryString['interviewerId'] || "";
 
         self.SelectedTemplate.subscribe(self.ListView.filter);
         self.SelectedResponsible.subscribe(self.ListView.filter);
