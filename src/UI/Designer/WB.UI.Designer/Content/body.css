@@ -41,3 +41,7 @@ input[type=text]::-ms-clear { display: none; }
 .form-horizontal .form-actions {
     padding-left: 30px;
 }
+
+.icon-chevron-up.icon-white {
+    color: transparent;
+}

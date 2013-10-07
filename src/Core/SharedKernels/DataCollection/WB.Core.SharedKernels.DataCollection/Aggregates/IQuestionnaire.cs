@@ -11,13 +11,19 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        IQuestion GetQuestionByStataCaption(string stataCaption);
+
         bool HasQuestion(Guid questionId);
 
         bool HasGroup(Guid groupId);
 
         QuestionType GetQuestionType(Guid questionId);
 
+        Guid? GetQuestionLinkedQuestionId(Guid questionId);
+
         string GetQuestionTitle(Guid questionId);
+
+        string GetQuestionVariableName(Guid questionId);
 
         string GetGroupTitle(Guid groupId);
 
@@ -30,6 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetCustomValidationExpression(Guid questionId);
 
         IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions();
+
+        IEnumerable<Guid> GetAllQuestionsWithNotEmptyValidationExpressions();
 
         IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId);
 
@@ -80,5 +88,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(Guid groupId);
 
         IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomEnablementConditions(Guid groupId);
+
+        IEnumerable<Guid> GetUnderlyingQuestionsWithNotEmptyCustomValidationExpressions(Guid groupId);
+        
+        IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId);
+
+        Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
+        
+        bool IsQuestionMandatory(Guid questionId);
     }
 }

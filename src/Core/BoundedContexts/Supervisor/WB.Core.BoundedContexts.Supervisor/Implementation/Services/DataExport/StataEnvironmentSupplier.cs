@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         {
            
             var createdLabels = new List<Guid>();
-            foreach (HeaderItem headerItem in result.Header)
+            foreach (ExportedHeaderItem headerItem in result.Header)
             {
                 if (headerItem.Labels.Count > 0)
                 {
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         
         }
 
-        protected string CreateLabelName(HeaderItem item)
+        protected string CreateLabelName(ExportedHeaderItem item)
         {
             return string.Format("l{0}", item.Caption);
         }

@@ -25,10 +25,10 @@
                             data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
                         Kind of propagation</label>
                     <div class="btn-group">
-                        <button
+                        <button type="button"
                             data-value="None" data-bind="checkedButtons: gtype" class="btn btn-small">
                             None</button>
-                        <button data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
+                        <button type="button" data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
                     </div>
                 </div>
                 <!-- /ko -->
@@ -41,16 +41,21 @@
 
                 <label>
                     <a href="#" class="btn btn-info btn btn-help"
-                        data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-                        data-original-title="Condition expression"
-                        data-html="true"
-                        data-trigger="hover"
-                        data-placement="right"
-                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
-                <div class="editor-container">
-                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
+                       data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+                       data-original-title="Condition expression"
+                       data-html="true"
+                       data-trigger="hover"
+                       data-placement="right"
+                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+                
+                <div class="control-group" data-bind="validationElement: condition">
+                    <div class="controls">
+                        <div class="editor-container" data-bind="validationElement: condition">
+                            <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
+                        </div>
+                        <span class="help-inline" data-bind="validationMessage: condition"></span>
+                    </div>
                 </div>
-
             </div>
         </td>
     </tr>
@@ -58,8 +63,8 @@
         <td>
             <div>
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: $root.saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
-                    <button class="btn btn-link cancel-edit" data-bind="click: revert, visible: dirtyFlag().isDirty() && !isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-remove"></i></button>
+                    <button type="button" class="btn btn-success" data-bind="click: $root.saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+                    <button type="button" class="btn btn-link cancel-edit" data-bind="click: revert, visible: dirtyFlag().isDirty() && !isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-remove"></i></button>
                 </div>
             </div>
         </td>

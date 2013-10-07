@@ -3,10 +3,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    public class QuestionnaireTestsContext
+    internal class QuestionnaireTestsContext
     {
         public static T GetSingleEvent<T>(EventContext eventContext)
         {

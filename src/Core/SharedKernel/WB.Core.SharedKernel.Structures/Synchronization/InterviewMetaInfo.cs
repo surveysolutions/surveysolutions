@@ -22,6 +22,9 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 
         public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
 
+        public string Comments { get; set; }
+
+        public bool Valid { get; set; }
     }
 
     public class FeaturedQuestionMeta

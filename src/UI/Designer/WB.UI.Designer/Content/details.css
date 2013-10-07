@@ -222,6 +222,10 @@ body.loading .loading-backdrop {
         height: 20px;
     }
 
+    #output .inner .title {
+        height: 20px;
+    }
+
 .details.stack .body .input-append {
     display: inline;
 }
@@ -758,7 +762,7 @@ a.btn.btn-help {
 .informationContainer{
     left: 0;
     position: absolute;
-    top: 77px;
+    top:0;
     width: 100%;
     z-index: 10999;
     text-align: center;

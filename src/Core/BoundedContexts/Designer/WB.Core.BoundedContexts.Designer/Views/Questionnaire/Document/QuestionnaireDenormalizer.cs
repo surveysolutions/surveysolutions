@@ -6,6 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -29,7 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<GroupUpdated>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
-        IEventHandler<TemplateImported>
+        IEventHandler<TemplateImported>,
+        IEventHandler<QuestionnaireCloned>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly ICompleteQuestionFactory questionFactory;
@@ -139,7 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             FullQuestionDataEvent e = evnt.Payload;
             AbstractQuestion result =
                 new CompleteQuestionFactory().CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -173,7 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             FullQuestionDataEvent e = evnt.Payload;
             AbstractQuestion result =
                 new CompleteQuestionFactory().CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -214,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionChanged e = evnt.Payload;
             IQuestion newQuestion =
                 this.questionFactory.CreateQuestion(
-                    new DataQuestion(
+                    new QuestionData(
                         question.PublicKey,
                         e.QuestionType,
                         e.QuestionScope,
@@ -302,9 +304,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, document);
         }
 
-        private void UpdateQuestionnaire(IEvent evnt, QuestionnaireDocument document)
+        private void UpdateQuestionnaire(IPublishableEvent evnt, QuestionnaireDocument document)
         {
             document.LastEntryDate = evnt.EventTimeStamp;
+            document.LastEventSequence = evnt.EventSequence;
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
@@ -317,6 +320,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             var document = evnt.Payload.Source;
+            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
+        {
+            var document = evnt.Payload.QuestionnaireDocument;
             this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
     }

@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                                            HashSet<InterviewItemId> validAnsweredQuestions,
                                            HashSet<InterviewItemId> invalidAnsweredQuestions,
                                            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
-                                           bool interviewWasCompleted)
+                                           bool wasCompleted)
         {
             Id = id;
             Status = status;
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
-            InterviewWasCompleted = interviewWasCompleted;
+            this.WasCompleted = wasCompleted;
         }
 
         public Guid Id { get;  set; }
@@ -44,6 +44,6 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
         public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get;  set; }
-        public bool InterviewWasCompleted { get; set; }
+        public bool WasCompleted { get; set; }
     }
 }

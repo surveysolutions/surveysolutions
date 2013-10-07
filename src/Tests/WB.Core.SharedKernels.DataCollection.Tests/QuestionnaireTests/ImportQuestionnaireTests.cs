@@ -8,10 +8,11 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    public class ImportQuestionnaireTests : QuestionnaireTestsContext
+    internal class ImportQuestionnaireTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
