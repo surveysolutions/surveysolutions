@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (PropagationVector.Length != vector.Length)
                 return false;
-            return PropagationVector.All(vector.Contains);
+            return !this.PropagationVector.Where((t, i) => t != vector[i]).Any();
         }
 
         public bool IsTopLevel()
