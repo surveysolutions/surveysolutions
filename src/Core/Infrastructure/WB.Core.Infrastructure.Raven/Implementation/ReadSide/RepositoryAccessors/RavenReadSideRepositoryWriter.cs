@@ -132,7 +132,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             {
                 this.cache.Remove(id);
             }
-
             this.RemoveAvoidingCache(id);
         }
 
@@ -169,6 +168,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 string ravenId = ToRavenId(id);
 
                 var view = session.Load<TEntity>(id: ravenId);
+                
+                if(view==null)
+                    return;
 
                 session.Delete(view);
                 session.SaveChanges();

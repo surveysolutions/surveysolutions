@@ -1,5 +1,7 @@
+using System;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using System.Linq;
 
@@ -7,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
     public class QuestionnaireSharedPersonsDenormalizer :
         IEventHandler<SharedPersonToQuestionnaireAdded>,
-        IEventHandler<SharedPersonFromQuestionnaireRemoved>
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireSharedPersons> documentStorage;
 
@@ -30,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
                 });
             }
 
-            this.documentStorage.Store(item, item.QuestionnaireId);
+            this.documentStorage.Store(item, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<SharedPersonFromQuestionnaireRemoved> evnt)
@@ -44,8 +46,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
                     item.SharedPersons.Remove(sharedPerson);
                 }
 
-                this.documentStorage.Store(item, item.QuestionnaireId);
+                this.documentStorage.Store(item, evnt.EventSourceId);
             }
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireSharedPersons) }; }
         }
     }
 }

@@ -4,7 +4,7 @@ using Main.DenormalizerStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Raven.Client.Linq;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -43,55 +43,16 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.User.UserView.
-        /// </returns>
         public AccountListView Load(AccountListViewInputModel input)
         {
             IEnumerable<AccountListItem> retVal = new AccountListItem[0];
 
-            bool hasName = !string.IsNullOrEmpty(input.Name);
-            bool hasEmail = !string.IsNullOrEmpty(input.Email);
-            bool hasRole = input.Role != SimpleRoleEnum.Undefined;
+            var count =
+                this._accounts.Query(_ => this.FilterAccounts(_, input).Count());
 
-            Func<AccountDocument, bool> query = (x) => true;
+            var queryResult = _accounts.Query(_ => FilterAccounts(_, input).OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
 
-            if(hasRole && hasName)
-            {
-                query = (x) => x.SimpleRoles.Contains(input.Role) && x.UserName.Contains(input.Name);
-            }
-                else if (hasRole)
-            {
-                query = (x) => x.SimpleRoles.Contains(input.Role);
-            }
-            else if (input.IsNewOnly)
-            {
-                query = (x) => !x.IsConfirmed;
-            }
-            else if(input.IsOnlineOnly)
-            {
-                query = (x) => x.IsOnline;
-            }
-            else if(hasName)
-            {
-                query = (x) => x.UserName.Compare(input.Name);
-            }
-            else if (hasEmail)
-            {
-                query = (x) => x.Email.Compare(input.Email);
-            }
-
-            var queryResult = _accounts.Query(_ => _.Where(query).AsQueryable().OrderUsingSortExpression(input.Order).ToList());
-
-            retVal = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
+            retVal = queryResult
                               .Select(x => new AccountListItem()
                                   {
                                       ApplicationName = x.ApplicationName,
@@ -112,9 +73,41 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                       LastPasswordChangeAt = x.LastPasswordChangeAt
                                   });
 
-            return new AccountListView(input.Page, input.PageSize, queryResult.Count(), retVal, input.Order);
+            return new AccountListView(input.Page, input.PageSize, count, retVal, input.Order);
         }
 
-        #endregion
+        private IQueryable<AccountDocument> FilterAccounts(IQueryable<AccountDocument> accounts, AccountListViewInputModel input)
+        {
+            IQueryable<AccountDocument> result = accounts;
+            bool hasName = !string.IsNullOrEmpty(input.Name);
+            bool hasEmail = !string.IsNullOrEmpty(input.Email);
+            bool hasRole = input.Role != SimpleRoleEnum.Undefined;
+
+            if (hasRole && hasName)
+            {
+                result = result.Where((x) => x.SimpleRoles.Any(r => r == input.Role) && x.UserName == input.Name);
+            }
+            else if (hasRole)
+            {
+                result = result.Where((x) => x.SimpleRoles.Any(r => r == input.Role));
+            }
+            else if (input.IsNewOnly)
+            {
+               result = result.Where((x) => !x.IsConfirmed);
+            }
+            else if (input.IsOnlineOnly)
+            {
+                result = result.Where((x) => x.IsOnline);
+            }
+            else if (hasName)
+            {
+                result = result.Where((x) => x.UserName == input.Name);
+            }
+            else if (hasEmail)
+            {
+                result = result.Where( (x) => x.Email == input.Email);
+            }
+            return result;
+        }
     }
 }
