@@ -268,9 +268,14 @@ namespace CAPI.Android
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            btnNavigation.Click -= llNavigationHolder_Click;
-            VpContent.PageSelected -= VpContent_PageSelected;
-            NavList.ScreenChanged -= ContentFrameAdapter_ScreenChanged;
+
+            if(btnNavigation!= null)
+                btnNavigation.Click -= llNavigationHolder_Click;
+            if(VpContent != null)
+                VpContent.PageSelected -= VpContent_PageSelected;
+            if(NavList != null)
+                NavList.ScreenChanged -= ContentFrameAdapter_ScreenChanged;
+            
             GC.Collect();
         }
 

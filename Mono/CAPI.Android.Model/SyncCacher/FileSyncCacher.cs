@@ -21,9 +21,7 @@ namespace CAPI.Android.Core.Model.SyncCacher
 
         public bool SaveItem(Guid itemId, string itemContent)
         {
-            DeleteItem(itemId);
             File.WriteAllText(BuildFileName(itemId.ToString()), itemContent);
-
             return true;
         }
 

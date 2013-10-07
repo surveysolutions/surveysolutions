@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tools.CapiDataGenerator.Models
 {

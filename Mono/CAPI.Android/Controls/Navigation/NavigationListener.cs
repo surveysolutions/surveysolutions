@@ -12,6 +12,11 @@ namespace CAPI.Android.Controls.Navigation
     {
         private readonly IList<NavigationItem> items;
 
+        private static ILogger Logger
+        {
+            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
+        }
+
         public NavigationListener(IList<NavigationItem> items)
         {
             this.items = items;
@@ -26,15 +31,7 @@ namespace CAPI.Android.Controls.Navigation
             }
             catch (Exception exception)
             {
-                this.Logger.Warn("Page switch failed", exception);
-            }
-        }
-
-        public ILogger Logger
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<ILogger>();
+                Logger.Warn("Page switch failed", exception);
             }
         }
 
