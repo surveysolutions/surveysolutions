@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Views.Tests
         {
             // arrange
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-            QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
+            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer();
 
             Guid questionnaireId = Guid.NewGuid();
             string newtitle = "newTitle";
@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Views.Tests
         {
             // arrange
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
-            QuestionnaireDenormalizer target = CreateQuestionnaireDenormalizer();
+            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer();
 
             Guid questionnaireId = Guid.NewGuid();
 
@@ -84,9 +84,9 @@ namespace WB.UI.Designer.Views.Tests
             return mock.Object;
         }
 
-        private QuestionnaireDenormalizer CreateQuestionnaireDenormalizer()
+        private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer()
         {
-            return new QuestionnaireDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object);
+            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, accountStorageMock.Object);
         }
 
         private Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>> questionnaireStorageMock = new Mock<IReadSideRepositoryWriter<QuestionnaireListViewItem>>();

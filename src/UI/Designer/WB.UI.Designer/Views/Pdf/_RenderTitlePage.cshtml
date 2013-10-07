@@ -9,8 +9,8 @@
     Created by: @Model.CreatedBy, @Model.CreationDate.ToString(CultureInfo.InvariantCulture)
 </div>
 <div class="statistics">
-    Chapters: @Model.ChaptersCount <br/>
-    Groups: @Model.GroupsCount<br/>
-    Questions with conditions: @Model.QuestionsWithConditionsCount <br/>
-    Questions: @Model.QuestionsCount <br/>
+    Chapters: @Model.GetChaptersCount() <br/>
+    Groups: @Model.GetGroupsCount()<br/>
+    Questions with conditions: @Model.GetQuestionsWithConditionsCount() <br/>
+    Questions: @Model.GetQuestionsCount() <br/>
 </div>

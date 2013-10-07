@@ -1,4 +1,5 @@
 ﻿using Main.Core.Documents;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
@@ -12,13 +13,13 @@ namespace WB.UI.Designer.Views.EventHandler
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
-    public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
-                                             IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>,
-                                             IEventHandler<TemplateImported>,
-                                             IEventHandler<QuestionnaireCloned>,
-                                             IEventHandler<SharedPersonToQuestionnaireAdded>,
-                                             IEventHandler<SharedPersonFromQuestionnaireRemoved>
+    public class QuestionnaireListViewItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
+        IEventHandler<QuestionnaireUpdated>,
+        IEventHandler<QuestionnaireDeleted>,
+        IEventHandler<TemplateImported>,
+        IEventHandler<QuestionnaireCloned>,
+        IEventHandler<SharedPersonToQuestionnaireAdded>,
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>, IEventHandler
     {
         #region Fields
 
@@ -32,7 +33,8 @@ namespace WB.UI.Designer.Views.EventHandler
         /// </summary>
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
 
-        public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage, IReadSideRepositoryWriter<AccountDocument> accountStorage)
+        public QuestionnaireListViewItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> documentStorage,
+            IReadSideRepositoryWriter<AccountDocument> accountStorage)
         {
             this.documentStorage = documentStorage;
             this.accountStorage = accountStorage;
@@ -73,6 +75,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 browseItem.Title = evnt.Payload.Title;
                 browseItem.IsPublic = evnt.Payload.IsPublic;
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
 
@@ -84,6 +87,7 @@ namespace WB.UI.Designer.Views.EventHandler
             if (browseItem != null)
             {
                 browseItem.IsDeleted = true;
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
 
@@ -126,7 +130,9 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     browseItem.SharedPersons.Add(evnt.Payload.PersonId);
                 }
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
+            
         }
 
         public void Handle(IPublishedEvent<SharedPersonFromQuestionnaireRemoved> evnt)
@@ -138,8 +144,24 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     browseItem.SharedPersons.Remove(evnt.Payload.PersonId);
                 }
+
+                this.documentStorage.Store(browseItem, evnt.EventSourceId);
             }
         }
 
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[] {typeof (AccountDocument)}; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] {typeof (QuestionnaireListViewItem)}; }
+        }
     }
 }
