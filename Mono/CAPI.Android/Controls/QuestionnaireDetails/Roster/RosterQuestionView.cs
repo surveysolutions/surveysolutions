@@ -101,6 +101,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
                     dialog.Dispose();
                     dialog = null;
                 }
+                if (questionView != null)
+                {
+                    questionView.Dispose();
+                    questionView = null;
+                }
             }
             base.Dispose(disposing);
             
