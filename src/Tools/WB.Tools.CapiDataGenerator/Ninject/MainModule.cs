@@ -58,7 +58,7 @@ namespace CapiDataGenerator
         {
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>();
-            var capiEvenStore = new MvvmCrossSqliteEventStore(EventStoreDatabaseName);
+            var capiEvenStore = new AndroidNcqrs.Eventing.Storage.SQLite.MvvmCrossSqliteEventStore(EventStoreDatabaseName);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var loginStore = new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore);
             var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
@@ -129,7 +129,6 @@ namespace CapiDataGenerator
 
             InitDashboard(bus);
 
-            InitChangeLog(bus);
 
             #endregion
 
@@ -185,19 +184,12 @@ namespace CapiDataGenerator
                                           this.capiTemplateVersionedWriter);
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewRestarted));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewCompleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredInvalid));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredValid));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
         }
-
-        private void InitChangeLog(InProcessEventBus bus)
-        {
-            var changeLogHandler = new CommitDenormalizer(Kernel.Get<IChangeLogManipulator>());
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredInvalid));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewDeclaredValid));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewRestarted));
-            bus.RegisterHandler(changeLogHandler, typeof(InterviewSynchronized));
-        }
+        
     }
 }

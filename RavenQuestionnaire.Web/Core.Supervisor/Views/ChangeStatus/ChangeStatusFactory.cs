@@ -29,6 +29,7 @@ namespace Core.Supervisor.Views.ChangeStatus
                     QuestionnaireId = interview.QuestionnaireId,
                     QuestionnaireVersion =  interview.QuestionnaireVersion,
                     QuestionnaireTitle = interview.QuestionnaireTitle,
+                    Status = interview.Status,
                     StatusHistory = interview.CommentedStatusesHistory.Select(x => new CommentedStatusHistroyView
                         {
                             Comment = x.Comment,

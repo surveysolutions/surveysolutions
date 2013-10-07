@@ -16,6 +16,7 @@ namespace Core.Supervisor.Views.ChangeStatus
         public string QuestionnaireTitle { get; set; }
         public List<CommentedStatusHistroyView> StatusHistory { get; set; }
         public IEnumerable<InterviewFeaturedQuestion> FeaturedQuestions { get; set; }
+        public InterviewStatus Status { get; set; }
     }
 
     public class CommentedStatusHistroyView

@@ -283,7 +283,7 @@ namespace CAPI.Android.Syncronization
             }
             catch (Exception exc)
             {
-                logger.Error("Error occured during the process. Pcocess is being canceled.", exc);
+                logger.Error("Error occurred during the process. Process is being canceled.", exc);
                 Cancel();
                 throw;
             }

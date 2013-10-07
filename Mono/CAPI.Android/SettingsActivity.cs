@@ -21,7 +21,7 @@ namespace CAPI.Android
 {
     using global::Android.Content.PM;
 
-    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation |
                                ConfigChanges.KeyboardHidden |
                                 ConfigChanges.ScreenSize)]
     public class SettingsActivity : Activity
@@ -202,7 +202,7 @@ namespace CAPI.Android
             var fileName = "wbcapi.apk";
             var updater = new UpdateProcessor();
 
-            progress = ProgressDialog.Show(this, "Checking", "Please Wait...", true, true);
+            progress = ProgressDialog.Show(this, "Downloading", "Please Wait...", true, true);
 
             Task.Factory.StartNew(() => 
             {

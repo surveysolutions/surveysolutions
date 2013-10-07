@@ -302,6 +302,7 @@
     <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Code\EnumToStringConverter.cs" />
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
+    <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
@@ -535,6 +536,7 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\query-string.js" />
     <Content Include="Scripts\vm\svDocumentlistview.js" />
     <Content Include="Scripts\vm\statuslistview.js" />
@@ -610,6 +612,7 @@
     <Content Include="Views\Shared\_ListViewPagingScript.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interview\InterviewDetails.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>

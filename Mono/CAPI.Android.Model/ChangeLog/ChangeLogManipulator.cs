@@ -7,9 +7,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
@@ -35,7 +33,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
         public IList<ChangeLogShortRecord> GetClosedDraftChunksIds()
         {
             return
-                draftChangeLog.Filter(c => c.End != null)
+                draftChangeLog.Filter(c => c.IsClosed)
                               .Select(d => new ChangeLogShortRecord(Guid.Parse(d.Id), Guid.Parse(d.EventSourceId)))
                               .ToList();
 
@@ -57,47 +55,63 @@ namespace CAPI.Android.Core.Model.ChangeLog
 
         #region draft
 
-        public void OpenDraftRecord(Guid eventSourceId, long start)
+        public void CreateOrReopenDraftRecord(Guid eventSourceId)
         {
             var record = GetLastDraftRecord(eventSourceId);
             if (record != null)
             {
-                record.Start = start;
+                record.IsClosed = false;
                 draftChangeLog.Store(record, Guid.Parse(record.Id));
                 return;
             }
             var recordId = Guid.NewGuid();
-            draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null), recordId);
+            draftChangeLog.Store(new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, false), recordId);
         }
 
-        public void CloseDraftRecord(Guid eventSourceId, long end, bool validRecord)
+        public void CloseDraftRecord(Guid eventSourceId)
         {
             var record = GetLastDraftRecord(eventSourceId);
+            Guid recordId;
+
             if (record == null)
-                return;
-            if (record.Start > end)
-                throw new ArgumentException("end is more than start");
-            var recordId = Guid.Parse(record.Id);
+            {
+                recordId = Guid.NewGuid();
+                record = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, true);
+            }
+            else
+            {
+                record.IsClosed = true;
+                recordId = Guid.Parse(record.Id);
+            }
+            
+            var events = BuildEventStreamOfLocalChangesToSend(eventSourceId);
 
-            record.End = end;
-
-            var events = BuildEventStreamForSendByEventSourceId(eventSourceId, record.Start, end);
-
-            fileChangeLogStore.SaveChangeset(events, recordId, validRecord);
+            fileChangeLogStore.SaveChangeset(events, recordId);
             draftChangeLog.Store(record, recordId);
         }
 
-        private AggregateRootEvent[] BuildEventStreamForSendByEventSourceId(Guid eventSourceId, long start, long end)
+        
+        private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid eventSourceId)
         {
-            var storedEvents = eventStore.ReadFrom(eventSourceId, start, end).ToList();
+            var storedEvents = eventStore.ReadFrom(eventSourceId, 0, long.MaxValue).ToList();
 
-            /*var indexOfLastCompleteEvent = GetIndexOfLastCompleteEvent(storedEvents);*/
+            List<AggregateRootEvent> eventsToSend = new List<AggregateRootEvent>(); 
+            
+            for (int i = storedEvents.Count - 1; i >= 0; i--)
+            {
+                if (storedEvents[i].Payload is InterviewSynchronized)
+                {
+                    break;
+                }
 
-            var events =
-                storedEvents/*.Take(indexOfLastCompleteEvent)*/.Where(EventIsActive).Select(e => new AggregateRootEvent(e)).ToArray();
+                if (EventIsActive(storedEvents[i]))
+                    eventsToSend.Add(new AggregateRootEvent(storedEvents[i]));
+            }
 
-            return events;
+            eventsToSend.Reverse();
+            return eventsToSend.ToArray();
         }
+
 
         /*private static int GetIndexOfLastCompleteEvent(List<CommittedEvent> storedEvents)
         {
@@ -138,19 +152,19 @@ namespace CAPI.Android.Core.Model.ChangeLog
             return true;
         }
 
-        public void ReopenDraftRecord(Guid eventSourceId)
+        /*public void ReopenDraftRecord(Guid eventSourceId)
         {
             var record = GetLastDraftRecord(eventSourceId);
             if (record == null)
                 return;
-            record.End = null;
+            record.IsClosed = false;
 
             var recordId = Guid.Parse(record.Id);
 
             fileChangeLogStore.DeleteDraftChangeSet(recordId);
             draftChangeLog.Store(record, recordId);
-        }
-
+        }*/
+        
         public void CleanUpChangeLogByRecordId(Guid recordId)
         {
             var record = draftChangeLog.GetById(recordId);

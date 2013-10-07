@@ -180,16 +180,12 @@ namespace Core.Supervisor.Views.Interview
 
             IEnumerable<InterviewLevel> allAvailableLevelsByScope = this.GetAllAvailableLevelsByScope(interview, optionsSource);
 
-            return allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.PropagationVector,
-                interviewLevel => this.GetOptionTitleByReferencedQuestionId(optionsSource.ReferencedQuestionId, interviewLevel.Questions));
-        }
+            IDictionary<int[], InterviewQuestion> allLinkedQuestions =
+                allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.PropagationVector,
+                    interviewLevel => interviewLevel.Questions.FirstOrDefault(question => question.Id == optionsSource.ReferencedQuestionId));
 
-        private string GetOptionTitleByReferencedQuestionId(Guid referencedQuestionId, IEnumerable<InterviewQuestion> questionsInLevel)
-        {
-            var referencedQuestion = questionsInLevel.FirstOrDefault(question => question.Id == referencedQuestionId);
-            if (referencedQuestion == null)
-                return string.Empty;
-            return (referencedQuestion.Answer ?? string.Empty).ToString();
+            return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled)
+                .ToDictionary(question => question.Key, question => (question.Value.Answer ?? string.Empty).ToString());
         }
 
         private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, ReferenceInfoByQuestion optionsSource)
