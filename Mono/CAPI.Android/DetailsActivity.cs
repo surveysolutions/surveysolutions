@@ -16,9 +16,11 @@ using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -29,6 +31,7 @@ namespace CAPI.Android
     public class DetailsActivity : MvxFragmentActivity
     {
         protected InterviewItemId? ScreenId;
+        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
         protected Guid QuestionnaireId
         {
@@ -146,6 +149,9 @@ namespace CAPI.Android
                     ViewGroup.LayoutParams.FillParent);
 
             vpContentParams.LeftMargin = point.X - vpContentParams.Width;
+            if(VpContent == null)
+                logger.Error("Container was destroyed. Null ref will be thrown.");
+
             VpContent.LayoutParameters = vpContentParams;
 
             var lNavigationContainerParams =
