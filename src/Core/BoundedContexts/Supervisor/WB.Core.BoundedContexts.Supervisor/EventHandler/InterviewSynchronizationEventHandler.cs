@@ -18,17 +18,6 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
     public class InterviewSynchronizationEventHandler : IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewStatusChanged>,
-        IEventHandler<AnswerCommented>,
-        IEventHandler<FlagRemovedFromAnswer>,
-        IEventHandler<FlagSetToAnswer>,
-        /*,
-                                                        IEventHandler<InterviewRejected>,
-                                                        IEventHandler<InterviewCompleted>,
-                                                        IEventHandler<InterviewDeleted>, */
-        IEventHandler<AnswerDeclaredValid>, IEventHandler<GroupPropagated>, IEventHandler<QuestionEnabled>,
-        IEventHandler<AnswerDeclaredInvalid>, IEventHandler<QuestionDisabled>, IEventHandler<GroupDisabled>,
-        IEventHandler<GroupEnabled>,IEventHandler<InterviewSynchronized>,
-    IEventHandler<InterviewCompleted>,IEventHandler<InterviewDeclaredValid>,
     IEventHandler
     {
         private readonly ISynchronizationDataStorage syncStorage;
@@ -144,7 +133,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                 status,
                 userId, interview.QuestionnaireId, interview.QuestionnaireVersion,
                 answeredQuestions.ToArray(), disabledGroups, disabledQuestions,
-                validQuestions, invalidQuestions, propagatedGroupInstanceCounts, interview.InterviewWasCompleted);
+                validQuestions, invalidQuestions, propagatedGroupInstanceCounts, interview.WasCompleted);
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
@@ -156,11 +145,14 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             var outerVector = CreateOuterVector(interviewLevel);
 
-            foreach (var groupId in questionnariePropagationStructure.PropagationScopes[interviewLevel.ScopeId])
+            foreach (var scopeId in interviewLevel.ScopeIds)
             {
-                var groupKey = new InterviewItemId(groupId, outerVector);
+                foreach (var groupId in questionnariePropagationStructure.PropagationScopes[scopeId])
+                {
+                    var groupKey = new InterviewItemId(groupId, outerVector);
 
-                AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
+                    AddPropagatedGroupToDictionary(propagatedGroupInstanceCounts, groupKey);
+                }
             }
         }
 
@@ -201,31 +193,5 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             get { return new Type[] {typeof (SynchronizationDelta)}; }
         }
-
-        public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
-
-        public void Handle(IPublishedEvent<GroupPropagated> evnt) {}
-
-        public void Handle(IPublishedEvent<QuestionEnabled> evnt) {}
-
-        public void Handle(IPublishedEvent<AnswerDeclaredInvalid> evnt) {}
-
-        public void Handle(IPublishedEvent<QuestionDisabled> evnt) {}
-
-        public void Handle(IPublishedEvent<GroupDisabled> evnt) {}
-
-        public void Handle(IPublishedEvent<InterviewCompleted> evnt) {}
-
-        public void Handle(IPublishedEvent<AnswerCommented> evnt) {}
-
-        public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt) {}
-
-        public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
-
-        public void Handle(IPublishedEvent<GroupEnabled> evnt){}
-
-        public void Handle(IPublishedEvent<InterviewSynchronized> evnt){}
-
-        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt){}
     }
 }

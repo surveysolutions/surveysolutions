@@ -1038,7 +1038,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_categorical_question_with_linked_question_that_does_not_exist_in_autopropagated_group_questions_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
+        public void NewAddQuestion_When_categorical_question_with_linked_question_that_does_not_exist_in_questionnaire_questions_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
             Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
@@ -1050,9 +1050,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
                     autoGroupPublicKey: autoGroupId,
                     secondGroup: groupId,
-                    autoQuestoinId: autoQuestionId,
+                    autoQuestionId: autoQuestionId,
                     questionId: questionId,
-                    responsibleId: responsibleId);
+                    responsibleId: responsibleId,
+                    questionType: questionType);
 
             // act
             TestDelegate act =
@@ -1071,7 +1072,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: new[] { new Option(Guid.NewGuid(), "1", "title"), },
+                    options: null,
                     optionsOrder: Order.AZ,
                     maxValue: null,
                     triggedGroupIds: new Guid[0],
@@ -1080,13 +1081,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedToQuestionDoesNotExist));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionDoesNotExist));
         }
 
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewAddQuestion_When_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope_(QuestionType questionType)
+        public void NewAddQuestion_When_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
@@ -1101,10 +1102,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
                         autoGroupPublicKey: autoGroupId,
                         secondGroup: groupId,
-                        autoQuestoinId: autoQuestionId,
+                        autoQuestionId: autoQuestionId,
                         questionId: questionId,
-                        responsibleId: responsibleId);
-
+                        responsibleId: responsibleId,
+                        questionType: questionType);
 
                 // act
                 questionnaire.NewAddQuestion(
@@ -1121,20 +1122,77 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: new[] { new Option(Guid.NewGuid(), "1", "title"), },
+                    options: null,
                     optionsOrder: Order.AZ,
                     maxValue: null,
                     triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: questionId);
+                    linkedToQuestionId: autoQuestionId);
+
                 // assert
                 var risedEvent = GetLastEvent<NewQuestionAdded>(eventContext);
-                Assert.AreEqual(questionId, risedEvent.LinkedToQuestionId);
+                Assert.AreEqual(autoQuestionId, risedEvent.LinkedToQuestionId);
             }
         }
 
         [Test]
-        public void NewAddQuestion_When_not_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope_()
+        [TestCase(QuestionType.AutoPropagate)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.Text)]
+        public void NewAddQuestion_When_non_categorical_question_with_linked_question_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: QuestionType.MultyOption);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion));
+        }
+
+
+        [Test]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.Text)]
+        public void NewAddQuestion_When_categorical_question_with_linked_question_with_number_or_text_or_datetime_type(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
@@ -1149,9 +1207,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
                         autoGroupPublicKey: autoGroupId,
                         secondGroup: groupId,
-                        autoQuestoinId: autoQuestionId,
+                        autoQuestionId: autoQuestionId,
                         questionId: questionId,
-                        responsibleId: responsibleId);
+                        responsibleId: responsibleId,
+                        questionType: QuestionType.MultyOption,
+                        autoQuestionType: questionType);
 
 
                 // act
@@ -1159,7 +1219,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "Question",
-                    type: QuestionType.Text,
+                    type: QuestionType.MultyOption,
                     alias: "test",
                     isMandatory: false,
                     isFeatured: false,
@@ -1169,16 +1229,266 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    options: new Option[0],
+                    options: null,
                     optionsOrder: Order.AZ,
                     maxValue: null,
                     triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: questionId);
+                    linkedToQuestionId: autoQuestionId);
+
                 // assert
                 var risedEvent = GetLastEvent<NewQuestionAdded>(eventContext);
-                Assert.AreEqual(questionId, risedEvent.LinkedToQuestionId);
+                Assert.AreEqual(autoQuestionId, risedEvent.LinkedToQuestionId);
             }
         }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_categorical_question_with_linked_question_that_not_of_type_text_or_number_or_datetime_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType,
+                    autoQuestionType: QuestionType.GpsCoordinates);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotSupportedQuestionForLinkedQuestion));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_categorical_question_have_answers_and_linked_question_in_the_same_time_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: new []{new Option(Guid.NewGuid(), "1", "auto"), }, 
+                    optionsOrder: Order.AZ,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_categorical_question_with_linked_question_that_does_not_exist_in_questions_scope_from_autopropagate_groups_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid questionThatLinkedButNotFromPropagateGroupId = Guid.Parse("00000000-1111-0000-2222-222000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoAndRegularGroupsAnd1QuestionInAutoGroupAnd2QuestionsInRegular(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType,
+                    questionThatLinkedButNotFromPropagateGroup: questionThatLinkedButNotFromPropagateGroupId);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: questionThatLinkedButNotFromPropagateGroupId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionIsNotInPropagateGroup));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_categorical_question_with_linked_question_that_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: true,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_categorical_question_with_linked_question_that_has_head_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "Question",
+                    type: questionType,
+                    alias: "test",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: true,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    options: null,
+                    optionsOrder: Order.AZ,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
+        }
+
     }
 }

@@ -78,7 +78,7 @@ namespace WB.UI.Designer.Controllers
                         new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId,
                             model.IsPublic, sourceModel.Source));
 
-                    return this.RedirectToAction("Edit", new {id = questionnaireId});
+                    return this.RedirectToAction("Edit", new { id = questionnaireId });
                 }
                 catch (Exception e)
                 {
@@ -117,7 +117,7 @@ namespace WB.UI.Designer.Controllers
                         text: model.Title,
                         createdBy: UserHelper.WebUser.UserId,
                         isPublic: model.IsPublic));
-                return this.RedirectToAction("Edit", new {id = questionnaireId});
+                return this.RedirectToAction("Edit", new { id = questionnaireId });
             }
 
             return View(model);
@@ -147,16 +147,18 @@ namespace WB.UI.Designer.Controllers
             QuestionnaireView questionnaire = this.GetQuestionnaire(id);
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() {QuestionnaireId = id});
+                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
 
-            if (questionnaire.CreatedBy != UserHelper.WebUser.UserId && !UserHelper.WebUser.IsAdmin &&
-                ((questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.All(x => x.Id != this.UserHelper.WebUser.UserId)))
+            var isUserIsOwnerOrAdmin = questionnaire.CreatedBy == UserHelper.WebUser.UserId || UserHelper.WebUser.IsAdmin;
+            var isQuestionnaireIsSharedWithThisPerson = (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.UserHelper.WebUser.UserId);
+
+            if (isUserIsOwnerOrAdmin || isQuestionnaireIsSharedWithThisPerson)
             {
-                throw new HttpException(403, string.Empty);
+                this.ReplaceGuidsInValidationAndConditionRules(questionnaire);
             }
             else
             {
-                this.ReplaceGuidsInValidationAndConditionRules(questionnaire);
+                throw new HttpException(403, string.Empty);
             }
 
             return
@@ -181,10 +183,10 @@ namespace WB.UI.Designer.Controllers
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
             return this.questionnaireHelper.GetPublicQuestionnaires(
-                pageIndex: pageIndex, 
-                sortBy: sortBy, 
-                sortOrder: sortOrder, 
-                filter: filter, 
+                pageIndex: pageIndex,
+                sortBy: sortBy,
+                sortOrder: sortOrder,
+                filter: filter,
                 viewerId: UserHelper.WebUser.UserId);
         }
 
@@ -209,10 +211,10 @@ namespace WB.UI.Designer.Controllers
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
             return this.questionnaireHelper.GetQuestionnaires(
-                pageIndex: pageIndex, 
-                sortBy: sortBy, 
-                sortOrder: sortOrder, 
-                filter: filter, 
+                pageIndex: pageIndex,
+                sortBy: sortBy,
+                sortOrder: sortOrder,
+                filter: filter,
                 viewerId: UserHelper.WebUser.UserId);
         }
 

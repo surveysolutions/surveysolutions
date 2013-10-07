@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Export;
 using Main.Core.View;
@@ -12,6 +14,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
     internal class CsvDataExportService : IDataExportService
     {
+        private const string CSVFORMAT = "csv";
+        private const string TABFORMAT = "tab";
+        private const string CSVFILEEXTENSION = "." + CSVFORMAT;
+
         private readonly IEnvironmentSupplier<InterviewDataExportView> supplier;
         private readonly IExportProvider<InterviewDataExportView> provider;
         private readonly IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory;
@@ -29,18 +35,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             this.questionnaireLevelStorage = questionnaireLevelStorage;
         }
 
-        public IDictionary<string, byte[]> ExportData(Guid questionnarieid, long version, string type)
+        public IDictionary<string, byte[]> ExportData(Guid questionnaireId, long version, string type)
         {
             var fileType = GetFileTypeOrThrow(type);
           
             var allLevels = new Dictionary<string, byte[]>();
 
-            var questionnarieLevel = GetAllQuestionnarieLevels(questionnarieid, version);
+            var questionnarieLevel = GetAllQuestionnaireLevels(questionnaireId, version);
 
             foreach (var levelId in questionnarieLevel)
             {
                 CollectLevels(
-                    interviewDataExportViewFactory.Load(new InterviewDataExportInputModel(questionnarieid, version,
+                    interviewDataExportViewFactory.Load(new InterviewDataExportInputModel(questionnaireId, version,
                                                                                           levelId)),
                     allLevels,
                     fileType);
@@ -51,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return allLevels;
         }
 
-        private HashSet<Guid?> GetAllQuestionnarieLevels(Guid questionnarieid, long version)
+        private HashSet<Guid?> GetAllQuestionnaireLevels(Guid questionnarieid, long version)
         {
             var levels = new HashSet<Guid?> { null };
             var questionnarieLevelStructure = this.questionnaireLevelStorage.GetById(questionnarieid, version);
@@ -76,35 +82,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         private FileType GetFileTypeOrThrow(string type)
         {
-            if (type != "csv" && type != "tab")
-                throw new InvalidOperationException("file type doesn't supprot");
-            return type == "csv" ? FileType.Csv : FileType.Tab;
+            if (type != CSVFORMAT && type != TABFORMAT)
+                throw new InvalidOperationException("file type doesn't support");
+            return type == CSVFORMAT ? FileType.Csv : FileType.Tab;
         }
 
         protected string GetName(string name, Dictionary<string, byte[]> container, int i)
         {
-            if (i == 0)
-            {
-                if (!container.ContainsKey(name + ".csv"))
-                {
-                    return RemoveNonUnicode(name) + ".csv";
-                }
-                else
-                {
-                    return this.GetName(name, container, i + 1);
-                }
-            }
+            string fileNameWithoutInvalidFileNameChars = Path.GetInvalidFileNameChars()
+                                                             .Aggregate(name, (current, c) => current.Replace(c, '_'));
+            string fileNameWithExtension = string.Concat(RemoveNonAscii(fileNameWithoutInvalidFileNameChars),
+                                                         i == 0 ? (object) string.Empty : i, CSVFILEEXTENSION);
 
-            if (!container.ContainsKey(name + i + ".csv"))
-            {
-                return RemoveNonUnicode(name) + i + ".csv";
-            }
-            else
-            {
-                return this.GetName(name, container, i + 1);
-            }
+            return !container.ContainsKey(fileNameWithExtension)
+                       ? fileNameWithExtension
+                       : this.GetName(name, container, i + 1);
         }
-        protected string RemoveNonUnicode(string s)
+
+        protected string RemoveNonAscii(string s)
         {
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }

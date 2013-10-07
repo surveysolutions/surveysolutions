@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
@@ -259,7 +260,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.ServiceTests
                                            smallTemplateRepository ??
                                            new InMemoryReadSideRepositoryAccessor<QuestionnaireBrowseItem>(),
                                            tempStorage ?? new InMemoryTemporaryDataRepositoryAccessor<TempFileImportData>(),
-                                             new InMemoryTemporaryDataRepositoryAccessor<SampleCreationStatus>());
+                                             new InMemoryTemporaryDataRepositoryAccessor<SampleCreationStatus>(),
+                                             Mock.Of<IQuestionnaireFactory>());
         }
     }
 }
