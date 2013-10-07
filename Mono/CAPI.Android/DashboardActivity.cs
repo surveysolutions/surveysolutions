@@ -17,12 +17,11 @@ namespace CAPI.Android
 
     [Activity(Label = "CAPI",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class
-        DashboardActivity : Activity
+    public class DashboardActivity : Activity
     {
         protected DashboardModel currentDashboard;
         protected IDictionary<Guid,View> sureveyHolders;
-        protected ViewGroup llSurveyHolder;
+        protected LinearLayout llSurveyHolder;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
