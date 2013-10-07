@@ -613,7 +613,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                "Following linked questions are referencing questions, but referenced questions are of not supported type",
                 question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
         }
 
@@ -628,7 +628,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following linked questions are referencing questions, but referenced questions are missing in the questionnaire",
+                "Following linked questions are referencing questions, but referenced questions are not under propagated group",
                 question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
         }
 
