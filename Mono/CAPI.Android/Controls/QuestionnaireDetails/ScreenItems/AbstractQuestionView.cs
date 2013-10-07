@@ -42,8 +42,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
                 Console.WriteLine(string.Format("disposing question '{0}'", Model.Text));
@@ -55,13 +53,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     instructionDialog.Dispose();
                     instructionDialog = null;
                 }
-
-                if (Content != null)
-                {
-                    Content.Dispose();
-                    Content = null;
-                }
             }
+
+            base.Dispose(disposing);
         }
 
         protected View Content { get; set; }
