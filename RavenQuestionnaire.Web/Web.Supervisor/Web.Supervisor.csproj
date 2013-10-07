@@ -548,13 +548,13 @@
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
-    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
-    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
-    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
-    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
+    <None Include="Service References\DesignerPublicService\PublicService.disco" />
+    <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <None Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -580,18 +580,15 @@
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
     <Content Include="Scripts\lib\jquery.min.map" />
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DesignerPublicService\PublicService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListView.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewItem.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -616,6 +613,12 @@
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interview\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
@@ -759,7 +762,7 @@
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
-    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
     <None Include="Service References\DesignerPublicService\PublicService.xsd">
       <SubType>Designer</SubType>
     </None>
