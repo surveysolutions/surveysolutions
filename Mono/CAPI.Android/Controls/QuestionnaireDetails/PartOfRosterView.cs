@@ -14,6 +14,8 @@ using CAPI.Android.Controls.QuestionnaireDetails.Roster;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
+using CAPI.Android.Extensions;
+using Cirrious.MvvmCross.Binding.BindingContext;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
@@ -117,6 +119,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             view.LayoutParameters = new LinearLayout.LayoutParams(0,
                                                                   ViewGroup.LayoutParams.FillParent, 1);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Console.WriteLine("disposing roster PartOfRosterView");
+                this.DisposeChildrenAndCleanUp();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

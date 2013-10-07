@@ -66,7 +66,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             llContent.DescendantFocusability = DescendantFocusability.BeforeDescendants;
             llContent.ItemsCanFocus = true;
             llContent.ScrollingCacheEnabled = false;
-
+            llContent.ChildViewRemoved += llContent_ChildViewRemoved;
             var nextBtn = new GroupView(inflater.Context,
                                         PropagatedModel == null
                                             ? null
@@ -80,6 +80,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return top;
         }
 
+        void llContent_ChildViewRemoved(object sender, ViewGroup.ChildViewRemovedEventArgs e)
+        {
+            e.Child.Dispose();
+        }
+
         public override void OnViewStateRestored(Bundle savedInstanceState)
         {
             base.OnViewStateRestored(savedInstanceState);
@@ -88,20 +93,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
                 if (llContent != null)
                 {
+                    llContent.TryClearBindingsIfPossibleForChildren();
+
                     if (llContent.Adapter != null)
                     {
                         llContent.Adapter.Dispose();
+                        llContent.Adapter = null;
                     }
-
-                    llContent.Dispose();
                 }
             }
+
+            base.Dispose(disposing);
         }
 
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
