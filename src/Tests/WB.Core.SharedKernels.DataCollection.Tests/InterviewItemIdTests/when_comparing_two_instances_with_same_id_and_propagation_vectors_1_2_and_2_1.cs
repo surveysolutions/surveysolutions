@@ -4,7 +4,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewItemIdTests
 {
-    [Ignore("this tests higlights code review issue, please unignore it when it will be fixed")]
     internal class when_comparing_two_instances_with_same_id_and_propagation_vectors_1_2_and_2_1 : InterviewItemIdTestsContext
     {
         Establish context = () =>
