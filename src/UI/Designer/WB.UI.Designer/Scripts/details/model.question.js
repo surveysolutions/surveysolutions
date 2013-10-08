@@ -105,7 +105,7 @@
               self.validationExpression = ko.observable('');
               self.validationMessage = ko.observable('');
               self.instruction = ko.observable('');
-
+              self.isInteger = ko.observable('');
               self.isLinked = ko.observable(0);
               self.isLinkedDurty = ko.computed(function () {
                   return self.isLinked() == 1;
