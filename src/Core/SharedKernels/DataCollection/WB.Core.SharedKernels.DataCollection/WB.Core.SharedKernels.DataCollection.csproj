@@ -55,6 +55,7 @@
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
