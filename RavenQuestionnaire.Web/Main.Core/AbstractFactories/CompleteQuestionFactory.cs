@@ -64,7 +64,7 @@
                 question.Instructions,
                 null,
                 maxValue,
-                question.LinkedToQuestionId);
+                question.LinkedToQuestionId, null);
             ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 
@@ -121,7 +121,8 @@
                 data.instructions,
                 data.triggers,
                 data.maxValue,
-                data.linkedToQuestionId);
+                data.linkedToQuestionId,
+                data.isInteger);
 
             UpdateAnswerList(data.answers, q, data.linkedToQuestionId);
 
@@ -201,7 +202,8 @@
             string instructions,
             IEnumerable<Guid> triggers,
             int maxValue,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool? isInteger)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -232,6 +234,12 @@
                         }
                     }
                 }
+            }
+
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                numericQuestion.IsInteger = isInteger ?? false;
             }
         }
     }

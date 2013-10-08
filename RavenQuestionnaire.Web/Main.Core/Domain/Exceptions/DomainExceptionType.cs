@@ -156,6 +156,12 @@
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
 
-        QuestionWithLinkedQuestionCanNotBeHead
+        QuestionWithLinkedQuestionCanNotBeHead,
+
+        NotNumericQuestionHasPrecisionInformation,
+
+        NumericQuestionHasNoPrecisionInformation,
+        
+        AutoPropagateQuestionMarkedAsNotInteger
     }
 }
