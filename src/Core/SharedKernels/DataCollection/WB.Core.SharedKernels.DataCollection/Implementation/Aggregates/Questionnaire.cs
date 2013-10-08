@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
@@ -533,6 +534,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             return question.Mandatory;
+        }
+
+        public bool IsQuestionInteger(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion == null)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+            
+            return numericQuestion.IsInteger;
         }
 
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
