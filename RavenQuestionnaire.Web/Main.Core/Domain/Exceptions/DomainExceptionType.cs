@@ -160,8 +160,6 @@
 
         NotNumericQuestionHasPrecisionInformation,
 
-        NumericQuestionHasNoPrecisionInformation,
-        
-        AutoPropagateQuestionMarkedAsNotInteger
+        NumericQuestionHasNoPrecisionInformation
     }
 }

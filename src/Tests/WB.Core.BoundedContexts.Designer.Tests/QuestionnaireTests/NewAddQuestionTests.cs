@@ -906,7 +906,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds, responsibleId: responsibleId,
-                                             linkedToQuestionId: null, isInteger: true);
+                                             linkedToQuestionId: null, isInteger: null);
 
 
                 // Assert
@@ -930,7 +930,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds, responsibleId: responsibleId,
-                                             linkedToQuestionId: null, isInteger: true);
+                                             linkedToQuestionId: null, isInteger: null);
 
 
                 // Assert
@@ -955,34 +955,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
                                                                   false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                                   string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithAbsentGroupId, responsibleId: responsibleId,
-                                                                  linkedToQuestionId: null, isInteger: true);
+                                                                  linkedToQuestionId: null, isInteger: null);
 
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TriggerLinksToNotExistingGroup));
-        }
-
-        [Test]
-        public void NewAddQuestion_When_question_is_AutoPropagate_and_precision_is_not_integer_Then_DomainException_of_type_AutoPropagateQuestionMarkedAsNotInteger_should_be_thrown()
-        {
-            // Arrange
-            var groupId = Guid.NewGuid();
-            var autoPropagate = QuestionType.AutoPropagate;
-            var emptyTriggedGroupIds = new Guid[0];
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupId, responsibleId: responsibleId);
-
-            // Act
-            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds, responsibleId: responsibleId,
-                linkedToQuestionId: null, isInteger: false);
-
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.AutoPropagateQuestionMarkedAsNotInteger));
         }
 
         [Test]
@@ -1000,7 +978,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
                                                                   false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                                   string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithNonPropagateGroupId, responsibleId: responsibleId,
-                                                                  linkedToQuestionId: null, isInteger: true);
+                                                                  linkedToQuestionId: null, isInteger: null);
 
 
             // Assert
@@ -1028,7 +1006,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                              string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null,
                                              triggedGroupIdsWithAutoPropagateGroupId, responsibleId: responsibleId,
-                                             linkedToQuestionId: null, isInteger: true);
+                                             linkedToQuestionId: null, isInteger: null);
 
                 // Assert
                 Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));

@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false, false,
                                          false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0], responsibleId, null, isInteger: true);
+                                         new Guid[0], responsibleId, null, isInteger: null);
             return questionnaire;
         }
 
@@ -220,7 +220,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false,
                 false,
                 false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: true);
+                new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
             return questionnaire;
         }
 
@@ -231,7 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
         public static bool IsPrecisionRequiredByQuestionType(QuestionType type)
         {
-            return type == QuestionType.Numeric || type == QuestionType.AutoPropagate;
+            return type == QuestionType.Numeric;
         }
 
         public static Option[] CreateTwoOptions()

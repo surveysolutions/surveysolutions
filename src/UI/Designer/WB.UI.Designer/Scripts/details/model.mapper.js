@@ -124,6 +124,7 @@
                     item.validationMessage(dto.ValidationMessage);
                     item.selectedLinkTo(dto.LinkedToQuestionId);
                     item.isLinked(_.isNull(dto.LinkedToQuestionId) == false ? 1 : 0);
+                    item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
 
                     item.isNew(false);
                     item.dirtyFlag().reset();
