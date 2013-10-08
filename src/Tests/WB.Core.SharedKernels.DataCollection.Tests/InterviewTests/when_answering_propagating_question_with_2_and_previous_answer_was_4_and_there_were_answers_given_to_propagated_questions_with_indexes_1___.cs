@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId);
 
-            interview.AnswerNumericQuestion(userId, propagatingQuestionId, new int[]{}, DateTime.Now, 4);
+            interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new int[]{}, DateTime.Now, 4);
             interview.AnswerTextQuestion(userId, propagatedQuestionId, new [] { 1 }, DateTime.Now, "Answer for index 1");
             interview.AnswerTextQuestion(userId, propagatedQuestionId, new [] { 2 }, DateTime.Now, "Answer for index 2");
 
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericQuestion(userId, propagatingQuestionId, new int[]{}, DateTime.Now, 2);
+            interview.AnswerNumericIntegerQuestion(userId, propagatingQuestionId, new int[]{}, DateTime.Now, 2);
 
         It should_not_raise_AnswerRemoved_event_with_QuestionId_equal_to_propagated_question_and_PropagationVector_equal_to_0 = () =>
             eventContext.ShouldNotContainEvent<AnswerRemoved>(@event

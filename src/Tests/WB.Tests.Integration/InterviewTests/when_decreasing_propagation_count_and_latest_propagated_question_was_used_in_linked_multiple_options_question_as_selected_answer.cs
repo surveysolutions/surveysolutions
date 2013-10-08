@@ -64,7 +64,7 @@ namespace WB.Tests.Integration.InterviewTests
             };
 
             interview = CreateInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(questionnaireDocument);
-            interview.AnswerNumericQuestion(userId, numericQuestionId, new int[] { }, answerTime, 3);
+            interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new int[] { }, answerTime, 3);
             interview.AnswerTextQuestion(userId, referencedQuestionId, new[] { 0 }, answerTime, "A");
             interview.AnswerTextQuestion(userId, referencedQuestionId, new[] { 2 }, answerTime, "C");
             interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new int[] { }, answerTime, new[] { new[] { 0 }, new[] { 2 } });
@@ -73,7 +73,7 @@ namespace WB.Tests.Integration.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericQuestion(userId, numericQuestionId, new int[] { }, answerTime, 2);
+            interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new int[] { }, answerTime, 2);
 
         It should_raise_AnswerRemoved_event_with_linked_multiple_options_question_id_and_propagation_vector = () =>
             eventContext.ShouldContainEvent<AnswerRemoved>(@event

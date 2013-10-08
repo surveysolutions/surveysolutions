@@ -10,7 +10,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
     public class AnswerOptionsForLinkedQuestionsDenormalizer :
         IEventHandler<AnswerRemoved>,
         IEventHandler<TextQuestionAnswered>,
-        IEventHandler<NumericQuestionAnswered>,
+        IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
@@ -32,7 +32,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> @event)
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }

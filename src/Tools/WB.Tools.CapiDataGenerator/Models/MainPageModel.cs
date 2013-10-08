@@ -681,7 +681,7 @@ namespace CapiDataGenerator
 
                     case QuestionType.AutoPropagate:
                     case QuestionType.Numeric:
-                        command = new AnswerNumericQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
+                        command = new AnswerNumericRealQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
                                                                    (decimal) answer);
                         break;
 

@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.AnswerNumericQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
 
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
                 .Returns(true);
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         private Because of = () =>
-            interview.AnswerNumericQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
+            interview.AnswerNumericIntegerQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
 
         private Cleanup stuff = () =>
         {

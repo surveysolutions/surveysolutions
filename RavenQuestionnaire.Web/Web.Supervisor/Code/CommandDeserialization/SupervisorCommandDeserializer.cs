@@ -26,7 +26,7 @@ namespace Web.Supervisor.Code.CommandDeserialization
                         // answer question
                         { "AnswerDateTimeQuestionCommand", typeof (AnswerDateTimeQuestionCommand ) },
                         { "AnswerMultipleOptionsQuestionCommand", typeof (AnswerMultipleOptionsQuestionCommand ) },
-                        { "AnswerNumericQuestionCommand", typeof (AnswerNumericQuestionCommand ) },
+                        { "AnswerNumericQuestionCommand", typeof (AnswerNumericRealQuestionCommand ) },
                         { "AnswerSingleOptionQuestionCommand", typeof (AnswerSingleOptionQuestionCommand ) },
                         { "AnswerTextQuestionCommand", typeof (AnswerTextQuestionCommand ) },
                         { "AnswerGeoLocationQuestionCommand", typeof(AnswerGeoLocationQuestionCommand)},

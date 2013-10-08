@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
@@ -61,7 +62,7 @@
     <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs" />
-    <Compile Include="Commands\Interview\AnswerNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Interview\AnswerNumericRealQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerTextQuestionCommand.cs" />
     <Compile Include="Commands\Interview\ApproveInterviewCommand.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="Events\Interview\InterviewRestored.cs" />
     <Compile Include="Events\Interview\InterviewStatusChanged.cs" />
     <Compile Include="Events\Interview\MultipleOptionsQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
+    <Compile Include="Events\Interview\NumericRealQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionDisabled.cs" />
     <Compile Include="Events\Interview\QuestionEnabled.cs" />
     <Compile Include="Events\Interview\SingleOptionQuestionAnswered.cs" />
