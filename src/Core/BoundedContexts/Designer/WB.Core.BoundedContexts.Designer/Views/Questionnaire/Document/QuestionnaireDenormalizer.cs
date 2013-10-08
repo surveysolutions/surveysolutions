@@ -159,7 +159,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
 
             if (result == null)
             {
@@ -193,7 +194,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             if (result == null)
             {
                 return;
@@ -234,7 +236,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 

@@ -13,9 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public AddQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
             : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
-                scope, condition, validationExpression, validationMessage, instructions, options, optionsOrder, maxValue, triggedGroupIds, responsibleId, linkedToQuestionId)
+                scope, condition, validationExpression, validationMessage, instructions, options, optionsOrder, maxValue, triggedGroupIds, responsibleId, linkedToQuestionId, isInteger)
         {
             this.GroupId = groupId;
         }
