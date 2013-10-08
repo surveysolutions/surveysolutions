@@ -24,5 +24,6 @@ namespace Main.Core.Events.Questionnaire
         public List<Guid> Triggers { get; set; }
         public int MaxValue { get; set; }
         public Guid? LinkedToQuestionId { get; set; }
+        public bool? IsInteger { get; set; }
     }
 }

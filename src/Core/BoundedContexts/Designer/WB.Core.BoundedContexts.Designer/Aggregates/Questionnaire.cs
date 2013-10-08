@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
         {
             alias = alias.Trim();
 
@@ -336,7 +336,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsInteger = isInteger
             });
         }
 
@@ -344,7 +345,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            Guid groupId, string title, QuestionType type, string alias,
            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
            QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
         {
             alias = alias.Trim();
 
@@ -355,7 +356,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfPrecisionInformationDoenstMuchQuestionType(type, isInteger);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
@@ -395,7 +397,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId, 
+                IsInteger = isInteger
             });
         }
 
@@ -429,7 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -440,7 +443,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfPrecisionInformationDoenstMuchQuestionType(type, isInteger);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
@@ -478,7 +482,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsInteger = isInteger
             });
         }
 
@@ -668,7 +673,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             if (question == null)
             {
                 return;
@@ -698,7 +704,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             if (question == null)
             {
                 return;
@@ -739,7 +746,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
@@ -1007,18 +1015,48 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 && ((parentGroup.Propagated == Propagate.AutoPropagated) || this.IsUnderPropagatableGroupImpl(parentGroup.GetParent()));
         }
 
-        private static void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
+        private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
         {
             bool isCategoricalQuestion = questionType == QuestionType.MultyOption ||
                 questionType == QuestionType.SingleOption;
 
-            bool notCategoricalQuestionHasLinkedQuestonId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
+            bool notCategoricalQuestionHasLinkedQuestionId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
 
-            if (notCategoricalQuestionHasLinkedQuestonId)
+            if (notCategoricalQuestionHasLinkedQuestionId)
             {
                 throw new DomainException(
                     DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion,
                     "Only categorical question can be linked to another question");
+            }
+        }
+
+        private void ThrowIfPrecisionInformationDoenstMuchQuestionType(QuestionType questionType, bool? isInteger)
+        {
+            bool isNumericQuestion = questionType == QuestionType.Numeric || questionType == QuestionType.AutoPropagate;
+            bool notNumericQuestionHasPrecisionInformation = isInteger.HasValue && !isNumericQuestion;
+
+            if (notNumericQuestionHasPrecisionInformation)
+            {
+                throw new DomainException(
+                    DomainExceptionType.NotNumericQuestionHasPrecisionInformation,
+                    "Only numeric question can contain precision information");
+            }
+
+            bool numericQuestionHasNoPrecisionInformation = !isInteger.HasValue && isNumericQuestion;
+
+            if (numericQuestionHasNoPrecisionInformation)
+            {
+                throw new DomainException(
+                    DomainExceptionType.NumericQuestionHasNoPrecisionInformation,
+                    "Numeric question doesn't contain precision information");
+            }
+
+            bool autopropagatedQuestionMarkedAsNotInteger = questionType == QuestionType.AutoPropagate && !isInteger.Value;
+            if (autopropagatedQuestionMarkedAsNotInteger)
+            {
+                throw new DomainException(
+                  DomainExceptionType.AutoPropagateQuestionMarkedAsNotInteger,
+                  "AutoPropagate question can't be real");
             }
         }
 

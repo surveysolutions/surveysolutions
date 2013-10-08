@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.CloneQuestion(newQuestionId, groupId, notEmptyTitle, QuestionType.Text, "test_clone", false, false,
                                                 false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                                 string.Empty,
-                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId: responsibleId, linkedToQuestionId: null);
+                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: false);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () =>
                                questionnaire.CloneQuestion(newQuestionId, groupId, emptyTitle, QuestionType.Text, "test", false, false,
                                                                false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId, null);
+                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1, responsibleId, null, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test_clone", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId, null);
+                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId, null, isInteger: null);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.CloneQuestion(newQuestionId, groupId,"test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId, null);
+                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, responsibleId, null, isInteger: false);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
                 Assert.AreEqual(notEmptyAnswerOptionTitle1, risedEvent.Answers[0].AnswerText);
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // act
             TestDelegate act = () => questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, Guid.NewGuid(), null);
+                                            string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1, Guid.NewGuid(), null, isInteger: false);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
@@ -182,7 +182,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, Guid.NewGuid());
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, Guid.NewGuid(), isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -215,7 +215,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -251,7 +251,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -287,7 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", QuestionType.MultyOption, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -321,7 +321,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -354,7 +354,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                             string.Empty, new Option[] {new Option(Guid.NewGuid(), "1", "auto"),},
-                                            Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -389,7 +389,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                             string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1,
-                                            responsibleId, questionThatLinkedButNotFromPropagateGroupId);
+                                            responsibleId, questionThatLinkedButNotFromPropagateGroupId, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -421,7 +421,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, true, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -453,7 +453,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, true,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId);
+                                            string.Empty, null, Order.AsIs, null, new Guid[0], questionId, 1, responsibleId, autoQuestionId, isInteger: false);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
