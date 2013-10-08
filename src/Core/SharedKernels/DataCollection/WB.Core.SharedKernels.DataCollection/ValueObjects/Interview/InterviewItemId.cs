@@ -10,11 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             Id = id;
             PropagationVector = propagationVector ?? new int[0];
         }
+
         public InterviewItemId(Guid id)
-        {
-            Id = id;
-            PropagationVector = new int[0];
-        }
+            : this(id, new int[0]) {}
 
         public Guid Id;
         public int[] PropagationVector;
