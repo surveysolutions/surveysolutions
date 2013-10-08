@@ -247,6 +247,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\MultipleOptionsQuestionAnswered.cs">
       <Link>Events\Interview\MultipleOptionsQuestionAnswered.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericIntegerQuestionAnswered.cs">
+      <Link>Events\Interview\NumericIntegerQuestionAnswered.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
       <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
     </Compile>

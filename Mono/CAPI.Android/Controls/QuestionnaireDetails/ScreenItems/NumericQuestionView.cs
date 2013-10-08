@@ -50,10 +50,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (newAnswer != this.Model.AnswerString)
             {
-                decimal answer;
-                if(!decimal.TryParse(newAnswer,out  answer))
+                int answer;
+                if (!int.TryParse(newAnswer, out  answer))
                     return;
-                ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
+                ExecuteSaveAnswerCommand(new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
                                                                           CapiApplication.Membership.CurrentUser.Id,
                                                                           Model.PublicKey.Id,
                                                                           this.Model.PublicKey.PropagationVector,

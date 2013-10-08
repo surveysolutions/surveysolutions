@@ -114,7 +114,7 @@ namespace CAPI.Android
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
-            bus.RegisterHandler(eventHandler, typeof (NumericQuestionAnswered));
+            bus.RegisterHandler(eventHandler, typeof (NumericIntegerQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (TextQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (SingleOptionQuestionAnswered));
             bus.RegisterHandler(eventHandler, typeof (DateTimeQuestionAnswered));
@@ -139,7 +139,7 @@ namespace CAPI.Android
 
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(AnswerRemoved));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(TextQuestionAnswered));
-            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericQuestionAnswered));
+            bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(answerOptionsForLinkedQuestionsDenormalizer, typeof(DateTimeQuestionAnswered));
         }
 
