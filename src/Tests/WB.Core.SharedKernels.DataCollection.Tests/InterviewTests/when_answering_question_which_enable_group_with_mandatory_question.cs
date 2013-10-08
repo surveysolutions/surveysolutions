@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         private Because of = () =>
-            interview.AnswerNumericQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 0);
+            interview.AnswerNumericIntegerQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 0);
 
         private Cleanup stuff = () =>
         {

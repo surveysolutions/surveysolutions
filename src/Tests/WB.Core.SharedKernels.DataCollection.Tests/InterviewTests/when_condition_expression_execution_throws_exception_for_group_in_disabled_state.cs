@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId);
 
             //give an answer which would disable conditionallyDisabledQuestion at first
-            interview.AnswerNumericQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 5);
+            interview.AnswerNumericIntegerQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 5);
 
             //setup expression processor throw exception
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>())).Throws(new Exception());
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 0);
+            interview.AnswerNumericIntegerQuestion(userId, answeringQuestionId, new int[] { }, DateTime.Now, 0);
 
         It should_not_raise_GroupDisabled_event_with_GroupId_equal_to_conditionallyDisabledGroupId = () =>
             eventContext.ShouldNotContainEvent<GroupDisabled>(@event
