@@ -922,7 +922,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Act
                 questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
                                                 false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                                emptyTriggedGroupIds, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: true);
+                                                emptyTriggedGroupIds, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
 
 
                 // Assert
@@ -946,39 +946,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Act
                 questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
                                                 false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                                emptyTriggedGroupIds, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: true);
+                                                emptyTriggedGroupIds, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
 
 
                 // Assert
                 Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Empty);
             }
-        }
-
-        [Test]
-        public void
-            NewUpdateQuestion_When_question_is_AutoPropagate_and_precision_is_not_integer_Then_DomainException_of_type_AutoPropagateQuestionMarkedAsNotInteger_should_be_thrown
-            ()
-        {
-            // Arrange
-            var groupId = Guid.NewGuid();
-            var autoPropagateQuestionId = Guid.NewGuid();
-            var autoPropagate = QuestionType.AutoPropagate;
-            var emptyTriggedGroupIds = new Guid[0];
-            var responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(questionId: autoPropagateQuestionId,
-                responsibleId: responsibleId);
-
-            // Act
-            TestDelegate act =
-                () =>
-                    questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                        false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                        emptyTriggedGroupIds, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: false);
-
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.AutoPropagateQuestionMarkedAsNotInteger));
         }
 
         [Test]
@@ -994,12 +967,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             Questionnaire questionnaire =
                 CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: autoPropagateQuestionId, groupId: groupId,
-                    questionType: QuestionType.AutoPropagate, responsibleId: responsibleId, isInteger:true);
+                    questionType: QuestionType.AutoPropagate, responsibleId: responsibleId, isInteger: null);
 
             // Act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
                                                                      false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                                                     triggedGroupIdsWithAbsentGroupId, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: true);
+                                                                     triggedGroupIdsWithAbsentGroupId, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1026,7 +999,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         "name", false, false,
                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
                         triggedGroupIdsWithNonPropagateGroupId, responsibleId: responsibleId,
-                        linkedToQuestionId: null, isInteger: true);
+                        linkedToQuestionId: null, isInteger: null);
 
 
             // Assert
@@ -1054,7 +1027,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Act
                 questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
                                                 false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                                triggedGroupIdsWithAutoPropagateGroupId, responsibleId, linkedToQuestionId: null, isInteger: true);
+                                                triggedGroupIdsWithAutoPropagateGroupId, responsibleId, linkedToQuestionId: null, isInteger: null);
 
                 // Assert
                 Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));

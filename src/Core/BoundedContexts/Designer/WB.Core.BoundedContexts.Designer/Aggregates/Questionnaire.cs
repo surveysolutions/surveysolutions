@@ -1032,7 +1032,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfPrecisionInformationDoenstMuchQuestionType(QuestionType questionType, bool? isInteger)
         {
-            bool isNumericQuestion = questionType == QuestionType.Numeric || questionType == QuestionType.AutoPropagate;
+            bool isNumericQuestion = questionType == QuestionType.Numeric;
             bool notNumericQuestionHasPrecisionInformation = isInteger.HasValue && !isNumericQuestion;
 
             if (notNumericQuestionHasPrecisionInformation)
@@ -1049,14 +1049,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new DomainException(
                     DomainExceptionType.NumericQuestionHasNoPrecisionInformation,
                     "Numeric question doesn't contain precision information");
-            }
-
-            bool autopropagatedQuestionMarkedAsNotInteger = questionType == QuestionType.AutoPropagate && !isInteger.Value;
-            if (autopropagatedQuestionMarkedAsNotInteger)
-            {
-                throw new DomainException(
-                  DomainExceptionType.AutoPropagateQuestionMarkedAsNotInteger,
-                  "AutoPropagate question can't be real");
             }
         }
 
