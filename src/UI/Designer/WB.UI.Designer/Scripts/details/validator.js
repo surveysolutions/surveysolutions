@@ -29,7 +29,8 @@
 
                 if (usingVariables.length == 0) {
                     return {
-                        isValid: true
+                        isValid: false,
+                        errorMessage: "Expression is valid, but does not use any variable name. We recommend you to change or delete it"
                     };
                 }
 

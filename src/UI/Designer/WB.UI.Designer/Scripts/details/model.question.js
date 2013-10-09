@@ -255,7 +255,6 @@
                         }
                     });
 
-
                     self.validationExpression.extend({
                         validation: [{
                             validator: function (val) {
@@ -287,6 +286,17 @@
                                 return true;
                             },
                             message: 'You cannot use self-reference in conditions'
+                        },
+                        {
+                            validator: function (val) {
+                                var validationResult = validator.isValidExpression(val);
+                                if (validationResult.isValid) {
+                                    return true;
+                                }
+                                this.message = validationResult.errorMessage;
+                                return false;
+                            },
+                            message: 'Error'
                         }]
                     });
                 };
