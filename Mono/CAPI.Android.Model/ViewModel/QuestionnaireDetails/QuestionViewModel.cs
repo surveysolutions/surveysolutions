@@ -69,6 +69,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public virtual void SetAnswer(object answer)
         {
+            if (answer == null)
+            {
+                return;
+            }
+
             this.AnswerObject = answer;
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
