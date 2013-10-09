@@ -43,6 +43,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.AddView(this.CheckBoxContainer);
         }
 
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            IEnumerable<T> selectedAnswers = this.Answers.Where(this.IsAnswerSelected);
+
+            return this.FormatSelectedAnswersAsString(selectedAnswers);
+        }
+
         protected override void PutAnswerStoredInModelToUI()
         {
             this.CreateCheckBoxesByOptions();
@@ -105,7 +112,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 
             }
 
-            this.SaveAnswer(string.Join(",", selectedAnswers.Select(this.GetAnswerTitle)), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
+            this.SaveAnswer(this.FormatSelectedAnswersAsString(selectedAnswers), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
+        }
+
+        private string FormatSelectedAnswersAsString(IEnumerable<T> selectedAnswers)
+        {
+            return string.Join(",", selectedAnswers.Select(this.GetAnswerTitle));
         }
     }
 }

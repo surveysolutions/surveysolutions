@@ -40,9 +40,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.PutAnswerStoredInModelToUI();
         }
 
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            return this.Model.AnswerString;
+        }
+
         protected override void PutAnswerStoredInModelToUI()
         {
-            dateDisplay.Text = Model.AnswerString;
+            dateDisplay.Text = this.GetAnswerStoredInModelAsString();
         }
 
         // the event received when the user "sets" the date in the dialog

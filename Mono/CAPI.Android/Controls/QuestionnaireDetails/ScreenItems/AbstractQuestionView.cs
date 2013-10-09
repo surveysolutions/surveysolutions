@@ -160,6 +160,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         private void SaveAnswerErrorHandler(Exception ex)
         {
             this.PutAnswerStoredInModelToUI();
+            this.FireAnswerSetEvent(this.GetAnswerStoredInModelAsString());
 
             if (!Model.IsEnabled())
                 return;
@@ -170,6 +171,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             tvError.Text = this.GetDeepestException(ex).Message;
             logger.Error("Error message: " + tvError.Text);
         }
+
+        protected abstract string GetAnswerStoredInModelAsString();
 
         protected abstract void PutAnswerStoredInModelToUI();
 

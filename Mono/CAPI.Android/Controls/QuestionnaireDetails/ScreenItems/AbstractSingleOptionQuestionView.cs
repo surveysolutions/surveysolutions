@@ -43,6 +43,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.AddView(this.RadioGroup);
         }
 
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            T selectedAnswer = this.Answers.SingleOrDefault(this.IsAnswerSelected);
+
+            return selectedAnswer != null
+                ? this.GetAnswerTitle(selectedAnswer)
+                : string.Empty;
+        }
+
         protected override void PutAnswerStoredInModelToUI()
         {
             this.FillRadioButtonGroupWithAnswers();
@@ -105,7 +114,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var selectedItem = this.RadioGroup.FindViewById<RadioButton>(e.CheckedId);
 
-            var selectedAnswer = FindAnswerInModelByRadioButtonTag(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
+            T selectedAnswer = FindAnswerInModelByRadioButtonTag(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
 
             if (selectedAnswer == null)
                 return;

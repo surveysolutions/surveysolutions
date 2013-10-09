@@ -62,9 +62,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            return this.Model.AnswerString;
+        }
+
         protected override void PutAnswerStoredInModelToUI()
         {
-            this.etAnswer.Text = this.Model.AnswerString;
+            this.etAnswer.Text = this.GetAnswerStoredInModelAsString();
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

@@ -55,14 +55,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.AddView(geoWrapper);
         }
 
-        protected override void PutAnswerStoredInModelToUI()
+        protected override string GetAnswerStoredInModelAsString()
         {
             var position = Model.AnswerObject as GeoPosition;
 
-            if (position != null)
-            {
-                locationText.Text = RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy);
-            }
+            return position != null
+                ? this.RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy)
+                : string.Empty;
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            locationText.Text = this.GetAnswerStoredInModelAsString();
         }
 
         private TextView locationText;
