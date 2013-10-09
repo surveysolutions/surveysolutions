@@ -11,7 +11,6 @@ using Main.Core.Domain;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
 using Ncqrs;
@@ -28,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly ICompleteQuestionFactory questionFactory;
 
-        private ILogger logger;
+        private readonly ILogger logger;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {

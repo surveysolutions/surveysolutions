@@ -102,7 +102,7 @@ namespace CAPI.Android
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Success");
-                alert.SetMessage("Tablet was successefully restored");
+                alert.SetMessage("Tablet was successfully restored");
                 alert.Show();
             }
             catch (Exception ex)
