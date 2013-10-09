@@ -409,7 +409,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.AutoPropagate:
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyPropagationVector, answersTime, (int) answer);
+                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyPropagationVector, answersTime, Convert.ToInt32(answer));
                         else
                             this.AnswerNumericRealQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal)answer);
                         break;

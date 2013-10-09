@@ -24,7 +24,9 @@ namespace Web.Supervisor.Code.CommandTransformation
                     break;
                 case "AnswerMultipleOptionsQuestionCommand":
                     break;
-                case "AnswerNumericQuestionCommand":
+                case "AnswerNumericRealQuestionCommand":
+                    break;
+                case "AnswerNumericIntegerQuestionCommand":
                     break;
                 case "AnswerSingleOptionQuestionCommand":
                     break;
