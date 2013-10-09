@@ -26,9 +26,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.Click += NumericQuestionView_Click;
             etAnswer=new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            etAnswer.Text = Model.AnswerString;
+            this.PutAnswerStoredInModelToUI();
             etAnswer.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal;
-            
+
             etAnswer.SetSelectAllOnFocus(true);
             etAnswer.ImeOptions=ImeAction.Done;
             etAnswer.SetSingleLine(true);
@@ -62,10 +62,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        protected override void SaveAnswerErrorHandler(Exception ex)
+        protected override void PutAnswerStoredInModelToUI()
         {
-            base.SaveAnswerErrorHandler(ex);
-            etAnswer.Text = Model.AnswerString;
+            this.etAnswer.Text = this.Model.AnswerString;
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

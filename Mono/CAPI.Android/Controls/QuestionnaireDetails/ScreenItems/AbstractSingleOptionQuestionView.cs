@@ -37,10 +37,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             base.Initialize();
 
             RadioGroup = this.CreateRadioButtonsGroup();
-            FillRadioButtonGroupWithAnswers();
+            this.PutAnswerStoredInModelToUI();
             RadioGroup.CheckedChange += this.RadioGroupCheckedChange;
 
             llWrapper.AddView(this.RadioGroup);
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            this.FillRadioButtonGroupWithAnswers();
         }
 
         protected RadioGroup CreateRadioButtonsGroup()

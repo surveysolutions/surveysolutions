@@ -38,9 +38,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             this.CheckBoxContainer = this.CreateCheckBoxes();
 
-            this.CreateCheckBoxesByOptions();
+            this.PutAnswerStoredInModelToUI();
 
             llWrapper.AddView(this.CheckBoxContainer);
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            this.CreateCheckBoxesByOptions();
         }
 
         protected LinearLayout CreateCheckBoxes()

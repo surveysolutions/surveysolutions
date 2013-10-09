@@ -40,9 +40,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             locationText = new TextView(this.Context);
             
             locationText.SetTypeface(null, TypefaceStyle.Bold);
-            var position = Model.AnswerObject as GeoPosition;
-            if (position!= null)
-                locationText.Text = RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy);
+            this.PutAnswerStoredInModelToUI();
 
             var updateLocationButton = new Button(this.Context) {Text = "Get Location"};
             var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, 
@@ -55,6 +53,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             geoWrapper.AddView(locationText);
 
             llWrapper.AddView(geoWrapper);
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            var position = Model.AnswerObject as GeoPosition;
+
+            if (position != null)
+            {
+                locationText.Text = RenderPositionAsText(position.Latitude, position.Longitude, position.Accuracy);
+            }
         }
 
         private TextView locationText;
