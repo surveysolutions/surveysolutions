@@ -97,12 +97,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
         }
 
-        protected virtual void SaveAnswer(string newAnswer)
+        protected void SaveAnswer(string newAnswer, AnswerQuestionCommand saveAnswerCommand)
         {
-            OnAnswerSet(newAnswer);
+            this.ExecuteSaveAnswerCommand(saveAnswerCommand);
+
+            this.FireAnswerSetEvent(newAnswer);
         }
 
-        protected void OnAnswerSet(string newAnswer)
+        private void FireAnswerSetEvent(string newAnswer)
         {
             var handler = AnswerSet;
             if (handler != null)
@@ -146,7 +148,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         }
 
-        protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
+        private void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
             AnswerCommandService.AnswerOnQuestion(this.Context, command,

@@ -105,9 +105,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (selectedAnswer == null)
                 return;
 
-            ExecuteSaveAnswerCommand(CreateSaveAnswerCommand(selectedAnswer));
-
-            SaveAnswer(GetAnswerTitle(selectedAnswer));
+            this.SaveAnswer(this.GetAnswerTitle(selectedAnswer), CreateSaveAnswerCommand(selectedAnswer));
         }
     }
 }

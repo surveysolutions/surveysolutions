@@ -100,9 +100,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 
             }
 
-            ExecuteSaveAnswerCommand(CreateSaveAnswerCommand(selectedAnswers.ToArray()));
-
-            SaveAnswer(string.Join(",", selectedAnswers.Select(this.GetAnswerTitle)));
+            this.SaveAnswer(string.Join(",", selectedAnswers.Select(this.GetAnswerTitle)), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
         }
     }
 }

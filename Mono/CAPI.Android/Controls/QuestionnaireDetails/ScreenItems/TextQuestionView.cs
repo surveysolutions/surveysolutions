@@ -7,6 +7,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -42,21 +43,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 // ShowKeyboard(etAnswer);
                 return;
             }
-            SaveAnswer(etAnswer.Text.Trim());
-            /* if (!IsCommentsEditorFocused)
-                 HideKeyboard(etAnswer);*/
-        }
 
-        protected override void SaveAnswer(string newAnswer)
-        {
+            var newAnswer = this.etAnswer.Text.Trim();
+
             if (newAnswer != this.Model.AnswerString)
             {
-                ExecuteSaveAnswerCommand(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.Id,
-                                                     this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newAnswer));
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
 
-                base.SaveAnswer(newAnswer);
+                this.SaveAnswer(newAnswer,
+                    new AnswerTextQuestionCommand(
+                        this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
+                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newAnswer));
             }
         }
 

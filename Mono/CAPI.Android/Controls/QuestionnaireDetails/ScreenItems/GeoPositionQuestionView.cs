@@ -36,8 +36,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                                                              ViewGroup.LayoutParams.FillParent);
 
             //geoWrapper.Orientation = Orientation.Horizontal;
-
-            //locationDisplay = CreateTable(Model.AnswerObject as GeoPosition);
             
             locationText = new TextView(this.Context);
             
@@ -55,12 +53,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             geoWrapper.AddView(updateLocationButton);
             geoWrapper.AddView(locationText);
-            //geoWrapper.AddView(locationDisplay);
 
             llWrapper.AddView(geoWrapper);
         }
-
-        //private TableLayout locationDisplay;
 
         private TextView locationText;
 
@@ -111,64 +106,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 }
                 else
                 {
-                    CommandService.Execute(new AnswerGeoLocationQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,
-                        Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, 
-                        t.Result.Latitude, t.Result.Longitude, t.Result.Accuracy, t.Result.Timestamp));
-
                     var positionAsText = RenderPositionAsText(t.Result.Latitude, t.Result.Longitude, t.Result.Accuracy);
 
                     locationText.Text = positionAsText;
-                    //locationDisplay = CreateTable(position);
 
-                    SaveAnswer(positionAsText);
+                    this.SaveAnswer(
+                        positionAsText,
+                        new AnswerGeoLocationQuestionCommand(
+                            this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
+                            this.Model.PublicKey.PropagationVector, DateTime.UtcNow, t.Result.Latitude, t.Result.Longitude,
+                            t.Result.Accuracy, t.Result.Timestamp));
                 }
             }));
         }
-
-        /*private TableLayout CreateTable(GeoPosition position)
-        {
-            var table = new TableLayout(this.Context);
-
-            if (position != null)
-            {
-                CreateAndAddRow(table, "Latitude:", position.Latitude);
-                CreateAndAddRow(table, "Longitude:", position.Longitude);
-                CreateAndAddRow(table, "Accuracy:", position.Accuracy);
-            }
-            else
-            {
-                var nonValueRow = new TableRow(this.Context);
-                var nonValueText = new TextView(this.Context) {Text = "N/A"};
-                nonValueText.SetTypeface(null, TypefaceStyle.Bold);
-                nonValueRow.AddView(nonValueText);
-                table.AddView(nonValueRow);
-            }
-
-            return table;
-        }
-
-        private void CreateAndAddRow(TableLayout table, string name, double value)
-        {
-            TableRow th = new TableRow(this.Context);
-            TextView columnName = new TextView(this.Context);
-            columnName.Text = name;
-            columnName.SetTypeface(null, TypefaceStyle.Bold);
-
-            TextView columnValue = new TextView(this.Context);
-
-            var textToShow = value.ToString("N4");
-            
-            //placeholder for minus sign
-            if (value >= 0)
-                textToShow = " " + textToShow;
-            
-            columnValue.SetTypeface(null, TypefaceStyle.Bold);
-            columnValue.Text = textToShow;
-
-            th.AddView(columnName);
-            th.AddView(columnValue);
-            table.AddView(th);
-        }*/
 
         private string RenderPositionAsText(double latitude, double longitude, double accuracy)
         {

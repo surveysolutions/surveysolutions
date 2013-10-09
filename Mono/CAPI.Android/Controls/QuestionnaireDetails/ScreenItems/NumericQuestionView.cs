@@ -8,6 +8,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -43,25 +44,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 return;
             }
 
-            SaveAnswer(etAnswer.Text.Trim());
-        }
+            string newAnswer = this.etAnswer.Text.Trim();
 
-        protected override void SaveAnswer(string newAnswer)
-        {
             if (newAnswer != this.Model.AnswerString)
             {
                 decimal answer;
                 if(!decimal.TryParse(newAnswer,out  answer))
                     return;
-                ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
-                                                                          CapiApplication.Membership.CurrentUser.Id,
-                                                                          Model.PublicKey.Id,
-                                                                          this.Model.PublicKey.PropagationVector,
-                                                                          DateTime.UtcNow, answer));
+
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
 
-                base.SaveAnswer(newAnswer);
+                this.SaveAnswer(newAnswer,
+                    new AnswerNumericIntegerQuestionCommand(
+                        this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
+                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answer));
             }
         }
 
