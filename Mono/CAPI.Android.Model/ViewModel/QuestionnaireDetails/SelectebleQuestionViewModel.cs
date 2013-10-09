@@ -102,6 +102,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private decimal[] CastAnswerToSingleDimensionalArray(object answer)
         {
+            var decimalCast = answer as IEnumerable<decimal>;
+            if (decimalCast != null)
+                return decimalCast.ToArray();
+
             var objectCast = answer as IEnumerable<object>;
             if (objectCast != null)
                 return objectCast.Select(ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();

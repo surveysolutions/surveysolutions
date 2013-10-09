@@ -102,6 +102,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private int[] CastAnswerToSingleDimensionalArray(object answer)
         {
+            var intCast = answer as IEnumerable<int>;
+            if (intCast != null)
+                return intCast.ToArray();
+
             var objectCast = CastAnswerFormObjectToIntArray(answer);
             if (objectCast != null)
                 return objectCast;
@@ -126,6 +130,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private int[][] CastAnswerFormObject2DimensionalToIntArray(object answer)
         {
+            var intCast = answer as IEnumerable<int[]>;
+            if (intCast != null)
+                return intCast.ToArray();
+
             var objectCast = answer as IEnumerable<object>;
             if (objectCast == null)
                 return null;
