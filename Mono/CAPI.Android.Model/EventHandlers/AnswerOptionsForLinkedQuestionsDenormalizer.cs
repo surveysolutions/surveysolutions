@@ -11,6 +11,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<AnswerRemoved>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
+        IEventHandler<NumericRealQuestionAnswered>,
+        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
@@ -33,6 +35,16 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> @event)
+        {
+            this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event)
+        {
+            this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> @event)
         {
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }

@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                                 IEventHandler<MultipleOptionsQuestionAnswered>,
                                                 IEventHandler<SingleOptionQuestionAnswered>,
                                                 IEventHandler<NumericRealQuestionAnswered>,
+                                                IEventHandler<NumericQuestionAnswered>,
+                                                IEventHandler<NumericIntegerQuestionAnswered>,
                                                 IEventHandler<DateTimeQuestionAnswered>,
                                                 IEventHandler<GeoLocationQuestionAnswered>,
                                                 IEventHandler<InterviewerAssigned>,
@@ -149,6 +151,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
         }

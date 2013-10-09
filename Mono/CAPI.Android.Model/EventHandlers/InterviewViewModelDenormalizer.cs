@@ -18,6 +18,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
         IEventHandler<AnswerCommented>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
         IEventHandler<NumericIntegerQuestionAnswered>,
+        IEventHandler<NumericRealQuestionAnswered>,
+        IEventHandler<NumericQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
@@ -106,6 +108,18 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
                            evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                         evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            SetValueAnswer(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PropagationVector,
+                          evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
