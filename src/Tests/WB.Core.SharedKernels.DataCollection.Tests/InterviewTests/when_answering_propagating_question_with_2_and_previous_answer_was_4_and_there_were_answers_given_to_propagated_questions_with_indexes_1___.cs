@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                 => _.HasQuestion(propagatingQuestionId) == true
                 && _.GetQuestionType(propagatingQuestionId) == QuestionType.AutoPropagate
+                && _.IsQuestionInteger(propagatingQuestionId) == true
                 && _.ShouldQuestionPropagateGroups(propagatingQuestionId) == true
                 && _.GetMaxAnswerValueForPropagatingQuestion(propagatingQuestionId) == 100
                 && _.GetGroupsPropagatedByQuestion(propagatingQuestionId) == new[] { propagatedGroupId }
