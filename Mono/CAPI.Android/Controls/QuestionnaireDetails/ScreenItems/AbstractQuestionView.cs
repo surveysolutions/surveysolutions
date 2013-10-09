@@ -42,6 +42,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Dispose(bool disposing)
         {
+            this.isDisposed = true;
+
             if (disposing)
             {
                 Console.WriteLine(string.Format("disposing question '{0}'", Model.Text));
@@ -151,13 +153,24 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         private void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
-            AnswerCommandService.AnswerOnQuestion(this.Context, command,
-                                                  (ex) =>
-                                                  ((Activity) this.Context).RunOnUiThread(
-                                                      () => SaveAnswerErrorHandler(ex)));
+            AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler);
         }
 
         private void SaveAnswerErrorHandler(Exception ex)
+        {
+            if (this.isDisposed)
+                return;
+
+            ((Activity) this.Context).RunOnUiThread(() =>
+            {
+                if (this.isDisposed)
+                    return;
+
+                this.SaveAnswerErrorHandlerImpl(ex);
+            });
+        }
+
+        private void SaveAnswerErrorHandlerImpl(Exception ex)
         {
             this.PutAnswerStoredInModelToUI();
             this.FireAnswerSetEvent(this.GetAnswerStoredInModelAsString());
@@ -239,6 +252,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
 
         private AlertDialog.Builder instructionDialog = null;
+        private bool isDisposed;
 
         protected LinearLayout llRoot
         {
