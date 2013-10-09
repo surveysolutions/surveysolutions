@@ -9,23 +9,29 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
 using CAPI.Android.Core.Model;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
+using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
 using Ninject;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 
 namespace CAPI.Android
 {
-    [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxFragmentActivity
     {
         protected InterviewItemId? ScreenId;
+        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
         protected Guid QuestionnaireId
         {
@@ -98,6 +104,7 @@ namespace CAPI.Android
             }
 
             this.Title = Model.Title;
+            this.ActionBar.SetDisplayShowHomeEnabled(false);
 
             if (bundle == null)
             {
@@ -142,6 +149,9 @@ namespace CAPI.Android
                     ViewGroup.LayoutParams.FillParent);
 
             vpContentParams.LeftMargin = point.X - vpContentParams.Width;
+            if(VpContent == null)
+                logger.Error("Container was destroyed. Null ref will be thrown.");
+
             VpContent.LayoutParameters = vpContentParams;
 
             var lNavigationContainerParams =
@@ -264,7 +274,14 @@ namespace CAPI.Android
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            VpContent.PageSelected -= VpContent_PageSelected;
+
+            if(btnNavigation!= null)
+                btnNavigation.Click -= llNavigationHolder_Click;
+            if(VpContent != null)
+                VpContent.PageSelected -= VpContent_PageSelected;
+            if(NavList != null)
+                NavList.ScreenChanged -= ContentFrameAdapter_ScreenChanged;
+            
             GC.Collect();
         }
 
@@ -273,5 +290,16 @@ namespace CAPI.Android
             base.OnLowMemory();
             GC.Collect();
         }
+
+        public override void Finish()
+        {
+            base.Finish();
+
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
+            if (snapshotStore != null)
+                snapshotStore.PersistShapshot(QuestionnaireId);
+        }
+
+        
     }
 }

@@ -275,3 +275,6 @@ h4.heading {
     color: #fff;
     border-bottom-color:#51A351
 }
+.controls input {
+    margin-bottom: 0;
+}

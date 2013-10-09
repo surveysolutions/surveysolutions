@@ -2,42 +2,57 @@ using System;
 using System.Security.Authentication;
 using Android.App;
 using Android.Content;
+using Android.Content.Res;
+using Android.Graphics.Drawables;
 using Android.Views;
+using Android.Widget;
 using CAPI.Android.Controls.Navigation;
 
 namespace CAPI.Android.Extensions
 {
     public static class ActivityExtensions
     {
-        public static void CreateActionBar( this Activity activity)
+        public static void CreateActionBar(this Activity activity)
         {
-            activity.ActionBar.NavigationMode = ActionBarNavigationMode.List;
-            activity.ActionBar.DisplayOptions = ActionBarDisplayOptions.ShowHome;
+            // Set up your ActionBar
+            ActionBar actionBar = activity.ActionBar;
+            actionBar.SetDisplayShowHomeEnabled(false);
+            actionBar.SetDisplayShowTitleEnabled(false);
+            actionBar.SetDisplayShowCustomEnabled(true);
+            actionBar.SetDisplayUseLogoEnabled(true);
+            actionBar.SetCustomView(Resource.Layout.ActionBar);
 
-            NavigationItemsCollection navigation = new NavigationItemsCollection(activity);
-            
-            activity.ActionBar.SetListNavigationCallbacks(
-                new NavigationSpinnerAdapter(navigation),
-                new NavigationListener(activity, navigation));
-            
+            // You customization
+            var greetingsTextView = (TextView)actionBar.CustomView.FindViewById(Resource.Id.greetingsTextView);
+
+            greetingsTextView.Text = CapiApplication.Membership.CurrentUser == null
+                ? string.Empty
+                : string.Format("Hello, {0}", CapiApplication.Membership.CurrentUser.Name);
+
+            var navigation = new NavigationItemsCollection(activity);
+            var pagesSpinner = (Spinner)actionBar.CustomView.FindViewById(Resource.Id.pagesSpinner);
+            pagesSpinner.Adapter = new NavigationSpinnerAdapter(navigation);
+
+            pagesSpinner.OnItemSelectedListener= new NavigationListener(navigation);
+
             if (navigation.SelectedItemIndex != null)
-                activity.ActionBar.SetSelectedNavigationItem(navigation.SelectedItemIndex.Value);
+                pagesSpinner.SetSelection(navigation.SelectedItemIndex.Value);            
         }
 
         public static bool FinishIfNotLoggedIn(this Activity activity)
         {
             if (!CapiApplication.Membership.IsLoggedIn)
             {
-              //  throw new AuthenticationException("invalid credentials");
+                //  throw new AuthenticationException("invalid credentials");
                 activity.Finish();
                 return true;
             }
             return false;
         }
 
-        public static void ClearAllBackStack<T>(this Context context) where T:Activity
+        public static void ClearAllBackStack<T>(this Context context) where T : Activity
         {
-            Intent intent = new Intent(context,typeof(T) );
+            Intent intent = new Intent(context, typeof(T));
             intent.PutExtra("finish", true); // if you are checking for this in your other Activities
             intent.AddFlags(ActivityFlags.ClearTask);
             intent.AddFlags(ActivityFlags.ClearTop);

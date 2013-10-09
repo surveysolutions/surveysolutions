@@ -22,7 +22,7 @@ namespace CAPI.Android.Services
             this.changelog = changelog;
         }
 
-        //dengerous operation
+        //dangerous operation
         //deletes all information about Interview
         public void DeleteInterveiw(Guid id)
         {

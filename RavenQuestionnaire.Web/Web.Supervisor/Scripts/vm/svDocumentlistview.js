@@ -130,8 +130,10 @@
             self.Url.query['status'] = self.SelectedStatus() || "";
             self.Url.query['interviewerId'] = self.SelectedResponsible() || "";
 
-            window.history.pushState({}, "Interviews", self.Url.toString());
-
+            if (Modernizr.history) {
+                window.history.pushState({}, "Interviews", self.Url.toString());
+            }
+            
             return {
                 TemplateId: selectedTemplate.templateId,
                 TemplateVersion: selectedTemplate.version,

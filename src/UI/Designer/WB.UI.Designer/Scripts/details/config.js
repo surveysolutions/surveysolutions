@@ -43,11 +43,11 @@
                     value: "Geo Location"
                 }
             ],
-            questionScopes = [
-                "Interviewer",
-                "Supervisor",
-                "Headquarters"
-            ],
+            questionScopes = {
+                interviewer: "Interviewer",
+                supervisor: "Supervisor",
+                headquarters: "Headquarters"
+            },
             answerOrders = [
                 {
                     key: "AsIs",
@@ -163,10 +163,25 @@
                 },
                 savedData: 'Data saved successfully',
                 weWillClearCondition: {
-                    message: "Pre-filled question can't have condition expression. We can clear condition and make this questuion pre-filled.",
-                    okBtn: "Yes, clear condition",
-                    cancelBtn: "No, do not clear condition"
-    }
+                    message: "Pre-filled questions can't be conditionally enabled. Would you like to erase the condition expression?",
+                    okBtn: "Yes, erase the condition",
+                    cancelBtn: "No, keep the condition"
+                },
+                weWillClearConditionAndValidation: {
+                    message: "Questions filled in by the supervisor can't be conditionally enabled and don't support validation. Would you like to erase the condition and validation expressions?",
+                    okBtn: "Yes, erase the expressions",
+                    cancelBtn: "No, keep the expressions"
+                },
+                weWillClearSupervisorFlag: {
+                    message: "If a question is pre-filled, it can't at the same time be marked as answered by the supervisor. Would you like to disable the 'answered by the supervisor' option for this question?",
+                    okBtn: "Yes, disable it",
+                    cancelBtn: "No, don't disable it"
+                },
+                weWillClearHeadFlag:{
+                    message: "Questions answered by supervisor can't serve as a header of a roster group. Would you like to disable the 'head' option for this question?",
+                    okBtn: "Yes, disable it",
+                    cancelBtn: "No, don't disable it"
+                },
             },
             // methods
             //-----------------
