@@ -132,6 +132,7 @@
                     if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
                     //    item.isNew(true);
                     }
+                    
                     return item;
                 },
                 objectsFromDto: function (dto) {
