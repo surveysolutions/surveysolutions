@@ -10,11 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             Id = id;
             PropagationVector = propagationVector ?? new int[0];
         }
+
         public InterviewItemId(Guid id)
-        {
-            Id = id;
-            PropagationVector = new int[0];
-        }
+            : this(id, new int[0]) {}
 
         public Guid Id;
         public int[] PropagationVector;
@@ -61,11 +59,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
-        }
-
-        public static explicit operator InterviewItemId(string b)  // explicit byte to digit conversion operator
-        {
-            return Parse(b);
         }
 
         public static InterviewItemId Parse(string value)
