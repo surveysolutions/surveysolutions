@@ -56,7 +56,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     HideKeyboard(etAnswer);
 
                 this.SaveAnswer(newAnswer,
-                    new AnswerNumericIntegerQuestionCommand(
+                    new AnswerNumericQuestionCommand(
                         this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
                         this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answer));
             }
