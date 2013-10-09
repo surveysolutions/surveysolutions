@@ -38,7 +38,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             RadioGroup = this.CreateRadioButtonsGroup();
             this.PutAnswerStoredInModelToUI();
-            RadioGroup.CheckedChange += this.RadioGroupCheckedChange;
 
             llWrapper.AddView(this.RadioGroup);
         }
@@ -61,31 +60,41 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var radioGroup = new RadioGroup(this.Context);
             radioGroup.Orientation = Orientation.Vertical;
+            radioGroup.CheckedChange += this.RadioGroupCheckedChange;
             return radioGroup;
         }
 
         protected void FillRadioButtonGroupWithAnswers()
         {
-            RadioGroup.RemoveAllViews();
+            this.RadioGroup.CheckedChange -= this.RadioGroupCheckedChange;
 
-            RadioButton checkedButton = null;
-            int i = 0;
-
-            foreach (var answer in this.Answers)
+            try
             {
-                var radioButton = this.CreateRadioButton(answer);
+                RadioGroup.RemoveAllViews();
 
-                RadioGroup.AddView(radioButton);
+                RadioButton checkedButton = null;
+                int i = 0;
 
-                if (this.IsAnswerSelected(answer))
-                    checkedButton = radioButton;
+                foreach (var answer in this.Answers)
+                {
+                    var radioButton = this.CreateRadioButton(answer);
 
-                i++;
+                    RadioGroup.AddView(radioButton);
+
+                    if (this.IsAnswerSelected(answer))
+                        checkedButton = radioButton;
+
+                    i++;
+                }
+
+                if (checkedButton != null)
+                {
+                    RadioGroup.Check(checkedButton.Id);
+                }
             }
-
-            if (checkedButton != null)
+            finally
             {
-                RadioGroup.Check(checkedButton.Id);
+                this.RadioGroup.CheckedChange += this.RadioGroupCheckedChange;
             }
         }
 
