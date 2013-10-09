@@ -97,12 +97,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
         }
 
-        protected virtual void SaveAnswer(string newAnswer)
+        protected void SaveAnswer(string newAnswer, AnswerQuestionCommand saveAnswerCommand)
         {
-            OnAnswerSet(newAnswer);
+            this.ExecuteSaveAnswerCommand(saveAnswerCommand);
+
+            this.FireAnswerSetEvent(newAnswer);
         }
 
-        protected void OnAnswerSet(string newAnswer)
+        private void FireAnswerSetEvent(string newAnswer)
         {
             var handler = AnswerSet;
             if (handler != null)
@@ -127,7 +129,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }*/
         }
 
-        protected void SaveComment()
+        private void SaveComment()
         {
             string newComments = etComments.Text.Trim();
             if (newComments != this.Model.Comments)
@@ -146,7 +148,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         }
 
-        protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
+        private void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
             AnswerCommandService.AnswerOnQuestion(this.Context, command,
@@ -155,22 +157,27 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                                                       () => SaveAnswerErrorHandler(ex)));
         }
 
-        protected virtual void SaveAnswerErrorHandler(Exception ex)
+        private void SaveAnswerErrorHandler(Exception ex)
         {
+            this.PutAnswerStoredInModelToUI();
+
             if (!Model.IsEnabled())
                 return;
+
             var logger = ServiceLocator.Current.GetInstance<ILogger>();
             logger.Error("Error on answer set.", ex);
             tvError.Visibility = ViewStates.Visible;
-            tvError.Text = GetDippestException(ex).Message;
+            tvError.Text = this.GetDeepestException(ex).Message;
             logger.Error("Error message: " + tvError.Text);
         }
 
-        private Exception GetDippestException(Exception e)
+        protected abstract void PutAnswerStoredInModelToUI();
+
+        private Exception GetDeepestException(Exception e)
         {
             if (e.InnerException == null)
                 return e;
-            return GetDippestException(e.InnerException);
+            return this.GetDeepestException(e.InnerException);
         }
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)

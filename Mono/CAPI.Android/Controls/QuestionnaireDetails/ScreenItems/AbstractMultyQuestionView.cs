@@ -38,9 +38,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             this.CheckBoxContainer = this.CreateCheckBoxes();
 
-            this.CreateCheckBoxesByOptions();
+            this.PutAnswerStoredInModelToUI();
 
             llWrapper.AddView(this.CheckBoxContainer);
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            this.CreateCheckBoxesByOptions();
         }
 
         protected LinearLayout CreateCheckBoxes()
@@ -100,9 +105,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 
             }
 
-            ExecuteSaveAnswerCommand(CreateSaveAnswerCommand(selectedAnswers.ToArray()));
-
-            SaveAnswer(string.Join(",", selectedAnswers.Select(this.GetAnswerTitle)));
+            this.SaveAnswer(string.Join(",", selectedAnswers.Select(this.GetAnswerTitle)), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
         }
     }
 }

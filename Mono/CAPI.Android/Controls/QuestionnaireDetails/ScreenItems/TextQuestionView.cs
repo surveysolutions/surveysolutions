@@ -7,6 +7,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -25,7 +26,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             etAnswer = new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                    ViewGroup.LayoutParams.WrapContent);
-            etAnswer.Text = Model.AnswerString;
+            this.PutAnswerStoredInModelToUI();
             etAnswer.SetSelectAllOnFocus(true);
             etAnswer.ImeOptions = ImeAction.Done;
             etAnswer.SetSingleLine(true);
@@ -42,28 +43,24 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 // ShowKeyboard(etAnswer);
                 return;
             }
-            SaveAnswer(etAnswer.Text.Trim());
-            /* if (!IsCommentsEditorFocused)
-                 HideKeyboard(etAnswer);*/
-        }
 
-        protected override void SaveAnswer(string newAnswer)
-        {
+            var newAnswer = this.etAnswer.Text.Trim();
+
             if (newAnswer != this.Model.AnswerString)
             {
-                ExecuteSaveAnswerCommand(new AnswerTextQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,Model.PublicKey.Id,
-                                                     this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newAnswer));
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
 
-                base.SaveAnswer(newAnswer);
+                this.SaveAnswer(newAnswer,
+                    new AnswerTextQuestionCommand(
+                        this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
+                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, newAnswer));
             }
         }
 
-        protected override void SaveAnswerErrorHandler(Exception ex)
+        protected override void PutAnswerStoredInModelToUI()
         {
-            base.SaveAnswerErrorHandler(ex);
-            etAnswer.Text = Model.AnswerString;
+            this.etAnswer.Text = this.Model.AnswerString;
         }
 
         private void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
