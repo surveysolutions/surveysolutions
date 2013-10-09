@@ -102,9 +102,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private int[] CastAnswerToSingleDimensionalArray(object answer)
         {
-            var simpleCast = answer as int[];
-            if (simpleCast != null)
-                return simpleCast;
+            var objectCast = CastAnswerFormObjectToIntArray(answer);
+            if (objectCast != null)
+                return objectCast;
+            
             var jArrayCast = this.GetValueFromJArray<int>(answer);
             if (jArrayCast.Length > 0)
                 return jArrayCast;
@@ -113,12 +114,39 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private int[][] CastAnswerTo2DimensionalArray(object answer)
         {
-            var simpleCast = answer as int[][];
-            if (simpleCast != null)
-                return simpleCast;
+            var objectCast = CastAnswerFormObject2DimensionalToIntArray(answer);
+            if (objectCast != null)
+                return objectCast;
+
             var jArrayCast = this.GetValueFromJArray<int[]>(answer);
             if (jArrayCast.Length > 0)
                 return jArrayCast;
+            return null;
+        }
+
+        private int[][] CastAnswerFormObject2DimensionalToIntArray(object answer)
+        {
+            var objectCast = answer as IEnumerable<object>;
+            if (objectCast == null)
+                return null;
+            return objectCast.Select(this.CastAnswerFormObjectToIntArray).ToArray();
+        }
+
+        private int[] CastAnswerFormObjectToIntArray(object answer)
+        {
+            var objectCast = answer as IEnumerable<object>;
+            if (objectCast == null)
+                return null;
+            return objectCast.Select(this.ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
+        }
+
+        private int? ConvertObjectToAnswer(object answer)
+        {
+            if (answer == null)
+                return null;
+            int value;
+            if (int.TryParse(answer.ToString(), out value))
+                return value;
             return null;
         }
 
