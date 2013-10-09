@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => 
                    _.HasQuestion(questionWhichIsForcesPropagationId) == true
                    && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
+                   && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
                    && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId, disabledPropagatedGroupId }
                    && _.HasGroup(propagatedGroupId) == true
                    && _.HasGroup(disabledPropagatedGroupId) == true
@@ -85,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         private Because of = () =>
-            interview.AnswerNumericIntegerQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
+            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
 
         private Cleanup stuff = () =>
         {

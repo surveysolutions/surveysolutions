@@ -539,6 +539,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool IsQuestionInteger(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var autoPropagateQuestion = question as IAutoPropagate;
+            if (autoPropagateQuestion != null)
+                return true;
             
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
