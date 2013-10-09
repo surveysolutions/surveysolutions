@@ -244,17 +244,17 @@
                               self.validationExpression('');
                           });
                   }
-                  if (self.isHead()) {
-                      var weWillClearSupervisorFlag = config.warnings.weWillClearHeadFlag;
-                      bootbox.confirm(weWillClearSupervisorFlag.message,
-                          weWillClearSupervisorFlag.cancelBtn,
-                          weWillClearSupervisorFlag.okBtn,
+                  if (value && self.isHead()) {
+                      var weWillClearHeadFlag = config.warnings.weWillClearHeadFlag;
+                      bootbox.confirm(weWillClearHeadFlag.message,
+                          weWillClearHeadFlag.cancelBtn,
+                          weWillClearHeadFlag.okBtn,
                           function (result) {
                               if (result == false) {
-                                  self.isFeatured(false);
+                                  self.isSupervisorQuestion(false);
                                   return;
                               }
-                              self.scope("Interviewer");
+                              self.isHead(false);
                           });
                   }
               });
