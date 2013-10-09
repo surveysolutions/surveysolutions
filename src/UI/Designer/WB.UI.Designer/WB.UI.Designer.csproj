@@ -413,6 +413,7 @@
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\config.js" />
     <Content Include="Scripts\details\dataprimer.js" />
+    <Content Include="Scripts\details\expressionParser.js" />
     <Content Include="Scripts\details\model.sharePerson.js" />
     <Content Include="Scripts\details\model.statistic.js" />
     <Content Include="Scripts\details\datacontext.js" />
@@ -430,6 +431,7 @@
     <Content Include="Scripts\details\route-mediator.js" />
     <Content Include="Scripts\details\router.js" />
     <Content Include="Scripts\details\utils.js" />
+    <Content Include="Scripts\details\validator.js" />
     <Content Include="Scripts\details\vm.js" />
     <Content Include="Scripts\details\vm.questionnaire.js" />
     <Content Include="Scripts\html5shiv.js" />

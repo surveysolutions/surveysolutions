@@ -390,6 +390,10 @@
         _.each(groups.getAllLocal(), function (group) {
             group.fillChildren();
         });
+        
+        _.each(questions.getAllLocal(), function (question) {
+            question.attachValidation();
+        });
 
         return datacontext;
     });
