@@ -37,7 +37,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 while (true)
                 {
                     this.ExecuteFirstInLineSaveAnswerCommand();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(300);
                 }
             });
         }
