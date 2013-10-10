@@ -1,15 +1,28 @@
 using System;
 using System.Web;
 using Main.Core;
+using Main.Core.Commands;
+using Main.Core.Services;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.GenericSubdomains.Logging;
 using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Designer.Views.Questionnaire.Indexes;
 using WebActivator;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -54,32 +67,49 @@ namespace WB.UI.Designer.App_Start
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new RavenWriteSideInfrastructureModule(ravenSettings),
+                new RavenReadSideInfrastructureModule(ravenSettings),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule()
-            );
+                new DesignerBoundedContextModule(),
+                new MembershipModule(),
+                new MainModule(),
+                new DesignerRegistry()
+                );
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
-            RegisterServices(kernel);
+            PrepareNcqrsInfrastucture(kernel);
 
+            var indexccessor = kernel.Get<IReadSideRepositoryIndexAccessor>();
+            indexccessor.RegisterIndexesFromAssembly(typeof(DesignerReportQuestionnaireListViewItem).Assembly);
 
             return kernel;
         }
 
-        /// <summary>
-        ///     Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
+        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            kernel.Load(new DesignerRegistry());
+            var commandService = new ConcurrencyResolveCommandService(ServiceLocator.Current.GetInstance<ILogger>());
+            NcqrsEnvironment.SetDefault(commandService);
+            NcqrsInit.InitializeCommandService(kernel.Get<ICommandListSupplier>(), commandService);
+            kernel.Bind<ICommandService>().ToConstant(commandService);
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
-            #warning TLK: move NCQRS initialization to Global.asax
-            NcqrsInit.Init(kernel);
+            CreateAndRegisterEventBus(kernel);
+        }
 
-            kernel.Load<MainModule>();
-            kernel.Load<MembershipModule>();
+        private static void CreateAndRegisterEventBus(StandardKernel kernel)
+        {
+            var bus = new ViewConstructorEventBus();
+            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            kernel.Bind<IEventBus>().ToConstant(bus);
+            kernel.Bind<IViewConstructorEventBus>().ToConstant(bus);
+            foreach (var handler in kernel.GetAll(typeof(IEventHandler)))
+            {
+                bus.AddHandler(handler as IEventHandler);
+            }
+
         }
     }
 }

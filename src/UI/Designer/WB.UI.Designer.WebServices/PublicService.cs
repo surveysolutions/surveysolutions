@@ -1,4 +1,5 @@
 ﻿using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.WebServices
 {
@@ -22,7 +23,7 @@ namespace WB.UI.Designer.WebServices
             IJsonExportService exportService,
             IStringCompressor zipUtils, 
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)
+            IViewFactory<QuestionnaireListViewInputModel, WB.UI.Designer.Views.Questionnaire.QuestionnaireListView> viewFactory)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -59,20 +60,21 @@ namespace WB.UI.Designer.WebServices
         {
         }
 
-        public QuestionnaireListView GetQuestionnaireList(QuestionnaireListRequest request)
+        public QuestionnaireListViewMessage GetQuestionnaireList(QuestionnaireListRequest request)
         {
-            return
+            return new QuestionnaireListViewMessage(
                 this.viewFactory.Load(
                     input:
                         new QuestionnaireListViewInputModel
                             {
-                                CreatedBy = this.userHelper.WebServiceUser.UserId, 
-                                IsAdmin = this.userHelper.WebServiceUser.IsAdmin, 
-                                Page = request.PageIndex, 
-                                PageSize = request.PageSize, 
-                                Order = request.SortOrder, 
+
+                                ViewerId = this.userHelper.WebServiceUser.UserId,
+                                IsAdminMode = this.userHelper.WebServiceUser.IsAdmin,
+                                Page = request.PageIndex,
+                                PageSize = request.PageSize,
+                                Order = request.SortOrder,
                                 Filter = request.Filter
-                            });
+                            }));
         }
     }
 }

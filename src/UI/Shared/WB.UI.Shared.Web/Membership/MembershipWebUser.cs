@@ -43,7 +43,7 @@
         {
             get
             {
-                return (Guid)this.MembershipUser.ProviderUserKey;
+                return Guid.Parse(this.MembershipUser.ProviderUserKey.ToString());
             }
         }
 
