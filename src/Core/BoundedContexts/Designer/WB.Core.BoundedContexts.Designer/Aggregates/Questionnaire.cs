@@ -286,11 +286,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
         {
             alias = alias.Trim();
+            title = title.Trim();
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
+
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
@@ -346,11 +349,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
         {
             alias = alias.Trim();
+            title = title.Trim();
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
+
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
@@ -430,14 +436,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
         {
+            alias = alias.Trim();
+            title = title.Trim();
+
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            
+            this.ThrowDomainExceptionIfTitleIsEmpty(title);
 
-            alias = alias.Trim();
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            
             
             ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
@@ -1230,6 +1241,60 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new DomainException(
                     DomainExceptionType.QuestionCanNotContainValidation,
                     "Question cannot contain validations");
+        }
+
+        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias, Guid questionPublicKey)
+        {
+            string[] substitutionReferences = StringUtil.GetAllTermsFromString(questionTitle);
+
+            if(substitutionReferences.Length == 0)
+                return;
+
+            List<string> unknownReference = new List<string>();
+            List<string> incorrectTypeOfReferencedQuestion = new List<string>();
+            bool containsRefToSelf = false;
+
+            var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                .Where(q => q.PublicKey != questionPublicKey)
+                .ToDictionary(q => q.StataExportCaption, q => q.QuestionType);
+                               
+
+            foreach (var substitutionReference in substitutionReferences)
+            {
+                if (!containsRefToSelf)
+                    containsRefToSelf = string.Compare(substitutionReference, alias, StringComparison.OrdinalIgnoreCase) == 0;
+
+                if (substitutionReference.Length > 32 || !questions.ContainsKey(substitutionReference))
+                    unknownReference.Add(substitutionReference);
+                else
+                {
+                    var currentQuestionType = questions[substitutionReference];
+                    bool typeOfRefQuestionIsNotSupported = !(
+                        currentQuestionType == QuestionType.DateTime ||
+                        currentQuestionType == QuestionType.Numeric ||
+                        currentQuestionType == QuestionType.SingleOption ||
+                        currentQuestionType == QuestionType.Text);
+                    if(typeOfRefQuestionIsNotSupported)
+                        incorrectTypeOfReferencedQuestion.Add(substitutionReference);
+                }
+            }
+
+            if(unknownReference.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
+                    "Question title contains unknown substitution references: " + String.Join(", ", unknownReference.ToArray()));
+
+            if (incorrectTypeOfReferencedQuestion.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
+                    "Question title contains invalid substitution references: " + String.Join(", ", incorrectTypeOfReferencedQuestion.ToArray()));
+
+            if(containsRefToSelf)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
+                    "Question title contains invalid substitution references to self");
+
+
         }
 
     }
