@@ -8,7 +8,9 @@
 
     self.GetFilterMethod = function() {
         self.Url.query['interviewerId'] = self.SelectedUser() || "";
-        window.history.pushState({}, "interviewerId", self.Url.toString());
+        if (Modernizr.history) {
+            window.history.pushState({}, "interviewerId", self.Url.toString());
+        }
 
         return { UserId: self.SelectedUser() };
     };

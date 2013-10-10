@@ -40,7 +40,7 @@ namespace Web.Supervisor.Controllers
 
         public DesignerQuestionnairesView QuestionnairesList(DesignerQuestionnairesListViewModel data)
         {
-            QuestionnaireListView list =
+            QuestionnaireListViewMessage list =
                 this.DesignerService.GetQuestionnaireList(
                     new QuestionnaireListRequest(
                         Filter: data.Request.Filter,

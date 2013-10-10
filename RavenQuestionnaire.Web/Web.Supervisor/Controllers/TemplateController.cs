@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
 using Core.Supervisor.Views.Template;
@@ -17,7 +18,13 @@ namespace Web.Supervisor.Controllers
             : base(commandService, globalInfo, logger)
         {
             this.ViewBag.ActivePage = MenuItem.Administration;
+
+#if DEBUG
+            ServicePointManager.ServerCertificateValidationCallback =
+                (self, certificate, chain, sslPolicyErrors) => true;
+#endif
         }
+
 
         private PublicServiceClient DesignerServiceClient
         {

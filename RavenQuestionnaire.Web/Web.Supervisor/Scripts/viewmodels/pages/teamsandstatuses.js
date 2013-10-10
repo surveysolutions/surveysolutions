@@ -11,7 +11,9 @@
              : JSON.parse(self.SelectedTemplate());
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
-        window.history.pushState({}, "Summary", self.Url.toString());
+        if (Modernizr.history) {
+            window.history.pushState({}, "Summary", self.Url.toString());
+        }
 
         return {
             TemplateId: selectedTemplate.templateId,
