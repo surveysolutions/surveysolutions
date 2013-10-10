@@ -174,8 +174,11 @@ namespace Main.Core.Utility
         //move to specific class dedicated for substitution
         public static string[] GetAllTermsFromString(string source)
         {
-           var allOccurenses = Regex.Matches(source, AllowedVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
-           return allOccurenses.ToArray();
+            if (string.IsNullOrWhiteSpace(source))
+                return new string[0];
+
+            var allOccurenses = Regex.Matches(source, AllowedVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
+            return allOccurenses.ToArray();
         }
 
         #endregion

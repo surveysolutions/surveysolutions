@@ -7,6 +7,7 @@ using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -137,7 +138,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(document);
             ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(document);
             ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(document);
-
+            ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(document);
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
@@ -630,6 +631,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
                 "Following linked questions are referencing questions, but referenced questions are not under propagated group",
                 question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
+        }
+
+        //could be split into several methods
+        private void ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(QuestionnaireDocument document)
+        {
+            Func<Guid, bool> isReferencedQuestionsExists = questionId =>
+            {
+                var question = document.Find<IQuestion>(questionId);
+
+                string[] substitutionReferences = StringUtil.GetAllTermsFromString(question.QuestionText);
+
+                if (substitutionReferences.Length == 0)
+                    return true;
+
+                if (substitutionReferences.Contains(question.StataExportCaption))
+                    return false;
+                //not the most efficient way 
+                IEnumerable<IQuestion> questionsSubstitutionReferenced = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
+
+                if (questionsSubstitutionReferenced.Count() >= substitutionReferences.Count())
+                    return false;
+
+                if (questionsSubstitutionReferenced.Any(q => !( q.QuestionType == QuestionType.DateTime ||
+                                                                q.QuestionType == QuestionType.Numeric ||
+                                                                q.QuestionType == QuestionType.SingleOption ||
+                                                                q.QuestionType == QuestionType.Text)))
+                    return false;
+
+                return true;
+            };
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following questions contain unknown substitution references or target question has wrong type",
+                question => !isReferencedQuestionsExists(question.PublicKey));
         }
 
         private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document,
