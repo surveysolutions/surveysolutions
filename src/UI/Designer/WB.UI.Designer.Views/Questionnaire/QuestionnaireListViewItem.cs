@@ -16,7 +16,7 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
         {
-            this.Id = id;
+            this.PublicId = id;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid Id { get; private set; }
+        public Guid PublicId { get; private set; }
 
         /// <summary>
         /// Gets the last entry date.

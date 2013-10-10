@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition.Hosting;
+﻿using System;
+using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
 using Raven.Client;
@@ -15,7 +16,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
 
         private const string Database = "Views";
 
-        protected RavenReadSideRepositoryIndexAccessor(DocumentStore ravenStore)
+        public RavenReadSideRepositoryIndexAccessor(DocumentStore ravenStore)
         {
             this.ravenStore = ravenStore;
         }
@@ -31,6 +32,15 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             using (IDocumentSession session = this.OpenSession())
             {
                 return session.Query<TResult>(indexName);
+            }
+        }
+
+        public TResult Query<TEntity, TResult>(string indexName, Func<IQueryable<TEntity>, TResult> query)
+        {
+            using (IDocumentSession session = this.OpenSession())
+            {
+                return query.Invoke(
+                    session.Query<TEntity>(indexName));
             }
         }
 
