@@ -1,9 +1,5 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Optimization
-@using System.Web.Script.Serialization
-@using Main.Core.Entities.SubEntities
-@using Core.Supervisor.Views.Survey
-@using Mono.CSharp
 @using Newtonsoft.Json
 @using Questionnaire.Core.Web.Helpers
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
@@ -12,142 +8,6 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
-<div id="menu" class="hidden-phone" data-bind="css: filter">
-    <div id="menuInner" class="slim-scroll">
-        <div class="hide-panel-block text-right innerLR">
-            &larr;&nbsp;<a class="pseudo-link" data-bind="click: toggleFilter">Hide filter</a>
-        </div>
-        <ul>
-            <li class="heading"><span>FILTER</span></li>
-        </ul>
-        <ul id="groups-menu">
-            <!-- ko foreach: groups -->
-            <li data-bind="css: css">
-                <a data-bind="html: title, attr: {href : href}"></a>
-            </li>
-            <!-- /ko -->
-        </ul>
-    </div>
-</div>
-<div id="content">
-    <h3 class="sinle-line-header" data-bind="with: questionnaire">
-        <!-- ko text: title -->
-        <!-- /ko -->
-        <span data-bind="text: status"></span></h3>
-    <div class="menubar">
-        <span data-bind="visible: isFilterOpen() == false"><a class="pseudo-link" data-bind="    click: toggleFilter">Show filter</a>&nbsp;&rarr;</span>
-        @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
-        {
-            <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
-                <i class="icon-ok-sign icon-white"></i>Change state</a>
-        }
-        <div class="btn-group">
-            <a href="#/all" class="btn" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
-            <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': filter() == 'flaged' }"><i class="icon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i>flagged (<span data-bind="    text: flagedCount"></span>)</a>
-            <a href="#/commented" class="btn" data-bind="css: { 'btn-primary': filter() == 'commented' }"><i class="icon-comment " data-bind="    css: {'icon-white': filter() == 'commented' }"></i>commented (<span data-bind="    text: commentedCount"></span>)</a>
-            <a href="#/answered"
-                class="btn" data-bind="css: { 'btn-primary': filter() == 'answered' }"><i class="icon-ok"
-                    data-bind="    css: { 'icon-white': filter() == 'answered' }"></i>answered
-                (<span data-bind="    text: answeredCount"></span>)</a>
-            <a href="#/invalid" class="btn "
-                data-bind="css: { 'btn-primary': filter() == 'invalid' }"><i class="icon-warning-sign"
-                    data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span
-                        data-bind="    text: invalidCount"></span>)</a>
-            <a href="#/supervisor" class="btn "
-                data-bind="css: { 'btn-primary': filter() == 'supervisor' }"><i class="icon-pencil"
-                    data-bind="    css: { 'icon-white': filter() == 'supervisor' }"></i>supervisor's
-                                                    (<span data-bind="    text: editableCount"></span>)</a>
-            <a href="#/enabled" class="btn " data-bind="css: { 'btn-primary': filter() == 'enabled' }">
-                <i class="icon-pencil" data-bind="    css: { 'icon-white': filter() == 'enabled' }"></i>enabled (<span data-bind="    text: enabledCount"></span>)</a>
-        </div>
-    </div>
-    <div class="innerLR">@Html.Partial("_alerts")</div>
-    <div class="panel-container">
-        <div id="list">
-            <div class="innerLR ">
-                <!-- ko foreach: groups -->
-                <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
-                    <h2 data-bind="text: title" class="heading"></h2>
-                    <div class="questions">
-                        <table class="table table-bordered table-hover">
-                            <tbody data-bind="foreach: questions">
-                                <tr data-bind="visible : isVisible,css: {success: isSelected, error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
-                                    <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
-                                        <div class="cell-content" data-bind="css: {featured : isFeatured}">
-                                            <span class="icon-star"></span>
-                                            <span data-bind="html: title"></span>
-                                        </div>
-                                    </td>
-                                    <td class="question-answer" data-bind="click: $root.showDetails">
-                                        <div class="cell-content" data-bind="visible: isEnabled">
-                                            <div class="question-clickable">
-                                                <span data-bind="css: markerStyle()" class="question-marker"></span>
-                                                <span data-bind="template: { name: questionType() }"></span>
-                                                <small class="text-error" data-bind="html:validationExpression, visible: isValid()==false"></small>
-                                                <small class="text-error" data-bind="html:validationMessage, visible: isValid()==false"></small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="width: 120px;">
-                                        <div class="actions pull-right">
-                                            <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
-                                                <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
-                                                    <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
-                                                    <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
-                                                </ul>
-                                            </div>
-                                            <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
-                                                <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
-                                            </a>
-                                            <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
-                                                <i class="icon-flag icon-white"></i></a>
-                                            <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- /ko -->
-            </div>
-        </div>
-        <div id="details" data-bind="with: currentQuestion">
-            <button class="close" data-bind="click: $root.closeDetails">&times;</button>
-            <h3 class="heading" data-bind="html: title"></h3>
-            <div data-bind="template: { name: questionType() + 'Full' }"></div>
-            <h4 class="heading">Comments</h4>
-            <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
-                <dt data-bind="text: userName"></dt>
-                <dd>
-                    <span data-bind="text: text"></span>
-                    <span class="text-block comment-date " data-bind="text: moment(date()).fromNow()"></span>
-                </dd>
-            </dl>
-            <textarea data-bind="value: $root.currentComment" class="input-block-level"></textarea>
-            <button class="btn" type="button" data-bind="click: $root.addComment">Add comment</button>
-        </div>
-    </div>
-</div>
-<div id="output">
-    <div class="inner">
-        <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
-            <span>Errors log</span>
-        </div>
-        <div class="body">
-            <ul data-bind="foreach: errors" class="error-list">
-                <li class="error">
-                    <span data-bind="html: error"></span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 @section styles
 {
     @Styles.Render("~/css/list")
@@ -155,6 +15,27 @@
 }
 @section scripts
 {
+    @Scripts.Render("~/js/interview-general", "~/js/interview-details")
+    <script type="text/javascript">
+        var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                {
+                                    TypeNameHandling = TypeNameHandling.None,
+                                    TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                                    Converters = new List<JsonConverter>()
+                                        {
+                                            new EnumToStringConverter(),
+                                            new HtmlEncodeStringPropertiesConverter()
+                                        }
+                                }));
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
+        var userName = '@User.Identity.Name';
+        $(function () {
+            var model = new Supervisor.VM.InterviewDetails(commandExecutionUrl, questionnaire, userName);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+
     <script type="text/html" id="SingleOptionFull">
         <div class="control-group" data-bind="validationElement: selectedOption">
             <div class="controls">
@@ -239,157 +120,126 @@
         <div>accuracy: <span data-bind="text: accuracy"></span></div>
         <div>time stamp: <span data-bind="text: moment(timestamp()).format('lll')"></span></div>
     </script>
-    <script type="text/javascript">
-        var input = window.input || (function(document) {
-            'use strict';
-            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.None,
-                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
-                        Converters = new List<JsonConverter>()
-                        {
-                            new EnumToStringConverter(),
-                            new HtmlEncodeStringPropertiesConverter()
-                        }
-                    })),
-                u = @Html.Raw(JsonConvert.SerializeObject(ViewBag.CurrentUser, Formatting.None, new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.None,
-                        TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                    }));
-            return {
-                questionnaire: q,
-                user: u,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
-            };
-        }(document));
-
-        window.input = input;
-    </script>
-
-    @Scripts.Render("~/js/lib-modules")
-    @Scripts.Render("~/js/interview-details")
-
-    <script type="text/javascript">
-        (function() {
-            var root = this;
-
-            define3RdPartyModules();
-            loadPluginsAndBoot();
-
-            function define3RdPartyModules() {
-                // These are already loaded via bundles. 
-                // We define them and put them in the root object.
-                define('jquery', [], function() { return root.jQuery; });
-                define('ko', [], function() { return root.ko; });
-                define('amplify', [], function() { return root.amplify; });
-                define('moment', [], function() { return root.moment; });
-                define('lodash', [], function() { return root._; });
-                define('director', [], function() { return root.Router; });
-                define('input', [], function() { return root.input; });
-            }
-
-            function loadPluginsAndBoot() {
-                requirejs.config({
-                    baseUrl: '@Url.Content("~/Scripts/lib/")',
-                    config: {
-                        'waitSeconds': 15
-                    },
-                    paths: {
-                        app: '@Url.Content("~/Scripts/details/app/")'
-                    },
-                    shim: {
-                        
-                    }
-                });
-               
-                boot();
-            }
-
-            function boot() {
-                require(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid', 'moment'],
-                    function($, ko, amplify, _, viewmodel, input, datacontext) {
-                        ko.validation.configure({
-                            insertMessages: false,
-                            decorateElement: true,
-                            errorElementClass: 'error'
-                        });
-
-                        ko.bindingHandlers.datepicker = {
-                            init: function(element, valueAccessor, allBindingsAccessor) {
-                                //initialize datepicker with some optional options
-                                var options = allBindingsAccessor().datepickerOptions || {};
-                                $(element).datepicker(options);
-
-                                //when a user changes the date, update the view model
-                                ko.utils.registerEventHandler(element, "changeDate", function(event) {
-                                    var value = valueAccessor();
-                                    if (ko.isObservable(value)) {
-                                        value(event.date);
-                                    }
-                                });
-                            },
-                            update: function(element, valueAccessor) {
-                                var widget = $(element).data("datepicker");
-                                //when the view model is updated, update the widget
-                                if (widget) {
-                                    widget.date = ko.utils.unwrapObservable(valueAccessor());
-                                    if (widget.date) {
-                                        widget.setValue();
-                                    }
-                                }
-                            }
-                        };
-
-                        ko.bindingHandlers.popover = {
-                            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                                var cssSelectorForPopoverTemplate = ko.utils.unwrapObservable(valueAccessor());
-                                var popOverTemplate = "<div id='my-knockout-popver'>" + $(cssSelectorForPopoverTemplate).html() + "</div>";
-                                $(element).popover({ content: popOverTemplate, html: true, trigger: 'manual' });
-
-                                $(element).click(function() {
-                                    $(this).popover('toggle');
-                                    var thePopover = document.getElementById("my-knockout-popver");
-                                    ko.applyBindings(viewModel, thePopover);
-                                });
-                            }
-                        };
-
-                        ko.bindingHandlers.date = {
-                            update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
-                                var value = valueAccessor(),
-                                    allBindings = allBindingsAccessor();
-                                var valueUnwrapped = ko.utils.unwrapObservable(value);
-                                var pattern = allBindings.datePattern || 'MM/dd/yyyy';
-                                $(element).text(valueUnwrapped.toString(pattern));
-                            }
-                        };
-
-                        Date.prototype.mmddyyyy = function() {
-                            var yyyy = this.getFullYear().toString();
-                            var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
-                            var dd = this.getDate().toString();
-                            return (mm[1] ? mm : "0" + mm[0]) + '/' + (dd[1] ? dd : "0" + dd[0]) + '/' + yyyy; // padding
-                        };
-
-                        ko.validation.rules['notempty'] = {
-                            validator: function(array) {
-                                return array().length > 0;
-                            },
-                            message: 'The array must contain at least one valid element.'
-                        };
-
-                        $(document).ready(function() {
-                            $.when(datacontext.parseData(input))
-                                .done(function() {
-                                    $('#umbrella').attr('data-bind', 'visible:isSaving');
-                                    viewmodel.init();
-                                    ko.applyBindings(viewmodel);
-                                });
-                        });
-                    });
-            }
-        })();
-    </script>
 }
+
+<div data-bind="visible: IsPageLoaded">
+    <div id="menu" class="hidden-phone" data-bind="css: filter">
+        <div id="menuInner" class="slim-scroll">
+            <div class="hide-panel-block text-right innerLR">
+                &larr;&nbsp;<a class="pseudo-link" data-bind="click: ToggleFilter">Hide filter</a>
+            </div>
+            <ul>
+                <li class="heading"><span>FILTER</span></li>
+            </ul>
+            <ul id="groups-menu">
+                <!-- ko foreach: groups -->
+                <li data-bind="css: css">
+                    <a data-bind="html: title, attr: {href : href}"></a>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </div>
+    </div>
+    <div id="content">
+        <h3 class="sinle-line-header" data-bind="with: questionnaire">
+            <!-- ko text: title -->
+            <!-- /ko -->
+            <span data-bind="text: status"></span></h3>
+        <div class="menubar">
+            <span data-bind="visible: !IsFilterOpen()"><a class="pseudo-link" data-bind="    click: ToggleFilter">Show filter</a>&nbsp;&rarr;</span>
+            @if (Model.Status == InterviewStatus.Completed && GlobalInfo.IsSupervisor)
+            {
+                <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
+                    <i class="icon-ok-sign icon-white"></i>Change state</a>
+            }
+            <div class="btn-group">
+                <a href="#/all" class="btn" data-bind="css: { 'btn-primary': filter() == 'all' }">all</a>
+                <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': filter() == 'flaged' }"><i class="icon-flag" data-bind="    css: {'icon-white': filter() == 'flaged' }"></i>flagged (<span data-bind="    text: flagedCount"></span>)</a>
+                <a href="#/commented" class="btn" data-bind="css: { 'btn-primary': filter() == 'commented' }"><i class="icon-comment " data-bind="    css: {'icon-white': filter() == 'commented' }"></i>commented (<span data-bind="    text: commentedCount"></span>)</a>
+                <a href="#/answered"
+                   class="btn" data-bind="css: { 'btn-primary': filter() == 'answered' }"><i class="icon-ok"
+                                                                                             data-bind="    css: { 'icon-white': filter() == 'answered' }"></i>answered
+                    (<span data-bind="    text: answeredCount"></span>)</a>
+                <a href="#/invalid" class="btn "
+                   data-bind="css: { 'btn-primary': filter() == 'invalid' }"><i class="icon-warning-sign"
+                                                                                data-bind="    css: { 'icon-white': filter() == 'invalid' }"></i>invalid (<span
+                                                                                                                                                              data-bind="    text: invalidCount"></span>)</a>
+                <a href="#/supervisor" class="btn "
+                   data-bind="css: { 'btn-primary': filter() == 'supervisor' }"><i class="icon-pencil"
+                                                                                   data-bind="    css: { 'icon-white': filter() == 'supervisor' }"></i>supervisor's
+                    (<span data-bind="    text: editableCount"></span>)</a>
+                <a href="#/enabled" class="btn " data-bind="css: { 'btn-primary': filter() == 'enabled' }">
+                    <i class="icon-pencil" data-bind="    css: { 'icon-white': filter() == 'enabled' }"></i>enabled (<span data-bind="    text: enabledCount"></span>)</a>
+            </div>
+        </div>
+        <div class="innerLR">@Html.Partial("_alerts")</div>
+        <div class="panel-container">
+            <div id="list">
+                <div class="innerLR ">
+                    <!-- ko foreach: groups -->
+                    <div data-bind="visible: visibleQuestionsCount() > 0 && isVisible()">
+                        <h2 data-bind="text: title" class="heading"></h2>
+                        <div class="questions">
+                            <table class="table table-bordered table-hover">
+                                <tbody data-bind="foreach: questions">
+                                    <tr data-bind="visible : isVisible,css: {success: isSelected, error : isValid() == false && isEnabled(), mandatory : isMandatory, disabled: isEnabled() == false}">
+                                        <td style="width: 60%" class="question-text" data-bind="click: $root.showDetails">
+                                            <div class="cell-content" data-bind="css: {featured : isFeatured}">
+                                                <span class="icon-star"></span>
+                                                <span data-bind="html: title"></span>
+                                            </div>
+                                        </td>
+                                        <td class="question-answer" data-bind="click: $root.showDetails">
+                                            <div class="cell-content" data-bind="visible: isEnabled">
+                                                <div class="question-clickable">
+                                                    <span data-bind="css: markerStyle()" class="question-marker"></span>
+                                                    <span data-bind="template: { name: questionType() }"></span>
+                                                    <small class="text-error" data-bind="html:validationExpression, visible: isValid()==false"></small>
+                                                    <small class="text-error" data-bind="html:validationMessage, visible: isValid()==false"></small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div class="actions pull-right">
+                                                <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlagged() == false || isReadonly == false)}">
+                                                    <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li data-bind="visible: isReadonly() == false"><a href="#" data-bind="    click: $root.showDetails">Answer</a></li>
+                                                        <li><a href="#" data-bind="click: $root.showDetails">Comment</a></li>
+                                                        <li data-bind="visible: isFlagged() == false"><a data-bind="    click: $root.flagAnswer">Flag</a></li>
+                                                    </ul>
+                                                </div>
+                                                <a class="btn btn-mini btn-success" data-bind="click: $root.showDetails, visible: comments().length > 0">
+                                                    <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
+                                                </a>
+                                                <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlagged">
+                                                    <i class="icon-flag icon-white"></i></a>
+                                                <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.showDetails, visible: isReadonly == false">answer</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div id="details" data-bind="with: currentQuestion">
+                <button class="close" data-bind="click: $root.closeDetails">&times;</button>
+                <h3 class="heading" data-bind="html: title"></h3>
+                <div data-bind="template: { name: questionType() + 'Full' }"></div>
+                <h4 class="heading">Comments</h4>
+                <dl @*class="dl-horizontal"*@ data-bind="foreach: comments">
+                    <dt data-bind="text: userName"></dt>
+                    <dd>
+                        <span data-bind="text: text"></span>
+                        <span class="text-block comment-date " data-bind="text: moment(date()).fromNow()"></span>
+                    </dd>
+                </dl>
+                <textarea data-bind="value: $root.currentComment" class="input-block-level"></textarea>
+                <button class="btn" type="button" data-bind="click: $root.addComment">Add comment</button>
+            </div>
+        </div>
+    </div>    
+</div>

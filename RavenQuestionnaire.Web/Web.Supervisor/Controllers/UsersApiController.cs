@@ -2,7 +2,6 @@
 using System.Web.Http;
 using Core.Supervisor.Views.Interviewer;
 using Core.Supervisor.Views.User;
-using Main.Core.Commands.User;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
@@ -70,34 +69,6 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.supervisorsFactory.Load(input);
-        }
-
-        /// <summary>
-        ///     Lock user
-        /// </summary>
-        public LockResult Lock(LockRequest request)
-        {
-            if (request.IsLocked)
-            {
-                this.CommandService.Execute(new UnlockUserCommand(request.UserId));
-            }
-            else
-            {
-                this.CommandService.Execute(new LockUserCommand(request.UserId));
-            }
-
-            return new LockResult();
-        }
-
-        public class LockRequest
-        {
-            public Guid UserId { get; set; }
-            public bool IsLocked { get; set; }
-        }
-
-        public class LockResult
-        {
-            public bool IsSuccess = true;
         }
     }
 }
