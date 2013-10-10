@@ -1261,10 +1261,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var substitutionReference in substitutionReferences)
             {
-                if (!containsRefToSelf)
-                    containsRefToSelf = string.Compare(substitutionReference, alias, StringComparison.OrdinalIgnoreCase) == 0;
+                
+                //extract validity of variable name to separate method and make check validity of substitutionReference  
+                if (substitutionReference.Length > 32)
+                {
+                    unknownReference.Add(substitutionReference);
+                    continue;
+                }
 
-                if (substitutionReference.Length > 32 || !questions.ContainsKey(substitutionReference))
+                if (!containsRefToSelf)
+                {
+                    bool currentRefToSelf = string.Compare(substitutionReference, alias, StringComparison.OrdinalIgnoreCase) == 0;
+                    if (currentRefToSelf)
+                    {
+                        containsRefToSelf = true;
+                        continue;
+                    }
+                }
+                
+
+                if (!questions.ContainsKey(substitutionReference))
                     unknownReference.Add(substitutionReference);
                 else
                 {
