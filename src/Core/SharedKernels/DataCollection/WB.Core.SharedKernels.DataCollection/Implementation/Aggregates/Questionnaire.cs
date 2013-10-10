@@ -889,23 +889,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (IsSpecialThisIdentifier(identifier))
                 {
-                    if (!distinctQuestionIds.Contains(contextQuestionId))
-                    {
-                        distinctQuestionIds.Add(contextQuestionId);
-                    }
-
-                    continue;
+                    distinctQuestionIds.Add(contextQuestionId);
                 }
+                else
+                {
+                    Guid parsedId;
+                    if (!Guid.TryParse(identifier, out parsedId))
+                        throw new QuestionnaireException(string.Format(
+                            "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
+                            identifier, expression));
 
-                Guid parsedId;
-                if (!Guid.TryParse(identifier, out parsedId))
-                    throw new QuestionnaireException(string.Format(
-                        "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
-                        identifier, expression));
+                    ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId, hasQuestion);
 
-                ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId, hasQuestion);
-
-                distinctQuestionIds.Add(parsedId);
+                    distinctQuestionIds.Add(parsedId);
+                }
             }
 
             return distinctQuestionIds;
