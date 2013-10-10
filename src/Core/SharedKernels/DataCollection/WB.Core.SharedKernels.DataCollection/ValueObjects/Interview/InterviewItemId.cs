@@ -61,6 +61,11 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             return Id.ToString();
         }
 
+        public static explicit operator InterviewItemId(string b) // explicit byte to digit conversion operator
+        {
+            return Parse(b);
+        }
+
         public static InterviewItemId Parse(string value)
         {
             if (value.Contains(','))

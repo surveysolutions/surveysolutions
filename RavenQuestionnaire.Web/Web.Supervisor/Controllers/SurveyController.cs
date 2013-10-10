@@ -43,16 +43,22 @@ namespace Web.Supervisor.Controllers
             return this.View(usersAndQuestionnaires.Users);
         }
 
-        public ActionResult Interviews(string status, string templateid, string interviewerid, string statchange)
+        public ActionResult Interviews()
         {
-            if (!string.IsNullOrWhiteSpace(statchange))
-            {
-                this.Success(string.Format(@"Status was successfully changed. Interview is {0}", status));
-            }
             this.ViewBag.ActivePage = MenuItem.Docs;
             UserLight currentUser = this.GlobalInfo.GetCurrentUser();
             this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(this.Filters());
+        }
+
+        public ActionResult InterviewStatusChanged(string statchange)
+        {
+            if (!string.IsNullOrWhiteSpace(statchange))
+            {
+                this.Success(string.Format(@"Status was successfully changed. Interview is {0}", statchange));
+            }
+
+            return this.RedirectToAction("Interviews");
         }
 
         public ActionResult TeamMembersAndStatuses()

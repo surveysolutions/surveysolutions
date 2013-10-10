@@ -1,10 +1,6 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Optimization
-@using Main.Core.View.Question
 @using Newtonsoft.Json
-@using Questionnaire.Core.Web.Helpers
-@using Web.Supervisor.Code
-@using Web.Supervisor.Models
 
 @model Core.Supervisor.Views.TakeNew.TakeNewInterviewView
 
@@ -14,104 +10,28 @@
 
 <h3>Take New Interview</h3>
 
+@section styles
+{
+    @Styles.Render("~/css/interview-new")
+}
+
 @section scripts
 {
+    @Scripts.Render("~/js/interview-general", "~/js/interview-new")
     <script type="text/javascript">
-        var input = window.input || (function(document) {
-            'use strict';
-            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
-                })) ;
-            return {
-                questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                backUrl: '@Url.Action("Interviews", "HQ", new { questionnaireId = "_______" }, Request.Url.Scheme)',
-            };
-        }(document));
+        $(function() {
+            var questionnaire = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings
+                                  {
+                                      TypeNameHandling = TypeNameHandling.Objects,
+                                      TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                                  }));
+            var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
+            var interviewListUrl = '@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme)';
 
-        window.input = input;
-    </script>
-
-    @Scripts.Render("~/js/lib-modules")
-    @Scripts.Render("~/js/interview-assign")
-
-    <script type="text/javascript">
-        (function() {
-            var root = this;
-
-            define3RdPartyModules();
-            loadPluginsAndBoot();
-
-            function define3RdPartyModules() {
-                // These are already loaded via bundles. 
-                // We define them and put them in the root object.
-                define('jquery', [], function() { return root.jQuery; });
-                define('ko', [], function() { return root.ko; });
-                define('amplify', [], function() { return root.amplify; });
-                define('moment', [], function() { return root.moment; });
-                define('lodash', [], function() { return root._; });
-                define('director', [], function() { return root.Router; });
-                define('input', [], function() { return root.input; });
-            }
-
-            function loadPluginsAndBoot() {
-                requirejs.config({
-                    baseUrl: '@Url.Content("~/Scripts/lib/")',
-                    config: {
-                        'waitSeconds': 15
-                    },
-                    paths: {
-                        app: '@Url.Content("~/Scripts/assign/app/")'
-                    }
-                });
-
-                boot();
-            }
-
-            function boot() {
-                requirejs(['jquery', 'knockout', 'amplify', 'lodash', 'app/viewmodel', 'input', 'app/datacontext', 'Math.uuid'],
-                    function($, ko, amplify, _, viewmodel, input, datacontext) {
-                        ko.validation.configure({
-                            insertMessages: false,
-                            decorateElement: true,
-                            errorElementClass: 'error'
-                        });
-
-                        ko.bindingHandlers.datepicker = {
-                            init: function(element, valueAccessor, allBindingsAccessor) {
-                                //initialize datepicker with some optional options
-                                var options = allBindingsAccessor().datepickerOptions || {};
-                                $(element).datepicker(options).on("changeDate", function(ev) {
-                                    var observable = valueAccessor();
-                                    observable(ev.date);
-                                });
-                            },
-                            update: function(element, valueAccessor) {
-                                var value = ko.utils.unwrapObservable(valueAccessor());
-                                $(element).datepicker("setValue", value);
-                            }
-                        };
-
-                        ko.validation.rules['notempty'] = {
-                            validator: function(array) {
-                                return array.length > 0;
-                            },
-                            message: 'The array must contain at least one valid element.'
-                        };
-
-                        $(document).ready(function() {
-                            $.when(datacontext.parseData(input))
-                                .done(function() {
-                                    $('#umbrella').attr('data-bind', 'visible:isSaving');
-                                    viewmodel.init();
-                                    ko.applyBindings(viewmodel);
-                                });
-                        });
-                    });
-            }
-        })();
+            var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl);
+            model.load();
+            ko.applyBindings(model);
+        });
     </script>
 
     <script type="text/html" id="SingleOption">
@@ -208,7 +128,7 @@
 }
 
 <h4 data-bind="text: questionnaire().title"></h4>
-<div class="row-fluid" id="featured-questions-region">
+<div class="row-fluid" id="featured-questions-region" data-bind="visible: IsPageLoaded">
     <div class="span12">
         <div id="featured-questions" class="form-horizontal">
             <!-- ko foreach: questions -->
@@ -223,23 +143,9 @@
                 </div>
             </div>
         </div>
-        <p id="assignmentButton">
-            <button class="btn btn-success btn-large" data-bind="click: saveCommand, enable: isSaveEnable"><i class="icon-white icon-ok"></i>&nbsp;Save</button>
-        </p>
-    </div>
-</div>
-<div id="output">
-    <div class="inner">
-        <div class="title">
-            <button type="button" class="close" data-bind="click: hideOutput">&times;</button>
-            <span>Errors log</span>
-        </div>
-        <div class="body">
-            <ul data-bind="foreach: errors" class="error-list">
-                <li class="error">
-                    <pre data-bind="html: error"></pre>
-                </li>
-            </ul>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" data-bind="click: saveCommand, enable: isSaveEnable">Create</button>
+            @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn " })
         </div>
     </div>
 </div>

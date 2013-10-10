@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -37,12 +36,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 while (true)
                 {
                     this.ExecuteFirstInLineSaveAnswerCommand();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(300);
                 }
             });
         }
 
-        public void AnswerOnQuestion(Context context, AnswerQuestionCommand command, Action<Exception> errorCallback)
+        public void AnswerOnQuestion(AnswerQuestionCommand command, Action<Exception> errorCallback)
         {
             UpdateExecutionFlow(new CommandAndErrorCallback(command, errorCallback));
         }

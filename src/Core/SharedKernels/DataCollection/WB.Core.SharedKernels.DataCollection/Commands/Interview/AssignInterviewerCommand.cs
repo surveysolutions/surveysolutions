@@ -12,7 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public AssignInterviewerCommand(Guid interviewId, Guid userId, Guid interviewerId)
             : base(interviewId, userId)
         {
-            ThrowArgumentExceptionIfGuidIsEmpty(interviewerId);
+            if (interviewerId == Guid.Empty)
+                throw new ArgumentException("Interviewer ID cannot be empty.");
 
             this.InterviewerId = interviewerId;
         }

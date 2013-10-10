@@ -2,39 +2,44 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Newtonsoft.Json.Linq;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace Web.Supervisor.Code.CommandTransformation
 {
     public class CommandTransformator
     {
-        public ICommand TransformCommnadIfNeeded(string type, ICommand command, IGlobalInfoProvider globalInfo)
+        private static IGlobalInfoProvider globalInfo
+        {
+            get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
+        }
+
+        public ICommand TransformCommnadIfNeeded(string type, ICommand command)
         {
             switch (type)
             {
                 case "CreateInterviewCommand":
-                    return GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
+                    command = GetCreateInterviewCommand((CreateInterviewControllerCommand) command);
                     break;
                 case "AnswerDateTimeQuestionCommand":
-                    break;
                 case "AnswerMultipleOptionsQuestionCommand":
-                    break;
                 case "AnswerNumericQuestionCommand":
-                    break;
                 case "AnswerSingleOptionQuestionCommand":
-                    break;
                 case "AnswerTextQuestionCommand":
-                    break;
                 case "AnswerGeoLocationQuestionCommand":
-                    break;
                 case "AssignInterviewerCommand":
-                    var assignCommand = (AssignInterviewerCommand) command;
-                    return new AssignInterviewerCommand(assignCommand.InterviewId, globalInfo.GetCurrentUser().Id, assignCommand.InterviewerId);
+                case "DeleteInterviewCommand":
+                    break;
+            }
+            var interviewCommand = command as InterviewCommand;
+            if (interviewCommand != null)
+            {
+                interviewCommand.UserId = globalInfo.GetCurrentUser().Id;
             }
 
             return command;
@@ -47,7 +52,7 @@ namespace Web.Supervisor.Code.CommandTransformation
                 .ToDictionary(a => a.Key, a => a.Value);
 
             var resultCommand = new CreateInterviewCommand(command.InterviewId,
-                                                           command.UserId,
+                                                           globalInfo.GetCurrentUser().Id,
                                                            command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,
