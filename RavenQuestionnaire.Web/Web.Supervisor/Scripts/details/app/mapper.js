@@ -41,7 +41,8 @@
                         break;
                     case "Numeric":
                     case "AutoPropagate":
-                        item = new model.NumericQuestion();
+                        item = new model.NumericQuestion(_.isNull(dto.Settings) ? true : dto.Settings.IsInteger);
+
                         if (!_.isNull(dto.Answer)) {
                             item.answer(dto.Answer * 1);
                         }
@@ -88,6 +89,7 @@
                 item.isValid(dto.IsValid);
                 item.validationMessage(dto.ValidationMessage);
                 item.validationExpression(dto.ValidationExpression);
+                
                 return item;
             }
         },

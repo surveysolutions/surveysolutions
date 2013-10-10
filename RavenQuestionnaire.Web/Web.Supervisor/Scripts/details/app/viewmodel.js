@@ -120,8 +120,8 @@ define('app/viewmodel', ['knockout', 'app/datacontext', 'director', 'input', 'ap
                 var commandName = "";
                 switch (question.questionType()) {
                     case "Text": commandName = config.commands.answerTextQuestionCommand; break;
-                    case "AutoPropagate": commandName = config.commands.answerNumericQuestionCommand; break;
-                    case "Numeric": commandName = config.commands.answerNumericQuestionCommand; break;
+                    case "AutoPropagate": commandName = config.commands.answerNumericIntegerQuestionCommand; break;
+                    case "Numeric": commandName = question.isInteger() ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand; break;
                     case "DateTime": commandName = config.commands.answerDateTimeQuestionCommand; break;
                     case "GpsCoordinates": commandName = config.commands.answerGeoLocationQuestionCommand; break;
                     case "SingleOption":

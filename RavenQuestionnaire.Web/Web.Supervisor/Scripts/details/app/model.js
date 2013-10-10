@@ -77,10 +77,11 @@ function (ko) {
             self.errors = ko.validation.group(self);
             return self;
         },
-        NumericQuestion: function () {
+        NumericQuestion: function (isInteger) {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.answer = ko.observable().extend({required: true, number: true, digit: true });
+            self.isInteger = ko.observable(isInteger);
+            self.answer = ko.observable().extend({ required: true, number: true, digit: isInteger });
             self.errors = ko.validation.group(self);
             return self;
         },

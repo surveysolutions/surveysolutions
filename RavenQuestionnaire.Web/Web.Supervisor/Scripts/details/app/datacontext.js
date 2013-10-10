@@ -120,7 +120,14 @@ define('app/datacontext',
             return command;
         };
         
-        commands[config.commands.answerNumericQuestionCommand] = function (args) {
+        commands[config.commands.answerNumericRealQuestionCommand] = function (args) {
+            var question = questions.getLocalById(args.questionId);
+            var command = prepareQuestionCommand(question);
+            command.answer = question.answer();
+            return command;
+        };
+        
+        commands[config.commands.answerNumericIntegerQuestionCommand] = function (args) {
             var question = questions.getLocalById(args.questionId);
             var command = prepareQuestionCommand(question);
             command.answer = question.answer();
