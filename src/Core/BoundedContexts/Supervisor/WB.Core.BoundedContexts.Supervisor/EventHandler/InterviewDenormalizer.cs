@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
+        IEventHandler<AnswerRemoved>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
         IEventHandler<QuestionDisabled>,
@@ -211,6 +212,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVectors);
         }
 
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            this.UpdateQuestion(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+            {
+                question.Answer = null;
+                question.IsAnswered = false;
+            });
+        }
+
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             PreformActionOnLevel(evnt.EventSourceId, evnt.Payload.PropagationVector, (level) =>
@@ -333,6 +343,10 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = this.interviews.GetById(interviewId);
             var levelId = CreateLevelIdFromPropagationVector(vector);
+
+            if (!interview.Levels.ContainsKey(levelId))
+                return;
+
             if (action(interview.Levels[levelId]))
             {
                 this.interviews.Store(interview, interview.InterviewId);
