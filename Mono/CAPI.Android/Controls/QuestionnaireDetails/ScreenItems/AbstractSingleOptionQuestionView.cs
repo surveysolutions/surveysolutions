@@ -37,41 +37,64 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             base.Initialize();
 
             RadioGroup = this.CreateRadioButtonsGroup();
-            FillRadioButtonGroupWithAnswers();
-            RadioGroup.CheckedChange += this.RadioGroupCheckedChange;
+            this.PutAnswerStoredInModelToUI();
 
             llWrapper.AddView(this.RadioGroup);
+        }
+
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            T selectedAnswer = this.Answers.SingleOrDefault(this.IsAnswerSelected);
+
+            return selectedAnswer != null
+                ? this.GetAnswerTitle(selectedAnswer)
+                : string.Empty;
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            this.FillRadioButtonGroupWithAnswers();
         }
 
         protected RadioGroup CreateRadioButtonsGroup()
         {
             var radioGroup = new RadioGroup(this.Context);
             radioGroup.Orientation = Orientation.Vertical;
+            radioGroup.CheckedChange += this.RadioGroupCheckedChange;
             return radioGroup;
         }
 
         protected void FillRadioButtonGroupWithAnswers()
         {
-            RadioGroup.RemoveAllViews();
+            this.RadioGroup.CheckedChange -= this.RadioGroupCheckedChange;
 
-            RadioButton checkedButton = null;
-            int i = 0;
-
-            foreach (var answer in this.Answers)
+            try
             {
-                var radioButton = this.CreateRadioButton(answer);
+                RadioGroup.RemoveAllViews();
 
-                RadioGroup.AddView(radioButton);
+                RadioButton checkedButton = null;
+                int i = 0;
 
-                if (this.IsAnswerSelected(answer))
-                    checkedButton = radioButton;
+                foreach (var answer in this.Answers)
+                {
+                    var radioButton = this.CreateRadioButton(answer);
 
-                i++;
+                    RadioGroup.AddView(radioButton);
+
+                    if (this.IsAnswerSelected(answer))
+                        checkedButton = radioButton;
+
+                    i++;
+                }
+
+                if (checkedButton != null)
+                {
+                    RadioGroup.Check(checkedButton.Id);
+                }
             }
-
-            if (checkedButton != null)
+            finally
             {
-                RadioGroup.Check(checkedButton.Id);
+                this.RadioGroup.CheckedChange += this.RadioGroupCheckedChange;
             }
         }
 
@@ -100,14 +123,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var selectedItem = this.RadioGroup.FindViewById<RadioButton>(e.CheckedId);
 
-            var selectedAnswer = FindAnswerInModelByRadioButtonTag(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
+            T selectedAnswer = FindAnswerInModelByRadioButtonTag(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
 
             if (selectedAnswer == null)
                 return;
 
-            ExecuteSaveAnswerCommand(CreateSaveAnswerCommand(selectedAnswer));
-
-            SaveAnswer(GetAnswerTitle(selectedAnswer));
+            this.SaveAnswer(this.GetAnswerTitle(selectedAnswer), CreateSaveAnswerCommand(selectedAnswer));
         }
     }
 }
