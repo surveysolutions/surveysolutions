@@ -15,8 +15,8 @@ namespace Main.Core.Utility
     /// </summary>
     public static class StringUtil
     {
-        private static string allowedVariableNameRegexp = @"^%%\w+%%$";
-        
+        private const string AllowedVariableNameRegexp = @"(?<=%%)(\w+(?=%%))";
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -171,9 +171,10 @@ namespace Main.Core.Utility
             return new string(chars);
         }
 
+        //move to specific class dedicated for substitution
         public static string[] GetAllTermsFromString(string source)
         {
-           var allOccurenses = Regex.Matches(source, allowedVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
+           var allOccurenses = Regex.Matches(source, AllowedVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
            return allOccurenses.ToArray();
         }
 
