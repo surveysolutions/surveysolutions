@@ -237,8 +237,13 @@ namespace CAPI.Android
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+
+                AndroidEnvironment.UnhandledExceptionRaiser -= AndroidEnvironmentUnhandledExceptionRaiser;
+            }
+
             base.Dispose(disposing);
-            AndroidEnvironment.UnhandledExceptionRaiser -= AndroidEnvironmentUnhandledExceptionRaiser;
         }
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {

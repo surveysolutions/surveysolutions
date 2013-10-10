@@ -25,7 +25,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly Context context;
         private readonly Guid questionnaireId;
         private readonly InterviewStatus status;
-        private readonly bool enabled;
         
         private readonly IQuestionViewFactory questionViewFactory;
         private readonly EventHandler<ScreenChangedEventArgs> screenChangeEventHandler;
@@ -40,7 +39,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.status = status;
             this.questionViewFactory = new DefaultQuestionViewFactory(CapiApplication.Kernel.Get<IAnswerOnQuestionCommandService>());
             this.screenChangeEventHandler = screenChangeEventHandler;
-            this.enabled = screen.Enabled;
         }
 
         protected override View BuildViewItem(IQuestionnaireItemViewModel questionnaireItemViewModel, int position)

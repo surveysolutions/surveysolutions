@@ -22,7 +22,6 @@ namespace WB.UI.Designer.App_Start
             //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
-            this.Bind<ICommandService>().ToConstant(Ncqrs.NcqrsEnvironment.Get<ICommandService>());
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<GZipJsonCompressor>().InSingletonScope();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();

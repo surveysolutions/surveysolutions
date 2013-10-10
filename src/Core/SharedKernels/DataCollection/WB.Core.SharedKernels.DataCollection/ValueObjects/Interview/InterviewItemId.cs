@@ -10,11 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             Id = id;
             PropagationVector = propagationVector ?? new int[0];
         }
+
         public InterviewItemId(Guid id)
-        {
-            Id = id;
-            PropagationVector = new int[0];
-        }
+            : this(id, new int[0]) {}
 
         public Guid Id;
         public int[] PropagationVector;
@@ -23,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (PropagationVector.Length != vector.Length)
                 return false;
-            return PropagationVector.All(vector.Contains);
+            return !this.PropagationVector.Where((t, i) => t != vector[i]).Any();
         }
 
         public bool IsTopLevel()
@@ -63,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             return Id.ToString();
         }
 
-        public static explicit operator InterviewItemId(string b)  // explicit byte to digit conversion operator
+        public static explicit operator InterviewItemId(string b) // explicit byte to digit conversion operator
         {
             return Parse(b);
         }

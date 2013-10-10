@@ -107,7 +107,7 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult List(GridDataRequestModel data)
         {
-            QuestionnaireListView list =
+            QuestionnaireListViewMessage list =
                 this.DesignerService.GetQuestionnaireList(
                     new QuestionnaireListRequest(
                         Filter: string.Empty,

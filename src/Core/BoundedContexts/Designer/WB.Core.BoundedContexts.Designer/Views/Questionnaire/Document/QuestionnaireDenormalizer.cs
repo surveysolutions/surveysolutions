@@ -6,6 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -31,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>,
-        IEventHandler<QuestionnaireCloned>
+        IEventHandler<QuestionnaireCloned>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
         private readonly ICompleteQuestionFactory questionFactory;
@@ -308,6 +309,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             document.LastEntryDate = evnt.EventTimeStamp;
             document.LastEventSequence = evnt.EventSequence;
+            this.documentStorage.Store(document, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
@@ -315,6 +317,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.IsDeleted = true;
+            this.documentStorage.Store(document, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -327,6 +330,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             var document = evnt.Payload.QuestionnaireDocument;
             this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireDocument) }; }
         }
     }
 }

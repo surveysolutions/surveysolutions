@@ -51,10 +51,10 @@
   <xs:element name="PageIndex" type="xs:int" />
   <xs:element name="PageSize" type="xs:int" />
   <xs:element name="SortOrder" nillable="true" type="xs:string" />
-  <xs:element name="QuestionnaireListView">
+  <xs:element name="QuestionnaireListViewMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" minOccurs="0" name="Items" nillable="true" type="q4:ArrayOfQuestionnaireListViewItem" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" minOccurs="0" name="Items" nillable="true" type="q4:ArrayOfQuestionnaireListViewItemMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
