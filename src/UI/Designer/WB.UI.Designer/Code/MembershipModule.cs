@@ -13,8 +13,7 @@
         {
             Bind<IPasswordStrategy>().To<HashPasswordStrategy>().InSingletonScope();
             Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy());
-            Bind<IAccountRepository>()
-                .ToConstant(AccountRepositoryFactory.CreateRepository()).InSingletonScope();
+            Bind<IAccountRepository>().ToMethod(c => AccountRepositoryFactory.CreateRepository()).InSingletonScope();
             Bind<IRoleRepository>().To<CQRSRoleRepository>().InSingletonScope();
         }
     }

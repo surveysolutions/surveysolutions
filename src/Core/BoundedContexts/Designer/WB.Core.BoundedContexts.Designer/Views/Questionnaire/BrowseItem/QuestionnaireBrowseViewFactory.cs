@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Utility;
 using Main.Core.View;
+using Raven.Client.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
@@ -34,60 +36,45 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.BrowseItem
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The QuestionnaireBrowseView.
-        /// </returns>
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
             // Adjust the model appropriately
-            int count = this.documentGroupSession.Count();
+            int count = this.documentGroupSession.Query(querying => this.FilterQuery(querying, input).Count());
             if (count == 0)
             {
                 return new QuestionnaireBrowseView(
                     input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
-            return this.documentGroupSession.Query(queryable =>
-            {
-                IQueryable<QuestionnaireBrowseItem> query = queryable;
+            List<QuestionnaireBrowseItem> questionnaireItems = this.documentGroupSession.Query(querying => questionnaireItems =
+                this.FilterQuery(querying, input).OrderUsingSortExpression(input.Order)
+                    .Skip((input.Page - 1)*input.PageSize)
+                    .Take(input.PageSize)
+                    .ToList());
 
-                if (input.IsAdminMode.HasValue)
-                {
-                    if (input.IsOnlyOwnerItems)
-                    {
-                        query = query.Where(x => x.CreatedBy == input.CreatedBy);
-                    }
-
-                    if (!input.IsAdminMode.Value)
-                    {
-                        query = query.Where(x => !x.IsDeleted);
-                    }
-
-                    if (!string.IsNullOrEmpty(input.Filter))
-                    {
-                        #warning ReadLayer: ToList materialization because not supported by Raven
-                        query = query.ToList().AsQueryable().Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
-                    }
-                }
-
-                #warning ReadLayer: ToList materialization because not supported by Raven
-                var queryResult = query.ToList().AsQueryable().OrderUsingSortExpression(input.Order);
-
-                var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
-
-
-                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
-            });
+            return new QuestionnaireBrowseView(input.Page, input.PageSize, count, questionnaireItems, input.Order);
         }
 
-        #endregion
+        private IQueryable<QuestionnaireBrowseItem> FilterQuery(IQueryable<QuestionnaireBrowseItem> query, QuestionnaireBrowseInputModel input)
+        {
+            if (input.IsAdminMode.HasValue)
+            {
+                if (input.IsOnlyOwnerItems)
+                {
+                    query = query.Where(x => x.CreatedBy == input.CreatedBy);
+                }
+
+                if (!input.IsAdminMode.Value)
+                {
+                    query = query.Where(x => !x.IsDeleted);
+                }
+
+                if (!string.IsNullOrEmpty(input.Filter))
+                {
+                    query = query.Where(x => x.Title.StartsWith(input.Filter));
+                }
+            }
+            return query;
+        }
     }
 }
