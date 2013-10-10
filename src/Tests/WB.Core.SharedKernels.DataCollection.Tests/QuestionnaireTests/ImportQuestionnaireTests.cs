@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
 
         [Test]
-        public void Execute_When_SourceIsNotQuestionnaireDocument_Then_ArgumentException_should_be_thrown()
+        public void Execute_When_SourceIsNotQuestionnaireDocument_Then_QuestionnaireException_should_be_thrown()
         {
             using (var eventContext = new EventContext())
             {
