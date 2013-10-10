@@ -1252,8 +1252,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             List<string> unknownReference = new List<string>();
             List<string> incorrectTypeOfReferencedQuestion = new List<string>();
-            bool containsRefToSelf = false;
-
+            
             var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
                 .ToDictionary(q => q.StataExportCaption, q => q.QuestionType);
@@ -1261,25 +1260,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var substitutionReference in substitutionReferences)
             {
-                
                 //extract validity of variable name to separate method and make check validity of substitutionReference  
                 if (substitutionReference.Length > 32)
                 {
                     unknownReference.Add(substitutionReference);
                     continue;
                 }
-
-                if (!containsRefToSelf)
-                {
-                    bool currentRefToSelf = string.Compare(substitutionReference, alias, StringComparison.OrdinalIgnoreCase) == 0;
-                    if (currentRefToSelf)
-                    {
-                        containsRefToSelf = true;
-                        continue;
-                    }
-                }
                 
-
                 if (!questions.ContainsKey(substitutionReference))
                     unknownReference.Add(substitutionReference);
                 else
@@ -1303,14 +1290,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (incorrectTypeOfReferencedQuestion.Count > 0)
                 throw new DomainException(
                     DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question title contains invalid substitution references: " + String.Join(", ", incorrectTypeOfReferencedQuestion.ToArray()));
+                    "Question title contains illegal substitution references: " + String.Join(", ", incorrectTypeOfReferencedQuestion.ToArray()));
 
-            if(containsRefToSelf)
+            if (substitutionReferences.Contains(alias))
                 throw new DomainException(
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
-                    "Question title contains invalid substitution references to self");
-
-
+                    "Question title contains illegal substitution references to self");
         }
 
     }
