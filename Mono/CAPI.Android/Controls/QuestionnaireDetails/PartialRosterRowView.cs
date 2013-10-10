@@ -14,6 +14,8 @@ using CAPI.Android.Controls.QuestionnaireDetails.Roster;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using CAPI.Android.Events;
+using CAPI.Android.Extensions;
+using Cirrious.MvvmCross.Binding.BindingContext;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
@@ -59,19 +61,30 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
             model.PropertyChanged += model_PropertyChanged;
             HideIfRowDisabled(model.Enabled);
+            this.ChildViewRemoved += PartialRosterRowView_ChildViewRemoved;
+        }
+
+        void PartialRosterRowView_ChildViewRemoved(object sender, ViewGroup.ChildViewRemovedEventArgs e)
+        {
+            var boundChild = e.Child as IMvxBindingContextOwner;
+            if (boundChild != null)
+            {
+                Console.WriteLine("clean up binding from roster");
+                boundChild.ClearAllBindings();
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
                 if (model != null)
                 {
                     model.PropertyChanged -= this.model_PropertyChanged;
                 }
+                this.DisposeChildrenAndCleanUp();
             }
+            base.Dispose(disposing);
         }
 
         private void HideIfRowDisabled(bool enabled)

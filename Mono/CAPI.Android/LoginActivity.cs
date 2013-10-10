@@ -31,8 +31,7 @@ namespace CAPI.Android
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(Icon = "@drawable/capi",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity//<LoginViewModel>
     {
         #region Properties

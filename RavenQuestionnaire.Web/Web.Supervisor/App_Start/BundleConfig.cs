@@ -28,6 +28,7 @@
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
+                "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/knockout-{version}.js",
                 "~/Scripts/knockout.mapping-latest.js",

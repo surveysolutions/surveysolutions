@@ -83,7 +83,9 @@
                     item.parent(null);
                     item.qtype(dto.QuestionType);
 
-                    item.scope(dto.QuestionScope);
+                    if (dto.Featured == false) {
+                        item.scope(dto.QuestionScope);
+                    }
 
                     item.answerOrder(dto.AnswerOrder);
 
@@ -126,6 +128,11 @@
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
+                    
+                    if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
+                    //    item.isNew(true);
+                    }
+                    
                     return item;
                 },
                 objectsFromDto: function (dto) {

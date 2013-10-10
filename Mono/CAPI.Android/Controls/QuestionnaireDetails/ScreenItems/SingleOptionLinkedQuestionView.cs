@@ -72,5 +72,18 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             return TypedMode.SelectedAnswers.Any(a => LinkedQuestionViewModel.IsVectorsEqual(a, answer.PropagationVector));
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.Model != null)
+                {
+                    this.Model.PropertyChanged -= Model_PropertyChanged;
+                }
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

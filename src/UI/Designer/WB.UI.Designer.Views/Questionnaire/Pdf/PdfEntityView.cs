@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace WB.UI.Designer.Views.Questionnaire.Pdf
 {
@@ -14,11 +15,10 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public string Title { get; set; }
 
-        public Guid Id { get; set; }
+        public Guid PublicId { get; set; }
 
         public int Depth { get; set; }
 
-        public PdfEntityView Parent { get; set; }
 
         public List<PdfEntityView> Children { get; set; }
 
@@ -26,32 +26,63 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
         {
             get
             {
-                return string.Join(".", this.QuestionNumberSections);
+                return string.Join(".", this.GetQuestionNumberSections());
             }
         }
 
         private List<int> questionNumberSections = null;
 
-        protected List<int> QuestionNumberSections 
+        protected List<int> GetQuestionNumberSections()
         {
-            get
+            if (this.questionNumberSections == null)
             {
-                if (questionNumberSections == null)
+                this.questionNumberSections = new List<int>();
+                var parent = this.GetParent();
+                var currentItem = this;
+                while (parent != null)
                 {
-                    questionNumberSections = new List<int>();
-                    var parent = this.Parent;
-                    var currentItem = this;
-                    while (parent != null)
-                    {
-                        var currentItemNumber = parent.Children.IndexOf(currentItem) + 1;
-                        questionNumberSections.Insert(0, currentItemNumber);
-                        currentItem = parent;
-                        parent = parent.Parent;
-                    }
+                    var currentItemNumber = parent.Children.IndexOf(currentItem) + 1;
+                    this.questionNumberSections.Insert(0, currentItemNumber);
+                    currentItem = parent;
+                    parent = parent.GetParent();
                 }
-
-                return questionNumberSections;
             }
+
+            return this.questionNumberSections;
+        }
+
+        private PdfEntityView parent;
+
+        private void SetParent(PdfEntityView value)
+        {
+            this.parent = value;
+        }
+
+        public PdfEntityView GetParent()
+        {
+            return this.parent;
+        }
+
+        public void AddChild(PdfEntityView child)
+        {
+            this.Children.Add(child);
+            child.SetParent(this);
+        }
+
+        public void InsertChild(PdfEntityView child, int index)
+        {
+            this.Children.Insert(index, child);
+            child.SetParent(this);
+        }
+
+        public void ReconnectWithParent()
+        {
+            foreach (var child in Children)
+            {
+                child.SetParent(this);
+                child.ReconnectWithParent();
+            }
+
         }
     }
 }

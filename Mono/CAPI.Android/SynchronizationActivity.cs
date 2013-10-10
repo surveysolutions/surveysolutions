@@ -22,8 +22,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class SynchronizationActivity : Activity
     {
         #region find for ui controls from xml
@@ -71,7 +70,7 @@ namespace CAPI.Android
             backupManager = CapiApplication.Kernel.Get<IBackup>();
             btnSync.Click += this.ButtonSyncClick;
 
-            btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
+            //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
 
 
             btnBackup.Click += btnBackup_Click;

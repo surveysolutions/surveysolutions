@@ -9,6 +9,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Extensions;
+using Cirrious.MvvmCross.Binding.BindingContext;
 
 namespace CAPI.Android.Core
 {
@@ -23,7 +25,9 @@ namespace CAPI.Android.Core
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
+
             var dataItem = this[position];
+
             if (convertView == null)
             {
                 convertView = CreateViewElement(dataItem, position);
@@ -32,8 +36,13 @@ namespace CAPI.Android.Core
             {
                 var elementId = Convert.ToInt32(convertView.GetTag(Resource.Id.ElementId).ToString());
                 if (elementId != position)
+                {
+                    convertView.TryClearBindingsIfPossible();
+
                     convertView = CreateViewElement(dataItem, position);
+                }
             }
+
             return convertView;
         }
 
