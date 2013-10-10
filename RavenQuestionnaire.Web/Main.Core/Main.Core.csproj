@@ -139,11 +139,11 @@
   <ItemGroup>
     <Compile Include="AbstractFactories\CompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
-    <Compile Include="AbstractFactories\CompleteQuestionFactory.cs" />
+    <Compile Include="AbstractFactories\IQuestionFactory.cs" />
+    <Compile Include="AbstractFactories\QuestionFactory.cs" />
     <Compile Include="Entities\QuestionData.cs" />
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
-    <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="Backup\IBackupManager.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />

@@ -1,106 +1,17 @@
-﻿namespace Main.Core.AbstractFactories
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Main.Core.Entities;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
+
+namespace Main.Core.AbstractFactories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.Entities.SubEntities.Complete.Question;
-    using Main.Core.Entities.SubEntities.Question;
-    using Main.Core.Utility.OrderStrategy;
-
-    public class CompleteQuestionFactory : ICompleteQuestionFactory
+    public class QuestionFactory : IQuestionFactory
     {
-        public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
-        {
-            var maxValue = int.MaxValue;
-            AbstractCompleteQuestion completeQuestion;
-            if (question is IMultyOptionsQuestion)
-            {
-                completeQuestion = new MultyOptionsCompleteQuestion();
-            }
-            else if (question is ISingleQuestion)
-            {
-                completeQuestion = new SingleCompleteQuestion();
-            }
-            else if (question is IDateTimeQuestion)
-            {
-                completeQuestion = new DateTimeCompleteQuestion();
-            }
-            else if (question is INumericQuestion)
-            {
-                completeQuestion = new NumericCompleteQuestion();
-            }
-            else if (question is IAutoPropagate)
-            {
-                completeQuestion = new AutoPropagateCompleteQuestion(question as IAutoPropagate);
-                maxValue = (question as IAutoPropagate).MaxValue;
-            }
-            else if (question is IGpsCoordinatesQuestion)
-            {
-                completeQuestion = new GpsCoordinateCompleteQuestion();
-            }
-            else
-            {
-                completeQuestion = new TextCompleteQuestion();
-            }
-
-            completeQuestion.PublicKey = question.PublicKey;
-            UpdateQuestion(
-                completeQuestion,
-                question.QuestionType,
-                question.QuestionScope,
-                question.QuestionText,
-                question.StataExportCaption,
-                question.ConditionExpression,
-                question.ValidationExpression,
-                question.ValidationMessage,
-                question.AnswerOrder,
-                question.Featured,
-                question.Mandatory,
-                question.Capital,
-                question.Instructions,
-                null,
-                maxValue,
-                question.LinkedToQuestionId, null);
-            ////completeQuestion.Comments = question.Comments;
-            completeQuestion.Valid = true;
-
-            IEnumerable<IAnswer> answersToCopy =
-                new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Answers);
-
-            if (answersToCopy != null)
-            {
-                foreach (IAnswer composite in answersToCopy)
-                {
-                    IAnswer newAnswer;
-                    if (question is ICompleteQuestion)
-                    {
-                        newAnswer = new CompleteAnswer(
-                            composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
-                    }
-                    else
-                    {
-                        newAnswer = (CompleteAnswer)(composite as Answer);
-                    }
-
-                    completeQuestion.AddAnswer(newAnswer);
-                }
-            }
-
-            if (question.Cards != null)
-            {
-                foreach (Image card in question.Cards)
-                {
-                    completeQuestion.Cards.Add(card);
-                }
-            }
-
-            return completeQuestion;
-        }
-        
         public AbstractQuestion CreateQuestion(QuestionData data)
         {
             AbstractQuestion q = CreateQuestion(data.questionType, data.publicKey);
@@ -129,7 +40,7 @@
             return q;
         }
 
-        private static AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
+        private AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
         {
             AbstractQuestion q = CreateQuestion(questionType);
 
@@ -138,7 +49,7 @@
             return q;
         }
 
-        private static AbstractQuestion CreateQuestion(QuestionType type)
+        private AbstractQuestion CreateQuestion(QuestionType type)
         {
             switch (type)
             {
