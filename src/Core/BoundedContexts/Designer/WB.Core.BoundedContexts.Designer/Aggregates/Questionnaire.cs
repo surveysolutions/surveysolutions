@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
-        private readonly ICompleteQuestionFactory questionFactory;
+        private readonly IQuestionFactory questionFactory;
 
         private ILogger logger;
 
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire()
             : base()
         {
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
         }
 
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
             var clock = NcqrsEnvironment.Get<IClock>();
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
 
             this.ApplyEvent(
                 new NewQuestionnaireCreated
@@ -656,7 +656,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion question =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -687,7 +687,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
             AbstractQuestion question =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
