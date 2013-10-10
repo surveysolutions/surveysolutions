@@ -27,6 +27,18 @@ Supervisor.Framework.Objects.isEmpty = function (value) {
     }
     return true;
 };
+Supervisor.Framework.Objects.Values = function(object) {
+    var index = -1,
+        props = Object.keys(object),
+        length = props.length,
+        result = Array(length);
+
+    while (++index < length) {
+        result[index] = object[props[index]];
+    }
+    return result;
+};
+
 Supervisor.Framework.Classes = function () { };
 Supervisor.Framework.Classes.prototype = {};
 Supervisor.Framework.Classes.inherit = function(child, parent) {
@@ -43,4 +55,14 @@ Array.prototype.joinArrayOfObjects = function(key, value) {
     var ret = '';
     this.forEach(function(e) { ret = ret.concat(e[key](), ':', e[value](), ', '); });
     return ret.substring(0, ret.length - 2);
+};
+
+Function.prototype.intercept = function (callback) {
+    var underlyingObservable = this;
+    return ko.dependentObservable({
+        read: underlyingObservable,
+        write: function (value) {
+            callback.call(underlyingObservable, value);
+        }
+    });
 };

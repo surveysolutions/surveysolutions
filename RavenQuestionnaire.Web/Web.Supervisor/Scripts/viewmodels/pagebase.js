@@ -93,6 +93,18 @@
         });
     };
 
+    self.SendCommand = function(command, onSuccess) {
+        self.SendRequest(commandExecutionUrl, command, function(data) {
+            if (data.IsSuccess) {
+                if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                    onSuccess();
+                }
+            } else {
+                self.ShowError(input.settings.messages.unhandledExceptionMessage);
+            }
+        });
+    };
+
     self.SendCommands = function (commands, onSuccess) {
         self.SendRequest(commandExecutionUrl, commands, function (data) {
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function (cmd) {
@@ -104,14 +116,18 @@
             });
 
             if (failedCommandIds.length > 0) {
-                var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function (failedCommand) {
+                var failedDomainExceptions = ko.utils.arrayMap(failedCommands, function(failedCommand) {
                     return failedCommand.DomainException;
                 });
                 self.ShowErrors(failedDomainExceptions);
-            }
-            if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                onSuccess(failedCommandIds);
+            } else {
+                if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                    onSuccess(failedCommandIds);
+                }
             }
         });
+    };
+    
+    self.load = function() {
     };
 }

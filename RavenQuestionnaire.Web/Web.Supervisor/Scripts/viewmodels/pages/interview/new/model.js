@@ -1,5 +1,4 @@
-﻿define('app/model', ['knockout', 'knockout.validation'],
-function (ko) {
+﻿Model = function () {
     var model = {
         User: function () {
             var self = this;
@@ -39,10 +38,10 @@ function (ko) {
             self.value = ko.observable();
             self.isSelected = ko.observable(false);
             self.optionFor = ko.computed(function () {
-                return "optionFor" + "_" + self.questionId ()+ "_" + self.id();
+                return "optionFor" + "_" + self.questionId() + "_" + self.id();
             });
             return self;
         }
     };
     return model;
-});
+};

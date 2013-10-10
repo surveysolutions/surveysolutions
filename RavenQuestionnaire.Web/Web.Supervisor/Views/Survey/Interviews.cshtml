@@ -7,7 +7,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/sv.interviews.js")
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
 
     <script type="text/javascript">
         var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new {}, Request.Url.Scheme))';

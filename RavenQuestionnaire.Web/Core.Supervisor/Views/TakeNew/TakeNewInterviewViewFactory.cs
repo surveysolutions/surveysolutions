@@ -21,7 +21,7 @@ namespace Core.Supervisor.Views.TakeNew
         {
             var questionnaire = this.surveys.GetById(input.QuestionnaireId);
 
-            var view = new TakeNewInterviewView(questionnaire.Questionnaire)
+            var view = new TakeNewInterviewView(questionnaire.Questionnaire, questionnaire.Version)
                 {
                     Supervisors = this.GetSupervisorsListForViewer(input.ViewerId).ToList()
                 };

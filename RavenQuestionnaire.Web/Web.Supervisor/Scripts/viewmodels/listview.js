@@ -64,9 +64,11 @@ Supervisor.VM.ListView = function (serviceUrl, commandExecutionUrl) {
     self.Pager().PageSize(20);
 
     // Subscribe to current page changes.
-    self.Pager().CurrentPage.subscribe(function () {
+    self.Pager().CurrentPage.subscribe(function() {
         self.search(self.SortOrder);
     });
+
+    self.Pager().CanChangeCurrentPage = ko.computed(function() { return self.IsAjaxComplete(); });
 
     self.SortOrder = ko.observable("");
     self.SortDirection = ko.observable(false);

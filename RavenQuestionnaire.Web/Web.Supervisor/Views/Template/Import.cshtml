@@ -31,7 +31,7 @@
     <div class="menubar">
         <form data-bind="submit: filter">
             <div class="input-append search-bar">
-                <input class="span4" type="text" data-bind="value: Query"  />
+                <input class="span4" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'"  />
                 <button class="btn" type="button" data-bind="click: filter">Search</button>
             </div>
         </form>

@@ -53,8 +53,7 @@ namespace Web.Supervisor.Controllers
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
                     response.CommandId = concreteCommand.CommandIdentifier;
                     ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(request.Type,
-                                                                                                      concreteCommand,
-                                                                                                      this.GlobalInfo);
+                                                                                                      concreteCommand);
                     this.CommandService.Execute(transformedCommand);
 
                     response.IsSuccess = true;
