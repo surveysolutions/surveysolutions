@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Utility
+﻿using System.Text.RegularExpressions;
+
+namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +15,8 @@
     /// </summary>
     public static class StringUtil
     {
+        private static string allowedVariableNameRegexp = @"^%%\w+%%$";
+        
         #region Public Methods and Operators
 
         /// <summary>
@@ -165,6 +169,12 @@
             char[] chars = new char[bytes.Length / sizeof(char)];
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
+        }
+
+        public static string[] GetAllTermsFromString(string source)
+        {
+           var allOccurenses = Regex.Matches(source, allowedVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
+           return allOccurenses.ToArray();
         }
 
         #endregion
