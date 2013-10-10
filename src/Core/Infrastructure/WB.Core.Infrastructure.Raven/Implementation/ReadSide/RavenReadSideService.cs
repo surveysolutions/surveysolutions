@@ -374,7 +374,7 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
             {
                 UpdateStatusMessage(string.Format(
                     "Disabling cache in repository writer for entity {0}.",
-                    GetRepositoryEntity(writer)));
+                    GetRepositoryEntityName(writer)));
 
                 try
                 {
@@ -498,14 +498,14 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide
                     string.Join(
                         Environment.NewLine,
                         writers
-                            .Select(writer => string.Format("{0,-75} ({1})", GetRepositoryEntity(writer), writer.GetReadableStatus()))
+                            .Select(writer => string.Format("{0,-40} ({1})", GetRepositoryEntityName(writer), writer.GetReadableStatus()))
                             .OrderBy(_ => _)
                             .ToArray()));
         }
 
-        private static string GetRepositoryEntity(IRavenReadSideRepositoryWriter writer)
+        private static string GetRepositoryEntityName(IRavenReadSideRepositoryWriter writer)
         {
-            return writer.GetType().GetGenericArguments().Single().ToString();
+            return writer.GetType().GetGenericArguments().Single().Name;
         }
 
         #region Error reporting methods
