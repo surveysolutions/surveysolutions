@@ -1187,6 +1187,92 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion));
         }
 
+        [Test]
+        [TestCase(QuestionType.AutoPropagate)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        [TestCase(QuestionType.Text)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        public void NewAddQuestion_When_non_numeric_question_has_precicion_setting_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithOneGroup(
+                    responsibleId: responsibleId, groupId: groupId);
+            var questionOptions = AreOptionsRequiredByQuestionType(questionType) ? CreateTwoOptions() : null;
+
+            // act
+            TestDelegate act =
+                () => questionnaire.NewAddQuestion(
+                 questionId: questionId,
+                 groupId: groupId,
+                 title: "What is your last name?",
+                 type: questionType,
+                 alias: "name",
+                 isMandatory: false,
+                 isFeatured: false,
+                 isHeaderOfPropagatableGroup: false,
+                 scope: QuestionScope.Interviewer,
+                 condition: string.Empty,
+                 validationExpression: string.Empty,
+                 validationMessage: string.Empty,
+                 instructions: string.Empty,
+                 optionsOrder: Order.AsIs,
+                 maxValue: null,
+                 triggedGroupIds: new Guid[] { },
+                 options: questionOptions,
+                 responsibleId: responsibleId,
+                 linkedToQuestionId: null, isInteger: true);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotNumericQuestionHasPrecisionInformation));
+        }
+
+        [Test]
+        public void NewAddQuestion_When_numeric_question_has_no_precicion_setting_Then_DomainException_should_be_thrown()
+        {
+            // arrange
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+
+            Questionnaire questionnaire =
+              CreateQuestionnaireWithOneGroup(
+                  responsibleId: responsibleId, groupId: groupId);
+
+            // act
+            TestDelegate act =
+                () => questionnaire.NewAddQuestion(
+                 questionId: questionId,
+                 groupId: groupId,
+                 title: "What is your last name?",
+                 type: QuestionType.Numeric, 
+                 alias: "name",
+                 isMandatory: false,
+                 isFeatured: false,
+                 isHeaderOfPropagatableGroup: false,
+                 scope: QuestionScope.Interviewer,
+                 condition: string.Empty,
+                 validationExpression: string.Empty,
+                 validationMessage: string.Empty,
+                 instructions: string.Empty,
+                 optionsOrder: Order.AsIs,
+                 maxValue: null,
+                 triggedGroupIds: new Guid[] { },
+                 options: null,
+                 responsibleId: responsibleId,
+                 linkedToQuestionId: null, isInteger: null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NumericQuestionHasNoPrecisionInformation));
+        }
 
         [Test]
         [TestCase(QuestionType.DateTime)]
