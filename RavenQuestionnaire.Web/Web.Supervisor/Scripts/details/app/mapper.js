@@ -41,7 +41,7 @@
                         break;
                     case "Numeric":
                     case "AutoPropagate":
-                        item = new model.NumericQuestion(_.isNull(dto.Settings) ? true : dto.Settings.IsInteger);
+                        item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger);
 
                         if (!_.isNull(dto.Answer)) {
                             item.answer(dto.Answer * 1);

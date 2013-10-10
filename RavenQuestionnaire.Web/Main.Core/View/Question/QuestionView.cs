@@ -562,8 +562,16 @@ namespace Main.Core.View.Question
                 }
             }
 
+            var numericQuestion = doc as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                this.Settings = new {numericQuestion.IsInteger};
+            }
+
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
+
+        public dynamic Settings { get; set; }
 
         #endregion
     }
