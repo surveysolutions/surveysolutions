@@ -14,12 +14,12 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    internal class InterviewDenormalizer : IEventHandler,
-                                         IEventHandler<InterviewCreated>,
-                                         IEventHandler<InterviewStatusChanged>,
-                                         IEventHandler<SupervisorAssigned>,
-                                         IEventHandler<InterviewerAssigned>,
-
+    internal class InterviewDenormalizer :
+        IEventHandler,
+        IEventHandler<InterviewCreated>,
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<SupervisorAssigned>,
+        IEventHandler<InterviewerAssigned>,
         IEventHandler<GroupPropagated>,
         IEventHandler<AnswerCommented>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
