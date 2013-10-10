@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<NumericQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
+        IEventHandler<AnswerRemoved>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewDeleted>,
         IEventHandler<InterviewRestored>,
@@ -183,6 +184,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             });
         }
         
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                if (interview.AnswersToFeaturedQuestions.ContainsKey(evnt.Payload.QuestionId))
+                {
+                    interview.AnswersToFeaturedQuestions[evnt.Payload.QuestionId].Answer = string.Empty;
+                }
+            });
+        }
+
         public void Handle(IPublishedEvent<InterviewRestored> evnt)
         {
             this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
