@@ -1,3 +1,6 @@
+using System.Linq;
+using WB.UI.Designer.Views.Questionnaire;
+
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System.ServiceModel;
@@ -6,8 +9,19 @@ namespace WB.UI.Designer.WebServices.Questionnaire
     ///     The questionnaire browse view.
     /// </summary>
     [MessageContract]
-    public class QuestionnaireListView
+    public class QuestionnaireListViewMessage
     {
+       // public QuestionnaireListViewMessage() {}
+
+        public QuestionnaireListViewMessage(QuestionnaireListView data)
+        {
+            this.Order = data.Order;
+            this.Page = data.Page;
+            this.PageSize = data.PageSize;
+            this.TotalCount = data.TotalCount;
+            this.Items = data.Items.Select(item => new QuestionnaireListViewItemMessage(item)).ToArray();
+        }
+
         #region Public Properties
 
         /// <summary>
@@ -38,7 +52,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
         ///     Gets the items.
         /// </summary>
         [MessageBodyMember]
-        public QuestionnaireListViewItem[] Items;
+        public QuestionnaireListViewItemMessage[] Items;
 
         #endregion
     }

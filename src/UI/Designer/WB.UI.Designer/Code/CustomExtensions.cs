@@ -22,7 +22,9 @@
         /// </returns>
         public static Guid AsGuid(this object source)
         {
-            return (Guid)source;
+            if (source == null)
+                return Guid.Empty;
+            return Guid.Parse(source.ToString());
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -31,7 +32,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                        IEventHandler<AccountRoleAdded>, 
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
-                                       IEventHandler<AccountPasswordResetTokenChanged>
+                                       IEventHandler<AccountPasswordResetTokenChanged>, IEventHandler
     {
         #region Fields
 
@@ -70,6 +71,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.IsConfirmed = true;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -95,6 +97,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.IsLockedOut = true;
             item.LastLockedOutAt = @event.Payload.LastLockedOutAt;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -108,6 +111,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.LastActivityAt = @event.Payload.LastActivityAt;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -122,6 +126,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.Password = @event.Payload.Password;
             item.LastPasswordChangeAt = @event.Payload.LastPasswordChangeAt;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -136,6 +141,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.PasswordAnswer = @event.Payload.PasswordAnswer;
             item.PasswordQuestion = @event.Payload.PasswordQuestion;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -150,6 +156,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.PasswordSalt = @event.Payload.PasswordSalt;
             item.Password = @event.Payload.Password;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -191,6 +198,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             item.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue;
             item.FailedPasswordWindowAttemptCount = 0;
             item.FailedPasswordWindowStartedAt = DateTime.MinValue;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -207,6 +215,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             item.Email = @event.Payload.Email;
             item.PasswordQuestion = @event.Payload.PasswordQuestion;
             item.UserName = @event.Payload.UserName;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -222,6 +231,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             item.LastLoginAt = @event.Payload.LastLoginAt;
             item.FailedPasswordWindowStartedAt = DateTime.MinValue;
             item.FailedPasswordWindowAttemptCount = 0;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -235,6 +245,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.SimpleRoles.Add(@event.Payload.Role);
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -262,6 +273,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.FailedPasswordWindowStartedAt = @event.Payload.FailedPasswordWindowStartedAt;
             item.FailedPasswordWindowAttemptCount += 1;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         /// <summary>
@@ -276,8 +288,24 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.PasswordResetToken = @event.Payload.PasswordResetToken;
             item.PasswordResetExpirationDate = @event.Payload.PasswordResetExpirationDate;
+            this._accounts.Store(item, @event.EventSourceId);
         }
 
         #endregion
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(AccountDocument) }; }
+        }
     }
 }
