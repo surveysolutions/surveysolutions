@@ -61,7 +61,7 @@ namespace CAPI.Androids.Core.Model.Tests
         {
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
-            var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
+            var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "",
                                                       false, false,  "");
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
@@ -82,7 +82,7 @@ namespace CAPI.Androids.Core.Model.Tests
         {
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
-            var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
+            var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", 
                                                       false, false,  "");
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
@@ -103,7 +103,7 @@ namespace CAPI.Androids.Core.Model.Tests
         {
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
-            var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", false,
+            var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", 
                                                       false, false,  "");
 
             questions.Add(questionKEy, question);
@@ -120,10 +120,10 @@ namespace CAPI.Androids.Core.Model.Tests
         {
             this.Questions = questions;
         }
-        public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, TemplateCollection templates)
+        public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, InterviewPropagationScopeDescription templates)
             : this(screents)
         {
-            this.Templates = templates;
+            this.propagationScopeDescription = templates;
         }
         public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, IDictionary<InterviewItemId, QuestionViewModel> questions)
             : this(screents)
@@ -138,7 +138,7 @@ namespace CAPI.Androids.Core.Model.Tests
         public CompleteQuestionnaireViewTestable(Guid publicKey) : base(publicKey)
         {
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
-            this.Templates = new TemplateCollection();
+            this.propagationScopeDescription = new InterviewPropagationScopeDescription();
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
         }
 

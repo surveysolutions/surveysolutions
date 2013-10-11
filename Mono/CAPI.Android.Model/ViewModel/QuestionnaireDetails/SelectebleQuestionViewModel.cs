@@ -21,11 +21,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool valid,
             bool mandatory,
-            bool capital,
             object answerObject,
             string validationMessage)
             : base(
-                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
+                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answerObject, validationMessage)
         {
             Answers = answers;
         }
@@ -52,7 +51,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Text, this.QuestionType, newAnswers,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
+                this.Mandatory,  this.AnswerObject, this.ValidationMessage);
         }
 
         public override void SetAnswer(object answer)
