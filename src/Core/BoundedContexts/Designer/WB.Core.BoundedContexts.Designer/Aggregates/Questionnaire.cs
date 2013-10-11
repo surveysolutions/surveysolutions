@@ -1001,7 +1001,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private bool IsUnderPropagatableGroup(IComposite item)
         {
-            this.innerDocument.ConnectChildsWithParent();
+            this.innerDocument.ConnectChildrenWithParent();
 
             return this.IsUnderPropagatableGroupImpl(item);
         }
@@ -1256,7 +1256,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
                 .Where(q => q.PublicKey != questionPublicKey)
                 .ToDictionary(q => q.StataExportCaption, q => q.QuestionType);
-                               
 
             foreach (var substitutionReference in substitutionReferences)
             {
@@ -1300,7 +1299,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isFeatured)
                 throw new DomainException(
                     DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "Pre-filled question title contains substitution references. It's not illegal");
+                    "Pre-filled question title contains substitution references. It's illegal");
         }
 
     }

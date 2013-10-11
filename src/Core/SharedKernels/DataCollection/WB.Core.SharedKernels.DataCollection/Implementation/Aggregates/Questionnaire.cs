@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
-            this.innerDocument.ConnectChildsWithParent();
+            this.innerDocument.ConnectChildrenWithParent();
 
             this.questionCache = null;
             this.groupCache = null;
@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
-            document.ConnectChildsWithParent();
+            document.ConnectChildrenWithParent();
 
             ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
             ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
