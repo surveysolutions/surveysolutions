@@ -30,7 +30,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.Numeric:
-                    itemView = new NumericQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                    var valueQuestionModel = (ValueQuestionViewModel)model;
+                        itemView = valueQuestionModel.IsInteger.Value
+                            ? (AbstractQuestionView) new NumericIntegerQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService)
+                            : new NumericRealQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.DateTime:
                     itemView = new DateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
@@ -47,7 +50,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                         itemView = new MultyOptionLinkedQuestionView(context, bindingActivity, model, questionnairePublicKey,
                             commandService);
                     else
-                    itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
+                        itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.AutoPropagate:
                     itemView = new AutoPropagateQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);

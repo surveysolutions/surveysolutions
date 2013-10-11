@@ -15,7 +15,7 @@ using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class AutoPropagateQuestionView : NumericQuestionView
+    public class AutoPropagateQuestionView : NumericIntegerQuestionView
     {
         public AutoPropagateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService)
