@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
@@ -286,8 +287,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         break;
 
                     case QuestionType.AutoPropagate:
+                        featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
+                        break;
                     case QuestionType.Numeric:
-                        featuredAnswers.Add(question.PublicKey, decimal.Parse(values[i]));
+                        var numericQuestion = question as INumericQuestion;
+                        if (numericQuestion == null)
+                            break;
+                        // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
+                        if (numericQuestion.IsInteger)
+                            featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
+                        else
+                            featuredAnswers.Add(question.PublicKey, decimal.Parse(values[i]));
+
                         break;
 
                     case QuestionType.DateTime:
