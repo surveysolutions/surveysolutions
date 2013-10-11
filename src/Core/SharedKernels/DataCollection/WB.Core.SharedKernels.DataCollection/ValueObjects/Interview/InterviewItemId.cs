@@ -61,6 +61,12 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
             return Id.ToString();
         }
 
+        /// <remarks>Is needed for Newtonsoft JSON.</remarks>
+        public static explicit operator InterviewItemId(string b)
+        {
+            return Parse(b);
+        }
+
         public static InterviewItemId Parse(string value)
         {
             if (value.Contains(','))
