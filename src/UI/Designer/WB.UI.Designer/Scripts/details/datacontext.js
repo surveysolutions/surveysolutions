@@ -391,9 +391,5 @@
             group.fillChildren();
         });
         
-        _.each(questions.getAllLocal(), function (question) {
-            question.attachValidation();
-        });
-
         return datacontext;
     });

@@ -552,6 +552,7 @@ h1 {
     text-shadow: 0 1px 0 rgba(255,255,255,0.8);
     outline: none;
 }
+
 .alias {
     background-color: #A38F8F;
     border-radius: 2px 2px 2px 2px;
@@ -565,6 +566,10 @@ h1 {
     padding: 1px 3px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.hasErrors .alias {
+    background-color: #bd362f;
 }
 
 .edit-triggers .row-fluid {
@@ -720,6 +725,10 @@ h1 {
     -ms-border-radius: 4px 0 0 4px;
     -o-border-radius: 4px 0 0 4px;
     border-radius: 4px 0 0 4px;
+}
+.q-item-wrap.q-group.hasErrors > .handler ,
+.q-item-wrap.q-question.hasErrors > .handler {
+    background: #bd362f;
 }
 .controls .btn.btn-danger {
     margin-left: 5px;
