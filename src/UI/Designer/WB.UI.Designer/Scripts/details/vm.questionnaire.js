@@ -521,6 +521,14 @@
                         }
                     }
                 };
+                
+                _.each(datacontext.questions.getAllLocal(), function (question) {
+                    question.attachValidation();
+                });
+
+                _.each(datacontext.groups.getAllLocal(), function (group) {
+                    group.attachValidation();
+                });
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {
