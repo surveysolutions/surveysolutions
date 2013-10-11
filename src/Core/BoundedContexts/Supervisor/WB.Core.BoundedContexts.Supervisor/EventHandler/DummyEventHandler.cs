@@ -13,13 +13,20 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerCommented>,
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
-        IEventHandler<AnswerDeclaredValid>, IEventHandler<GroupPropagated>, IEventHandler<QuestionEnabled>,
-        IEventHandler<AnswerDeclaredInvalid>, IEventHandler<QuestionDisabled>, IEventHandler<GroupDisabled>,
-        IEventHandler<GroupEnabled>, IEventHandler<InterviewSynchronized>,
-        IEventHandler<InterviewCompleted>, IEventHandler<InterviewDeclaredValid>, IEventHandler<SingleOptionLinkedQuestionAnswered>,IEventHandler<MultipleOptionsLinkedQuestionAnswered>, IEventHandler
+        IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<GroupPropagated>,
+        IEventHandler<QuestionEnabled>,
+        IEventHandler<AnswerDeclaredInvalid>,
+        IEventHandler<QuestionDisabled>,
+        IEventHandler<GroupDisabled>,
+        IEventHandler<GroupEnabled>,
+        IEventHandler<InterviewSynchronized>,
+        IEventHandler<InterviewCompleted>,
+        IEventHandler<InterviewDeclaredValid>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IEventHandler
     {
-
-
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt) {}
@@ -46,15 +53,18 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt) {}
 
-        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) { }
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) {}
 
-        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) { }
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) {}
 
-        public string Name {
+        public string Name
+        {
             get { return "Dummy event handler"; }
         }
-        public Type[] UsesViews {
-            get { return  new Type[0]; }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
         }
 
         public Type[] BuildsViews
