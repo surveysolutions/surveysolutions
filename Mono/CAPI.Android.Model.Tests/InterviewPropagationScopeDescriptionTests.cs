@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace CAPI.Androids.Core.Model.Tests
 {
     [TestFixture]
-    public class TemplateCollectionTests
+    public class InterviewPropagationScopeDescriptionTests
     {
         [SetUp]
         public void SetUp()
@@ -22,34 +22,34 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void Add_ValidDate_ItemIsAddedToCollection()
         {
-            var target = new TemplateCollection();
+            var target = new InterviewPropagationScopeDescription();
             var key = Guid.NewGuid();
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
                                                                   new InterviewItemId(Guid.NewGuid(), null),
                                                                   Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                                   Enumerable.Empty<InterviewItemId>(), 0, 0, null, null);
-            target.Add(key, item);
-            Assert.AreEqual(item, target[key]);
+            target.AddTemplateOfPropagatedScreen(key, item);
+            Assert.AreEqual(item, target.GetTemplateOfPropagatedScreen(key));
         }
         [Test]
         public void GetItemsFromScope_ScopeIsAbsent_ExeptionIsThrowed()
         {
-            var target = new TemplateCollection();
-            Assert.Throws<ArgumentException>(() => target.GetScopeByItem(Guid.NewGuid()));
+            var target = new InterviewPropagationScopeDescription();
+            Assert.Throws<ArgumentException>(() => target.GetScreenSiblingsByPropagationLevel(Guid.NewGuid()));
         }
 
         [Test]
         public void GetItemsFromScope_OneItemIsPassed_AllOtherItemsFromScopeAreReturnedIncludingPassedItem()
         {
-            var target = new TemplateCollection();
+            var target = new InterviewPropagationScopeDescription();
             var scopeKey = Guid.NewGuid();
             var scopedItems = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
             foreach (var scopedItem in scopedItems)
             {
                 AddItemInCollections(target, scopedItem);
             }
-            target.AssignScope(scopeKey, scopedItems);
-            IEnumerable<Guid> resultedScope = target.GetScopeByItem(scopedItems[1]);
+            target.CreateScopeOfPropagatedScreens(scopeKey, scopedItems);
+            IEnumerable<Guid> resultedScope = target.GetScreenSiblingsByPropagationLevel(scopedItems[1]);
             Assert.AreEqual(scopedItems.Count(), resultedScope.Count());
             int i = 0;
             foreach (var item in resultedScope)
@@ -62,29 +62,29 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void Add_ValidData_SingleITemScopeIsCreatedWithSameGuidAsItemKey()
         {
-            var target = new TemplateCollection();
+            var target = new InterviewPropagationScopeDescription();
             var key = Guid.NewGuid();
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
                                                                   new InterviewItemId(Guid.NewGuid(), null),
                                                                   Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                                   Enumerable.Empty<InterviewItemId>(), 0, 0, null, null);
-            target.Add(key, item);
-            var result = target.GetItemsInScope(key);
+            target.AddTemplateOfPropagatedScreen(key, item);
+            var result = target.GetTemplatesOfPropagatedScreensInScope(key);
             Assert.AreEqual(result.Count(), 1);
             Assert.AreEqual(result.First(), key);
         }
         [Test]
         public void AssignScope_TwoItemsInDifferentScopes_ScopesAreMeged()
         {
-            var target = new TemplateCollection();
+            var target = new InterviewPropagationScopeDescription();
             var key1 = Guid.NewGuid();
             var key2 = Guid.NewGuid();
             AddItemInCollections(target, key1);
             AddItemInCollections(target, key2);
             var newScope = Guid.NewGuid();
-            target.AssignScope(newScope, new Guid[] {key1, key2});
+            target.CreateScopeOfPropagatedScreens(newScope, new Guid[] {key1, key2});
 
-            var result = target.GetItemsInScope(newScope);
+            var result = target.GetTemplatesOfPropagatedScreensInScope(newScope);
             Assert.AreEqual(result.Count(),2);
             Assert.IsTrue(result.Contains(key1));
             Assert.IsTrue(result.Contains(key2));
@@ -92,32 +92,32 @@ namespace CAPI.Androids.Core.Model.Tests
         [Test]
         public void AssignScope_SingleItemsScopeExists_SingleITemScopeIsDeleted()
         {
-            var target = new TemplateCollection();
+            var target = new InterviewPropagationScopeDescription();
             var key1 = Guid.NewGuid();
             AddItemInCollections(target, key1);
             var newScope = Guid.NewGuid();
-            target.AssignScope(newScope, new Guid[] { key1});
+            target.CreateScopeOfPropagatedScreens(newScope, new Guid[] { key1});
 
-            Assert.Throws<ArgumentException>(() => target.GetItemsInScope(key1));
+            Assert.Throws<ArgumentException>(() => target.GetTemplatesOfPropagatedScreensInScope(key1));
         }
         [Test]
         public void Add_ItemAlreadyInScope_SecondScopeWasntCreated()
         {
-            var target = new TemplateCollection();
+            var target = new InterviewPropagationScopeDescription();
             var scopeKey = Guid.NewGuid();
             var itemKey = Guid.NewGuid();
-            target.AssignScope(scopeKey, new Guid[] {itemKey});
+            target.CreateScopeOfPropagatedScreens(scopeKey, new Guid[] {itemKey});
             AddItemInCollections(target, itemKey);
-            Assert.Throws<ArgumentException>(() => target.GetItemsInScope(itemKey));
+            Assert.Throws<ArgumentException>(() => target.GetTemplatesOfPropagatedScreensInScope(itemKey));
         }
 
-        protected void AddItemInCollections(TemplateCollection target,Guid key)
+        protected void AddItemInCollections(InterviewPropagationScopeDescription target,Guid key)
         {
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
                                                                  new InterviewItemId(Guid.NewGuid(), null),
                                                                  Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                                  Enumerable.Empty<InterviewItemId>(), 0, 0, null, null);
-            target.Add(key, item);
+            target.AddTemplateOfPropagatedScreen(key, item);
         }
     }
 }

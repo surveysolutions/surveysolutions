@@ -10,9 +10,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     public class ValueQuestionViewModel : QuestionViewModel
     {
 
-        public ValueQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType, object answer, bool enabled, string instructions, string comments, bool valid, bool capital, bool mandatory, 
+        public ValueQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType, object answer, bool enabled, string instructions, string comments, bool valid,  bool mandatory, 
             string validationMessage)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answer,validationMessage)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answer,validationMessage)
         {
         }
         #region Overrides of QuestionViewModel
@@ -22,7 +22,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return new ValueQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                                                    this.Text, this.QuestionType, this.AnswerObject,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
-                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid), this.Capital,
+                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid), 
                                                    this.Mandatory,this.ValidationMessage);
         }
 

@@ -11,9 +11,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     {
         public LinkedQuestionViewModel(
             InterviewItemId publicKey, string text, QuestionType questionType, bool enabled, string instructions, bool valid,
-            bool mandatory, bool capital, string validationMessage, Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions)
+            bool mandatory, string validationMessage, Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions)
             : base(
-                publicKey, text, questionType, enabled, instructions, null, valid, mandatory, capital, null, validationMessage)
+                publicKey, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage)
         {
             this.getAnswerOptions = getAnswerOptions;
             this.SelectedAnswers = new int[0][];
@@ -33,7 +33,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return new LinkedQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
                 this.Text, this.QuestionType, 
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions, this.Status.HasFlag(QuestionStatus.Valid),
-                this.Mandatory, this.Capital, this.ValidationMessage, this.getAnswerOptions);
+                this.Mandatory, this.ValidationMessage, this.getAnswerOptions);
         }
 
         public override string AnswerString

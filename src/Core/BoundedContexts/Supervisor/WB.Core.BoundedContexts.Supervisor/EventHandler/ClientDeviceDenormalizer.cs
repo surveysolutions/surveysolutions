@@ -1,13 +1,12 @@
 ﻿using System;
+using Main.Core.Documents;
+using Main.Core.Events.Sync;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace Main.Core.EventHandlers
+namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    using Main.Core.Events.Sync;
-    using Ncqrs.Eventing.ServiceModel.Bus;
-    using Main.Core.Documents;
-
     public class ClientDeviceDenormalizer : IEventHandler<NewClientDeviceCreated>,
                                             IEventHandler<ClientDeviceLastSyncItemUpdated>,
                                             IEventHandler
@@ -46,7 +45,7 @@ namespace Main.Core.EventHandlers
 
         public string Name
         {
-            get { return GetType().Name; }
+            get { return this.GetType().Name; }
         }
 
         public Type[] UsesViews
