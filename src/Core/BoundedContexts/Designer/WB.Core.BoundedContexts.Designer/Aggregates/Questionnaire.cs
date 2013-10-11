@@ -293,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
@@ -356,7 +356,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
@@ -445,7 +445,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             
@@ -1243,7 +1243,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Question cannot contain validations");
         }
 
-        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias, Guid questionPublicKey)
+        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias, Guid questionPublicKey, bool isFeatured)
         {
             string[] substitutionReferences = StringUtil.GetAllTermsFromString(questionTitle);
 
@@ -1296,6 +1296,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new DomainException(
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
                     "Question title contains illegal substitution references to self");
+
+            if (isFeatured)
+                throw new DomainException(
+                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
+                    "Pre-filled question title contains substitution references. It's not illegal");
         }
 
     }
