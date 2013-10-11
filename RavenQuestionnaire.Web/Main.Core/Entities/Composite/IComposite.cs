@@ -76,9 +76,9 @@
 
         
         /// <summary>
-        /// The connect childs with parent.
+        /// Connects children with parent.
         /// </summary>
-        void ConnectChildsWithParent();
+        void ConnectChildrenWithParent();
 
 
         // Could be created as a separate interface

@@ -357,12 +357,12 @@ namespace Main.Core.Documents
             return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
         }
 
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             foreach (var item in this.Children)
             {
                 item.SetParent(this);
-                item.ConnectChildsWithParent();
+                item.ConnectChildrenWithParent();
             }
         }
 

@@ -303,7 +303,7 @@
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             //// do nothing
         }

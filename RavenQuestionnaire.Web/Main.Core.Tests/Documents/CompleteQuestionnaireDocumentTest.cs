@@ -59,7 +59,7 @@ namespace Main.Core.Tests.Documents
             questionTest01.SetAnswer(new List<Guid> { this.answer1Key }, string.Empty);
 
             var newDoc = item.Clone() as CompleteQuestionnaireDocument;
-            newDoc.ConnectChildsWithParent();
+            newDoc.ConnectChildrenWithParent();
 
             ICompleteQuestion questionTest1 = newDoc.GetQuestion(this.questionKey, null);
             ICompleteQuestion questionTest2 =

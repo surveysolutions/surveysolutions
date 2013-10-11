@@ -291,12 +291,12 @@
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             foreach (var item in this.Children)
             {
                 item.SetParent(this);
-                item.ConnectChildsWithParent();
+                item.ConnectChildrenWithParent();
             }
         }
 
