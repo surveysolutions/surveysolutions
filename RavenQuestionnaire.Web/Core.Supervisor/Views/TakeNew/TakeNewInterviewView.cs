@@ -10,10 +10,11 @@ namespace Core.Supervisor.Views.TakeNew
 {
     public class TakeNewInterviewView
     {
-        public TakeNewInterviewView(IQuestionnaireDocument questionnaire)
+        public TakeNewInterviewView(IQuestionnaireDocument questionnaire, long questionnaireVersion)
         {
             this.QuestionnaireTitle = questionnaire.Title;
             this.QuestionnaireId = questionnaire.PublicKey;
+            this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestions = new List<QuestionView>();
             this.Supervisors = new List<UserDocument>();
             foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
@@ -31,6 +32,6 @@ namespace Core.Supervisor.Views.TakeNew
 
         public List<UserDocument> Supervisors { get; set; }
 
-        public UserLight CurrentUser { get; set; }
+        public long QuestionnaireVersion { get; set; }
     }
 }

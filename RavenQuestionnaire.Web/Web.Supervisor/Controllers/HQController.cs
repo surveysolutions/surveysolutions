@@ -130,7 +130,6 @@ namespace Web.Supervisor.Controllers
             Guid key = id;
             UserLight user = this.GlobalInfo.GetCurrentUser();
             TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, user.Id));
-            model.CurrentUser = user;
             return this.View(model);
         }
 

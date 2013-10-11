@@ -62,7 +62,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$blockMessage']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    & (GetPathToMSBuild) $Solution '/t:Build' "/p:Configuration=$BuildConfiguration" | Write-Host
+    & (GetPathToMSBuild) $Solution '/t:Build' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 

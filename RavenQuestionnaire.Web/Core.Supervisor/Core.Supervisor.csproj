@@ -281,6 +281,8 @@
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
+    <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
+    <Compile Include="Views\Template\DesignerQuestionnairesView.cs" />
     <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />

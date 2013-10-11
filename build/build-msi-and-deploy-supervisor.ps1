@@ -70,7 +70,7 @@ function BuildCapi($CapiProject, $BuildConfiguration){
 	Write-Host "##teamcity[blockOpened name='Building Capi project']"
 	Write-Host "##teamcity[progressStart 'Building Capi project']"
 	
-	& (GetPathToMSBuild) $CapiProject '/t:PackageForAndroid' "/p:Configuration=$BuildConfiguration" | Write-Host
+	& (GetPathToMSBuild) $CapiProject '/t:PackageForAndroid' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
 
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 

@@ -84,6 +84,13 @@
             </div>
 
         </div>
+        <div class="ui-pnotify" data-bind="visible: IsNotifyVisible()" style="display: none">
+            <div class="alert ui-pnotify-container ui-pnotify-shadow">
+                <div class="ui-pnotify-icon"><span class="icon-exclamation-sign"></span></div>
+                <h4 class="ui-pnotify-title" data-bind="text: NotifyTitle()"></h4>
+                <div class="ui-pnotify-text" data-bind="html: NotifyText()"></div>
+            </div>
+        </div>
         <div id="wrapper">
             <div id="umbrella">
                 <div id="umbrella-message">
@@ -91,10 +98,23 @@
                 </div>
             </div>
             @RenderBody()
+            <div id="output">
+                <div class="inner">
+                    <div class="title">
+                        <button type="button" class="close" data-bind="click: HideOutput">&times;</button>
+                        <span>Errors log</span>
+                    </div>
+                    <div class="body">
+                        <ul data-bind="foreach: Errors" class="error-list">
+                            <li class="error">
+                                <span data-bind="html: error"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
-
     <div class="row-fluid" id="footer-block">
         <hr>
         <footer>
@@ -116,8 +136,38 @@
         </footer>
     </div>
     @Scripts.Render("~/js/main")
+    <script type="text/javascript">
+        var input = window.input || (function () {
+            'use strict';
+            return {
+                settings: {
+                    messages: {
+                        unhandledExceptionMessage: 'An unexpected error occurred. We are sorry for inconvenience. Please try to refresh this page and if this error will occure again, contact support via following email: <a href="mailto:@AppSettings.Instance.AdminEmail">@AppSettings.Instance.AdminEmail</a>',
+                        notifyDialogTitle: 'Please wait',
+                        notifyDialogText: '"Your previous request is not complete. Please wait for it to be finished and repeat your operation."'
+                    }
+                }
+            };
+        }(document));
+
+        window.input = input;
+
+        var setMinHeight = function () {
+            var windowHeight = $(window).height();
+            var navigationHeight = $('.navbar.navbar-fixed-top').height();
+            $('#content').css('min-height', (windowHeight - navigationHeight) + 'px');
+            $('#wrapper').css('margin-top', navigationHeight + 'px');
+            $('#umbrella').css('top', navigationHeight + 'px');
+
+        };
+
+        $(document).ready(function () {
+            setMinHeight();
+            $(window).resize(function () {
+                setMinHeight();
+            });
+        });
+    </script>
     @RenderSection("scripts", false)
-
-
 </body>
 </html>

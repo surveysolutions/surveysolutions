@@ -18,16 +18,16 @@
 
 @RenderSection("gridnavigation", false)
 <div id="list" class="innerLR">
-    <!-- ko if:ListView.IsPageLoaded()  -->
-    <!-- ko ifnot:ListView.Pager().TotalItemCount() > 0  -->
+    <!-- ko if:IsPageLoaded()  -->
+    <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
     <p class="text-center">
         No results found
     </p>
     <!-- /ko -->
-    <!-- ko if:ListView.Pager().TotalItemCount() > 0 -->
+    <!-- ko if:Pager().TotalItemCount() > 0 -->
     @RenderSection("grid", true)
-    <!-- ko if:ListView.Pager().LastPage() > 1 -->
-    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: ListView.Pager }"></div>
+    <!-- ko if:Pager().LastPage() > 1 -->
+    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
     <!-- /ko -->
     <!-- /ko -->
     <!-- /ko -->

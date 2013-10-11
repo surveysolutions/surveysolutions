@@ -409,8 +409,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\TemplateLight.cs" />
-    <Compile Include="EventHandlers\ClientDeviceDenormalizer.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="Events\AggregateRootEvent.cs">

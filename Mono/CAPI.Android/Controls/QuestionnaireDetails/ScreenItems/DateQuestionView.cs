@@ -37,19 +37,31 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     dialog.Show();
                 };
 
-            // display the current date (this method is below)
-            dateDisplay.Text = Model.AnswerString;
+            this.PutAnswerStoredInModelToUI();
         }
+
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            return this.Model.AnswerString;
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            dateDisplay.Text = this.GetAnswerStoredInModelAsString();
+        }
+
         // the event received when the user "sets" the date in the dialog
         void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
             string newValue = e.Date.ToString("d");
             if (newValue != this.Model.AnswerString)
             {
-               ExecuteSaveAnswerCommand(new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
-                                                          this.Model.PublicKey.PropagationVector, DateTime.UtcNow, e.Date));
                 dateDisplay.Text = newValue;
-                SaveAnswer(newValue);
+
+                this.SaveAnswer(
+                    newValue,
+                    new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,
+                        Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, e.Date));
             }
         }
 
