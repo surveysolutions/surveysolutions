@@ -633,7 +633,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
         }
 
-        //could be split into several methods
+        //could be split into several methods but it involves several scans of questionnaire 
         private void ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(QuestionnaireDocument document)
         {
             Func<Guid, bool> isReferencedQuestionsExists = questionId =>
@@ -645,12 +645,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (substitutionReferences.Length == 0)
                     return true;
 
+                if (question.Featured)
+                    return false;
+
                 if (substitutionReferences.Contains(question.StataExportCaption))
                     return false;
                 //not the most efficient way 
                 IEnumerable<IQuestion> questionsSubstitutionReferenced = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
 
-                if (questionsSubstitutionReferenced.Count() >= substitutionReferences.Count())
+                if (questionsSubstitutionReferenced.Count() < substitutionReferences.Count())
                     return false;
 
                 if (questionsSubstitutionReferenced.Any(q => !( q.QuestionType == QuestionType.DateTime ||
