@@ -93,7 +93,12 @@
             var self = this;
             ko.utils.extend(self, new QuestionModel());
             self.isInteger = ko.observable(isInteger);
-            self.answer = ko.observable().extend({ required: true, number: true, digit: isInteger });
+            self.answer = ko.observable().extend({ required: true, number: true });
+            
+            if (isInteger) {
+                ko.observable().extend({ digit: true });
+            }
+            
             self.errors = ko.validation.group(self);
             return self;
         },
