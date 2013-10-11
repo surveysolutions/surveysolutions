@@ -415,9 +415,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.AutoPropagate:
+                        this.AnswerNumericIntegerQuestion(userId, questionId, EmptyPropagationVector, answersTime, (int)answer);
+                        break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyPropagationVector, answersTime, Convert.ToInt32(answer));
+                            this.AnswerNumericIntegerQuestion(userId, questionId, EmptyPropagationVector, answersTime, (int) answer);
                         else
                             this.AnswerNumericRealQuestion(userId, questionId, EmptyPropagationVector, answersTime, (decimal)answer);
                         break;
@@ -534,7 +536,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
-            this.ThrowIfNumericQuestionIsNotAcceptPassedAnswerType(questionId, questionnaire, answer.GetType());
+            this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
             if (questionnaire.ShouldQuestionPropagateGroups(questionId))
@@ -632,7 +634,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfPropagationVectorIsIncorrect(questionId, propagationVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
-            this.ThrowIfNumericQuestionIsNotAcceptPassedAnswerType(questionId, questionnaire, answer.GetType());
+            this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
 
 
@@ -1189,19 +1191,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "Question {0} has type {1}. But one of the following types was expected: {2}.",
                     FormatQuestionForException(questionId, questionnaire), questionType, string.Join(", ", expectedQuestionTypes.Select(type => type.ToString()))));
+        } 
+
+        private void ThrowIfNumericQuestionIsNotReal(Guid questionId, IQuestionnaire questionnaire)
+        {
+            var isNotSupportReal = questionnaire.IsQuestionInteger(questionId);
+            if (isNotSupportReal)
+                throw new InterviewException(string.Format(
+                    "Question {0} doesn't support answer of type real.",
+                    FormatQuestionForException(questionId, questionnaire)));
         }
 
-        private void ThrowIfNumericQuestionIsNotAcceptPassedAnswerType(Guid questionId, IQuestionnaire questionnaire, Type type)
+        private void ThrowIfNumericQuestionIsNotInteger(Guid questionId, IQuestionnaire questionnaire)
         {
-            var isSupportInteger = questionnaire.IsQuestionInteger(questionId);
-            var expectedType = isSupportInteger ? typeof (int) : typeof (decimal);
-            var isAnswerTypeCorrect = type == expectedType;
-
-            if(!isAnswerTypeCorrect)
+            var isNotSupportInteger = !questionnaire.IsQuestionInteger(questionId);
+            if (isNotSupportInteger)
                 throw new InterviewException(string.Format(
-                   "Question {0} expects answer of type {1}. But passed: {2}.",
-                   FormatQuestionForException(questionId, questionnaire), expectedType, type.Name));
-
+                    "Question {0} doesn't support answer of type integer.",
+                    FormatQuestionForException(questionId, questionnaire)));
         }
 
         private Guid GetLinkedQuestionIdOrThrow(Guid questionId, IQuestionnaire questionnaire)
