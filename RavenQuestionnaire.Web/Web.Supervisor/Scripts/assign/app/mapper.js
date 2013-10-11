@@ -29,6 +29,7 @@
                         item.selectedOptions.extend({ notempty: true }); break;
                     case "AutoPropagate":
                     case "Numeric":
+                        item.settings(dto.Settings);
                         var isInteger = _.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger;
                         item.selectedOption.extend({ required: true, number: true, digit: isInteger });
                         break;

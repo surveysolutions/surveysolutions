@@ -65,7 +65,13 @@ namespace Web.Supervisor.Code.CommandTransformation
                     return new KeyValuePair<Guid, object>(answer.Id, answer.Answer);
 
                 case QuestionType.AutoPropagate:
+                    return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
                 case QuestionType.Numeric:
+                    if (answer.Settings != null)
+                    {
+                        if ((bool)answer.Settings.IsInteger)
+                            return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
+                    }
                     return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
 
                 case QuestionType.DateTime:
