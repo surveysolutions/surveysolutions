@@ -162,6 +162,8 @@
 
         QuestionTitleContainsUnknownSubstitutionReference,
 
-        QuestionTitleContainsSubstitutionReferenceToSelf
+        QuestionTitleContainsSubstitutionReferenceToSelf,
+
+        FeaturedQuestionTitleContainsSubstitutionReference
     }
 }
