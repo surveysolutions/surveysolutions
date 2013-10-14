@@ -161,7 +161,7 @@ namespace Core.Supervisor.Views.Interview
 
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
-                InterviewQuestion answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
+                InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
 
                 Dictionary<string, string> answersForTitleSubstitution = new Dictionary<string, string>();
 
@@ -186,7 +186,7 @@ namespace Core.Supervisor.Views.Interview
 
             IDictionary<int[], InterviewQuestion> allLinkedQuestions =
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.PropagationVector,
-                    interviewLevel => interviewLevel.Questions.FirstOrDefault(question => question.Id == optionsSource.ReferencedQuestionId));
+                    interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
             return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled)
                 .ToDictionary(question => question.Key, question => (question.Value.Answer ?? string.Empty).ToString());
