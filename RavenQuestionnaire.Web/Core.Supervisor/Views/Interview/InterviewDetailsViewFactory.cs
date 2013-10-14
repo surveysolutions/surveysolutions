@@ -163,7 +163,8 @@ namespace Core.Supervisor.Views.Interview
             {
                 InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
 
-                Dictionary<string, string> answersForTitleSubstitution = new Dictionary<string, string>();
+                Dictionary<string, string> answersForTitleSubstitution =
+                    GetAnswersForTitleSubstitution(interviewLevel, variableToIdMap, question);
 
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
                     ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions)
@@ -173,6 +174,39 @@ namespace Core.Supervisor.Views.Interview
             }
 
             return completedGroup;
+        }
+
+        private static Dictionary<string, string> GetAnswersForTitleSubstitution(InterviewLevel interviewLevel, Dictionary<string, Guid> variableToIdMap, IQuestion question)
+        {
+            return question
+                .GetVariablesUsedInTitle()
+                .Select(variableName => new
+                {
+                    Variable = variableName,
+                    Answer = GetAnswerForTitleSubstitution(variableName, variableToIdMap, interviewLevel),
+                })
+                .Where(x => x.Answer != null)
+                .ToDictionary(
+                    x => x.Variable,
+                    x => x.Answer);
+        }
+
+        private static string GetAnswerForTitleSubstitution(string variableName, Dictionary<string, Guid> variableToIdMap, InterviewLevel interviewLevel)
+        {
+            if (!variableToIdMap.ContainsKey(variableName))
+                return null;
+
+            Guid questionId = variableToIdMap[variableName];
+
+            InterviewQuestion interviewQuestion = interviewLevel.GetQuestion(questionId);
+
+            if (interviewQuestion == null)
+                return null;
+
+            if (!interviewQuestion.Enabled)
+                return null;
+
+            return interviewQuestion.Answer.ToString();
         }
 
         private Dictionary<int[], string> GetAvailableOptions(Guid questionId, InterviewData interview,
