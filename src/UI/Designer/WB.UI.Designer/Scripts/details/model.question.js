@@ -126,6 +126,10 @@
                 };
                 self.canUpdate = ko.observable(true);
 
+                self.hasErrors = ko.computed(function() {
+                    return self.errors().length > 0;
+                });
+
                 self.attachValidation = function () {
 
                     self.alias.extend({

@@ -8,6 +8,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -25,9 +26,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.Click += NumericQuestionView_Click;
             etAnswer=new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            etAnswer.Text = Model.AnswerString;
+            this.PutAnswerStoredInModelToUI();
             etAnswer.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal;
-            
+
             etAnswer.SetSelectAllOnFocus(true);
             etAnswer.ImeOptions=ImeAction.Done;
             etAnswer.SetSingleLine(true);
@@ -43,32 +44,32 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 return;
             }
 
-            SaveAnswer(etAnswer.Text.Trim());
-        }
+            string newAnswer = this.etAnswer.Text.Trim();
 
-        protected override void SaveAnswer(string newAnswer)
-        {
             if (newAnswer != this.Model.AnswerString)
             {
                 decimal answer;
                 if(!decimal.TryParse(newAnswer,out  answer))
                     return;
-                ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
-                                                                          CapiApplication.Membership.CurrentUser.Id,
-                                                                          Model.PublicKey.Id,
-                                                                          this.Model.PublicKey.PropagationVector,
-                                                                          DateTime.UtcNow, answer));
+
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
 
-                base.SaveAnswer(newAnswer);
+                this.SaveAnswer(newAnswer,
+                    new AnswerNumericQuestionCommand(
+                        this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
+                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answer));
             }
         }
 
-        protected override void SaveAnswerErrorHandler(Exception ex)
+        protected override string GetAnswerStoredInModelAsString()
         {
-            base.SaveAnswerErrorHandler(ex);
-            etAnswer.Text = Model.AnswerString;
+            return this.Model.AnswerString;
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            this.etAnswer.Text = this.GetAnswerStoredInModelAsString();
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

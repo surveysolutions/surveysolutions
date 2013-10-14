@@ -6,15 +6,13 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/lib/lodash.js")
-    @Scripts.Render("~/Scripts/vm/summarylistview.js")
     @Html.Partial("_ListViewStatusesScript")
+    @Scripts.Render("~/Scripts/viewmodels/pages/teamsandstatuses.js")
     <script type="text/javascript">
         var $surveysUrl = '@Url.Action("Index", "Survey")';
         var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
         $(function () {
-            var model = new SummaryListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" })');
-
+            var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" })');
             ko.applyBindings(model);
             model.load();
         });
@@ -61,7 +59,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:ListView.Items -->
+            <!-- ko foreach:Items -->
             <tr>
                 <td>
                     <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a>

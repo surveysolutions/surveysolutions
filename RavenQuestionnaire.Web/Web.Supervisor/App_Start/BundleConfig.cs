@@ -12,21 +12,16 @@
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-#warning: do not change name for this bundle, this name should match with phisical path to build right path to load fonts from css
             bundles.Add(new StyleBundle("~/Content/main").Include(
                 "~/Content/css/bootstrap.css",
-                "~/Content/css/bootstrap.icon-large.css",
+                "~/Content/font-awesome.min.css",
                 "~/Content/bootstrap-mvc-validation.css",
-                //"~/Content/css/bootstrap-responsive.css",
-                "~/Content/font-awesome.css",
                 "~/Content/jquery.pnotify.default.css",
-                "~/Content/datepicker.css",
                 "~/Content/supervisor.css",
                 "~/Content/main.css"));
 
             bundles.Add(new StyleBundle("~/css/main-not-loggedin").Include(
                 "~/Content/css/bootstrap.css",
-                "~/Content/css/bootstrap.icon-large.min.css",
                 "~/Content/bootstrap-mvc-validation.css",
                 "~/Content/css/bootstrap-responsive.css",
                  "~/Content/main-not-logged.css"));
@@ -35,10 +30,12 @@
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/modernizr-{version}.js",
                 "~/Scripts/bootstrap.js",
+                "~/Scripts/knockout-{version}.js",
+                "~/Scripts/knockout.mapping-latest.js",
                 "~/Scripts/query-string.js",
-                "~/Scripts/lib/jquery.pnotify.js",
-                "~/Scripts/bootstrap-datepicker.js"
-                ));
+                "~/Scripts/supervisor.framework.js",
+                "~/Scripts/viewmodels/viewmodelbase.js",
+                "~/Scripts/viewmodels/pagebase.js"));
 
             bundles.Add(
                 new ScriptBundle("~/validate").Include(
@@ -49,55 +46,45 @@
 
             bundles.Add(
                 new ScriptBundle("~/js/list").Include(
-                    "~/Scripts/knockout-2.2.1.js",
-                    "~/Scripts/knockout.mapping-latest.js",
                     "~/Scripts/ko.pager.js",
-                    "~/Scripts/vm/listview.js"));
+                    "~/Scripts/viewmodels/listview.js"));
+
+            bundles.Add(new StyleBundle("~/css/interview-new").Include(
+                "~/Content/bootstrap-editable.css",
+                "~/Content/datepicker.css"));
 
             bundles.Add(new StyleBundle("~/css/interview").Include(
                 "~/Content/bootstrap-editable.css",
                 "~/Content/datepicker.css",
-                "~/Content/main.css",
                 "~/Content/details.css"));
 
-
             bundles.Add(
-                new ScriptBundle("~/js/lib-modules").Include(
-                    "~/Scripts/lib/lodash.js",
-                    "~/Scripts/lib/moment.js",
-                    "~/Scripts/lib/jquery.pnotify.js",
-                    "~/Scripts/lib/knockout.js",
-                    "~/Scripts/lib/knockout.validation.js",
-                    "~/Scripts/lib/require.js",
-                    "~/Scripts/lib/amplify.js",
-                    "~/Scripts/lib/director.js",
-                    "~/Scripts/lib/Math.uuid.js"
+                new ScriptBundle("~/js/interview-general").Include(
+                    "~/Scripts/knockout.validation.js",
+                    "~/Scripts/bootstrap-datepicker.js",
+                    "~/Scripts/Math.uuid.js",
+                    "~/Scripts/viewmodels/pages/interview/custom.js"
                     ));
 
             bundles.Add(
                 new ScriptBundle("~/js/interview-details").Include(
-                    "~/Scripts/details/app/config.js",
-                    "~/Scripts/details/app/datacontext.js",
-                    "~/Scripts/details/app/dataservice.js",
-                    "~/Scripts/details/app/mapper.js",
-                    "~/Scripts/details/app/model.js",
-                    "~/Scripts/details/app/viewmodel.js"
+                    "~/Scripts/lodash.underscore.js",
+                    "~/Scripts/moment.js",
+                    "~/Scripts/director.js",
+                    "~/Scripts/viewmodels/pages/interview/details/config.js",
+                    "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
+                    "~/Scripts/viewmodels/pages/interview/details/mapper.js",
+                    "~/Scripts/viewmodels/pages/interview/details/model.js",
+                    "~/Scripts/viewmodels/pages/interview/details/interviewdetails.js"
                     ));
 
             bundles.Add(
-                new ScriptBundle("~/js/interview-assign").Include(
-                    "~/Scripts/assign/app/datacontext.js",
-                    "~/Scripts/assign/app/dataservice.js",
-                    "~/Scripts/assign/app/mapper.js",
-                    "~/Scripts/assign/app/model.js",
-                    "~/Scripts/assign/app/viewmodel.js"
+                new ScriptBundle("~/js/interview-new").Include(
+                    "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
+                    "~/Scripts/viewmodels/pages/interview/new/mapper.js",
+                    "~/Scripts/viewmodels/pages/interview/new/model.js",
+                    "~/Scripts/viewmodels/pages/interview/new/newinterview.js"
                     ));
-
-            bundles.Add(
-               new ScriptBundle("~/js/interview-changeState").Include(
-                   "~/Scripts/changeState/app/viewmodel.js"
-                   ));
-
         }
     }
 }

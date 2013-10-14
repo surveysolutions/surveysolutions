@@ -17,10 +17,15 @@
 
     function Pager(totalItemCount) {
         var self = this;
-        self.CurrentPage = numericObservable(1);
+        self.CurrentPage = numericObservable(1).intercept(function (value) {
+            if (self.CanChangeCurrentPage()) {
+                this(value);
+            }
+        });
         self.TotalItemCount = ko.computed(totalItemCount);
         self.PageSize = numericObservable(10);
         self.PageSlide = numericObservable(2);
+        self.CanChangeCurrentPage = ko.observable(true);
 
         self.LastPage = ko.computed(function () {
             return Math.floor((self.TotalItemCount() - 1) / self.PageSize()) + 1;
