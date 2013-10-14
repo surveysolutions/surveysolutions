@@ -14,12 +14,12 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    internal class InterviewDenormalizer : IEventHandler,
-                                         IEventHandler<InterviewCreated>,
-                                         IEventHandler<InterviewStatusChanged>,
-                                         IEventHandler<SupervisorAssigned>,
-                                         IEventHandler<InterviewerAssigned>,
-
+    internal class InterviewDenormalizer :
+        IEventHandler,
+        IEventHandler<InterviewCreated>,
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<SupervisorAssigned>,
+        IEventHandler<InterviewerAssigned>,
         IEventHandler<GroupPropagated>,
         IEventHandler<AnswerCommented>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>,
         IEventHandler<GeoLocationQuestionAnswered>,
+        IEventHandler<AnswerRemoved>,
         IEventHandler<GroupDisabled>,
         IEventHandler<GroupEnabled>,
         IEventHandler<QuestionDisabled>,
@@ -211,6 +212,15 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, evnt.Payload.SelectedPropagationVectors);
         }
 
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            this.UpdateQuestion(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, question =>
+            {
+                question.Answer = null;
+                question.IsAnswered = false;
+            });
+        }
+
         public void Handle(IPublishedEvent<GroupDisabled> evnt)
         {
             PreformActionOnLevel(evnt.EventSourceId, evnt.Payload.PropagationVector, (level) =>
@@ -270,17 +280,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void SaveAnswer(Guid interviewId, int[] vector, Guid questionId, object answer)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+            this.UpdateQuestion(interviewId, vector, questionId, (question) =>
                 {
                     question.Answer = answer;
                     question.IsAnswered = true;
-                    return true;
                 });
         }
 
         private void SetFlagStateForQuestion(Guid interviewId, int[] vector, Guid questionId, bool isFlagged)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+            this.UpdateQuestion(interviewId, vector, questionId, (question) =>
             {
                 if (question.IsFlagged == isFlagged)
                     return false;
@@ -300,18 +309,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                     Date = commentTime
                 };
 
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+            this.UpdateQuestion(interviewId, vector, questionId, (question) =>
                 {
                     if (question.Comments == null)
                         question.Comments = new List<InterviewQuestionComment>();
                     question.Comments.Add(interviewQuestionComment);
-                    return true;
                 });
         }
 
         private void ChangeQuestionConditionState(Guid interviewId, int[] vector, Guid questionId, bool newState)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+            this.UpdateQuestion(interviewId, vector, questionId, (question) =>
                 {
                     if (question.Enabled == newState)
                         return false;
@@ -322,7 +330,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void ChangeQuestionConditionValidity(Guid interviewId, int[] vector, Guid questionId, bool valid)
         {
-            PreformActionOnQuestion(interviewId, vector, questionId, (question) =>
+            this.UpdateQuestion(interviewId, vector, questionId, (question) =>
                 {
                     if (question.Valid == valid)
                         return false;
@@ -335,15 +343,26 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         {
             var interview = this.interviews.GetById(interviewId);
             var levelId = CreateLevelIdFromPropagationVector(vector);
+
+            if (!interview.Levels.ContainsKey(levelId))
+                return;
+
             if (action(interview.Levels[levelId]))
             {
                 this.interviews.Store(interview, interview.InterviewId);
             }
         }
 
+        private void UpdateQuestion(Guid interviewId, int[] vector, Guid questionId, Action<InterviewQuestion> update)
+        {
+            this.UpdateQuestion(interviewId, vector, questionId, question =>
+            {
+                update(question);
+                return true;
+            });
+        }
 
-        private void PreformActionOnQuestion(Guid interviewId, int[] vector, Guid questionId,
-                                             Func<InterviewQuestion, bool> action)
+        private void UpdateQuestion(Guid interviewId, int[] vector, Guid questionId, Func<InterviewQuestion, bool> update)
         {
             PreformActionOnLevel(interviewId, vector, (questionsAtTheLevel) =>
                 {
@@ -354,7 +373,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                         questionsAtTheLevel.Questions.Add(answeredQuestion);
                     }
                    
-                    return action(answeredQuestion);
+                    return update(answeredQuestion);
                 });
         }
 

@@ -216,7 +216,7 @@
 <script type="text/html" id="GroupView">
     <div class="ui-expander" data-bind="expand: isExpanded">
         <button type="button" class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-plus icon-white"></i><i class="icon-minus icon-white"></i></button>
-        <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
+        <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew, hasErrors: hasErrors}, popover : tip">
             <div class="handler"></div>
             <div class="q-item">
                 <div class="group-actions  pull-right">
@@ -242,7 +242,7 @@
     </div>
 </script>
 <script type="text/html" id="QuestionView">
-    <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
+    <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew, hasErrors: hasErrors}">
         <div class="handler"></div>
         <div class="q-item">
             <div class="group-actions  pull-right">
