@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
+    [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView
     {
         public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
