@@ -11,7 +11,7 @@ namespace Core.Supervisor.Views.Interview
         public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap)
         {
             this.Id = question.PublicKey;
-            this.Title = question.QuestionText;
+            this.Title = SubstituteVariablesInTitleIfNeeded(question.QuestionText);
             this.QuestionType = question.QuestionType;
             this.IsMandatory = question.Mandatory;
             this.IsFeatured = question.Featured;
@@ -47,6 +47,26 @@ namespace Core.Supervisor.Views.Interview
             }).ToList();
             this.IsValid = answeredQuestion.Valid;
             this.Answer = answeredQuestion.Answer;
+        }
+
+        private static string SubstituteVariablesInTitleIfNeeded(string title)
+        {
+            IEnumerable<string> usedVariables = GetVariablesUsedInTitle(title);
+
+            foreach (string usedVariable in usedVariables)
+            {
+                title = title.Replace(string.Format("%{0}%", usedVariable), "[...]");
+            }
+
+            return title;
+        }
+
+        private static IEnumerable<string> GetVariablesUsedInTitle(string title)
+        {
+            return title
+                .Split('%')
+                .Where((part, index) => index % 2 == 1)
+                .Distinct();
         }
 
         private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
