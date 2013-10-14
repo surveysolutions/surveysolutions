@@ -1111,7 +1111,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
         {
-            if (!options.Any())
+            if (options == null || !options.Any())
             {
                 throw new DomainException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
