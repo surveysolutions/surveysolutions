@@ -365,16 +365,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         private void UpdateQuestion(Guid interviewId, int[] vector, Guid questionId, Func<InterviewQuestion, bool> update)
         {
             PreformActionOnLevel(interviewId, vector, (questionsAtTheLevel) =>
-                {
-                    var answeredQuestion = questionsAtTheLevel.Questions.FirstOrDefault(q => q.Id == questionId);
-                    if (answeredQuestion == null)
-                    {
-                        answeredQuestion = new InterviewQuestion(questionId);
-                        questionsAtTheLevel.Questions.Add(answeredQuestion);
-                    }
-                   
-                    return update(answeredQuestion);
-                });
+            {
+                var answeredQuestion = questionsAtTheLevel.GetOrCreateQuestion(questionId);
+
+                return update(answeredQuestion);
+            });
         }
 
         private void RemoveLevelFromInterview(InterviewData interview, string levelKey, Guid scopeId)
