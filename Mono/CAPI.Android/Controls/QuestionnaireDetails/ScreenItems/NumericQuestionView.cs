@@ -6,64 +6,15 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Main.Core.Commands.Questionnaire.Completed;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-
-    public class NumericIntegerQuestionView : NumericQuestionView
-    {
-        public NumericIntegerQuestionView(Context context, IMvxAndroidBindingContext bindingActivity,
-            QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
-            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
-        {
-            KeyboardTypeFlags = InputTypes.ClassNumber | InputTypes.NumberFlagSigned;
-        }
-
-        protected override bool IsParsingOrAswerSavingFailed(string newAnswer)
-        {
-            int answer;
-            if (!int.TryParse(newAnswer, out answer))
-                return true;
-
-            ExecuteSaveAnswerCommand(new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
-                CapiApplication.Membership.CurrentUser.Id,
-                Model.PublicKey.Id,
-                this.Model.PublicKey.PropagationVector,
-                DateTime.UtcNow, answer));
-
-            return false;
-        }
-    }
-    public class NumericRealQuestionView : NumericQuestionView
-    {
-        public NumericRealQuestionView(Context context, IMvxAndroidBindingContext bindingActivity,
-            QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
-            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
-        {
-            KeyboardTypeFlags = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned;
-        }
-
-        protected override bool IsParsingOrAswerSavingFailed(string newAnswer)
-        {
-            decimal answer;
-            if (!decimal.TryParse(newAnswer, out answer))
-                return true;
-
-            ExecuteSaveAnswerCommand(new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
-                CapiApplication.Membership.CurrentUser.Id,
-                Model.PublicKey.Id,
-                this.Model.PublicKey.PropagationVector,
-                DateTime.UtcNow, answer));
-
-            return false;
-        }
-    }
     public abstract class NumericQuestionView : AbstractQuestionView
     {
-        protected InputTypes KeyboardTypeFlags; 
+        protected abstract InputTypes KeyboardTypeFlags
+        {
+             get;
+        }
 
         public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService)
@@ -74,13 +25,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
             llWrapper.Click += NumericQuestionView_Click;
-            etAnswer=new EditText(this.Context)
-            {
-                LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent),
-                Text = Model.AnswerString,
-                InputType = KeyboardTypeFlags
-            };
-            
+            etAnswer = new EditText(this.Context);
+            etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            etAnswer.InputType = KeyboardTypeFlags;
+
             this.PutAnswerStoredInModelToUI();
 
             etAnswer.SetSelectAllOnFocus(true);
@@ -102,21 +50,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             if (newAnswer != this.Model.AnswerString)
             {
-                if (IsParsingOrAswerSavingFailed(newAnswer)) 
-                    return;
-                
-                if (!IsCommentsEditorFocused)
-                    HideKeyboard(etAnswer);
-
-                this.SaveAnswer(newAnswer,new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
-                                                                          CapiApplication.Membership.CurrentUser.Id,
-                                                                          Model.PublicKey.Id,
-                                                                          this.Model.PublicKey.PropagationVector,
-                                                                          DateTime.UtcNow, answer));
+                IsParsingOrAswerSavingFailed(newAnswer);
             }
         }
 
-        protected abstract bool IsParsingOrAswerSavingFailed(string newAnswer);
+        protected abstract void IsParsingOrAswerSavingFailed(string newAnswer);
 
         protected override string GetAnswerStoredInModelAsString()
         {

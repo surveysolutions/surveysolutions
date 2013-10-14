@@ -31,8 +31,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     break;
                 case QuestionType.Numeric:
                     var valueQuestionModel = (ValueQuestionViewModel)model;
-                        itemView = valueQuestionModel.IsInteger.Value
-                            ? (AbstractQuestionView) new NumericIntegerQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService)
+                        itemView = valueQuestionModel.IsInteger == true
+                            ? (AbstractQuestionView)new NumericIntegerQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService)
                             : new NumericRealQuestionView(context, bindingActivity, model, questionnairePublicKey, commandService);
                     break;
                 case QuestionType.DateTime:
