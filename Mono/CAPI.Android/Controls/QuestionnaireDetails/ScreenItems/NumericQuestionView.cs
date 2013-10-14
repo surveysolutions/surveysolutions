@@ -8,6 +8,7 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -79,6 +80,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 Text = Model.AnswerString,
                 InputType = KeyboardTypeFlags
             };
+            
+            this.PutAnswerStoredInModelToUI();
 
             etAnswer.SetSelectAllOnFocus(true);
             etAnswer.ImeOptions=ImeAction.Done;
@@ -95,11 +98,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 return;
             }
 
-            SaveAnswer(etAnswer.Text.Trim());
-        }
+            string newAnswer = this.etAnswer.Text.Trim();
 
-        protected override void SaveAnswer(string newAnswer)
-        {
             if (newAnswer != this.Model.AnswerString)
             {
                 if (IsParsingOrAswerSavingFailed(newAnswer)) 
@@ -108,16 +108,24 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 if (!IsCommentsEditorFocused)
                     HideKeyboard(etAnswer);
 
-                base.SaveAnswer(newAnswer);
+                this.SaveAnswer(newAnswer,new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
+                                                                          CapiApplication.Membership.CurrentUser.Id,
+                                                                          Model.PublicKey.Id,
+                                                                          this.Model.PublicKey.PropagationVector,
+                                                                          DateTime.UtcNow, answer));
             }
         }
 
         protected abstract bool IsParsingOrAswerSavingFailed(string newAnswer);
 
-        protected override void SaveAnswerErrorHandler(Exception ex)
+        protected override string GetAnswerStoredInModelAsString()
         {
-            base.SaveAnswerErrorHandler(ex);
-            etAnswer.Text = Model.AnswerString;
+            return this.Model.AnswerString;
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            this.etAnswer.Text = this.GetAnswerStoredInModelAsString();
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

@@ -68,7 +68,6 @@ namespace Core.Supervisor.Views.Interview
 
             var interviewDetails = new InterviewDetailsView()
                 {
-                    User = input.User,
                     Responsible = new UserLight(interview.ResponsibleId, user.UserName),
                     QuestionnairePublicKey = interview.QuestionnaireId,
                     Title = questionnaire.Questionnaire.Title,

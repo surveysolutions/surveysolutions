@@ -391,6 +391,6 @@
         _.each(groups.getAllLocal(), function (group) {
             group.fillChildren();
         });
-
+        
         return datacontext;
     });

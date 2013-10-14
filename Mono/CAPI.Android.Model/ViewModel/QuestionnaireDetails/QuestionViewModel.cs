@@ -18,7 +18,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool valid,
             bool mandatory,
-            bool capital,
             object answerObject,
             string validationMessage)
         {
@@ -27,7 +26,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Text = text;
             QuestionType = questionType;
             AnswerObject = answerObject;
-            Capital = capital;
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
@@ -49,7 +47,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public InterviewItemId PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
-        public bool Capital { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
 
@@ -67,6 +64,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public virtual void SetAnswer(object answer)
         {
+            if (answer == null)
+            {
+                return;
+            }
+
             this.AnswerObject = answer;
             if (!Status.HasFlag(QuestionStatus.Answered))
             {

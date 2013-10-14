@@ -496,9 +496,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\TemplateLight.cs">
       <Link>Entities\TemplateLight.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs">
-      <Link>EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\FileStoreDenormalizer.cs">
       <Link>EventHandlers\FileStoreDenormalizer.cs</Link>
     </Compile>

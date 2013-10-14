@@ -8,5 +8,6 @@ namespace Web.Supervisor.Code.CommandTransformation
         public Guid Id { get; set; }
         public object Answer { get; set; }
         public QuestionType Type { get; set; }
+        public dynamic Settings { get; set; }
     }
 }

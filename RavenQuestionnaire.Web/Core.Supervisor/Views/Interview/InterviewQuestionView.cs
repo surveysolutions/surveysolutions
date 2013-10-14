@@ -33,6 +33,12 @@ namespace Core.Supervisor.Views.Interview
                 }).ToList();
             }
 
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                this.Settings = new { numericQuestion.IsInteger };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;
@@ -49,11 +55,6 @@ namespace Core.Supervisor.Views.Interview
             this.IsValid = answeredQuestion.Valid;
             this.Answer = answeredQuestion.Answer;
 
-            var numericQuestion = question as INumericQuestion;
-            if (numericQuestion != null)
-            {
-                this.Settings = new {numericQuestion.IsInteger};
-            }
         }
 
         private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
