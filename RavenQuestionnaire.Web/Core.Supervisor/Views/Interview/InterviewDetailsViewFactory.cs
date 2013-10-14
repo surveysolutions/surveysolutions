@@ -44,16 +44,17 @@ namespace Core.Supervisor.Views.Interview
             var questionnaire = this.questionnaireStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
             if (questionnaire == null)
                 throw new ArgumentException(string.Format(
-                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion)); 
+                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion));
 
-             var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            var variablesMap = questionnaire.Questionnaire.GetAllQuestions().Select(x => new
-            {
-                Id = x.PublicKey,
-                Variable = x.StataExportCaption
-            }).ToDictionary(x => x.Id, x => x.Variable);
+            Dictionary<Guid, string> idToVariableMap = questionnaire.Questionnaire.GetAllQuestions().ToDictionary(
+                x => x.PublicKey,
+                x => x.StataExportCaption);
 
+            Dictionary<string, Guid> variableToIdMap = questionnaire.Questionnaire.GetAllQuestions().ToDictionary(
+                x => x.StataExportCaption,
+                x => x.PublicKey);
 
             if (!input.CurrentGroupPublicKey.HasValue)
             {
@@ -93,7 +94,8 @@ namespace Core.Supervisor.Views.Interview
                         //so for every layer we are creating propagated group
                         foreach (var propagatedGroup in propagatedGroups)
                         {
-                            var completedPropGroup = this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value, variablesMap, getAvailableOptions);
+                            var completedPropGroup = this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value,
+                                idToVariableMap, variableToIdMap, getAvailableOptions);
 
                             interviewDetails.Groups.Add(completedPropGroup);
                         }
@@ -103,7 +105,8 @@ namespace Core.Supervisor.Views.Interview
                 {
                     var rootLevel = this.GetRootLevel(interview);
 
-                    interviewDetails.Groups.Add(this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, variablesMap, getAvailableOptions));
+                    interviewDetails.Groups.Add(
+                        this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, idToVariableMap, variableToIdMap, getAvailableOptions));
 
                     foreach (var group in currentGroup.Key.Children.OfType<IGroup>().Reverse())
                     {
@@ -146,7 +149,7 @@ namespace Core.Supervisor.Views.Interview
 
 
         private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
-            Dictionary<Guid, string> variablesMap, Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<int[], string>> getAvailableOptions)
         {
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
                 {
@@ -160,9 +163,11 @@ namespace Core.Supervisor.Views.Interview
             {
                 InterviewQuestion answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
 
+                Dictionary<string, string> answersForTitleSubstitution = new Dictionary<string, string>();
+
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
-                    ? new InterviewLinkedQuestionView(question, answeredQuestion, variablesMap, getAvailableOptions)
-                    : new InterviewQuestionView(question, answeredQuestion, variablesMap);
+                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions)
+                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution);
 
                 completedGroup.Questions.Add(interviewQuestion);
             }

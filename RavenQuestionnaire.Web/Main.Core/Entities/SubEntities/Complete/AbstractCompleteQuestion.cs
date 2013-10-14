@@ -227,6 +227,11 @@
         /// </exception>
         public abstract void AddAnswer(IAnswer answer);
 
+        public IEnumerable<string> GetVariablesUsedInTitle()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// The find.
         /// </summary>
