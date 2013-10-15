@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
     public class NumericQuestionCloned : AbstractQuestionDataEvent
     {
         public Guid SourceQuestionId { get; set; }
-        public Guid? GroupPublicKey { get; set; }
+        public Guid GroupPublicKey { get; set; }
         public int TargetIndex { get; set; }
 
         public List<Guid> Triggers { get; set; }
