@@ -701,6 +701,41 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void UpdateNumericQuestion_When_question_type_is_allowed_Then_raised_QuestionChanged_event_with_same_question_type(
+            QuestionType allowedQuestionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid questionId = Guid.NewGuid();
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestion(questionId: questionId,
+                    responsibleId: responsibleId);
+
+                // act
+                questionnaire.UpdateNumericQuestion(
+                    questionId: questionId,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: allowedQuestionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    instructions: string.Empty,
+                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+            }
+        }
+
+        [Test]
         [TestCase(QuestionType.DropDownList)]
         [TestCase(QuestionType.YesNo)]
         public void NewUpdateQuestion_When_question_type_is_not_allowed_Then_DomainException_with_type_NotAllowedQuestionType_should_be_thrown(
