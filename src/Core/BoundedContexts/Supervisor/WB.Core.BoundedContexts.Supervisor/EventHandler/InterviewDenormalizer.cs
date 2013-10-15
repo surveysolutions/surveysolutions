@@ -23,7 +23,9 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<GroupPropagated>,
         IEventHandler<AnswerCommented>,
         IEventHandler<MultipleOptionsQuestionAnswered>,
+        IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<NumericQuestionAnswered>,
+        IEventHandler<NumericIntegerQuestionAnswered>,
         IEventHandler<TextQuestionAnswered>,
         IEventHandler<SingleOptionQuestionAnswered>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
@@ -172,10 +174,22 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                        evnt.Payload.SelectedValues);
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
             SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
                        evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                      evnt.Payload.Answer);
+        }
+
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
+        {
+            SaveAnswer(evnt.EventSourceId, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+                      evnt.Payload.Answer);
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)

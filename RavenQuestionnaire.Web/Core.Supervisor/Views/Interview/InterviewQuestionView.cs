@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
 namespace Core.Supervisor.Views.Interview
@@ -32,6 +33,12 @@ namespace Core.Supervisor.Views.Interview
                 }).ToList();
             }
 
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                this.Settings = new { numericQuestion.IsInteger };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;
@@ -47,6 +54,7 @@ namespace Core.Supervisor.Views.Interview
             }).ToList();
             this.IsValid = answeredQuestion.Valid;
             this.Answer = answeredQuestion.Answer;
+
         }
 
         private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
@@ -92,6 +100,8 @@ namespace Core.Supervisor.Views.Interview
         public List<InterviewQuestionCommentView> Comments { get; set; }
 
         public object Answer { get; set; }
+
+        public dynamic Settings { get; set; }
     }
 
     public class InterviewQuestionCommentView

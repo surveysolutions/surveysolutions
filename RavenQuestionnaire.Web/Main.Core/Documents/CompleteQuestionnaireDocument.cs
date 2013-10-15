@@ -281,10 +281,12 @@
                 var question = child as IQuestion;
                 if (question != null)
                 {
-                    IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    throw new NotImplementedException("CompleteQuestionFactory was deleted as redundant at this commit");
+                  /*  IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    IComposite questionItem = null;
                     questionItem.SetParent(result);
                     result.Children.Add(questionItem);
-                    continue;
+                    continue;*/
                 }
 
                 var group = child as IGroup;

@@ -64,8 +64,11 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs">
       <Link>Commands\Interview\AnswerMultipleOptionsQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerNumericQuestionCommand.cs">
-      <Link>Commands\Interview\AnswerNumericQuestionCommand.cs</Link>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerNumericIntegerQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerNumericIntegerQuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerNumericRealQuestionCommand.cs">
+      <Link>Commands\Interview\AnswerNumericRealQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs">
       <Link>Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs</Link>
@@ -244,8 +247,14 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\MultipleOptionsQuestionAnswered.cs">
       <Link>Events\Interview\MultipleOptionsQuestionAnswered.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericIntegerQuestionAnswered.cs">
+      <Link>Events\Interview\NumericIntegerQuestionAnswered.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericQuestionAnswered.cs">
       <Link>Events\Interview\NumericQuestionAnswered.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\NumericRealQuestionAnswered.cs">
+      <Link>Events\Interview\NumericRealQuestionAnswered.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Events\Interview\QuestionDisabled.cs">
       <Link>Events\Interview\QuestionDisabled.cs</Link>

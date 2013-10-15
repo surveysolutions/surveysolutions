@@ -22,21 +22,26 @@
                 }));
             }
             switch (item.type()) {
-                case "SingleOption":
-                    item.selectedOption.extend({ required: true });
-                    break;
-                case "MultyOption":
-                    item.selectedOptions.extend({ notempty: true });
-                    break;
-                case "AutoPropagate":
-                case "Numeric":
-                    item.selectedOption.extend({ required: true, number: true, digit: true });
-                    break;
-                case "DateTime":
-                    item.selectedOption(new Date());
-                    item.selectedOption.extend({ required: true, date: true });
-                case "Text":
-                    item.selectedOption.extend({ required: true });
+            case "SingleOption":
+                item.selectedOption.extend({ required: true });
+                break;
+            case "MultyOption":
+                item.selectedOptions.extend({ notempty: true });
+                break;
+            case "AutoPropagate":
+            case "Numeric":
+                item.settings(dto.Settings);
+                var isInteger = _.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger;
+                item.selectedOption.extend({ required: true, number: true });
+                if (isInteger) {
+                    item.selectedOption.extend({ digit: true });
+                }
+                break;
+            case "DateTime":
+                item.selectedOption(new Date());
+                item.selectedOption.extend({ required: true, date: true });
+            case "Text":
+                item.selectedOption.extend({ required: true });
             }
             return item;
         }

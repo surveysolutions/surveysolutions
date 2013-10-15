@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                                                         => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                                                         && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
+                                                        && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
                                                         && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
 
                                                         && _.HasGroup(propagatedGroupId) == true
@@ -67,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
+           interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
 
 
         It should_raise_GroupDisabled_event_with_GroupId_equal_to_propagatedGroupId_with_disablement_condition = () =>

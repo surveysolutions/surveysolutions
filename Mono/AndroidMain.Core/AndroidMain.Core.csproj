@@ -59,17 +59,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\CompleteGroupFactory.cs">
       <Link>AbstractFactories\CompleteGroupFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\CompleteQuestionFactory.cs">
-      <Link>AbstractFactories\CompleteQuestionFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteAnswerFactory.cs">
       <Link>AbstractFactories\ICompleteAnswerFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteGroupFactory.cs">
       <Link>AbstractFactories\ICompleteGroupFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteQuestionFactory.cs">
-      <Link>AbstractFactories\ICompleteQuestionFactory.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\IQuestionFactory.cs">
+      <Link>AbstractFactories\IQuestionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\QuestionFactory.cs">
+      <Link>AbstractFactories\QuestionFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CommandListSupplier.cs">
       <Link>CommandListSupplier.cs</Link>

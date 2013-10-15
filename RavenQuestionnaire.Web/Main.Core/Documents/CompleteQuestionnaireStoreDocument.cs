@@ -151,8 +151,9 @@ namespace Main.Core.Documents
                 var question = child as IQuestion;
                 if (question != null)
                 {
-                    result.Children.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
-                    continue;
+                    throw new NotImplementedException("CompleteQuestionFactory was deleted as redundant at this commit");
+                   /* result.Children.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+                    continue;*/
                 }
 
                 var group = child as IGroup;

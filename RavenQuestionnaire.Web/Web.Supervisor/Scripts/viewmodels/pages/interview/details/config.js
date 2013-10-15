@@ -2,7 +2,8 @@
     var commands = {
         answerDateTimeQuestionCommand: "AnswerDateTimeQuestionCommand",
         answerMultipleOptionsQuestionCommand: "AnswerMultipleOptionsQuestionCommand",
-        answerNumericQuestionCommand: "AnswerNumericQuestionCommand",
+        answerNumericRealQuestionCommand: "AnswerNumericRealQuestionCommand",
+        answerNumericIntegerQuestionCommand: "AnswerNumericIntegerQuestionCommand",
         answerSingleOptionQuestionCommand: "AnswerSingleOptionQuestionCommand",
         answerTextQuestionCommand: "AnswerTextQuestionCommand",
         answerGeoLocationQuestionCommand: "AnswerGeoLocationQuestionCommand",

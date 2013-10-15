@@ -103,12 +103,8 @@ Supervisor.VM.InterviewDetails = function(commandExecutionUrl, inputQuestionnair
         case "Text":
             commandName = config.commands.answerTextQuestionCommand;
             break;
-        case "AutoPropagate":
-            commandName = config.commands.answerNumericQuestionCommand;
-            break;
-        case "Numeric":
-            commandName = config.commands.answerNumericQuestionCommand;
-            break;
+        case "AutoPropagate": commandName = config.commands.answerNumericIntegerQuestionCommand; break;
+        case "Numeric": commandName = question.isInteger() ? config.commands.answerNumericIntegerQuestionCommand : config.commands.answerNumericRealQuestionCommand; break;                   
         case "DateTime":
             commandName = config.commands.answerDateTimeQuestionCommand;
             break;

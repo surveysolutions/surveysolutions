@@ -150,7 +150,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         }
 
-        private void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
+        protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
             AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler);

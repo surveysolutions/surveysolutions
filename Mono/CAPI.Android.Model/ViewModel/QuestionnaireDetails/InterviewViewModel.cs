@@ -642,13 +642,15 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
+            var isNumericQuestion = question is NumericQuestion;
             return new ValueQuestionViewModel(
                 new InterviewItemId(question.PublicKey), question.QuestionText,
                 newType,
                 null,
                 true, question.Instructions, null,
                 true, question.Mandatory,
-                question.ValidationMessage);
+                question.ValidationMessage,
+                isNumericQuestion ? (question as NumericQuestion).IsInteger : (bool?)null);
         }
 
         private LinkedQuestionViewModel CreateLinkedQuestion(IQuestion question, QuestionType newType)

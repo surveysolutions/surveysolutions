@@ -324,7 +324,7 @@
             case "DropDownList":
             case "MultyOption":
                 command.optionsOrder = question.answerOrder();
-                
+
                 if (question.isLinked() == 1) {
                     command.linkedToQuestionId = question.selectedLinkTo();
                 } else {
@@ -338,6 +338,7 @@
                 }
                 break;
             case "Numeric":
+                command.isInteger = question.isInteger() == 1 ? true : false;
             case "DateTime":
             case "GpsCoordinates":
             case "Text":

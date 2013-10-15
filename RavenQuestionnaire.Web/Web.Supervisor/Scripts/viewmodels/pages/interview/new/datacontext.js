@@ -43,6 +43,13 @@
                 case "Text":
                 case "AutoPropagate":
                 case "Numeric":
+                        answer = {
+                            id: question.id(),
+                            answer: question.selectedOption(),
+                            settings:  question.settings(),
+                            type: question.type()
+                        };
+                        break;
                 case "DateTime":
                 case "GpsCoordinates":
                 case "SingleOption":

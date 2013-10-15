@@ -17,6 +17,7 @@
             self.instructions = ko.observable();
             self.selectedOption = ko.observable();
             self.selectedOptions = ko.observableArray([]);
+            self.settings = ko.observableArray([]);
             self.isSingleOption = ko.computed(function () {
                 return self.type() === "SingleOption";
             });

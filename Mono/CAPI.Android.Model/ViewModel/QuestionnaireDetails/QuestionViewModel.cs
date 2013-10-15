@@ -7,8 +7,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-
-
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
         protected QuestionViewModel(
@@ -44,8 +42,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var answered = answerObject != null;
             if (answered)
                 Status = Status | QuestionStatus.Answered;
-
         }
+
         public InterviewItemId PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }

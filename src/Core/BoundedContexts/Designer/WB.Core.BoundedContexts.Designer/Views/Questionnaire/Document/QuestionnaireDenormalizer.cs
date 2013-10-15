@@ -35,11 +35,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<QuestionnaireCloned>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
-        private readonly ICompleteQuestionFactory questionFactory;
+        private readonly IQuestionFactory questionFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            ICompleteQuestionFactory questionFactory, ILogger logger)
+            IQuestionFactory questionFactory, ILogger logger)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             FullQuestionDataEvent e = evnt.Payload;
             AbstractQuestion result =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -159,7 +159,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
 
             if (result == null)
             {
@@ -175,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             FullQuestionDataEvent e = evnt.Payload;
             AbstractQuestion result =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -193,7 +194,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             if (result == null)
             {
                 return;
@@ -234,7 +236,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 

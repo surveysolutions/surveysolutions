@@ -6,14 +6,15 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Main.Core.Commands.Questionnaire.Completed;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class NumericQuestionView : AbstractQuestionView
+    public abstract class NumericQuestionView : AbstractQuestionView
     {
+        protected abstract InputTypes KeyboardTypeFlags
+        {
+             get;
+        }
 
         public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService)
@@ -24,10 +25,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
             llWrapper.Click += NumericQuestionView_Click;
-            etAnswer=new EditText(this.Context);
+            etAnswer = new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            etAnswer.InputType = KeyboardTypeFlags;
+
             this.PutAnswerStoredInModelToUI();
-            etAnswer.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal;
 
             etAnswer.SetSelectAllOnFocus(true);
             etAnswer.ImeOptions=ImeAction.Done;
@@ -48,19 +50,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             if (newAnswer != this.Model.AnswerString)
             {
-                decimal answer;
-                if(!decimal.TryParse(newAnswer,out  answer))
-                    return;
-
-                if (!IsCommentsEditorFocused)
-                    HideKeyboard(etAnswer);
-
-                this.SaveAnswer(newAnswer,
-                    new AnswerNumericQuestionCommand(
-                        this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id, Model.PublicKey.Id,
-                        this.Model.PublicKey.PropagationVector, DateTime.UtcNow, answer));
+                ParseAndSaveAnswer(newAnswer);
             }
         }
+
+        protected abstract void ParseAndSaveAnswer(string newAnswer);
 
         protected override string GetAnswerStoredInModelAsString()
         {

@@ -63,12 +63,12 @@
                     "~/Scripts/knockout.validation.js",
                     "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/Math.uuid.js",
-                    "~/Scripts/viewmodels/pages/interview/custom.js"
-                    ));
+                    "~/Scripts/viewmodels/pages/interview/custom.js",
+                    "~/Scripts/lodash.underscore.js"
+                    )); 
 
             bundles.Add(
                 new ScriptBundle("~/js/interview-details").Include(
-                    "~/Scripts/lodash.underscore.js",
                     "~/Scripts/moment.js",
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",

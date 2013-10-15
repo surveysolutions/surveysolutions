@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
     {
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
-        private readonly ICompleteQuestionFactory questionFactory;
+        private readonly IQuestionFactory questionFactory;
 
         private ILogger logger;
 
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire()
             : base()
         {
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
         }
 
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
             var clock = NcqrsEnvironment.Get<IClock>();
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
 
             this.ApplyEvent(
                 new NewQuestionnaireCreated
@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
         {
             alias = alias.Trim();
 
@@ -295,8 +295,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            this.ThrowIfPrecisionInformationDoenstMuchQuestionType(type, isInteger);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
 
@@ -336,7 +337,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsInteger = isInteger
             });
         }
 
@@ -344,7 +346,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
            Guid groupId, string title, QuestionType type, string alias,
            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
            QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
         {
             alias = alias.Trim();
 
@@ -355,7 +357,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
 
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfPrecisionInformationDoenstMuchQuestionType(type, isInteger);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
@@ -395,7 +398,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId, 
+                IsInteger = isInteger
             });
         }
 
@@ -429,7 +433,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId, bool? isInteger)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -440,7 +444,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfPrecisionInformationDoenstMuchQuestionType(type, isInteger);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
@@ -478,7 +483,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 ResponsibleId = responsibleId,
-                LinkedToQuestionId = linkedToQuestionId
+                LinkedToQuestionId = linkedToQuestionId,
+                IsInteger = isInteger
             });
         }
 
@@ -650,7 +656,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion question =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -668,7 +674,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             if (question == null)
             {
                 return;
@@ -680,7 +687,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
             AbstractQuestion question =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -698,7 +705,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             if (question == null)
             {
                 return;
@@ -739,7 +747,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
@@ -1007,18 +1016,40 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 && ((parentGroup.Propagated == Propagate.AutoPropagated) || this.IsUnderPropagatableGroupImpl(parentGroup.GetParent()));
         }
 
-        private static void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
+        private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
         {
             bool isCategoricalQuestion = questionType == QuestionType.MultyOption ||
                 questionType == QuestionType.SingleOption;
 
-            bool notCategoricalQuestionHasLinkedQuestonId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
+            bool notCategoricalQuestionHasLinkedQuestionId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
 
-            if (notCategoricalQuestionHasLinkedQuestonId)
+            if (notCategoricalQuestionHasLinkedQuestionId)
             {
                 throw new DomainException(
                     DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion,
                     "Only categorical question can be linked to another question");
+            }
+        }
+
+        private void ThrowIfPrecisionInformationDoenstMuchQuestionType(QuestionType questionType, bool? isInteger)
+        {
+            bool isNumericQuestion = questionType == QuestionType.Numeric;
+            bool notNumericQuestionHasPrecisionInformation = isInteger.HasValue && !isNumericQuestion;
+
+            if (notNumericQuestionHasPrecisionInformation)
+            {
+                throw new DomainException(
+                    DomainExceptionType.NotNumericQuestionHasPrecisionInformation,
+                    "Only numeric question can contain precision information");
+            }
+
+            bool numericQuestionHasNoPrecisionInformation = !isInteger.HasValue && isNumericQuestion;
+
+            if (numericQuestionHasNoPrecisionInformation)
+            {
+                throw new DomainException(
+                    DomainExceptionType.NumericQuestionHasNoPrecisionInformation,
+                    "Numeric question doesn't contain precision information");
             }
         }
 
