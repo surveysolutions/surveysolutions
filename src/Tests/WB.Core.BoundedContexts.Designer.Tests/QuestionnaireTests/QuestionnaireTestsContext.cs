@@ -37,10 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: Guid.NewGuid(),
                 groupId: groupId.Value, groupPropagationKind: Propagate.None, responsibleId: responsibleId);
 
-            questionnaire.NewAddQuestion(questionId,
-                groupId.Value, "Title", questionType, "text1", false, false,
-                false, QuestionScope.Interviewer, "", "", "", "",
-                options, Order.AsIs, responsibleId, null);
+            AddQuestion(questionnaire, questionId, groupId.Value, responsibleId, questionType, "text1", options);
 
             return questionnaire;
             
