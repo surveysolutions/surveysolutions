@@ -133,6 +133,46 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.Text)]
+        public void CloneQuestion_When_questions_Type_is_not_numeric_Then_DomainException_should_be_thrown(
+            QuestionType questionType)
+        {
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+
+
+            TestDelegate act = () =>
+                questionnaire.CloneNumericQuestion(
+                    questionId: newQuestionId,
+                    groupId: groupId,
+                    title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, targetIndex: 1, maxValue: null,
+                    triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTypeIsNotAcceptableByNumericQuestionsCommand));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
         public void CloneQuestion_When_answer_title_is_not_empty_Then_event_contains_the_same_answer_title(QuestionType questionType)
         {
             using (var eventContext = new EventContext())

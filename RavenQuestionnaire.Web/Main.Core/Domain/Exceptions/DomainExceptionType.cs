@@ -162,6 +162,8 @@
 
         IntegerQuestionCantHaveDecimalPlacesSettings,
 
-        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand
+        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
+
+        QuestionTypeIsNotAcceptableByNumericQuestionsCommand
     }
 }

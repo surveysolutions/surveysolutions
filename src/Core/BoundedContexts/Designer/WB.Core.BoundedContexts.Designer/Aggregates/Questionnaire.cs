@@ -340,6 +340,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
 
@@ -427,6 +428,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
@@ -553,6 +555,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
 
@@ -1103,6 +1106,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isQuestionTypeRerouted)
                 throw new DomainException(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
                     string.Format("Question type {0} rerouted on QuestionType specific command", type));
+        }
+
+        private void ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(QuestionType type)
+        {
+            bool isQuestionTypeNumeric = type == QuestionType.AutoPropagate || type == QuestionType.Numeric;
+
+            if (!isQuestionTypeNumeric)
+                throw new DomainException(DomainExceptionType.QuestionTypeIsNotAcceptableByNumericQuestionsCommand,
+                    string.Format("Question type {0} can't be handled by numeric question's command", type));
         }
 
         private bool IsUnderPropagatableGroup(IComposite item)
