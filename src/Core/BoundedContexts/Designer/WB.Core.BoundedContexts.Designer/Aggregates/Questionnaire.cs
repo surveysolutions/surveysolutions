@@ -809,7 +809,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxValue,
                         null,
                         null,
-                        e.IsInteger));
+                        e.IsInteger,e.CountOfDecimalPlaces));
             if (question == null)
             {
                 return;
@@ -871,7 +871,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxValue,
                         null,
                         null,
-                        e.IsInteger));
+                        e.IsInteger, e.CountOfDecimalPlaces));
 
             if (question == null)
             {
@@ -941,7 +941,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxValue,
                         null,
                         null,
-                        e.IsInteger));
+                        e.IsInteger, e.CountOfDecimalPlaces));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 

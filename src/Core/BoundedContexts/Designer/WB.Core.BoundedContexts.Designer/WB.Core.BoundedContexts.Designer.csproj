@@ -95,6 +95,9 @@
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
+    <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
+    <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
