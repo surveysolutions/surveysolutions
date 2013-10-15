@@ -15,7 +15,7 @@ namespace Main.Core.Utility
     /// </summary>
     public static class StringUtil
     {
-        private const string AllowedVariableNameRegexp = @"(?<=%%)(\w+(?=%%))";
+        private const string AllowedSubstitutionVariableNameRegexp = @"(?<=%)(\w+(?=%))";
 
         #region Public Methods and Operators
 
@@ -177,7 +177,7 @@ namespace Main.Core.Utility
             if (string.IsNullOrWhiteSpace(source))
                 return new string[0];
 
-            var allOccurenses = Regex.Matches(source, AllowedVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
+            var allOccurenses = Regex.Matches(source, AllowedSubstitutionVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
             return allOccurenses.ToArray();
         }
 
