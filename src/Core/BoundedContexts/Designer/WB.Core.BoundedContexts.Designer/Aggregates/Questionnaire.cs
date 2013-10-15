@@ -353,10 +353,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
 
-            this.ApplyEvent(new QuestionCloned
+            this.ApplyEvent(new NumericQuestionCloned
             {
                 PublicKey = questionId,
-
                 GroupPublicKey = groupId,
                 QuestionText = title,
                 QuestionType = type,
@@ -376,7 +375,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
-                IsInteger = isInteger
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces
             });
         }
 
@@ -439,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger,countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
-            this.ApplyEvent(new NewQuestionAdded
+            this.ApplyEvent(new NumericQuestionAdded
             {
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
@@ -459,7 +459,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
-                IsInteger = isInteger
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces
             });
         }
 
@@ -566,7 +567,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
-            this.ApplyEvent(new QuestionChanged
+            this.ApplyEvent(new NumericQuestionChanged
             {
                 PublicKey = questionId,
                 QuestionText = title,
@@ -585,7 +586,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
-                IsInteger = isInteger
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces
             });
         }
 
@@ -785,6 +787,37 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(question, e.GroupPublicKey, null);
         }
 
+        protected internal void OnNumericQuestionAdded(NumericQuestionAdded e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ, 
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+        }
+
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
             AbstractQuestion question =
@@ -808,6 +841,38 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Answers,
                         e.LinkedToQuestionId,
                         e.IsInteger));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+        }
+
+        protected internal void OnNumericQuestionCloned(NumericQuestionCloned e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ, 
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger));
+
             if (question == null)
             {
                 return;
@@ -849,6 +914,33 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxValue,
                         e.Answers,
                         e.LinkedToQuestionId,
+                        e.IsInteger));
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+        }
+
+        protected void OnNumericQuestionChanged(NumericQuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(
+                    new QuestionData(
+                        question.PublicKey,
+                        e.QuestionType,
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ, 
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
                         e.IsInteger));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
