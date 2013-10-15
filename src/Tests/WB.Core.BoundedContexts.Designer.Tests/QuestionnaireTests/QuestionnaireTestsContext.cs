@@ -217,7 +217,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             }
             questionnaire.NewAddQuestion(questionId, groupId, "Title", questionType, alias, false,
                 false,
-                false, QuestionScope.Interviewer, "", "", "", "", options, Order.AsIs, responsible, null);
+                false, QuestionScope.Interviewer, "", "", "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
+                Order.AsIs, responsible, null);
         }
 
 
