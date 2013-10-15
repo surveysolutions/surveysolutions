@@ -67,5 +67,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public double? Answer { get; set; }
 
         public bool IsInteger { get; set; }
+        public int? CountOfDecimalPlaces { get; set; }
     }
 }

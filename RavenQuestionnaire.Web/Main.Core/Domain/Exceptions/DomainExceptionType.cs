@@ -158,8 +158,10 @@
 
         QuestionWithLinkedQuestionCanNotBeHead,
 
-        NotNumericQuestionHasPrecisionInformation,
+        AutoPropagateQuestionCantBeReal,
 
-        NumericQuestionHasNoPrecisionInformation
+        IntegerQuestionCantHaveDecimalPlacesSettings,
+
+        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand
     }
 }

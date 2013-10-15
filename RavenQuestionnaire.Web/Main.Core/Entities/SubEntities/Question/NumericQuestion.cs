@@ -38,5 +38,7 @@
         }
 
         public bool IsInteger { get; set; }
+        
+        public int? CountOfDecimalPlaces { get; set; }
     }
 }
