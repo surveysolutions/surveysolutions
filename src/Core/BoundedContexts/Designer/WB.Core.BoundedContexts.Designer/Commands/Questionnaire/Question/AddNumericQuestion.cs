@@ -11,9 +11,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
     [MapsToAggregateRootMethod(typeof (Aggregates.Questionnaire), "AddNumericQuestion")]
-    public class AddNumericAbstractQuestionCommand : AbstractNumericQuestionCommand
+    public class AddNumericQuestionCommand : AbstractNumericQuestionCommand
     {
-        public AddNumericAbstractQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
+        public AddNumericQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions, int? maxValue,
             Guid[] triggedGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
