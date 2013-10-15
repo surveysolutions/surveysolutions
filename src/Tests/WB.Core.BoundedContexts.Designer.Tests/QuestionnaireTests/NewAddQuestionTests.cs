@@ -695,6 +695,41 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void AddNumericQuestion_When_question_type_is_allowed_Then_raised_NewQuestionAdded_event_with_same_question_type(
+            QuestionType allowedQuestionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupId, responsibleId: responsibleId);
+
+                // act
+                questionnaire.AddNumericQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "What is your last name?",
+                    type: allowedQuestionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    responsibleId: responsibleId, maxValue: 10, triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+            }
+        }
+
+        [Test]
         [TestCase(QuestionType.DropDownList)]
         //[TestCase(QuestionType.GpsCoordinates)]
         [TestCase(QuestionType.YesNo)]
