@@ -26,7 +26,8 @@
             int maxValue,
             Answer[] answers,
             Guid? linkedToQuestionId,
-            bool? isInteger)
+            bool? isInteger,
+            int? countOfDecimalPlaces = null)
         {
             this.publicKey = publicKey;
             this.questionType = questionType;
@@ -46,6 +47,7 @@
             this.answers = answers;
             this.linkedToQuestionId = linkedToQuestionId;
             this.isInteger = isInteger;
+            this.countOfDecimalPlaces = countOfDecimalPlaces;
         }
         public Guid publicKey { get; set; }
         public QuestionType questionType { get; set; }
@@ -65,5 +67,6 @@
         public Answer[] answers { get; set; }
         public Guid? linkedToQuestionId { get; set; }
         public bool? isInteger { get; set; }
+        public int? countOfDecimalPlaces { get; set; }
     }
 }

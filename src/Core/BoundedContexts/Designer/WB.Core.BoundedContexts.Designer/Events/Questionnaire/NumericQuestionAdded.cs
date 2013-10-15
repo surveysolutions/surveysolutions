@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class NumericQuestionAdded : AbstractQuestionDataEvent
     {
-        public Guid? GroupPublicKey { get; set; }
+        public Guid GroupPublicKey { get; set; }
         public List<Guid> Triggers { get; set; }
         public int MaxValue { get; set; }
         public bool? IsInteger { get; set; }
