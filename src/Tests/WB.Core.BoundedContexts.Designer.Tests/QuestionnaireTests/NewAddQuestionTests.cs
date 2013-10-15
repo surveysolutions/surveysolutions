@@ -531,6 +531,40 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void NewAddQuestion_When_command_is_rerouted_on_command_specific_to_question_type_Then_DomainException_should_be_thrown(
+            QuestionType questionType)
+        {
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+
+            TestDelegate act = () =>
+                               questionnaire.NewAddQuestion(
+                                   questionId: Guid.NewGuid(),
+                                   groupId: Guid.NewGuid(),
+                                   title: "What is your last name?",
+                                   type: questionType,
+                                   alias: "name",
+                                   isMandatory: false,
+                                   isFeatured: false,
+                                   isHeaderOfPropagatableGroup: false,
+                                   scope: QuestionScope.Interviewer,
+                                   condition: string.Empty,
+                                   validationExpression: string.Empty,
+                                   validationMessage: string.Empty,
+                                   instructions: string.Empty,
+                                   optionsOrder: Order.AsIs,
+                                   options: new Option[0],
+                                   responsibleId: responsibleId,
+                                   linkedToQuestionId: null);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand));
+        }
+
+        [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
 #warning Roma: when part is incorrect should be something like when answer option value contains not number
