@@ -93,6 +93,44 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void CloneQuestion_When_command_is_rerouted_on_command_specific_to_question_type_Then_DomainException_should_be_thrown(
+            QuestionType questionType)
+        {
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+
+            TestDelegate act = () =>
+                questionnaire.CloneQuestion(
+                    questionId: newQuestionId,
+                    groupId: groupId,
+                    title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    options: new Option[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null, sourceQuestionId: sourceQuestionId, targetIndex: 1);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand));
+        }
+
+        [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
         public void CloneQuestion_When_answer_title_is_not_empty_Then_event_contains_the_same_answer_title(QuestionType questionType)
