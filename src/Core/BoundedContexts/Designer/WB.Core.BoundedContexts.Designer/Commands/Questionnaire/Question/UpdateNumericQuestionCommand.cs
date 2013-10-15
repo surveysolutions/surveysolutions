@@ -20,8 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool isInteger, int? countOfDecimalPlaces)
             : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
                 scope, condition, validationExpression, validationMessage, instructions, responsibleId, maxValue, triggedGroupIds,
-                isInteger, countOfDecimalPlaces)
-        {
-        }
+                isInteger, countOfDecimalPlaces) {}
     }
 }

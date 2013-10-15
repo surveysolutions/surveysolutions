@@ -8,6 +8,7 @@ using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 {
@@ -759,7 +760,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     responsibleId: responsibleId, maxValue: 10, triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
 
                 // assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+                Assert.That(GetSingleEvent<NumericQuestionAdded>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
             }
         }
 
@@ -991,7 +992,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
 
                 // Assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Is.Null);
+                Assert.That(GetSingleEvent<NumericQuestionAdded>(eventContext).Triggers, Is.Null);
             }
         }
 
@@ -1014,7 +1015,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
 
                 // Assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Is.Empty);
+                Assert.That(GetSingleEvent<NumericQuestionAdded>(eventContext).Triggers, Is.Empty);
             }
         }
 
@@ -1088,7 +1089,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                              triggedGroupIdsWithAutoPropagateGroupId, responsibleId: responsibleId,isInteger: true, countOfDecimalPlaces: null);
 
                 // Assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
+                Assert.That(GetSingleEvent<NumericQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
             }
         }
 
