@@ -20,7 +20,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagSigned; }
         }
 
-        protected override void IsParsingOrAswerSavingFailed(string newAnswer)
+        protected override void ParseAndSaveAnswer(string newAnswer)
         {
             int answer;
             if (!int.TryParse(newAnswer, out  answer))

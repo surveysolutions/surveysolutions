@@ -50,11 +50,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             if (newAnswer != this.Model.AnswerString)
             {
-                IsParsingOrAswerSavingFailed(newAnswer);
+                ParseAndSaveAnswer(newAnswer);
             }
         }
 
-        protected abstract void IsParsingOrAswerSavingFailed(string newAnswer);
+        protected abstract void ParseAndSaveAnswer(string newAnswer);
 
         protected override string GetAnswerStoredInModelAsString()
         {

@@ -21,10 +21,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned; }
         }
 
-        protected override void IsParsingOrAswerSavingFailed(string newAnswer)
+        protected override void ParseAndSaveAnswer(string newAnswer)
         {
             decimal answer;
-            if (!decimal.TryParse(newAnswer, NumberStyles.Any, CultureInfo.InvariantCulture, out  answer))
+            if (!decimal.TryParse(newAnswer, out  answer))
                 return;
             if (!IsCommentsEditorFocused)
                 HideKeyboard(etAnswer);
