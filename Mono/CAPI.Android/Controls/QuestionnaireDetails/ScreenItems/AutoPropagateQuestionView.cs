@@ -22,10 +22,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
         }
 
-        protected override void Initialize()
+        protected override InputTypes KeyboardTypeFlags
         {
-            base.Initialize();
-            etAnswer.InputType = InputTypes.ClassNumber;
+            get { return InputTypes.ClassNumber; }
         }
     }
 }

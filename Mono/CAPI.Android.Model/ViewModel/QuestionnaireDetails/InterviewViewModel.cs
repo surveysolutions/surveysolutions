@@ -642,7 +642,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private ValueQuestionViewModel CreateValueQuestion(IQuestion question, QuestionType newType)
         {
-            var isNumericQuestion = question is NumericQuestion;
             return new ValueQuestionViewModel(
                 new InterviewItemId(question.PublicKey), question.QuestionText,
                 newType,
@@ -650,7 +649,15 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 true, question.Instructions, null,
                 true, question.Mandatory,
                 question.ValidationMessage,
-                isNumericQuestion ? (question as NumericQuestion).IsInteger : (bool?)null);
+                this.GetQuestionsIsIntegerSetting(question));
+        }
+
+        private bool? GetQuestionsIsIntegerSetting(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            if (numericQuestion == null)
+                return null;
+            return numericQuestion.IsInteger;
         }
 
         private LinkedQuestionViewModel CreateLinkedQuestion(IQuestion question, QuestionType newType)
