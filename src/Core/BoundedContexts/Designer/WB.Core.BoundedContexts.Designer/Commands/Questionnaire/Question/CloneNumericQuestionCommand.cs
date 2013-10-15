@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneQuestion")]
-    public class CloneQuestionCommand : FullQuestionDataCommand
+    [MapsToAggregateRootMethod(typeof(Aggregates.Questionnaire), "CloneNumericQuestion")]
+    public class CloneNumericQuestionCommand : AbstractNumericQuestionCommand
     {
-        public CloneQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
+        public CloneNumericQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId)
+            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions, int? maxValue,
+            Guid[] triggedGroupIds, Guid responsibleId,
+            bool isInteger, int? countOfDecimalPlaces)
             : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
-                scope, condition, validationExpression, validationMessage, instructions, options, optionsOrder, responsibleId, linkedToQuestionId)
+                scope, condition, validationExpression, validationMessage, instructions, responsibleId, maxValue, triggedGroupIds,
+                isInteger, countOfDecimalPlaces)
         {
             this.GroupId = groupId;
             this.SourceQuestionId = sourceQuestionId;

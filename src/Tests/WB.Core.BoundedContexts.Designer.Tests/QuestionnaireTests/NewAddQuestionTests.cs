@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, options, Order.AsIs, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
                 // assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
                 Assert.AreEqual(notEmptyAnswerTitle1, risedEvent.Answers[0].AnswerText);
@@ -61,8 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () =>
                                questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?", QuestionType.Text, "name", false,
                                                             isFeatured,
-                                                            false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0],
-                                                            responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                            false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -84,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
                                              QuestionType.Text, "name",
                                              false, isFeatured, false, QuestionScope.Interviewer, "", "", "", "",
-                                             new Option[0], Order.AsIs, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // Assert
                 Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Featured, Is.EqualTo(isFeatured));
@@ -109,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                              false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                              string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             string.Empty, new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
@@ -130,7 +129,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () =>
                                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "", QuestionType.Text, "test", false, false,
                                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                            string.Empty, new Option[0], Order.AZ, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: false);
+                                                            string.Empty, new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -154,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, oneOption, Order.AsIs, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: false);
+                                             string.Empty, oneOption, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -180,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                                   false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                                   string.Empty,
-                                                  string.Empty, options, Order.AsIs, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                  string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // assert
                 var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
@@ -205,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, options, Order.AsIs, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -229,7 +228,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, options, Order.AsIs, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextNotUnique));
@@ -251,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, options, Order.AsIs, null, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
                 // assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
                 for (int i = 0; i < options.Length; i++)
@@ -276,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                                             "name", false, false,
                                                             isHeadOfPropagatedGroup,
                                                             QuestionScope.Interviewer, "", "", "", "",
-                                                            new Option[0], Order.AsIs, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                            new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -298,7 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?",
                                              QuestionType.Text, "name",
                                              false, false, isHeadOfPropagatedGroup, QuestionScope.Interviewer, "", "", "", "",
-                                             new Option[0], Order.AsIs, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // Assert
                 Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Capital, Is.EqualTo(isHeadOfPropagatedGroup));
@@ -318,7 +317,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text, "name",
-                    false, false, capital, QuestionScope.Interviewer, "", "", "", "", new Option[] { }, Order.AZ, null, new Guid[] { }, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                    false, false, capital, QuestionScope.Interviewer, "", "", "", "", new Option[] { }, Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
@@ -342,7 +341,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
                                              validVariableName,
                                              false, false, false, QuestionScope.Interviewer,
-                                             "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
 
                 // Assert
@@ -365,7 +364,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
                                              longVariableName,
                                              false, false, false, QuestionScope.Interviewer,
-                                             "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                             "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // Assert
                 Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).StataExportCaption, Is.EqualTo(longVariableName.Trim()));
@@ -383,7 +382,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
                                                                   variableNameMatchedWithKeyword,
                                                                   false, false, false, QuestionScope.Interviewer,
-                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -402,7 +401,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
                                                                   variableNameMatchedWithKeyword,
                                                                   false, false, false, QuestionScope.Interviewer,
-                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -421,7 +420,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
                                                                   longVariableName,
                                                                   false, false, false, QuestionScope.Interviewer,
-                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -441,7 +440,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
                                                                   stataExportCaptionWithFirstDigit,
                                                                   false, false, false, QuestionScope.Interviewer,
-                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -461,7 +460,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
                                                                   emptyVariableName,
                                                                   false, false, false, QuestionScope.Interviewer,
-                                                                  "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0], responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
 
             // assert
@@ -481,8 +480,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // Act
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), Guid.NewGuid(), "What is your last name?", QuestionType.Text,
                                                                   nonValidVariableNameWithBannedSymbols,
-                                                                  false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0],
-                                                                  responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -501,8 +499,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             // Act
             TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
                                                                   duplicateVariableName,
-                                                                  false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0],
-                                                                  responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                                  false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
 
             // assert
@@ -526,7 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             TestDelegate act = () =>
                                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
                                                             questionType, "name", false, false, false, QuestionScope.Interviewer, "", "", "", "",
-                                                            emptyAnswersList, Order.AZ, null, new Guid[] { }, responsibleId: responsibleId, linkedToQuestionId: null, isInteger: null);
+                                                            emptyAnswersList, Order.AZ, responsibleId: responsibleId, linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -563,15 +560,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    validationMessage: string.Empty,
                                    instructions: string.Empty,
                                    optionsOrder: Order.AsIs,
-                                   maxValue: 0,
-                                   triggedGroupIds: new Guid[0],
                                    options: new Option[2]
                                        {
                                            new Option(id: Guid.NewGuid(), value: notNumericAnswerValue1, title: "text"),
                                            new Option(id: Guid.NewGuid(), value: notNumericAnswerValue2, title: "text1")
                                        },
                                    responsibleId: responsibleId,
-                                   linkedToQuestionId: null, isInteger: null);
+                                   linkedToQuestionId: null);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -609,15 +604,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
-                    maxValue: 0,
-                    triggedGroupIds: new Guid[0],
                     options: new Option[2]
                         {
                             new Option(id: Guid.NewGuid(), value: answerValue1, title: "text1"),
                             new Option(id: Guid.NewGuid(), value: answerValue2, title: "text2")
                         },
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null, isInteger: null);
+                    linkedToQuestionId: null);
 
 
                 // assert
@@ -629,10 +622,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.Text)]
         [TestCase(QuestionType.DateTime)]
-        [TestCase(QuestionType.AutoPropagate)]
         [TestCase(QuestionType.GpsCoordinates)]
         public void NewAddQuestion_When_question_type_is_allowed_Then_raised_NewQuestionAdded_event_with_same_question_type(
             QuestionType allowedQuestionType)
@@ -660,11 +651,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[] {},
                     options: AreOptionsRequiredByQuestionType(allowedQuestionType) ? CreateTwoOptions() : null,
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null, isInteger: IsPrecisionRequiredByQuestionType(allowedQuestionType) ? (bool?) true : null);
+                    linkedToQuestionId: null);
 
                 // assert
                 Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
@@ -699,11 +688,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 validationMessage: string.Empty,
                 instructions: string.Empty,
                 optionsOrder: Order.AsIs,
-                maxValue: null,
-                triggedGroupIds: null,
                 options: null,
                 responsibleId: responsibleId,
-                linkedToQuestionId: null, isInteger: null);
+                linkedToQuestionId: null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -737,15 +724,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                    validationMessage: string.Empty,
                                    instructions: string.Empty,
                                    optionsOrder: Order.AZ,
-                                   maxValue: 0,
-                                   triggedGroupIds: new Guid[] { },
                                    options: new Option[2]
                                        {
                                            new Option(id: Guid.NewGuid(), value: null, title: "text"),
                                            new Option(id: Guid.NewGuid(), value: "1", title: "text2")
                                        },
                                    responsibleId: responsibleId,
-                                   linkedToQuestionId: null, isInteger: null);
+                                   linkedToQuestionId: null);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -783,15 +768,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
-                    maxValue: 0,
-                    triggedGroupIds: new Guid[0],
                     options: new Option[2]
                         {
                             new Option(id: Guid.NewGuid(), value: answerValue1, title: "text1") , 
                             new Option(id: Guid.NewGuid(), value: answerValue2, title: "text2")
                         },
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null, isInteger: null);
+                    linkedToQuestionId: null);
 
 
                 // assert
@@ -827,8 +810,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
-                    maxValue: 0,
-                    triggedGroupIds: new Guid[0],
                     options:
                         new Option[2]
                             {
@@ -836,7 +817,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                 new Option(id: Guid.NewGuid(), value: "1", title: "text 2")
                             },
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null, isInteger: null);
+                    linkedToQuestionId: null);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -872,8 +853,6 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     optionsOrder: Order.AsIs,
-                    maxValue: 0,
-                    triggedGroupIds: new Guid[0],
                     options:
                         new Option[2]
                             {
@@ -881,7 +860,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                                 new Option(id: Guid.NewGuid(), title: "text 2", value: "2")
                             },
                     responsibleId: responsibleId,
-                    linkedToQuestionId: null, isInteger: null);
+                    linkedToQuestionId: null);
 
 
                 // assert
@@ -903,10 +882,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupId, responsibleId: responsibleId);
 
                 // Act
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds, responsibleId: responsibleId,
-                                             linkedToQuestionId: null, isInteger: null);
+                questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+                    false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                    string.Empty, null, emptyTriggedGroupIds, responsibleId: responsibleId, isInteger: true, countOfDecimalPlaces: null);
 
 
                 // Assert
@@ -927,10 +905,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupId, responsibleId: responsibleId);
 
                 // Act
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds, responsibleId: responsibleId,
-                                             linkedToQuestionId: null, isInteger: null);
+                questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+                    false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                    string.Empty, null, emptyTriggedGroupIds, responsibleId: responsibleId, isInteger: true, countOfDecimalPlaces: null);
 
 
                 // Assert
@@ -952,10 +929,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupId, responsibleId: responsibleId);
 
             // Act
-            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+            TestDelegate act = () => questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
                                                                   false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                                  string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithAbsentGroupId, responsibleId: responsibleId,
-                                                                  linkedToQuestionId: null, isInteger: null);
+                                                                  string.Empty, null, triggedGroupIdsWithAbsentGroupId, responsibleId: responsibleId,
+                                                                  isInteger: true,countOfDecimalPlaces: null);
 
 
             // Assert
@@ -975,10 +952,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithTwoGroups(firstGroup: nonPropagateGroupId, secondGroup: groupId, responsibleId: responsibleId);
 
             // Act
-            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+            TestDelegate act = () => questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
                                                                   false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                                  string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithNonPropagateGroupId, responsibleId: responsibleId,
-                                                                  linkedToQuestionId: null, isInteger: null);
+                                                                  string.Empty,  null, triggedGroupIdsWithNonPropagateGroupId, responsibleId: responsibleId,
+                                                                  isInteger: true, countOfDecimalPlaces: null);
 
 
             // Assert
@@ -1000,13 +977,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey: autoPropagateGroupId, secondGroup: groupId, responsibleId: responsibleId);
 
                 // Act
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
+                questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
                                              false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                              string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null,
-                                             triggedGroupIdsWithAutoPropagateGroupId, responsibleId: responsibleId,
-                                             linkedToQuestionId: null, isInteger: null);
+                                             string.Empty, null,
+                                             triggedGroupIdsWithAutoPropagateGroupId, responsibleId: responsibleId,isInteger: true, countOfDecimalPlaces: null);
 
                 // Assert
                 Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
@@ -1023,13 +999,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
             Questionnaire questionnaire = CreateQuestionnaireWithAutoGroupAndRegularGroup(autoGroupPublicKey: autoPropagateGroupId, secondGroup: groupId, responsibleId: Guid.NewGuid());
             // act
-            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
+            TestDelegate act = () => questionnaire.AddNumericQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
                                          false,
                                          false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                          string.Empty,
-                                         string.Empty, new Option[0], Order.AZ, null,
-                                         triggedGroupIdsWithAutoPropagateGroupId, responsibleId: Guid.NewGuid(),
-                                         linkedToQuestionId: null, isInteger: false);
+                                         string.Empty,  null,
+                                         triggedGroupIdsWithAutoPropagateGroupId, responsibleId: Guid.NewGuid(), isInteger: false, countOfDecimalPlaces:null);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
@@ -1074,10 +1049,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: Guid.NewGuid(), isInteger: null);
+                    linkedToQuestionId: Guid.NewGuid());
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1124,10 +1097,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: null);
+                    linkedToQuestionId: autoQuestionId);
 
                 // assert
                 var risedEvent = GetLastEvent<NewQuestionAdded>(eventContext);
@@ -1136,10 +1107,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [TestCase(QuestionType.AutoPropagate)]
         [TestCase(QuestionType.DateTime)]
         [TestCase(QuestionType.GpsCoordinates)]
-        [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.Text)]
         public void NewAddQuestion_When_non_categorical_question_with_linked_question_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
@@ -1177,101 +1146,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: false);
+                    linkedToQuestionId: autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion));
-        }
-
-        [Test]
-        [TestCase(QuestionType.AutoPropagate)]
-        [TestCase(QuestionType.DateTime)]
-        [TestCase(QuestionType.GpsCoordinates)]
-        [TestCase(QuestionType.SingleOption)]
-        [TestCase(QuestionType.MultyOption)]
-        [TestCase(QuestionType.Text)]
-        [TestCase(QuestionType.GpsCoordinates)]
-        public void NewAddQuestion_When_non_numeric_question_has_precicion_setting_Then_DomainException_should_be_thrown(QuestionType questionType)
-        {
-            // arrange
-            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire =
-                CreateQuestionnaireWithOneGroup(
-                    responsibleId: responsibleId, groupId: groupId);
-            var questionOptions = AreOptionsRequiredByQuestionType(questionType) ? CreateTwoOptions() : null;
-
-            // act
-            TestDelegate act =
-                () => questionnaire.NewAddQuestion(
-                 questionId: questionId,
-                 groupId: groupId,
-                 title: "What is your last name?",
-                 type: questionType,
-                 alias: "name",
-                 isMandatory: false,
-                 isFeatured: false,
-                 isHeaderOfPropagatableGroup: false,
-                 scope: QuestionScope.Interviewer,
-                 condition: string.Empty,
-                 validationExpression: string.Empty,
-                 validationMessage: string.Empty,
-                 instructions: string.Empty,
-                 optionsOrder: Order.AsIs,
-                 maxValue: null,
-                 triggedGroupIds: new Guid[] { },
-                 options: questionOptions,
-                 responsibleId: responsibleId,
-                 linkedToQuestionId: null, isInteger: true);
-
-            // assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotNumericQuestionHasPrecisionInformation));
-        }
-
-        [Test]
-        public void NewAddQuestion_When_numeric_question_has_no_precicion_setting_Then_DomainException_should_be_thrown()
-        {
-            // arrange
-            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Guid responsibleId = Guid.NewGuid();
-
-            Questionnaire questionnaire =
-              CreateQuestionnaireWithOneGroup(
-                  responsibleId: responsibleId, groupId: groupId);
-
-            // act
-            TestDelegate act =
-                () => questionnaire.NewAddQuestion(
-                 questionId: questionId,
-                 groupId: groupId,
-                 title: "What is your last name?",
-                 type: QuestionType.Numeric, 
-                 alias: "name",
-                 isMandatory: false,
-                 isFeatured: false,
-                 isHeaderOfPropagatableGroup: false,
-                 scope: QuestionScope.Interviewer,
-                 condition: string.Empty,
-                 validationExpression: string.Empty,
-                 validationMessage: string.Empty,
-                 instructions: string.Empty,
-                 optionsOrder: Order.AsIs,
-                 maxValue: null,
-                 triggedGroupIds: new Guid[] { },
-                 options: null,
-                 responsibleId: responsibleId,
-                 linkedToQuestionId: null, isInteger: null);
-
-            // assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NumericQuestionHasNoPrecisionInformation));
         }
 
         [Test]
@@ -1317,10 +1197,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: null);
+                    linkedToQuestionId: autoQuestionId);
 
                 // assert
                 var risedEvent = GetLastEvent<NewQuestionAdded>(eventContext);
@@ -1368,10 +1246,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: null);
+                    linkedToQuestionId: autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1417,10 +1293,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: new []{new Option(Guid.NewGuid(), "1", "auto"), }, 
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: null);
+                    linkedToQuestionId: autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1468,10 +1342,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: questionThatLinkedButNotFromPropagateGroupId, isInteger: null);
+                    linkedToQuestionId: questionThatLinkedButNotFromPropagateGroupId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1517,10 +1389,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: null);
+                    linkedToQuestionId: autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1552,7 +1422,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 () =>
                 questionnaire.NewAddQuestion(
                     questionId: Guid.NewGuid(),
-                    groupId: groupId,
+                    groupId: autoGroupId,
                     title: "Question",
                     type: questionType,
                     alias: "test",
@@ -1566,10 +1436,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     instructions: string.Empty,
                     options: null,
                     optionsOrder: Order.AZ,
-                    maxValue: null,
-                    triggedGroupIds: new Guid[0],
                     responsibleId: responsibleId,
-                    linkedToQuestionId: autoQuestionId, isInteger: null);
+                    linkedToQuestionId: autoQuestionId);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
