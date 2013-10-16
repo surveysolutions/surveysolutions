@@ -6,6 +6,7 @@ using Core.Supervisor.Views.Template;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using Web.Supervisor.Code;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
 
@@ -19,10 +20,11 @@ namespace Web.Supervisor.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Administration;
 
-#if DEBUG
-            ServicePointManager.ServerCertificateValidationCallback =
-                (self, certificate, chain, sslPolicyErrors) => true;
-#endif
+            if (AppSettings.Instance.AcceptUnsignedCertificate)
+            {
+                ServicePointManager.ServerCertificateValidationCallback =
+                    (self, certificate, chain, sslPolicyErrors) => true;
+            }
         }
 
 
