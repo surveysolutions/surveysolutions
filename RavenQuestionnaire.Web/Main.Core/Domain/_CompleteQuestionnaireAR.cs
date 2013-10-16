@@ -462,7 +462,7 @@ namespace Main.Core.Domain
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
             this.doc = e.Questionnaire;
-            this.doc.ConnectChildsWithParent();
+            this.doc.ConnectChildrenWithParent();
             ////this.conditionDependencies = ExpressionDependencyBuilder.Build(this.doc);
         }
 

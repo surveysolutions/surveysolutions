@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var interviewLevel in interview.Levels.Values)
             {
-                foreach (var interviewQuestion in interviewLevel.Questions)
+                foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
                         interviewQuestion.Answer,
