@@ -1007,25 +1007,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument.ConnectChildrenWithParent();
 
-            return this.GetPropagatableParentGroupId(item) != null;
+            return this.GetFirstPropagatableParentGroupIdOrNull(item) != null;
         }
 
-        private Guid? GetPropagatableParentGroupId(IComposite item)
+        private Guid? GetFirstPropagatableParentGroupIdOrNull(IComposite item)
         {
             if (item == null)
                 return null;
 
-            var parentGroup = (IGroup) item.GetParent();
-            if (parentGroup == null) 
-                return null;
-
-            if (parentGroup.Propagated == Propagate.AutoPropagated)
-                return parentGroup.PublicKey;
-            else
+            var itemAsGroup = item as IGroup;
+            if (itemAsGroup != null)
             {
-                return this.GetPropagatableParentGroupId(parentGroup.GetParent());
+                if (itemAsGroup.Propagated == Propagate.AutoPropagated)
+                    return itemAsGroup.PublicKey;
             }
-                 
+            
+            return this.GetFirstPropagatableParentGroupIdOrNull(item.GetParent());
         }
 
         private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
@@ -1315,7 +1312,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if(typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (DoesReferensedSubstitutionIsIllegal(group, currentQuestion.GetParent()))
+                    if (DoesReferensedSubstitutionIllegal(group, currentQuestion.GetParent()))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
             }
@@ -1346,15 +1343,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Pre-filled question title contains substitution references. It's illegal");
         }
 
-        private bool DoesReferensedSubstitutionIsIllegal(IGroup groupQuestionContainsSubstitution, IComposite referencedQuestionGroup)
+        private bool DoesReferensedSubstitutionIllegal(IGroup groupQuestionContainsSubstitution, IComposite referencedQuestionGroup)
         {
             IGroup group = (IGroup) referencedQuestionGroup;
 
-            Guid? referencedPropagationId = GetPropagatableParentGroupId(group);
+            Guid? referencedPropagationId = GetFirstPropagatableParentGroupIdOrNull(group);
             if (referencedPropagationId == null) //referenced Question not in propagation - OK
                 return false;
 
-            Guid? substitutionContainedPropagationId = GetPropagatableParentGroupId(groupQuestionContainsSubstitution);
+            Guid? substitutionContainedPropagationId = GetFirstPropagatableParentGroupIdOrNull(groupQuestionContainsSubstitution);
             if (substitutionContainedPropagationId == null) // Question to check not in propagation - illegal
                 return true;
 
