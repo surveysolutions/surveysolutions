@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         {
             var answeredQuestions = new Dictionary<Guid,ExportedQuestion>();
 
-            foreach (var question in level.Questions)
+            foreach (var question in level.GetAllQuestions())
             {
                 var column = header.GetAvailableHeaderForQuestion(question.Id).ToArray();
                 if (!column.Any())
