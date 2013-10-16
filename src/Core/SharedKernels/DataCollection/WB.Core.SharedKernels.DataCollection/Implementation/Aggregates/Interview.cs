@@ -1362,9 +1362,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!countOfDecimalPlacesAllowed.HasValue)
                 return;
 
-            int countOfDecimalPlacesInAnswer = answer.ToString(CultureInfo.InvariantCulture).SkipWhile(c => c != '.').Skip(1).Count();
-            
-            if (countOfDecimalPlacesInAnswer > countOfDecimalPlacesAllowed)
+            var roundedAnswer = Math.Round(answer, countOfDecimalPlacesAllowed.Value);
+            if (roundedAnswer!=answer)
                 throw new InterviewException(
                     string.Format(
                         "Answer '{0}' for question {1}  is incorrect because has more decimal places then allowed by questionnaire", answer,

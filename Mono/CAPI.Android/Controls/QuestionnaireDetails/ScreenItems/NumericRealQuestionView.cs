@@ -5,6 +5,7 @@ using Android.Text;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -21,7 +22,24 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned; }
         }
 
-       
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.AttachDecimalPlacesFilterToEditTextIfNeeded();
+        }
+
+        private void AttachDecimalPlacesFilterToEditTextIfNeeded()
+        {
+            var valueModel = this.Model as ValueQuestionViewModel;
+
+            if (valueModel == null)
+                throw new InvalidCastException("Something bad happened with mapping question's viewmodel to question's view");
+
+            if (valueModel.CountOfDecimalPlaces.HasValue)
+                this.etAnswer.SetFilters(new IInputFilter[] { new DecimalPlacesFilter(valueModel.CountOfDecimalPlaces.Value) });
+        }
+
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out decimal answer)
         {
             var replacedAnswer = newAnswer.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
@@ -29,13 +47,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             return decimal.TryParse(replacedAnswer, out answer);
         }
 
-        protected override void SaveAnswer(string newAnswer, decimal answer)
+        protected override AnswerQuestionCommand CreateAnswerQuestionCommand(decimal answer)
         {
-            this.SaveAnswer(newAnswer, new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
+            return new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id,
                 this.Model.PublicKey.PropagationVector,
-                DateTime.UtcNow, answer));
+                DateTime.UtcNow, answer);
         }
     }
 }

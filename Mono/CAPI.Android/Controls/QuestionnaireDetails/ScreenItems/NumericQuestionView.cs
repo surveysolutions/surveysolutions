@@ -6,6 +6,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -53,17 +54,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (!IsParseAnswerStringSucceeded(newAnswer, out answer))
                 return;
 
-            if (answer.Equals((T)this.Model.AnswerObject)) return;
+            if (this.Model.AnswerObject!=null && answer.Equals((T)this.Model.AnswerObject)) return;
 
             if (!IsCommentsEditorFocused)
                 HideKeyboard(etAnswer);
 
-            SaveAnswer(newAnswer, answer);
+            this.SaveAnswer(newAnswer, CreateAnswerQuestionCommand(answer));
         }
 
         protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
 
-        protected abstract void SaveAnswer(string newAnswer, T answer);
+        protected abstract AnswerQuestionCommand CreateAnswerQuestionCommand(T answer);
 
         protected override string GetAnswerStoredInModelAsString()
         {

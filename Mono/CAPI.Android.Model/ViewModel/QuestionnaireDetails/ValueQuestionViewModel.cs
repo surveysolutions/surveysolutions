@@ -10,14 +10,17 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
     public class ValueQuestionViewModel : QuestionViewModel
     {
 
-        public ValueQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType, object answer, bool enabled, string instructions, string comments, bool valid, bool mandatory,
-            string validationMessage, bool? isInteger)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answer,validationMessage)
+        public ValueQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType, object answer, bool enabled,
+            string instructions, string comments, bool valid, bool mandatory,
+            string validationMessage, bool? isInteger, int? countOfDecimalPlaces)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answer, validationMessage)
         {
             IsInteger = isInteger;
+            CountOfDecimalPlaces = countOfDecimalPlaces;
         }
 
         public bool? IsInteger = null;
+        public int? CountOfDecimalPlaces = null;
 
         #region Overrides of QuestionViewModel
 
@@ -27,7 +30,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                                    this.Text, this.QuestionType, this.AnswerObject,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.ValidationMessage, this.IsInteger);
+                                                   this.Mandatory, this.ValidationMessage, this.IsInteger, this.CountOfDecimalPlaces);
         }
 
         #endregion
