@@ -57,6 +57,7 @@ namespace WB.UI.Designer.Controllers
                 var domainEx = e.As<DomainException>();
                 if (domainEx == null)
                 {
+                    logger.Error(string.Format("Error on command of type ({0}) handling ", type), e);
                     throw;
                 }
                 else
@@ -73,9 +74,10 @@ namespace WB.UI.Designer.Controllers
 
         private void SetResponsible(ICommand concreteCommand)
         {
-            if (concreteCommand is QuestionnaireCommandBase)
+            var currentCommand = concreteCommand as QuestionnaireCommandBase;
+            if (currentCommand != null)
             {
-                (concreteCommand as QuestionnaireCommandBase).ResponsibleId = userHelper.WebUser.UserId;
+                currentCommand.ResponsibleId = userHelper.WebUser.UserId;
             }
         }
 
@@ -87,9 +89,10 @@ namespace WB.UI.Designer.Controllers
             {
                 questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
                 questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
-             }
-            // can command be FullGroupDataCommand and FullQuestionDataCommand at the same time?
-            // if not this cast is unnecessary 
+
+                return;
+            }
+            
             var newGroupCommand = command as FullGroupDataCommand;
             if (newGroupCommand != null)
             {

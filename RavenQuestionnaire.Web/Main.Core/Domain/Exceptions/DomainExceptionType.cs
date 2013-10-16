@@ -160,6 +160,14 @@
 
         NotNumericQuestionHasPrecisionInformation,
 
-        NumericQuestionHasNoPrecisionInformation
+        QuestionTitleContainsInvalidSubstitutionReference,
+
+        NumericQuestionHasNoPrecisionInformation,
+
+        QuestionTitleContainsUnknownSubstitutionReference,
+
+        QuestionTitleContainsSubstitutionReferenceToSelf,
+
+        FeaturedQuestionTitleContainsSubstitutionReference,
     }
 }

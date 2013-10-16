@@ -271,12 +271,12 @@ namespace Main.Core.Documents
             throw new NotImplementedException();
         }
 
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             foreach (IComposite item in this.Children)
             {
                 item.SetParent(this);
-                item.ConnectChildsWithParent();
+                item.ConnectChildrenWithParent();
             }
         }
 

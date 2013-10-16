@@ -1,8 +1,6 @@
 ﻿using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
@@ -13,12 +11,12 @@ namespace Main.Core.Documents
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
-    using Main.DenormalizerStorage;
 
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
 
         private readonly List<Guid> triggers = new List<Guid>();
+        
 
         public QuestionnaireDocument()
         {
@@ -357,12 +355,12 @@ namespace Main.Core.Documents
             return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
         }
 
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             foreach (var item in this.Children)
             {
                 item.SetParent(this);
-                item.ConnectChildsWithParent();
+                item.ConnectChildrenWithParent();
             }
         }
 
@@ -384,10 +382,12 @@ namespace Main.Core.Documents
 
             if (targetIndex < 0)
             {
+                //item.SetParent(targetContainer);
                 targetContainer.Children.Insert(0, item);
             }
             else if (targetIndex >= targetContainer.Children.Count)
             {
+                //item.SetParent(targetContainer);
                 targetContainer.Children.Add(item);
             }
             else

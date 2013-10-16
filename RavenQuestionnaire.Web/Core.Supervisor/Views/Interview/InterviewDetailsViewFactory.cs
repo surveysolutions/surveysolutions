@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.AbstractFactories;
 using Main.Core.Entities.SubEntities;
@@ -41,19 +43,20 @@ namespace Core.Supervisor.Views.Interview
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            var questionnaire = this.questionnaireStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
             if (questionnaire == null)
                 throw new ArgumentException(string.Format(
-                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion)); 
+                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion));
 
-             var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.GetById(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            var variablesMap = questionnaire.Questionnaire.GetAllQuestions().Select(x => new
-            {
-                Id = x.PublicKey,
-                Variable = x.StataExportCaption
-            }).ToDictionary(x => x.Id, x => x.Variable);
+            Dictionary<Guid, string> idToVariableMap = questionnaire.Questionnaire.GetAllQuestions().ToDictionary(
+                x => x.PublicKey,
+                x => x.StataExportCaption);
 
+            Dictionary<string, Guid> variableToIdMap = questionnaire.Questionnaire.GetAllQuestions().ToDictionary(
+                x => x.StataExportCaption,
+                x => x.PublicKey);
 
             if (!input.CurrentGroupPublicKey.HasValue)
             {
@@ -83,6 +86,8 @@ namespace Core.Supervisor.Views.Interview
             {
                 var currentGroup = groupStack.Pop();
 
+                var rootLevel = this.GetRootLevel(interview);
+
                 if (currentGroup.Key.Propagated == Propagate.AutoPropagated)
                 {
                     var propagatedGroups = GetPropagatedLevels(currentGroup.Key.PublicKey, interview, questionnairePropagation).ToList();
@@ -93,7 +98,10 @@ namespace Core.Supervisor.Views.Interview
                         //so for every layer we are creating propagated group
                         foreach (var propagatedGroup in propagatedGroups)
                         {
-                            var completedPropGroup = this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, propagatedGroup.Value, variablesMap, getAvailableOptions);
+                            var completedPropGroup =
+                                this.GetCompletedGroup(currentGroup.Key, currentGroup.Value,
+                                    propagatedGroup.Value, new [] { rootLevel },
+                                    idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire.Questionnaire);
 
                             interviewDetails.Groups.Add(completedPropGroup);
                         }
@@ -101,9 +109,10 @@ namespace Core.Supervisor.Views.Interview
                 }
                 else
                 {
-                    var rootLevel = this.GetRootLevel(interview);
-
-                    interviewDetails.Groups.Add(this.GetCompletedGroup(currentGroup.Key, currentGroup.Value, rootLevel, variablesMap, getAvailableOptions));
+                    interviewDetails.Groups.Add(
+                        this.GetCompletedGroup(currentGroup.Key, currentGroup.Value,
+                            rootLevel, new InterviewLevel[] {},
+                            idToVariableMap, variableToIdMap, getAvailableOptions, questionnaire.Questionnaire));
 
                     foreach (var group in currentGroup.Key.Children.OfType<IGroup>().Reverse())
                     {
@@ -145,8 +154,9 @@ namespace Core.Supervisor.Views.Interview
         }
 
 
-        private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
-            Dictionary<Guid, string> variablesMap, Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+        private InterviewGroupView GetCompletedGroup(IGroup currentGroup, int depth, InterviewLevel interviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels,
+            Dictionary<Guid, string> idToVariableMap, Dictionary<string, Guid> variableToIdMap, Func<Guid, Dictionary<int[], string>> getAvailableOptions,
+            IQuestionnaireDocument questionnaire)
         {
             var completedGroup = new InterviewGroupView(currentGroup.PublicKey)
                 {
@@ -158,16 +168,113 @@ namespace Core.Supervisor.Views.Interview
 
             foreach (var question in currentGroup.Children.OfType<IQuestion>())
             {
-                InterviewQuestion answeredQuestion = interviewLevel.Questions.FirstOrDefault(q => q.Id == question.PublicKey);
+                InterviewQuestion answeredQuestion = interviewLevel.GetQuestion(question.PublicKey);
+
+                Dictionary<string, string> answersForTitleSubstitution =
+                    GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions);
 
                 var interviewQuestion = question.LinkedToQuestionId.HasValue
-                    ? new InterviewLinkedQuestionView(question, answeredQuestion, variablesMap, getAvailableOptions)
-                    : new InterviewQuestionView(question, answeredQuestion, variablesMap);
+                    ? new InterviewLinkedQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution, getAvailableOptions)
+                    : new InterviewQuestionView(question, answeredQuestion, idToVariableMap, answersForTitleSubstitution);
 
                 completedGroup.Questions.Add(interviewQuestion);
             }
 
             return completedGroup;
+        }
+
+        private static Dictionary<string, string> GetAnswersForTitleSubstitution(IQuestion question, Dictionary<string, Guid> variableToIdMap,
+            InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
+            Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+        {
+            return question
+                .GetVariablesUsedInTitle()
+                .Select(variableName => new
+                {
+                    Variable = variableName,
+                    Answer = GetAnswerForTitleSubstitution(variableName, variableToIdMap, currentInterviewLevel, upperInterviewLevels, questionnaire, getAvailableOptions),
+                })
+                .Where(x => x.Answer != null)
+                .ToDictionary(
+                    x => x.Variable,
+                    x => x.Answer);
+        }
+
+        private static string GetAnswerForTitleSubstitution(string variableName, Dictionary<string, Guid> variableToIdMap,
+            InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels, IQuestionnaireDocument questionnaire,
+            Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+        {
+            if (!variableToIdMap.ContainsKey(variableName))
+                return null;
+
+            Guid questionId = variableToIdMap[variableName];
+
+            InterviewQuestion interviewQuestion = GetQuestion(questionId, currentInterviewLevel, upperInterviewLevels);
+
+            if (interviewQuestion == null)
+                return null;
+
+            if (!interviewQuestion.Enabled)
+                return null;
+
+            return GetFormattedAnswerForTitleSubstitution(interviewQuestion, questionnaire, getAvailableOptions);
+        }
+
+        private static string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, IQuestionnaireDocument questionnaire,
+            Func<Guid, Dictionary<int[], string>> getAvailableOptions)
+        {
+            if (interviewQuestion.Answer == null)
+                return null;
+
+            var question = questionnaire.Find<IQuestion>(interviewQuestion.Id);
+
+            switch (question.QuestionType)
+            {
+                case QuestionType.Text:
+                    return (string) interviewQuestion.Answer;
+
+                case QuestionType.Numeric:
+                    return Convert.ToDecimal(interviewQuestion.Answer).ToString(CultureInfo.InvariantCulture);
+
+                case QuestionType.DateTime:
+                    DateTime dateTime = DateTime.Parse((string) interviewQuestion.Answer);
+                    return dateTime.ToString("M/d/yyyy");
+
+                case QuestionType.SingleOption:
+                    if (!question.LinkedToQuestionId.HasValue)
+                    {
+                        decimal selectedValue = Convert.ToDecimal(interviewQuestion.Answer);
+
+                        IAnswer selectedAnswer =
+                            question.Answers.SingleOrDefault(option => Convert.ToDecimal(option.AnswerValue) == selectedValue);
+
+                        return selectedAnswer != null ? selectedAnswer.AnswerText : null;
+                    }
+                    else
+                    {
+                        int[] selectedPropagationVector = ((IEnumerable) interviewQuestion.Answer).OfType<int>().ToArray();
+
+                        Dictionary<int[], string> availableOptions = getAvailableOptions(interviewQuestion.Id);
+
+                        KeyValuePair<int[], string> selectedOption = availableOptions.SingleOrDefault(option => option.Key.SequenceEqual(selectedPropagationVector));
+
+                        return selectedOption.Value;
+                    }
+
+                default:
+                    return null;
+            }
+        }
+
+        private static InterviewQuestion GetQuestion(Guid questionId, InterviewLevel currentInterviewLevel, IEnumerable<InterviewLevel> upperInterviewLevels)
+        {
+            return GetQuestion(questionId, currentInterviewLevel)
+                ?? upperInterviewLevels.Select(level => GetQuestion(questionId, level)).FirstOrDefault();
+        }
+
+        private static InterviewQuestion GetQuestion(Guid questionId, InterviewLevel currentInterviewLevel)
+        {
+            return currentInterviewLevel.GetQuestion(questionId);
         }
 
         private Dictionary<int[], string> GetAvailableOptions(Guid questionId, InterviewData interview,
@@ -181,7 +288,7 @@ namespace Core.Supervisor.Views.Interview
 
             IDictionary<int[], InterviewQuestion> allLinkedQuestions =
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.PropagationVector,
-                    interviewLevel => interviewLevel.Questions.FirstOrDefault(question => question.Id == optionsSource.ReferencedQuestionId));
+                    interviewLevel => interviewLevel.GetQuestion(optionsSource.ReferencedQuestionId));
 
             return allLinkedQuestions.Where(question => question.Value != null && question.Value.Enabled)
                 .ToDictionary(question => question.Key, question => (question.Value.Answer ?? string.Empty).ToString());
