@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 {
-    internal class when_answering_real_question_with_3_decimal_places : InterviewTestsContext
+    internal class when_answering_real_question_with_allowed_3_decimal_places_but_answer_has_4_decimal_places : InterviewTestsContext
     {
         Establish context = () =>
         {
