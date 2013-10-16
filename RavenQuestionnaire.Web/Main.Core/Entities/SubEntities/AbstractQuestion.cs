@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Entities.SubEntities
+﻿using Main.Core.Utility;
+
+namespace Main.Core.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
@@ -175,11 +177,7 @@
 
         public IEnumerable<string> GetVariablesUsedInTitle()
         {
-            return this
-                .QuestionText
-                .Split('%')
-                .Where((part, index) => index % 2 == 1)
-                .Distinct();
+            return StringUtil.GetAllTermsFromString(QuestionText);
         }
 
         public override string ToString()
