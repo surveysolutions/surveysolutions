@@ -96,7 +96,7 @@
             self.answer = ko.observable().extend({ required: true, number: true });
             
             if (isInteger) {
-                ko.observable().extend({ digit: true });
+                self.answer.extend({ digit: true });
             }
             
             self.errors = ko.validation.group(self);

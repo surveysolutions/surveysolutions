@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class NumericRealQuestionView : NumericQuestionView
+    public class NumericRealQuestionView : NumericQuestionView<decimal>
     {
         public NumericRealQuestionView(Context context, IMvxAndroidBindingContext bindingActivity,
             QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
@@ -21,14 +21,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned; }
         }
 
-        protected override void ParseAndSaveAnswer(string newAnswer)
+       
+        protected override bool IsParseAnswerStringSucceeded(string newAnswer, out decimal answer)
         {
-            decimal answer;
-            if (!decimal.TryParse(newAnswer, out  answer))
-                return;
-            if (!IsCommentsEditorFocused)
-                HideKeyboard(etAnswer);
+            var replacedAnswer = newAnswer.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);
 
+            return decimal.TryParse(replacedAnswer, out answer);
+        }
+
+        protected override void SaveAnswer(string newAnswer, decimal answer)
+        {
             this.SaveAnswer(newAnswer, new AnswerNumericRealQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id,
