@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -24,15 +25,20 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             PublicKey = publicKey;
             ValidationMessage = validationMessage;
-            Text = text;
-            SourceText = text;
+            SubstitutionReferences = substitutionReferences;
+
+            SourceText = Text = text;
+            foreach (var substitutionReference in SubstitutionReferences)
+            {
+                Text = Text.ReplaceSubstitutionVariable(substitutionReference, StringUtil.DefaultSubstitutionText);
+            }
+
             QuestionType = questionType;
             AnswerObject = answerObject;
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
             Variable = variable;
-            SubstitutionReferences = substitutionReferences;
 
             Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
@@ -76,19 +82,24 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 return;
             }
 
-
             this.AnswerObject = answer;
+            
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
                 Status = Status | QuestionStatus.Answered;
                 RaisePropertyChanged("Status");
             }
+
             RaisePropertyChanged("AnswerString");
         }
 
-        public virtual void SetText(string text)
+        public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
         {
-            this.Text = text;
+            var testForSubstitution = string.IsNullOrEmpty(referencedQuestion.AnswerString)
+                ? StringUtil.DefaultSubstitutionText : referencedQuestion.AnswerString;
+
+            this.Text = SourceText.ReplaceSubstitutionVariable(referencedQuestion.Variable, testForSubstitution);
+
             RaisePropertyChanged(() => Text);
         }
 

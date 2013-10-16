@@ -123,7 +123,7 @@ namespace CAPI.Androids.Core.Model.Tests
         public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, InterviewPropagationScopeDescription templates)
             : this(screents)
         {
-            this.propagationScopeDescription = templates;
+            this.PropagationScopeDescription = templates;
         }
         public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, IDictionary<InterviewItemId, QuestionViewModel> questions)
             : this(screents)
@@ -138,7 +138,7 @@ namespace CAPI.Androids.Core.Model.Tests
         public CompleteQuestionnaireViewTestable(Guid publicKey) : base(publicKey)
         {
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
-            this.propagationScopeDescription = new InterviewPropagationScopeDescription();
+            this.PropagationScopeDescription = new InterviewPropagationScopeDescription();
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
         }
 
