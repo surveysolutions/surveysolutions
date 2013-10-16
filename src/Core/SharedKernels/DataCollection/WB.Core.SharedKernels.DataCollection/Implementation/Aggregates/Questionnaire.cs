@@ -671,7 +671,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return substitutionReferencedQuestions.All(q => (q.QuestionType == QuestionType.DateTime ||
                                                                  q.QuestionType == QuestionType.Numeric ||
                                                                  q.QuestionType == QuestionType.SingleOption ||
-                                                                 q.QuestionType == QuestionType.Text)) && 
+                                                                 q.QuestionType == QuestionType.Text ||
+                                                                 q.QuestionType == QuestionType.AutoPropagate)) && 
                                                                  IsQuestionsBelongsToAllowedPropagationForSubstitution(document, question, substitutionReferencedQuestions);
                 
             };
