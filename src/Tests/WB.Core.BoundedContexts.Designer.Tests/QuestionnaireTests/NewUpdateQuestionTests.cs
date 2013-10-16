@@ -653,6 +653,35 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        public void NewUpdateQuestion_When_countOfDecimalPlaces_is_more_then_allowed_20_Then_DomainException_should_be_thrown()
+        {
+            Guid responsibleId = Guid.NewGuid();
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireWithOneQuestion(questionId: targetQuestionPublicKey,
+             responsibleId: responsibleId);
+
+            TestDelegate act = () =>
+                questionnaire.UpdateNumericQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    type: QuestionType.Numeric, 
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: 20);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesExceededMaximum));
+        }
+
+        [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
         public void NewUpdateQuestion_When_answer_option_value_contains_only_numbers_Then_raised_QuestionChanged_event_contains_question_answer_with_the_same_answe_values(
