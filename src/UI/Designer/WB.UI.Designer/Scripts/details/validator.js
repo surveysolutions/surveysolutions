@@ -56,6 +56,10 @@
                     return { isValid: false, errorMessage: 'Following variables have not supported type for substitution: %' + titleVariablesWithNotSupportedTypes.join('%, %') + '%. Only numeric, text, date and single categorical types are supported.' };
 
 
+                if (_.contains(titleVariables, contextQuestion.alias()))
+                    return { isValid: false, errorMessage: 'Question cannot reference self variable %' + contextQuestion.alias() + '% for substitution.' };
+
+
                 return { isValid: true };
             },
 
