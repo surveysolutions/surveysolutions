@@ -600,6 +600,34 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
+        public void AddNumericQuestion_When_countOfDecimalPlaces_is_more_then_allowed_20_Then_DomainException_should_be_thrown()
+        {
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+
+            TestDelegate act = () =>
+                questionnaire.AddNumericQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: Guid.NewGuid(),
+                    title: "What is your last name?",
+                    type: QuestionType.Numeric, 
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: 20);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesExceededMaximum));
+        }
+
+        [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
 #warning Roma: when part is incorrect should be something like when answer option value contains not number

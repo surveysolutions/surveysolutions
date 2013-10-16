@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
     public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
+        
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
         private readonly IQuestionFactory questionFactory;
@@ -45,7 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             QuestionType.Numeric,
             QuestionType.AutoPropagate
-        }; 
+        };
+        
+        private static readonly int maxCountOfDecimaPlaces = 15;
 
         public Questionnaire()
             : base()
@@ -350,6 +353,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(type, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
 
@@ -437,6 +441,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(type,isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger,countOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
             this.ApplyEvent(new NumericQuestionAdded
@@ -565,6 +570,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(type, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
             this.ApplyEvent(new NumericQuestionChanged
@@ -1422,6 +1428,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     throw new DomainException(
                     DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
                     "AutoPropagate question can't have decimal places settings");
+            }
+        }
+
+        private void ThrowIfDecimalPlacesExceededMaximum(int? countOfDecimalPlaces)
+        {
+            if (countOfDecimalPlaces.HasValue && countOfDecimalPlaces.Value > maxCountOfDecimaPlaces)
+            {
+                throw new DomainException(
+                    DomainExceptionType.CountOfDecimalPlacesExceededMaximum,
+                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'", countOfDecimalPlaces, maxCountOfDecimaPlaces));
             }
         }
 

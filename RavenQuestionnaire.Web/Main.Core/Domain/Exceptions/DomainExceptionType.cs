@@ -164,6 +164,8 @@
 
         QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
 
-        QuestionTypeIsNotAcceptableByNumericQuestionsCommand
+        QuestionTypeIsNotAcceptableByNumericQuestionsCommand,
+
+        CountOfDecimalPlacesExceededMaximum
     }
 }
