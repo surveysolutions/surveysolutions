@@ -304,13 +304,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
             
             var group = this.innerDocument.Find<IGroup>(groupId);
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
-
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
-
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
+
 
             this.ApplyEvent(new QuestionCloned
             {
@@ -368,14 +367,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
 
             var group = this.innerDocument.Find<IGroup>(groupId);
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
-
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
-
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
-
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -459,11 +455,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
             
             IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
-
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1285,9 +1280,41 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
+            AreAllSubstitutinReferencesValid(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
+
+            if (substitutionReferences.Contains(alias))
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
+                    "Question title contains illegal substitution references to self");
+
+            if(unknownReferences.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
+                    "Question title contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
+
+            if (questionsIncorrectTypeOfReferenced.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+                    "Question title contains substitution references to questions of illegal type: " + String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
+
+            if (questionsIllegalPropagationScope.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
+                    "Question title contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
+            
+            if (isFeatured)
+                throw new DomainException(
+                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
+                    "Pre-filled question title contains substitution references. It's illegal");
+        }
+
+        private void AreAllSubstitutinReferencesValid(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
+                                                      List<string> unknownReferences, List<string> questionsIncorrectTypeOfReferenced,
+                                                      List<string> questionsIllegalPropagationScope)
+        {
             var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
-                .Where(q => q.PublicKey != questionPublicKey)
-                .ToDictionary(q => q.StataExportCaption, q => q);
+                                .Where(q => q.PublicKey != questionPublicKey)
+                                .ToDictionary(q => q.StataExportCaption, q => q);
 
             foreach (var substitutionReference in substitutionReferences)
             {
@@ -1297,50 +1324,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     unknownReferences.Add(substitutionReference);
                     continue;
                 }
-                
+
                 if (!questions.ContainsKey(substitutionReference))
                     unknownReferences.Add(substitutionReference);
                 else
                 {
                     var currentQuestion = questions[substitutionReference];
-                    bool typeOfRefQuestionIsNotSupported = !(
-                        currentQuestion.QuestionType == QuestionType.DateTime ||
-                        currentQuestion.QuestionType == QuestionType.Numeric ||
-                        currentQuestion.QuestionType == QuestionType.SingleOption ||
-                        currentQuestion.QuestionType == QuestionType.Text);
+                    bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
+                                                             currentQuestion.QuestionType == QuestionType.Numeric ||
+                                                             currentQuestion.QuestionType == QuestionType.SingleOption ||
+                                                             currentQuestion.QuestionType == QuestionType.Text ||
+                                                             currentQuestion.QuestionType == QuestionType.AutoPropagate);
 
-                    if(typeOfRefQuestionIsNotSupported)
+                    if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (DoesReferensedSubstitutionIllegal(group, currentQuestion.GetParent()))
+                    if (DoesReferensedSubstitutionIllegal(@group, currentQuestion.GetParent()))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
             }
-
-            if(unknownReferences.Count > 0)
-                throw new DomainException(
-                    DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
-                    "Question title contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
-
-            if (questionsIncorrectTypeOfReferenced.Count > 0)
-                throw new DomainException(
-                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question title contains substitution references to questions of illegal type: " + String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
-
-            if (questionsIllegalPropagationScope.Count > 0)
-                throw new DomainException(
-                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
-                    "Question title contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
-
-            if (substitutionReferences.Contains(alias))
-                throw new DomainException(
-                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
-                    "Question title contains illegal substitution references to self");
-
-            if (isFeatured)
-                throw new DomainException(
-                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "Pre-filled question title contains substitution references. It's illegal");
         }
 
         private bool DoesReferensedSubstitutionIllegal(IGroup groupQuestionContainsSubstitution, IComposite referencedQuestionGroup)

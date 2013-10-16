@@ -160,6 +160,8 @@
 
         NotNumericQuestionHasPrecisionInformation,
 
+        QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+
         QuestionTitleContainsInvalidSubstitutionReference,
 
         NumericQuestionHasNoPrecisionInformation,
