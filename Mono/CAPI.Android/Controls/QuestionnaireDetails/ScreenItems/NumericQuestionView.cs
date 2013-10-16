@@ -54,7 +54,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (!IsParseAnswerStringSucceeded(newAnswer, out answer))
                 return;
 
-            if (this.Model.AnswerObject!=null && answer.Equals((T)this.Model.AnswerObject)) return;
+            if (this.Model.AnswerObject!=null && answer.Equals(this.Model.AnswerObject)) return;
 
             if (!IsCommentsEditorFocused)
                 HideKeyboard(etAnswer);
