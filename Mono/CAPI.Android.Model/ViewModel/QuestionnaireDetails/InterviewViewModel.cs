@@ -29,9 +29,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, InterviewSynchronizationDto interview)
             : this(id)
         {
+
             this.Status = interview.Status;
 
             this.BuildInterviewStructureFromTemplate(questionnaire);
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences();
 
             this.BuildHeadQuestionsInsidePropagaedGroupsStructure(questionnaire);
 
@@ -61,6 +64,68 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 .ToDictionary(
                     keySelector: grouping => grouping.Key,
                     elementSelector: grouping => new HashSet<InterviewItemId>(grouping.Select(answer => new InterviewItemId(answer.Id, answer.PropagationVector))));
+        }
+
+        private Dictionary<QuestionViewModel, IEnumerable<QuestionViewModel>> questionsParticipationInSubstitutionReferences;
+        private const string defaultSubstitutionText = "[...]";
+
+        private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences()
+        {
+            questionsParticipationInSubstitutionReferences = allQuestionViewModels.Where(x => x.SubstitutionReferences.Any())
+                .SelectMany(
+                    x =>
+                        x.SubstitutionReferences.Select(
+                            y =>
+                                new
+                                {
+                                    ReferencedQuestion = allQuestionViewModels.FirstOrDefault(z => z.Variable == y),
+                                    ParticipationQuestion = x
+                                }))
+                .GroupBy(x => x.ReferencedQuestion, y => y.ParticipationQuestion, (referencedQuestion, participationQuestions) => new
+                {
+                    ReferencedQuestion = referencedQuestion,
+                    ParticipationQuestions =
+                        participationQuestions
+                })
+                .ToDictionary(
+                    x => x.ReferencedQuestion,
+                    y => y.ParticipationQuestions);
+
+            foreach (var substitutionQuestion in questionsParticipationInSubstitutionReferences)
+            {
+                foreach (var participationQuestion in substitutionQuestion.Value)
+                {
+                    var text = participationQuestion.SubstitutionReferences.Aggregate(participationQuestion.SourceText,
+                        (current, substitutionReference) =>
+                            current.Replace(string.Format("%{0}%", substitutionReference), defaultSubstitutionText));
+                    participationQuestion.SetText(text);
+                }
+                substitutionQuestion.Key.PropertyChanged += (sender, args) =>
+                {
+                    if (args.PropertyName == "AnswerString")
+                    {
+                        var vm = sender as QuestionViewModel;
+                        if (vm != null)
+                        {
+                            var participationQuestions = questionsParticipationInSubstitutionReferences[vm];
+                            if (participationQuestions != null)
+                            {
+                                foreach (var participationQuestion in participationQuestions)
+                                {
+                                    participationQuestion.SetText(
+                                        participationQuestion.SourceText.Replace(
+                                            string.Format("%{0}%", vm.Variable),
+                                            string.IsNullOrEmpty(vm.AnswerString)
+                                                ? defaultSubstitutionText
+                                                : vm.AnswerString));
+                                }
+
+                            }
+                        }
+
+                    }
+                };
+            }
         }
 
         private void BuildHeadQuestionsInsidePropagaedGroupsStructure(IQuestionnaireDocument questionnaire)
@@ -217,7 +282,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         private readonly Dictionary<Guid, Guid> listofHeadQuestionsMappedOnScope = new Dictionary<Guid, Guid>(); 
         private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
         protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
-        
+        private readonly List<QuestionViewModel> allQuestionViewModels = new List<QuestionViewModel>();
 
         #endregion
 
@@ -590,6 +655,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                     return null;
 
                 QuestionViewModel questionView = CreateQuestionView(question);
+
+                questionView.Variable = question.StataExportCaption;
+                questionView.SubstitutionReferences = question.GetVariablesUsedInTitle();
+
+                this.allQuestionViewModels.Add(questionView);
 
                 if (question.Featured)
                 {
