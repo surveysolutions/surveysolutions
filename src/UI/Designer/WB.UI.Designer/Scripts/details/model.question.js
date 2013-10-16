@@ -308,7 +308,7 @@
                     self.title.extend({
                         validation: [{
                             validator: function (val) {
-                                var validationResult = validator.isValidQuestionTitle(val);
+                                var validationResult = validator.isValidQuestionTitle(val, self);
 
                                 if (validationResult.errorMessage != null)
                                     this.message = validationResult.errorMessage;
