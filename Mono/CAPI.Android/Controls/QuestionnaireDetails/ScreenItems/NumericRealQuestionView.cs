@@ -22,7 +22,24 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned; }
         }
 
-       
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.AttachDecimalPlacesFilterToEditTextIfNeeded();
+        }
+
+        private void AttachDecimalPlacesFilterToEditTextIfNeeded()
+        {
+            var valueModel = this.Model as ValueQuestionViewModel;
+
+            if (valueModel == null)
+                throw new InvalidCastException("Something bad happened with mapping question's viewmodel to question's view");
+
+            if (valueModel.CountOfDecimalPlaces.HasValue)
+                this.etAnswer.SetFilters(new IInputFilter[] { new DecimalPlacesFilter(valueModel.CountOfDecimalPlaces.Value) });
+        }
+
         protected override bool IsParseAnswerStringSucceeded(string newAnswer, out decimal answer)
         {
             var replacedAnswer = newAnswer.Replace(".", NumberFormatInfo.CurrentInfo.NumberDecimalSeparator);

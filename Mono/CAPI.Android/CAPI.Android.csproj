@@ -150,6 +150,7 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractSingleOptionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DecimalPlacesFilter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyOptionLinkedQuestionView.cs" />
