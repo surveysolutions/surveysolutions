@@ -171,7 +171,11 @@
             });
             return items;
         };
-        
+
+        questions.getLocalByVariable = function(variable) {
+            return _.find(questions.getAllLocal(), function(question) { return question.alias() == variable; });
+        };
+
         questions.cleanTriggers = function (group) {
             _.each(questions.getAllLocal(), function (question) {
                 var child = _.find(question.triggers(), { 'key': group.id });
@@ -190,6 +194,7 @@
                 return question.alias();
             });
         };
+
 
         var getChildItemByIdAndType = function(item) {
             if (item.type === "GroupView")
