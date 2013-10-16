@@ -9,6 +9,16 @@
                 return _dc || require('datacontext');
             };
         return {
+            isValidQuestionTitle: function (title) {
+
+                var parts = title.split('%');
+
+                if (parts.length % 2 == 0)
+                    return { isValid: false, errorMessage: 'Count of special % symbols is odd but should be even. Seems like one of variables for substitution does not have closing % character.' };
+
+
+                return { isValid: true };
+            },
             isValidExpression: function (expression) {
                 if (_.isEmpty(expression)) {
                     return {
