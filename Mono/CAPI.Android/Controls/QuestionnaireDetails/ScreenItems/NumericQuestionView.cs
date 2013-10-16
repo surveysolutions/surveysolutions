@@ -9,11 +9,12 @@ using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public abstract class NumericQuestionView : AbstractQuestionView
+    public abstract class NumericQuestionView<T> : AbstractQuestionView
+        where T : struct
     {
         protected abstract InputTypes KeyboardTypeFlags
         {
-             get;
+            get;
         }
 
         public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
@@ -32,7 +33,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.PutAnswerStoredInModelToUI();
 
             etAnswer.SetSelectAllOnFocus(true);
-            etAnswer.ImeOptions=ImeAction.Done;
+            etAnswer.ImeOptions = ImeAction.Done;
             etAnswer.SetSingleLine(true);
             etAnswer.EditorAction += etAnswer_EditorAction;
             etAnswer.FocusChange += etAnswer_FocusChange;
@@ -48,13 +49,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             string newAnswer = this.etAnswer.Text.Trim();
 
-            if (newAnswer != this.Model.AnswerString)
-            {
-                ParseAndSaveAnswer(newAnswer);
-            }
+            T answer;
+            if (!IsParseAnswerStringSucceeded(newAnswer, out answer))
+                return;
+
+            if (answer.Equals((T)this.Model.AnswerObject)) return;
+
+            if (!IsCommentsEditorFocused)
+                HideKeyboard(etAnswer);
+
+            SaveAnswer(newAnswer, answer);
         }
 
-        protected abstract void ParseAndSaveAnswer(string newAnswer);
+        protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
+
+        protected abstract void SaveAnswer(string newAnswer, T answer);
 
         protected override string GetAnswerStoredInModelAsString()
         {

@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class NumericIntegerQuestionView : NumericQuestionView
+    public class NumericIntegerQuestionView : NumericQuestionView<int>
     {
         public NumericIntegerQuestionView(Context context, IMvxAndroidBindingContext bindingActivity,
             QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
@@ -20,14 +20,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return InputTypes.ClassNumber | InputTypes.NumberFlagSigned; }
         }
 
-        protected override void ParseAndSaveAnswer(string newAnswer)
+        protected override bool IsParseAnswerStringSucceeded(string newAnswer, out int answer)
         {
-            int answer;
-            if (!int.TryParse(newAnswer, out  answer))
-                return;
-            if (!IsCommentsEditorFocused)
-                HideKeyboard(etAnswer);
+            return int.TryParse(newAnswer, out answer);
+        }
 
+        protected override void SaveAnswer(string newAnswer, int answer)
+        {
             this.SaveAnswer(newAnswer, new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id,
