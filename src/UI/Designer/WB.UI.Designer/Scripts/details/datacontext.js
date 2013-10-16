@@ -185,6 +185,12 @@
             });
         };
 
+        questions.getAllVariables = function() {
+            return _.map(questions.getAllLocal(), function (question) {
+                return question.alias();
+            });
+        };
+
         var getChildItemByIdAndType = function(item) {
             if (item.type === "GroupView")
                 return groups.getLocalById(item.id);

@@ -16,6 +16,18 @@
                 if (parts.length % 2 == 0)
                     return { isValid: false, errorMessage: 'Count of special % symbols is odd but should be even. Seems like one of variables for substitution does not have closing % character.' };
 
+                var titleVariables = _.uniq(_.filter(parts, function (part, index) { return index % 2 == 1; }));
+
+                if (titleVariables.length == 0)
+                    return { isValid: true };
+
+                var existingVariables = dc().questions.getAllVariables();
+                var variableNotExists = function (variable) { return !_.contains(existingVariables, variable); };
+
+                var notExistingTitleVariables = _.filter(titleVariables, variableNotExists);
+
+                if (notExistingTitleVariables.length > 0)
+                    return { isValid: false, errorMessage: 'Following variables does not exist in questionnaire: ' + notExistingTitleVariables.join(', ') };
 
                 return { isValid: true };
             },
@@ -44,9 +56,7 @@
                     };
                 }
 
-                var existingVariables = _.map(dc().questions.getAllLocal(), function (question) {
-                    return question.alias();
-                });
+                var existingVariables = dc().questions.getAllVariables();
                 
                 existingVariables.push("this");
                 
