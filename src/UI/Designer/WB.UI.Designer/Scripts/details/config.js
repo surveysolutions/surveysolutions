@@ -5,13 +5,13 @@
         var // properties
             //-----------------
             questionTypes = {
-                "SingleOption": "SingleOption",
-                "MultyOption": "MultyOption",
+                "SingleOption": "Categorical: one answer",
+                "MultyOption": "Categorical: multiple answers",
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
                 "AutoPropagate": "AutoPropagate",
-                "GpsCoordinates": "GpsCoordinates"
+                "GpsCoordinates": "Geo Location"
             },
             questionTypeOptions = [
                 {
