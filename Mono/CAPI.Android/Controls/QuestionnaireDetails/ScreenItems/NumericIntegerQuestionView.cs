@@ -4,6 +4,7 @@ using Android.Text;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -25,13 +26,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             return int.TryParse(newAnswer, out answer);
         }
 
-        protected override void SaveAnswer(string newAnswer, int answer)
+        protected override AnswerQuestionCommand CreateAnswerQuestionCommand(int answer)
         {
-            this.SaveAnswer(newAnswer, new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
+            return new AnswerNumericIntegerQuestionCommand(this.QuestionnairePublicKey,
                 CapiApplication.Membership.CurrentUser.Id,
                 Model.PublicKey.Id,
                 this.Model.PublicKey.PropagationVector,
-                DateTime.UtcNow, answer));
+                DateTime.UtcNow, answer);
         }
     }
 }
