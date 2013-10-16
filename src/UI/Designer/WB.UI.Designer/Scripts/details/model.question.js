@@ -10,7 +10,7 @@
                 self.isClone = ko.observable(false);
 
 
-                self.title = ko.observable('New Question').extend({ required: true, throttle: 1000 });
+                self.title = ko.observable('New Question').extend({ required: true });
                 self.parent = ko.observable();
                 self.alias = ko.observable('');
 
