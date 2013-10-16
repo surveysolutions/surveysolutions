@@ -157,6 +157,12 @@ body.loading .loading-backdrop {
             overflow: auto;
     }
 
+    @-moz-document url-prefix() {
+        .stack .body .container-fluid {
+            position: relative;
+        }
+    }
+
     .stack .pane-bottom {
         -webkit-border-radius: 0 0 5px 5px;
         -moz-border-radius: 0 0 5px 5px;
