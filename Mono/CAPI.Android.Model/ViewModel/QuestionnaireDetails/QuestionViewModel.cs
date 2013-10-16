@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json.Linq;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
@@ -19,16 +18,21 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             bool valid,
             bool mandatory,
             object answerObject,
-            string validationMessage)
+            string validationMessage,
+            string variable,
+            IEnumerable<string> substitutionReferences)
         {
             PublicKey = publicKey;
             ValidationMessage = validationMessage;
             Text = text;
+            SourceText = text;
             QuestionType = questionType;
             AnswerObject = answerObject;
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
+            Variable = variable;
+            SubstitutionReferences = substitutionReferences;
 
             Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
@@ -45,10 +49,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         public InterviewItemId PublicKey { get; private set; }
+        public string SourceText { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
+        public string Variable { get; private set; }
+        public IEnumerable<string> SubstitutionReferences { get; private set; }
 
         public virtual string AnswerString
         {
@@ -69,6 +76,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 return;
             }
 
+
             this.AnswerObject = answer;
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
@@ -76,6 +84,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 RaisePropertyChanged("Status");
             }
             RaisePropertyChanged("AnswerString");
+        }
+
+        public virtual void SetText(string text)
+        {
+            this.Text = text;
+            RaisePropertyChanged(() => Text);
         }
 
         public virtual void RemoveAnswer()

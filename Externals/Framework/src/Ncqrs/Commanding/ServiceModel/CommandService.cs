@@ -37,7 +37,7 @@ namespace Ncqrs.Commanding.ServiceModel
                 // Call OnBeforeExecution on every interceptor.
                 _interceptors.ForEach(i => i.OnBeforeExecution(context));
 
-                // When we couldn't find an executore, throw exception.
+                // When we couldn't find an executor, throw exception.
                 if (executor == null)
                 {
                     throw new ExecutorForCommandNotFoundException(commandType);

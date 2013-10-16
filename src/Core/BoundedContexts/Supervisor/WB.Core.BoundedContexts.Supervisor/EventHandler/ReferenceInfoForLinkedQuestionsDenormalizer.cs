@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             var template = evnt.Payload.Source;
-            template.ConnectChildsWithParent();
+            template.ConnectChildrenWithParent();
             var referenceInfo = new Dictionary<Guid, ReferenceInfoByQuestion>();
             
             var linkedQuestions =

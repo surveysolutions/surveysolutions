@@ -10,9 +10,10 @@ namespace Core.Supervisor.Views.Interview
 {
     public class InterviewLinkedQuestionView : InterviewQuestionView
     {
-        public InterviewLinkedQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap,
+        public InterviewLinkedQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
+            Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution,
             Func<Guid, Dictionary<int[], string>> getAvailableOptions)
-            : base(question, answeredQuestion, variablesMap)
+            : base(question, answeredQuestion, variablesMap, answersForTitleSubstitution)
         {
             this.Options = getAvailableOptions(question.PublicKey).Select(a => new QuestionOptionView
                 {
