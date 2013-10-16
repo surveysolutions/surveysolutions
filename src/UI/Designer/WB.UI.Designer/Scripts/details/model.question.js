@@ -1,4 +1,4 @@
-﻿define('model.question',
+﻿ define('model.question',
     ['ko', 'config', 'utils', 'model.answerOption', 'validator'],
     function (ko, config, utils, answerOption, validator) {
 
@@ -302,6 +302,20 @@
                                 return false;
                             },
                             message: 'Error'
+                        }]
+                    });
+
+                    self.title.extend({
+                        validation: [{
+                            validator: function (val) {
+                                var validationResult = validator.isValidQuestionTitle(val, self);
+
+                                if (validationResult.errorMessage != null)
+                                    this.message = validationResult.errorMessage;
+
+                                return validationResult.isValid;
+                            },
+                            message: 'Question title is invalid.'
                         }]
                     });
                 };
