@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json.Linq;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
@@ -21,7 +20,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             bool valid,
             bool mandatory,
             object answerObject,
-            string validationMessage)
+            string validationMessage,
+            string variable,
+            IEnumerable<string> substitutionReferences)
         {
             PublicKey = publicKey;
             ValidationMessage = validationMessage;
@@ -32,6 +33,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
+            Variable = variable;
+            SubstitutionReferences = substitutionReferences;
 
             Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
@@ -53,8 +56,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionType QuestionType { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
-        public string Variable { get; set; }
-        public IEnumerable<string> SubstitutionReferences { get; set; }
+        public string Variable { get; private set; }
+        public IEnumerable<string> SubstitutionReferences { get; private set; }
 
         public virtual string AnswerString
         {

@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Utility;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -34,13 +35,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             this.BuildInterviewStructureFromTemplate(questionnaire);
 
-            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences();
-
             this.BuildHeadQuestionsInsidePropagaedGroupsStructure(questionnaire);
 
             this.PropagateGroups(interview);
 
             this.SetAnswers(interview);
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences();
 
             this.DisableInterviewElements(interview);
 
@@ -67,7 +68,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         private Dictionary<QuestionViewModel, IEnumerable<QuestionViewModel>> questionsParticipationInSubstitutionReferences;
-        private const string defaultSubstitutionText = "[...]";
+        
 
         private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences()
         {
@@ -78,7 +79,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                             y =>
                                 new
                                 {
-                                    ReferencedQuestion = allQuestionViewModels.FirstOrDefault(z => z.Variable == y),
+                                    ReferencedQuestion = allQuestionViewModels.FirstOrDefault(z => z.Variable == y && (z.PublicKey.PropagationVector.SequenceEqual(x.PublicKey.PropagationVector) || x.PublicKey.PropagationVector.Length < z.PublicKey.PropagationVector.Length)),
                                     ParticipationQuestion = x
                                 }))
                 .GroupBy(x => x.ReferencedQuestion, y => y.ParticipationQuestion, (referencedQuestion, participationQuestions) => new
@@ -97,7 +98,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 {
                     var text = participationQuestion.SubstitutionReferences.Aggregate(participationQuestion.SourceText,
                         (current, substitutionReference) =>
-                            current.Replace(string.Format("%{0}%", substitutionReference), defaultSubstitutionText));
+                            current.ReplaceSubstitutionVariable(substitutionReference,
+                                !string.IsNullOrEmpty(substitutionQuestion.Key.AnswerString)
+                                    ? substitutionQuestion.Key.AnswerString
+                                    : StringUtil.DefaultSubstitutionText));
                     participationQuestion.SetText(text);
                 }
                 substitutionQuestion.Key.PropertyChanged += (sender, args) =>
@@ -113,10 +117,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                                 foreach (var participationQuestion in participationQuestions)
                                 {
                                     participationQuestion.SetText(
-                                        participationQuestion.SourceText.Replace(
-                                            string.Format("%{0}%", vm.Variable),
+                                        participationQuestion.SourceText.ReplaceSubstitutionVariable(vm.Variable,
                                             string.IsNullOrEmpty(vm.AnswerString)
-                                                ? defaultSubstitutionText
+                                                ? StringUtil.DefaultSubstitutionText
                                                 : vm.AnswerString));
                                 }
 
@@ -321,10 +324,16 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 index);
             var template = this.propagationScopeDescription.GetTemplateOfPropagatedScreen(publicKey);
             var screen = template.Clone(propagationVector);
-            foreach (var question in screen.Items.OfType<QuestionViewModel>())
+            var questions = screen.Items.OfType<QuestionViewModel>();
+            foreach (var question in questions)
             {
                 UpdateQuestionHash(question);
+
+                allQuestionViewModels.Add(question);
             }
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences();
+
             screen.PropertyChanged += screen_PropertyChanged;
             this.Screens.Add(screen.ScreenId, screen);
             UpdateGrid(publicKey);
@@ -340,7 +349,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 var question = item as QuestionViewModel;
                 if (question != null)
+                {
                     this.Questions.Remove(question.PublicKey);
+                    allQuestionViewModels.Remove(question);
+                }
+                
             }
             this.Screens.Remove(key);
             UpdateGrid(publicKey);
@@ -635,7 +648,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected HeaderItem BuildHeader(IQuestion question)
         {
-            return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
+            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, StringUtil.DefaultSubstitutionText));
+            return new HeaderItem(question.PublicKey, text, question.Instructions);
         }
 
         protected string BuildComments(IEnumerable<CommentDocument> comments)
@@ -655,9 +669,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                     return null;
 
                 QuestionViewModel questionView = CreateQuestionView(question);
-
-                questionView.Variable = question.StataExportCaption;
-                questionView.SubstitutionReferences = question.GetVariablesUsedInTitle();
 
                 this.allQuestionViewModels.Add(questionView);
 
@@ -718,7 +729,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 null,
                 true, question.Instructions, null,
                 true, question.Mandatory,
-                question.ValidationMessage);
+                question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         private LinkedQuestionViewModel CreateLinkedQuestion(IQuestion question, QuestionType newType)
@@ -728,7 +739,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newType,
                 true, question.Instructions,
                 true, question.Mandatory,question.ValidationMessage,
-                () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value));
+                () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value), 
+                question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
@@ -740,7 +752,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                         new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage))
                     .ToList(),
                 true, question.Instructions, null,
-                true, question.Mandatory,  null, question.ValidationMessage);
+                true, question.Mandatory,  null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId)

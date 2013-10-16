@@ -15,7 +15,9 @@ namespace Main.Core.Utility
     /// </summary>
     public static class StringUtil
     {
-        private const string AllowedSubstitutionVariableNameRegexp = @"(?<=%)(\w+(?=%))";
+        private const string SubstitutionVariableDelimiter = "%";
+        private static readonly string AllowedSubstitutionVariableNameRegexp = string.Format(@"(?<={0})(\w+(?={0}))", SubstitutionVariableDelimiter);
+        public const string DefaultSubstitutionText = "[...]";
 
         #region Public Methods and Operators
 
@@ -179,6 +181,11 @@ namespace Main.Core.Utility
 
             var allOccurenses = Regex.Matches(source, AllowedSubstitutionVariableNameRegexp).OfType<Match>().Select(m => m.Value).Distinct();
             return allOccurenses.ToArray();
+        }
+
+        public static string ReplaceSubstitutionVariable(this string text, string variable, string replaceTo)
+        {
+            return text.Replace(string.Format("{1}{0}{1}", variable, SubstitutionVariableDelimiter), replaceTo);
         }
 
         #endregion
