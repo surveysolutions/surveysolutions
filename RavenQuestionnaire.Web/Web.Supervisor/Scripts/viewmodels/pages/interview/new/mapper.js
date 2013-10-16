@@ -32,9 +32,30 @@
             case "Numeric":
                 item.settings(dto.Settings);
                 var isInteger = _.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger;
-                item.selectedOption.extend({ required: true, number: true });
+                item.selectedOption.extend({ number: true });
                 if (isInteger) {
                     item.selectedOption.extend({ digit: true });
+                }
+                else if (!_.isEmpty(dto.Settings) && _.isNumber(dto.Settings.CountOfDecimalPlaces)) {
+                    var countOfDecimalPlaces = 3;//dto.Settings.CountOfDecimalPlaces;
+                    item.selectedOption.extend({
+                        validation: [{
+                            validator: function (val) {
+                                var stringVal = (val || '').toString();
+                                if (stringVal.indexOf(".") == -1) {
+                                    return true;
+                                }
+                                var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(".") + 1).length;
+                                if (countOfDecimalDigits > countOfDecimalPlaces) {
+                                    console.log("error");
+                                    return false;
+                                    
+                                }
+                                return true;
+                            },
+                            message: 'According to questionnaire, count of decimal places should not be greater than ' + countOfDecimalPlaces
+                        }]
+                    });
                 }
                 break;
             case "DateTime":

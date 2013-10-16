@@ -97,7 +97,11 @@
         self.SendRequest(commandExecutionUrl, command, function(data) {
             if (data.IsSuccess) {
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                    onSuccess();
+                    if (!Supervisor.Framework.Objects.isUndefined(data.DomainException)) {
+                        self.ShowError(data.DomainException);
+                    } else {
+                        onSuccess();
+                    }
                 }
             } else {
                 self.ShowError(input.settings.messages.unhandledExceptionMessage);

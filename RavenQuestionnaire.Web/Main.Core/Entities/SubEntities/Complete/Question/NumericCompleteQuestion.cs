@@ -59,7 +59,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             double value;
             if (!double.TryParse(answerValue.Trim(), out value))
             {
-                throw new InterviewException("value must be numeric");
+                throw new CompleteQuestionnaireException("value must be numeric");
             }
 
         }
