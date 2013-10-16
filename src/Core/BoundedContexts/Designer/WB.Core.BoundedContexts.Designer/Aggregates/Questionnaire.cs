@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
@@ -11,7 +12,6 @@ using Main.Core.Domain;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
 using Ncqrs;
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly IQuestionFactory questionFactory;
 
-        private ILogger logger;
+        private readonly ILogger logger;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
@@ -296,16 +296,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Order optionsOrder, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);   
+            title = title.Trim();
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             alias = alias.Trim();
-
              var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
 
             this.ApplyEvent(new QuestionCloned
             {
@@ -346,6 +347,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
+            title = title.Trim();
 
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
@@ -395,7 +397,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             alias = alias.Trim();
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
-
+            
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
@@ -517,17 +519,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
+            alias = alias.Trim();
+            title = title.Trim();
+
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-
-            alias = alias.Trim();
-
+            
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
             this.ApplyEvent(new QuestionChanged
             {
                 PublicKey = questionId,
@@ -1217,20 +1222,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private bool IsUnderPropagatableGroup(IComposite item)
         {
-            this.innerDocument.ConnectChildsWithParent();
+            this.innerDocument.ConnectChildrenWithParent();
 
-            return this.IsUnderPropagatableGroupImpl(item);
+            return this.GetFirstPropagatableParentGroupIdOrNull(item) != null;
         }
 
-        private bool IsUnderPropagatableGroupImpl(IComposite item)
+        private Guid? GetFirstPropagatableParentGroupIdOrNull(IComposite item)
         {
             if (item == null)
-                return false;
+                return null;
 
-            var parentGroup = (IGroup) item.GetParent();
-
-            return parentGroup != null
-                && ((parentGroup.Propagated == Propagate.AutoPropagated) || this.IsUnderPropagatableGroupImpl(parentGroup.GetParent()));
+            var itemAsGroup = item as IGroup;
+            if (itemAsGroup != null)
+            {
+                if (itemAsGroup.Propagated == Propagate.AutoPropagated)
+                    return itemAsGroup.PublicKey;
+            }
+            
+            return this.GetFirstPropagatableParentGroupIdOrNull(item.GetParent());
         }
 
         private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
@@ -1327,7 +1336,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
         {
-            if (!options.Any())
+            if (options == null || !options.Any())
             {
                 throw new DomainException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
@@ -1492,5 +1501,98 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Question cannot contain validations");
         }
 
+        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias, Guid questionPublicKey, bool isFeatured, IGroup group)
+        {
+            string[] substitutionReferences = StringUtil.GetAllTermsFromString(questionTitle);
+            if(substitutionReferences.Length == 0)
+                return;
+
+            List<string> unknownReferences = new List<string>();
+            List<string> questionsIncorrectTypeOfReferenced = new List<string>();
+            List<string> questionsIllegalPropagationScope = new List<string>();
+
+            this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
+
+            var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                .Where(q => q.PublicKey != questionPublicKey)
+                .ToDictionary(q => q.StataExportCaption, q => q);
+
+            foreach (var substitutionReference in substitutionReferences)
+            {
+                //extract validity of variable name to separate method and make check validity of substitutionReference  
+                if (substitutionReference.Length > 32)
+                {
+                    unknownReferences.Add(substitutionReference);
+                    continue;
+                }
+                
+                if (!questions.ContainsKey(substitutionReference))
+                    unknownReferences.Add(substitutionReference);
+                else
+                {
+                    var currentQuestion = questions[substitutionReference];
+                    bool typeOfRefQuestionIsNotSupported = !(
+                        currentQuestion.QuestionType == QuestionType.DateTime ||
+                        currentQuestion.QuestionType == QuestionType.Numeric ||
+                        currentQuestion.QuestionType == QuestionType.SingleOption ||
+                        currentQuestion.QuestionType == QuestionType.Text);
+
+                    if(typeOfRefQuestionIsNotSupported)
+                        questionsIncorrectTypeOfReferenced.Add(substitutionReference);
+
+                    if (DoesReferensedSubstitutionIllegal(group, currentQuestion.GetParent()))
+                        questionsIllegalPropagationScope.Add(substitutionReference);
+                }
+            }
+
+            if(unknownReferences.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
+                    "Question title contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
+
+            if (questionsIncorrectTypeOfReferenced.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
+                    "Question title contains substitution references to questions of illegal type: " + String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
+
+            if (questionsIllegalPropagationScope.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
+                    "Question title contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
+
+            if (substitutionReferences.Contains(alias))
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
+                    "Question title contains illegal substitution references to self");
+
+            if (isFeatured)
+                throw new DomainException(
+                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
+                    "Pre-filled question title contains substitution references. It's illegal");
+        }
+
+        private bool DoesReferensedSubstitutionIllegal(IGroup groupQuestionContainsSubstitution, IComposite referencedQuestionGroup)
+        {
+            IGroup group = (IGroup) referencedQuestionGroup;
+
+            Guid? referencedPropagationId = GetFirstPropagatableParentGroupIdOrNull(group);
+            if (referencedPropagationId == null) //referenced Question not in propagation - OK
+                return false;
+
+            Guid? substitutionContainedPropagationId = GetFirstPropagatableParentGroupIdOrNull(groupQuestionContainsSubstitution);
+            if (substitutionContainedPropagationId == null) // Question to check not in propagation - illegal
+                return true;
+
+            if (substitutionContainedPropagationId.Value == referencedPropagationId.Value) //both questions are in the same propagation group
+                return false;
+
+            //case when both question are from autopropagated groups but belongs to the same autopropagation question 
+            if (this.innerDocument.Find<AutoPropagateQuestion>(question => question.Triggers.Contains(referencedPropagationId.Value))
+                .Any(q => q.Triggers.Contains(substitutionContainedPropagationId.Value)))
+                return false;
+
+
+            return true;
+        }
     }
 }

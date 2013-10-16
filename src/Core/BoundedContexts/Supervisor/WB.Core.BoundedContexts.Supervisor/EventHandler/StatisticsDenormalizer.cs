@@ -120,15 +120,13 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             //update old statistics
             var oldStatistics = this.GetStatisticItem(interviewBriefItem);
             this.DecreaseStatisticsByStatus(oldStatistics, interviewBriefItem.Status);
+            
             this.StoreStatisticsItem(interviewBriefItem, oldStatistics);
 
             interviewBriefItem.ResponsibleId = interviewerId;
-            var statistics = this.GetStatisticItem(interviewBriefItem);
-            if (statistics == null)
-            {
-                statistics = this.CreateNewStatisticsLine(interviewBriefItem);
-            }
+            var statistics = this.GetStatisticItem(interviewBriefItem) ?? this.CreateNewStatisticsLine(interviewBriefItem);
             this.IncreaseStatisticsByStatus(statistics, interviewBriefItem.Status);
+            
             this.interviewBriefStorage.Store(interviewBriefItem, interviewBriefItem.InterviewId);
             this.StoreStatisticsItem(interviewBriefItem, statistics);
         }
@@ -189,14 +187,11 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             summary.RejectedBySupervisorCount += status == InterviewStatus.RejectedBySupervisor ? incCount : 0;
             summary.RestoredCount += status == InterviewStatus.Restored ? incCount : 0;
 
-            if (status == InterviewStatus.Deleted)
-            {
-                summary.TotalCount += incCount == 1 ? -1 : 0;
-            }
-            else
+            if (status != InterviewStatus.Deleted)
             {
                 summary.TotalCount += incCount;
             }
+            
         }
 
         private StatisticsLineGroupedByUserAndTemplate GetStatisticItem(InterviewBrief interviewBriefItem)
