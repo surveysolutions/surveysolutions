@@ -79,7 +79,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                             y =>
                                 new
                                 {
-                                    ReferencedQuestion = allQuestionViewModels.FirstOrDefault(z => z.Variable == y && (z.PublicKey.PropagationVector.SequenceEqual(x.PublicKey.PropagationVector) || x.PublicKey.PropagationVector.Length < z.PublicKey.PropagationVector.Length)),
+                                    ReferencedQuestion = allQuestionViewModels.FirstOrDefault(z => z.Variable == y && (z.PublicKey.PropagationVector.SequenceEqual(x.PublicKey.PropagationVector) || (x.PublicKey.PropagationVector.Length > z.PublicKey.PropagationVector.Length))),
                                     ParticipationQuestion = x
                                 }))
                 .GroupBy(x => x.ReferencedQuestion, y => y.ParticipationQuestion, (referencedQuestion, participationQuestions) => new
