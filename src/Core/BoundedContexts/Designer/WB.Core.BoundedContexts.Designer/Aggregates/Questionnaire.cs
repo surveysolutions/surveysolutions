@@ -295,18 +295,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
         {
-            this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);   
-            title = title.Trim();
+            this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type); 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             alias = alias.Trim();
-             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            title = title.Trim();
+
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
 
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
 
             this.ApplyEvent(new QuestionCloned
             {
@@ -396,6 +396,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             alias = alias.Trim();
+            title = title.Trim();
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
             
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
@@ -437,6 +438,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
+            title = title.Trim();
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
@@ -484,6 +486,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, parentGroup);
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, parentGroup);
+
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -519,20 +523,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId)
         {
             this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
-            alias = alias.Trim();
-            title = title.Trim();
-
+            
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            alias = alias.Trim();
+            title = title.Trim();
             
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
             
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, group);
             this.ApplyEvent(new QuestionChanged
             {
                 PublicKey = questionId,
@@ -569,6 +572,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
+            title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);

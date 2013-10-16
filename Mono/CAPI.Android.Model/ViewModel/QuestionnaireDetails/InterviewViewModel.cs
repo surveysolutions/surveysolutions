@@ -740,9 +740,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 true, question.Instructions, null,
                 true, question.Mandatory,
                 question.ValidationMessage,
-                this.GetQuestionsIsIntegerSetting(question), this.GetQuestionsDecimalPlacesSetting(question));
                 question.StataExportCaption,
-                question.GetVariablesUsedInTitle());
+                question.GetVariablesUsedInTitle(),
+                this.GetQuestionsIsIntegerSetting(question), this.GetQuestionsDecimalPlacesSetting(question));
         }
 
         private bool? GetQuestionsIsIntegerSetting(IQuestion question)

@@ -14,7 +14,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public ValueQuestionViewModel(InterviewItemId publicKey, string text, QuestionType questionType, object answer, bool enabled,
             string instructions, string comments, bool valid, bool mandatory,
             string validationMessage, string variable, IEnumerable<string> substitutionReference, bool? isInteger, int? countOfDecimalPlaces)
- : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answer,validationMessage, variable, substitutionReferences)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answer, validationMessage, variable, substitutionReference)
 
         {
             IsInteger = isInteger;
