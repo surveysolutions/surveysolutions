@@ -1285,37 +1285,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
-            var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
-                .Where(q => q.PublicKey != questionPublicKey)
-                .ToDictionary(q => q.StataExportCaption, q => q);
-
-            foreach (var substitutionReference in substitutionReferences)
-            {
-                //extract validity of variable name to separate method and make check validity of substitutionReference  
-                if (substitutionReference.Length > 32)
-                {
-                    unknownReferences.Add(substitutionReference);
-                    continue;
-                }
-                
-                if (!questions.ContainsKey(substitutionReference))
-                    unknownReferences.Add(substitutionReference);
-                else
-                {
-                    var currentQuestion = questions[substitutionReference];
-                    bool typeOfRefQuestionIsNotSupported = !(
-                        currentQuestion.QuestionType == QuestionType.DateTime ||
-                        currentQuestion.QuestionType == QuestionType.Numeric ||
-                        currentQuestion.QuestionType == QuestionType.SingleOption ||
-                        currentQuestion.QuestionType == QuestionType.Text);
-
-                    if(typeOfRefQuestionIsNotSupported)
-                        questionsIncorrectTypeOfReferenced.Add(substitutionReference);
-
-                    if (DoesReferensedSubstitutionIllegal(group, currentQuestion.GetParent()))
-                        questionsIllegalPropagationScope.Add(substitutionReference);
-                }
-            }
+            AreAllSubstitutinReferencesValid(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
 
             if(unknownReferences.Count > 0)
                 throw new DomainException(
@@ -1341,6 +1311,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new DomainException(
                     DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
                     "Pre-filled question title contains substitution references. It's illegal");
+        }
+
+        private void AreAllSubstitutinReferencesValid(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
+                                                      List<string> unknownReferences, List<string> questionsIncorrectTypeOfReferenced,
+                                                      List<string> questionsIllegalPropagationScope)
+        {
+            var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                                .Where(q => q.PublicKey != questionPublicKey)
+                                .ToDictionary(q => q.StataExportCaption, q => q);
+
+            foreach (var substitutionReference in substitutionReferences)
+            {
+                //extract validity of variable name to separate method and make check validity of substitutionReference  
+                if (substitutionReference.Length > 32)
+                {
+                    unknownReferences.Add(substitutionReference);
+                    continue;
+                }
+
+                if (!questions.ContainsKey(substitutionReference))
+                    unknownReferences.Add(substitutionReference);
+                else
+                {
+                    var currentQuestion = questions[substitutionReference];
+                    bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
+                                                             currentQuestion.QuestionType == QuestionType.Numeric ||
+                                                             currentQuestion.QuestionType == QuestionType.SingleOption ||
+                                                             currentQuestion.QuestionType == QuestionType.Text);
+
+                    if (typeOfRefQuestionIsNotSupported)
+                        questionsIncorrectTypeOfReferenced.Add(substitutionReference);
+
+                    if (DoesReferensedSubstitutionIllegal(@group, currentQuestion.GetParent()))
+                        questionsIllegalPropagationScope.Add(substitutionReference);
+                }
+            }
         }
 
         private bool DoesReferensedSubstitutionIllegal(IGroup groupQuestionContainsSubstitution, IComposite referencedQuestionGroup)
