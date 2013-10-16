@@ -1,4 +1,4 @@
-﻿define('model.question',
+﻿ define('model.question',
     ['ko', 'config', 'utils', 'model.answerOption', 'validator'],
     function (ko, config, utils, answerOption, validator) {
 
@@ -10,7 +10,7 @@
                 self.isClone = ko.observable(false);
 
 
-                self.title = ko.observable('New Question').extend({ required: true });
+                self.title = ko.observable('New Question').extend({ required: true, throttle: 2000 });
                 self.parent = ko.observable();
                 self.alias = ko.observable('');
 
@@ -301,6 +301,20 @@
                                 return false;
                             },
                             message: 'Error'
+                        }]
+                    });
+
+                    self.title.extend({
+                        validation: [{
+                            validator: function (val) {
+                                var validationResult = validator.isValidQuestionTitle(val);
+
+                                if (validationResult.errorMessage != null)
+                                    this.message = validationResult.errorMessage;
+
+                                return validationResult.isValid;
+                            },
+                            message: 'Question title is invalid.'
                         }]
                     });
                 };
