@@ -18,7 +18,7 @@
 
         return {
 
-            isValidQuestionTitle: function (title) {
+            isValidQuestionTitle: function (title, contextQuestion) {
 
                 var parts = title.split('%');
 
@@ -30,6 +30,10 @@
 
                 if (titleVariables.length == 0)
                     return { isValid: true };
+
+
+                if (contextQuestion.isFeatured())
+                    return { isValid: false, errorMessage: 'Pre-filled question cannot use variables for substitution but following variables are used: %' + titleVariables.join('%, %') + '%.' };
 
 
                 var existingVariables = dc().questions.getAllVariables();
