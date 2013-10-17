@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public bool Capital { get; set; }
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
-        public QuestionType QuestionType { get; set; }
         public QuestionScope QuestionScope { get; set; }
         public string StataExportCaption { get; set; }
         public string ValidationExpression { get; set; }
