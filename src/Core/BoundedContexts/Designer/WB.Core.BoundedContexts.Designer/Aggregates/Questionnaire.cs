@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, Guid[] triggedGroupIds,
+            string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, Guid[] triggeredGroupIds,
             bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -356,8 +356,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggedGroupIds);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
 
 
             this.ApplyEvent(new NumericQuestionCloned
@@ -381,7 +381,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
                 MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+                Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
             });
@@ -432,7 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId,
+            string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId,
             bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
@@ -445,8 +445,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger,countOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggedGroupIds);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
 
             this.ApplyEvent(new NumericQuestionAdded
             {
@@ -467,7 +467,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
 
                 MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+                Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
             });
@@ -570,7 +570,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
+            string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
@@ -585,8 +585,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggedGroupIds);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
 
             this.ApplyEvent(new NumericQuestionChanged
             {
@@ -606,7 +606,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
 
                 MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+                Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces
             });
@@ -1045,13 +1045,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(bool isAutopropagating, Guid[] triggedGroupIds)
+        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(bool isAutopropagating, Guid[] triggeredGroupIds)
         {
-            bool noGroupsShouldBeTrigged = triggedGroupIds == null || triggedGroupIds.Length == 0;
+            bool noGroupsShouldBeTrigged = triggeredGroupIds == null || triggeredGroupIds.Length == 0;
             if (!isAutopropagating || noGroupsShouldBeTrigged)
                 return;
 
-            foreach (Guid groupId in triggedGroupIds)
+            foreach (Guid groupId in triggeredGroupIds)
             {
                 var group = this.innerDocument.Find<Group>(groupId);
                 if (@group == null)
@@ -1438,13 +1438,30 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfDecimalPlacesExceededMaximum(int? countOfDecimalPlaces)
+        private void ThrowIfDecimalPlacesValueIsIncorrect(int? countOfDecimalPlaces)
         {
-            if (countOfDecimalPlaces.HasValue && countOfDecimalPlaces.Value > maxCountOfDecimaPlaces)
+            if(!countOfDecimalPlaces.HasValue)
+                return;
+
+            if (countOfDecimalPlaces.Value > maxCountOfDecimaPlaces)
             {
                 throw new DomainException(
-                    DomainExceptionType.CountOfDecimalPlacesExceededMaximum,
-                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'", countOfDecimalPlaces, maxCountOfDecimaPlaces));
+                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
+                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, maxCountOfDecimaPlaces));
+            }
+
+            if (countOfDecimalPlaces.Value < 0)
+            {
+                throw new DomainException(
+                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
+                    string.Format("Count of decimal places cant be negative."));
+            }
+
+            if (countOfDecimalPlaces.Value == 0)
+            {
+                throw new DomainException(
+                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
+                    string.Format("If you want Count of decimal places equals to 0 please select integer."));
             }
         }
 

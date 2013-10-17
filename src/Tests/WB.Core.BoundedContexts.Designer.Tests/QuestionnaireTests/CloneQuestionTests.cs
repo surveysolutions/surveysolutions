@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.AutoPropagate)]
-        public void CloneQuestion_When_command_is_rerouted_on_command_specific_to_question_type_Then_DomainException_should_be_thrown(
+        public void CloneQuestion_When_question_type_is_handled_by_type_specific_command_Then_DomainException_should_be_thrown(
             QuestionType questionType)
         {
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
@@ -131,7 +131,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void CloneQuestion_When_countOfDecimalPlaces_is_more_then_allowed_20_Then_DomainException_should_be_thrown()
+        [TestCase(20)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void CloneQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
         {
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
@@ -157,11 +160,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, targetIndex: 1, maxValue: null,
-                    triggedGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: 20);
+                    triggeredGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: countOfDecimalPlaces);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesExceededMaximum));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect));
         }
 
         [Test]

@@ -293,8 +293,8 @@
 
                 var command = '';
                 switch (question.qtype()) {
-                    case "AutoPropagate":
-                    case "Numeric":
+                    case config.questionTypes.AutoPropagate:
+                    case config.questionTypes.Numeric:
                         if (question.isNew()) {
                             if (question.isClone()) {
                                 command = config.commands.cloneNumericQuestion;
