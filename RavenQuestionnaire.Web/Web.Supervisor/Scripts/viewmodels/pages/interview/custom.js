@@ -39,6 +39,13 @@ ko.validation.rules['precision'] = {
     message: 'Count of decimal places should not be greater than value set in questionnaire'
 };
 
+ko.validation.rules['digit'] = {
+    validator: function (value, validate) {
+        return _.isEmpty(value) || (validate && /^-?\d+$/.test(value));
+    },
+    message: 'Please enter a digit'
+};
+
 (function () {
     ko.validation.registerExtenders();
 }());

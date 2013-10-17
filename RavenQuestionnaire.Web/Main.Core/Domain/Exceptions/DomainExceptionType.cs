@@ -159,6 +159,8 @@
         QuestionWithLinkedQuestionCanNotBeHead,
 
         AutoPropagateQuestionCantBeReal,
+        QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+
         QuestionTitleContainsInvalidSubstitutionReference,
 
         QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
