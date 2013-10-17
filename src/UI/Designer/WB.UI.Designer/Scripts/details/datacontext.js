@@ -356,7 +356,7 @@
                 break;
             case "Numeric":
                 command.isInteger = question.isInteger() == 1 ? true : false;
-                command.countOfDecimalPlaces = question.countOfDecimalPlaces();
+                command.countOfDecimalPlaces =  command.isInteger == false ? question.countOfDecimalPlaces() : null;
             case "DateTime":
             case "GpsCoordinates":
             case "Text":
