@@ -337,26 +337,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void CloneNumericQuestion(Guid questionId,
-            Guid groupId, string title, QuestionType type, string alias,
+            Guid groupId, string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, Guid[] triggedGroupIds,
             bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
             title = title.Trim();
 
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
 
-            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(type, isInteger);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+
+            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggedGroupIds);
 
 
             this.ApplyEvent(new NumericQuestionCloned
@@ -364,7 +365,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
                 QuestionText = title,
-                QuestionType = type,
+                IsAutopropagating = isAutopropagating,
                 StataExportCaption = alias,
 
                 Mandatory = isMandatory,
@@ -428,29 +429,31 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void AddNumericQuestion(Guid questionId,
-            Guid groupId, string title, QuestionType type, string alias,
+            Guid groupId, string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId,
             bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
-            this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
             alias = alias.Trim();
             title = title.Trim();
+
             var parentGroup = this.innerDocument.Find<IGroup>(groupId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
-            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(type,isInteger);
+            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger,countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggedGroupIds);
 
             this.ApplyEvent(new NumericQuestionAdded
             {
                 PublicKey = questionId,
                 GroupPublicKey = groupId,
                 QuestionText = title,
-                QuestionType = type,
+                IsAutopropagating = isAutopropagating,
                 StataExportCaption = alias,
                 Mandatory = isMandatory,
                 Featured = isFeatured,
@@ -533,6 +536,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title.Trim();
             
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
             
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
@@ -563,31 +567,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateNumericQuestion(Guid questionId,
-            string title, QuestionType type, string alias,
+            string title, bool isAutopropagating, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(type);
 
             alias = alias.Trim();
             title = title.Trim();
 
             IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
 
-            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(type, isInteger);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+
+            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesExceededMaximum(countOfDecimalPlaces);
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggedGroupIds);
 
             this.ApplyEvent(new NumericQuestionChanged
             {
                 PublicKey = questionId,
                 QuestionText = title,
-                QuestionType = type,
+                IsAutopropagating = isAutopropagating,
                 StataExportCaption = alias,
                 Mandatory = isMandatory,
                 Featured = isFeatured,
@@ -809,7 +814,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
-                        e.QuestionType,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
                         e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
@@ -871,7 +876,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
-                        e.QuestionType,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
                         e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
@@ -941,7 +946,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.questionFactory.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
-                        e.QuestionType,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
                         e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
@@ -1040,11 +1045,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(QuestionType type, Guid[] triggedGroupIds)
+        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(bool isAutopropagating, Guid[] triggedGroupIds)
         {
-            bool questionIsNotAutoPropagated = type != QuestionType.AutoPropagate;
             bool noGroupsShouldBeTrigged = triggedGroupIds == null || triggedGroupIds.Length == 0;
-            if (questionIsNotAutoPropagated || noGroupsShouldBeTrigged)
+            if (!isAutopropagating || noGroupsShouldBeTrigged)
                 return;
 
             foreach (Guid groupId in triggedGroupIds)
@@ -1214,15 +1218,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isQuestionTypeRerouted)
                 throw new DomainException(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
                     string.Format("Question type {0} rerouted on QuestionType specific command", type));
-        }
-
-        private void ThrowDomainExceptionIfQuestionTypeIsNotAcceptableByNumericQuestionsCommand(QuestionType type)
-        {
-            bool isQuestionTypeNumeric = type == QuestionType.AutoPropagate || type == QuestionType.Numeric;
-
-            if (!isQuestionTypeNumeric)
-                throw new DomainException(DomainExceptionType.QuestionTypeIsNotAcceptableByNumericQuestionsCommand,
-                    string.Format("Question type {0} can't be handled by numeric question's command", type));
         }
 
         private bool IsUnderPropagatableGroup(IComposite item)
@@ -1422,10 +1417,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
         }
 
-        private void ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(QuestionType questionType, bool isInteger)
+        private void ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(bool isAutoPropagateQuestion, bool isInteger)
         {
-            bool isAutoPropagateQuestion = questionType == QuestionType.AutoPropagate;
-
             if (isAutoPropagateQuestion)
             {
                 if (!isInteger)

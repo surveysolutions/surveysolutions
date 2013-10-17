@@ -10,19 +10,22 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class AbstractNumericQuestionCommand : AbstractQuestionCommand
     {
         protected AbstractNumericQuestionCommand(Guid questionnaireId, Guid questionId,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            string title, bool isAutopropagating, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
             Guid responsibleId, int? maxValue,
             Guid[] triggedGroupIds,
             bool isInteger, int? countOfDecimalPlaces)
-            : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
+            : base(questionnaireId, questionId, title, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
                 scope, condition, validationExpression, validationMessage, instructions, responsibleId)
         {
             this.MaxValue = maxValue;
             this.TriggedGroupIds = triggedGroupIds;
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
+            this.IsAutopropagating = isAutopropagating;
         }
+
+        public bool IsAutopropagating { get; set; }
 
         public int? MaxValue { get; private set; }
 

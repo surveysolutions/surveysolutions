@@ -7,6 +7,7 @@ namespace Main.Core.Events.Questionnaire
 {
     public class FullQuestionDataEvent : AbstractQuestionDataEvent
     {
+        public QuestionType QuestionType { get; set; }
         public Order AnswerOrder { get; set; }
         public Answer[] Answers { get; set; }
         public Guid? GroupPublicKey { get; set; }
