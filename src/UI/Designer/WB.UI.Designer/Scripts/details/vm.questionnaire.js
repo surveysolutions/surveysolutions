@@ -132,6 +132,8 @@
                 parent.fillChildren();
                 router.navigateTo(question.getHref());
                 calcStatistics();
+
+                question.attachValidation();
             },
             addChapter = function() {
                 var group = new model.Group();
