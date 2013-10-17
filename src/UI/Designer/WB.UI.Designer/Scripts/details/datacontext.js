@@ -277,15 +277,32 @@
             return command;
         };
 
+        commands[config.commands.updateQuestion] = function (question) {
+            return converQuestionToCommand(question);
+        };
+        
+        commands[config.commands.cloneNumericQuestion] = function (question) {
+            var command = commands[config.commands.createNumericQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
+            command.targetIndex = firstSavedIndexInCollection(question.parent().childrenID(), question.id());
+            return command;
+        };
+
+        commands[config.commands.createNumericQuestion] = function (question) {
+            var command = converQuestionToCommand(question);
+            command.groupId = question.parent().id();
+            return command;
+        };
+
+        commands[config.commands.updateNumericQuestion] = function (question) {
+            return converQuestionToCommand(question);
+        };
+
         commands[config.commands.deleteQuestion] = function (question) {
             return {
                 questionnaireId: questionnaire.id(),
                 questionId: question.id()
             };
-        };
-
-        commands[config.commands.updateQuestion] = function (question) {
-            return converQuestionToCommand(question);
         };
         
         commands[config.commands.questionMove] = function (command) {
@@ -350,13 +367,15 @@
                 break;
             case "Numeric":
                 command.isInteger = question.isInteger() == 1 ? true : false;
+                command.countOfDecimalPlaces =  command.isInteger == false ? question.countOfDecimalPlaces() : null;
             case "DateTime":
             case "GpsCoordinates":
             case "Text":
                 break;
-            case "AutoPropagate":
-                command.maxValue = question.maxValue();
-                command.triggedGroupIds = _.map(question.triggers(), function(trriger) {
+                case "AutoPropagate":
+                    command.isInteger = true;
+                    command.maxValue = question.maxValue();
+                    command.triggedGroupIds = _.map(question.triggers(), function(trriger) {
                     return trriger.key;
                 });
                 break;

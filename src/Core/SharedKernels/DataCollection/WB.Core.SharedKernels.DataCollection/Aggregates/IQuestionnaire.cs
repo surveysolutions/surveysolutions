@@ -98,5 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionMandatory(Guid questionId);
 
         bool IsQuestionInteger(Guid questionId);
+
+        int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
     }
 }

@@ -551,6 +551,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return numericQuestion.IsInteger;
         }
 
+        public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion == null)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+            if (numericQuestion.IsInteger)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' must be real.", questionId));
+            return numericQuestion.CountOfDecimalPlaces;
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))

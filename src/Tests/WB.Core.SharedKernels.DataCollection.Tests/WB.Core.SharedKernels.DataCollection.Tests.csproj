@@ -74,6 +74,7 @@
     <Compile Include="InterviewTests\when_answering_propagating_question_with_2_and_previous_answer_was_4_and_there_were_answers_given_to_propagated_questions_with_indexes_1___.cs" />
     <Compile Include="InterviewTests\when_answering_question_inside_propagatable_group_which_triggers_group_enablement_with_mandatory_question_inside_disabled_group.cs" />
     <Compile Include="InterviewTests\when_answering_question_which_enable_group_with_mandatory_question.cs" />
+    <Compile Include="InterviewTests\when_answering_real_question_with_allowed_3_decimal_places_but_answer_has_4_decimal_places.cs" />
     <Compile Include="InterviewTests\when_condition_expression_execution_throws_exception_for_group_in_disabled_state.cs" />
     <Compile Include="InterviewTests\when_condition_expression_execution_throws_exception_for_question_in_disabled_state.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_has_question_marked_as_mandatory.cs" />
