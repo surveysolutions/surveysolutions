@@ -37,25 +37,8 @@
                     item.selectedOption.extend({ digit: true });
                 }
                 else if (!_.isEmpty(dto.Settings) && _.isNumber(dto.Settings.CountOfDecimalPlaces)) {
-                    var countOfDecimalPlaces = 3;//dto.Settings.CountOfDecimalPlaces;
-                    item.selectedOption.extend({
-                        validation: [{
-                            validator: function (val) {
-                                var stringVal = (val || '').toString();
-                                if (stringVal.indexOf(".") == -1) {
-                                    return true;
-                                }
-                                var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(".") + 1).length;
-                                if (countOfDecimalDigits > countOfDecimalPlaces) {
-                                    console.log("error");
-                                    return false;
-                                    
-                                }
-                                return true;
-                            },
-                            message: 'According to questionnaire, count of decimal places should not be greater than ' + countOfDecimalPlaces
-                        }]
-                    });
+                    var countOfDecimalPlaces = dto.Settings.CountOfDecimalPlaces;
+                    item.selectedOption.extend({ precision: countOfDecimalPlaces});
                 }
                 break;
             case "DateTime":
