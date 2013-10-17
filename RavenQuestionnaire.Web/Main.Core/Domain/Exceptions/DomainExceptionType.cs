@@ -167,7 +167,7 @@
         
         QuestionTypeIsNotAcceptableByNumericQuestionsCommand,    
            
-        CountOfDecimalPlacesExceededMaximum,
+        CountOfDecimalPlacesValueIsIncorrect,
         
         IntegerQuestionCantHaveDecimalPlacesSettings,
 
