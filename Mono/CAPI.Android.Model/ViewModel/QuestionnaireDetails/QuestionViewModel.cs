@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Newtonsoft.Json.Linq;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using System.Linq;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -26,12 +27,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             PublicKey = publicKey;
             ValidationMessage = validationMessage;
             SubstitutionReferences = substitutionReferences;
-
+            referencedQuestionAnswers = SubstitutionReferences.ToDictionary(x => x, y => StringUtil.DefaultSubstitutionText);
             SourceText = Text = text;
-            foreach (var substitutionReference in SubstitutionReferences)
-            {
-                Text = Text.ReplaceSubstitutionVariable(substitutionReference, StringUtil.DefaultSubstitutionText);
-            }
+
+            this.ReplaceSubstitutionVariables();
 
             QuestionType = questionType;
             AnswerObject = answerObject;
@@ -62,6 +61,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public string Comments { get; private set; }
         public string Variable { get; private set; }
         public IEnumerable<string> SubstitutionReferences { get; private set; }
+        private readonly Dictionary<string, string> referencedQuestionAnswers = new Dictionary<string, string>();
 
         public virtual string AnswerString
         {
@@ -95,12 +95,23 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
         {
-            var testForSubstitution = string.IsNullOrEmpty(referencedQuestion.AnswerString)
-                ? StringUtil.DefaultSubstitutionText : referencedQuestion.AnswerString;
+            this.referencedQuestionAnswers[referencedQuestion.Variable] = string.IsNullOrEmpty(referencedQuestion.AnswerString)
+                ? StringUtil.DefaultSubstitutionText
+                : referencedQuestion.AnswerString;
 
-            this.Text = SourceText.ReplaceSubstitutionVariable(referencedQuestion.Variable, testForSubstitution);
+            this.ReplaceSubstitutionVariables();
 
             RaisePropertyChanged(() => Text);
+        }
+
+        private void ReplaceSubstitutionVariables()
+        {
+            this.Text = this.SourceText;
+            foreach (var substitutionReference in this.SubstitutionReferences)
+            {
+                this.Text = this.Text.ReplaceSubstitutionVariable(substitutionReference,
+                    this.referencedQuestionAnswers[substitutionReference]);
+            }
         }
 
         public virtual void RemoveAnswer()
