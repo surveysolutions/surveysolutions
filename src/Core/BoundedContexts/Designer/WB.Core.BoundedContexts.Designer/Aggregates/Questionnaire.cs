@@ -1242,6 +1242,31 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return this.GetFirstPropagatableParentGroupIdOrNull(item.GetParent());
         }
 
+
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(IComposite item)
+        {
+            var allQuestion = new List<Guid>();
+            var itemAsGroup = item;
+
+            while (itemAsGroup != null)
+            {
+                IGroup @group = itemAsGroup as IGroup;
+                if (@group.Propagated == Propagate.AutoPropagated)
+                {
+                    var autoPropagationQuestion =
+                        this.innerDocument.Find<AutoPropagateQuestion>(
+                            question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
+
+                    if(autoPropagationQuestion != null)
+                        allQuestion.Add(autoPropagationQuestion.PublicKey);
+                }
+
+                itemAsGroup = itemAsGroup.GetParent();
+            }
+            return allQuestion;
+        }
+
+
         private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
         {
             bool isCategoricalQuestion = questionType == QuestionType.MultyOption ||
@@ -1564,6 +1589,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                                 .Where(q => q.PublicKey != questionPublicKey)
                                 .ToDictionary(q => q.StataExportCaption, q => q);
 
+            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(@group);
+
             foreach (var substitutionReference in substitutionReferences)
             {
                 //extract validity of variable name to separate method and make check validity of substitutionReference  
@@ -1587,34 +1614,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (typeOfRefQuestionIsNotSupported)
                         questionsIncorrectTypeOfReferenced.Add(substitutionReference);
 
-                    if (DoesReferensedSubstitutionIllegal(@group, currentQuestion.GetParent()))
+                    if (!IsReferencedSubstitutionLegal(propagationQuestionsVector, currentQuestion.GetParent()))
                         questionsIllegalPropagationScope.Add(substitutionReference);
                 }
             }
         }
 
-        private bool DoesReferensedSubstitutionIllegal(IGroup groupQuestionContainsSubstitution, IComposite referencedQuestionGroup)
+        private bool IsReferencedSubstitutionLegal(List<Guid> propagationQuestionsVector, IComposite referencedQuestionGroup)
         {
-            IGroup group = (IGroup) referencedQuestionGroup;
+            List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(referencedQuestionGroup);
 
-            Guid? referencedPropagationId = GetFirstPropagatableParentGroupIdOrNull(group);
-            if (referencedPropagationId == null) //referenced Question not in propagation - OK
-                return false;
-
-            Guid? substitutionContainedPropagationId = GetFirstPropagatableParentGroupIdOrNull(groupQuestionContainsSubstitution);
-            if (substitutionContainedPropagationId == null) // Question to check not in propagation - illegal
+            if (referencedPropagationQuestionsVector.Count == 0) //referenced Question not in propagation - OK
                 return true;
 
-            if (substitutionContainedPropagationId.Value == referencedPropagationId.Value) //both questions are in the same propagation group
+            var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
+
+            if(lengthDiff < 0)
                 return false;
 
-            //case when both question are from autopropagated groups but belongs to the same autopropagation question 
-            if (this.innerDocument.Find<AutoPropagateQuestion>(question => question.Triggers.Contains(referencedPropagationId.Value))
-                .Any(q => q.Triggers.Contains(substitutionContainedPropagationId.Value)))
-                return false;
-
-
-            return true;
+            return propagationQuestionsVector.Except(propagationQuestionsVector).Count() <= lengthDiff;
         }
     }
 }

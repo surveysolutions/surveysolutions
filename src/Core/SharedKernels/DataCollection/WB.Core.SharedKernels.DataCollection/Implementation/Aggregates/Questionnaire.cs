@@ -680,52 +680,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (substitutionReferences.Contains(question.StataExportCaption))
                 return false;
 
-            //not the most efficient way 
-            IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
+            return IsSubstitutionReferencesSatisfyToStructureRestrictions(document, question, substitutionReferences);
+        }
 
+        private bool IsSubstitutionReferencesSatisfyToStructureRestrictions(QuestionnaireDocument document, IQuestion question,string[] substitutionReferences)
+        {
+            //not the most efficient way - we scan all document.
+            //We need cache by VariableName 
+            IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
             if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
                 return false;
 
+            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(question.PublicKey, document);
+
+
+            Func<IQuestion, bool> referenceIsValid =
+                reference =>
+                {
+                    List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(reference.PublicKey, document);
+                    if (referencedPropagationQuestionsVector.Count == 0)
+                        //referenced Question not in propagation - OK
+                        return true;
+
+                    var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
+
+                    return lengthDiff >= 0 && propagationQuestionsVector.Except(propagationQuestionsVector).Count() > lengthDiff;
+                };
+
             return substitutionReferencedQuestions.All(q =>
-                    this.IsQuestionTypeAllowedToBeSourceOfSubstitution(q.QuestionType) 
-                &&  this.IsQuestionBelongsToSubstitutionValidPropagationLevel(document, question, substitutionReferencedQuestions));
+                    this.IsQuestionTypeAllowedToBeSourceOfSubstitution(q.QuestionType) && referenceIsValid(q));
         }
+
 
         private bool IsQuestionTypeAllowedToBeSourceOfSubstitution(QuestionType type)
         {
             return type == QuestionType.DateTime || type == QuestionType.Numeric || type == QuestionType.SingleOption ||
-                type == QuestionType.Text || type == QuestionType.AutoPropagate;
+                   type == QuestionType.Text || type == QuestionType.AutoPropagate;
         }
-
-        private bool IsQuestionBelongsToSubstitutionValidPropagationLevel(QuestionnaireDocument document, IQuestion question,
-                                                                           IEnumerable<IQuestion> substitutionReferencedQuestions)
+        
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(Guid id, QuestionnaireDocument document)
         {
-            //assuming that top of propagation has to be the same
+            List<Guid> propagationQuestions = GetParentPropagatableGroupsForQuestionStartingFromTop(id)
+                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g, document).FirstOrDefault().PublicKey).ToList();
 
-            Guid[] questionPropSourceQuestions = GetParentPropagatableGroupsForQuestionStartingFromTop(question.PublicKey).ToArray();
-            var autopropagationQuestions = new Guid[0];
-
-            if (questionPropSourceQuestions.Length != 0)
-                autopropagationQuestions = GetPropagatingQuestionsPointingToPropagatedGroup(questionPropSourceQuestions[0], document)
-                                           .Select(q => q.PublicKey).ToArray();
-
-            foreach (var referencedQuestion in substitutionReferencedQuestions)
-            {
-                Guid[] referencedQuestionPropSourceQuestions =
-                    GetParentPropagatableGroupsForQuestionStartingFromTop(referencedQuestion.PublicKey).ToArray();
-                if (referencedQuestionPropSourceQuestions.Length == 0) //question not in propagated group
-                    continue;
-
-                Guid[] autopropagationReferencedQuestion = GetPropagatingQuestionsPointingToPropagatedGroup(questionPropSourceQuestions[0], document)
-                                                           .Select(q => q.PublicKey).ToArray();
-
-                if (Enumerable.SequenceEqual(autopropagationReferencedQuestion, autopropagationQuestions))
-                    return false;
-            }
-
-            return true;
+            return propagationQuestions;
         }
-
 
         private static void ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(QuestionnaireDocument document)
         {
