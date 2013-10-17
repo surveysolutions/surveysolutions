@@ -177,7 +177,7 @@ namespace Main.Core.Entities.SubEntities
 
         public IEnumerable<string> GetVariablesUsedInTitle()
         {
-            return StringUtil.GetAllTermsFromString(QuestionText);
+            return StringUtil.GetAllSubstitutionVariableNames(QuestionText);
         }
 
         public override string ToString()
