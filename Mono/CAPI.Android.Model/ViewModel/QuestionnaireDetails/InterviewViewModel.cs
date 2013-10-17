@@ -740,9 +740,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 true, question.Instructions, null,
                 true, question.Mandatory,
                 question.ValidationMessage,
-                this.GetQuestionsIsIntegerSetting(question),
                 question.StataExportCaption,
-                question.GetVariablesUsedInTitle());
+                question.GetVariablesUsedInTitle(),
+                this.GetQuestionsIsIntegerSetting(question), this.GetQuestionsDecimalPlacesSetting(question));
         }
 
         private bool? GetQuestionsIsIntegerSetting(IQuestion question)
@@ -751,6 +751,14 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             if (numericQuestion == null)
                 return null;
             return numericQuestion.IsInteger;
+        }
+
+        private int? GetQuestionsDecimalPlacesSetting(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            if (numericQuestion == null)
+                return null;
+            return numericQuestion.CountOfDecimalPlaces;
         }
 
         private LinkedQuestionViewModel CreateLinkedQuestion(IQuestion question, QuestionType newType)

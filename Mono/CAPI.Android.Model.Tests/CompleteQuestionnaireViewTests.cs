@@ -62,7 +62,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "",
-                                                      false, false,  "", null, "", new string[]{});
+                                                      false, false,  "","", new string[]{}, null, null);
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             target.SetQuestionStatus(questionKEy, false);
@@ -83,7 +83,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", 
-                                                      false, false,  "", null, "", new string[]{});
+                                                      false, false,  "", "", new string[]{}, null, null);
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             target.SetComment(questionKEy, "comment");
@@ -104,7 +104,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", 
-                                                      false, false,  "", null, "", new string[]{});
+                                                      false, false,  "", "", new string[]{}, null, null);
 
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);

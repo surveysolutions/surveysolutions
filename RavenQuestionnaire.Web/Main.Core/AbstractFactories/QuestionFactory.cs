@@ -33,7 +33,8 @@ namespace Main.Core.AbstractFactories
                 data.triggers,
                 data.maxValue,
                 data.linkedToQuestionId,
-                data.isInteger);
+                data.isInteger,
+                data.countOfDecimalPlaces);
 
             UpdateAnswerList(data.answers, q, data.linkedToQuestionId);
 
@@ -114,7 +115,8 @@ namespace Main.Core.AbstractFactories
             IEnumerable<Guid> triggers,
             int maxValue,
             Guid? linkedToQuestionId,
-            bool? isInteger)
+            bool? isInteger,
+            int? countOfDecimalPlaces)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -151,6 +153,7 @@ namespace Main.Core.AbstractFactories
             if (numericQuestion != null)
             {
                 numericQuestion.IsInteger = isInteger ?? false;
+                numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
             }
         }
     }

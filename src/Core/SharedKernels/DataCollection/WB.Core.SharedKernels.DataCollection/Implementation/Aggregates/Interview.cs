@@ -639,7 +639,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             this.ThrowIfQuestionOrParentGroupIsDisabled(answeredQuestion, questionnaire);
-
+            this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
 
 
             Func<Identity, object> getAnswer = question => AreEqual(question, answeredQuestion) ? answer : this.GetAnswerSupportedInExpressionsForEnabledOrNull(question);
@@ -1354,6 +1354,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         FormatGroupForException(parentGroup, questionnaire),
                         questionnaire.GetCustomEnablementConditionForGroup(parentGroup.Id)));
             }
+        }
+
+        private void ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(IQuestionnaire questionnaire, Guid questionId, decimal answer)
+        {
+            int? countOfDecimalPlacesAllowed = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(questionId);
+            if (!countOfDecimalPlacesAllowed.HasValue)
+                return;
+
+            var roundedAnswer = Math.Round(answer, countOfDecimalPlacesAllowed.Value);
+            if (roundedAnswer!=answer)
+                throw new InterviewException(
+                    string.Format(
+                        "Answer '{0}' for question {1}  is incorrect because has more decimal places then allowed by questionnaire", answer,
+                        FormatQuestionForException(questionId, questionnaire)));
         }
 
         private static void ThrowIfAnswerCannotBeUsedAsPropagationCount(Guid questionId, decimal answer, IQuestionnaire questionnaire)

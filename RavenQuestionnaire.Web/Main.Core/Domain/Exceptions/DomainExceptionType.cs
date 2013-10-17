@@ -158,11 +158,16 @@
 
         QuestionWithLinkedQuestionCanNotBeHead,
 
-        NotNumericQuestionHasPrecisionInformation,
-
+        AutoPropagateQuestionCantBeReal,
         QuestionTitleContainsInvalidSubstitutionReference,
 
-        NumericQuestionHasNoPrecisionInformation,
+        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
+        
+        QuestionTypeIsNotAcceptableByNumericQuestionsCommand,    
+           
+        CountOfDecimalPlacesExceededMaximum,
+        
+        IntegerQuestionCantHaveDecimalPlacesSettings,
 
         QuestionTitleContainsUnknownSubstitutionReference,
 

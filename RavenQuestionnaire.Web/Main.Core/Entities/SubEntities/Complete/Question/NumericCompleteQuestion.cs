@@ -59,7 +59,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             double value;
             if (!double.TryParse(answerValue.Trim(), out value))
             {
-                throw new InterviewException("value must be numeric");
+                throw new CompleteQuestionnaireException("value must be numeric");
             }
 
         }
@@ -67,5 +67,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public double? Answer { get; set; }
 
         public bool IsInteger { get; set; }
+        public int? CountOfDecimalPlaces { get; set; }
     }
 }

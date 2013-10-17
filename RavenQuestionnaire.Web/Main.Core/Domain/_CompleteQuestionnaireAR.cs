@@ -142,7 +142,7 @@ namespace Main.Core.Domain
             {
                 var answerList = new List<string>();
                 if (completeAnswers == null)
-                    throw new InterviewException("optiona are absent");
+                    throw new CompleteQuestionnaireException("optiona are absent");
                 foreach (Guid answerGuid in completeAnswers)
                 {
                     var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);

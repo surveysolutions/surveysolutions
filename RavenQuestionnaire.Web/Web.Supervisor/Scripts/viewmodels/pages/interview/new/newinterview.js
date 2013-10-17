@@ -1,6 +1,6 @@
 ﻿Supervisor.VM.NewInterview = function (commandExecutionUrl, questionnaire, interviewListUrl) {
     Supervisor.VM.NewInterview.superclass.constructor.apply(this, [commandExecutionUrl]);
-    
+    console.log(questionnaire);
     var self = this;
     
     var datacontext = new DataContext(new Mapper(new Model()));

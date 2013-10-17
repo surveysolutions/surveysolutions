@@ -147,7 +147,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             foreach (var item in answerKeys)
             {
                 if (this.Answers.All(a => a.PublicKey != item))
-                    throw new InterviewException(string.Format("value {0} is absent", item));
+                    throw new CompleteQuestionnaireException(string.Format("value {0} is absent", item));
             }
         }
 
