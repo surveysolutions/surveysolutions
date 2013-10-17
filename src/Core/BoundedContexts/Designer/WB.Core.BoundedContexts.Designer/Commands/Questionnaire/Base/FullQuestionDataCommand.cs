@@ -10,13 +10,16 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
             Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId)
             : base(
-                questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup, scope, condition,
+                questionnaireId, questionId, title, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup, scope, condition,
                 validationExpression, validationMessage, instructions, responsibleId)
         {
             this.Options = options;
             this.OptionsOrder = optionsOrder;
             this.LinkedToQuestionId = linkedToQuestionId;
+            this.Type = type;
         }
+
+        public QuestionType Type { get; private set; }
 
         public Option[] Options { get; private set; }
 

@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     public class CloneNumericQuestionCommand : AbstractNumericQuestionCommand
     {
         public CloneNumericQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId, Guid sourceQuestionId, int targetIndex,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            string title, bool isAutopropagating, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions, int? maxValue,
             Guid[] triggedGroupIds, Guid responsibleId,
             bool isInteger, int? countOfDecimalPlaces)
-            : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
+            : base(questionnaireId, questionId, title, isAutopropagating, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
                 scope, condition, validationExpression, validationMessage, instructions, responsibleId, maxValue, triggedGroupIds,
                 isInteger, countOfDecimalPlaces)
         {

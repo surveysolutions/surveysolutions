@@ -94,6 +94,7 @@
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
+    <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
