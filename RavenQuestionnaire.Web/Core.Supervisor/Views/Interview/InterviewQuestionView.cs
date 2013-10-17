@@ -39,7 +39,11 @@ namespace Core.Supervisor.Views.Interview
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
             {
-                this.Settings = new { numericQuestion.IsInteger };
+                this.Settings = new
+                {
+                    IsInteger = numericQuestion.IsInteger,
+                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
+                };
             }
 
             if (answeredQuestion == null) return;

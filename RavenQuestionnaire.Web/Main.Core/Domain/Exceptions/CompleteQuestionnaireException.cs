@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Main.Core.Domain.Exceptions
 {
-    public class InterviewException : Exception
+    public class CompleteQuestionnaireException : Exception
     {
-        internal InterviewException(string message)
+        internal CompleteQuestionnaireException(string message)
             : base(message) { }
 
-        internal InterviewException(string message, Exception innerException)
+        internal CompleteQuestionnaireException(string message, Exception innerException)
             : base(message, innerException) { }
     }
 }

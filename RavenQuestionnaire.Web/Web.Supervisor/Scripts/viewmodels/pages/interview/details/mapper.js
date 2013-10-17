@@ -40,11 +40,12 @@
                 break;
             case "Numeric":
             case "AutoPropagate":
-                item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger);
+                item = new model.NumericQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsInteger, _.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
                 if (!_.isNull(dto.Answer)) {
                     item.answer(dto.Answer * 1);
                 }
+                
                 break;
             case "DateTime":
                 item = new model.DateTimeQuestion();

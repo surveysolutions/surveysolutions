@@ -50,7 +50,8 @@
                 self.validationExpression = ko.observable('');
                 self.validationMessage = ko.observable('');
                 self.instruction = ko.observable('');
-              self.isInteger = ko.observable(1);
+                self.isInteger = ko.observable(1);
+                self.countOfDecimalPlaces = ko.observable('').extend({ number: true });
                 self.isLinked = ko.observable(0);
                 self.isLinkedDurty = ko.computed(function () {
                     return self.isLinked() == 1;
@@ -119,7 +120,7 @@
                 self.isNullo = false;
                 self.cloneSource = ko.observable();
 
-              self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger, self.countOfDecimalPlaces]);
                 self.dirtyFlag().reset();
                 self.errors = ko.validation.group(self);
                 this.cache = function () {
@@ -372,6 +373,8 @@
                     item.condition(this.condition());
                     item.instruction(this.instruction());
                     item.maxValue(this.maxValue());
+                    item.isInteger(this.isInteger());
+                    item.countOfDecimalPlaces(this.countOfDecimalPlaces());
 
                     item.validationExpression(this.validationExpression());
                     item.validationMessage(this.validationMessage());
@@ -423,7 +426,9 @@
                 this.instruction(data.instruction);
                 this.answerOrder(data.answerOrder);
                 this.maxValue(data.maxValue);
-
+                this.isInteger(data.isInteger);
+                this.countOfDecimalPlaces(data.countOfDecimalPlaces);
+                
                 this.answerOptions(_.map(data.answerOptions, function (answer) {
                     return new answerOption().id(answer.id).title(answer.title).value(answer.value);
                 }));

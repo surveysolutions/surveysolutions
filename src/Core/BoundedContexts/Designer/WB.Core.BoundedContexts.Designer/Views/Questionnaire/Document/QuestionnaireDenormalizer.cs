@@ -24,6 +24,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
+        IEventHandler<NumericQuestionAdded>,
+        IEventHandler<NumericQuestionCloned>,
+        IEventHandler<NumericQuestionChanged>,
         IEventHandler<ImageUpdated>,
         IEventHandler<ImageUploaded>,
         IEventHandler<ImageDeleted>,
@@ -138,110 +141,198 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<QuestionCloned> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            FullQuestionDataEvent e = evnt.Payload;
-            AbstractQuestion result =
-                new QuestionFactory().CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.IsInteger));
-
-            if (result == null)
-            {
-                return;
-            }
-            #warning Slava: uncomment this line and get rig of read and write side objects
-            item.Insert(evnt.Payload.TargetIndex, result, evnt.Payload.GroupPublicKey);
-            this.UpdateQuestionnaire(evnt, item);
+            QuestionCloned e = evnt.Payload;
+            CloneQuestion(evnt, e.GroupPublicKey.Value, e.TargetIndex,
+                new QuestionData(
+                    e.PublicKey,
+                    e.QuestionType,
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    e.AnswerOrder,
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    e.Answers,
+                    e.LinkedToQuestionId,
+                    e.IsInteger));
         }
 
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             FullQuestionDataEvent e = evnt.Payload;
-            AbstractQuestion result =
-                new QuestionFactory().CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.IsInteger));
-            if (result == null)
-            {
-                return;
-            }
-
-            item.Add(result, evnt.Payload.GroupPublicKey, null);
-            this.UpdateQuestionnaire(evnt, item);
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey.Value,
+                new QuestionData(
+                    e.PublicKey,
+                    e.QuestionType,
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    e.AnswerOrder,
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    e.Answers,
+                    e.LinkedToQuestionId,
+                    e.IsInteger));
         }
 
         //// move it out of there
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
+            QuestionChanged e = evnt.Payload;
+            UpdateQuestion(evnt, new QuestionData(
+                e.PublicKey,
+                e.QuestionType,
+                e.QuestionScope,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                e.AnswerOrder,
+                e.Featured,
+                e.Mandatory,
+                e.Capital,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue,
+                e.Answers,
+                e.LinkedToQuestionId,
+                e.IsInteger, null));
+        }
+
+        protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            AbstractQuestion result =
+                new QuestionFactory().CreateQuestion(data);
+
+            if (result == null)
+            {
+                return;
+            }
+
+            item.Add(result, groupId, null);
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
+        protected void UpdateQuestion(IPublishableEvent evnt, QuestionData data)
+        {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
-            var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
+            var question = item.Find<AbstractQuestion>(data.publicKey);
             if (question == null)
             {
                 return;
             }
 
-            QuestionChanged e = evnt.Payload;
             IQuestion newQuestion =
-                this.questionFactory.CreateQuestion(
-                    new QuestionData(
-                        question.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Mandatory,
-                        e.Capital,
-                        e.Instructions,
-                        e.Triggers,
-                        e.MaxValue,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.IsInteger));
+                this.questionFactory.CreateQuestion(data);
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 
             this.UpdateQuestionnaire(evnt, item);
+        }
+
+        protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            AbstractQuestion result =
+                new QuestionFactory().CreateQuestion(data);
+
+            if (result == null)
+            {
+                return;
+            }
+#warning Slava: uncomment this line and get rig of read and write side objects
+            item.Insert(index, result, groupId);
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
+        {
+            NumericQuestionAdded e = evnt.Payload;
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey,
+                new QuestionData(
+                    e.PublicKey,
+                    e.QuestionType,
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    Order.AZ, 
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    null,
+                    null,
+                    e.IsInteger, e.CountOfDecimalPlaces));
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
+        {
+            NumericQuestionCloned e = evnt.Payload;
+            CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
+                new QuestionData(
+                    e.PublicKey,
+                    e.QuestionType,
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    Order.AZ,
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    null,
+                    null,
+                    e.IsInteger, e.CountOfDecimalPlaces));
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
+        {
+            NumericQuestionChanged e = evnt.Payload;
+            UpdateQuestion(evnt, new QuestionData(
+                e.PublicKey,
+                e.QuestionType,
+                e.QuestionScope,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                Order.AZ,
+                e.Featured,
+                e.Mandatory,
+                e.Capital,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue,
+                null, null,
+                e.IsInteger, e.CountOfDecimalPlaces));
         }
 
         public void Handle(IPublishedEvent<ImageUpdated> evnt)

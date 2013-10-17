@@ -565,7 +565,7 @@ namespace Main.Core.View.Question
             var numericQuestion = doc as INumericQuestion;
             if (numericQuestion != null)
             {
-                this.Settings = new {numericQuestion.IsInteger};
+                this.Settings = new {numericQuestion.IsInteger, numericQuestion.CountOfDecimalPlaces};
             }
 
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);

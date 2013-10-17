@@ -1,6 +1,6 @@
-﻿function Supervisor() {}
+﻿function Supervisor() { }
 Supervisor.prototype = {};
-Supervisor.Framework = function() {};
+Supervisor.Framework = function () { };
 Supervisor.Framework.prototype = {};
 Supervisor.Framework.Objects = function () { };
 Supervisor.Framework.Objects.prototype = {};
@@ -27,7 +27,7 @@ Supervisor.Framework.Objects.isEmpty = function (value) {
     }
     return true;
 };
-Supervisor.Framework.Objects.Values = function(object) {
+Supervisor.Framework.Objects.Values = function (object) {
     var index = -1,
         props = Object.keys(object),
         length = props.length,
@@ -41,8 +41,8 @@ Supervisor.Framework.Objects.Values = function(object) {
 
 Supervisor.Framework.Classes = function () { };
 Supervisor.Framework.Classes.prototype = {};
-Supervisor.Framework.Classes.inherit = function(child, parent) {
-    var f = function() {};
+Supervisor.Framework.Classes.inherit = function (child, parent) {
+    var f = function () { };
     f.prototype = parent.prototype;
     child.prototype = new f();
     child.prototype.constructor = child;
@@ -51,9 +51,9 @@ Supervisor.Framework.Classes.inherit = function(child, parent) {
 
 
 //------ helpers------
-Array.prototype.joinArrayOfObjects = function(key, value) {
+Array.prototype.joinArrayOfObjects = function (key, value) {
     var ret = '';
-    this.forEach(function(e) { ret = ret.concat(e[key](), ':', e[value](), ', '); });
+    this.forEach(function (e) { ret = ret.concat(e[key](), ':', e[value](), ', '); });
     return ret.substring(0, ret.length - 2);
 };
 
@@ -65,4 +65,16 @@ Function.prototype.intercept = function (callback) {
             callback.call(underlyingObservable, value);
         }
     });
+};
+
+Supervisor.Config = {};
+Supervisor.Config.prototype = {};
+Supervisor.Config.QuestionType = {
+    SingleOption: "SingleOption",
+    MultyOption: "MultyOption",
+    Numeric: "Numeric",
+    DateTime: "DateTime",
+    Text: "Text",
+    AutoPropagate: "AutoPropagate",
+    GpsCoordinates: "Geo Location"
 };

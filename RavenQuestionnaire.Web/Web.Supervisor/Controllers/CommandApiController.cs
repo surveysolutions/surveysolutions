@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Domain;
+using Main.Core.Domain.Exceptions;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.Code.CommandTransformation;
@@ -60,7 +62,7 @@ namespace Web.Supervisor.Controllers
                 }
                 catch (Exception e)
                 {
-                    var domainEx = e.As<DomainException>();
+                    var domainEx = e.As<InterviewException>();
                     if (domainEx == null)
                     {
                         this.Logger.Error("Unexpected error occurred", e);

@@ -19,10 +19,10 @@
             self.selectedOptions = ko.observableArray([]);
             self.settings = ko.observableArray([]);
             self.isSingleOption = ko.computed(function () {
-                return self.type() === "SingleOption";
+                return self.type() === Supervisor.Config.QuestionType.SingleOption;
             });
             self.isMultyOption = ko.computed(function () {
-                return self.type() === "MultyOption";
+                return self.type() === Supervisor.Config.QuestionType.MultyOption;
             });
             self.hasOptions = ko.computed(function () {
                 return self.isSingleOption() || self.isMultyOption();

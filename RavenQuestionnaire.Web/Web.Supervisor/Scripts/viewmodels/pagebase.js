@@ -96,8 +96,10 @@
     self.SendCommand = function(command, onSuccess) {
         self.SendRequest(commandExecutionUrl, command, function(data) {
             if (data.IsSuccess) {
-                if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                    onSuccess();
+                if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException!=null) {
+                    self.ShowError(data.DomainException);
+                } else if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                        onSuccess();
                 }
             } else {
                 self.ShowError(input.settings.messages.unhandledExceptionMessage);
