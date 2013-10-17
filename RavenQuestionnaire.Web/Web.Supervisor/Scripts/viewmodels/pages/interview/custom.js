@@ -21,3 +21,24 @@ ko.validation.rules['notempty'] = {
     },
     message: 'The array must contain at least one valid element.'
 };
+
+ko.validation.rules['precision'] = {
+    validator: function (val, countOfDecimalPlaces) {
+        var stringVal = (val || '').toString();
+        if (stringVal.indexOf(".") == -1) {
+            return true;
+        }
+        var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(".") + 1).length;
+        if (countOfDecimalDigits > countOfDecimalPlaces) {
+            this.message = 'According to questionnaire, count of decimal places should not be greater than ' + countOfDecimalPlaces;
+            return false;
+
+        }
+        return true;
+    },
+    message: 'Count of decimal places should not be greater than value set in questionnaire'
+};
+
+(function () {
+    ko.validation.registerExtenders();
+}());
