@@ -159,13 +159,20 @@
         QuestionWithLinkedQuestionCanNotBeHead,
 
         AutoPropagateQuestionCantBeReal,
+        QuestionTitleContainsInvalidSubstitutionReference,
 
+        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
+        
+        QuestionTypeIsNotAcceptableByNumericQuestionsCommand,    
+           
+        CountOfDecimalPlacesExceededMaximum,
+        
         IntegerQuestionCantHaveDecimalPlacesSettings,
 
-        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
+        QuestionTitleContainsUnknownSubstitutionReference,
 
-        QuestionTypeIsNotAcceptableByNumericQuestionsCommand,
+        QuestionTitleContainsSubstitutionReferenceToSelf,
 
-        CountOfDecimalPlacesExceededMaximum
+        FeaturedQuestionTitleContainsSubstitutionReference,
     }
 }

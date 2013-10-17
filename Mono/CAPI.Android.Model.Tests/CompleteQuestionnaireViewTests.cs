@@ -62,7 +62,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "",
-                                                      false, false,  "", null, null);
+                                                      false, false,  "","", new string[]{}, null, null);
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             target.SetQuestionStatus(questionKEy, false);
@@ -83,7 +83,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", 
-                                                      false, false,  "", null, null);
+                                                      false, false,  "", "", new string[]{}, null, null);
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
             target.SetComment(questionKEy, "comment");
@@ -104,7 +104,7 @@ namespace CAPI.Androids.Core.Model.Tests
             var questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             var questionKEy = new InterviewItemId(Guid.NewGuid(), null);
             var question = new ValueQuestionViewModel(questionKEy, "test", QuestionType.Text, "t", true, "", "", 
-                                                      false, false,  "", null, null);
+                                                      false, false,  "", "", new string[]{}, null, null);
 
             questions.Add(questionKEy, question);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
@@ -123,7 +123,7 @@ namespace CAPI.Androids.Core.Model.Tests
         public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, InterviewPropagationScopeDescription templates)
             : this(screents)
         {
-            this.propagationScopeDescription = templates;
+            this.PropagationScopeDescription = templates;
         }
         public CompleteQuestionnaireViewTestable(IDictionary<InterviewItemId, IQuestionnaireViewModel> screents, IDictionary<InterviewItemId, QuestionViewModel> questions)
             : this(screents)
@@ -138,7 +138,7 @@ namespace CAPI.Androids.Core.Model.Tests
         public CompleteQuestionnaireViewTestable(Guid publicKey) : base(publicKey)
         {
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
-            this.propagationScopeDescription = new InterviewPropagationScopeDescription();
+            this.PropagationScopeDescription = new InterviewPropagationScopeDescription();
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
         }
 

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Newtonsoft.Json.Linq;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
@@ -19,16 +19,26 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             bool valid,
             bool mandatory,
             object answerObject,
-            string validationMessage)
+            string validationMessage,
+            string variable,
+            IEnumerable<string> substitutionReferences)
         {
             PublicKey = publicKey;
             ValidationMessage = validationMessage;
-            Text = text;
+            SubstitutionReferences = substitutionReferences;
+
+            SourceText = Text = text;
+            foreach (var substitutionReference in SubstitutionReferences)
+            {
+                Text = Text.ReplaceSubstitutionVariable(substitutionReference, StringUtil.DefaultSubstitutionText);
+            }
+
             QuestionType = questionType;
             AnswerObject = answerObject;
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
+            Variable = variable;
 
             Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
@@ -45,10 +55,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         public InterviewItemId PublicKey { get; private set; }
+        public string SourceText { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
+        public string Variable { get; private set; }
+        public IEnumerable<string> SubstitutionReferences { get; private set; }
 
         public virtual string AnswerString
         {
@@ -70,12 +83,24 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             }
 
             this.AnswerObject = answer;
+            
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
                 Status = Status | QuestionStatus.Answered;
                 RaisePropertyChanged("Status");
             }
+
             RaisePropertyChanged("AnswerString");
+        }
+
+        public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
+        {
+            var testForSubstitution = string.IsNullOrEmpty(referencedQuestion.AnswerString)
+                ? StringUtil.DefaultSubstitutionText : referencedQuestion.AnswerString;
+
+            this.Text = SourceText.ReplaceSubstitutionVariable(referencedQuestion.Variable, testForSubstitution);
+
+            RaisePropertyChanged(() => Text);
         }
 
         public virtual void RemoveAnswer()

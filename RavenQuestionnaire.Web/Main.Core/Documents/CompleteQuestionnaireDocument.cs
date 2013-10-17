@@ -396,12 +396,12 @@
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             foreach (IComposite item in this.Children)
             {
                 item.SetParent(this);
-                item.ConnectChildsWithParent();
+                item.ConnectChildrenWithParent();
             }
         }
 
@@ -558,7 +558,7 @@
         [OnDeserialized]
         public void OnDeserialized(StreamingContext context)
         {
-            this.ConnectChildsWithParent();
+            this.ConnectChildrenWithParent();
         }
         
         #endregion
