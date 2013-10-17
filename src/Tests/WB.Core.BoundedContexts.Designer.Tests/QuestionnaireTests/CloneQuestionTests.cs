@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
             var optionsWithEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
 
             TestDelegate act = () =>
                 questionnaire.CloneQuestion(
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
 
 
             TestDelegate act = () =>
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, QuestionType.Numeric, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, QuestionType.Numeric, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
 
 
             TestDelegate act = () =>
@@ -220,7 +220,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var notEmptyAnswerOptionTitle2 = "title1";
                 Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
                     sourceQuestionId, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var notEmptyAnswerOptionTitle2 = "title1";
             Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
                 sourceQuestionId, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),

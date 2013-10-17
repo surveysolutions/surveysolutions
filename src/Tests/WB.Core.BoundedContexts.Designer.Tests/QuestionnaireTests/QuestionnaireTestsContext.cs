@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionId, responsibleId: responsibleId);
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options, Guid responsibleId, Guid? groupId = null)
+        public static Questionnaire CreateQuestionnaireWithOneQuestionInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options, Guid responsibleId, Guid? groupId = null)
         {
             groupId = groupId ?? Guid.NewGuid();
 
@@ -86,15 +86,19 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionId: questionId, groupPropagationKind: Propagate.AutoPropagated, responsibleId: responsibleId);
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid questionId, Guid responsibleId, Guid? groupId = null,
-                                                                                       Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text)
+        public static Questionnaire CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid questionId, Guid responsibleId, Guid? groupId = null, 
+                                                                                   Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text, 
+                                                                                   bool? isInteger = null, string alias = "text")
         {
             groupId = groupId ?? Guid.NewGuid();
 
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, Guid.NewGuid(), groupId.Value,
                 groupPropagationKind);
-
-            AddQuestion(questionnaire, questionId, groupId.Value, responsibleId, questionType, "text");
+            
+            AddQuestion(questionnaire, questionId, groupId.Value, responsibleId, questionType, alias,
+                                               (questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption)?
+                                                  new Option[2]{new Option(Guid.NewGuid(),"1", "1"),new Option(Guid.NewGuid(), "2", "2") }:
+                                                  new Option[0]);
 
             return questionnaire;
         }
@@ -114,12 +118,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             return questionnaire;
         }
 
-        public static Questionnaire CreateQuestionnaireWithTwoGroups(Guid firstGroup, Guid secondGroup, Guid responsibleId)
+        public static Questionnaire CreateQuestionnaireWithTwoGroups(Guid firstGroup, Guid secondGroup, Guid responsibleId, Propagate propagationKind = Propagate.None)
         {
-            Questionnaire questionnaire = CreateQuestionnaireWithOneNonPropagatedGroup(groupId: firstGroup,
-                responsibleId: responsibleId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup,
+                responsibleId: responsibleId, propagationKind: propagationKind);
 
-            questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null,
+            questionnaire.NewAddGroup(secondGroup, null, "Second group", propagationKind, null, null,
                 responsibleId: responsibleId);
 
             return questionnaire;
