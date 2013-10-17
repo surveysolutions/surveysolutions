@@ -661,39 +661,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         //could be split into several methods but it involves several scans of questionnaire 
         private void ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(QuestionnaireDocument document)
         {
-            Func<Guid, bool> isReferencedQuestionsExists = questionId =>
-            {
-                var question = document.Find<IQuestion>(questionId);
-                string[] substitutionReferences = StringUtil.GetAllTermsFromString(question.QuestionText);
-
-                if (substitutionReferences.Length == 0)
-                    return true;
-
-                if (question.Featured ||
-                    substitutionReferences.Contains(question.StataExportCaption))
-                    return false;
-                
-                //not the most efficient way 
-                IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
-
-                if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
-                    return false;
-
-                return substitutionReferencedQuestions.All(q => (q.QuestionType == QuestionType.DateTime ||
-                                                                 q.QuestionType == QuestionType.Numeric ||
-                                                                 q.QuestionType == QuestionType.SingleOption ||
-                                                                 q.QuestionType == QuestionType.Text ||
-                                                                 q.QuestionType == QuestionType.AutoPropagate)) && 
-                                                                 IsQuestionsBelongsToAllowedPropagationForSubstitution(document, question, substitutionReferencedQuestions);
-                
-            };
-
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
                 "Following questions contain unknown substitution references or target question has wrong type",
-                question => !isReferencedQuestionsExists(question.PublicKey));
+                question => !this.IsReferencedQuestionsSubstitutionsAreValidInDocument(document, question.PublicKey));
         }
 
-        private bool IsQuestionsBelongsToAllowedPropagationForSubstitution(QuestionnaireDocument document, IQuestion question,
+        private bool IsReferencedQuestionsSubstitutionsAreValidInDocument(QuestionnaireDocument document, Guid questionId)
+        {
+            var question = document.Find<IQuestion>(questionId);
+            string[] substitutionReferences = StringUtil.GetAllTermsFromString(question.QuestionText);
+
+            if (substitutionReferences.Length == 0)
+                return true;
+
+            if (question.Featured)
+                return false;
+
+            if (substitutionReferences.Contains(question.StataExportCaption))
+                return false;
+
+            //not the most efficient way 
+            IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
+
+            if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
+                return false;
+
+            return substitutionReferencedQuestions.All(q =>
+                    this.IsQuestionTypeAllowedToBeSourceOfSubstitution(q.QuestionType) 
+                &&  this.IsQuestionBelongsToSubstitutionValidPropagationLevel(document, question, substitutionReferencedQuestions));
+        }
+
+        private bool IsQuestionTypeAllowedToBeSourceOfSubstitution(QuestionType type)
+        {
+            return type == QuestionType.DateTime || type == QuestionType.Numeric || type == QuestionType.SingleOption ||
+                type == QuestionType.Text || type == QuestionType.AutoPropagate;
+        }
+
+        private bool IsQuestionBelongsToSubstitutionValidPropagationLevel(QuestionnaireDocument document, IQuestion question,
                                                                            IEnumerable<IQuestion> substitutionReferencedQuestions)
         {
             //assuming that top of propagation has to be the same
