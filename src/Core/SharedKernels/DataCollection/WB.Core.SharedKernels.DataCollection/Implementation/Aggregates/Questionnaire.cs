@@ -669,7 +669,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool IsReferencedQuestionsSubstitutionsAreValidInDocument(QuestionnaireDocument document, Guid questionId)
         {
             var question = document.Find<IQuestion>(questionId);
-            string[] substitutionReferences = StringUtil.GetAllTermsFromString(question.QuestionText);
+            string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(question.QuestionText);
 
             if (substitutionReferences.Length == 0)
                 return true;
