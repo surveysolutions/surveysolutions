@@ -664,7 +664,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Func<Guid, bool> isReferencedQuestionsExists = questionId =>
             {
                 var question = document.Find<IQuestion>(questionId);
-                string[] substitutionReferences = StringUtil.GetAllTermsFromString(question.QuestionText);
+                string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(question.QuestionText);
 
                 if (substitutionReferences.Length == 0)
                     return true;
