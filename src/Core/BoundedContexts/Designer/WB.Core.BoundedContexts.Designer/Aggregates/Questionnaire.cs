@@ -1508,7 +1508,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias, Guid questionPublicKey, bool isFeatured, IGroup group)
         {
-            string[] substitutionReferences = StringUtil.GetAllTermsFromString(questionTitle);
+            string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionTitle);
             if(substitutionReferences.Length == 0)
                 return;
 
@@ -1518,7 +1518,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
-            AreAllSubstitutinReferencesValid(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
+            ValidateSubstitutionReferences(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
 
             if (substitutionReferences.Contains(alias))
                 throw new DomainException(
@@ -1546,9 +1546,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Pre-filled question title contains substitution references. It's illegal");
         }
 
-        private void AreAllSubstitutinReferencesValid(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
-                                                      List<string> unknownReferences, List<string> questionsIncorrectTypeOfReferenced,
-                                                      List<string> questionsIllegalPropagationScope)
+        private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
+                                                    List<string> unknownReferences, List<string> questionsIncorrectTypeOfReferenced,
+                                                    List<string> questionsIllegalPropagationScope)
         {
             var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
                                 .Where(q => q.PublicKey != questionPublicKey)
