@@ -25,7 +25,7 @@
                 router.navigateTo(clonedQuestion.getHref());
                 calcStatistics();
 
-                question.attachValidation();
+                clonedQuestion.attachValidation();
             },
             cloneGroup = function(group) {
                 if (group.isNew())
