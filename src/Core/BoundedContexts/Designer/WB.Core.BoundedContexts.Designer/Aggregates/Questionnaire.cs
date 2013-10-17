@@ -1522,6 +1522,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if(substitutionReferences.Length == 0)
                 return;
 
+            if (isFeatured)
+                throw new DomainException(
+                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
+                    "Pre-filled question title contains substitution references. It's illegal");
+
+            if (substitutionReferences.Contains(alias))
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
+                    "Question title contains illegal substitution references to self");
+
             List<string> unknownReferences = new List<string>();
             List<string> questionsIncorrectTypeOfReferenced = new List<string>();
             List<string> questionsIllegalPropagationScope = new List<string>();
@@ -1529,11 +1539,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
             AreAllSubstitutinReferencesValid(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
-
-            if (substitutionReferences.Contains(alias))
-                throw new DomainException(
-                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
-                    "Question title contains illegal substitution references to self");
 
             if(unknownReferences.Count > 0)
                 throw new DomainException(
@@ -1549,11 +1554,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new DomainException(
                     DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
                     "Question title contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
-            
-            if (isFeatured)
-                throw new DomainException(
-                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "Pre-filled question title contains substitution references. It's illegal");
         }
 
         private void AreAllSubstitutinReferencesValid(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
