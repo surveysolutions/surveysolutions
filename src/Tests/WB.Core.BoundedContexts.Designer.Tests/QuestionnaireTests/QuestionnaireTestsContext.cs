@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             if (IsNumericQuestion(questionType))
             {
-                questionnaire.AddNumericQuestion(questionId, groupId, "Title", questionType==QuestionType.AutoPropagate, alias, false,
+                questionnaire.AddNumericQuestion(questionId, groupId, "Title", questionType == QuestionType.AutoPropagate, alias, false,
                     false,
                     false, QuestionScope.Interviewer, "", "", "", "", null, new Guid[0], responsible, true, null);
                 return;

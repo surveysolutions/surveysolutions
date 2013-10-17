@@ -534,7 +534,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.AutoPropagate)]
-        public void NewAddQuestion_When_command_is_rerouted_on_command_specific_to_question_type_Then_DomainException_should_be_thrown(
+        public void NewAddQuestion_When_question_type_is_handled_by_type_specific_command_Then_DomainException_should_be_thrown(
             QuestionType questionType)
         {
             Guid responsibleId = Guid.NewGuid();
@@ -566,7 +566,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void AddNumericQuestion_When_countOfDecimalPlaces_is_more_then_allowed_20_Then_DomainException_should_be_thrown()
+        [TestCase(20)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void AddNumericQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
         {
             Guid responsibleId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
@@ -586,11 +589,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: 20);
+                    responsibleId: responsibleId, maxValue: null, triggeredGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: countOfDecimalPlaces);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesExceededMaximum));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect));
         }
 
         [Test]
@@ -751,7 +754,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    responsibleId: responsibleId, maxValue: 10, triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+                    responsibleId: responsibleId, maxValue: 10, triggeredGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
 
                 // assert
                 Assert.That(GetSingleEvent<NumericQuestionAdded>(eventContext).IsAutopropagating, Is.EqualTo(isAutopropagating));

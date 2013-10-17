@@ -367,15 +367,17 @@
                 break;
             case "Numeric":
                 command.isInteger = question.isInteger() == 1 ? true : false;
+                command.isAutopropagating = false;
                 command.countOfDecimalPlaces =  command.isInteger == false ? question.countOfDecimalPlaces() : null;
             case "DateTime":
             case "GpsCoordinates":
             case "Text":
                 break;
                 case "AutoPropagate":
+                    command.isAutopropagating = true;
                     command.isInteger = true;
                     command.maxValue = question.maxValue();
-                    command.triggedGroupIds = _.map(question.triggers(), function(trriger) {
+                    command.triggeredGroupIds = _.map(question.triggers(), function (trriger) {
                     return trriger.key;
                 });
                 break;
