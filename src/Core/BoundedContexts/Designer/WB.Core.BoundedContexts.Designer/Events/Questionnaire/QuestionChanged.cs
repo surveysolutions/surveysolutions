@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Events.Questionnaire
+﻿using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+
+namespace Main.Core.Events.Questionnaire
 {
     using System;
     using System.Collections.Generic;
@@ -8,37 +10,13 @@
     using Ncqrs.Eventing.Storage;
 
     [EventName("RavenQuestionnaire.Core:Events:QuestionChangeded")]
-    public class QuestionChanged : QuestionnaireActiveEvent
+    public class QuestionChanged : AbstractQuestionDataEvent
     {
         public Order AnswerOrder { get; set; }
 
         public Answer[] Answers { get; set; }
 
-        public string ConditionExpression { get; set; }
-
-        public bool Featured { get; set; }
-
-        public string Instructions { get; set; }
-
-        public bool Mandatory { get; set; }
-
-        public bool Capital { get; set; }
-
-        public Guid PublicKey { get; set; }
-
-        public string QuestionText { get; set; }
-
-        public QuestionType QuestionType { get; set; }
-
-        public QuestionScope QuestionScope { get; set; }
-
-        public string StataExportCaption { get; set; }
-
         public Guid TargetGroupKey { get; set; }
-
-        public string ValidationExpression { get; set; }
-
-        public string ValidationMessage { get; set; }
 
         public List<Guid> Triggers { get; set; }
 

@@ -292,14 +292,29 @@
                 }
 
                 var command = '';
-                if (question.isNew()) {
-                    if (question.isClone()) {
-                        command = config.commands.cloneQuestion;
-                    } else {
-                        command = config.commands.createQuestion;
-                    }
-                } else {
-                    command = config.commands.updateQuestion;
+                switch (question.qtype()) {
+                    case "AutoPropagate":
+                    case "Numeric":
+                        if (question.isNew()) {
+                            if (question.isClone()) {
+                                command = config.commands.cloneNumericQuestion;
+                            } else {
+                                command = config.commands.createNumericQuestion;
+                            }
+                        } else {
+                            command = config.commands.updateNumericQuestion;
+                        }
+                        break;
+                    default:
+                        if (question.isNew()) {
+                            if (question.isClone()) {
+                                command = config.commands.cloneQuestion;
+                            } else {
+                                command = config.commands.createQuestion;
+                            }
+                        } else {
+                            command = config.commands.updateQuestion;
+                        }
                 }
 
                 question.canUpdate(false);

@@ -125,6 +125,7 @@
                     item.selectedLinkTo(dto.LinkedToQuestionId);
                     item.isLinked(_.isNull(dto.LinkedToQuestionId) == false ? 1 : 0);
                     item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
+                    item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
                     item.isNew(false);
                     item.dirtyFlag().reset();
