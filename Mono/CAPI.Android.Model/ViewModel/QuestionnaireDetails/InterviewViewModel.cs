@@ -90,6 +90,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                         questionsParticipationInSubstitutionReferences.Add(referencedQuestion, new List<QuestionViewModel> { questionsWithSubstitution });
 
                     referencedQuestion.PropertyChanged += this.ReferencedQuestionPropertyChanged;
+                    if (!string.IsNullOrEmpty(referencedQuestion.AnswerString))
+                    {
+                        this.ReferencedQuestionPropertyChanged(referencedQuestion, new PropertyChangedEventArgs("AnswerString"));
+                    }
                 }
             }
         }

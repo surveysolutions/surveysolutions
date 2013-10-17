@@ -237,7 +237,7 @@ namespace Core.Supervisor.Views.Interview
                     return Convert.ToDecimal(interviewQuestion.Answer).ToString(CultureInfo.InvariantCulture);
 
                 case QuestionType.DateTime:
-                    DateTime dateTime = DateTime.Parse((string) interviewQuestion.Answer);
+                    DateTime dateTime = DateTime.Parse(Convert.ToString(interviewQuestion.Answer));
                     return dateTime.ToString("M/d/yyyy");
 
                 case QuestionType.SingleOption:
