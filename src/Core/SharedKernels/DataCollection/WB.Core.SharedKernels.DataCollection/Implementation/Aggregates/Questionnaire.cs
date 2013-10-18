@@ -691,20 +691,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
                 return false;
 
-            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(question.PublicKey, document);
+            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(question, document);
 
 
             Func<IQuestion, bool> referenceIsValid =
                 reference =>
                 {
-                    List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(reference.PublicKey, document);
+                    List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(reference, document);
                     if (referencedPropagationQuestionsVector.Count == 0)
                         //referenced Question not in propagation - OK
                         return true;
 
                     var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
 
-                    return lengthDiff >= 0 && propagationQuestionsVector.Except(propagationQuestionsVector).Count() > lengthDiff;
+                    return lengthDiff >= 0 
+                        && propagationQuestionsVector.Except(propagationQuestionsVector).Count() == lengthDiff;
                 };
 
             return substitutionReferencedQuestions.All(q =>
@@ -718,10 +719,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                    type == QuestionType.Text || type == QuestionType.AutoPropagate;
         }
         
-        private List<Guid> GetAllAutopropagationQuestionsAsVector(Guid id, QuestionnaireDocument document)
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument document)
         {
-            List<Guid> propagationQuestions = GetParentPropagatableGroupsForQuestionStartingFromTop(id)
-                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g, document).FirstOrDefault().PublicKey).ToList();
+            List<Guid> propagationQuestions = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document)
+                .Where(IsGroupPropagatable)
+                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, document).FirstOrDefault().PublicKey)
+                .ToList();
 
             return propagationQuestions;
         }
