@@ -1,4 +1,5 @@
 ﻿using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.WebServices
 {
@@ -8,6 +9,7 @@ namespace WB.UI.Designer.WebServices
     using Main.Core.View;
     using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.WebServices.Questionnaire;
+    using WB.UI.Shared.Web;
     using WB.UI.Shared.Web.Membership;
 
     public class PublicService : IPublicService
@@ -21,7 +23,7 @@ namespace WB.UI.Designer.WebServices
             IJsonExportService exportService,
             IStringCompressor zipUtils, 
             IMembershipUserService userHelper,
-            IViewFactory<QuestionnaireListViewInputModel, QuestionnaireListView> viewFactory)
+            IViewFactory<QuestionnaireListViewInputModel, WB.UI.Designer.Views.Questionnaire.QuestionnaireListView> viewFactory)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
@@ -31,41 +33,48 @@ namespace WB.UI.Designer.WebServices
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
         {
-            string data = this.exportService.GetQuestionnaireTemplate(request.QuestionnaireId);
+            var templateInfo = this.exportService.GetQuestionnaireTemplate(request.QuestionnaireId);
 
-            if (string.IsNullOrEmpty(data))
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
                 return null;
             }
 
-            Stream stream = this.zipUtils.Compress(data);
+            Stream stream = this.zipUtils.Compress(templateInfo.Source);
 
-            return new RemoteFileInfo { FileName = "template.zip", Length = stream.Length, FileByteStream = stream };
+            return new RemoteFileInfo
+                       {
+                           FileName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName()),
+                           Length = stream.Length,
+                           FileByteStream = stream
+                       };
         }
 
         public string DownloadQuestionnaireSource(Guid request)
         {
-            return this.exportService.GetQuestionnaireTemplate(request);
+            var templateInfo = this.exportService.GetQuestionnaireTemplate(request);
+            return templateInfo == null ? string.Empty : templateInfo.Source;
         }
 
         public void Dummy()
         {
         }
 
-        public QuestionnaireListView GetQuestionnaireList(QuestionnaireListRequest request)
+        public QuestionnaireListViewMessage GetQuestionnaireList(QuestionnaireListRequest request)
         {
-            return
+            return new QuestionnaireListViewMessage(
                 this.viewFactory.Load(
                     input:
                         new QuestionnaireListViewInputModel
                             {
-                                CreatedBy = this.userHelper.WebServiceUser.UserId, 
-                                IsAdmin = this.userHelper.WebServiceUser.IsAdmin, 
-                                Page = request.PageIndex, 
-                                PageSize = request.PageSize, 
-                                Order = request.SortOrder, 
+
+                                ViewerId = this.userHelper.WebServiceUser.UserId,
+                                IsAdminMode = this.userHelper.WebServiceUser.IsAdmin,
+                                Page = request.PageIndex,
+                                PageSize = request.PageSize,
+                                Order = request.SortOrder,
                                 Filter = request.Filter
-                            });
+                            }));
         }
     }
 }

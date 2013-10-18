@@ -1,6 +1,9 @@
-﻿using System.Web.Routing;
+﻿using System.Web.Security;
 using Main.Core.Domain;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using System.Linq;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -26,21 +29,27 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IExpressionReplacer expressionReplacer;
+        private readonly ILogger logger;
 
         public QuestionnaireController(
             ICommandService commandService,
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> viewFactory,
-            IExpressionReplacer expressionReplacer)
+            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
+            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
+            IExpressionReplacer expressionReplacer,
+            ILogger logger)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
-            this.viewFactory = viewFactory;
+            this.questionnaireViewFactory = questionnaireViewFactory;
+            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.expressionReplacer = expressionReplacer;
+            this.logger = logger;
         }
 
         public ActionResult Clone(Guid id)
@@ -69,13 +78,16 @@ namespace WB.UI.Designer.Controllers
                         new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId,
                             model.IsPublic, sourceModel.Source));
 
-                    return this.RedirectToAction("Edit", new {id = questionnaireId});
+                    return this.RedirectToAction("Edit", new { id = questionnaireId });
                 }
                 catch (Exception e)
                 {
+                    logger.Error("Error on questionnaire cloning.", e);
+
                     if (e.InnerException is DomainException)
                     {
                         this.Error(e.InnerException.Message);
+                        logger.Error("Inner exception: " + e.InnerException.Message, e.InnerException);
                     }
                     else
                     {
@@ -105,7 +117,7 @@ namespace WB.UI.Designer.Controllers
                         text: model.Title,
                         createdBy: UserHelper.WebUser.UserId,
                         isPublic: model.IsPublic));
-                return this.RedirectToAction("Edit", new {id = questionnaireId});
+                return this.RedirectToAction("Edit", new { id = questionnaireId });
             }
 
             return View(model);
@@ -132,18 +144,27 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            QuestionnaireView model = this.GetQuestionnaire(id);
+            QuestionnaireView questionnaire = this.GetQuestionnaire(id);
 
-            if (model.CreatedBy != UserHelper.WebUser.UserId)
+            QuestionnaireSharedPersons questionnaireSharedPersons =
+                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = id });
+
+            var isUserIsOwnerOrAdmin = questionnaire.CreatedBy == UserHelper.WebUser.UserId || UserHelper.WebUser.IsAdmin;
+            var isQuestionnaireIsSharedWithThisPerson = (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.UserHelper.WebUser.UserId);
+
+            if (isUserIsOwnerOrAdmin || isQuestionnaireIsSharedWithThisPerson)
             {
-                throw new HttpException(403, string.Empty);
+                this.ReplaceGuidsInValidationAndConditionRules(questionnaire);
             }
             else
             {
-                this.ReplaceGuidsInValidationAndConditionRules(model);
+                throw new HttpException(403, string.Empty);
             }
 
-            return View(model);
+            return
+                View(new QuestionnaireEditView(questionaire: questionnaire,
+                    questionnaireSharedPersons: questionnaireSharedPersons,
+                    isOwner: questionnaire.CreatedBy == UserHelper.WebUser.UserId));
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -162,17 +183,17 @@ namespace WB.UI.Designer.Controllers
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
             return this.questionnaireHelper.GetPublicQuestionnaires(
-                pageIndex: pageIndex, 
-                sortBy: sortBy, 
-                sortOrder: sortOrder, 
-                filter: filter, 
-                userId: UserHelper.WebUser.UserId);
+                pageIndex: pageIndex,
+                sortBy: sortBy,
+                sortOrder: sortOrder,
+                filter: filter,
+                viewerId: UserHelper.WebUser.UserId);
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire =
-                this.viewFactory.Load(
+                this.questionnaireViewFactory.Load(
                     new QuestionnaireViewInputModel(id));
 
             if (questionnaire == null)
@@ -190,11 +211,11 @@ namespace WB.UI.Designer.Controllers
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
             return this.questionnaireHelper.GetQuestionnaires(
-                pageIndex: pageIndex, 
-                sortBy: sortBy, 
-                sortOrder: sortOrder, 
-                filter: filter, 
-                userId: UserHelper.WebUser.UserId);
+                pageIndex: pageIndex,
+                sortBy: sortBy,
+                sortOrder: sortOrder,
+                filter: filter,
+                viewerId: UserHelper.WebUser.UserId);
         }
 
         private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
@@ -210,19 +231,18 @@ namespace WB.UI.Designer.Controllers
             {
                 ICompositeView element = elements.Dequeue();
 
-                if (element is QuestionView)
+                var question = element as QuestionView;
+                if (question != null)
                 {
-                    var question = (QuestionView)element;
-
                     question.ConditionExpression =
                         this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
                     question.ValidationExpression =
                         this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
                 }
 
-                if (element is GroupView)
+                var group = element as GroupView;
+                if (group != null)
                 {
-                    var group = (GroupView)element;
                     group.ConditionExpression =
                         this.expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
                     foreach (ICompositeView child in element.Children)
@@ -244,6 +264,12 @@ namespace WB.UI.Designer.Controllers
             {
                 sortBy = string.Format("{0} Desc", sortBy);
             }
+        }
+
+        public ActionResult LackOfPermits()
+        {
+            this.Error("You no longer have permission to edit this questionnaire");
+            return this.RedirectToAction("Index");
         }
     }
 }

@@ -95,6 +95,14 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\recaptcha.1.0.5.0\lib\.NetFramework 4.0\Recaptcha.dll</HintPath>
@@ -188,16 +196,19 @@
     <Compile Include="App_Start\ValidatorsConfig.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
+    <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
+    <Compile Include="Code\IQuestionnaireHelper.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
+    <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -234,8 +245,12 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\JsonQuestionnaireResult.cs" />
+    <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
+    <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
+    <Compile Include="Models\QuestionnaireEditView.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -398,6 +413,8 @@
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\config.js" />
     <Content Include="Scripts\details\dataprimer.js" />
+    <Content Include="Scripts\details\expressionParser.js" />
+    <Content Include="Scripts\details\model.sharePerson.js" />
     <Content Include="Scripts\details\model.statistic.js" />
     <Content Include="Scripts\details\datacontext.js" />
     <Content Include="Scripts\details\dataservice.js" />
@@ -414,6 +431,7 @@
     <Content Include="Scripts\details\route-mediator.js" />
     <Content Include="Scripts\details\router.js" />
     <Content Include="Scripts\details\utils.js" />
+    <Content Include="Scripts\details\validator.js" />
     <Content Include="Scripts\details\vm.js" />
     <Content Include="Scripts\details\vm.questionnaire.js" />
     <Content Include="Scripts\html5shiv.js" />
@@ -539,6 +557,8 @@
     <Content Include="Views\Questionnaire\_QuestionDetails.cshtml" />
     <Content Include="Views\Questionnaire\_GroupDetails.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireDetails.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireDetailsForOwner.cshtml" />
+    <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -34,13 +34,13 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications, Version=0.5.14.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications, Version=0.5.16.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Machine.Specifications.0.5.14\lib\net40\Machine.Specifications.dll</HintPath>
+      <HintPath>..\..\..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.5.14.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications.Clr4, Version=0.5.16.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Machine.Specifications.0.5.14\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+      <HintPath>..\..\..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -78,12 +78,12 @@
     <Compile Include="QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="QuestionnaireDocumentExtentions.cs" />
     <Compile Include="QuestionnaireTests\CloneQuestionTests.cs" />
+    <Compile Include="QuestionnaireTests\SharedPersonsTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteImageTests.cs" />
     <Compile Include="QuestionnaireTests\DeleteQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\ImportQuestionnaireTests.cs" />
     <Compile Include="QuestionnaireTests\MoveGroupTests.cs" />
-    <Compile Include="QuestionnaireTests\MoveQuestionnaireItemTests.cs" />
     <Compile Include="QuestionnaireTests\NewAddGroupTests.cs" />
     <Compile Include="QuestionnaireTests\NewAddQuestionTests.cs" />
     <Compile Include="QuestionnaireTests\NewUpdateGroupTests.cs" />

@@ -1,6 +1,5 @@
 using System;
-
-using WB.Core.Infrastructure;
+using System.Collections.Generic;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.UI.Designer.Views.Questionnaire
@@ -17,12 +16,13 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
         {
-            this.Id = id;
+            this.PublicId = id;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
+            this.SharedPersons = new List<Guid>();
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid Id { get; private set; }
+        public Guid PublicId { get; private set; }
 
         /// <summary>
         /// Gets the last entry date.
@@ -68,6 +68,10 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// Gets or sets a value indicating whether is public.
         /// </summary>
         public bool IsPublic { get; set; }
+
+        public List<Guid> SharedPersons { get; private set; }
+
+        public string Owner { get; set; }
 
         #endregion
     }

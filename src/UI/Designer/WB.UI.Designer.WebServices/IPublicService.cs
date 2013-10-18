@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.WebServices
+﻿using WB.UI.Designer.Views.Questionnaire;
+
+namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.ServiceModel;
@@ -50,10 +52,10 @@
         /// The request.
         /// </param>
         /// <returns>
-        /// The <see cref="QuestionnaireListView"/>.
+        /// The <see cref="QuestionnaireListViewMessage"/>.
         /// </returns>
         [OperationContract]
-        QuestionnaireListView GetQuestionnaireList(QuestionnaireListRequest request);
+        QuestionnaireListViewMessage GetQuestionnaireList(QuestionnaireListRequest request);
 
         #endregion
     }

@@ -3,8 +3,10 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Eventing.Storage.RavenDB;
 using Ninject;
 using Raven.Client.Document;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.Infrastructure.Raven.Implementation.WriteSide;
+using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Infrastructure.Raven
 {
@@ -26,6 +28,8 @@ namespace WB.Core.Infrastructure.Raven
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
             this.Kernel.Bind<IStreamableEventStore>().ToConstant(store);
+            this.Bind<IReadSideRepositoryCleanerRegistry>().To<ReadSideRepositoryCleanerRegistry>().InSingletonScope();
+            this.Kernel.Bind<IEventStore>().ToConstant(store);
         }
     }
 }

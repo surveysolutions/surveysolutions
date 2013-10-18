@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -17,9 +20,12 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         {
             eventContext = new EventContext();
 
+            interviewId = Guid.Parse("11000000000000000000000000000000");
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             questionnaireVersion = 18;
+            answersToFeaturedQuestions = new Dictionary<Guid, object>();
 
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
@@ -33,10 +39,10 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            new Interview(questionnaireId, userId);
+            new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId);
 
         It should_raise_InterviewCreated_event = () =>
-            eventContext.Events.ShouldContain(@event => @event.Payload is InterviewCreated);
+            eventContext.ShouldContainEvent<InterviewCreated>();
 
         It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
             GetEvent<InterviewCreated>(eventContext)
@@ -56,5 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         private static Guid questionnaireId;
         private static long questionnaireVersion;
         private static Guid userId;
+        private static Guid responsibleSupervisorId;
+        private static Guid interviewId;
+        private static Dictionary<Guid, object> answersToFeaturedQuestions;
     }
 }

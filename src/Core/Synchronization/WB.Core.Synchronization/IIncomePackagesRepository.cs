@@ -8,4 +8,4 @@ namespace WB.Core.Synchronization
         void StoreIncomingItem(SyncItem item);
         void ProcessItem(Guid id, long sequence);
     }
-}
+}  
