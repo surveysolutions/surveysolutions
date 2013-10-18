@@ -55,10 +55,15 @@ namespace Web.Supervisor.Controllers
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
                     response.CommandId = concreteCommand.CommandIdentifier;
                     ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(request.Type,
-                                                                                                      concreteCommand);
+                        concreteCommand);
                     this.CommandService.Execute(transformedCommand);
 
                     response.IsSuccess = true;
+                }
+                catch (OverflowException e)
+                {
+                    response.IsSuccess = true;
+                    response.DomainException = e.Message;
                 }
                 catch (Exception e)
                 {

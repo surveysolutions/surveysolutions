@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace Web.Supervisor.Code.CommandTransformation
 {
@@ -24,7 +25,7 @@ namespace Web.Supervisor.Code.CommandTransformation
             switch (type)
             {
                 case "CreateInterviewCommand":
-                    command = GetCreateInterviewCommand((CreateInterviewControllerCommand) command);
+                    command = GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
                     break;
                 case "AnswerDateTimeQuestionCommand":
                 case "AnswerMultipleOptionsQuestionCommand":
@@ -72,13 +73,20 @@ namespace Web.Supervisor.Code.CommandTransformation
                 case QuestionType.AutoPropagate:
                     return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
                 case QuestionType.Numeric:
-                    if (answer.Settings != null)
+                    try
                     {
-                        if ((bool)answer.Settings.IsInteger)
-                            return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
+                        if (answer.Settings != null)
+                        {
+                            if ((bool)answer.Settings.IsInteger)
+                                return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
+                        }
+                        return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
                     }
-                    return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
-
+                    catch (OverflowException)
+                    {
+                        throw new OverflowException(string.Format("Values {0} is too big or too small", answer.Answer));
+                    }
+                    break;
                 case QuestionType.DateTime:
                     if (answer.Answer is DateTime)
                     {
@@ -95,7 +103,7 @@ namespace Web.Supervisor.Code.CommandTransformation
                 case QuestionType.MultyOption:
                     decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(decimal.Parse).ToArray();
                     return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
-                
+
             }
 
             throw new Exception("Unknown question type");
@@ -103,7 +111,7 @@ namespace Web.Supervisor.Code.CommandTransformation
 
         private static string[] JsonArrayToStringArray(object jsonArray)
         {
-            return ((JArray) jsonArray).ToObject<string[]>();
+            return ((JArray)jsonArray).ToObject<string[]>();
         }
     }
 }
