@@ -83,7 +83,7 @@
         {
             AccountView account = this.GetUser(accountName: username);
 
-            this.commandService.Execute(new DeleteAccountCommand(account.PublicKey));
+            this.commandService.Execute(new DeleteAccountCommand(account.GetPublicKey()));
 
             return this.GetUser(accountName: username) == null;
         }
@@ -352,7 +352,7 @@
         /// </param>
         public void Update(IMembershipAccount account, MembershipEventType eventType)
         {
-            var accountPublicKey = (Guid)account.ProviderUserKey;
+            var accountPublicKey = Guid.Parse(account.ProviderUserKey.ToString());
 
             ICommand command = null;
 

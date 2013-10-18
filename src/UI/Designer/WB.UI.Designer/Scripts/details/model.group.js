@@ -1,6 +1,6 @@
 ﻿define('model.group',
-    ['ko', 'config','utils'],
-    function (ko, config, utils) {
+    ['ko', 'config', 'utils', 'validator'],
+    function (ko, config, utils, validator) {
 
         var _dc = null,
             Group = function() {
@@ -18,7 +18,17 @@
 
                 self.level = ko.observable();
                 self.description = ko.observable('');
-                self.condition = ko.observable('');
+                self.condition = ko.observable('').extend({
+                    validation: [{
+                        validator: function (val) {
+                            if (_.isUndefined(val) || _.isNull(val)) {
+                                return true;
+                            }
+                            return (val.indexOf("[this]") == -1);
+                        },
+                        message: 'You cannot use self-reference in conditions'
+                    }]
+                });;
                 
                 self.children = ko.observableArray();
                 self.childrenID = ko.observableArray();
@@ -42,9 +52,29 @@
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
-                
+                self.hasErrors = ko.computed(function() {
+                    return self.errors().length > 0;
+                });
                 self.canUpdate = ko.observable(true);
                 this.cache = function () { };
+                
+                self.attachValidation = function () {
+                    self.condition.extend({
+                        validation: [
+                        {
+                            validator: function (val) {
+                                var validationResult = validator.isValidExpression(val);
+                                if (validationResult.isValid) {
+                                    return true;
+                                }
+                                this.message = validationResult.errorMessage;
+                                return false;
+                            },
+                            message: 'Error'
+                        }]
+                    });
+                };
+                
                 return self;
             };
         

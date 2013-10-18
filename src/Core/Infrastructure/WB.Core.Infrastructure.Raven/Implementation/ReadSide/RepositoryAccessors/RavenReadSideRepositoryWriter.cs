@@ -108,6 +108,10 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 cachedEntitiesWhichNeedToBeStoredToRepository);
         }
 
+        public Type ViewType {
+            get { return typeof (TEntity); }
+        }
+
         private TEntity GetByIdUsingCache(Guid id)
         {
             if (!this.cache.ContainsKey(id))
@@ -128,7 +132,6 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
             {
                 this.cache.Remove(id);
             }
-
             this.RemoveAvoidingCache(id);
         }
 
@@ -165,6 +168,9 @@ namespace WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccesso
                 string ravenId = ToRavenId(id);
 
                 var view = session.Load<TEntity>(id: ravenId);
+                
+                if(view==null)
+                    return;
 
                 session.Delete(view);
                 session.SaveChanges();

@@ -4,7 +4,7 @@ using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    internal class SynchronizationDelta : IView
+    public class SynchronizationDelta : IView
     {
         public SynchronizationDelta()
         {

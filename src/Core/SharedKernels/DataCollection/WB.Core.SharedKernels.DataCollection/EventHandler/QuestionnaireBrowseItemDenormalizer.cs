@@ -1,15 +1,20 @@
-﻿using Main.Core.Events.Questionnaire;
+﻿using System;
+using Main.Core.Documents;
+using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.DataCollection.EventHandler
 {
-    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>
+    public class QuestionnaireBrowseItemDenormalizer : IEventHandler<TemplateImported>, IEventHandler
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage;
 
-        public QuestionnaireBrowseItemDenormalizer(IReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
+        public QuestionnaireBrowseItemDenormalizer(IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> documentStorage)
         {
             this.documentStorage = documentStorage;
         }
@@ -18,9 +23,23 @@ namespace WB.Core.SharedKernels.DataCollection.EventHandler
         {
             var document = evnt.Payload.Source;
 
-            var browseItem = new QuestionnaireBrowseItem(document);
+            var browseItem = new QuestionnaireBrowseItem(document, evnt.EventSequence);
+            this.documentStorage.Store(browseItem, evnt.EventSourceId);
+        }
 
-            this.documentStorage.Store(browseItem, document.PublicKey);
+        public string Name
+        {
+            get { return GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireBrowseItem) }; }
         }
     }
 }

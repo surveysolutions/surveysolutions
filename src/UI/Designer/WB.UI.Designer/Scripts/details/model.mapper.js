@@ -83,7 +83,9 @@
                     item.parent(null);
                     item.qtype(dto.QuestionType);
 
-                    item.scope(dto.QuestionScope);
+                    if (dto.Featured == false) {
+                        item.scope(dto.QuestionScope);
+                    }
 
                     item.answerOrder(dto.AnswerOrder);
 
@@ -120,10 +122,19 @@
 
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
+                    item.selectedLinkTo(dto.LinkedToQuestionId);
+                    item.isLinked(_.isNull(dto.LinkedToQuestionId) == false ? 1 : 0);
+                    item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
+                    item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
+                    
+                    if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
+                    //    item.isNew(true);
+                    }
+                    
                     return item;
                 },
                 objectsFromDto: function (dto) {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -30,9 +28,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
                 Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
                 Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
 
-
-                Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(sourceQuestionId, groupId: groupId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: sourceQuestionId, groupId: groupId, responsibleId: responsibleId);
 
                 string notEmptyTitle = "not empty :)";
 
@@ -40,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.CloneQuestion(newQuestionId, groupId, notEmptyTitle, QuestionType.Text, "test_clone", false, false,
                                                 false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                                 string.Empty,
-                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1);
+                                                string.Empty, new Option[0], Order.AZ, sourceQuestionId, 1, responsibleId: responsibleId, linkedToQuestionId: null);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -55,14 +53,15 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(sourceQuestionId, groupId: groupId);
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: sourceQuestionId, groupId: groupId, responsibleId: responsibleId);
 
             // act
             var emptyTitle = string.Empty;
             TestDelegate act = () =>
                                questionnaire.CloneQuestion(newQuestionId, groupId, emptyTitle, QuestionType.Text, "test", false, false,
                                                                false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                               string.Empty, new Option[0], Order.AZ, null, new Guid[0], sourceQuestionId, 1);
+                                                               string.Empty, new Option[0], Order.AZ, sourceQuestionId, 1, responsibleId, null);
 
             // assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -78,18 +77,94 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
             var optionsWithEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
                 () =>
                 questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test_clone", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1);
+                                            string.Empty, optionsWithEmptyTitles, Order.AsIs, sourceQuestionId, 1, responsibleId, null);
             // assert
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
+        }
+
+        [Test]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void CloneQuestion_When_question_type_is_handled_by_type_specific_command_Then_DomainException_should_be_thrown(
+            QuestionType questionType)
+        {
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+
+            TestDelegate act = () =>
+                questionnaire.CloneQuestion(
+                    questionId: newQuestionId,
+                    groupId: groupId,
+                    title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    options: new Option[0],
+                    responsibleId: responsibleId,
+                    linkedToQuestionId: null, sourceQuestionId: sourceQuestionId, targetIndex: 1);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand));
+        }
+
+        [Test]
+        [TestCase(20)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void CloneQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
+        {
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, QuestionType.Numeric, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+
+
+            TestDelegate act = () =>
+                questionnaire.CloneNumericQuestion(
+                    questionId: newQuestionId,
+                    groupId: groupId,
+                    title: "What is your last name?",
+                    isAutopropagating:false, 
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, targetIndex: 1, maxValue: null,
+                    triggeredGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: countOfDecimalPlaces);
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect));
         }
 
         [Test]
@@ -102,29 +177,365 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
                 Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
                 Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
 
                 var notEmptyAnswerOptionTitle1 = "title";
                 var notEmptyAnswerOptionTitle2 = "title1";
                 Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
                     sourceQuestionId, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
                             new Option(Guid.NewGuid(), "2", "option text1"),
-                        }, groupId: groupId);
+                        }, responsibleId: responsibleId, groupId: groupId);
 
 
                 // act
                 questionnaire.CloneQuestion(newQuestionId, groupId,"test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, null, new Guid[0], sourceQuestionId, 1);
+                                                string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs, sourceQuestionId, 1, responsibleId, null);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
                 Assert.AreEqual(notEmptyAnswerOptionTitle1, risedEvent.Answers[0].AnswerText);
                 Assert.AreEqual(notEmptyAnswerOptionTitle2, risedEvent.Answers[1].AnswerText);
             }
         }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
+            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+
+            var notEmptyAnswerOptionTitle1 = "title";
+            var notEmptyAnswerOptionTitle2 = "title1";
+            Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
+            // arrange
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
+                sourceQuestionId, questionType, new[]
+                        {
+                            new Option(Guid.NewGuid(), "1", "option text"),
+                            new Option(Guid.NewGuid(), "2", "option text1"),
+                        }, responsibleId: Guid.NewGuid(), groupId: groupId);
+
+            // act
+            TestDelegate act = () => questionnaire.CloneQuestion(newQuestionId, groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, newOptionsWithNotEmptyTitles, Order.AsIs,  sourceQuestionId, 1, Guid.NewGuid(), null);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_does_not_exist_in_questionnaire_questions_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, Guid.NewGuid());
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionDoesNotExist));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_exist_in_autopropagated_group_questions_scope(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+                Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+                Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+                Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
+
+                Questionnaire questionnaire =
+                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                        autoGroupPublicKey: autoGroupId,
+                        secondGroup: groupId,
+                        autoQuestionId: autoQuestionId,
+                        questionId: questionId,
+                        responsibleId: responsibleId,
+                        questionType: questionType);
+
+                // act
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs,  questionId, 1, responsibleId, autoQuestionId);
+
+                // assert
+                var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
+                Assert.AreEqual(autoQuestionId, risedEvent.LinkedToQuestionId);
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.Text)]
+        public void CloneQuestion_When_non_categorical_question_with_linked_question_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: QuestionType.MultyOption);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion));
+        }
+
+        [Test]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.Text)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_with_number_or_text_or_datetime_type(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+                Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+                Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+                Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
+
+                Questionnaire questionnaire =
+                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                        autoGroupPublicKey: autoGroupId,
+                        secondGroup: groupId,
+                        autoQuestionId: autoQuestionId,
+                        questionId: questionId,
+                        responsibleId: responsibleId,
+                        questionType: QuestionType.MultyOption,
+                        autoQuestionType: questionType);
+
+
+                // act
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", QuestionType.MultyOption, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId);
+
+                // assert
+                var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
+                Assert.AreEqual(autoQuestionId, risedEvent.LinkedToQuestionId);
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_not_of_type_text_or_number_or_datetime_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType,
+                    autoQuestionType: QuestionType.GpsCoordinates);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotSupportedQuestionForLinkedQuestion));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_have_answers_and_linked_question_in_the_same_time_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, new Option[] {new Option(Guid.NewGuid(), "1", "auto"),},
+                                            Order.AsIs, questionId, 1, responsibleId, autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_does_not_exist_in_questions_scope_from_autopropagate_groups_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid questionThatLinkedButNotFromPropagateGroupId = Guid.Parse("00000000-1111-0000-2222-222000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoAndRegularGroupsAnd1QuestionInAutoGroupAnd2QuestionsInRegular(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType,
+                    questionThatLinkedButNotFromPropagateGroup: questionThatLinkedButNotFromPropagateGroupId);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1,
+                                            responsibleId, questionThatLinkedButNotFromPropagateGroupId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.LinkedQuestionIsNotInPropagateGroup));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_has_featured_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, true, false,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void CloneQuestion_When_categorical_question_with_linked_question_that_has_head_status_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            // arrange
+            Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+            Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+            Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire =
+                CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                    autoGroupPublicKey: autoGroupId,
+                    secondGroup: groupId,
+                    autoQuestionId: autoQuestionId,
+                    questionId: questionId,
+                    responsibleId: responsibleId,
+                    questionType: questionType);
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.CloneQuestion(Guid.NewGuid(), autoGroupId, "test", questionType, "test", false, false, true,
+                                            QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
+        }
+
+    
+#warning following tests are commented because they were copy pasted from add command tests but Slava had not enough time to uncomment them and make them test for Clone feature (when he wrote such tests in his spare time)
+
 
 //        [Test]
 //        [TestCase(QuestionType.SingleOption)]
@@ -494,7 +905,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
 //        [TestCase(QuestionType.SingleOption)]
 //        [TestCase(QuestionType.MultyOption)]
-//        public void NewUpdateQuestion_When_there_are_two_options_in_categorical_question_Then_raised_NewQuestionAdded_event_contains_the_same_options_count(QuestionType questionType)
+//        public void NewUpdateQuestion_When_there_are_two_options_in_categorical_question_Then_raised_QuestionCloned_event_contains_the_same_options_count(QuestionType questionType)
 //        {
 //            using (var eventContext = new EventContext())
 //            {
@@ -528,7 +939,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 //                                   options: options);
 
 //                // assert
-//                var raisedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+//                var raisedEvent = GetSingleEvent<QuestionCloned>(eventContext);
 //                Assert.That(raisedEvent.Answers.Length, Is.EqualTo(answerOptionsCount));
 //            }
 //        }

@@ -67,8 +67,7 @@
 
                     // Knockout and its plugins
                     "~/Scripts/knockout-{version}.js",
-                    "~/Scripts/lib/knockout.mapping.js",
-                    "~/Scripts/lib/knockout.activity.js", 
+                    "~/Scripts/lib/knockout.mapping.js", 
                     "~/Scripts/lib/knockout.asyncCommand.js", 
                     "~/Scripts/lib/knockout.dirtyFlag.js", 
                     "~/Scripts/knockout.validation.debug.js", 
@@ -91,10 +90,11 @@
 
                     "~/Scripts/details/config.js",
                     "~/Scripts/details/router.js",
+                    "~/Scripts/details/validator.js",
+                    "~/Scripts/details/expressionParser.js",
                     "~/Scripts/details/route-config.js",
                     "~/Scripts/details/route-mediator.js",
                     "~/Scripts/details/utils.js",
-                    "~/Scripts/details/presenter.js",
 
                     "~/Scripts/details/datacontext.js",
                     "~/Scripts/details/dataprimer.js",
@@ -106,6 +106,7 @@
                     "~/Scripts/details/model.group.js",
                     "~/Scripts/details/model.mapper.js",
                     "~/Scripts/details/model.question.js",
+                    "~/Scripts/details/model.sharePerson.js",
                     "~/Scripts/details/model.questionnaire.js",
                     "~/Scripts/details/model.js",
                     

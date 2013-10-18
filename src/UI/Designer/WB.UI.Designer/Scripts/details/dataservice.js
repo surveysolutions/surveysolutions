@@ -8,12 +8,17 @@
                 contentType: 'application/json; charset=utf-8',
                 decoder: function (data, status, xhr, success, error) {
                     if (data == null) {
-                        error({ error: input.settings.unhandledExceptionMessage }, status);
+                        error({ error: input.settings.messages.unhandledExceptionMessage }, status);
                     } else {
-                        if (data['error'] == undefined) {
+                        if (data.IsSuccess) {
                             success(data, status);
                         } else {
-                            error(data, status);
+                            if (!data.HasPermissions) {
+                                window.location.href = input.url.lackOfPermitsUrl;
+                            } else {
+                                error(data.Error, status);
+                            }
+                            
                         }
                     }
                 }

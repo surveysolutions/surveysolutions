@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Commands.Sync;
-using Main.Core;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.GenericSubdomains.Logging;
@@ -12,9 +11,6 @@ namespace WB.Core.Synchronization.SyncProvider
 {
     using System;
     using Main.Core.Documents;
-    using Newtonsoft.Json;
-    
-    using Main.Core.Events;
 
     internal class SyncProvider : ISyncProvider
     {
@@ -63,19 +59,8 @@ namespace WB.Core.Synchronization.SyncProvider
 
             throw new NotImplementedException();
         }
-        
-        public IEnumerable<Guid> GetAllARIds(Guid userId, Guid clientRegistrationKey)
-        {
-            var device = devices.GetById(clientRegistrationKey);
-            //return storate.GetChunksCreatedAfter(0, userId);
 
-            if (device == null)
-                throw new ArgumentException("Device was not found.");
-           
-            return storage.GetChunksCreatedAfter(device.LastSyncItemIdentifier, userId);
-        }
-
-        public IEnumerable<KeyValuePair<long, Guid>> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
+        public IEnumerable<SynchronizationChunkMeta> GetAllARIdsWithOrder(Guid userId, Guid clientRegistrationKey, long clientSequence)
         {
             var device = devices.GetById(clientRegistrationKey);
 
@@ -104,8 +89,30 @@ namespace WB.Core.Synchronization.SyncProvider
                 if (device == null)
                 {
                     //keys were provided but we can't find device
-                    //probably device was init with other supervisor 
-                    throw new ArgumentException("Unknown device.");
+                    //probably device has been synchronized with other supervisor application
+                    var package = new HandshakePackage
+                    {
+                        IsErrorOccured = true,
+                        ErrorMessage = "Device was not found. It could be linked to other system."
+                    };
+                    return package;
+                }
+
+                //old sync devices are already in use
+                //lets allow to sync them for awhile
+                //then we have to delete this code
+                if (device.SupervisorKey == Guid.Empty)
+                {
+                    logger.Error("Old registered device is synchronizing. Errors could be on client in case of different team.");
+                }
+                else if (device.SupervisorKey != identifier.SupervisorPublicKey)
+                {
+                    var package = new HandshakePackage
+                        {
+                            IsErrorOccured = true,
+                            ErrorMessage = "Device was assigned to another Supervisor."
+                        };
+                    return package;
                 }
 
                 //TODO: check device validity
@@ -116,7 +123,8 @@ namespace WB.Core.Synchronization.SyncProvider
             {
                 ClientRegistrationKey = Guid.NewGuid();
 
-                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, identifier.ClientDeviceKey, identifier.ClientInstanceKey));
+                commandService.Execute(new CreateClientDeviceCommand(ClientRegistrationKey, 
+                    identifier.ClientDeviceKey, identifier.ClientInstanceKey, identifier.SupervisorPublicKey));
             }
 
             Guid syncActivityKey = Guid.NewGuid();

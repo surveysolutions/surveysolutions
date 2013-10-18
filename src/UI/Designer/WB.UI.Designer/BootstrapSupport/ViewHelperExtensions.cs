@@ -83,6 +83,10 @@ namespace WB.UI.Designer.BootstrapSupport
             return ((string)model.GetType().GetProperty(property).GetValue(model, new object[0])) ?? string.Empty;
         }
 
+        public static bool IsDateTimePropertyValue(this PropertyInfo prop)
+        {
+            return prop.PropertyType == typeof (DateTime);
+        }
 
         public static string IdentifierPropertyName(this Object model)
         {

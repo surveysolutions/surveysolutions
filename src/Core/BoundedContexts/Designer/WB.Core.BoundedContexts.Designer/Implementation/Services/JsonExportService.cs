@@ -16,14 +16,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public string GetQuestionnaireTemplate(Guid templateId)
+        public TemplateInfo GetQuestionnaireTemplate(Guid templateId)
         {
             var template = questionnaireStorage.GetById(templateId);
-            if (template == null)
-                return null;
+            if (template == null) return null;
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            return JsonConvert.SerializeObject(template, Newtonsoft.Json.Formatting.Indented, settings);
-          
+            return new TemplateInfo()
+                       {
+                           Title = template.Title,
+                           Source = JsonConvert.SerializeObject(template, Formatting.Indented, settings)
+                       };
+
         }
     }
 }

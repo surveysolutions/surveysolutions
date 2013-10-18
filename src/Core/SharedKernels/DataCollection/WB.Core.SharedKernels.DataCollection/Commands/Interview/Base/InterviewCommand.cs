@@ -9,20 +9,25 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
         [AggregateRootId]
         public Guid InterviewId { get; private set; }
 
-        public Guid UserId { get; private set; }
-
-        protected InterviewCommand(Guid interviewId, Guid userId)
+        private Guid userId;
+        public Guid UserId
         {
-            ThrowArgumentExceptionIfGuidIsEmpty(userId);
+            get
+            {
+                if (this.userId == Guid.Empty)
+                    throw new ArgumentException("User ID cannot be empty.");
 
-            this.InterviewId = interviewId;
-            this.UserId = userId;
+                return this.userId;
+            }
+
+            set { this.userId = value; }
         }
 
-        private void ThrowArgumentExceptionIfGuidIsEmpty(Guid guid)
+        protected InterviewCommand(Guid interviewId, Guid userId)
+            : base(interviewId)
         {
-            if (guid == Guid.Empty)
-                throw new ArgumentException("Guid cannot be empty.");
+            this.InterviewId = interviewId;
+            this.UserId = userId;
         }
     }
 }

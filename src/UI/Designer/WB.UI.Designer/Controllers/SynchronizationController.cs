@@ -11,6 +11,7 @@ namespace WB.UI.Designer.Controllers
 
     using Ncqrs.Commanding.ServiceModel;
     using WB.Core.SharedKernel.Utils.Compression;
+    using WB.UI.Shared.Web;
     using WB.UI.Shared.Web.Membership;
 
     [CustomAuthorize(Roles = "Administrator")]
@@ -35,16 +36,16 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public FileStreamResult Export(Guid id)
         {
-            string data = this.exportService.GetQuestionnaireTemplate(id);
+            var templateInfo = this.exportService.GetQuestionnaireTemplate(id);
 
-            if (string.IsNullOrEmpty(data))
+            if (templateInfo == null || string.IsNullOrEmpty(templateInfo.Source))
             {
                 return null;
             }
 
-            return new FileStreamResult(this.zipUtils.Compress(data), "application/zip")
+            return new FileStreamResult(this.zipUtils.Compress(templateInfo.Source), "application/octet-stream")
                        {
-                           FileDownloadName = "template.zip"
+                           FileDownloadName = string.Format("{0}.tmpl", templateInfo.Title.ToValidFileName())
                        };
         }
 

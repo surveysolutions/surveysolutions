@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
@@ -10,9 +11,6 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
     {
         private static Regex conditionRegex = new Regex(@"\[([^\]]*)\]", RegexOptions.Compiled);
 
-        private string _condition;
-        private string _validationExpression;
-
         public PdfQuestionView()
         {
             this.Answers = new List<PdfAnswerView>();
@@ -22,36 +20,29 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public List<PdfAnswerView> Answers { get; set; }
 
-        public string ValidationExpression
+        public string GetReadableValidationExpression()
         {
-            get
+            if (this.ValidationExpression == null)
             {
-                if (_validationExpression == null)
-                {
-                    return null;
-                }
-
-                return ReplaceGuidsWithQuestionNumbers(_validationExpression);
+                return null;
             }
-            set { _validationExpression = value; }
+
+            return this.ReplaceGuidsWithQuestionNumbers(this.ValidationExpression);
         }
 
-        public string Condition
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_condition))
-                {
-                    return null;
-                }
+        public string ValidationExpression { get; set; }
 
-                return ReplaceGuidsWithQuestionNumbers(_condition);
-            }
-            set
+        public string GetReadableConditionExpression()
+        {
+            if (string.IsNullOrEmpty(this.ConditionExpression))
             {
-                _condition = value;
+                return null;
             }
+
+            return this.ReplaceGuidsWithQuestionNumbers(this.ConditionExpression);
         }
+
+        public string ConditionExpression { get; set; }
 
         private string ReplaceGuidsWithQuestionNumbers(string expression)
         {
@@ -59,7 +50,7 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
                 Guid matchId = Guid.Empty;
                 if (Guid.TryParse(match.Groups[1].Value, out matchId))
                 {
-                    var question = Root.Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.Id == matchId);
+                    var question = GetRoot().Children.TreeToEnumerable().OfType<PdfQuestionView>().FirstOrDefault(x => x.PublicId == matchId);
                     return "[question " + question.ItemNumber +"]";
                 }
 
@@ -69,33 +60,39 @@ namespace WB.UI.Designer.Views.Questionnaire.Pdf
 
         public string Variable { get; set; }
 
-        public bool HasCodition
+        public bool GetHasCondition()
         {
-            get
-            {
-                return !string.IsNullOrEmpty(Condition);
-            }
+            return !string.IsNullOrEmpty(this.GetReadableConditionExpression());
         }
 
-        private PdfEntityView Root
+        private PdfEntityView GetRoot()
         {
-            get
+            var next = this.GetParent();
+            do
             {
-                var next = Parent;
-                do
+                if (next.GetParent() != null)
                 {
-                    if (next.Parent != null)
-                    {
-                        next = next.Parent;
-                    }
-                    else
-                    {
-                        return next;
-                    }
-                } while (next != null);
+                    next = next.GetParent();
+                }
+                else
+                {
+                    return next;
+                }
+            } while (next != null);
 
-                return next;
+            return next;
+        }
+
+        private string stringItemNumber = null;
+
+        public string GetStringItemNumber()
+        {
+            if (this.stringItemNumber == null)
+            {
+                this.stringItemNumber = string.Join(".", this.GetQuestionNumberSections().Select(x => x.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')));
             }
+
+            return this.stringItemNumber;
         }
     }
 }

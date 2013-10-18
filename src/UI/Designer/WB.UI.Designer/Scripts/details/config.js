@@ -1,16 +1,17 @@
 ﻿define('config',
     ['pnotify', 'ko', 'amplify'],
-    function(toastr, ko, amplify) {
+    function (toastr, ko, amplify) {
 
-        var// properties
+        var // properties
             //-----------------
             questionTypes = {
-                "SingleOption": "Categorical: one answer",
-                "MultyOption": "Categorical: multiple answers",
+                "SingleOption": "SingleOption",
+                "MultyOption": "MultyOption",
                 "Numeric": "Numeric",
                 "DateTime": "DateTime",
                 "Text": "Text",
-                "AutoPropagate": "AutoPropagate"
+                "AutoPropagate": "AutoPropagate",
+                "GpsCoordinates": "GpsCoordinates"
             },
             questionTypeOptions = [
                 {
@@ -27,7 +28,7 @@
                 },
                 {
                     key: "DateTime",
-                    value: "Date and time"
+                    value: "Date"
                 },
                 {
                     key: "Text",
@@ -36,13 +37,17 @@
                 {
                     key: "AutoPropagate",
                     value: "Auto propagate"
+                },
+                {
+                    key: "GpsCoordinates",
+                    value: "Geo Location"
                 }
             ],
-            questionScopes = [
-                "Interviewer",
-                "Supervisor",
-                "Headquarter"
-            ],
+            questionScopes = {
+                interviewer: "Interviewer",
+                supervisor: "Supervisor",
+                headquarters: "Headquarters"
+            },
             answerOrders = [
                 {
                     key: "AsIs",
@@ -78,10 +83,15 @@
                 deleteGroup: "DeleteGroup",
                 groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
+                createNumericQuestion: "AddNumericQuestion",
                 cloneQuestion: "CloneQuestion",
+                cloneNumericQuestion: "CloneNumericQuestion",
                 updateQuestion: "UpdateQuestion",
+                updateNumericQuestion: "UpdateNumericQuestion",
                 deleteQuestion: "DeleteQuestion",
-                questionMove: "MoveQuestion"
+                questionMove: "MoveQuestion",
+                addSharedPersonToQuestionnaire: "AddSharedPersonToQuestionnaire",
+                removeSharedPersonFromQuestionnaire: "RemoveSharedPersonFromQuestionnaire"
             },
             hashes = {
                 details: '#/details',
@@ -101,7 +111,7 @@
             tips = {
                 newGroup: {
                     title: "Save this group",
-                    content: "You should save this group to perfome some actions with it",
+                    content: "You should save this group to perform any actions with it",
                     placement: "top",
                     trigger: "hover"
                 }
@@ -113,35 +123,73 @@
             loggerTmeout = 2000,
             warnings = {
                 propagatedGroupCantBecomeChapter: {
-                    title: 'Cant move',
-                    text: "Auto propagate group can't become a chapter"
+                    title: "Can't move",
+                    text: "AutoPropagate group can't become a chapter"
                 },
                 cantMoveQuestionOutsideGroup: {
-                    title: 'Cant move',
-                    text: "You can't move question outside any group"
+                    title: "Can't move",
+                    text: "You can't move a question outside of any group"
                 },
                 cantMoveGroupIntoPropagatedGroup: {
-                    title: 'Cant move',
-                    text: "You can't move group into propagated group"
+                    title: "Can't move",
+                    text: "You can't move a group into a propagated group"
                 },
                 cantMoveUnsavedItem: {
-                    title: 'Cant move',
+                    title: "Can't move",
                     text: "You can't move unsaved items"
                 },
-                cantMoveIntoUnsavedItem : {
-                    title: 'Cant move',
+                cantMoveIntoUnsavedItem: {
+                    title: "Can't move",
                     text: "You can't move items to unsaved groups or chapters"
                 },
                 saveParentFirst: {
-                    title: 'Cant save',
-                    text: "Save parent item first"
+                    title: "Can't move",
+                    text: "Save the parent item first"
                 },
-                savedData: 'Data saved successfully'
+                cantMoveAutoPropagatedGroupOutsideGroup: {
+                    title: "Can't move group",
+                    text: "You can't move an AutoPropagate group outside any chapter"
+                },
+                cantMoveFeaturedQuestionIntoAutoGroup: {
+                    title: "Can't move question",
+                    text: "You can't move a pre-filled question into a propagated group"
+                },
+                cantMoveAutoQuestionIntoAutoGroup: {
+                    title: "Can't move question",
+
+                    text: "You can't move an AutoPropagate question into a propagated group"
+                },
+                cantMoveHeadQuestionOutsideAutoGroup: {
+                    title: "Can't move question",
+
+                    text: "You can't move a head question outside of any propagated group"
+                },
+                savedData: 'Data saved successfully',
+                weWillClearCondition: {
+                    message: "Pre-filled questions can't be conditionally enabled. Would you like to erase the condition expression?",
+                    okBtn: "Yes, erase the condition",
+                    cancelBtn: "No, keep the condition"
+                },
+                weWillClearConditionAndValidation: {
+                    message: "Questions filled in by the supervisor can't be conditionally enabled and don't support validation. Would you like to erase the condition and validation expressions?",
+                    okBtn: "Yes, erase the expressions",
+                    cancelBtn: "No, keep the expressions"
+                },
+                weWillClearSupervisorFlag: {
+                    message: "If a question is pre-filled, it can't at the same time be marked as answered by the supervisor. Would you like to disable the 'answered by the supervisor' option for this question?",
+                    okBtn: "Yes, disable it",
+                    cancelBtn: "No, don't disable it"
+                },
+                weWillClearHeadFlag:{
+                    message: "Questions answered by supervisor can't serve as a header of a roster group. Would you like to disable the 'head' option for this question?",
+                    okBtn: "Yes, disable it",
+                    cancelBtn: "No, don't disable it"
+                },
             },
             // methods
             //-----------------
 
-            init = function() {
+            init = function () {
                 logger.defaults.delay = loggerTmeout;
 
                 ko.validation.configure({

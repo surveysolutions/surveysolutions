@@ -1,40 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
+using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 {
     internal class SampleImportService : ISampleImportService
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository;
-        private readonly ITemporaryDataRepositoryAccessor tempImportRepository;
+        private readonly ITemporaryDataStorage<TempFileImportData> tempImportStorage;
+        private readonly ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage;
+        private readonly IQuestionnaireFactory questionnaireFactory;
 
-        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocument> templateRepository,
-                                   IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, ITemporaryDataRepositoryAccessor tempImportRepository)
+
+        public SampleImportService(IReadSideRepositoryWriter<QuestionnaireDocumentVersioned> templateRepository,
+                                   IReadSideRepositoryWriter<QuestionnaireBrowseItem> templateSmallRepository, 
+            ITemporaryDataStorage<TempFileImportData> tempImportStorage,
+            ITemporaryDataStorage<SampleCreationStatus> tempSampleCreationStorage,
+            IQuestionnaireFactory questionnaireFactory)
         {
             this.templateRepository = templateRepository;
             this.templateSmallRepository = templateSmallRepository;
-            this.tempImportRepository = tempImportRepository;
+            this.tempImportStorage = tempImportStorage;
+            this.tempSampleCreationStorage = tempSampleCreationStorage;
+            this.questionnaireFactory = questionnaireFactory;
         }
 
         public Guid ImportSampleAsync(Guid templateId, ISampleRecordsAccessor recordAccessor)
         {
             Guid importId = Guid.NewGuid();
-            tempImportRepository.Store( CreateInitialTempRecord(templateId, importId), importId.ToString());
+            tempImportStorage.Store( CreateInitialTempRecord(templateId, importId), importId.ToString());
             new Task(() => Process(templateId, recordAccessor, importId)).Start();
             return importId;
         }
@@ -56,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         public ImportResult GetImportStatus(Guid id)
         {
-            var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
+            var item = this.tempImportStorage.GetByName(id.ToString());
             if (item == null)
                 return null;
             return new ImportResult(id, item.IsCompleted, item.ErrorMassage, item.Header, item.Values);
@@ -64,50 +78,52 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         public void CreateSample(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
         {
-            tempImportRepository.Store(new SampleCreationStatus(id), id.ToString());
+            tempSampleCreationStorage.Store(new SampleCreationStatus(id), id.ToString());
             new Task(() => CreateSamplInternal(id,responsibleHeadquaterId,responsibleSupervisorId)).Start();
         }
 
         public SampleCreationStatus GetSampleCreationStatus(Guid id)
         {
-            return tempImportRepository.GetByName<SampleCreationStatus>(id.ToString());
+            return tempSampleCreationStorage.GetByName(id.ToString());
         }
         private void CreateSamplInternal(Guid id, Guid responsibleHeadquaterId, Guid responsibleSupervisorId)
         {
             var result = GetSampleCreationStatus(id);
-            var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
+            var item = this.tempImportStorage.GetByName(id.ToString());
             if (item == null)
             {
                 result.SetErrorMessage("Data is absent");
-                tempImportRepository.Store(result,id.ToString());
+                tempSampleCreationStorage.Store(result, id.ToString());
                 return;
             }
             if (!item.IsCompleted)
             {
                 result.SetErrorMessage("Parsing is still in process");
-                tempImportRepository.Store(result, id.ToString());
+                tempSampleCreationStorage.Store(result, id.ToString());
                 return;
             }
             if (!string.IsNullOrEmpty(item.ErrorMassage))
                 {
                     result.SetErrorMessage("Parsing wasn't successed");
-                    tempImportRepository.Store(result, id.ToString());
+                    tempSampleCreationStorage.Store(result, id.ToString());
                     return;
                 }
 
-            var bigTemplate = this.templateRepository.GetById(item.TemplateId);
+            var bigTemplateObject = this.templateRepository.GetById(item.TemplateId);
+
+            var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
             if (bigTemplate == null)
             {
                 result.SetErrorMessage("Template is absent");
-                tempImportRepository.Store(result, id.ToString());
+                tempSampleCreationStorage.Store(result, id.ToString());
                 return;
             }
-            Questionnaire questionnarie;
+            IQuestionnaire questionnarie;
             //return;
             
             using (new ObliviousEventContext())
             {
-                questionnarie = new Questionnaire(Guid.NewGuid(), bigTemplate);
+                questionnarie = questionnaireFactory.CreateTemporaryInstance(bigTemplate);
             }
             int i = 0;
             foreach (var value in item.Values)
@@ -121,13 +137,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         i++;
 
                         result.SetStatusMessage(string.Format("Validated {0} interview(s) from {1}", i, item.Values.Count));
-                        tempImportRepository.Store(result, id.ToString());
+                        tempSampleCreationStorage.Store(result, id.ToString());
                     }
                 }
                 catch
                 {
                     result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
-                    tempImportRepository.Store(result, id.ToString());
+                    tempSampleCreationStorage.Store(result, id.ToString());
                     return;
                 }
             }
@@ -140,15 +156,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                                    responsibleSupervisorId);
 
                     result.SetStatusMessage(string.Format("Created {0} interview(s) from {1}", i, item.Values.Count));
-                    tempImportRepository.Store(result, id.ToString());
+                    tempSampleCreationStorage.Store(result, id.ToString());
                     i++;
                 }
                 catch
                 {
+                   // result.SetErrorMessage(string.Format("Invalid data in row {0}", i + 1));
                 }
             }
             result.CompleteProcess();
-            tempImportRepository.Store(result, id.ToString());
+            tempSampleCreationStorage.Store(result, id.ToString());
         }
 
         private void Process(Guid templateId, ISampleRecordsAccessor recordAccessor, Guid id)
@@ -156,7 +173,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             var smallTemplate = this.templateSmallRepository.GetById(templateId);
             if (smallTemplate == null)
             {
-                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, "Template Is Absent"), id.ToString());
+                tempImportStorage.Store(CreateErrorTempRecord(templateId, id, "Template Is Absent"), id.ToString());
                 return;
             }
 
@@ -177,7 +194,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
                         }
                         catch (ArgumentException e)
                         {
-                            tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id.ToString());
+                            tempImportStorage.Store(CreateErrorTempRecord(templateId, id, e.Message), id.ToString());
                             break;
                         }
                         continue;
@@ -196,7 +213,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             }
             catch (Exception e)
             {
-                tempImportRepository.Store(CreateErrorTempRecord(templateId, id, e.Message), id.ToString());
+                tempImportStorage.Store(CreateErrorTempRecord(templateId, id, e.Message), id.ToString());
             }
             if (tempBatch.Length > 0)
                 SaveBatch(id, tempBatch.Take(i).ToArray(), true);
@@ -206,12 +223,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
 
         private void SaveBatch(Guid id, IEnumerable<string[]> tempBatch, bool complete)
         {
-            var item = this.tempImportRepository.GetByName<TempFileImportData>(id.ToString());
+            var item = this.tempImportStorage.GetByName(id.ToString());
             if(tempBatch.Any())
                 item.AddValueBatch(tempBatch.ToArray());
             if(complete)
                 item.CompleteImport();
-            this.tempImportRepository.Store(item, id.ToString());
+            this.tempImportStorage.Store(item, id.ToString());
         }
 
 
@@ -222,56 +239,91 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services
             {
                 var realHeader = expectedHeader.FirstOrDefault(h => h.Caption == header[i]);
                 if(realHeader==null)
-                    throw new ArgumentException("invalid header Capiton");
+                    throw new ArgumentException("invalid header Caption");
                 newHeader.Add(realHeader);
             }
-            tempImportRepository.Store(
+            tempImportStorage.Store(
                 CreateTempRecordWithHeader(templateId, id, newHeader.Select(q => q.Caption).ToArray()), id.ToString());
         }
 
-        private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, Questionnaire template)
+        private void PreBuiltInterview(Guid publicKey, string[] values, string[] header, IQuestionnaire template)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+            
+   
+           /* var featuredAnswers =*/ CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: template.GetQuestionByStataCaption);
-
-            template.CreateInterviewWithFeaturedQuestions(publicKey, new UserLight(Guid.NewGuid(), "test"),
+          /*  new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Interview(Guid.NewGuid(), Guid.NewGuid(),
+                template.EventSourceId, featuredAnswers, DateTime.Now, Guid.NewGuid());*/
+            /*   template.CreateInterviewWithFeaturedQuestions(interviewId, new UserLight(Guid.NewGuid(), "test"),
                                                     new UserLight(Guid.NewGuid(), "test"), featuredAnswers);
+ */
         }
-        private void BuiltInterview(Guid publicKey, string[] values, string[] header, QuestionnaireDocument template, Guid headqarter, Guid supervisor)
+        private void BuiltInterview(Guid interviewId, string[] values, string[] header, QuestionnaireDocument template, Guid headqarterId, Guid supervisorId)
         {
-            var featuredAnswers = CreateFeaturedAnswerList(values, header,
+            var answersToFeaturedQuestions = CreateFeaturedAnswerList(values, header,
                 getQuestionByStataCaption: stataCaption => template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption));
 
             var commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            commandInvoker.Execute(new CreateInterviewWithFeaturedQuestionsCommand(publicKey, template.PublicKey,
-                                                                                   new UserLight(headqarter, ""),
-                                                                                   new UserLight(supervisor, ""),
-                                                                                   featuredAnswers));
+            commandInvoker.Execute(new CreateInterviewCommand(interviewId, headqarterId, template.PublicKey, answersToFeaturedQuestions, DateTime.UtcNow, supervisorId));
         }
-        private List<QuestionAnswer> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
+        private Dictionary<Guid, object> CreateFeaturedAnswerList(string[] values, string[] header, Func<string, IQuestion> getQuestionByStataCaption)
         {
-            var featuredAnswers = new List<QuestionAnswer>();
+            if (values.Length < header.Length)
+            {
+                throw new ArgumentOutOfRangeException("Values doesn't much header");
+            }
+
+            var featuredAnswers = new Dictionary<Guid, object>();
             for (int i = 0; i < header.Length; i++)
             {
-                var question =
-                    getQuestionByStataCaption(header[i]);
+                var question = getQuestionByStataCaption(header[i]);
                 if (question == null)
                     continue;
 
-                var singleOption = question as SingleQuestion;
-                if (singleOption != null)
+                switch (question.QuestionType)
                 {
-                    var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
-                    featuredAnswers.Add(new QuestionAnswer() {Answers = new Guid[] {answer.PublicKey}, Id = question.PublicKey});
-                }
-                else
-                {
-                    featuredAnswers.Add(new QuestionAnswer()
+                    case QuestionType.Text:
+                        featuredAnswers.Add(question.PublicKey, values[i]);                        
+                        break;
+
+                    case QuestionType.AutoPropagate:
+                        featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
+                        break;
+                    case QuestionType.Numeric:
+                        var numericQuestion = question as INumericQuestion;
+                        if (numericQuestion == null)
+                            break;
+                        // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
+                        if (numericQuestion.IsInteger)
+                            featuredAnswers.Add(question.PublicKey, int.Parse(values[i]));
+                        else
+                            featuredAnswers.Add(question.PublicKey, decimal.Parse(values[i]));
+
+                        break;
+
+                    case QuestionType.DateTime:
+                        DateTime date;
+                        if (DateTime.TryParse(values[i], out date))
                         {
-                            Answer = values[i],
-                            Answers = new Guid[] {},
-                            Id = question.PublicKey
-                        });
+                            featuredAnswers.Add(question.PublicKey, date);
+                        }
+                        break;
+
+                    case QuestionType.SingleOption:
+                        var singleOption = question as SingleQuestion;
+                        if (singleOption != null)
+                        {
+                            decimal answerValue;
+                            if (decimal.TryParse(values[i], out answerValue))
+                            {
+                                featuredAnswers.Add(question.PublicKey, answerValue);
+                            }
+                        }
+                        break;
+                    case QuestionType.GpsCoordinates:
+                    case QuestionType.MultyOption:
+                        //throw new Exception("Unsupported pre-filled question type in sample");
+                        break;
                 }
             }
             return featuredAnswers;

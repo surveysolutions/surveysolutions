@@ -1192,7 +1192,7 @@
             bool isApproved, 
             out MembershipCreateStatus status)
         {
-            if (this.AccountRepository.IsUniqueEmailRequired && this.AccountRepository.GetUserNameByEmail(email) != null)
+            if (this.AccountRepository.IsUniqueEmailRequired && !string.IsNullOrEmpty(this.AccountRepository.GetUserNameByEmail(email)))
             {
                 status = MembershipCreateStatus.DuplicateEmail;
                 return null;
