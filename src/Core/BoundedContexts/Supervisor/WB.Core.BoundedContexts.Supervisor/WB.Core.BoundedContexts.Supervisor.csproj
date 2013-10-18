@@ -56,7 +56,6 @@
     <Compile Include="EventHandler\InterviewDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSynchronizationEventHandler.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
     <Compile Include="Implementation\ReadSide\InterviewDataRepositoryWriterWithCache.cs" />
@@ -88,7 +87,6 @@
     <Compile Include="Views\Interview\InterviewSummary.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnairePropagationStructure.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
