@@ -53,12 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\CompleteQuestionnaire\CompleteQuestionnaireARTest.cs">
-      <Link>Domain\CompleteQuestionnaire\CompleteQuestionnaireARTest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\CompleteQuestionnaire\SetAnswerTests.cs">
-      <Link>Domain\CompleteQuestionnaire\SetAnswerTests.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\TestDataConfigurator.cs">
       <Link>Domain\TestDataConfigurator.cs</Link>
     </Compile>
@@ -91,6 +85,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\QuestionnaireParametersParserTest.cs">
       <Link>ExpressionExecutors\QuestionnaireParametersParserTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\SimpleObjectExtensionsTests.cs">
+      <Link>SimpleObjectExtensionsTests.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Utils\RavenMockUtils.cs">
       <Link>Utils\RavenMockUtils.cs</Link>

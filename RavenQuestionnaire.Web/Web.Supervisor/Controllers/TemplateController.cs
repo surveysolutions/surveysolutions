@@ -1,69 +1,38 @@
-﻿using Main.Core.Commands.Questionnaire;
+﻿using System;
+using System.Net;
+using System.ServiceModel.Security;
+using System.Web.Mvc;
+using Core.Supervisor.Views.Template;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using Web.Supervisor.Code;
+using Web.Supervisor.DesignerPublicService;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Net;
-    using System.ServiceModel.Security;
-    using System.Web.Mvc;
-
-    using Core.Supervisor.Views.Template;
-
-    using Main.Core.Documents;
-    using Main.Core.Utility;
-    
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using WB.Core.SharedKernel.Utils.Compression;
-
-    using Web.Supervisor.DesignerPublicService;
-    using Web.Supervisor.Models;
-
-    /// <summary>
-    /// The template controller.
-    /// </summary>
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
-        private readonly IStringCompressor zipUtils;
-        #region Constructors and Destructors
-
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
-            this.zipUtils = zipUtils;
+            this.ViewBag.ActivePage = MenuItem.Administration;
 
-            ViewBag.ActivePage = MenuItem.Administration;
-
-            #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
-            ServicePointManager.ServerCertificateValidationCallback =
-                    (self, certificate, chain, sslPolicyErrors) => true;
-        }
-
-        #endregion
-
-        private IPublicService DesignerService
-        {
-            get
+            if (AppSettings.Instance.AcceptUnsignedCertificate)
             {
-                return DesignerServiceClient;
+                ServicePointManager.ServerCertificateValidationCallback =
+                    (self, certificate, chain, sslPolicyErrors) => true;
             }
         }
+
 
         private PublicServiceClient DesignerServiceClient
         {
-            get
-            {
-                return (PublicServiceClient)this.Session[GlobalInfo.GetCurrentUser().Name];
-            }
+            get { return (PublicServiceClient) this.Session[this.GlobalInfo.GetCurrentUser().Name]; }
 
-            set
-            {
-                this.Session[GlobalInfo.GetCurrentUser().Name] = value;
-            }
+            set { this.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
         }
 
         public ActionResult Import(QuestionnaireListInputModel model)
@@ -74,13 +43,7 @@ namespace Web.Supervisor.Controllers
             }
 
             return
-                this.View(
-                    DesignerService.GetQuestionnaireList(
-                        new QuestionnaireListRequest(
-                            Filter: string.Empty,
-                            PageIndex: model.Page,
-                            PageSize: model.PageSize,
-                            SortOrder: model.Order)));
+                this.View();
         }
 
         public ActionResult LoginToDesigner()
@@ -92,7 +55,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult LoginToDesigner(LogOnModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 var service = new PublicServiceClient();
                 service.ClientCredentials.UserName.UserName = model.UserName;
@@ -102,9 +65,9 @@ namespace Web.Supervisor.Controllers
                 {
                     service.Dummy();
 
-                    DesignerServiceClient = service;
+                    this.DesignerServiceClient = service;
 
-                    return RedirectToAction("Import");
+                    return this.RedirectToAction("Import");
                 }
                 catch (MessageSecurityException)
                 {
@@ -116,53 +79,11 @@ namespace Web.Supervisor.Controllers
                         string.Format(
                             "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
                             GlobalHelper.GenerateUrl("Import", "Template", null)));
-                    Logger.Error("Could not connect to designer.", ex);
+                    this.Logger.Error("Could not connect to designer.", ex);
                 }
             }
 
             return this.View(model);
-        }
-
-
-        public ActionResult List(GridDataRequestModel data)
-        {
-            var list =
-                DesignerService.GetQuestionnaireList(
-                    new QuestionnaireListRequest(
-                        Filter: string.Empty,
-                        PageIndex: data.Pager.Page,
-                        PageSize: data.Pager.PageSize,
-                        SortOrder: StringUtil.GetOrderRequestString(data.SortOrder)));
-
-            return this.PartialView("_PartialGrid_Questionnaires", list);
-        }
-
-        public ActionResult Get(Guid id)
-        {
-            QuestionnaireDocument document = null;
-
-            try
-            {
-                var docSource = DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
-                document = zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
-            }
-            catch (Exception ex)
-            {
-                this.Error("Error when downloading questionnaire from designer. Please try again");
-                Logger.Error("Unexpected error occurred", ex);
-            }
-
-            if (document == null)
-            {
-                return this.RedirectToAction("Import");
-            }
-            else
-            {
-                this.CommandService.Execute(
-                    new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
-
-                return this.RedirectToAction("Index", "HQ");    
-            }
         }
     }
 }

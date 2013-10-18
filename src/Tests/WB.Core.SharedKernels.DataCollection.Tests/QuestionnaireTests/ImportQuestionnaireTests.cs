@@ -7,10 +7,12 @@ using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 {
-    public class ImportQuestionnaireTests : QuestionnaireTestsContext
+    internal class ImportQuestionnaireTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()
@@ -37,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
 
 
         [Test]
-        public void Execute_When_SourceIsNotQuestionnaireDocument_Then_ArgumentException_should_be_thrown()
+        public void Execute_When_SourceIsNotQuestionnaireDocument_Then_QuestionnaireException_should_be_thrown()
         {
             using (var eventContext = new EventContext())
             {
@@ -49,7 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
                     () =>
                     questionnaire.ImportQuestionnaire(Guid.NewGuid(), docMock.Object);
                 // assert
-                Assert.Throws<DomainException>(act);
+                Assert.Throws<QuestionnaireException>(act);
             }
         }
     }

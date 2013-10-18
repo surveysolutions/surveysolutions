@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
+using Newtonsoft.Json.Linq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using System.Linq;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-
-
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
         protected QuestionViewModel(
-            ItemPublicKey publicKey,
+            InterviewItemId publicKey,
             string text,
             QuestionType questionType,
             bool enabled,
@@ -17,22 +19,27 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool valid,
             bool mandatory,
-            bool capital,
-            string answerString,
-            string validationExpression,
-            string validationMessage)
+            object answerObject,
+            string validationMessage,
+            string variable,
+            IEnumerable<string> substitutionReferences)
         {
             PublicKey = publicKey;
-            ValidationExpression = validationExpression;
             ValidationMessage = validationMessage;
-            Text = text;
+            SubstitutionReferences = substitutionReferences;
+            referencedQuestionAnswers = SubstitutionReferences.ToDictionary(x => x, y => StringUtil.DefaultSubstitutionText);
+            SourceText = Text = text;
+
+            this.ReplaceSubstitutionVariables();
+
             QuestionType = questionType;
-            AnswerString = answerString;
-            Capital = capital;
+            AnswerObject = answerObject;
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
+            Variable = variable;
 
+            Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
             {
                 Status = Status | QuestionStatus.Enabled;
@@ -41,61 +48,83 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 Status = Status | QuestionStatus.Valid;
             }
-            var answered = !string.IsNullOrEmpty(answerString);
+            var answered = answerObject != null;
             if (answered)
                 Status = Status | QuestionStatus.Answered;
-            
         }
-        protected QuestionViewModel(
-           ItemPublicKey publicKey,
-           string text,
-           QuestionType questionType,
-           QuestionStatus status,
-           string instructions,
-           string comments,
-           bool mandatory,
-           bool capital,
-           string answerString,
-           string validationExpression,
-           string validationMessage)
-        {
-            PublicKey = publicKey;
-            ValidationExpression = validationExpression;
-            ValidationMessage = validationMessage;
-            Text = text;
-            QuestionType = questionType;
-            AnswerString = answerString;
-            Capital = capital;
-            Instructions = instructions;
-            Comments = comments;
-            Mandatory = mandatory;
 
-            Status = status;
-        }
-        public ItemPublicKey PublicKey { get; private set; }
+        public InterviewItemId PublicKey { get; private set; }
+        public string SourceText { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
-        public bool Capital { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
-        public string AnswerString { get; protected set; }
-        public abstract string AnswerObject { get; }
+        public string Variable { get; private set; }
+        public IEnumerable<string> SubstitutionReferences { get; private set; }
+        private readonly Dictionary<string, string> referencedQuestionAnswers = new Dictionary<string, string>();
+
+        public virtual string AnswerString
+        {
+            get { return (AnswerObject ?? "").ToString(); }
+        }
+
+        public object AnswerObject { get; private set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
-        public string ValidationExpression { get; private set; }
         public string ValidationMessage { get; private set; }
 
-        public abstract IQuestionnaireItemViewModel Clone(Guid propagationKey);
+        public abstract IQuestionnaireItemViewModel Clone(int[] propagationVector);
 
-        public virtual void SetAnswer(List<Guid> answer, string answerString)
+        public virtual void SetAnswer(object answer)
         {
-            this.AnswerString = answerString;
+            if (answer == null)
+            {
+                return;
+            }
+
+            this.AnswerObject = answer;
+            
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
                 Status = Status | QuestionStatus.Answered;
                 RaisePropertyChanged("Status");
             }
+
             RaisePropertyChanged("AnswerString");
+        }
+
+        public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
+        {
+            this.referencedQuestionAnswers[referencedQuestion.Variable] = string.IsNullOrEmpty(referencedQuestion.AnswerString)
+                ? StringUtil.DefaultSubstitutionText
+                : referencedQuestion.AnswerString;
+
+            this.ReplaceSubstitutionVariables();
+
+            RaisePropertyChanged(() => Text);
+        }
+
+        private void ReplaceSubstitutionVariables()
+        {
+            this.Text = this.SourceText;
+            foreach (var substitutionReference in this.SubstitutionReferences)
+            {
+                this.Text = this.Text.ReplaceSubstitutionVariable(substitutionReference,
+                    this.referencedQuestionAnswers[substitutionReference]);
+            }
+        }
+
+        public virtual void RemoveAnswer()
+        {
+            this.AnswerObject = null;
+
+            if (this.Status.HasFlag(QuestionStatus.Answered))
+            {
+                this.Status ^= QuestionStatus.Answered;
+                this.RaisePropertyChanged("Status");
+            }
+
+            this.RaisePropertyChanged("AnswerString");
         }
 
         public virtual void SetComment(string comment)
@@ -125,14 +154,43 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 Status &= ~QuestionStatus.Valid;
             RaisePropertyChanged("Status");
         }
+
+        public bool IsEnabled()
+        {
+            return this.Status.HasFlag(QuestionStatus.Enabled) && this.Status.HasFlag(QuestionStatus.ParentEnabled);
+        }
+
+        public void SetParentEnabled(bool enabled)
+        {
+            if (Status.HasFlag(QuestionStatus.ParentEnabled) == enabled)
+                return;
+            if (enabled)
+                Status = Status | QuestionStatus.ParentEnabled;
+            else
+                Status &= ~QuestionStatus.ParentEnabled;
+            RaisePropertyChanged("Status");
+        }
+
+        protected T[] GetValueFromJArray<T>(object answer)
+        {
+            try
+            {
+                return ((JArray)answer).ToObject<T[]>();
+            }
+            catch (Exception)
+            {
+                return new T[0];
+            }
+        }
     }
 
     [Flags]
     public enum QuestionStatus
     {
-        None=0,
-        Enabled=1,
-        Valid=2,
-        Answered=4
+        None = 0,
+        Enabled = 1,
+        Valid = 2,
+        Answered = 4,
+        ParentEnabled = 8
     }
 }

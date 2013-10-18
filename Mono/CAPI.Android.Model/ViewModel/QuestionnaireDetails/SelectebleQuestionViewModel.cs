@@ -3,90 +3,136 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class SelectebleQuestionViewModel:QuestionViewModel
+    public class SelectebleQuestionViewModel : QuestionViewModel
     {
         public SelectebleQuestionViewModel(
-            ItemPublicKey publicKey, 
+            InterviewItemId publicKey,
             string text,
-            QuestionType questionType, 
-            IEnumerable<AnswerViewModel> answers, 
-            bool enabled, 
-            string instructions, 
-            string comments, 
-            bool valid, 
-            bool mandatory, 
-            bool capital, 
-            string answerString, 
-            string validationExpression,
-            string validationMessage)
-            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
+            QuestionType questionType,
+            IEnumerable<AnswerViewModel> answers,
+            bool enabled,
+            string instructions,
+            string comments,
+            bool valid,
+            bool mandatory,
+            object answerObject,
+            string validationMessage,
+            string variable, 
+            IEnumerable<string> substitutionReferences)
+            : base(
+                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answerObject, validationMessage, variable, substitutionReferences)
         {
             Answers = answers;
         }
 
-        [JsonConstructor]
-        public SelectebleQuestionViewModel(
-            ItemPublicKey publicKey,
-            string text,
-            QuestionType questionType,
-            IEnumerable<AnswerViewModel> answers,
-            QuestionStatus status,
-            string instructions,
-            string comments,
-            bool mandatory,
-            bool capital,
-            string answerString,
-            string validationExpression,
-            string validationMessage)
-            : base(publicKey, text, questionType, status, instructions, comments,  mandatory, capital, answerString, validationExpression, validationMessage)
-        {
-            Answers = answers;
-        }
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
+
+        public override string AnswerString
+        {
+            get
+            {
+                var selectedAnswers = Answers.Where(a => a.Selected).Select(answer => answer.Title).ToList();
+                return string.Join(", ", selectedAnswers);
+            }
+        }
+
+        public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
         {
             IList<AnswerViewModel> newAnswers = new List<AnswerViewModel>();
             foreach (AnswerViewModel answerViewModel in Answers)
             {
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
-            return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
-                                                   this.Text, this.QuestionType, newAnswers,
-                                                   this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
-                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerString, this.ValidationExpression,this.ValidationMessage);
+            return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
+                this.SourceText, this.QuestionType, newAnswers,
+                this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
+                this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
+                this.Mandatory,  this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences);
         }
 
-        public override string AnswerObject
-        {
-            get
-            {
-                var value = this.Answers.Where(a => a.Selected).Select(a => a.Value).FirstOrDefault();
-                if (value == null)
-                    return string.Empty;
-                return value;
-            }
-        }
-
-        public override void SetAnswer(List<Guid> answer, string answerString)
+        public override void SetAnswer(object answer)
         {
             if (answer == null)
             {
                 return;
             }
+
+            var typedAnswers = this.CastAnswerToSingleDimensionalArray(answer) ?? this.CastAnswerToDecimal(answer);
+
+            if (typedAnswers == null)
+            {
+                return;
+            }
+
             foreach (var item in this.Answers)
             {
-                item.Selected = answer.Contains(item.PublicKey);
+                item.Selected = typedAnswers.Contains(item.Value);
             }
-            base.SetAnswer(answer, answerString);
-            if (QuestionType==QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a=>a.Selected))
+
+            base.SetAnswer(answer);
+
+            this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
+        }
+
+        public override void RemoveAnswer()
+        {
+            foreach (var item in this.Answers)
             {
-                Status &= ~QuestionStatus.Answered;
-                RaisePropertyChanged("Status");
+                item.Selected = false;
             }
+
+            base.RemoveAnswer();
+
+            this.RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions();
+        }
+
+        private void RemoveStatusAnsweredIfMultiOptionHasNoSelectedOptions()
+        {
+            if (this.QuestionType == QuestionType.MultyOption && this.Status.HasFlag(QuestionStatus.Answered) && !this.Answers.Any(a => a.Selected))
+            {
+                this.Status &= ~QuestionStatus.Answered;
+                this.RaisePropertyChanged("Status");
+            }
+        }
+
+        private decimal[] CastAnswerToSingleDimensionalArray(object answer)
+        {
+            var decimalCast = answer as IEnumerable<decimal>;
+            if (decimalCast != null)
+                return decimalCast.ToArray();
+
+            var objectCast = answer as IEnumerable<object>;
+            if (objectCast != null)
+                return objectCast.Select(ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
+
+            var jArrayCast = this.GetValueFromJArray<decimal>(answer);
+            if (jArrayCast.Length > 0)
+                return jArrayCast;
+            return null;
+        }
+
+        private decimal? ConvertObjectToAnswer(object answer)
+        {
+            if (answer == null)
+                return null;
+            decimal value;
+            if (decimal.TryParse(answer.ToString(), out value))
+                return value;
+            return null;
+        }
+
+        private decimal[] CastAnswerToDecimal(object answer)
+        {
+            var decimalAnswer = ConvertObjectToAnswer(answer);
+            if (decimalAnswer.HasValue)
+                return new decimal[] {decimalAnswer.Value};
+            return null;
         }
     }
 }

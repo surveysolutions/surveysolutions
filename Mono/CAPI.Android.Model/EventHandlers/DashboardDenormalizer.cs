@@ -1,110 +1,123 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
 using Main.Core.Events.Questionnaire.Completed;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ReadSide;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<NewAssigmentCreated>,
-                                         IEventHandler<QuestionnaireStatusChanged>, IEventHandler<InterviewMetaInfoUpdated>
+    public class DashboardDenormalizer :
+                                      IEventHandler<SynchronizationMetadataApplied>,
+                                      IEventHandler<InterviewSynchronized>,
+                                      IEventHandler<InterviewDeclaredValid>,
+                                      IEventHandler<InterviewDeclaredInvalid>,
+                                      IEventHandler<InterviewStatusChanged>, 
+                                      IEventHandler<TemplateImported>
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
-        private readonly IReadSideRepositoryWriter<SurveyDto> _surveyDTOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage;
+        private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtOdocumentStorage;
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage
-            )
+                                     IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage, 
+                                     IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnaireStorage)
         {
-            _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;
-            _surveyDTOdocumentStorage = surveyDTOdocumentStorage;
+            this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
+            this.surveyDtOdocumentStorage = surveyDTOdocumentStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
-        #region Implementation of IEventHandler<in SnapshootLoaded>
-
-        public void Handle(IPublishedEvent<NewAssigmentCreated> evnt)
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            var document = evnt.Payload.Source;
-            ProcessCompleteQuestionnaire(document);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.Status, evnt.Payload.FeaturedQuestionsMeta);
         }
 
-        #endregion
-        protected void ProcessCompleteQuestionnaire( CompleteQuestionnaireDocument doc)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, Guid interviewId, Guid responsibleId,
+                                                     InterviewStatus status,
+                                                     IEnumerable<AnsweredQuestionSynchronizationDto>
+                                                         answeredQuestions)
         {
-            if (!IsVisible(doc.Status))
-            {
-                _questionnaireDTOdocumentStorage.Remove(doc.PublicKey);
+            var questionnaireTemplate = questionnaireStorage.GetById(questionnaireId);
+            if (questionnaireTemplate == null)
                 return;
-            }
-            var featuredItems = doc.GetFeaturedQuestions();
-            var items = featuredItems.Select(
+            var items =
+                FilterNonFeaturedQuestionsByTemplate(questionnaireTemplate.Questionnaire, answeredQuestions).Select(
+                    q =>
+                    new FeaturedItem(q.Id, questionnaireTemplate.Questionnaire.Find<IQuestion>(q.Id).QuestionText,
+                                     q.Answer.ToString()))
+                                                                                                            .ToList();
+            questionnaireDtOdocumentStorage.Store(
+                new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
+                                     items), interviewId);
+        }
+
+        private IEnumerable<AnsweredQuestionSynchronizationDto> FilterNonFeaturedQuestionsByTemplate(
+            QuestionnaireDocument template, IEnumerable<AnsweredQuestionSynchronizationDto> allQuestions)
+        {
+            return allQuestions.Where(
                 q =>
-                new FeaturedItem(q.PublicKey, q.QuestionText,
-                                 q.GetAnswerString())).ToList();
-            var survey = _surveyDTOdocumentStorage.GetById(doc.TemplateId);
-            if (survey == null)
-                _surveyDTOdocumentStorage.Store(new SurveyDto(doc.TemplateId, doc.Title), doc.TemplateId);
-          
-            _questionnaireDTOdocumentStorage.Store(
-                new QuestionnaireDTO(doc.PublicKey, doc.Responsible.Id, doc.TemplateId, doc.Status, items),
-                doc.PublicKey);
+                template.FirstOrDefault<IQuestion>(
+                    questionFromTemplate => questionFromTemplate.PublicKey == q.Id && questionFromTemplate.Featured) !=
+                null);
         }
 
-
-        public void Handle(IPublishedEvent<InterviewMetaInfoUpdated> evnt)
+        public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var meta = evnt.Payload;
-            var status = SurveyStatus.GetStatusByIdOrDefault(meta.StatusId);
+            AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId, evnt.EventSourceId, evnt.Payload.UserId,
+                                            evnt.Payload.InterviewData.Status, evnt.Payload.InterviewData.Answers);
+        }
 
-            if (!IsVisible(status))
-            {
-                _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            surveyDtOdocumentStorage.Store(new SurveyDto(evnt.EventSourceId, evnt.Payload.Source.Title), evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
+        {
+            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            if (questionnaire == null)
                 return;
-            }
-
-            var items = meta.FeaturedQuestionsMeta.Select(q => new FeaturedItem(q.PublicKey, q.Title, q.Value)).ToList();
-            var survey = _surveyDTOdocumentStorage.GetById(meta.TemplateId);
-            
-            if (survey == null)
-                _surveyDTOdocumentStorage.Store(new SurveyDto(meta.TemplateId, meta.Title), meta.TemplateId);
-          
-            _questionnaireDTOdocumentStorage.Store(
-                new QuestionnaireDTO(evnt.EventSourceId, meta.ResponsibleId.Value, meta.TemplateId, status, items),
-                evnt.EventSourceId);
+            questionnaire.Valid = true;
+            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
- 
-        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
-
-        public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
         {
-            var questionnaire = _questionnaireDTOdocumentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
-            if(questionnaire==null)
+            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            if (questionnaire == null)
                 return;
-            if (!IsVisible(evnt.Payload.Status))
-            {
-                _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
-            }
-            questionnaire.Status = evnt.Payload.Status.PublicId.ToString();
-
-            _questionnaireDTOdocumentStorage.Store(questionnaire, evnt.Payload.CompletedQuestionnaireId);
-          
+            questionnaire.Valid = false;
+            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
-        #endregion
-        protected bool IsVisible(SurveyStatus status)
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Reinit || status == SurveyStatus.Error;
+            if(!IsInterviewCompletedOrRestarted(evnt.Payload.Status))
+                return;
+
+            var questionnaire = questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            if (questionnaire == null)
+                return;
+            questionnaire.Status = (int)evnt.Payload.Status;
+            questionnaire.Comments = evnt.Payload.Comment;
+
+            questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
         }
-        
-        public void RemoveItem(Guid itemId)
+
+        private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
         {
-            _questionnaireDTOdocumentStorage.Remove(itemId);
+            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
     }
 }

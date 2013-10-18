@@ -7,6 +7,8 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Events;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -52,10 +54,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void Initialize()
         {
-            var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            layoutParams.SetMargins(0, 0, 0, 10);
-            this.LayoutParameters = layoutParams;
-            
             AddButton();
 
             AddCounterText();
@@ -82,8 +80,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 this.Visibility = ViewStates.Gone;
             }
+        }
 
-          
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.Model != null)
+                {
+                    this.Model.PropertyChanged -= Model_PropertyChanged;
+                }
+            }
+
+            base.Dispose(disposing);
         }
 
         private void AddCounterText()
@@ -145,7 +154,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             OnScreenChanged(Model.PublicKey);
         }
 
-        protected void OnScreenChanged(ItemPublicKey publicKey)
+        protected void OnScreenChanged(InterviewItemId publicKey)
         {
             var handler = ScreenChanged;
             if(handler!=null)

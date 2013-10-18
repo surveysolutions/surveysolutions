@@ -22,33 +22,34 @@
         <Button Content="Generate" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Top" Height="40"  Width="120" Command="{Binding GenerateCommand}"  IsEnabled="{Binding CanGenerate}" Grid.ColumnSpan="2" Margin="0,5,0,0"/>
         <GroupBox Header="Parameters:" Margin="10,0,10.4,0" Grid.RowSpan="3">
             <Grid>
-                <TextBlock HorizontalAlignment="Left" Margin="18,110,0,0" TextWrapping="Wrap" Text="Number of questionnaires by interviewer:" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding QuestionnairesCount, Mode=TwoWay}"/>
-                <TextBlock HorizontalAlignment="Left" Margin="18,61,0,0" TextWrapping="Wrap" Text="Number of interviewers:" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding InterviewersCount, Mode=TwoWay}"/>
-                <TextBlock HorizontalAlignment="Left" Margin="18,158,0,0" TextWrapping="Wrap" Text="Percentage of answers by questionnaire:" VerticalAlignment="Top" Width="222"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding AnswersCount, Mode=TwoWay}"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,326,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="211" Text="{Binding TemplatePath}" IsReadOnly="True"/>
-                <Button Content="Open" HorizontalAlignment="Left" Margin="234,326,0,0" VerticalAlignment="Top" Width="59" Height="23" Command="{Binding OpenTemplateCommand}"/>
-                <TextBlock HorizontalAlignment="Left" Margin="18,305,0,0" TextWrapping="Wrap" Text="Template:" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="72,184,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="18,208,0,0" TextWrapping="Wrap" Text="Percentage of comments by questionnaire:" VerticalAlignment="Top" Width="236"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="20,229,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding CommentsCount, Mode=TwoWay}"/>
-                <TextBlock HorizontalAlignment="Left" Margin="73,233,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="20,257,0,0" TextWrapping="Wrap" Text="Percentage of complate/redo statuses:" VerticalAlignment="Top" Width="222"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="20,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding StatusesCount, Mode=TwoWay}"/>
-                <TextBlock HorizontalAlignment="Left" Margin="73,281,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
-                <TextBlock HorizontalAlignment="Left" Margin="20,9,0,0" TextWrapping="Wrap" Text="Select supervisor:" VerticalAlignment="Top"/>
-                <ComboBox HorizontalAlignment="Left" Margin="18,30,0,0" VerticalAlignment="Top" Width="220" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
+                <TextBlock HorizontalAlignment="Left" Margin="18,142,0,0" TextWrapping="Wrap" Text="Number of interviews by interviewer:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,162,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding QuestionnairesCount, Mode=TwoWay}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="18,93,0,0" TextWrapping="Wrap" Text="Number of interviewers:" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding InterviewersCount, Mode=TwoWay}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="18,190,0,0" TextWrapping="Wrap" Text="Percentage of answers by inteview:" VerticalAlignment="Top" Width="222"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="18,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding AnswersCount, Mode=TwoWay}"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="20,361,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="211" Text="{Binding TemplatePath}" IsReadOnly="True"/>
+                <Button Content="Open" HorizontalAlignment="Left" Margin="236,361,0,0" VerticalAlignment="Top" Width="59" Height="23" Command="{Binding OpenTemplateCommand}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="20,340,0,0" TextWrapping="Wrap" Text="Template:" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="72,216,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="18,240,0,0" TextWrapping="Wrap" Text="Percentage of comments by interview:" VerticalAlignment="Top" Width="236"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="20,261,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding CommentsCount, Mode=TwoWay}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="73,265,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="20,289,0,0" TextWrapping="Wrap" Text="Percentage of complete/approve statuses:" VerticalAlignment="Top" Width="234"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="20,309,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding StatusesCount, Mode=TwoWay}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="73,313,0,0" TextWrapping="Wrap" Text="%" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="20,25,0,0" TextWrapping="Wrap" Text="Select supervisor:" VerticalAlignment="Top"/>
+                <ComboBox HorizontalAlignment="Left" Margin="18,46,0,0" VerticalAlignment="Top" Width="220" ItemsSource="{Binding SupervisorList}" SelectedItem="{Binding SelectedSupervisor}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding UserName}"></TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <CheckBox Content="All events only for supervisor" HorizontalAlignment="Left" Margin="18,73,0,0" VerticalAlignment="Top" IsChecked="{Binding OnlyForSupervisor, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
-        
+
         <StatusBar Grid.ColumnSpan="2" Grid.Row="4">
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding CanGenerate, Converter={StaticResource BoolToNegotiationVisibilityConverter}}">

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Supervisor.DenormalizerStorageItem;
-using Core.Supervisor.RavenIndexes;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
+using WB.Core.BoundedContexts.Supervisor.Views.Interview;
+using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 
 namespace Core.Supervisor.Tests.RavenIndexes
 {
@@ -24,20 +25,20 @@ namespace Core.Supervisor.Tests.RavenIndexes
 
         protected class SummaryItemSketch
         {
-            public int Unassigned { get; set; }
+            public int SupervisorAssignedCount { get; set; }
             public TestUser ResponsibleSupervisor { get; set; }
             public TestUser Responsible { get; set; }
             public TestTemplate Template { get; set; }
             public int Total
             {
-                get { return this.Unassigned + this.Initial + this.Complete + this.Approved + this.Error + this.Redo; }
+                get { return this.SupervisorAssignedCount + this.InterviewerAssignedCount + this.Complete + this.RejectedBySupervisorCount + this.Error + this.Redo; }
             }
 
-            public int Initial { get; set; }
+            public int InterviewerAssignedCount { get; set; }
 
             public int Complete { get; set; }
 
-            public int Approved { get; set; }
+            public int RejectedBySupervisorCount { get; set; }
 
             public int Error { get; set; }
 
@@ -53,7 +54,7 @@ namespace Core.Supervisor.Tests.RavenIndexes
         protected static readonly TestTemplate Template1 = new TestTemplate { Id = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"), Title = "The first template" };
         protected static readonly TestTemplate Template2 = new TestTemplate { Id = Guid.Parse("EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE"), Title = "The second template" };
 
-        protected static EmbeddableDocumentStore CreateDocumentStore(IEnumerable<SummaryItem> documents)
+        protected static EmbeddableDocumentStore CreateDocumentStore(IEnumerable<StatisticsLineGroupedByUserAndTemplate> documents)
         {
             var documentStore = new EmbeddableDocumentStore
                 {
@@ -100,34 +101,34 @@ namespace Core.Supervisor.Tests.RavenIndexes
             
         }
 
-        protected static IEnumerable<SummaryItem> GenerateStatisticDocuments(params SummaryItemSketch[] testSummaryItems)
+        protected static IEnumerable<StatisticsLineGroupedByUserAndTemplate> GenerateStatisticDocuments(params SummaryItemSketch[] testSummaryItems)
         {
-            return testSummaryItems.Select(x => new SummaryItem()
+            return testSummaryItems.Select(x => new StatisticsLineGroupedByUserAndTemplate()
                 {
                     TotalCount = x.Total,
-                    UnassignedCount = x.Unassigned,
-                    InitialCount = x.Initial,
+                    SupervisorAssignedCount = x.SupervisorAssignedCount,
+                    InterviewerAssignedCount = x.InterviewerAssignedCount,
                     CompletedCount = x.Complete,
-                    RedoCount = x.Redo,
-                    CompletedWithErrorsCount = x.Error,
-                    ApprovedCount = x.Approved,
-                    DeletedInterviews = new HashSet<Guid>(),
+                    RejectedBySupervisorCount = x.Redo,
+                    //CompletedWithErrorsCount = x.Error, // not exists in StatisticsLineGroupedByUserAndTemplate
+                    ApprovedBySupervisorCount = x.RejectedBySupervisorCount,
+                    //DeletedInterviews = new HashSet<Guid>(),
                     ResponsibleId = x.Responsible.Id,
                     ResponsibleName = x.Responsible.Name,
-                    ResponsibleSupervisorId = x.ResponsibleSupervisor.Id,
-                    ResponsibleSupervisorName = x.ResponsibleSupervisor.Name,
-                    TemplateId = x.Template.Id,
-                    TemplateName = x.Template.Title
+                    TeamLeadId = x.ResponsibleSupervisor.Id,
+                    TeamLeadName = x.ResponsibleSupervisor.Name,
+                    QuestionnaireId = x.Template.Id,
+                    QuestionnaireTitle = x.Template.Title
                 });
         }
 
-        protected static IEnumerable<SummaryItem> GetLineItemForTeam(IEnumerable<SummaryItem> lineItems, TestUser teamSupervisor)
+        protected static IEnumerable<StatisticsLineGroupedByUserAndTemplate> GetLineItemForTeam(IEnumerable<StatisticsLineGroupedByUserAndTemplate> lineItems, TestUser teamSupervisor)
         {
-            return lineItems.Where(lineItem => lineItem.ResponsibleSupervisorId == teamSupervisor.Id && lineItem.ResponsibleId == Guid.Empty);
+            return lineItems.Where(lineItem => lineItem.TeamLeadId == teamSupervisor.Id && lineItem.ResponsibleId == Guid.Empty);
         }
-        protected static IEnumerable<SummaryItem> GetLineItemForTeamMember(IEnumerable<SummaryItem> lineItems, TestUser teamSupervisor, TestUser teamMember)
+        protected static IEnumerable<StatisticsLineGroupedByUserAndTemplate> GetLineItemForTeamMember(IEnumerable<StatisticsLineGroupedByUserAndTemplate> lineItems, TestUser teamSupervisor, TestUser teamMember)
         {
-            return lineItems.Where(lineItem => lineItem.ResponsibleSupervisorId == teamSupervisor.Id && lineItem.ResponsibleId == teamMember.Id);
+            return lineItems.Where(lineItem => lineItem.TeamLeadId == teamSupervisor.Id && lineItem.ResponsibleId == teamMember.Id);
         }
     }
 }

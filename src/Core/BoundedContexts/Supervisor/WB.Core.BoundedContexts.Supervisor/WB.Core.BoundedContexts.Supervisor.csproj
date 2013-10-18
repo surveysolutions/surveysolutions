@@ -50,14 +50,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
+    <Compile Include="EventHandler\DummyEventHandler.cs" />
+    <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewSynchronizationEventHandler.cs" />
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
+    <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
+    <Compile Include="EventHandler\StatisticsDenormalizer.cs" />
+    <Compile Include="Implementation\ReadSide\InterviewDataRepositoryWriterWithCache.cs" />
+    <Compile Include="Implementation\ReadSide\TemporaryInterviewWriter.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
+    <Compile Include="Implementation\Services\DataExport\CsvDataExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\CSVIterviewExporter.cs" />
+    <Compile Include="Implementation\Services\DataExport\StataEnvironmentSupplier.cs" />
+    <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
+    <Compile Include="Services\IDataExportService.cs" />
     <Compile Include="SupervisorBoundedContextModule.cs" />
-    <Compile Include="Implementation\TemporaryDataRepository\FileTemporaryDataRepositoryAccessor.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
-    <Compile Include="Implementation\ITemporaryDataRepositoryAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Implementation\ISampleRecordsAccessor.cs" />
+    <Compile Include="EventHandler\UserDenormalizer.cs" />
+    <Compile Include="Views\DataExport\ExportedHeaderCollection.cs" />
+    <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
+    <Compile Include="Views\DataExport\ExportedQuestion.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportFactory.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportInputModel.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportRerord.cs" />
+    <Compile Include="Views\DataExport\InterviewDataExportView.cs" />
+    <Compile Include="Views\Interview\InterviewBrief.cs" />
+    <Compile Include="Views\Interview\InterviewData.cs" />
+    <Compile Include="Views\Interview\InterviewLevel.cs" />
+    <Compile Include="Views\Interview\InterviewQuestion.cs" />
+    <Compile Include="Views\Interview\InterviewQuestionComment.cs" />
+    <Compile Include="Views\Interview\InterviewSummary.cs" />
+    <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
+    <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnairePropagationStructure.cs" />
+    <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
     <Compile Include="Views\SampleImport\TempFileImportData.cs" />
@@ -87,10 +119,15 @@
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
       <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
+      <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
+      <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

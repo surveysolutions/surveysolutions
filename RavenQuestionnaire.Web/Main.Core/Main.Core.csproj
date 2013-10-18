@@ -139,10 +139,11 @@
   <ItemGroup>
     <Compile Include="AbstractFactories\CompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\CompleteGroupFactory.cs" />
-    <Compile Include="AbstractFactories\CompleteQuestionFactory.cs" />
+    <Compile Include="AbstractFactories\IQuestionFactory.cs" />
+    <Compile Include="AbstractFactories\QuestionFactory.cs" />
+    <Compile Include="Entities\QuestionData.cs" />
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
-    <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
     <Compile Include="Backup\IBackupManager.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
@@ -161,7 +162,6 @@
     <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
@@ -213,11 +213,11 @@
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Domain\ClientDeviceAR.cs" />
     <Compile Include="Domain\CollectionAR.cs" />
-    <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
+    <Compile Include="Domain\_CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
     <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
-    <Compile Include="Domain\Exceptions\InterviewException.cs" />
+    <Compile Include="Domain\Exceptions\CompleteQuestionnaireException.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\SyncActivityAR.cs" />
@@ -258,6 +258,9 @@
     <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\GeoPosition.cs" />
+    <Compile Include="Entities\SubEntities\NumericQuestionUtils.cs" />
+    <Compile Include="Entities\SubEntities\Question\IAutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -407,8 +410,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\TemplateLight.cs" />
-    <Compile Include="EventHandlers\ClientDeviceDenormalizer.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="Events\AggregateRootEvent.cs">
@@ -454,7 +455,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Questionnaire\Completed\InterviewDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -565,9 +565,6 @@
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="View\Answer\AnswerView.cs" />
     <Compile Include="View\Answer\CompleteAnswerView.cs" />
-    <Compile Include="View\Card\CardView.cs" />
-    <Compile Include="View\Card\CardViewFactory.cs" />
-    <Compile Include="View\Card\CardViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />

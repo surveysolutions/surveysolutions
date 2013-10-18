@@ -1,6 +1,4 @@
 ﻿using System.Web.Mvc;
-
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Web.Supervisor.Controllers
@@ -17,13 +15,20 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult ReadLayer()
         {
-            return this.View();
+            return this.View(this.readSideAdministrationService.GetAllAvailableHandlers());
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReadLayerStatus()
         {
             return this.readSideAdministrationService.GetReadableStatus();
+        }
+
+        public ActionResult RebuildReadLayerPartially(string[] handlers)
+        {
+            this.readSideAdministrationService.RebuildViewsAsync(handlers);
+            this.TempData["CheckedHandlers"] = handlers;
+            return this.RedirectToAction("ReadLayer");
         }
 
         public ActionResult RebuildReadLayer()

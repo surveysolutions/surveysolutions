@@ -10,6 +10,8 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails
 {
@@ -18,13 +20,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     /// </summary>
     public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
-     //   private readonly Guid questionnaireId;
-        private readonly CompleteQuestionnaireView questionnaire;
-        private ItemPublicKey? screenId;
+        private readonly InterviewViewModel questionnaire;
+        private InterviewItemId? screenId;
         private bool isRoot;
-        private IList<ItemPublicKey> screensHolder;
+        private IList<InterviewItemId> screensHolder;
         private AbstractScreenChangingFragment[] mFragments;
-        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ItemPublicKey? screenId)
+        public ContentFrameAdapter(FragmentManager fm, InterviewViewModel questionnaire, InterviewItemId? screenId)
             : base(fm)
         {
             this.questionnaire = questionnaire;
@@ -46,7 +47,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             get { return isRoot; }
         }
-        public ItemPublicKey? ScreenId
+        public InterviewItemId? ScreenId
         {
             get { return screenId; }
         }
@@ -89,17 +90,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             return PositionNone;
         }
+
         public override void DestroyItem(global::Android.Views.ViewGroup p0, int p1, Java.Lang.Object p2)
         {
             var fragment = p2 as Fragment;
-            
+
             FragmentTransaction trans = fragment.FragmentManager.BeginTransaction();
             trans.Remove(fragment);
             trans.Commit();
             base.DestroyItem(p0, p1, p2);
-           
+
+            if (mFragments.Length > p1)
+                mFragments[p1] = null;
         }
-        public int GetScreenIndex(ItemPublicKey? screenId)
+
+        public int GetScreenIndex(InterviewItemId? screenId)
         {
             if (!screenId.HasValue)
                 return isRoot ? Count - 1 : -1;
@@ -110,7 +115,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
             return -1;
         }
-        public void UpdateScreenData(ItemPublicKey? newScreenId)
+        public void UpdateScreenData(InterviewItemId? newScreenId)
         {
             var screenIdNotNull = newScreenId ?? this.questionnaire.Chapters.First().ScreenId;
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
@@ -118,6 +123,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
             this.mFragments = new AbstractScreenChangingFragment[this.Count];
             this.NotifyDataSetChanged();
+            GC.Collect();
         }
     }
 }

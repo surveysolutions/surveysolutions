@@ -40,7 +40,7 @@ namespace CAPI.Android.Syncronization.Pull
             }
         }
 
-        public IDictionary<KeyValuePair<long, Guid>, bool> GetChuncks(string login, string password, string deviceId, string sequence, CancellationToken ct)
+        public IDictionary<SynchronizationChunkMeta, bool> GetChuncks(string login, string password, string deviceId, string sequence, CancellationToken ct)
         {
             try
             {
@@ -51,10 +51,10 @@ namespace CAPI.Android.Syncronization.Pull
                                                                        new KeyValuePair<string, string>("sequence", sequence)
                                                                        );
 
-                if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ARId == null)
+                if (syncItemsMetaContainer.IsErrorOccured || syncItemsMetaContainer.ChunksMeta == null)
                     throw new SynchronizationException("Error on item list receiving.");
 
-                return syncItemsMetaContainer.ARId.ToDictionary(s => s, s => false);
+                return syncItemsMetaContainer.ChunksMeta.ToDictionary(s => s, s => false);
             }
             catch (RestException)
             {

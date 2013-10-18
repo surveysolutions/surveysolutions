@@ -11,7 +11,7 @@
     /// The delete propagatable group command.
     /// </summary>
     [Serializable]
-    [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "DeletePropagatableGroup")]
+    [MapsToAggregateRootMethod(typeof(_CompleteQuestionnaireAR), "DeletePropagatableGroup")]
     public class DeletePropagatableGroupCommand : CommandBase
     {
         #region Constructors and Destructors

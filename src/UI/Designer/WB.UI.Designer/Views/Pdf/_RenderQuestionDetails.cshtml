@@ -5,13 +5,13 @@
 <div class="question no-page-break">
     <span>
         @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.Variable</span>
-        @if (Model.HasCodition)
+        @if (Model.GetHasCondition())
         {
-            <a href="#@("c" + Model.ItemNumber)">[c @Model.ItemNumber]</a>
+            <a href="#@("c" + Model.ItemNumber)" id="@("cq" + Model.ItemNumber)">[c @Model.ItemNumber]</a>
         }
         @if (!string.IsNullOrEmpty(Model.ValidationExpression))
         {
-            <a href="#@("v" + Model.ItemNumber)">[v @Model.ItemNumber]</a>
+            <a href="#@("v" + Model.ItemNumber)" id="@("vq" + Model.ItemNumber)">[v @Model.ItemNumber]</a>
         }
     </span>
 

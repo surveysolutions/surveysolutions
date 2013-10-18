@@ -1,4 +1,5 @@
-﻿using Main.Core.Domain.Exceptions;
+﻿using System.Globalization;
+using Main.Core.Domain.Exceptions;
 
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
@@ -10,7 +11,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     using Main.Core.Entities.Composite;
 
     /// <summary>
-    /// The multy options complete question.
+    /// The multy-options complete question.
     /// </summary>
     public sealed class MultyOptionsCompleteQuestion : AbstractCompleteQuestion, IMultyOptionsQuestion
     {
@@ -60,7 +61,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             // AddAnswer(answer);
             if (this.Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
             {
-                throw new DuplicateNameException("answer with current publick key already exist");
+                throw new DuplicateNameException("Answer with current public key already exist.");
             }
 
             this.Answers.Add(answer);
@@ -103,7 +104,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
             if (items.Any())
             {
-                return string.Join(", ", items.Select(a => a.AnswerType == AnswerType.Image ? a.AnswerImage : a.AnswerText.ToString()));
+                return string.Join(", ", items.Select(a => a.AnswerType == AnswerType.Image ? a.AnswerImage : a.AnswerText.ToString(CultureInfo.InvariantCulture)));
             }
 
             return string.Empty;
@@ -146,7 +147,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             foreach (var item in answerKeys)
             {
                 if (this.Answers.All(a => a.PublicKey != item))
-                    throw new InterviewException(string.Format("value {0} is absent", item));
+                    throw new CompleteQuestionnaireException(string.Format("value {0} is absent", item));
             }
         }
 

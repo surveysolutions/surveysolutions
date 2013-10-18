@@ -496,7 +496,6 @@ hr.separator {
   margin: 0 0 0 234px;
   background: #fff;
   min-width: 320px;
-  min-height: 800px;
 }
 #wrapper #content.no-menu {
     margin: 0;
@@ -655,7 +654,7 @@ hr.separator {
   padding: 0;
   margin: 0;
   color: #222222;
-  height: 38px;
+  min-height: 38px;
   line-height: 38px;
   text-decoration: none;
   font-size: 13px;
@@ -876,6 +875,10 @@ hr.separator {
   margin: -9px 0 10px;
   padding: 0 10px 0 10px;
   line-height: 30px;
+}
+
+.menubar .search-bar {
+  margin-bottom: 0;
 }
 
 .widget-stats {
@@ -4541,3 +4544,18 @@ a.pseudo-link:hover {
  #alerts .alert {
      margin-top: 5px;
  }
+ #content .alert {
+     margin-bottom: 0;
+ }
+ #splash-screen {
+     position: absolute;
+     position: fixed;
+     top: 40px;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     display: none;
+     background: red;
+     z-index: 109999;
+ }
+ 

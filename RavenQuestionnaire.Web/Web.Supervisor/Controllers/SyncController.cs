@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Http.Controllers;
+using System.Text;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
@@ -13,6 +15,7 @@ using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
 
@@ -24,8 +27,11 @@ namespace Web.Supervisor.Controllers
         private readonly ISyncManager syncManager;
         private readonly IViewFactory<UserViewInputModel, UserView> viewFactory;
 
+        private string CapiFileName = "wbcapi.apk";
+
+        private string pathToSearchVersions = ("~/App_Data/Capi");
         public SyncController(ISyncManager syncManager, ILogger logger,
-            IViewFactory<UserViewInputModel, UserView> viewFactory)
+                              IViewFactory<UserViewInputModel, UserView> viewFactory)
         {
             this.syncManager = syncManager;
             this.logger = logger;
@@ -35,14 +41,12 @@ namespace Web.Supervisor.Controllers
 
         protected UserView GetUser(string login, string password)
         {
-
             if (Membership.ValidateUser(login, password))
             {
                 if (Roles.IsUserInRole(login, UserRoles.Operator.ToString()))
                 {
                     return
                         this.viewFactory.Load(new UserViewInputModel(login, null));
-
                 }
             }
             return null;
@@ -53,7 +57,7 @@ namespace Web.Supervisor.Controllers
         [HandleUIException]
         public ActionResult Handshake(string clientId, string androidId, Guid? clientRegistrationId)
         {
-            var user = GetUserByNameAndPassword();
+            UserView user = this.GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -67,11 +71,12 @@ namespace Web.Supervisor.Controllers
             }
             else
             {
-                ClientIdentifier identifier = new ClientIdentifier();
+                var identifier = new ClientIdentifier();
                 identifier.ClientDeviceKey = androidId;
                 identifier.ClientInstanceKey = key;
                 identifier.ClientVersionIdentifier = "unknown";
                 identifier.ClientRegistrationKey = clientRegistrationId;
+                identifier.SupervisorPublicKey = user.Supervisor.Id;
                 try
                 {
                     package = this.syncManager.ItitSync(identifier);
@@ -80,18 +85,18 @@ namespace Web.Supervisor.Controllers
                 {
                     this.logger.Fatal("Sync Handshake Error", exc);
                     package.IsErrorOccured = true;
-                    package.ErrorMessage = "Error occured on sync. Try later.";    
+                    package.ErrorMessage = "Error occurred on sync. Try later.";
                 }
             }
-            return Json(package, JsonRequestBehavior.AllowGet);
+            return this.Json(package, JsonRequestBehavior.AllowGet);
         }
 
-        //In case of error of type missing or casting error we'll try to send correct response.
+        
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public ActionResult InitPulling(string clientRegistrationId)
         {
-            var user = GetUserByNameAndPassword();
+            UserView user = this.GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -107,8 +112,8 @@ namespace Web.Supervisor.Controllers
             {
                 package.ItemsInQueue = 0;
             }
-            
-            return Json(package, JsonRequestBehavior.AllowGet);
+
+            return this.Json(package, JsonRequestBehavior.AllowGet);
         }
 
         //In case of error of type missing or casting error we send correct response.
@@ -116,7 +121,7 @@ namespace Web.Supervisor.Controllers
         [HandleUIException]
         public ActionResult GetSyncPackage(string aRKey, string aRSequence, string clientRegistrationId)
         {
-            var user = GetUserByNameAndPassword();
+            UserView user = this.GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
@@ -127,7 +132,7 @@ namespace Web.Supervisor.Controllers
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Invalid object identifier";
-                return Json(package, JsonRequestBehavior.AllowGet);
+                return this.Json(package, JsonRequestBehavior.AllowGet);
             }
 
             Guid clientRegistrationKey;
@@ -135,7 +140,7 @@ namespace Web.Supervisor.Controllers
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Invalid device identifier";
-                return Json(package, JsonRequestBehavior.AllowGet);
+                return this.Json(package, JsonRequestBehavior.AllowGet);
             }
 
             long sequence;
@@ -143,25 +148,23 @@ namespace Web.Supervisor.Controllers
             {
                 package.IsErrorOccured = true;
                 package.ErrorMessage = "Invalid sequence identifier";
-                return Json(package, JsonRequestBehavior.AllowGet);
+                return this.Json(package, JsonRequestBehavior.AllowGet);
             }
-            
+
             try
             {
                 package = this.syncManager.ReceiveSyncPackage(clientRegistrationKey, key, sequence);
-                
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on sync", ex);
-                logger.Fatal(ex.StackTrace);
+                this.logger.Fatal("Error on sync", ex);
+                this.logger.Fatal(ex.StackTrace);
 
                 package.IsErrorOccured = true;
-                package.ErrorMessage = "Error occured. Try later.";
+                package.ErrorMessage = "Error occurred. Try later.";
             }
 
-            return Json(package, JsonRequestBehavior.AllowGet);
-
+            return this.Json(package, JsonRequestBehavior.AllowGet);
         }
 
         //In case of error of type missing or casting error we send correct response.
@@ -169,23 +172,23 @@ namespace Web.Supervisor.Controllers
         [HandleUIException]
         public JsonResult GetARKeys(string clientRegistrationId, string sequence)
         {
-            var user = GetUserByNameAndPassword();
+            UserView user = this.GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
             Guid clientRegistrationKey;
             if (!Guid.TryParse(clientRegistrationId, out clientRegistrationKey))
             {
-                var result = new SyncItemsMetaContainer(); 
+                var result = new SyncItemsMetaContainer();
                 result.IsErrorOccured = true;
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return this.Json(result, JsonRequestBehavior.AllowGet);
             }
 
             if (clientRegistrationKey == Guid.Empty)
             {
                 var result = new SyncItemsMetaContainer();
                 result.IsErrorOccured = true;
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return this.Json(result, JsonRequestBehavior.AllowGet);
             }
 
             if (string.IsNullOrWhiteSpace(sequence))
@@ -194,12 +197,12 @@ namespace Web.Supervisor.Controllers
             long clientSequence;
             if (!long.TryParse(sequence, out clientSequence))
             {
-                var result = new SyncItemsMetaContainer(); 
+                var result = new SyncItemsMetaContainer();
                 result.IsErrorOccured = true;
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return this.Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence), JsonRequestBehavior.AllowGet);
+            return this.Json(this.GetListOfAR(user.PublicKey, clientRegistrationKey, clientSequence), JsonRequestBehavior.AllowGet);
         }
 
         private SyncItemsMetaContainer GetListOfAR(Guid userId, Guid clientRegistrationKey, long clientSequence)
@@ -208,16 +211,17 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey, clientSequence);
-                result.ARId = package.ToList();
+                IEnumerable<SynchronizationChunkMeta> package = this.syncManager.GetAllARIdsWithOrder(userId, clientRegistrationKey,
+                                                                                                      clientSequence);
+                result.ChunksMeta = package.ToList();
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
-                logger.Fatal(ex.Message);
-                logger.Fatal(ex.StackTrace);
+                this.logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
+                this.logger.Fatal(ex.Message);
+                this.logger.Fatal(ex.StackTrace);
 
-                result.ErrorMessage = "Server error occured.";
+                result.ErrorMessage = "Server error occurred.";
                 result.IsErrorOccured = true;
             }
 
@@ -229,79 +233,146 @@ namespace Web.Supervisor.Controllers
         [HandleUIException]
         public ActionResult PostPackage(string login, string password, string syncItemContent)
         {
-            var user = GetUserByNameAndPassword();
+            UserView user = this.GetUserByNameAndPassword();
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
 
             try
             {
-                Stream requestStream = Request.InputStream;
+                Stream requestStream = this.Request.InputStream;
                 requestStream.Seek(0, SeekOrigin.Begin);
                 string json = new StreamReader(requestStream).ReadToEnd();
                 SyncItem syncItem = null;
                 try
                 {
                     syncItem = JsonConvert.DeserializeObject<SyncItem>(json,
-                                                                           new JsonSerializerSettings
-                                                                               {
-                                                                                   TypeNameHandling =
-                                                                                       TypeNameHandling.Objects
-                                                                               });
+                                                                       new JsonSerializerSettings
+                                                                           {
+                                                                               TypeNameHandling =
+                                                                                   TypeNameHandling.Objects
+                                                                           });
                 }
                 catch (Exception exc)
                 {
-                    logger.Fatal("Error on Deserialization received stream. Item: ", exc);
-                    return Json(false, JsonRequestBehavior.AllowGet);
+                    this.logger.Fatal("Error on Deserialization received stream. Item: ", exc);
+                    return this.Json(false, JsonRequestBehavior.AllowGet);
                 }
 
                 if (syncItem == null)
                 {
-                    return Json(false, JsonRequestBehavior.AllowGet);
+                    return this.Json(false, JsonRequestBehavior.AllowGet);
                 }
 
-                var result = this.syncManager.SendSyncItem(syncItem);
+                bool result = this.syncManager.SendSyncItem(syncItem);
 
-                return Json(result, JsonRequestBehavior.AllowGet);
-
+                return this.Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on Sync.", ex);
-                logger.Fatal("Exception message: " + ex.Message);
-                logger.Fatal("Stack: " + ex.StackTrace);
+                this.logger.Fatal("Error on Sync.", ex);
+                this.logger.Fatal("Exception message: " + ex.Message);
+                this.logger.Fatal("Stack: " + ex.StackTrace);
 
-                return Json(false, JsonRequestBehavior.AllowGet);
+                return this.Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [AllowAnonymous]
+        public ActionResult GetLatestVersion()
+        {
+            int maxVersion = this.GetLastVersionNumber();
+
+            if (maxVersion != 0)
+            {
+                var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+                string path = Path.Combine(targetToSearchVersions, maxVersion.ToString(CultureInfo.InvariantCulture));
+
+                string pathToFile = Path.Combine(path, this.CapiFileName);
+                if (System.IO.File.Exists(pathToFile))
+                    return File(pathToFile, "application/vnd.android.package-archive", this.CapiFileName);
+            }
+
+            return null;
+        }
+
+        private int GetLastVersionNumber()
+        {
+            int maxVersion = 0;
+
+            var targetToSearchVersions = Server.MapPath(pathToSearchVersions);
+            if (Directory.Exists(targetToSearchVersions))
+            {
+                var dirInfo = new DirectoryInfo(targetToSearchVersions);
+                foreach (DirectoryInfo directoryInfo in dirInfo.GetDirectories())
+                {
+                    int value;
+                    if (int.TryParse(directoryInfo.Name, out value))
+                        if (maxVersion < value)
+                            maxVersion = value;
+                }
+            }
+
+            return maxVersion;
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
+        [AllowAnonymous]
+        public ActionResult CheckNewVersion(string version, string versionCode, string androidId)
+        {
+            bool isNewVersionExsist = false;
+
+            try
+            {
+                int versionValue;
+                if (int.TryParse(versionCode, out versionValue))
+                {
+                int maxVersion = this.GetLastVersionNumber();
+
+                    if (maxVersion != 0 && maxVersion > versionValue)
+                    {
+                        isNewVersionExsist = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on version check.", e);
+            }
+
+            return Json(isNewVersionExsist, JsonRequestBehavior.AllowGet);
+        }
+
 
         //move to filter
         //or change to web API
         private UserView GetUserByNameAndPassword()
         {
             UserView user = null;
-            var username = string.Empty;
-            var password = string.Empty;
+            string username = string.Empty;
+            string password = string.Empty;
 
-            if (!Request.Headers.AllKeys.Contains("Authorization")) 
+            if (!this.Request.Headers.AllKeys.Contains("Authorization"))
                 return null;
 
             try
             {
-                string authHeader = Request.Headers["Authorization"];
+                string authHeader = this.Request.Headers["Authorization"];
                 char[] delims = {' '};
-                string[] authHeaderTokens = authHeader.Split(new char[] {' '});
+                string[] authHeaderTokens = authHeader.Split(new[] {' '});
                 if (authHeaderTokens[0].Contains("Basic"))
                 {
                     string decodedStr = DecodeFrom64(authHeaderTokens[1]);
-                    string[] unpw = decodedStr.Split(new char[] {':'});
+                    string[] unpw = decodedStr.Split(new[] {':'});
                     username = unpw[0];
                     password = unpw[1];
                 }
-                user = GetUser(username, password);
+                user = this.GetUser(username, password);
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error on credentials check.", ex);
+                this.logger.Fatal("Error on credentials check.", ex);
             }
 
             return user;
@@ -309,8 +380,8 @@ namespace Web.Supervisor.Controllers
 
         private static string DecodeFrom64(string encodedData)
         {
-            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-            string returnValue = System.Text.Encoding.ASCII.GetString(encodedDataAsBytes);
+            byte[] encodedDataAsBytes = Convert.FromBase64String(encodedData);
+            string returnValue = Encoding.ASCII.GetString(encodedDataAsBytes);
             return returnValue;
         }
     }

@@ -1,11 +1,16 @@
-﻿@using Web.Supervisor.Utils
-@model Object
+﻿@using System.Web.Optimization
+@model Web.Supervisor.Models.UserCreateModel
 
 @{
     ViewBag.Title = "Add supervisor";
 }
 
-<h2>@Model.GetLabel() <small>create</small></h2>
+@section scripts
+{
+    @Scripts.Render("~/validate")
+}
+
+<h2>Supervisor <small>create</small></h2>
 
 @using (Html.BeginForm())
 {

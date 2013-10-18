@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox'],
-    function (ko, _, config, utils, datacontext, router, model, bootbox) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'model', 'bootbox', 'input'],
+    function (ko, _, config, utils, datacontext, router, model, bootbox, input) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -24,6 +24,8 @@
                 parent.fillChildren();
                 router.navigateTo(clonedQuestion.getHref());
                 calcStatistics();
+
+                clonedQuestion.attachValidation();
             },
             cloneGroup = function(group) {
                 if (group.isNew())
@@ -53,7 +55,6 @@
                     getChapters();
                     questionnaire(datacontext.questionnaire);
                     calcStatistics();
-                    $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
                 }
                 if (!_.isUndefined(selectedGroup())) {
                     selectedGroup().isSelected(false);
@@ -96,6 +97,7 @@
                 }
                 question.isSelected(true);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
+                question.localQuestionsFromProragatedGroups(datacontext.groups.getQuestionsFromPropagatableGroups());
                 selectedQuestion(question);
                 selectedQuestion.valueHasMutated();
                 openDetails("show-question");
@@ -113,8 +115,6 @@
             openDetails = function(style) {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').addClass('detail-visible').addClass(style);
-                $('#details-question .body').css('top', ($('#details-question .title').outerHeight() + 'px'));
-                $('#details-group .body').css('top', ($('#details-group .title').outerHeight() + 'px'));
             },
             closeDetails = function() {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
@@ -134,6 +134,8 @@
                 parent.fillChildren();
                 router.navigateTo(question.getHref());
                 calcStatistics();
+
+                question.attachValidation();
             },
             addChapter = function() {
                 var group = new model.Group();
@@ -269,10 +271,12 @@
                         success: function() {
                             group.isNew(false);
                             group.dirtyFlag().reset();
+                            group.fillChildren();
                             calcStatistics();
                             isOutputVisible(false);
                             group.canUpdate(true);
                             group.commit();
+                               
                         },
                         error: function(d) {
                             showError(d);
@@ -288,14 +292,29 @@
                 }
 
                 var command = '';
-                if (question.isNew()) {
-                    if (question.isClone()) {
-                        command = config.commands.cloneQuestion;
-                    } else {
-                        command = config.commands.createQuestion;
-                    }
-                } else {
-                    command = config.commands.updateQuestion;
+                switch (question.qtype()) {
+                    case config.questionTypes.AutoPropagate:
+                    case config.questionTypes.Numeric:
+                        if (question.isNew()) {
+                            if (question.isClone()) {
+                                command = config.commands.cloneNumericQuestion;
+                            } else {
+                                command = config.commands.createNumericQuestion;
+                            }
+                        } else {
+                            command = config.commands.updateNumericQuestion;
+                        }
+                        break;
+                    default:
+                        if (question.isNew()) {
+                            if (question.isClone()) {
+                                command = config.commands.cloneQuestion;
+                            } else {
+                                command = config.commands.createQuestion;
+                            }
+                        } else {
+                            command = config.commands.updateQuestion;
+                        }
                 }
 
                 question.canUpdate(false);
@@ -337,6 +356,34 @@
                         }
                     });
             },
+            addSharedPerson = function(sharedUser) {
+                sharedUser.check(function() {
+                    datacontext.sendCommand(
+                        config.commands.addSharedPersonToQuestionnaire,
+                        sharedUser,
+                        {
+                            success: function() {
+                                questionnaire().addSharedPerson();
+                            },
+                            error: function(d) {
+                                showError(d);
+                            }
+                        });
+                });
+            },
+            removeSharedPerson = function (sharedUser) {
+                datacontext.sendCommand(
+                    config.commands.removeSharedPersonFromQuestionnaire,
+                    sharedUser,
+                    {
+                        success: function() {
+                            questionnaire().removeSharedPerson(sharedUser);
+                        },
+                        error: function(d) {
+                            showError(d);
+                        }
+                    });
+            },
             clearFilter = function() {
                 filter('');
                 focusOnSearch();
@@ -354,13 +401,30 @@
                 var fromId = arg.sourceParent.id;
                 var toId = arg.targetParent.id;
                 var moveItemType = arg.item.type().replace('View', '').toLowerCase();
+                var isItemFeaturedQuestion = false;
+                var isItemHeadQuestion = false;
+                var isItemAutoQuestion = false;
+                var targetGroupIsAuto = false;
+                if (moveItemType == "question") {
+                    isItemAutoQuestion = arg.item.qtype() == "AutoPropagate";
+                    isItemHeadQuestion = arg.item.isHead();
+                    isItemFeaturedQuestion = arg.item.isFeatured();
+                }
+                
                 var isDropedOutsideAnyChapter = $(ui.item).parent('#chapters-list').length > 0;
                 var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
                 var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
+                var itemIsAutopropagateGroup = moveItemType == "group" && arg.item.gtype() == "AutoPropagated";
 
                 if (arg.item.isNew()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveUnsavedItem);
+                    return;
+                }
+                
+                if (isDropedOutsideAnyChapter && itemIsAutopropagateGroup) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveAutoPropagatedGroupOutsideGroup);
                     return;
                 }
 
@@ -372,9 +436,29 @@
                 var target = datacontext.groups.getLocalById(toId);
                 var source = datacontext.groups.getLocalById(fromId);
 
+                targetGroupIsAuto = target.gtype() == "AutoPropagated";
+
                 if (target.isNew()) {
                     arg.cancelDrop = true;
                     config.logger(config.warnings.cantMoveIntoUnsavedItem);
+                    return;
+                }
+                
+                if (isItemFeaturedQuestion && targetGroupIsAuto) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveFeaturedQuestionIntoAutoGroup);
+                    return;
+                }
+                
+                if (isItemAutoQuestion && targetGroupIsAuto) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveAutoQuestionIntoAutoGroup);
+                    return;
+                }
+                
+                if (isItemHeadQuestion && targetGroupIsAuto == false) {
+                    arg.cancelDrop = true;
+                    config.logger(config.warnings.cantMoveHeadQuestionOutsideAutoGroup);
                     return;
                 }
 
@@ -433,9 +517,6 @@
                             chapters(datacontext.groups.getChapters());
 
                             showError(d);
-                            errors.removeAll();
-                            errors.push(d);
-                            isOutputVisible(true);
                         }
                     });
             },
@@ -459,6 +540,14 @@
                         }
                     }
                 };
+                
+                _.each(datacontext.questions.getAllLocal(), function (question) {
+                    question.attachValidation();
+                });
+
+                _.each(datacontext.groups.getAllLocal(), function (group) {
+                    group.attachValidation();
+                });
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {
@@ -488,9 +577,12 @@
             },
             showError = function(message) {
                 errors.removeAll();
-                errors.push(message);
+                if (!_.isUndefined(message.error)) {
+                    errors.push(message.error);
+                } else {
+                    errors.push(message);
+                }
                 isOutputVisible(true);
-
             };
 
         init();
@@ -523,6 +615,8 @@
             saveQuestionnaire: saveQuestionnaire,
             isAllChaptersExpanded: isAllChaptersExpanded,
             toggleAllChapters: toggleAllChapters,
-            toggleAllChaptersTooltip: toggleAllChaptersTooltip
+            toggleAllChaptersTooltip: toggleAllChaptersTooltip,
+            addSharedPerson: addSharedPerson,
+            removeSharedPerson : removeSharedPerson
         };
     });

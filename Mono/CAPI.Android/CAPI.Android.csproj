@@ -120,10 +120,14 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>..\..\packages\MvvmCross.PortableSupport.3.0.10\lib\MonoAndroid16\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\ExternalsMonodroid\Xamarin.Mobile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\HtmlBinding.cs" />
     <Compile Include="Bindings\CustomImageGetter.cs" />
+    <Compile Include="Bindings\MvvmBindingWrapper.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
@@ -135,16 +139,33 @@
     <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\AbstractScreenChangingFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\GridContentAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\PartialRosterRowView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\PartOfRosterView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnarieNavigationItem.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\RosterTable.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenContentAdapter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractMultyQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractSingleOptionQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AnswerOnQuestionCommandService.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
-    <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DecimalPlacesFilter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GeoPositionQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IAnswerOnQuestionCommandService.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyOptionLinkedQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericIntegerQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericRealQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionLinkedQuestionView.cs" />
+    <Compile Include="Controls\Statistics\StatisticsDataAdapter.cs" />
+    <Compile Include="Core\AjustableListView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\ParcelableWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SmartAdapter.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
@@ -152,8 +173,7 @@
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\GridContentFragment.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemClickEventArgs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
@@ -164,14 +184,19 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\IQuestionViewFactory.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericQuestionView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleOptionQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
+    <Compile Include="Events\AnswerSetEventArgs.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
+    <Compile Include="Extensions\ContextExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
+    <Compile Include="Extensions\ViewExtensions.cs" />
+    <Compile Include="GeolocationServices\GeoService.cs" />
+    <Compile Include="GeolocationServices\IGeoService.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoadingActivity.cs" />
     <Compile Include="LoginActivity.cs" />
@@ -198,6 +223,8 @@
     <Compile Include="Syncronization\SynchronizationEventArgsWithPercent.cs" />
     <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\SynchronozationProcessor.cs" />
+    <Compile Include="Syncronization\Update\RestVersionUpdate.cs" />
+    <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -208,7 +235,6 @@
     <AndroidResource Include="Resources\Layout\list_navigation_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
     <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -242,6 +268,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
     <AndroidResource Include="Resources\Layout\SyncLogin.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\ActionBar.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -305,6 +334,10 @@
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
+      <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>

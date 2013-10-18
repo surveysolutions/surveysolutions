@@ -59,17 +59,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\CompleteGroupFactory.cs">
       <Link>AbstractFactories\CompleteGroupFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\CompleteQuestionFactory.cs">
-      <Link>AbstractFactories\CompleteQuestionFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteAnswerFactory.cs">
       <Link>AbstractFactories\ICompleteAnswerFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteGroupFactory.cs">
       <Link>AbstractFactories\ICompleteGroupFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\ICompleteQuestionFactory.cs">
-      <Link>AbstractFactories\ICompleteQuestionFactory.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\IQuestionFactory.cs">
+      <Link>AbstractFactories\IQuestionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\AbstractFactories\QuestionFactory.cs">
+      <Link>AbstractFactories\QuestionFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\CommandListSupplier.cs">
       <Link>CommandListSupplier.cs</Link>
@@ -118,9 +118,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetFlagCommand.cs">
       <Link>Commands\Questionnaire\Completed\SetFlagCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs">
-      <Link>Commands\Questionnaire\Completed\UpdateInterviewMetaInfoCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
       <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
@@ -248,20 +245,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CollectionAR.cs">
       <Link>Domain\CollectionAR.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CompleteQuestionnaireAR.cs">
-      <Link>Domain\CompleteQuestionnaireAR.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\DeviceAR.cs">
       <Link>Domain\DeviceAR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\CompleteQuestionnaireException.cs">
+      <Link>Domain\Exceptions\CompleteQuestionnaireException.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainException.cs">
       <Link>Domain\Exceptions\DomainException.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainExceptionType.cs">
       <Link>Domain\Exceptions\DomainExceptionType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\InterviewException.cs">
-      <Link>Domain\Exceptions\InterviewException.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
@@ -274,6 +268,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\UserAR.cs">
       <Link>Domain\UserAR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\_CompleteQuestionnaireAR.cs">
+      <Link>Domain\_CompleteQuestionnaireAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Composite\CompositeException.cs">
       <Link>Entities\Composite\CompositeException.cs</Link>
@@ -312,6 +309,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\OrderRequestItem.cs">
       <Link>Entities\OrderRequestItem.cs</Link>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\QuestionData.cs">
+      <Link>Entities\QuestionData.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\RegisterData.cs">
       <Link>Entities\RegisterData.cs</Link>
@@ -406,6 +406,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowRule.cs">
       <Link>Entities\SubEntities\FlowRule.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\GeoPosition.cs">
+      <Link>Entities\SubEntities\GeoPosition.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Group.cs">
       <Link>Entities\SubEntities\Group.cs</Link>
     </Compile>
@@ -433,6 +436,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\LocationWithUserStatistic.cs">
       <Link>Entities\SubEntities\LocationWithUserStatistic.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\NumericQuestionUtils.cs">
+      <Link>Entities\SubEntities\NumericQuestionUtils.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Option.cs">
       <Link>Entities\SubEntities\Option.cs</Link>
     </Compile>
@@ -456,6 +462,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <Link>Entities\SubEntities\Question\GpsCoordinateQuestion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\IAutoPropagateQuestion.cs">
+      <Link>Entities\SubEntities\Question\IAutoPropagateQuestion.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
@@ -489,9 +498,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\TemplateLight.cs">
       <Link>Entities\TemplateLight.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs">
-      <Link>EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\EventHandlers\FileStoreDenormalizer.cs">
       <Link>EventHandlers\FileStoreDenormalizer.cs</Link>
@@ -540,9 +546,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewDeleted.cs">
       <Link>Events\Questionnaire\Completed\InterviewDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs">
-      <Link>Events\Questionnaire\Completed\InterviewMetaInfoUpdated.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\NewAssigmentCreated.cs">
       <Link>Events\Questionnaire\Completed\NewAssigmentCreated.cs</Link>
@@ -720,15 +723,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Answer\CompleteAnswerView.cs">
       <Link>View\Answer\CompleteAnswerView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Card\CardView.cs">
-      <Link>View\Card\CardView.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Card\CardViewFactory.cs">
-      <Link>View\Card\CardViewFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\Card\CardViewInputModel.cs">
-      <Link>View\Card\CardViewInputModel.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs">
       <Link>View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs</Link>
@@ -925,7 +919,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

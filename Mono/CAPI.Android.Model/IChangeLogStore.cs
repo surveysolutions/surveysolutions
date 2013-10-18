@@ -7,7 +7,7 @@ namespace CAPI.Android.Core.Model
 {
     public interface IChangeLogStore:IBackupable
     {
-        void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId);
+        void SaveChangeset(AggregateRootEvent[] recordData, Guid recordId/*, bool validRecord*/);
         string GetChangesetContent(Guid recordId);
         void DeleteDraftChangeSet(Guid recordId);
     }

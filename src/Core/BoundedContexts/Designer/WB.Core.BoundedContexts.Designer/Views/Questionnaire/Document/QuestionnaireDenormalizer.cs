@@ -6,11 +6,15 @@ using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 {
+    using Main.Core.Entities;
+
     public class QuestionnaireDenormalizer :
         IEventHandler<NewQuestionnaireCreated>,
         IEventHandler<NewGroupAdded>,
@@ -20,6 +24,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
+        IEventHandler<NumericQuestionAdded>,
+        IEventHandler<NumericQuestionCloned>,
+        IEventHandler<NumericQuestionChanged>,
         IEventHandler<ImageUpdated>,
         IEventHandler<ImageUploaded>,
         IEventHandler<ImageDeleted>,
@@ -27,14 +34,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<GroupUpdated>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>,
-        IEventHandler<TemplateImported>
+        IEventHandler<TemplateImported>,
+        IEventHandler<QuestionnaireCloned>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage;
-        private readonly ICompleteQuestionFactory questionFactory;
+        private readonly IQuestionFactory questionFactory;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage,
-            ICompleteQuestionFactory questionFactory, ILogger logger)
+            IQuestionFactory questionFactory, ILogger logger)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
@@ -133,50 +141,198 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<QuestionCloned> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
-            FullQuestionDataEvent e = evnt.Payload;
-            AbstractQuestion result = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
-
-            if (result == null)
-            {
-                return;
-            }
-            #warning Slava: uncomment this line and get rig of read and write side objects
-            item.Insert(evnt.Payload.TargetIndex, result, evnt.Payload.GroupPublicKey);
-            this.UpdateQuestionnaire(evnt, item);
+            QuestionCloned e = evnt.Payload;
+            CloneQuestion(evnt, e.GroupPublicKey.Value, e.TargetIndex,
+                new QuestionData(
+                    e.PublicKey,
+                    e.QuestionType,
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    e.AnswerOrder,
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    e.Answers,
+                    e.LinkedToQuestionId,
+                    e.IsInteger));
         }
 
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             FullQuestionDataEvent e = evnt.Payload;
-            AbstractQuestion result = new CompleteQuestionFactory().CreateQuestion(e.PublicKey, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
-            if (result == null)
-            {
-                return;
-            }
-
-            item.Add(result, evnt.Payload.GroupPublicKey, null);
-            this.UpdateQuestionnaire(evnt, item);
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey.Value,
+                new QuestionData(
+                    e.PublicKey,
+                    e.QuestionType,
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    e.AnswerOrder,
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    e.Answers,
+                    e.LinkedToQuestionId,
+                    e.IsInteger));
         }
 
         //// move it out of there
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
+            QuestionChanged e = evnt.Payload;
+            UpdateQuestion(evnt, new QuestionData(
+                e.PublicKey,
+                e.QuestionType,
+                e.QuestionScope,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                e.AnswerOrder,
+                e.Featured,
+                e.Mandatory,
+                e.Capital,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue,
+                e.Answers,
+                e.LinkedToQuestionId,
+                e.IsInteger, null));
+        }
+
+        protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            AbstractQuestion result =
+                new QuestionFactory().CreateQuestion(data);
+
+            if (result == null)
+            {
+                return;
+            }
+
+            item.Add(result, groupId, null);
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
+        protected void UpdateQuestion(IPublishableEvent evnt, QuestionData data)
+        {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
-            var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
+            var question = item.Find<AbstractQuestion>(data.publicKey);
             if (question == null)
             {
                 return;
             }
 
-            QuestionChanged e = evnt.Payload;
-            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingSpecifiedData(question, e.QuestionType, e.QuestionScope, e.QuestionText, e.StataExportCaption, e.ConditionExpression, e.ValidationExpression, e.ValidationMessage, e.AnswerOrder, e.Featured, e.Mandatory, e.Capital, e.Instructions, e.Triggers, e.MaxValue, e.Answers);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(data);
 
             item.ReplaceQuestionWithNew(question, newQuestion);
 
             this.UpdateQuestionnaire(evnt, item);
+        }
+
+        protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            AbstractQuestion result =
+                new QuestionFactory().CreateQuestion(data);
+
+            if (result == null)
+            {
+                return;
+            }
+#warning Slava: uncomment this line and get rig of read and write side objects
+            item.Insert(index, result, groupId);
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
+        {
+            NumericQuestionAdded e = evnt.Payload;
+            AddQuestion(evnt, evnt.Payload.GroupPublicKey,
+                new QuestionData(
+                    e.PublicKey,
+                    NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    Order.AZ, 
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    null,
+                    null,
+                    e.IsInteger, e.CountOfDecimalPlaces));
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
+        {
+            NumericQuestionCloned e = evnt.Payload;
+            CloneQuestion(evnt, e.GroupPublicKey, e.TargetIndex,
+                new QuestionData(
+                    e.PublicKey,
+                    NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                    e.QuestionScope,
+                    e.QuestionText,
+                    e.StataExportCaption,
+                    e.ConditionExpression,
+                    e.ValidationExpression,
+                    e.ValidationMessage,
+                    Order.AZ,
+                    e.Featured,
+                    e.Mandatory,
+                    e.Capital,
+                    e.Instructions,
+                    e.Triggers,
+                    e.MaxValue,
+                    null,
+                    null,
+                    e.IsInteger, e.CountOfDecimalPlaces));
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
+        {
+            NumericQuestionChanged e = evnt.Payload;
+            UpdateQuestion(evnt, new QuestionData(
+                e.PublicKey,
+                NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                e.QuestionScope,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                Order.AZ,
+                e.Featured,
+                e.Mandatory,
+                e.Capital,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue,
+                null, null,
+                e.IsInteger, e.CountOfDecimalPlaces));
         }
 
         public void Handle(IPublishedEvent<ImageUpdated> evnt)
@@ -243,9 +399,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, document);
         }
 
-        private void UpdateQuestionnaire(IEvent evnt, QuestionnaireDocument document)
+        private void UpdateQuestionnaire(IPublishableEvent evnt, QuestionnaireDocument document)
         {
             document.LastEntryDate = evnt.EventTimeStamp;
+            document.LastEventSequence = evnt.EventSequence;
+            this.documentStorage.Store(document, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
@@ -253,12 +411,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.IsDeleted = true;
+            this.documentStorage.Store(document, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
             var document = evnt.Payload.Source;
             this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
+        {
+            var document = evnt.Payload.QuestionnaireDocument;
+            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(QuestionnaireDocument) }; }
         }
     }
 }

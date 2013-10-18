@@ -5,15 +5,12 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/userlistview.js")
-
-    
+    @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Interviewers", "Team")';
+        var $detailsUrl = '@Url.Action("Details", "Team")';
         $(function () {
-            var model = new UserListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Lock" })',
-                '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
-            
+            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "Supervisors" })');
             ko.applyBindings(model);
             model.load();
         });
@@ -47,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- ko foreach:ListView.Items -->
+            <!-- ko foreach:Items -->
             <tr>
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
@@ -57,17 +54,9 @@
                         <i class="icon icon-group icon-white"></i> Interviewers</a>
                 </td>
                 <td>
-                    <!-- ko if:IsLocked -->
-                    <a class="btn btn-info" data-bind="click: $root.lock">
-                        <i class="icon icon-unlock icon-white"></i> Unlock</a>
-                    <!-- /ko -->
-                    <!-- ko ifnot:IsLocked -->
-                    <a class="btn btn-danger" data-bind="click: $root.lock">
-                        <i class="icon icon-lock icon-white"></i> Lock  </a>
-                    <!-- /ko -->
-                    
+                    <a class="btn btn-info" data-bind="attr: { href: $detailsUrl + '/' + UserId() }">
+                        <i class="icon icon-edit icon-white"></i> Details</a>
                 </td>
-                
             </tr>
             <!-- /ko -->
         </tbody>

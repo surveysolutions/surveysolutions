@@ -130,6 +130,51 @@
 
         TooFewOptionsInCategoryQuestion,
 
-        CouldNotDeleteInterview
+        CouldNotDeleteInterview,
+
+        DoesNotHavePermissionsForEdit,
+
+        UserDoesNotExistInShareList,
+
+        UserExistInShareList,
+
+        OwnerCannotBeInShareList,
+
+        LinkedQuestionDoesNotExist,
+
+        QuestionCanNotBeFeatured,
+
+        QuestionCanNotContainValidation,
+
+        ConflictBetweenLinkedQuestionAndOptions,
+
+        NotSupportedQuestionForLinkedQuestion,
+
+        LinkedQuestionIsNotInPropagateGroup,
+
+        NotCategoricalQuestionLinkedToAnoterQuestion,
+
+        QuestionWithLinkedQuestionCanNotBeFeatured,
+
+        QuestionWithLinkedQuestionCanNotBeHead,
+
+        AutoPropagateQuestionCantBeReal,
+        QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+
+        QuestionTitleContainsInvalidSubstitutionReference,
+
+        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
+        
+        QuestionTypeIsNotAcceptableByNumericQuestionsCommand,    
+           
+        CountOfDecimalPlacesValueIsIncorrect,
+        
+        IntegerQuestionCantHaveDecimalPlacesSettings,
+
+        QuestionTitleContainsUnknownSubstitutionReference,
+
+        QuestionTitleContainsSubstitutionReferenceToSelf,
+
+        FeaturedQuestionTitleContainsSubstitutionReference,
     }
 }

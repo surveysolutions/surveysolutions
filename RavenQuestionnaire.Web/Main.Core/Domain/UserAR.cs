@@ -27,7 +27,7 @@
         /// <summary>
         /// User Password Hash.
         /// </summary>
-        private string password;
+        private string passwordHash;
 
         /// <summary>
         /// The roles.
@@ -119,9 +119,12 @@
         /// <param name="roles">
         /// Roles for User. 
         /// </param>
-        public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
+        /// <param name="passwordHash">
+        /// User password.
+        /// </param>
+        public void ChangeUser(string email, bool isLocked, UserRoles[] roles, string passwordHash)
         {
-            this.ApplyEvent(new UserChanged { Email = email, Roles = roles });
+            this.ApplyEvent(new UserChanged { Email = email, Roles = roles, PasswordHash = passwordHash});
 
             if (isLocked)
             {
@@ -158,7 +161,7 @@
         {
             this.userName = e.Name;
             this.email = e.Email;
-            this.password = e.Password;
+            this.passwordHash = e.Password;
             this.isUserLocked = e.IsLocked;
             this.roles = e.Roles;
             this.supervisor = e.Supervisor;
@@ -184,6 +187,7 @@
         {
             this.email = e.Email;
             this.roles = e.Roles;
+            this.passwordHash = e.PasswordHash;
         }
 
         #endregion

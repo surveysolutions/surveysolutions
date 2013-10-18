@@ -15,23 +15,11 @@
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingleQuestion"/> class.
-        /// </summary>
         public SingleQuestion()
         {
             this.Children = new List<IComposite>();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingleQuestion"/> class.
-        /// </summary>
-        /// <param name="qid">
-        /// The qid.
-        /// </param>
-        /// <param name="text">
-        /// The text.
-        /// </param>
         public SingleQuestion(Guid qid, string text) : base(text)
         {
             this.PublicKey = qid;

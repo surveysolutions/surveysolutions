@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.Authorization;
+using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Extensions;
 using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
@@ -17,11 +18,11 @@ using System.Text;
 using System.Threading;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi",
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class SynchronizationActivity : Activity
     {
         #region find for ui controls from xml
@@ -53,6 +54,8 @@ namespace CAPI.Android
 
         protected ProgressDialog progressDialog;
         protected SynchronozationProcessor synchronizer;
+        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+
         #endregion
 
         private int clickCount = 0;
@@ -67,7 +70,7 @@ namespace CAPI.Android
             backupManager = CapiApplication.Kernel.Get<IBackup>();
             btnSync.Click += this.ButtonSyncClick;
 
-            btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
+            //btnSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
 
 
             btnBackup.Click += btnBackup_Click;
@@ -99,7 +102,7 @@ namespace CAPI.Android
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Success");
-                alert.SetMessage("Tablet was successefully restored");
+                alert.SetMessage("Tablet was successfully restored");
                 alert.Show();
             }
             catch (Exception ex)
@@ -123,7 +126,7 @@ namespace CAPI.Android
             alertWarningAboutRestore.SetTitle("Warning");
             alertWarningAboutRestore.SetMessage(
                 string.Format(
-                    "All current data will be erased. Are you sure you want proceed to restore. If Yes, please make sure restore data is presented at {0}",
+                    "All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}",
                     backupManager.RestorePath));
             alertWarningAboutRestore.SetPositiveButton("Yes", btnRestoreConfirmed_Click);
             alertWarningAboutRestore.SetNegativeButton("No", btnRestoreDeclined_Click);
@@ -151,17 +154,23 @@ namespace CAPI.Android
 
         private void ButtonSyncClick(object sender, EventArgs e)
         {
+            if (!NetworkHelper.IsNetworkEnabled(this))
+            {
+                Toast.MakeText(this, "Network is unavailable", ToastLength.Long).Show();
+                return;
+            }
+
             ThrowExeptionIfDialogIsOpened();
 
             PreperaUI();
             try
             {
                 synchronizer = new SynchronozationProcessor(this, CreateAuthenticator(),
-                                                            CapiApplication.Kernel.Get<IChangeLogManipulator>());
+                                                            CapiApplication.Kernel.Get<IChangeLogManipulator>(), CapiApplication.Kernel.Get<IReadSideRepositoryReader<LoginDTO>>());
             }
             catch (Exception ex)
             {
-                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                
                 logger.Error("Error on Sync: " + ex.Message, ex);
                 tvSyncResult.Text = ex.Message;
                 return;

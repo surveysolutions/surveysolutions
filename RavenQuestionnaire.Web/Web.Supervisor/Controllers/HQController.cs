@@ -1,67 +1,58 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
-using Core.Supervisor.Views;
-using Core.Supervisor.Views.Summary;
+using System.Web.Mvc;
 using Core.Supervisor.Views.Survey;
 using Core.Supervisor.Views.TakeNew;
 using Core.Supervisor.Views.User;
-using Main.Core.Documents;
+using Core.Supervisor.Views.UsersAndQuestionnaires;
+using Main.Core.Entities.SubEntities;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Helpers;
 using WB.Core.BoundedContexts.Supervisor.Implementation.SampleRecordsAccessors;
-using WB.Core.BoundedContexts.Supervisor.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Views.SampleImport;
 using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Web.Mvc;
-
-    using Core.Supervisor.Views.Assign;
-
-    using Main.Core.Commands.Questionnaire.Completed;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.View;
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Helpers;
-    using Web.Supervisor.Models;
-
     [Authorize(Roles = "Headquarter")]
     public class HQController : BaseController
     {
+        private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory;
-        private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
-        private readonly IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory;
-        private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
-        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
-        private readonly IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory;
         private readonly ISampleImportService sampleImportService;
         private readonly IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory;
+        private readonly IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory;
+        private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
+        private readonly IViewFactory<UserListViewInputModel, UserListView> userListViewFactory;
+
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
-            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
-            IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
-            IViewFactory<AssignSurveyInputModel, AssignSurveyView> assignSurveyViewFactory,
-            IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
-            IViewFactory<SummaryTemplatesInputModel, SummaryTemplatesView> summaryTemplatesViewFactory,
-            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory, 
-            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory, 
-            ISampleImportService sampleImportService)
+                            IViewFactory<QuestionnaireBrowseInputModel, QuestionnaireBrowseView> questionnaireBrowseViewFactory,
+                            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireItemFactory,
+                            IViewFactory<UserListViewInputModel, UserListView> userListViewFactory,
+                            IViewFactory<SurveyUsersViewInputModel, SurveyUsersView> surveyUsersViewFactory,
+                            IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
+                            IViewFactory<UserListViewInputModel, UserListView> supervisorsFactory,
+                            ISampleImportService sampleImportService,
+                            IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
+                                allUsersAndQuestionnairesFactory)
             : base(commandService, provider, logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireItemFactory = questionnaireItemFactory;
             this.userListViewFactory = userListViewFactory;
-            this.assignSurveyViewFactory = assignSurveyViewFactory;
             this.surveyUsersViewFactory = surveyUsersViewFactory;
-            this.summaryTemplatesViewFactory = summaryTemplatesViewFactory;
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
             this.sampleImportService = sampleImportService;
+            this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.supervisorsFactory = supervisorsFactory;
         }
 
@@ -69,191 +60,126 @@ namespace Web.Supervisor.Controllers
         {
             var model = new HQDashboardModel
                 {
-                    Questionnaires =
-                        this.questionnaireBrowseViewFactory.Load(
-                            new QuestionnaireBrowseInputModel()),
-                    Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor })
+                    Questionnaires = this.questionnaireBrowseViewFactory.Load(
+                            new QuestionnaireBrowseInputModel(){PageSize = 1024}),
+                    Teams = this.userListViewFactory.Load(new UserListViewInputModel { Role = UserRoles.Supervisor, PageSize = 1024 })
                 };
             return this.View(model);
-
         }
 
         public ActionResult Interviews(Guid? questionnaireId)
         {
             if (questionnaireId.HasValue)
             {
-                this.Success(string.Format(@"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>", Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
+                this.Success(
+                    string.Format(
+                        @"Interview was successfully created. <a class=""btn btn-success"" href=""{0}""><i class=""icon-plus""></i> Create one more?</a>",
+                        this.Url.Action("TakeNew", "HQ", new {id = questionnaireId.Value})));
             }
-            ViewBag.ActivePage = MenuItem.Docs;
-            return this.View(Filters());
+            this.ViewBag.ActivePage = MenuItem.Docs;
+            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
+            this.ViewBag.CurrentUser = new UsersViewItem {UserId = currentUser.Id, UserName = currentUser.Name};
+            return this.View(this.Filters());
         }
 
         public ActionResult BatchUpload(Guid id)
         {
-            var model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+            QuestionnaireBrowseItem model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
             return this.View(model);
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ImportSample(Guid id, HttpPostedFileBase uploadFile)
         {
-            ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id,
-                                                                          new CsvSampleRecordsAccessor(
-                                                                              uploadFile.InputStream));
-            var model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
+            this.ViewBag.ImportId = this.sampleImportService.ImportSampleAsync(id, new CsvSampleRecordsAccessor(uploadFile.InputStream));
+            QuestionnaireBrowseItem model = this.questionnaireItemFactory.Load(new QuestionnaireItemInputModel(id));
             return this.View(model);
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult ImportResult(Guid id)
         {
-            var result = this.sampleImportService.GetImportStatus(id);
+            ImportResult result = this.sampleImportService.GetImportStatus(id);
             if (result.IsCompleted && result.IsSuccessed)
             {
-
-                ViewBag.SupervisorList =
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                                                                                   ViewerStatus.Headquarter)).Items;
+                this.ViewBag.SupervisorList =
+                    this.supervisorsFactory.Load(new UserListViewInputModel {Role = UserRoles.Supervisor, PageSize = int.MaxValue}).Items;
             }
             return this.PartialView(result);
         }
 
         public ActionResult CreateSample(Guid id, Guid responsibleSupervisor)
         {
-            this.sampleImportService.CreateSample(id, GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
-            return RedirectToAction("SampleCreationResult", new {id = id});
+            this.sampleImportService.CreateSample(id, this.GlobalInfo.GetCurrentUser().Id, responsibleSupervisor);
+            return this.RedirectToAction("SampleCreationResult", new {id});
         }
 
         public ActionResult SampleCreationResult(Guid id)
         {
-            var result = this.sampleImportService.GetSampleCreationStatus(id);
+            SampleCreationStatus result = this.sampleImportService.GetSampleCreationStatus(id);
             return this.View(result);
         }
+
         public JsonResult GetSampleCreationStatus(Guid id)
         {
             return this.Json(this.sampleImportService.GetSampleCreationStatus(id));
         }
+
         public ActionResult TakeNew(Guid id)
         {
             Guid key = id;
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, user.Id));
-            model.CurrentUser = user;
+            UserLight user = this.GlobalInfo.GetCurrentUser();
+            TakeNewInterviewView model = this.takeNewInterviewViewFactory.Load(new TakeNewInterviewInputModel(key, user.Id));
             return this.View(model);
         }
 
-        public ActionResult Surveys()
+        public ActionResult SurveysAndStatuses()
         {
-            ViewBag.ActivePage = MenuItem.Surveys;
-            return
-                this.View(
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(this.GlobalInfo.GetCurrentUser().Id,
-                        ViewerStatus.Headquarter)).Items);
+            this.ViewBag.ActivePage = MenuItem.Surveys;
+
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
+
+            return this.View(usersAndQuestionnaires.Users);
         }
 
-        public ActionResult Assign(Guid id)
+        public ActionResult SupervisorsAndStatuses()
         {
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.assignSurveyViewFactory.Load(new AssignSurveyInputModel(id, user.Id));
-            return this.View(model);
-        }
+            this.ViewBag.ActivePage = MenuItem.Summary;
 
-        [HttpPost]
-        public JsonResult Assign(AssignSuveyData data)
-        {
-            try
-            {
-                foreach (var answer in data.Answers)
-                {
-                    var answers = answer.Answers ?? new Guid[0];
-                    this.CommandService.Execute(new SetAnswerCommand(data.QuestionnaireId, answer.Id, answers.ToList(), answer.Answer, null));
-                }
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
-                this.CommandService.Execute(new ChangeAssignmentCommand(data.QuestionnaireId, data.Responsible));
-                this.CommandService.Execute(
-                    new ChangeStatusCommand()
-                        {
-                            CompleteQuestionnaireId = data.QuestionnaireId,
-                            Status = SurveyStatus.Unassign,
-                            Responsible = data.Responsible
-                        });
-            }
-            catch (Exception e)
-            {
-                Logger.Fatal("Unexpected error occurred", e);
-                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
-        }
-
-
-
-        public ActionResult Summary()
-        {
-            ViewBag.ActivePage = MenuItem.Summary;
-            return this.View(this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(
-                this.GlobalInfo.GetCurrentUser().Id, ViewerStatus.Headquarter)).Items);
+            return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
         public ActionResult Status()
         {
-            ViewBag.ActivePage = MenuItem.Statuses;
-            return this.View(SurveyStatusViewItems());
+            this.ViewBag.ActivePage = MenuItem.Statuses;
+            return this.View(StatusHelper.GetOnlyActualSurveyStatusViewItems());
         }
 
         private DocumentFilter Filters()
         {
-            var statuses = SurveyStatusViewItems();
+            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems();
 
-            var viewerId = this.GlobalInfo.GetCurrentUser().Id;
-            var viewerStatus = ViewerStatus.Headquarter;
+            AllUsersAndQuestionnairesView usersAndQuestionnaires =
+                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
-            return new DocumentFilter()
-            {
-                Users = this.supervisorsFactory.Load(new UserListViewInputModel() { PageSize = int.MaxValue }).Items.Where(u => !u.IsLocked).Select(u => new SurveyUsersViewItem()
-                    {
-                        UserId = u.UserId,
-                        UserName = u.UserName
-                    }),
-                Responsibles =
-                    this.surveyUsersViewFactory.Load(new SurveyUsersViewInputModel(viewerId, viewerStatus)).Items,
-                Templates =
-                    this.summaryTemplatesViewFactory.Load(new SummaryTemplatesInputModel(viewerId, viewerStatus)).Items,
-                Statuses = statuses
-            };
-        }
-
-        private IEnumerable<SurveyStatusViewItem> SurveyStatusViewItems()
-        {
-            var statuses = new List<SurveyStatusViewItem>()
+            return new DocumentFilter
                 {
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Initial.PublicId,
-                            StatusName = SurveyStatus.Initial.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Redo.PublicId,
-                            StatusName = SurveyStatus.Redo.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Complete.PublicId,
-                            StatusName = SurveyStatus.Complete.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Error.PublicId,
-                            StatusName = SurveyStatus.Error.Name
-                        },
-                    new SurveyStatusViewItem()
-                        {
-                            StatusId = SurveyStatus.Approve.PublicId,
-                            StatusName = SurveyStatus.Approve.Name
-                        }
+                    Users =
+                        this.supervisorsFactory.Load(new UserListViewInputModel {PageSize = int.MaxValue})
+                            .Items.Where(u => !u.IsLocked)
+                            .Select(u => new UsersViewItem
+                                {
+                                    UserId = u.UserId,
+                                    UserName = u.UserName
+                                }),
+                    Responsibles = usersAndQuestionnaires.Users,
+                    Templates = usersAndQuestionnaires.Questionnaires,
+                    Statuses = statuses
                 };
-            return statuses;
         }
     }
 }

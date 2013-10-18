@@ -51,6 +51,7 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Title)
+                            <small> <small>(ver. @item.Version)</small></small>
                         </td>
                         <td class="buttons">
                             <div class="btn-group">
@@ -61,9 +62,9 @@
                         </td>
                          <td>
                         <div class="btn-group">
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId, type = "csv" })">
+                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId,version=item.Version, type = "csv" })">
                                 <i class="icon-download icon-white"></i>CSV</a>
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId, type = "tab" })">
+                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = item.QuestionnaireId,version=item.Version,  type = "tab" })">
                                 <i class="icon-download icon-white"></i>TAB</a>
                         </div>
                     </td>

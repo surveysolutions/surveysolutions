@@ -10,6 +10,7 @@
         public string DeviceId { set; get; }
         public Guid ClientInstanceKey { set; get; }
 
-        //public string DeviceType { set; get; }
+        public Guid SupervisorKey { set; get; }
+
     }
 }

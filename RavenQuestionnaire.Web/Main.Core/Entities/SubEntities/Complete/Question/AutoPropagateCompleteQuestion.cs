@@ -163,13 +163,13 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             if (int.TryParse(answerValue.Trim(), out value))
             {
                 if (value > this.MaxValue)
-                    throw new InterviewException("max value is reached");
+                    throw new CompleteQuestionnaireException("max value is reached");
 
 
             }
             else
             {
-                throw new InterviewException("value must be numeric");
+                throw new CompleteQuestionnaireException("value must be numeric");
             }
 
         }

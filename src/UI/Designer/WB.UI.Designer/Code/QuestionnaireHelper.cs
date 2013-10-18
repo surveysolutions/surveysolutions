@@ -22,14 +22,14 @@
         }
 
         public IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            Guid userId, 
+            Guid viewerId, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string filter = null)
         {
             QuestionnaireListView model = this.GetQuestionnaireView(
-                userId: userId, 
+                viewerId: viewerId, 
                 isPublic: true, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
@@ -41,14 +41,14 @@
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            Guid userId, 
+            Guid viewerId, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string filter = null)
         {
             QuestionnaireListView model = this.GetQuestionnaireView(
-                userId: userId, 
+                viewerId: viewerId, 
                 isPublic: false, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
@@ -60,26 +60,27 @@
             return result;
         }
 
-        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(Guid userId)
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId)
         {
-            return this.GetQuestionnaires(userId: userId);
+            return this.GetQuestionnaires(viewerId: viewerId);
         }
 
         private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
         {
             return new QuestionnairePublicListViewModel
                        {
-                           Id = x.Id, 
+                           Id = x.PublicId, 
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
-                           IsPublic = x.IsPublic,
                            CanDelete =
                                (x.CreatedBy == this.userService.WebUser.UserId
                                || this.userService.WebUser.IsAdmin) && !x.IsDeleted, 
                            CanExport = true, 
-                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
+                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
+                                     x.SharedPersons.Contains(this.userService.WebUser.UserId) ||
+                                     this.userService.WebUser.IsAdmin, 
                            CanSynchronize = this.userService.WebUser.IsAdmin, 
                            CanExportToPdf = true,
                            CreatorName =
@@ -93,22 +94,24 @@
         {
             return new QuestionnaireListViewModel
                        {
-                           Id = x.Id, 
+                           Id = x.PublicId,
+                           Owner = x.Owner,
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            IsPublic = x.IsPublic,
                            CanExportToPdf = true,
-                           CanDelete = !x.IsDeleted, 
-                           CanEdit = true, 
+                           CanDelete = x.CreatedBy == this.userService.WebUser.UserId && !x.IsDeleted,
+                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId ||
+                                     x.SharedPersons.Contains(this.userService.WebUser.UserId), 
                            CanExport = true, 
                            CanSynchronize = this.userService.WebUser.IsAdmin
                        };
         }
 
         private QuestionnaireListView GetQuestionnaireView(
-            Guid userId, 
+            Guid viewerId, 
             bool isPublic = true, 
             int? pageIndex = null, 
             string sortBy = null, 
@@ -120,33 +123,14 @@
                     input:
                         new QuestionnaireListViewInputModel
                             {
-                                CreatedBy = userId, 
+                                ViewerId = viewerId, 
                                 IsPublic = isPublic, 
                                 IsAdminMode = this.userService.WebUser.IsAdmin, 
-                                Page = pageIndex ?? 1, 
+                                Page = pageIndex ?? 1,
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
                                 Filter = filter
                             });
         }
-    }
-
-    public interface IQuestionnaireHelper
-    {
-        IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            Guid userId, 
-            int? pageIndex = null, 
-            string sortBy = null, 
-            int? sortOrder = null, 
-            string filter = null);
-
-        IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
-            Guid userId, 
-            int? pageIndex = null, 
-            string sortBy = null, 
-            int? sortOrder = null, 
-            string filter = null);
-
-        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(Guid userId);
     }
 }

@@ -8,17 +8,11 @@ using CAPI.Android.Core.Model.ModelUtils;
 using CAPI.Android.Core.Model.SyncCacher;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core;
-using Main.Core.Commands.Questionnaire.Completed;
-using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using Ninject;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace CAPI.Android
 {
@@ -29,96 +23,57 @@ namespace CAPI.Android
     public class LoadingActivity : Activity
     {
         private Action<Guid> restore; 
+
         protected override void OnCreate(Bundle bundle)
         {
             restore = Restore;
             base.OnCreate(bundle);
-            ProgressBar pb=new ProgressBar(this);
-            
-           /* TextView tv=new TextView(this);
-            var img = this.Resources.GetDrawable(Android.Resource.Drawable.SpinnerDropDownBackground);
-            //img.SetBounds(0, 0, 45, 45);
-            tv.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);*/
+            var pb=new ProgressBar(this);
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
+            this.ActionBar.SetDisplayShowHomeEnabled(false);
             restore.BeginInvoke(Guid.Parse(Intent.GetStringExtra("publicKey")), Callback, restore);
-            // Create your application here
         }
         private void Callback(IAsyncResult asyncResult)
         {
-            Action<Guid> asyncAction = (Action<Guid>)asyncResult.AsyncState;
+            var asyncAction = (Action<Guid>)asyncResult.AsyncState;
             asyncAction.EndInvoke(asyncResult);
         }
+
         protected void Restore(Guid publicKey)
         {
-            try
+            CheckAndRestoreFromSyncPackage(publicKey);
+            
+            var questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+                new QuestionnaireScreenInput(publicKey));
+            if (questionnaire == null)
             {
-                var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
-                var result = documentStorage.GetById(publicKey);
-                if (result == null)
-                {
-                    GenerateEvents(publicKey);
-                }
-                Intent intent = new Intent(this, typeof(DetailsActivity));
-                intent.PutExtra("publicKey", publicKey.ToString());
-                StartActivity(intent);
+                this.RunOnUiThread(this.Finish);
+                return;
             }
-            catch (Exception exc)
-            {
-                var logger = ServiceLocator.Current.GetInstance<ILogger>();
-                logger.Error("Rebuild Error", exc);
-            }
+            var intent = new Intent(this, typeof (DetailsActivity));
+            intent.PutExtra("publicKey", publicKey.ToString());
+            StartActivity(intent);
         }
-#warning remove after eluminating ncqrs
-        private void GenerateEvents(Guid publicKey)
-        {
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            var eventStore = NcqrsEnvironment.Get<IEventStore>();
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
 
-            //loading from sync cache 
+        private void CheckAndRestoreFromSyncPackage(Guid itemKey)
+        {
             var syncCacher = CapiApplication.Kernel.Get<ISyncCacher>();
-            var item = syncCacher.LoadItem(publicKey);
+
+            if (!syncCacher.DoesCachedItemExist(itemKey))
+                return;
+
+            var item = syncCacher.LoadItem(itemKey);
             if (!string.IsNullOrWhiteSpace(item))
             {
                 string content = PackageHelper.DecompressString(item);
-                var questionnarieContent = JsonUtils.GetObject<CompleteQuestionnaireDocument>(content);
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new CreateNewAssigment(questionnarieContent));
+                var interview = JsonUtils.GetObject<InterviewSynchronizationDto>(content);
 
-                syncCacher.DeleteItem(publicKey);
+                NcqrsEnvironment.Get<ICommandService>().Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
+                //CapiApplication.Kernel.Get<IChangeLogManipulator>().CreateOrReopenDraftRecord(interview.Id);
             }
+            syncCacher.DeleteItem(itemKey);
 
 
-            var documentStorage = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<CompleteQuestionnaireView>>();
-            long minVersion = 0;
-            var snapshot = snapshotStore.GetSnapshot(publicKey, long.MaxValue);
-            if (snapshot != null)
-            {
-                var originalDoc = snapshot.Payload as CompleteQuestionnaireDocument;
-                if (originalDoc != null)
-                {
-                    documentStorage.Store(
-                        new CompleteQuestionnaireView(originalDoc),
-                        publicKey);
-                    minVersion = snapshot.Version + 1;
-                }
-            }
-            var eventsAfterSnapshot = eventStore.ReadFrom(publicKey, minVersion, long.MaxValue);
-            foreach (CommittedEvent committedEvent in eventsAfterSnapshot)
-            {
-                try
-                {
-                    bus.Publish(committedEvent);
-                }
-                catch(Exception e)
-                {
-                    var logger = ServiceLocator.Current.GetInstance<ILogger>();
-
-                    logger.Error("Rebuild Error", e);
-
-                    logger.Error("Event: " + JsonUtils.GetJsonData(committedEvent.Payload));
-                }
-            }
         }
     }
 }

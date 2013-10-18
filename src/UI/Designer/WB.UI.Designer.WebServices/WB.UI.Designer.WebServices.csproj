@@ -48,10 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questionnaire\DownloadQuestionnaireRequest.cs" />
     <Compile Include="Questionnaire\QuestionnaireListRequest.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListView.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListViewFactory.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListViewInputModel.cs" />
-    <Compile Include="Questionnaire\QuestionnaireListViewItem.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListViewMessage.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListViewItemMessage.cs" />
     <Compile Include="RemoteFileInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +76,10 @@
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
+      <Project>{4489f996-d379-43d1-8932-3c48d59d9ab5}</Project>
+      <Name>WB.UI.Designer.Views</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

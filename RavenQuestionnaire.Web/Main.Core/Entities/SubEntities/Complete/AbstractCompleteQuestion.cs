@@ -210,6 +210,8 @@
         /// </summary>
         public List<Guid> Triggers { get; set; }
 
+        public Guid? LinkedToQuestionId { get; set; }
+
 
         #endregion
 
@@ -224,6 +226,11 @@
         /// <exception cref="NotImplementedException">
         /// </exception>
         public abstract void AddAnswer(IAnswer answer);
+
+        public IEnumerable<string> GetVariablesUsedInTitle()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The find.
@@ -301,7 +308,7 @@
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             //// do nothing
         }

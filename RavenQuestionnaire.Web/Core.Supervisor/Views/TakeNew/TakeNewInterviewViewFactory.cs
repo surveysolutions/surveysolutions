@@ -1,16 +1,16 @@
 using System.Linq;
-using Core.Supervisor.Views.Assign;
 using Main.Core.Documents;
 using Main.Core.View;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace Core.Supervisor.Views.TakeNew
 {
     public class TakeNewInterviewViewFactory : BaseUserViewFactory, IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> 
     {
-        private readonly IReadSideRepositoryReader<QuestionnaireDocument> surveys;
+        private readonly IReadSideRepositoryReader<QuestionnaireDocumentVersioned> surveys;
 
-        public TakeNewInterviewViewFactory(IReadSideRepositoryReader<QuestionnaireDocument> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
+        public TakeNewInterviewViewFactory(IReadSideRepositoryReader<QuestionnaireDocumentVersioned> surveys, IQueryableReadSideRepositoryReader<UserDocument> users)
             : base(users)
         {
             this.surveys = surveys;
@@ -21,7 +21,7 @@ namespace Core.Supervisor.Views.TakeNew
         {
             var questionnaire = this.surveys.GetById(input.QuestionnaireId);
 
-            var view = new TakeNewInterviewView(questionnaire)
+            var view = new TakeNewInterviewView(questionnaire.Questionnaire, questionnaire.Version)
                 {
                     Supervisors = this.GetSupervisorsListForViewer(input.ViewerId).ToList()
                 };

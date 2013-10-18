@@ -15,10 +15,9 @@ namespace CAPI.Android
 {
     using global::Android.Content.PM;
 
-    [Activity(Label = "CAPI", Icon = "@drawable/capi",
+    [Activity(Label = "CAPI",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class
-        DashboardActivity : Activity
+    public class DashboardActivity : Activity
     {
         protected DashboardModel currentDashboard;
         protected IDictionary<Guid,View> sureveyHolders;
@@ -38,7 +37,7 @@ namespace CAPI.Android
             currentDashboard =
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
-            sureveyHolders = new Dictionary<Guid, View>();
+
             llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
             this.RunOnUiThread(() =>
                 {
@@ -48,6 +47,7 @@ namespace CAPI.Android
                     {
                         AddSurveyItem(dashboardSurveyItem);
                     }
+
                 });
         }
 
@@ -60,7 +60,7 @@ namespace CAPI.Android
             txtSurveyCount.Text = dashboardSurveyItem.ActiveItems.Count.ToString();
             var llQuestionnarieHolder = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnarieHolder);
 
-            var adapter = new DashboardAdapter(this, dashboardSurveyItem.ActiveItems);
+            var adapter = new DashboardAdapter(dashboardSurveyItem.ActiveItems,this);
             for (int i = 0; i < adapter.Count; i++)
             {
                 View item = adapter.GetView(i, null, null);
@@ -70,7 +70,6 @@ namespace CAPI.Android
 
             llQuestionnarieHolder.Clickable = true;
             llSurveyHolder.AddView(view);
-            sureveyHolders.Add(dashboardSurveyItem.PublicKey, view);
         }
 
         void llQuestionnarieHolder_ItemClick(object sender, EventArgs e)
@@ -100,24 +99,6 @@ namespace CAPI.Android
             base.OnRestart();
 
             RequestData(InitDashboard);
-        }
-
-        protected void UpdateDashboard()
-        {
-            currentDashboard =
-              CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                  new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
-            sureveyHolders = new Dictionary<Guid, View>();
-            llSurveyHolder = this.FindViewById<LinearLayout>(Resource.Id.llSurveyHolder);
-            this.RunOnUiThread(() =>
-            {
-                llSurveyHolder.RemoveAllViews();
-
-                foreach (var dashboardSurveyItem in currentDashboard.Surveys)
-                {
-                    AddSurveyItem(dashboardSurveyItem);
-                }
-            });
         }
         
         protected override void OnStart()

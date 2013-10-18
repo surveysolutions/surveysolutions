@@ -79,6 +79,8 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         string ValidationMessage { get; set; }
 
+        #warning TLK: no data is added to following dependent questions and groups, they should be deleted
+
         /// <summary>
         /// Gets or sets the conditional dependent questions.
         /// </summary>
@@ -88,6 +90,8 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the dependent items.
         /// </summary>
         List<Guid> ConditionalDependentGroups { get; set; }
+
+        Guid? LinkedToQuestionId { get; set; }
 
         #endregion
 
@@ -106,5 +110,6 @@ namespace Main.Core.Entities.SubEntities
         /// The answer key.
         /// </param>
         void RemoveAnswer(Guid answerKey);*/
+        IEnumerable<string> GetVariablesUsedInTitle();
     }
 }

@@ -29,6 +29,8 @@
         //// Is not propogated now
         public UserRoles[] Roles { get; set; }
 
+        public string PasswordHash { get; set; }
+
         #endregion
 
         protected override bool DoCheckIsAssignedRole(UserRoles role)

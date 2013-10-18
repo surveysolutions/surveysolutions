@@ -1,16 +1,7 @@
-using System.ComponentModel.Composition.Hosting;
-using System.IO;
 using System.Web.Configuration;
-using Core.Supervisor.RavenIndexes;
-using Core.Supervisor.Views.Index;
-using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Indexes;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.Infrastructure.Raven.Implementation;
-using WB.Core.Infrastructure.Raven.Implementation.ReadSide;
+using Core.Supervisor.Views.User;
+using WB.Core.BoundedContexts.Supervisor.EventHandler;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Utils.Serialization;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.UI.Shared.Web.Filters;
@@ -24,10 +15,8 @@ namespace Web.Supervisor.Injections
     using System.Web.Mvc;
 
     using Main.Core;
-    using Main.Core.Events;
     using Main.Core.Export;
     using Main.Core.View.Export;
-    using Main.DenormalizerStorage;
 
     using Ninject;
     using Ninject.Activation;
@@ -44,9 +33,10 @@ namespace Web.Supervisor.Injections
         {
             return base.GetAssembliesForRegistration().Concat(new[]
             {
-                typeof(IndexViewFactory).Assembly,
+                typeof(UserViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
                 typeof(ImportQuestionnaireCommand).Assembly,
+                typeof(UserDenormalizer).Assembly
             });
         }
 

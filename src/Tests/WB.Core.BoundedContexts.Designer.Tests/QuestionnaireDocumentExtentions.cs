@@ -61,6 +61,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests
                 case QuestionType.MultyOption:
                     question = new MultyOptionsQuestion();
                     break;
+                case QuestionType.GpsCoordinates:
+                    question = new GpsCoordinateQuestion();
+                    break;
                 default:
                     question = new TextQuestion();
                     break;

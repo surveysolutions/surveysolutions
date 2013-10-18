@@ -1,45 +1,60 @@
 using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Events;
 using CAPI.Android.Extensions;
+using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using Microsoft.Practices.ServiceLocation;
+using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.GenericSubdomains.Logging;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public abstract class AbstractQuestionView : LinearLayout
+    public abstract class AbstractQuestionView : LinearLayout, IMvxBindingContextOwner
     {
-        public event EventHandler AnswerSet;
+        public event EventHandler<AnswerSetEventArgs> AnswerSet;
         public bool IsCommentsEditorFocused { get; private set; }
         protected QuestionViewModel Model { get; private set; }
 
         protected Guid QuestionnairePublicKey { get; private set; }
         protected ICommandService CommandService { get; private set; }
-        private readonly IMvxAndroidBindingContext bindingActivity;
+        protected IAnswerOnQuestionCommandService AnswerCommandService { get; private set; }
+        private readonly IMvxAndroidBindingContext _bindingContext;
 
         private readonly int templateId;
 
 
-        public void ClearBindings()
+        public IMvxBindingContext BindingContext
         {
-            bindingActivity.ClearBindings(this);
-        }
-
-        protected IMvxAndroidBindingContext BindingActivity
-        {
-            get { return bindingActivity; }
+            get { return _bindingContext; }
+            set { throw new NotImplementedException("BindingContext is readonly in the question"); }
         }
 
         protected override void Dispose(bool disposing)
         {
+            this.isDisposed = true;
+
             if (disposing)
             {
-                ClearBindings();
+                Console.WriteLine(string.Format("disposing question '{0}'", Model.Text));
+
+                this.ClearAllBindings();
+
+                if (instructionDialog != null)
+                {
+                    instructionDialog.Dispose();
+                    instructionDialog = null;
+                }
             }
 
             base.Dispose(disposing);
@@ -48,81 +63,144 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected View Content { get; set; }
 
 
-        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+        public AbstractQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context)
         {
-            this.bindingActivity = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
+            this._bindingContext = new MvxAndroidBindingContext(context, bindingActivity.LayoutInflater, source);
             templateId = Resource.Layout.AbstractQuestionView;
-            Content = BindingActivity.BindingInflate(templateId, this);
+            Content = _bindingContext.BindingInflate(templateId, this);
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
+            this.AnswerCommandService = commandService;
 
             Initialize();
 
             PostInit();
         }
+
         protected virtual void Initialize()
         {
             etComments.ImeOptions = ImeAction.Done;
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
             etComments.EditorAction += etComments_EditorAction;
+            etComments.ImeOptions = ImeAction.Done;
             etComments.FocusChange += etComments_FocusChange;
-            llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            llWrapper.LongClick += AbstractQuestionView_LongClick;
+            llWrapper.FocusChange += llWrapper_FocusChange;
             llWrapper.Clickable = true;
+            /*llWrapper.Focusable = true;
+            llWrapper.FocusableInTouchMode = true;*/
         }
 
-        protected virtual void SaveAnswer()
+        void llWrapper_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            OnAnswerSet();
+            
         }
 
-        protected void OnAnswerSet()
+        protected void SaveAnswer(string newAnswer, AnswerQuestionCommand saveAnswerCommand)
+        {
+            this.ExecuteSaveAnswerCommand(saveAnswerCommand);
+
+            this.FireAnswerSetEvent(newAnswer);
+        }
+
+        private void FireAnswerSetEvent(string newAnswer)
         {
             var handler = AnswerSet;
             if (handler != null)
-                handler(this, EventArgs.Empty);
+                handler(this, new AnswerSetEventArgs(Model.PublicKey, newAnswer));
         }
-
-        #region 
 
         private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
         {
             IsCommentsEditorFocused = true;
             SetEditCommentsVisibility(true);
             etComments.RequestFocus();
+            ShowKeyboard(etComments);
         }
+
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             IsCommentsEditorFocused = e.HasFocus;
-            if (!e.HasFocus)
+          /*  if (!e.HasFocus)
             {
                 SaveComment();
                 HideKeyboard(etComments);
-            }
-            else
-            {
-                ShowKeyboard(etComments);
-            }
+            }*/
         }
-        
-        protected void SaveComment()
+
+        private void SaveComment()
         {
             string newComments = etComments.Text.Trim();
             if (newComments != this.Model.Comments)
             {
-                CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey, newComments, this.Model.PublicKey.PropagationKey,
-                                                             CapiApplication.Membership.CurrentUser));
+                CommandService.Execute(new CommentAnswerCommand(this.QuestionnairePublicKey,
+                                                                CapiApplication.Membership.CurrentUser.Id,
+                                                                this.Model.PublicKey.Id,
+                                                                this.Model.PublicKey.PropagationVector,
+                                                                DateTime.UtcNow,
+                                                                newComments));
+                tvComments.Text = newComments;
+
             }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
-            
+
+        }
+
+        protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
+        {
+            tvError.Visibility = ViewStates.Gone;
+            AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler);
+        }
+
+        private void SaveAnswerErrorHandler(Exception ex)
+        {
+            if (this.isDisposed)
+                return;
+
+            ((Activity) this.Context).RunOnUiThread(() =>
+            {
+                if (this.isDisposed)
+                    return;
+
+                this.SaveAnswerErrorHandlerImpl(ex);
+            });
+        }
+
+        private void SaveAnswerErrorHandlerImpl(Exception ex)
+        {
+            this.PutAnswerStoredInModelToUI();
+            this.FireAnswerSetEvent(this.GetAnswerStoredInModelAsString());
+
+            if (!Model.IsEnabled())
+                return;
+
+            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            logger.Error("Error on answer set.", ex);
+            tvError.Visibility = ViewStates.Visible;
+            tvError.Text = this.GetDeepestException(ex).Message;
+            logger.Error("Error message: " + tvError.Text);
+        }
+
+        protected abstract string GetAnswerStoredInModelAsString();
+
+        protected abstract void PutAnswerStoredInModelToUI();
+
+        private Exception GetDeepestException(Exception e)
+        {
+            if (e.InnerException == null)
+                return e;
+            return this.GetDeepestException(e.InnerException);
         }
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+            SaveComment();
             etComments.ClearFocus();
+            HideKeyboard(etComments);
         }
 
         protected void HideKeyboard(EditText editor)
@@ -141,7 +219,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             imm.ShowSoftInput(editor, 0);
         }
 
-        #endregion
 
         private void SetEditCommentsVisibility(bool visible)
         {
@@ -150,7 +227,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
         protected override void OnAttachedToWindow()
         {
-            llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            llWrapper.EnableDisableView(this.Model.IsEnabled());
             base.OnAttachedToWindow();
         }
         protected virtual void PostInit()
@@ -166,10 +243,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         void btnInstructions_Click(object sender, EventArgs e)
         {
-            var instructionsBuilder = new AlertDialog.Builder(this.Context);
-            instructionsBuilder.SetMessage(Model.Instructions);
-            instructionsBuilder.Show();
+            if (this.instructionDialog == null)
+            {
+                this.instructionDialog = new AlertDialog.Builder(this.Context);
+                this.instructionDialog.SetMessage(Model.Instructions);
+            }
+            this.instructionDialog.Show();
         }
+
+        private AlertDialog.Builder instructionDialog = null;
+        private bool isDisposed;
 
         protected LinearLayout llRoot
         {
@@ -204,6 +287,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
-       
+
     }
 }

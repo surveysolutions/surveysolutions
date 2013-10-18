@@ -18,14 +18,19 @@ namespace WB.UI.Designer.CommandDeserialization
                         {"UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand)},
                         {"UpdateGroup", typeof (UpdateGroupCommand)},
                         {"AddGroup", typeof (AddGroupCommand)},
-                        {"CloneGroupWithoutChildren", typeof (CloneGroupCommand)},
+                        {"CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand)},
                         {"DeleteGroup", typeof (DeleteGroupCommand)},
                         {"MoveGroup", typeof (MoveGroupCommand)},
                         {"UpdateQuestion", typeof (UpdateQuestionCommand)},
+                        {"UpdateNumericQuestion", typeof (UpdateNumericQuestionCommand)},
                         {"AddQuestion", typeof (AddQuestionCommand)},
+                        {"AddNumericQuestion", typeof (AddNumericQuestionCommand)},
                         {"CloneQuestion", typeof (CloneQuestionCommand)},
+                        {"CloneNumericQuestion", typeof (CloneNumericQuestionCommand)},
                         {"DeleteQuestion", typeof (DeleteQuestionCommand)},
                         {"MoveQuestion", typeof (MoveQuestionCommand)},
+                        {"AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand)},
+                        {"RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand)},
                     };
             }
 

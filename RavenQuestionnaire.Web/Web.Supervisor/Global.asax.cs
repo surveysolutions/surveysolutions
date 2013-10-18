@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using System.Web.SessionState;
+using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Logging;
 
@@ -33,12 +34,7 @@ namespace Web.Supervisor
         /// The logger.
         /// </summary>
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-
-        /// <summary>
-        /// The correctly initialized.
-        /// </summary>
-        private static bool correctlyInitialized;
-
+        
         /// <summary>
         /// The register global filters.
         /// </summary>
@@ -135,5 +131,17 @@ namespace Web.Supervisor
 
         #warning TLK: delete this when NCQRS initialization moved to Global.asax
         public static void Initialize() { }
+
+        public override void Init()
+        {
+            this.PostAuthenticateRequest += MvcApplication_PostAuthenticateRequest;
+            base.Init();
+        }
+
+        void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
+        {
+            HttpContext.Current.SetSessionStateBehavior(
+                SessionStateBehavior.Required);
+        }
     }
 }

@@ -149,7 +149,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             DateTime date;
             if (!DateTime.TryParse(answerValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
-                throw new InterviewException("value must be date time");
+                throw new CompleteQuestionnaireException("value must be date time");
         }
 
         #endregion

@@ -9,7 +9,7 @@
     /// <summary>
     /// The auto propagate question.
     /// </summary>
-    public class AutoPropagateQuestion : AbstractQuestion, IAutoPropagate
+    public class AutoPropagateQuestion : AbstractQuestion, IAutoPropagateQuestion
     {
         #region Constructors and Destructors
 

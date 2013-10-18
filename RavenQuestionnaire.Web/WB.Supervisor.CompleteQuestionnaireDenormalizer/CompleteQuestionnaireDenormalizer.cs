@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Core.Supervisor.Denormalizer;
 using Main.Core.Documents;
@@ -25,8 +26,8 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
                                                      IEventHandler<PropagateGroupCreated>, 
                                                      IEventHandler<PropagatableGroupDeleted>, 
                                                      IEventHandler<QuestionnaireAssignmentChanged>, 
-                                                     IEventHandler<QuestionnaireStatusChanged>,
-                                                     IEventHandler<InterviewDeleted>
+                                                     IEventHandler<QuestionnaireStatusChanged>/*,
+                                                     IEventHandler<InterviewDeleted>*/
     {
         
         private  IReadSideRepositoryWriter<CompleteQuestionnaireStoreDocument> documentStorage;
@@ -201,7 +202,7 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
             this.documentStorage.Store(doc, doc.PublicKey);
         }
 
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        /*public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
             CompleteQuestionnaireStoreDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
@@ -210,6 +211,11 @@ namespace WB.Supervisor.CompleteQuestionnaireDenormalizer
 
             this.documentStorage.Store(item, item.PublicKey);
 
+        }*/
+
+        public override Type[] BuildsViews
+        {
+            get { return new Type[0]; }
         }
     }
 }

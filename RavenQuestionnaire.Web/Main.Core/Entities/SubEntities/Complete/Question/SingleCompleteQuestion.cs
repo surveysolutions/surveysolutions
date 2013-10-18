@@ -164,7 +164,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 if (selecteAnswer == item.PublicKey)
                     return;
             }
-            throw new InterviewException(string.Format("value {0} is absent", selecteAnswer));
+            throw new CompleteQuestionnaireException(string.Format("value {0} is absent", selecteAnswer));
         }
 
         #endregion

@@ -1,4 +1,7 @@
-﻿namespace Main.Core.Utility
+﻿using System.ComponentModel;
+using System.Reflection;
+
+namespace Main.Core.Utility
 {
     using System;
     using System.Linq;
@@ -34,6 +37,14 @@
                                         .Concat(BitConverter.GetBytes(BitConverter.ToUInt64(a, 8) ^ BitConverter.ToUInt64(b, 0))).ToArray());
         }
 
+        public static Guid Combine(this Guid x, long y)
+        {
+            byte[] a = x.ToByteArray();
+            byte[] b = BitConverter.GetBytes(y);
+
+            return new Guid(BitConverter.GetBytes(BitConverter.ToUInt64(a, 0))
+                                        .Concat(BitConverter.GetBytes(BitConverter.ToUInt64(a, 8) ^ BitConverter.ToUInt64(b, 0))).ToArray());
+        }
         #endregion
     }
 }

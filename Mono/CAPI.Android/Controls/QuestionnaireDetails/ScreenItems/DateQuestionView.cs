@@ -5,6 +5,7 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -14,8 +15,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
         }
         */
-        public DateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public DateQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -30,43 +31,43 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (!DateTime.TryParse(Model.AnswerString, out date))
                 date = DateTime.Now;
             dialog = new DatePickerDialog(this.Context, OnDateSet, date.Year, date.Month - 1, date.Day);
-           
-            // add a click event handler to the button
-
             llWrapper.Click += delegate
                 {
 
                     dialog.Show();
                 };
-          /*  if (!DateTime.TryParse(Model.AnswerString, out date))
-                // get the current date
-                date = DateTime.Today;*/
 
-            // display the current date (this method is below)
-            dateDisplay.Text = Model.AnswerString;
+            this.PutAnswerStoredInModelToUI();
         }
+
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            return this.Model.AnswerString;
+        }
+
+        protected override void PutAnswerStoredInModelToUI()
+        {
+            dateDisplay.Text = this.GetAnswerStoredInModelAsString();
+        }
+
         // the event received when the user "sets" the date in the dialog
         void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
             string newValue = e.Date.ToString("d");
             if (newValue != this.Model.AnswerString)
             {
-                CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                          null, newValue,
-                                                          Model.PublicKey.PropagationKey));
                 dateDisplay.Text = newValue;
+
+                this.SaveAnswer(
+                    newValue,
+                    new AnswerDateTimeQuestionCommand(this.QuestionnairePublicKey, CapiApplication.Membership.CurrentUser.Id,
+                        Model.PublicKey.Id, this.Model.PublicKey.PropagationVector, DateTime.UtcNow, e.Date));
             }
-            
-           // this.date = e.Date;
-            SaveAnswer();
-          //  UpdateDisplay();
         }
+
         #endregion
 
         private TextView dateDisplay;
-       // private Button pickDate;
-     //   private DateTime date=DateTime.Now;
         private DatePickerDialog dialog;
-        // const int DATE_DIALOG_ID = 0;
     }
 }

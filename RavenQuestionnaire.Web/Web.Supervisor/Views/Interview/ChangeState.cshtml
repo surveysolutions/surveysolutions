@@ -1,103 +1,74 @@
-﻿@using Main.Core.View.CompleteQuestionnaire.Statistics
-@using Web.Supervisor.Models
-@model ApproveRedoModel
+﻿@using System.Web.Optimization
+@model Core.Supervisor.Views.ChangeStatus.ChangeStatusView
 @{
     ViewBag.Title = "Change state survey";
 }
-<h3>Approve survey</h3>
-<p><a href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Back to list</a></p>
+@section scripts
+{
+    @Scripts.Render("~/Scripts/viewmodels/pages/interviewchangestate.js")
+    <script type="text/javascript">
+        var interviewId = '@Model.InterviewId';
+        var interviewsUrl = '@Url.Action("InterviewStatusChanged", "Survey", new {}, Request.Url.Scheme)';
+        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "Execute" })';
+        $(function () {
+            var model = new Supervisor.VM.InterviewChangeState(commandExecutionUrl, interviewId, interviewsUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
+<h2>@Model.QuestionnaireTitle <small>(ver. @Model.QuestionnaireVersion)</small></h2>
 <div class="row-fluid">
-    <div class="span6">
-        @using (Html.BeginForm("ChangeState", GlobalHelper.CurrentController, new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
-        {
-            <legend>Change survey status</legend>
-            <div class="control-group">
-                @Html.LabelFor(x => x.StatusId, new { @class = "control-label" })
-                <div class="controls">
-                    <select id="state" name="state">
-                        <option value="1">Approve</option>
-                        <option value="2">Redo</option>
-                    </select>
-                </div>
-            </div>
-
-
-            <div class="control-group">
-                @Html.LabelFor(x => x.Comment, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.TextAreaFor(x => x.Comment, new { @class = "span12" })
-                </div>
-            </div>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn" href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Cancel</a>
-            </div>
-        }
-        @Html.Partial("_StatusHistory", Model.Statistic.StatusHistory)
-    </div>
-    <div class="span6" id="state-right">
-        <div class="tabbable tabs-left">
-            <ul class="nav nav-tabs" id="statisticTab">
-                <li class="active"><a href="#featured">Featured</a></li>
-                <li><a href="#invalid">Invalid</a></li>
-                <li><a href="#answered">Answered</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="featured">
-                    <h4>Featured questions</h4>
-                    @foreach (QuestionStatisticView question in Model.Statistic.FeaturedQuestions)
-                    {
-                        <p>
-                            @Html.Raw(question.QuestionText) - @question.AnswerValue
-                            @if (question.ApproximateTime.HasValue)
-                            {
-                                <b>, Timing : @question.ApproximateTime.Value.Minutes
-                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                            }
-                        </p>
-                    }
-                </div>
-                <div class="tab-pane" id="invalid">
-                    <h4>Invalid questions</h4>
-                    @foreach (QuestionStatisticView question in Model.Statistic.InvalidQuestions)
-                    {
-                        <p>
-                            @Html.Raw(question.QuestionText)
-                            - @question.AnswerValue
-                            @if (question.ApproximateTime.HasValue)
-                            {
-                                <b>, Timing : @question.ApproximateTime.Value.Minutes
-                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                            }
-                        </p>
-                    }</div>
-                <div class="tab-pane" id="answered">
-                    <h4>Answered questions</h4>
-                    @foreach (QuestionStatisticView question in Model.Statistic.AnsweredQuestions)
-                    {
-                        <p>
-                            @Html.Raw(question.QuestionText)
-                            - @question.AnswerValue
-                            @if (question.ApproximateTime.HasValue)
-                            {
-                                <b>, Timing : @question.ApproximateTime.Value.Minutes
-                                    minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                            }
-                        </p>
-                    }</div>
+    <div class="span12">
+        <div class="control-group">
+            <label class="control-label" for="comment">Comment</label>
+            <div class="controls">
+                <textarea rows="3" class="input-block-level" id="comment" data-bind="value: Comment"></textarea>
             </div>
         </div>
-        <script>
-            $(function () {
-                /*$('#state').change(function () {
-                if ($(this).val() != "1") $('#state-right').hide();
-                else $('#state-right').show();
-                });*/
-                $('#statisticTab a').click(function (e) {
-                    e.preventDefault();
-                    $(this).tab('show');
-                });
-            })
-        </script>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        <button class="btn btn-success" data-bind="click: Approve">Approve</button>
+    </div>
+    <div class="span6">
+        <div class="pull-right">
+            <button class="btn btn-danger" data-bind="click: Reject">Reject</button>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6 offset3">
+        <h3>State change history</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>set status</th>
+                    <th>with comment</th>
+                    <th>on</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ch in Model.StatusHistory)
+                {
+                    <tr>
+                        <td>user
+                        </td>
+                        <td>
+                            @ch.Status
+                        </td>
+                        <td>
+                            @ch.Comment
+                        </td>
+                        <td>
+                            @ch.Date.ToLocalTime()
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

@@ -5,18 +5,16 @@ using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 namespace CAPI.Android.Bindings
 {
-    public class HtmlBinding : MvxAndroidTargetBinding
+    public class HtmlBinding : MvvmBindingWrapper<TextView>
     {
-        private readonly TextView control;
-
         public HtmlBinding(TextView control):base(control)
         {
-            this.control = control;
         }
-        public override void SetValue(object value)
+
+        protected override void SetValueToView(TextView view, object value)
         {
-            var htmlString = (string) value;
-            control.SetText(Html.FromHtml(htmlString), TextView.BufferType.Spannable);
+            var htmlString = (string)value;
+            view.SetText(Html.FromHtml(htmlString), TextView.BufferType.Spannable);
         }
 
         public override Type TargetType

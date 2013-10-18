@@ -1,19 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using Main.Core.Events;
-using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
@@ -38,15 +28,15 @@ namespace CAPI.Androids.Core.Model.Tests
             var draftStorage = new Dictionary<Guid, DraftChangesetDTO>();
             ChangeLogManipulator unitUnderTest = CreateChangeLogManipulatorWithAccesibleDraftStorage(draftStorage);
             Guid eventSourceId = Guid.NewGuid();
-            int start = 4;
+            //int start = 4;
 
             // act
-            
-            unitUnderTest.OpenDraftRecord(eventSourceId, start);
+
+            unitUnderTest.CreateOrReopenDraftRecord(eventSourceId/*, start*/);
 
             // assert
             Assert.That(draftStorage.Count,Is.EqualTo( 1));
-            Assert.That(draftStorage.First().Value.Start, Is.EqualTo(start));
+            //Assert.That(draftStorage.First().Value.Start, Is.EqualTo(start));
         }
 
         [Test]
@@ -57,12 +47,12 @@ namespace CAPI.Androids.Core.Model.Tests
             ChangeLogManipulator unitUnderTest = CreateChangeLogManipulatorWithAccesibleDraftStorage(draftStorage);
             Guid eventSourceId = Guid.NewGuid();
             Guid recordId = Guid.NewGuid();
-            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, 1, null);
-            int start = 4;
+            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, /*1,*/ false);
+            //int start = 4;
 
             // act
 
-            Assert.Throws<InvalidOperationException>(() => unitUnderTest.OpenDraftRecord(eventSourceId, start));
+            Assert.Throws<InvalidOperationException>(() => unitUnderTest.CreateOrReopenDraftRecord(eventSourceId/*, start*/));
         }
 
         [Test]
@@ -74,18 +64,18 @@ namespace CAPI.Androids.Core.Model.Tests
             ChangeLogManipulator unitUnderTest = CreateChangeLogManipulatorWithAccesibleChangelogStorageAndDraftStorage(changeLogStoreMock.Object, draftStorage);
             Guid eventSourceId = Guid.NewGuid();
             Guid recordId = Guid.NewGuid();
-            int start = 4;
-            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null);
-            int end = 6;
+            //int start = 4;
+            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, /*start,*/ false);
+            //int end = 6;
 
             // act
-            unitUnderTest.CloseDraftRecord(eventSourceId, end);
+            unitUnderTest.CloseDraftRecord(eventSourceId/*, end, true*/);
 
             // assert
             Assert.That(draftStorage.Count, Is.EqualTo(1));
-            Assert.That(draftStorage[recordId].Start, Is.EqualTo(start));
-            Assert.That(draftStorage[recordId].End, Is.EqualTo(end));
-            changeLogStoreMock.Verify(x => x.SaveChangeset(It.IsAny<AggregateRootEvent[]>(), recordId), Times.Once());
+            //Assert.That(draftStorage[recordId].Start, Is.EqualTo(start));
+            Assert.That(draftStorage[recordId].IsClosed, Is.EqualTo(true));
+            changeLogStoreMock.Verify(x => x.SaveChangeset(It.IsAny<AggregateRootEvent[]>(), recordId/*, true*/), Times.Once());
         }
 
         [Test]
@@ -96,12 +86,12 @@ namespace CAPI.Androids.Core.Model.Tests
             ChangeLogManipulator unitUnderTest = CreateChangeLogManipulatorWithAccesibleDraftStorage(draftStorage);
             Guid eventSourceId = Guid.NewGuid();
             Guid recordId = Guid.NewGuid();
-            int start = 4;
-            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, null);
-            int end = 1;
+            //int start = 4;
+            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, /*start,*/ false);
+            //int end = 1;
 
             // act
-            Assert.Throws<ArgumentException>(() => unitUnderTest.CloseDraftRecord(eventSourceId, end));
+            Assert.Throws<ArgumentException>(() => unitUnderTest.CloseDraftRecord(eventSourceId /*, end, true*/));
         }
 
         [Test]
@@ -115,7 +105,7 @@ namespace CAPI.Androids.Core.Model.Tests
             int end = 6;
 
             // act
-            unitUnderTest.CloseDraftRecord(eventSourceId, end);
+            unitUnderTest.CloseDraftRecord(eventSourceId/*, end, true*/);
 
             // assert
             Assert.That(draftStorage.Count, Is.EqualTo(0));
@@ -130,16 +120,16 @@ namespace CAPI.Androids.Core.Model.Tests
             ChangeLogManipulator unitUnderTest = CreateChangeLogManipulatorWithAccesibleChangelogStorageAndDraftStorage(changeLogStoreMock.Object, draftStorage);
             Guid eventSourceId = Guid.NewGuid();
             Guid recordId = Guid.NewGuid();
-            int start = 4;
-            int end = 10;
-            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, end);
+            /*int start = 4;
+            int end = 10;*/
+            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, /*start, end*/false);
             
 
             // act
-            unitUnderTest.ReopenDraftRecord(eventSourceId);
+            unitUnderTest.CreateOrReopenDraftRecord(eventSourceId);
 
             // assert
-            Assert.That(draftStorage[recordId].End, Is.EqualTo(null));
+            Assert.That(draftStorage[recordId].IsClosed, Is.EqualTo(false));
             changeLogStoreMock.Verify(x => x.DeleteDraftChangeSet(recordId), Times.Once());
         }
 
@@ -152,7 +142,7 @@ namespace CAPI.Androids.Core.Model.Tests
             Guid eventSourceId = Guid.NewGuid();
 
             // act
-            unitUnderTest.ReopenDraftRecord(eventSourceId);
+            unitUnderTest.CreateOrReopenDraftRecord(eventSourceId);
 
             // assert
             Assert.That(draftStorage.Count, Is.EqualTo(0));
@@ -171,9 +161,9 @@ namespace CAPI.Androids.Core.Model.Tests
 
             Guid eventSourceId = Guid.NewGuid();
             Guid recordId = Guid.NewGuid();
-            int start = 4;
-            int end = 10;
-            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, start, end);
+            /*int start = 4;
+            int end = 10;*/
+            draftStorage[recordId] = new DraftChangesetDTO(recordId, eventSourceId, DateTime.Now, /*start, end*/ false);
 
             // act
             unitUnderTest.CleanUpChangeLogByRecordId(recordId);

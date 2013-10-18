@@ -6,15 +6,20 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Main.Core.Commands.Questionnaire.Completed;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class NumericQuestionView : AbstractQuestionView
+    public abstract class NumericQuestionView<T> : AbstractQuestionView
+        where T : struct
     {
+        protected abstract InputTypes KeyboardTypeFlags
+        {
+            get;
+        }
 
-        public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
-            : base(context, bindingActivity, source, questionnairePublicKey)
+        public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
+            : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
 
@@ -22,13 +27,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
             llWrapper.Click += NumericQuestionView_Click;
-            etAnswer=new EditText(this.Context);
+            etAnswer = new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            etAnswer.Text = Model.AnswerString;
-            etAnswer.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal;
-            
+            etAnswer.InputType = KeyboardTypeFlags;
+
+            this.PutAnswerStoredInModelToUI();
+
             etAnswer.SetSelectAllOnFocus(true);
-            etAnswer.ImeOptions=ImeAction.Done;
+            etAnswer.ImeOptions = ImeAction.Done;
             etAnswer.SetSingleLine(true);
             etAnswer.EditorAction += etAnswer_EditorAction;
             etAnswer.FocusChange += etAnswer_FocusChange;
@@ -39,50 +45,35 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (e.HasFocus)
             {
-                ShowKeyboard(etAnswer);
                 return;
             }
-            SaveAnswer();
+
+            string newAnswer = this.etAnswer.Text.Trim();
+
+            T answer;
+            if (!IsParseAnswerStringSucceeded(newAnswer, out answer))
+                return;
+
+            if (this.Model.AnswerObject!=null && answer.Equals(this.Model.AnswerObject)) return;
+
             if (!IsCommentsEditorFocused)
                 HideKeyboard(etAnswer);
-           /* InputMethodManager imm
-               = (InputMethodManager)this.Context.GetSystemService(
-                   Context.InputMethodService);
-            if(imm.IsAcceptingText)
-            {
-                
-            }*/
+
+            this.SaveAnswer(newAnswer, CreateAnswerQuestionCommand(answer));
         }
 
-        protected override void SaveAnswer()
-        {
-            try
-            {
-                tvError.Visibility = ViewStates.Gone;
-                string newValue = etAnswer.Text.Trim();
-                if (newValue != this.Model.AnswerString)
-                {
-                    CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                                null, newValue,
-                                                                Model.PublicKey.PropagationKey));
-                }
-                base.SaveAnswer();
+        protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
 
-            }
-            catch (Exception ex)
-            {
-                // etAnswer.Text = Model.AnswerString;
-                tvError.Visibility = ViewStates.Visible;
-                etAnswer.Text = Model.AnswerString;
-                tvError.Text = GetDippestException(ex).Message;
-            }
+        protected abstract AnswerQuestionCommand CreateAnswerQuestionCommand(T answer);
+
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            return this.Model.AnswerString;
         }
 
-        private Exception GetDippestException(Exception e)
+        protected override void PutAnswerStoredInModelToUI()
         {
-            if (e.InnerException == null)
-                return e;
-            return GetDippestException(e.InnerException);
+            this.etAnswer.Text = this.GetAnswerStoredInModelAsString();
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -92,6 +83,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             etAnswer.RequestFocus();
+            ShowKeyboard(etAnswer);
         }
 
         protected TextView tvTitle
