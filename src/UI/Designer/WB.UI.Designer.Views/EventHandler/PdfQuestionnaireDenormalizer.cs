@@ -209,7 +209,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     PublicId = @event.PublicKey,
                     Title = @event.QuestionText,
-                    QuestionType = @event.QuestionType,
+                    QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating),
                     Answers = new List<PdfAnswerView>(),
                     Variable = @event.StataExportCaption
                 };
@@ -229,7 +229,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 {
                     PublicId = @event.PublicKey,
                     Title = @event.QuestionText,
-                    QuestionType = @event.QuestionType,
+                    QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating),
                     Answers = new List<PdfAnswerView>(0),
                     Variable = @event.StataExportCaption
                 };
@@ -249,7 +249,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 existingQuestion.ValidationExpression = @event.ValidationExpression;
 
                 existingQuestion.Title = @event.QuestionText;
-                existingQuestion.QuestionType = @event.QuestionType;
+                existingQuestion.QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating);
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
 
                 return questionnaire;

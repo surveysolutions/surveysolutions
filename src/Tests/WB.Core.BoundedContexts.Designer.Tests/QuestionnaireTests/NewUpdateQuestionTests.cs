@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid questionKey = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType,
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(questionKey, questionType,
                 new[] {new Option(Guid.NewGuid(), "123", "title"), new Option(Guid.NewGuid(), "2", "title1")},
                 responsibleId: responsibleId);
             Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
                 Guid responsibleId = Guid.NewGuid();
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
                     questionKey, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid questionKey = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title"), new Option(Guid.NewGuid(), "125", "title1") }, responsibleId: responsibleId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title"), new Option(Guid.NewGuid(), "125", "title1") }, responsibleId: responsibleId);
             Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title") };
             // act
             TestDelegate act =
@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
                 Guid questionKey = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "121", "title"), new Option(Guid.NewGuid(), "12", "title1") }, responsibleId: responsibleId);
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "121", "title"), new Option(Guid.NewGuid(), "12", "title1") }, responsibleId: responsibleId);
                 Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", firstAnswerOptionTitle), new Option(Guid.NewGuid(), "2", secondAnswerOptionTitleThatNotEqualsFirstOne) };
                 
                 // act
@@ -469,7 +469,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         {
             Guid targetQuestionPublicKey = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
-            var questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionId: targetQuestionPublicKey, questionType: questionType, options: new Option[2]
+            var questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(questionId: targetQuestionPublicKey, questionType: questionType, options: new Option[2]
                     {
                         new Option(id: Guid.NewGuid(), title: "text1", value: "1") ,
                         new Option(id: Guid.NewGuid(), title: "text2", value: "2") 
@@ -511,7 +511,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
                 Guid responsibleId = Guid.NewGuid();
-                var questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(questionId: targetQuestionPublicKey, questionType: questionType, options: new Option[2]
+                var questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(questionId: targetQuestionPublicKey, questionType: questionType, options: new Option[2]
                     {
                         new Option(id: Guid.NewGuid(), title: "text1", value: "1") ,
                         new Option(id: Guid.NewGuid(), title: "text2", value: "2") 
@@ -585,7 +585,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.AutoPropagate)]
-        public void NewUpdateQuestion_When_command_is_rerouted_on_command_specific_to_question_type_Then_DomainException_should_be_thrown(
+        public void NewUpdateQuestion_When_question_type_is_handled_by_type_specific_command_Then_DomainException_should_be_thrown(
             QuestionType questionType)
         {
             Guid responsibleId = Guid.NewGuid();
@@ -618,13 +618,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [TestCase(QuestionType.SingleOption)]
-        [TestCase(QuestionType.MultyOption)]
-        [TestCase(QuestionType.DateTime)]
-        [TestCase(QuestionType.GpsCoordinates)]
-        [TestCase(QuestionType.Text)]
-        public void NewUpdateQuestion_When_questions_Type_is_not_numeric_Then_DomainException_should_be_thrown(
-            QuestionType questionType)
+        [TestCase(20)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void NewUpdateQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
         {
             Guid responsibleId = Guid.NewGuid();
             Guid targetQuestionPublicKey = Guid.NewGuid();
@@ -635,7 +632,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 questionnaire.UpdateNumericQuestion(
                     questionId: targetQuestionPublicKey,
                     title: "What is your last name?",
-                    type: questionType,
+                    isAutopropagating:false, 
                     alias: "name",
                     isMandatory: false,
                     isFeatured: false,
@@ -645,40 +642,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+                    responsibleId: responsibleId, maxValue: null, triggeredGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: countOfDecimalPlaces);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTypeIsNotAcceptableByNumericQuestionsCommand));
-        }
-
-        [Test]
-        public void NewUpdateQuestion_When_countOfDecimalPlaces_is_more_then_allowed_20_Then_DomainException_should_be_thrown()
-        {
-            Guid responsibleId = Guid.NewGuid();
-            Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = CreateQuestionnaireWithOneQuestion(questionId: targetQuestionPublicKey,
-             responsibleId: responsibleId);
-
-            TestDelegate act = () =>
-                questionnaire.UpdateNumericQuestion(
-                    questionId: targetQuestionPublicKey,
-                    title: "What is your last name?",
-                    type: QuestionType.Numeric, 
-                    alias: "name",
-                    isMandatory: false,
-                    isFeatured: false,
-                    isHeaderOfPropagatableGroup: false,
-                    scope: QuestionScope.Interviewer,
-                    condition: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    instructions: string.Empty,
-                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: 20);
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesExceededMaximum));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect));
         }
 
         [Test]
@@ -766,10 +734,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [TestCase(QuestionType.Numeric)]
-        [TestCase(QuestionType.AutoPropagate)]
+        [TestCase(true)]
+        [TestCase(false)]
         public void UpdateNumericQuestion_When_question_type_is_allowed_Then_raised_QuestionChanged_event_with_same_question_type(
-            QuestionType allowedQuestionType)
+            bool isAutopropagating)
         {
             using (var eventContext = new EventContext())
             {
@@ -784,7 +752,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionId: questionId,
                     title: "What is your last name?",
                     alias: "name",
-                    type: allowedQuestionType,
+                    isAutopropagating: isAutopropagating,
                     scope: QuestionScope.Interviewer,
                     condition: string.Empty,
                     validationExpression: string.Empty,
@@ -793,10 +761,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     isMandatory: false,
                     isHeaderOfPropagatableGroup: false,
                     instructions: string.Empty,
-                    responsibleId: responsibleId, maxValue: null, triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+                    responsibleId: responsibleId, maxValue: null, triggeredGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
 
                 // assert
-                Assert.That(GetSingleEvent<NumericQuestionChanged>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+                Assert.That(GetSingleEvent<NumericQuestionChanged>(eventContext).IsAutopropagating, Is.EqualTo(isAutopropagating));
             }
         }
 
@@ -1010,7 +978,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Arrange
                 var groupId = Guid.NewGuid();
                 var autoPropagateQuestionId = Guid.NewGuid();
-                var autoPropagate = QuestionType.AutoPropagate;
+                var autoPropagate = true;
                 Guid[] emptyTriggedGroupIds = null;
                 var responsibleId = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(questionId: autoPropagateQuestionId, responsibleId: responsibleId);
@@ -1034,7 +1002,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // Arrange
                 var groupId = Guid.NewGuid();
                 var autoPropagateQuestionId = Guid.NewGuid();
-                var autoPropagate = QuestionType.AutoPropagate;
+                var autoPropagate = true;
                 var emptyTriggedGroupIds = new Guid[0];
                 var responsibleId = Guid.NewGuid();
                 Questionnaire questionnaire = CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(questionId: autoPropagateQuestionId, responsibleId: responsibleId);
@@ -1054,7 +1022,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         public void NewUpdateQuestion_When_question_is_AutoPropagate_and_list_of_triggers_contains_absent_group_id_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
+            var autoPropagate = true;
             var autoPropagateQuestionId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
             var absentGroupId = Guid.NewGuid();
@@ -1079,7 +1047,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         public void NewUpdateQuestion_When_question_is_AutoPropagate_and_list_of_triggers_contains_non_propagate_group_id_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
+            var autoPropagate = true;
             var autoPropagateQuestionId = Guid.NewGuid();
             var nonPropagateGroupId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
@@ -1108,7 +1076,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                var autoPropagate = QuestionType.AutoPropagate;
+                var autoPropagate = true;
                 var autoPropagateQuestionId = Guid.NewGuid();
                 var autoPropagateGroupId = Guid.NewGuid();
                 var groupId = Guid.NewGuid();
@@ -1133,7 +1101,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         public void NewUpdateQuestion_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
+            var autoPropagate = true;
             var autoPropagateQuestionId = Guid.NewGuid();
             var autoPropagateGroupId = Guid.NewGuid();
             var groupId = Guid.NewGuid();

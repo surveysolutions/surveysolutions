@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     public class AddNumericQuestionCommand : AbstractNumericQuestionCommand
     {
         public AddNumericQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            string title, bool isAutopropagating, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions, int? maxValue,
-            Guid[] triggedGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
-            : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup, scope, condition,
-                validationExpression, validationMessage, instructions, responsibleId, maxValue, triggedGroupIds,
+            Guid[] triggeredGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
+            : base(questionnaireId, questionId, title, isAutopropagating, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup, scope, condition,
+                validationExpression, validationMessage, instructions, responsibleId, maxValue, triggeredGroupIds,
                 isInteger, countOfDecimalPlaces)
         {
             this.GroupId = groupId;

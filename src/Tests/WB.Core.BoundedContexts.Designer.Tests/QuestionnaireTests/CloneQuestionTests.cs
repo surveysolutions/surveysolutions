@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
             var optionsWithEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", string.Empty), new Option(Guid.NewGuid(), "2", string.Empty) };
             // act
             TestDelegate act =
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [Test]
         [TestCase(QuestionType.Numeric)]
         [TestCase(QuestionType.AutoPropagate)]
-        public void CloneQuestion_When_command_is_rerouted_on_command_specific_to_question_type_Then_DomainException_should_be_thrown(
+        public void CloneQuestion_When_question_type_is_handled_by_type_specific_command_Then_DomainException_should_be_thrown(
             QuestionType questionType)
         {
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
 
             TestDelegate act = () =>
                 questionnaire.CloneQuestion(
@@ -131,20 +131,17 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        [TestCase(QuestionType.SingleOption)]
-        [TestCase(QuestionType.MultyOption)]
-        [TestCase(QuestionType.DateTime)]
-        [TestCase(QuestionType.GpsCoordinates)]
-        [TestCase(QuestionType.Text)]
-        public void CloneQuestion_When_questions_Type_is_not_numeric_Then_DomainException_should_be_thrown(
-            QuestionType questionType)
+        [TestCase(20)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void CloneQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
         {
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
             Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, questionType, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(sourceQuestionId, QuestionType.Numeric, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
 
 
             TestDelegate act = () =>
@@ -152,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     questionId: newQuestionId,
                     groupId: groupId,
                     title: "What is your last name?",
-                    type: questionType,
+                    isAutopropagating:false, 
                     alias: "name",
                     isMandatory: false,
                     isFeatured: false,
@@ -163,45 +160,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     validationMessage: string.Empty,
                     instructions: string.Empty,
                     responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, targetIndex: 1, maxValue: null,
-                    triggedGroupIds: new Guid[0], isInteger: true, countOfDecimalPlaces: null);
+                    triggeredGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: countOfDecimalPlaces);
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTypeIsNotAcceptableByNumericQuestionsCommand));
-        }
-
-        [Test]
-        public void CloneQuestion_When_countOfDecimalPlaces_is_more_then_allowed_20_Then_DomainException_should_be_thrown()
-        {
-            Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
-            Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
-            Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
-            Guid responsibleId = Guid.NewGuid();
-
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(sourceQuestionId, QuestionType.Numeric, CreateTwoOptions(), responsibleId: responsibleId, groupId: groupId);
-
-
-            TestDelegate act = () =>
-                questionnaire.CloneNumericQuestion(
-                    questionId: newQuestionId,
-                    groupId: groupId,
-                    title: "What is your last name?",
-                    type: QuestionType.Numeric, 
-                    alias: "name",
-                    isMandatory: false,
-                    isFeatured: false,
-                    isHeaderOfPropagatableGroup: false,
-                    scope: QuestionScope.Interviewer,
-                    condition: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    instructions: string.Empty,
-                    responsibleId: responsibleId, sourceQuestionId: sourceQuestionId, targetIndex: 1, maxValue: null,
-                    triggedGroupIds: new Guid[0], isInteger: false, countOfDecimalPlaces: 20);
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesExceededMaximum));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect));
         }
 
         [Test]
@@ -220,7 +183,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 var notEmptyAnswerOptionTitle2 = "title1";
                 Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
                     sourceQuestionId, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
@@ -253,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var notEmptyAnswerOptionTitle2 = "title1";
             Option[] newOptionsWithNotEmptyTitles = new Option[2] { new Option(Guid.NewGuid(), "1", notEmptyAnswerOptionTitle1), new Option(Guid.NewGuid(), "2", notEmptyAnswerOptionTitle2) };
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionnInTypeAndOptions(
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestionInTypeAndOptions(
                 sourceQuestionId, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),

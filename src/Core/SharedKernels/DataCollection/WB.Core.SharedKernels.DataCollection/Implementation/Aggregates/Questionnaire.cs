@@ -597,7 +597,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = document.Find<IGroup>(group
                 => IsGroupPropagatable(group)
-                && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() == 0);
+                && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, document).Count() == 0);
 
             if (propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Any())
                 throw new QuestionnaireException(string.Format(
@@ -610,7 +610,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = document.Find<IGroup>(group
                 => IsGroupPropagatable(group)
-                && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() > 1);
+                && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, document).Count() > 1);
 
             if (propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Any())
                 throw new QuestionnaireException(string.Format(
@@ -661,38 +661,69 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         //could be split into several methods but it involves several scans of questionnaire 
         private void ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(QuestionnaireDocument document)
         {
-            Func<Guid, bool> isReferencedQuestionsExists = questionId =>
-            {
-                var question = document.Find<IQuestion>(questionId);
-
-                string[] substitutionReferences = StringUtil.GetAllTermsFromString(question.QuestionText);
-
-                if (substitutionReferences.Length == 0)
-                    return true;
-
-                if (question.Featured)
-                    return false;
-
-                if (substitutionReferences.Contains(question.StataExportCaption))
-                    return false;
-                //not the most efficient way 
-                IEnumerable<IQuestion> questionsSubstitutionReferenced = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
-
-                if (questionsSubstitutionReferenced.Count() < substitutionReferences.Count())
-                    return false;
-
-                if (questionsSubstitutionReferenced.Any(q => !( q.QuestionType == QuestionType.DateTime ||
-                                                                q.QuestionType == QuestionType.Numeric ||
-                                                                q.QuestionType == QuestionType.SingleOption ||
-                                                                q.QuestionType == QuestionType.Text)))
-                    return false;
-
-                return true;
-            };
-
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
                 "Following questions contain unknown substitution references or target question has wrong type",
-                question => !isReferencedQuestionsExists(question.PublicKey));
+                question => !this.IsReferencedQuestionsSubstitutionsAreValidInDocument(document, question.PublicKey));
+        }
+
+        private bool IsReferencedQuestionsSubstitutionsAreValidInDocument(QuestionnaireDocument document, Guid questionId)
+        {
+            var question = document.Find<IQuestion>(questionId);
+            string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(question.QuestionText);
+
+            if (substitutionReferences.Length == 0)
+                return true;
+
+            if (question.Featured)
+                return false;
+
+            if (substitutionReferences.Contains(question.StataExportCaption))
+                return false;
+
+            return IsSubstitutionReferencesSatisfyToStructureRestrictions(document, question, substitutionReferences);
+        }
+
+        private bool IsSubstitutionReferencesSatisfyToStructureRestrictions(QuestionnaireDocument document, IQuestion question,string[] substitutionReferences)
+        {
+            //not the most efficient way - we scan all document.
+            //We need cache by VariableName 
+            IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
+            if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
+                return false;
+
+            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(question.PublicKey, document);
+
+
+            Func<IQuestion, bool> referenceIsValid =
+                reference =>
+                {
+                    List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(reference.PublicKey, document);
+                    if (referencedPropagationQuestionsVector.Count == 0)
+                        //referenced Question not in propagation - OK
+                        return true;
+
+                    var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
+
+                    return lengthDiff >= 0 && propagationQuestionsVector.Except(propagationQuestionsVector).Count() > lengthDiff;
+                };
+
+            return substitutionReferencedQuestions.All(q =>
+                    this.IsQuestionTypeAllowedToBeSourceOfSubstitution(q.QuestionType) && referenceIsValid(q));
+        }
+
+
+        private bool IsQuestionTypeAllowedToBeSourceOfSubstitution(QuestionType type)
+        {
+            return type == QuestionType.DateTime || type == QuestionType.Numeric || type == QuestionType.SingleOption ||
+                   type == QuestionType.Text || type == QuestionType.AutoPropagate;
+        }
+        
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(Guid id, QuestionnaireDocument document)
+        {
+            List<Guid> propagationQuestions = GetParentPropagatableGroupsForQuestionStartingFromTop(id)
+                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g, document).FirstOrDefault().PublicKey).ToList();
+
+            return propagationQuestions;
         }
 
         private static void ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(QuestionnaireDocument document)
@@ -729,9 +760,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(IGroup group, QuestionnaireDocument document)
+        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
         {
-            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(group.PublicKey));
+            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(groupId));
         }
 
 
@@ -1089,7 +1120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? this.QuestionCache[questionId]
                 : null;
         }
-
+        
         private static string FormatQuestionForException(IQuestion question)
         {
             return string.Format("'{0} [{1}] ({2:N})'",

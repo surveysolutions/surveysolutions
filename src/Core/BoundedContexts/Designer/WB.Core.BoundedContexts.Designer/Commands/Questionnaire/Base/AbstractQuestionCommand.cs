@@ -6,12 +6,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class AbstractQuestionCommand : QuestionCommand
     {
         protected AbstractQuestionCommand(Guid questionnaireId, Guid questionId,
-            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            string title, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,Guid responsibleId)
             : base(questionnaireId, questionId, responsibleId)
         {
             this.Title = title;
-            this.Type = type;
             this.Alias = alias;
             this.IsMandatory = isMandatory;
             this.IsFeatured = isFeatured;
@@ -23,8 +22,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.Instructions = instructions;
         }
         public string Title { get; private set; }
-
-        public QuestionType Type { get; private set; }
 
         public string Alias { get; private set; }
 

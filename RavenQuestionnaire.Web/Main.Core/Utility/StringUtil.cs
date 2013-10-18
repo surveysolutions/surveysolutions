@@ -174,7 +174,7 @@ namespace Main.Core.Utility
         }
 
         //move to specific class dedicated for substitution
-        public static string[] GetAllTermsFromString(string source)
+        public static string[] GetAllSubstitutionVariableNames(string source)
         {
             if (string.IsNullOrWhiteSpace(source))
                 return new string[0];

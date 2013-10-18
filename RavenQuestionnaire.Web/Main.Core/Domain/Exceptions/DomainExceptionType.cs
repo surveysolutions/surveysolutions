@@ -159,13 +159,15 @@
         QuestionWithLinkedQuestionCanNotBeHead,
 
         AutoPropagateQuestionCantBeReal,
+        QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+
         QuestionTitleContainsInvalidSubstitutionReference,
 
         QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
         
         QuestionTypeIsNotAcceptableByNumericQuestionsCommand,    
            
-        CountOfDecimalPlacesExceededMaximum,
+        CountOfDecimalPlacesValueIsIncorrect,
         
         IntegerQuestionCantHaveDecimalPlacesSettings,
 
