@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         [TestCase(20)]
         [TestCase(0)]
         [TestCase(-1)]
-        public void CloneQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
+        public void CloneNumericQuestion_When_countOfDecimalPlaces_is_incorrect_Then_DomainException_should_be_thrown(int countOfDecimalPlaces)
         {
             Guid newQuestionId = Guid.Parse("00000000-1111-0000-1111-000000000000");
             Guid sourceQuestionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
