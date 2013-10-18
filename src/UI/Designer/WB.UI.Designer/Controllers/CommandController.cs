@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Controllers
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
         {
 
-            var questionCommand = command as FullQuestionDataCommand;
+            var questionCommand = command as AbstractQuestionCommand;
             if (questionCommand != null)
             {
                 questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
