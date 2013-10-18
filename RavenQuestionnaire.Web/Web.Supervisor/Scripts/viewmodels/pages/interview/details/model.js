@@ -87,6 +87,7 @@
             ko.utils.extend(self, new QuestionModel());
             self.answer = ko.observable().extend({ required: true });
             self.errors = ko.validation.group(self);
+            self.isValid = ko.observable(true);
             return self;
         },
         NumericQuestion: function (isInteger, countOfDecimalPlaces) {
@@ -104,6 +105,7 @@
             }
 
             self.errors = ko.validation.group(self);
+            self.isValid = ko.observable(true);
             return self;
         },
         DateTimeQuestion: function () {
@@ -133,6 +135,7 @@
                 return _.isEmpty(o) ? "" : o.label;
             });
             self.errors = ko.validation.group(self);
+            self.isValid = ko.observable(true);
             return self;
         },
         MultyOptionQuestion: function () {
@@ -163,6 +166,7 @@
                 return a;
             });
             self.errors = ko.validation.group(self);
+            self.isValid = ko.observable(true);
             return self;
         },
         Group: function () {
