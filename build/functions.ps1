@@ -62,7 +62,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$blockMessage']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    & (GetPathToMSBuild) $Solution '/t:Build' "/p:Configuration=$BuildConfiguration" | Write-Host
+    & (GetPathToMSBuild) $Solution '/t:Build' '/p:CodeContractsRunCodeAnalysis=false' "/p:Configuration=$BuildConfiguration" | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
@@ -157,7 +157,7 @@ function RunTestsFromProject($Project, $BuildConfiguration) {
         .\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo /nodots | Write-Host
         Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
 
-        .\packages\Machine.Specifications.0.5.14\tools\mspec-clr4.exe --teamcity $assembly | Write-Host
+        .\packages\Machine.Specifications.0.5.16\tools\mspec-clr4.exe --teamcity $assembly | Write-Host
 
         Write-Host "##teamcity[progressFinish 'Running tests from $assembly']"
     }
