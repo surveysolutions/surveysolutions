@@ -58,15 +58,15 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             Func<AccountDocument, bool> query = (x) => false;
             if (input.ProviderUserKey != null)
             {
-                query = (x) => x.ProviderUserKey.Equals(input.ProviderUserKey);
+                query = (x) => x.ProviderUserKey.ToString()== input.ProviderUserKey.ToString();
             }
             else if (!string.IsNullOrEmpty(input.AccountName))
             {
-                query = (x) => x.UserName.Compare(input.AccountName);
+                query = (x) => x.UserName == input.AccountName;
             }
             else if (!string.IsNullOrEmpty(input.AccountEmail))
             {
-                query = (x) => x.Email.Compare(input.AccountEmail);
+                query = (x) => x.Email == input.AccountEmail;
             }
             else if (!string.IsNullOrEmpty(input.ConfirmationToken))
             {

@@ -1,3 +1,5 @@
+using WB.UI.Designer.Views.Questionnaire;
+
 namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System;
@@ -7,8 +9,14 @@ namespace WB.UI.Designer.WebServices.Questionnaire
     ///     The questionnaire browse item.
     /// </summary>
     [MessageContract]
-    public class QuestionnaireListViewItem
+    public class QuestionnaireListViewItemMessage
     {
+        public QuestionnaireListViewItemMessage() { }
+        public QuestionnaireListViewItemMessage(QuestionnaireListViewItem data)
+        {
+            this.Id = data.PublicId;
+            this.Title = data.Title;
+        }
         #region Public Properties
 
         /// <summary>

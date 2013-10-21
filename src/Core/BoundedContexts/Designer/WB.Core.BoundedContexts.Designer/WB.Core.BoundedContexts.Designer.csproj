@@ -45,7 +45,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.3.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
+    <Compile Include="Commands\Questionnaire\Base\AbstractNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
@@ -63,6 +74,11 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddNumericQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneNumericQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
@@ -75,11 +91,14 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
+    <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
+    <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
+    <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
