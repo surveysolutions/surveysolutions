@@ -170,8 +170,8 @@
                     okBtn: "Yes, erase the condition",
                     cancelBtn: "No, keep the condition"
                 },
-                weWillClearConditionAndValidation: {
-                    message: "Questions filled in by the supervisor can't be conditionally enabled and don't support validation. Would you like to erase the condition and validation expressions?",
+                weWillClearValidation: {
+                    message: "Questions filled in by the supervisor don't support validation. Would you like to erase validation expression?",
                     okBtn: "Yes, erase the expressions",
                     cancelBtn: "No, keep the expressions"
                 },
