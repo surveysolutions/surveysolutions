@@ -36,25 +36,44 @@ namespace CAPI.Android.Core.Model.EventHandlers
     {
         private readonly IReadSideRepositoryWriter<InterviewViewModel> interviewStorage;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage;
+        private readonly IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnairePropagationStructureStorage;
 
         public InterviewViewModelDenormalizer(
             IReadSideRepositoryWriter<InterviewViewModel> interviewStorage,
-            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage)
+            IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned> questionnarieStorage,
+            IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure> questionnairePropagationStructureStorage)
         {
             this.interviewStorage = interviewStorage;
             this.questionnarieStorage = questionnarieStorage;
+            this.questionnairePropagationStructureStorage = questionnairePropagationStructureStorage;
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            var questionnarie = questionnarieStorage.GetById(evnt.Payload.InterviewData.QuestionnaireId,
+            var questionnaire = questionnarieStorage.GetById(evnt.Payload.InterviewData.QuestionnaireId,
                                                              evnt.Payload.InterviewData.QuestionnaireVersion);
-            if (questionnarie == null)
+            if (questionnaire == null)
                 return;
 
-            var view = new InterviewViewModel(evnt.EventSourceId, questionnarie.Questionnaire, evnt.Payload.InterviewData);
+            var propagationStructure = this.GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(questionnaire);
+            var view = new InterviewViewModel(evnt.EventSourceId, questionnaire.Questionnaire, propagationStructure, evnt.Payload.InterviewData);
 
             interviewStorage.Store(view, evnt.EventSourceId);
+        }
+
+        private QuestionnairePropagationStructure GetPropagationStructureOfQuestionnaireAndBuildItIfAbsent(QuestionnaireDocumentVersioned questionnaire)
+        {
+            var propagationStructure = questionnairePropagationStructureStorage.GetById(questionnaire.Questionnaire.PublicKey,
+                questionnaire.Version);
+
+            if (propagationStructure != null)
+                return propagationStructure;
+
+#warning it's bad to write data to other storage, but I've wrote this code for backward compatibility with old versions of CAPI where QuestionnairePropagationStructureDenormalizer haven't been running
+
+            propagationStructure = new QuestionnairePropagationStructure(questionnaire.Questionnaire, questionnaire.Version);
+            questionnairePropagationStructureStorage.Store(propagationStructure, propagationStructure.QuestionnaireId);
+            return propagationStructure;
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
