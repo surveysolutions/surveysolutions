@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
-            if (question.Answer == null)
+            if (question.Answer == null || !question.Enabled)
                 return header.ColumnNames.Select(c => string.Empty).ToArray();
 
             if (header.ColumnNames.Length == 1)
