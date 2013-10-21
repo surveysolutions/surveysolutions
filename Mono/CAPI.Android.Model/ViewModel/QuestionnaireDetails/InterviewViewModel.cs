@@ -37,20 +37,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             this.BuildHeadQuestionsInsidePropagateGroupsStructure(questionnaire);
 
-            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
-
-            this.PropagateGroups(interview);
-
-            this.SetAnswers(interview);
-
-            this.DisableInterviewElements(interview);
-
-            this.MarkAnswersAsInvalid(interview);
-
-            this.CreateInterviewChapters(questionnaire);
-
-            this.CreateInterviewTitle(questionnaire);
-
             this.referencedQuestionToLinkedQuestionsMap = questionnaire
                 .Find<IQuestion>(question => question.LinkedToQuestionId != null)
                 .GroupBy(question => question.LinkedToQuestionId.Value)
@@ -65,6 +51,22 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 .ToDictionary(
                     keySelector: grouping => grouping.Key,
                     elementSelector: grouping => new HashSet<InterviewItemId>(grouping.Select(answer => new InterviewItemId(answer.Id, answer.PropagationVector))));
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
+
+            this.PropagateGroups(interview);
+
+            this.SetAnswers(interview);
+
+            this.DisableInterviewElements(interview);
+
+            this.MarkAnswersAsInvalid(interview);
+
+            this.CreateInterviewChapters(questionnaire);
+
+            this.CreateInterviewTitle(questionnaire);
+
+            
         }
 
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
