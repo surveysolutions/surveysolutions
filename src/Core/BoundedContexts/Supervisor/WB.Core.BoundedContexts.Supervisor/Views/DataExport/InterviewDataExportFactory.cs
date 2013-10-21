@@ -83,14 +83,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                         _.Where(
                             interview =>
                             interview.QuestionnaireId == templateId && interview.QuestionnaireVersion == templateVersion &&
-                            interview.Status == InterviewStatus.ApprovedBySupervisor)).Skip(returnedEventCount)
-                        .Take(bulkSize).ToArray();
-                bool allEventsWereAlreadyReturned = interviews.Length == 0;
+                            interview.Status == InterviewStatus.ApprovedBySupervisor).Skip(returnedEventCount)
+                        .Take(bulkSize).ToArray());
+
+                result.AddRange(interviews);
+
+                bool allEventsWereAlreadyReturned = interviews.Length < bulkSize;
 
                 if (allEventsWereAlreadyReturned)
                      break;
-
-                result.AddRange(interviews);
 
                 returnedEventCount += bulkSize;
             }
@@ -106,24 +107,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 GetApprovedInterviews(templateId, templateVersion)
                     .Select(interview => this.interviewStorage.GetById(interview.InterviewId));
 
+            int recordId = 0;
+
             foreach (var interview in interviews)
             {
-                this.FillDataRecordsWithDataFromInterviewByLevel(dataRecords, interview, levelId, header);
+                recordId = this.FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(dataRecords, interview, levelId, header, recordId);
             }
             
             return dataRecords.ToArray();
         }
 
-        private void FillDataRecordsWithDataFromInterviewByLevel(List<InterviewDataExportRerord> dataRecords,
-                                                                  InterviewData interview, Guid? levelId, ExportedHeaderCollection header)
+        private int FillDataRecordsWithDataFromInterviewByLevelAndReturnIndexOfNextRecord(List<InterviewDataExportRerord> dataRecords,
+            InterviewData interview, Guid? levelId, ExportedHeaderCollection header, int recordIndex)
         {
             var interviewDataByLevels = GetLevelsFromInterview(interview, levelId);
-            int i = 0;
+
             foreach (var dataByLevel in interviewDataByLevels)
             {
-                AddDataRecordFromInterviewLevel(dataRecords, dataByLevel,i, interview.InterviewId, header);
-                i++;
+                AddDataRecordFromInterviewLevel(dataRecords, dataByLevel, recordIndex, interview.InterviewId, header);
+                if (levelId.HasValue) recordIndex++;
             }
+
+            //increase only in case of top level, if I increase record index inside roaster, linked questions data would be broken
+            recordIndex = !levelId.HasValue ? recordIndex + 1 : 0;
+            return recordIndex;
         }
 
         private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, Guid? levelId)
