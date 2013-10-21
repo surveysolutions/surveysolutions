@@ -6,14 +6,12 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/vm/surveylistview.js")
     @Html.Partial("_ListViewStatusesScript")
-
+    @Scripts.Render("~/Scripts/viewmodels/pages/surveysandstatuses.js")
     <script type="text/javascript">
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
         $(function () {
-            var model = new SurveyListViewModel('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })');
-
+            var model = new Supervisor.VM.SurveysAndStatuses('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })');
             ko.applyBindings(model);
             model.load();
         });
@@ -61,7 +59,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- ko foreach:ListView.Items -->
+                <!-- ko foreach:Items -->
                 <tr>
                     <td>
                         <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() }, text: QuestionnaireTitle"></a>

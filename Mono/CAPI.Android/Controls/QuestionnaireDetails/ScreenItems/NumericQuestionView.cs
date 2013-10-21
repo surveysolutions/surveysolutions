@@ -6,13 +6,17 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Main.Core.Commands.Questionnaire.Completed;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class NumericQuestionView : AbstractQuestionView
+    public abstract class NumericQuestionView<T> : AbstractQuestionView
+        where T : struct
     {
+        protected abstract InputTypes KeyboardTypeFlags
+        {
+            get;
+        }
 
         public NumericQuestionView(Context context, IMvxAndroidBindingContext bindingActivity, QuestionViewModel source, Guid questionnairePublicKey, IAnswerOnQuestionCommandService commandService)
             : base(context, bindingActivity, source, questionnairePublicKey, commandService)
@@ -23,13 +27,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
             llWrapper.Click += NumericQuestionView_Click;
-            etAnswer=new EditText(this.Context);
+            etAnswer = new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            etAnswer.Text = Model.AnswerString;
-            etAnswer.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal;
-            
+            etAnswer.InputType = KeyboardTypeFlags;
+
+            this.PutAnswerStoredInModelToUI();
+
             etAnswer.SetSelectAllOnFocus(true);
-            etAnswer.ImeOptions=ImeAction.Done;
+            etAnswer.ImeOptions = ImeAction.Done;
             etAnswer.SetSingleLine(true);
             etAnswer.EditorAction += etAnswer_EditorAction;
             etAnswer.FocusChange += etAnswer_FocusChange;
@@ -43,32 +48,32 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 return;
             }
 
-            SaveAnswer(etAnswer.Text.Trim());
+            string newAnswer = this.etAnswer.Text.Trim();
+
+            T answer;
+            if (!IsParseAnswerStringSucceeded(newAnswer, out answer))
+                return;
+
+            if (this.Model.AnswerObject!=null && answer.Equals(this.Model.AnswerObject)) return;
+
+            if (!IsCommentsEditorFocused)
+                HideKeyboard(etAnswer);
+
+            this.SaveAnswer(newAnswer, CreateAnswerQuestionCommand(answer));
         }
 
-        protected override void SaveAnswer(string newAnswer)
-        {
-            if (newAnswer != this.Model.AnswerString)
-            {
-                decimal answer;
-                if(!decimal.TryParse(newAnswer,out  answer))
-                    return;
-                ExecuteSaveAnswerCommand(new AnswerNumericQuestionCommand(this.QuestionnairePublicKey,
-                                                                          CapiApplication.Membership.CurrentUser.Id,
-                                                                          Model.PublicKey.Id,
-                                                                          this.Model.PublicKey.PropagationVector,
-                                                                          DateTime.UtcNow, answer));
-                if (!IsCommentsEditorFocused)
-                    HideKeyboard(etAnswer);
+        protected abstract bool IsParseAnswerStringSucceeded(string newAnswer, out T answer);
 
-                base.SaveAnswer(newAnswer);
-            }
+        protected abstract AnswerQuestionCommand CreateAnswerQuestionCommand(T answer);
+
+        protected override string GetAnswerStoredInModelAsString()
+        {
+            return this.Model.AnswerString;
         }
 
-        protected override void SaveAnswerErrorHandler(Exception ex)
+        protected override void PutAnswerStoredInModelToUI()
         {
-            base.SaveAnswerErrorHandler(ex);
-            etAnswer.Text = Model.AnswerString;
+            this.etAnswer.Text = this.GetAnswerStoredInModelAsString();
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)

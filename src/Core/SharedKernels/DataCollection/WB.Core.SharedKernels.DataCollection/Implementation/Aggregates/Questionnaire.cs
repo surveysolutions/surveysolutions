@@ -5,8 +5,10 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -40,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected internal void OnTemplateImported(TemplateImported e)
         {
             this.innerDocument = e.Source;
-            this.innerDocument.ConnectChildsWithParent();
+            this.innerDocument.ConnectChildrenWithParent();
 
             this.questionCache = null;
             this.groupCache = null;
@@ -109,7 +111,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// So this processor may be used only in command handlers or in domain methods.
         /// And should never be used in event handlers!!
         /// </remarks>
-        private IExpressionProcessor ExpressionProcessor
+        private static IExpressionProcessor ExpressionProcessor
         {
             get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
         }
@@ -129,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
-            document.ConnectChildsWithParent();
+            document.ConnectChildrenWithParent();
 
             ThrowIfSomePropagatingQuestionsHaveNoAssociatedGroups(document);
             ThrowIfSomePropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(document);
@@ -137,7 +139,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsReferencedByLinkedQuestionsDoNotExist(document);
             ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(document);
             ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(document);
-
+            ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(document);
+            ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(document);
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
@@ -438,9 +441,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.ThrowIfQuestionDoesNotExist(questionId);
 
-            return this
-                .GetAllParentGroupsForQuestion(questionId)
-                .Count(this.IsGroupPropagatable);
+            return GetPropagationLevelForQuestion(questionId, this.GetAllParentGroupsForQuestion, this.IsGroupPropagatable);
         }
 
         public int GetPropagationLevelForGroup(Guid groupId)
@@ -535,6 +536,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.Mandatory;
         }
 
+        public bool IsQuestionInteger(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var autoPropagateQuestion = question as IAutoPropagate;
+            if (autoPropagateQuestion != null)
+                return true;
+            
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion == null)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+            
+            return numericQuestion.IsInteger;
+        }
+
+        public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion == null)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+            if (numericQuestion.IsInteger)
+                throw new QuestionnaireException(string.Format("Question with id '{0}' must be real.", questionId));
+            return numericQuestion.CountOfDecimalPlaces;
+        }
+
         public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
@@ -570,7 +597,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = document.Find<IGroup>(group
                 => IsGroupPropagatable(group)
-                && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() == 0);
+                && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, document).Count() == 0);
 
             if (propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Any())
                 throw new QuestionnaireException(string.Format(
@@ -583,7 +610,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = document.Find<IGroup>(group
                 => IsGroupPropagatable(group)
-                && GetPropagatingQuestionsPointingToPropagatedGroup(group, document).Count() > 1);
+                && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, document).Count() > 1);
 
             if (propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Any())
                 throw new QuestionnaireException(string.Format(
@@ -601,7 +628,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 question => question.LinkedToQuestionId.HasValue && !isQuestionPresentInQuestionnaire(question.LinkedToQuestionId.Value));
         }
 
-        private void ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(QuestionnaireDocument document)
+        private static void ThrowIfSomeLinkedQuestionsReferenceQuestionsOfNotSupportedType(QuestionnaireDocument document)
         {
             Func<Guid, bool> isReferencedQuestionTypeSupported = questionId =>
             {
@@ -617,12 +644,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
         }
 
-        private void ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(QuestionnaireDocument document)
+        private static void ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(QuestionnaireDocument document)
         {
             Func<Guid, bool> isQuestionUnderPropagatedGroup = questionId =>
             {
-                var question = document.Find<IQuestion>(questionId);
-                IEnumerable<IGroup> parentGroups = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), document);
+                var parentGroups = GetAllParentGroupsForQuestion(questionId, document);
 
                 return parentGroups.Any(IsGroupPropagatable);
             };
@@ -630,6 +656,98 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
                 "Following linked questions are referencing questions, but referenced questions are not under propagated group",
                 question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
+        }
+
+        //could be split into several methods but it involves several scans of questionnaire 
+        private void ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(QuestionnaireDocument document)
+        {
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following questions contain unknown substitution references or target question has wrong type",
+                question => !this.IsReferencedQuestionsSubstitutionsAreValidInDocument(document, question.PublicKey));
+        }
+
+        private bool IsReferencedQuestionsSubstitutionsAreValidInDocument(QuestionnaireDocument document, Guid questionId)
+        {
+            var question = document.Find<IQuestion>(questionId);
+            string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(question.QuestionText);
+
+            if (substitutionReferences.Length == 0)
+                return true;
+
+            if (question.Featured)
+                return false;
+
+            if (substitutionReferences.Contains(question.StataExportCaption))
+                return false;
+
+            return IsSubstitutionReferencesSatisfyToStructureRestrictions(document, question, substitutionReferences);
+        }
+
+        private bool IsSubstitutionReferencesSatisfyToStructureRestrictions(QuestionnaireDocument document, IQuestion question,string[] substitutionReferences)
+        {
+            //not the most efficient way - we scan all document.
+            //We need cache by VariableName 
+            IEnumerable<IQuestion> substitutionReferencedQuestions = document.Find<IQuestion>(q => substitutionReferences.Contains(q.StataExportCaption)).ToList();
+            if (substitutionReferencedQuestions.Count() < substitutionReferences.Count())
+                return false;
+
+            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(question, document);
+
+
+            Func<IQuestion, bool> referenceIsValid =
+                reference =>
+                {
+                    List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(reference, document);
+                    if (referencedPropagationQuestionsVector.Count == 0)
+                        //referenced Question not in propagation - OK
+                        return true;
+
+                    var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
+
+                    return lengthDiff >= 0 
+                        && propagationQuestionsVector.Except(propagationQuestionsVector).Count() == lengthDiff;
+                };
+
+            return substitutionReferencedQuestions.All(q =>
+                    this.IsQuestionTypeAllowedToBeSourceOfSubstitution(q.QuestionType) && referenceIsValid(q));
+        }
+
+
+        private bool IsQuestionTypeAllowedToBeSourceOfSubstitution(QuestionType type)
+        {
+            return type == QuestionType.DateTime || type == QuestionType.Numeric || type == QuestionType.SingleOption ||
+                   type == QuestionType.Text || type == QuestionType.AutoPropagate;
+        }
+        
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument document)
+        {
+            List<Guid> propagationQuestions = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document)
+                .Where(IsGroupPropagatable)
+                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, document).FirstOrDefault().PublicKey)
+                .ToList();
+
+            return propagationQuestions;
+        }
+
+        private static void ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(QuestionnaireDocument document)
+        {
+            Func<IQuestion, bool> haveSomeOfQuestionsInvolvedInCustomValidationDeeperPropagationLevel = question =>
+            {
+                int questionPropagationLevel = GetPropagationLevelForQuestion(question.PublicKey, document);
+
+                IEnumerable<Guid> involvedQuestionIds = GetQuestionsInvolvedInCustomValidation(question.PublicKey, question.ValidationExpression,
+                    hasQuestion: questionId => document.Find<IQuestion>(questionId) != null);
+
+                IEnumerable<int> involvedQuestionsPropagationLevels =
+                    involvedQuestionIds.Select(involvedQuestion => GetPropagationLevelForQuestion(involvedQuestion, document));
+
+                return involvedQuestionsPropagationLevels.Any(
+                    involvedQuestionPropagationLevel => involvedQuestionPropagationLevel > questionPropagationLevel);
+            };
+
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following questions have custom validation which involves questions, but some of involved questions have deeper propagation level",
+                haveSomeOfQuestionsInvolvedInCustomValidationDeeperPropagationLevel);
         }
 
         private static void ThrowIfSomeQuestionsSatisfySpecifiedCondition(QuestionnaireDocument document,
@@ -645,9 +763,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
 
-        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(IGroup group, QuestionnaireDocument document)
+        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
         {
-            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(group.PublicKey));
+            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(groupId));
         }
 
 
@@ -655,13 +773,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string validationExpression = this.GetCustomValidationExpression(questionId);
 
+            return GetQuestionsInvolvedInCustomValidation(questionId, validationExpression, this.HasQuestion);
+        }
+
+        private static IEnumerable<Guid> GetQuestionsInvolvedInCustomValidation(Guid questionId, string validationExpression, Func<Guid, bool> hasQuestion)
+        {
             if (!IsExpressionDefined(validationExpression))
                 return Enumerable.Empty<Guid>();
 
-            IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
+            IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
 
-            return this.DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
-                identifiersUsedInExpression, questionId, validationExpression);
+            return DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
+                identifiersUsedInExpression, questionId, validationExpression, hasQuestion);
         }
 
         private IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestionImpl(Guid questionId)
@@ -786,6 +909,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Cast<IAutoPropagateQuestion>();
         }
 
+        private static int GetPropagationLevelForQuestion(Guid questionId, QuestionnaireDocument document)
+        {
+            return GetPropagationLevelForQuestion(questionId,
+                getAllParentGroupsForQuestion: qId => GetAllParentGroupsForQuestion(qId, document).Select(group => group.PublicKey),
+                isGroupPropagatable: groupId => document.Find<IGroup>(groupId).Propagated == Propagate.AutoPropagated);
+        }
+
+        private static int GetPropagationLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion, Func<Guid, bool> isGroupPropagatable)
+        {
+            return getAllParentGroupsForQuestion(questionId).Count(isGroupPropagatable);
+        }
+
         private IEnumerable<Guid> GetAllParentGroupsForQuestionStartingFromBottom(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -793,6 +928,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var parentGroup = (IGroup) question.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private static IEnumerable<IGroup> GetAllParentGroupsForQuestion(Guid questionId, QuestionnaireDocument document)
+        {
+            var question = document.Find<IQuestion>(questionId);
+
+            return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), document);
         }
 
         private IEnumerable<Guid> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group)
@@ -818,7 +960,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!IsExpressionDefined(enablementCondition))
                 return Enumerable.Empty<Guid>();
 
-            IEnumerable<string> identifiersUsedInExpression = this.ExpressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
+            IEnumerable<string> identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
 
             return identifiersUsedInExpression
                 .Select(identifier => this.ParseExpressionIdentifierToExistingQuestionIdIgnoringThisIdentifierOrThrow(identifier, enablementCondition))
@@ -837,8 +979,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return parsedValue;
         }
 
-        private IEnumerable<Guid> DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
-            IEnumerable<string> identifiers, Guid contextQuestionId, string expression)
+        private static IEnumerable<Guid> DistinctlyResolveExpressionIdentifiersToExistingQuestionIdsReplacingThisIdentifierOrThrow(
+            IEnumerable<string> identifiers, Guid contextQuestionId, string expression, Func<Guid, bool> hasQuestion)
         {
             var distinctQuestionIds = new HashSet<Guid>();
 
@@ -846,22 +988,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (IsSpecialThisIdentifier(identifier))
                 {
-                    if (!distinctQuestionIds.Contains(contextQuestionId))
-                    {
-                        distinctQuestionIds.Add(contextQuestionId);
-                    }
-
-                    continue;
+                    distinctQuestionIds.Add(contextQuestionId);
                 }
+                else
+                {
+                    Guid parsedId;
+                    if (!Guid.TryParse(identifier, out parsedId))
+                        throw new QuestionnaireException(string.Format(
+                            "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
+                            identifier, expression));
 
-                Guid parsedId;
-                if (!Guid.TryParse(identifier, out parsedId))
-                    throw new QuestionnaireException(string.Format(
-                        "Identifier '{0}' from expression '{1}' is not a 'this' keyword nor a valid guid.",
-                        identifier, expression));
-                this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression,
-                                                                                                parsedId);
-                distinctQuestionIds.Add(parsedId);
+                    ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId, hasQuestion);
+
+                    distinctQuestionIds.Add(parsedId);
+                }
             }
 
             return distinctQuestionIds;
@@ -875,14 +1015,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Identifier '{0}' from expression '{1}' is not a valid guid.",
                     identifier, expression));
 
-            this.ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId);
+            ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(identifier, expression, parsedId, this.HasQuestion);
 
             return parsedId;
         }
 
-        private void ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(string identifier, string expression, Guid parsedId)
+        private static void ThrowIfThereAreNoCorrespondingQuestionsForExpressionIdentifierParsedToGuid(string identifier, string expression, Guid parsedId, Func<Guid, bool> hasQuestion)
         {
-            if (!this.HasQuestion(parsedId))
+            if (!hasQuestion(parsedId))
                 throw new QuestionnaireException(string.Format(
                     "Identifier '{0}' from expression '{1}' is a valid guid '{2}' but questionnaire has no questions with such id.",
                     identifier, expression, parsedId));
@@ -983,7 +1123,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? this.QuestionCache[questionId]
                 : null;
         }
-
+        
         private static string FormatQuestionForException(IQuestion question)
         {
             return string.Format("'{0} [{1}] ({2:N})'",

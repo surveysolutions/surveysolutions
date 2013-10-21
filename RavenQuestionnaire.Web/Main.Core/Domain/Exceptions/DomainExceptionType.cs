@@ -156,6 +156,25 @@
 
         QuestionWithLinkedQuestionCanNotBeFeatured,
 
-        QuestionWithLinkedQuestionCanNotBeHead
+        QuestionWithLinkedQuestionCanNotBeHead,
+
+        AutoPropagateQuestionCantBeReal,
+        QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+
+        QuestionTitleContainsInvalidSubstitutionReference,
+
+        QuestionTypeIsReroutedOnQuestionTypeSpecificCommand, 
+        
+        QuestionTypeIsNotAcceptableByNumericQuestionsCommand,    
+           
+        CountOfDecimalPlacesValueIsIncorrect,
+        
+        IntegerQuestionCantHaveDecimalPlacesSettings,
+
+        QuestionTitleContainsUnknownSubstitutionReference,
+
+        QuestionTitleContainsSubstitutionReferenceToSelf,
+
+        FeaturedQuestionTitleContainsSubstitutionReference,
     }
 }

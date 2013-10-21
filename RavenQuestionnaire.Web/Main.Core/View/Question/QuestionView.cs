@@ -78,6 +78,10 @@ namespace Main.Core.View.Question
             }
 
             this.LinkedToQuestionId = doc.LinkedToQuestionId;
+
+            var numericQuestion = doc as INumericQuestion;
+            if (numericQuestion != null)
+                this.IsInteger = numericQuestion.IsInteger;
         }
 
         #endregion
@@ -208,6 +212,9 @@ namespace Main.Core.View.Question
         public bool IsPropagated { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
+
+
+        public bool? IsInteger { get; set; }
         #endregion
 
     }
@@ -555,8 +562,16 @@ namespace Main.Core.View.Question
                 }
             }
 
+            var numericQuestion = doc as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                this.Settings = new {numericQuestion.IsInteger, numericQuestion.CountOfDecimalPlaces};
+            }
+
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
+
+        public dynamic Settings { get; set; }
 
         #endregion
     }

@@ -42,6 +42,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Dispose(bool disposing)
         {
+            this.isDisposed = true;
+
             if (disposing)
             {
                 Console.WriteLine(string.Format("disposing question '{0}'", Model.Text));
@@ -97,12 +99,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
         }
 
-        protected virtual void SaveAnswer(string newAnswer)
+        protected void SaveAnswer(string newAnswer, AnswerQuestionCommand saveAnswerCommand)
         {
-            OnAnswerSet(newAnswer);
+            this.ExecuteSaveAnswerCommand(saveAnswerCommand);
+
+            this.FireAnswerSetEvent(newAnswer);
         }
 
-        protected void OnAnswerSet(string newAnswer)
+        private void FireAnswerSetEvent(string newAnswer)
         {
             var handler = AnswerSet;
             if (handler != null)
@@ -127,7 +131,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }*/
         }
 
-        protected void SaveComment()
+        private void SaveComment()
         {
             string newComments = etComments.Text.Trim();
             if (newComments != this.Model.Comments)
@@ -149,28 +153,47 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected void ExecuteSaveAnswerCommand(AnswerQuestionCommand command)
         {
             tvError.Visibility = ViewStates.Gone;
-            AnswerCommandService.AnswerOnQuestion(this.Context, command,
-                                                  (ex) =>
-                                                  ((Activity) this.Context).RunOnUiThread(
-                                                      () => SaveAnswerErrorHandler(ex)));
+            AnswerCommandService.AnswerOnQuestion(command, this.SaveAnswerErrorHandler);
         }
 
-        protected virtual void SaveAnswerErrorHandler(Exception ex)
+        private void SaveAnswerErrorHandler(Exception ex)
         {
+            if (this.isDisposed)
+                return;
+
+            ((Activity) this.Context).RunOnUiThread(() =>
+            {
+                if (this.isDisposed)
+                    return;
+
+                this.SaveAnswerErrorHandlerImpl(ex);
+            });
+        }
+
+        private void SaveAnswerErrorHandlerImpl(Exception ex)
+        {
+            this.PutAnswerStoredInModelToUI();
+            this.FireAnswerSetEvent(this.GetAnswerStoredInModelAsString());
+
             if (!Model.IsEnabled())
                 return;
+
             var logger = ServiceLocator.Current.GetInstance<ILogger>();
             logger.Error("Error on answer set.", ex);
             tvError.Visibility = ViewStates.Visible;
-            tvError.Text = GetDippestException(ex).Message;
+            tvError.Text = this.GetDeepestException(ex).Message;
             logger.Error("Error message: " + tvError.Text);
         }
 
-        private Exception GetDippestException(Exception e)
+        protected abstract string GetAnswerStoredInModelAsString();
+
+        protected abstract void PutAnswerStoredInModelToUI();
+
+        private Exception GetDeepestException(Exception e)
         {
             if (e.InnerException == null)
                 return e;
-            return GetDippestException(e.InnerException);
+            return this.GetDeepestException(e.InnerException);
         }
 
         private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
@@ -229,6 +252,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         }
 
         private AlertDialog.Builder instructionDialog = null;
+        private bool isDisposed;
 
         protected LinearLayout llRoot
         {

@@ -49,10 +49,12 @@ namespace CAPI.Android.Core.Model
             var syncCacher = new FileSyncCacher();
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
             var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>();
+            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnairePropagationStructure>();
          
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
+            this.Bind<IReadSideRepositoryWriter<QuestionnairePropagationStructure>>().ToConstant(propagationStructureStore);
             this.Bind<IReadSideRepositoryWriter<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(loginStore);
@@ -77,7 +79,7 @@ namespace CAPI.Android.Core.Model
 
             this.Bind<IBackup>()
                 .ToConstant(new DefaultBackup(evenStore, changeLogStore, fileSystem, denormalizerStore,
-                                              bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore));
+                                              bigSurveyStore, syncCacher, sharedPreferencesBackup, templateStore, propagationStructureStore));
 
         }
     }

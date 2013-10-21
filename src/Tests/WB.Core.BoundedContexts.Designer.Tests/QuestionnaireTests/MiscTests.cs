@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 string conditionExpression = "1=1";
                 string stataExportCaption = "s1q1";
 
-                var questionType = QuestionType.Numeric;
+                var questionType = QuestionType.Text;
                 var questionScope = QuestionScope.Interviewer;
                 string validationExpression = "2=2";
                 string validationMessage = "not valid";
@@ -84,14 +84,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 bool mandatory = true;
                 var answerOrder = Order.AsIs;
                 string instructions = "do it";
-                Guid[] triggers = null;
-                int maxValue = 3;
                 Option[] answers = null;
                 bool capital = false;
 
                 questionnaire.NewAddQuestion(publicKey, groupPublicKey, questionText, questionType,
                     stataExportCaption, mandatory, featured, capital, questionScope, conditionExpression,
-                    validationExpression, validationMessage, instructions, answers, answerOrder, maxValue, triggers, responsibleId: responsibleId, linkedToQuestionId: null);
+                    validationExpression, validationMessage, instructions, answers, answerOrder,responsibleId: responsibleId, linkedToQuestionId: null);
 
                 Assert.True(ctx.Events.Count() == 1);
 
@@ -109,14 +107,12 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                         Assert.AreEqual(evnt.GroupPublicKey, groupPublicKey);
                         Assert.AreEqual(evnt.Instructions, instructions);
                         Assert.AreEqual(evnt.Mandatory, mandatory);
-                        Assert.AreEqual(evnt.MaxValue, maxValue);
                         Assert.AreEqual(evnt.QuestionScope, questionScope);
 
                         Assert.AreEqual(evnt.QuestionText, questionText);
                         Assert.AreEqual(evnt.QuestionType, questionType);
 
                         Assert.AreEqual(evnt.StataExportCaption, stataExportCaption);
-                        Assert.AreEqual(evnt.Triggers, triggers);
 
                         Assert.AreEqual(evnt.ValidationExpression, validationExpression);
                         Assert.AreEqual(evnt.ValidationMessage, validationMessage);

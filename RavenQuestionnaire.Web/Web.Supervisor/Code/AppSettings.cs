@@ -20,13 +20,16 @@ namespace Web.Supervisor.Code
         }
 
         const string ADMINEMAIL = "AdminEmail";
+        const string ACCEPTUNSIGNEDCERTIFICATE = "AcceptUnsignedCertificate";
 
         public string AdminEmail { get; set; }
+        public bool AcceptUnsignedCertificate { get; set; }
 
         private AppSettings(NameValueCollection settingsCollection)
             : base(settingsCollection)
         {
             this.AdminEmail = this.GetString(ADMINEMAIL);
+            this.AcceptUnsignedCertificate = this.GetBoolean(ACCEPTUNSIGNEDCERTIFICATE, true);
         }
     }
 }

@@ -21,11 +21,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool valid,
             bool mandatory,
-            bool capital,
             object answerObject,
-            string validationMessage)
+            string validationMessage,
+            string variable, 
+            IEnumerable<string> substitutionReferences)
             : base(
-                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
+                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answerObject, validationMessage, variable, substitutionReferences)
         {
             Answers = answers;
         }
@@ -49,10 +50,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
             return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
-                this.Text, this.QuestionType, newAnswers,
+                this.SourceText, this.QuestionType, newAnswers,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
+                this.Mandatory,  this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences);
         }
 
         public override void SetAnswer(object answer)

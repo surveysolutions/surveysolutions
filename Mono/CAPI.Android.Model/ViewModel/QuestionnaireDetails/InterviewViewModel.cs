@@ -8,9 +8,11 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Utility;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -22,28 +24,20 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             this.Screens = new Dictionary<InterviewItemId, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<InterviewItemId, QuestionViewModel>();
             this.FeaturedQuestions = new Dictionary<InterviewItemId, QuestionViewModel>();
-
-            this.Templates = new TemplateCollection();
         }
 
-        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, InterviewSynchronizationDto interview)
+        public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnairePropagationStructure propagationStructure, InterviewSynchronizationDto interview)
             : this(id)
         {
             this.Status = interview.Status;
 
+            #region interview structure initialization
+
+            this.propagationStructure = propagationStructure;
+
             this.BuildInterviewStructureFromTemplate(questionnaire);
 
-            this.PropagateGroups(interview);
-
-            this.SetAnswers(interview);
-
-            this.DisableInterviewElements(interview);
-
-            this.MarkAnswersAsInvalid(interview);
-
-            this.CreateInterviewChapters(questionnaire);
-
-            this.CreateInterviewTitle(questionnaire);
+            this.BuildHeadQuestionsInsidePropagateGroupsStructure(questionnaire);
 
             this.referencedQuestionToLinkedQuestionsMap = questionnaire
                 .Find<IQuestion>(question => question.LinkedToQuestionId != null)
@@ -59,6 +53,114 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 .ToDictionary(
                     keySelector: grouping => grouping.Key,
                     elementSelector: grouping => new HashSet<InterviewItemId>(grouping.Select(answer => new InterviewItemId(answer.Id, answer.PropagationVector))));
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
+
+            #endregion
+
+            #region interview data initialization
+
+            this.PropagateGroups(interview);
+
+            this.SetAnswers(interview);
+
+            this.DisableInterviewElements(interview);
+
+            this.MarkAnswersAsInvalid(interview);
+
+            this.CreateInterviewChapters(questionnaire);
+
+            this.CreateInterviewTitle(questionnaire);
+
+            #endregion
+        }
+
+        private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
+            new Dictionary<QuestionViewModel, IList<QuestionViewModel>>();
+        
+
+        private void SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(IEnumerable<QuestionViewModel> questionsToSubscribe)
+        {
+            foreach (var questionsWithSubstitution in questionsToSubscribe)
+            {
+                if (!questionsWithSubstitution.SubstitutionReferences.Any())
+                    continue;
+
+                foreach (var substitutionReference in questionsWithSubstitution.SubstitutionReferences)
+                {
+                    var referencedQuestion = this.FindReferencedQuestion(substitutionReference, questionsWithSubstitution);
+                    if(referencedQuestion ==null)
+                        continue;
+
+                    if (questionsParticipationInSubstitutionReferences.ContainsKey(referencedQuestion))
+                        questionsParticipationInSubstitutionReferences[referencedQuestion].Add(questionsWithSubstitution);
+                    else
+                        questionsParticipationInSubstitutionReferences.Add(referencedQuestion, new List<QuestionViewModel> { questionsWithSubstitution });
+
+                    referencedQuestion.PropertyChanged += this.ReferencedQuestionPropertyChanged;
+                    if (!string.IsNullOrEmpty(referencedQuestion.AnswerString))
+                    {
+                        this.ReferencedQuestionPropertyChanged(referencedQuestion, new PropertyChangedEventArgs("AnswerString"));
+                    }
+                }
+            }
+        }
+
+        private void ReferencedQuestionPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName != "AnswerString")
+                return;
+
+            var vm = sender as QuestionViewModel;
+            if (vm == null)
+                return;
+
+            if (!questionsParticipationInSubstitutionReferences.ContainsKey(vm))
+                return;
+
+            foreach (var participationQuestion in questionsParticipationInSubstitutionReferences[vm])
+            {
+                participationQuestion.SubstituteQuestionText(vm);
+            }
+        }
+
+        private QuestionViewModel FindReferencedQuestion(string variableName, QuestionViewModel subscribedQuestion)
+        {
+            return this.Questions.Values.FirstOrDefault(question => question.Variable == variableName &&
+                this.PropagationVectorIsTheSameOrHigher(subscribedQuestion, question));
+        }
+
+#warning nastya_k "subscribedQuestion.PublicKey.PropagationVector.Length > referencedQuestion.PublicKey.PropagationVector.Length" is not correct check for higher propagation level
+        private bool PropagationVectorIsTheSameOrHigher(QuestionViewModel subscribedQuestion, QuestionViewModel referencedQuestion)
+        {
+            if (referencedQuestion.PublicKey.CompareWithVector(subscribedQuestion.PublicKey.PropagationVector))
+                return true;
+            return subscribedQuestion.PublicKey.PropagationVector.Length > referencedQuestion.PublicKey.PropagationVector.Length;
+        }
+
+        private IEnumerable<QuestionViewModel> GetAllQuestionsWithSubstitution()
+        {
+            return this.Questions.Values.Where(x => x.SubstitutionReferences.Any());
+        }
+
+        private void BuildHeadQuestionsInsidePropagateGroupsStructure(IQuestionnaireDocument questionnaire)
+        {
+            foreach (var propagatedGroup in questionnaire.Find<IGroup>(group => group.Propagated != Propagate.None))
+            {
+                var scopeOfPropagationId = GetScopeOfPropagatedScreen(propagatedGroup.PublicKey);
+                foreach (var headQuestion in propagatedGroup.Find<IQuestion>(question => question.Capital))
+                {
+                    this.listOfHeadQuestionsMappedOnScope.Add(headQuestion.PublicKey, scopeOfPropagationId);
+                }
+            }
+        }
+
+        public Guid GetScopeOfPropagatedScreen(Guid itemKey)
+        {
+            var itemScope = this.propagationStructure.PropagationScopes.FirstOrDefault(s => s.Value.Contains(itemKey));
+            if (itemScope.Equals(default(KeyValuePair<Guid, HashSet<Guid>>)))
+                throw new ArgumentException("item is absent in any scope");
+            return itemScope.Key;
         }
 
         private void SetAnswers(InterviewSynchronizationDto interview)
@@ -107,7 +209,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             {
                 for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
                 {
-                    this.AddPropagateGroup(propagatedGroupInstanceCount.Key.Id,
+                    this.AddPropagateScreen(propagatedGroupInstanceCount.Key.Id,
                         propagatedGroupInstanceCount.Key.PropagationVector, i);
                 }
             }
@@ -158,32 +260,33 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 last = rout.Last();
             }
 
-            CreateNextPrevious();
+            this.CreateNextPreviousButtonsForPropagatedGroups();
         }
 
-        protected void CreateNextPrevious()
+        protected void CreateNextPreviousButtonsForPropagatedGroups()
         {
-            var templates = Templates.Select(t => t.ScreenId.Id).ToList();
-            while (templates.Count > 0)
+            foreach (var propagationScopeId in this.propagationStructure.PropagationScopes.Keys)
             {
-                var first = templates[0];
-                var scope = Templates.GetScopeByItem(first).ToArray();
-                templates.RemoveAll(t => scope.Any(s => s == t));
-                for (int i = 0; i < scope.Length; i++)
+                var screenSiblingByPropagationScopeIds = this.propagationStructure.PropagationScopes[propagationScopeId].ToArray();
+
+                for (int i = 0; i < screenSiblingByPropagationScopeIds.Length; i++)
                 {
-                    var target = this.Templates[scope[i]];
+                    var target = this.propagatedScreenPrototypes[screenSiblingByPropagationScopeIds[i]];
+
                     IQuestionnaireItemViewModel next = null;
                     IQuestionnaireItemViewModel previous = null;
+
                     if (i > 0)
                     {
-                        var item = this.Templates[scope[i - 1]];
+                        var item = this.propagatedScreenPrototypes[screenSiblingByPropagationScopeIds[i - 1]];
                         previous = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
                     }
-                    if (i < scope.Length - 1)
+                    if (i < screenSiblingByPropagationScopeIds.Length - 1)
                     {
-                        var item = this.Templates[scope[i + 1]];
+                        var item = this.propagatedScreenPrototypes[screenSiblingByPropagationScopeIds[i + 1]];
                         next = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
                     }
+
                     target.AddNextPrevious(next, previous);
                 }
             }
@@ -197,32 +300,34 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public IDictionary<InterviewItemId, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
-        protected TemplateCollection Templates { get; set; }
+        
         protected IDictionary<InterviewItemId, QuestionViewModel> Questions { get; set; }
         private readonly Dictionary<Guid, HashSet<InterviewItemId>> instancesOfAnsweredQuestionsUsableAsLinkedQuestionsOptions;
+        private readonly Dictionary<Guid, Guid> listOfHeadQuestionsMappedOnScope = new Dictionary<Guid, Guid>(); 
         private readonly Dictionary<Guid, Guid[]> referencedQuestionToLinkedQuestionsMap;
+        private readonly QuestionnairePropagationStructure propagationStructure;
+        private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> propagatedScreenPrototypes =
+            new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
+
         protected IDictionary<InterviewItemId, QuestionViewModel> FeaturedQuestions { get; set; }
-        
 
         #endregion
-
-
-        #region public methods
 
         public void UpdatePropagateGroupsByTemplate(Guid publicKey, int[] outerScopePropagationVector, int count)
         {
             var propagatedGroupsCount = this.Screens.Keys.Count(id => id.Id == publicKey) - 1;
             if (propagatedGroupsCount == count)
                 return;
+
             for (int i = 0; i < Math.Abs(count - propagatedGroupsCount); i++)
             {
                 if (propagatedGroupsCount < count)
                 {
-                    AddPropagateGroup(publicKey, outerScopePropagationVector, propagatedGroupsCount + i);
+                    this.AddPropagateScreen(publicKey, outerScopePropagationVector, propagatedGroupsCount + i);
                 }
                 else
                 {
-                    RemovePropagatedGroup(publicKey, outerScopePropagationVector, propagatedGroupsCount - i - 1);
+                    this.RemovePropagatedScreen(publicKey, outerScopePropagationVector, propagatedGroupsCount - i - 1);
                 }
             }
         }
@@ -235,36 +340,60 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             return newGroupVector;
         }
 
-        private void AddPropagateGroup(Guid publicKey, int[] outerScopePropagationVector, int index)
+        private void AddPropagateScreen(Guid screenId, int[] outerScopePropagationVector, int index)
         {
             var propagationVector = BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
-            var template = this.Templates[publicKey];
-            var screen = template.Clone(propagationVector);
-            foreach (var question in screen.Items.OfType<QuestionViewModel>())
+
+            var screenPrototype = this.propagatedScreenPrototypes[screenId];
+            var screen = screenPrototype.Clone(propagationVector);
+
+            var questions = screen.Items.OfType<QuestionViewModel>().ToList();
+
+            foreach (var question in questions)
             {
-                UpdateQuestionHash(question);
+                this.UpdateQuestionHash(question);
             }
+
+            this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(questions);
+
             screen.PropertyChanged += screen_PropertyChanged;
             this.Screens.Add(screen.ScreenId, screen);
-            UpdateGrid(publicKey);
+            UpdateGrid(screenId);
         }
 
-        private void RemovePropagatedGroup(Guid publicKey, int[] outerScopePropagationVector, int index)
+        private void RemovePropagatedScreen(Guid screenId, int[] outerScopePropagationVector, int index)
         {
             var propagationVector = BuildPropagationVectorForGroup(outerScopePropagationVector,
                 index);
-            var key = new InterviewItemId(publicKey, propagationVector);
+            var key = new InterviewItemId(screenId, propagationVector);
             var screen = this.Screens[key] as QuestionnaireScreenViewModel;
             foreach (var item in screen.Items)
             {
                 var question = item as QuestionViewModel;
                 if (question != null)
+                {
                     this.Questions.Remove(question.PublicKey);
+
+                    this.CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(question);
+                }
             }
             this.Screens.Remove(key);
-            UpdateGrid(publicKey);
+            UpdateGrid(screenId);
 
+        }
+
+        private void CleanQuestionsParticipationInSubstitutionReferencesBySubscribedQuestion(QuestionViewModel question)
+        {
+            var allQuestionsSubstitutedAtQuestionText =
+                questionsParticipationInSubstitutionReferences.Where(q => q.Value.Contains(question));
+
+            foreach (var referencedQuestionWithSubscribers in allQuestionsSubstitutedAtQuestionText)
+            {
+                referencedQuestionWithSubscribers.Value.Remove(question);
+                if (referencedQuestionWithSubscribers.Value.Count == 0)
+                    referencedQuestionWithSubscribers.Key.PropertyChanged -= ReferencedQuestionPropertyChanged;
+            }
         }
 
         public IEnumerable<IQuestionnaireViewModel> RestoreBreadCrumbs(IEnumerable<InterviewItemId> breadcrumbs)
@@ -370,43 +499,50 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 .SelectMany(
                     linkedQuestionId =>
                         this.Questions.Values.OfType<LinkedQuestionViewModel>()
-                            .Where(questionViemModel => questionViemModel.PublicKey.Id == linkedQuestionId))
+                            .Where(questionViewModel => questionViewModel.PublicKey.Id == linkedQuestionId))
                 .ToList()
-                .ForEach(linkedQuestionViewModel =>
-                {
-                    linkedQuestionViewModel.HandleAnswerListChange();
-                });
+                .ForEach(linkedQuestionViewModel => linkedQuestionViewModel.HandleAnswerListChange());
         }
 
-        #endregion
-
-        #region event handlers
-
-        private void question_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void HeadQuestionPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "AnswerString")
                 return;
+
             var question = sender as QuestionViewModel;
-            if (question == null || !question.Capital || question.PublicKey.IsTopLevel())
+            if (question==null || !this.listOfHeadQuestionsMappedOnScope.ContainsKey(question.PublicKey.Id))
                 return;
 
-            UpdatePropagatedGroupScreenName(question.PublicKey.PropagationVector);
+            this.UpdatePropagationScopeTitleForVector(this.listOfHeadQuestionsMappedOnScope[question.PublicKey.Id],
+                question.PublicKey.PropagationVector);
         }
 
-        private void UpdatePropagatedGroupScreenName(int[] propagationVector)
+        private void UpdatePropagationScopeTitleForVector(Guid scopeId, int[] propagationVector)
         {
-            var screens =
-                Screens.Select(
-                    q => q.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(
-                        q => q.ScreenId.CompareWithVector(propagationVector));
-            var newTitle = string.Concat(
-                Questions.Where(q => q.Key.CompareWithVector(propagationVector) && q.Value.Capital).
-                    Select(
-                        q => q.Value.AnswerString));
-            foreach (var screen in screens)
+            var siblingsByPropagationScopeIds = this.propagationStructure.PropagationScopes[scopeId];
+
+            var screensSiblingByPropagationScopeWithVector =
+                siblingsByPropagationScopeIds.Select(
+                    screenId => Screens[new InterviewItemId(screenId, propagationVector)] as QuestionnairePropagatedScreenViewModel);
+
+            var newTitle = this.BuildPropagationScopeTitleBasedOnAnswersToCapitalQuestions(propagationVector, scopeId);
+
+            foreach (var screen in screensSiblingByPropagationScopeWithVector)
             {
                 screen.UpdateScreenName(newTitle);
             }
+        }
+
+        private string BuildPropagationScopeTitleBasedOnAnswersToCapitalQuestions(int[] propagationVector, Guid scopeId)
+        {
+            return string.Concat(
+                this.Questions.Where(
+                    q =>
+                        q.Key.CompareWithVector(propagationVector) &&
+                            this.listOfHeadQuestionsMappedOnScope.Any(
+                                headQuestion => headQuestion.Key == q.Key.Id && headQuestion.Value == scopeId)).
+                    Select(
+                        q => q.Value.AnswerString));
         }
 
         private void screen_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -418,10 +554,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 return;
             UpdateGrid(propagatedScreen.ScreenId.Id);
         }
-
-        #endregion
-
-        #region protected helper methods
 
         protected void AddScreen(List<IGroup> rout,
             IGroup group)
@@ -452,9 +584,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         protected void UpdateQuestionHash(QuestionViewModel question)
         {
             this.Questions.Add(question.PublicKey, question);
-            if (question.Capital && !question.PublicKey.IsTopLevel())
+
+            if (this.listOfHeadQuestionsMappedOnScope.ContainsKey(question.PublicKey.Id))
             {
-                question.PropertyChanged += question_PropertyChanged;
+                question.PropertyChanged += this.HeadQuestionPropertyChanged;
             }
         }
 
@@ -482,11 +615,14 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 () => CollectPropagatedScreen(rosterKey.Id));
 
             breadcrumbs = breadcrumbs.Union(new InterviewItemId[1] {roster.ScreenId}).ToList();
-            var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, true,
+
+            var screenPrototype = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, true,
                 rosterKey, screenItems,
                 GetSiblings,
                 breadcrumbs);
-            Templates.Add(rosterKey.Id, template);
+
+            this.propagatedScreenPrototypes.Add(rosterKey.Id, screenPrototype);
+
             this.Screens.Add(rosterKey, roster);
         }
 
@@ -504,7 +640,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 result.Add(item);
             }
             return result;
-            //  return screen.Children.Select(CreateView).Where(c => c != null);
         }
 
         protected IEnumerable<InterviewItemId> GetSiblings(Guid publicKey)
@@ -549,7 +684,8 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         protected HeaderItem BuildHeader(IQuestion question)
         {
-            return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
+            string text = question.GetVariablesUsedInTitle().Aggregate(question.QuestionText, (current, substitutionVariable) => current.ReplaceSubstitutionVariable(substitutionVariable, StringUtil.DefaultSubstitutionText));
+            return new HeaderItem(question.PublicKey, text, question.Instructions);
         }
 
         protected string BuildComments(IEnumerable<CommentDocument> comments)
@@ -576,8 +712,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                     return null;
                 }
 
-                HandleQuestionPossibleTriggers(question);
-
                 return questionView;
             }
 
@@ -590,17 +724,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                         key, this.Screens[key]);
             }
             return null;
-        }
-
-        private void HandleQuestionPossibleTriggers(IQuestion question)
-        {
-            var trigger = question as IAutoPropagateQuestion;
-
-            if (trigger == null)
-                return;
-
-            this.Templates.AssignScope(question.PublicKey, trigger.Triggers);
-            this.Templates.AssignScope(question.PublicKey, trigger.Triggers);
         }
 
         private bool IfQuestionNeedToBeSkipped(IQuestion question)
@@ -627,8 +750,27 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newType,
                 null,
                 true, question.Instructions, null,
-                true, question.Capital, question.Mandatory,
-                question.ValidationMessage);
+                true, question.Mandatory,
+                question.ValidationMessage,
+                question.StataExportCaption,
+                question.GetVariablesUsedInTitle(),
+                this.GetQuestionsIsIntegerSetting(question), this.GetQuestionsDecimalPlacesSetting(question));
+        }
+
+        private bool? GetQuestionsIsIntegerSetting(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            if (numericQuestion == null)
+                return null;
+            return numericQuestion.IsInteger;
+        }
+
+        private int? GetQuestionsDecimalPlacesSetting(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            if (numericQuestion == null)
+                return null;
+            return numericQuestion.CountOfDecimalPlaces;
         }
 
         private LinkedQuestionViewModel CreateLinkedQuestion(IQuestion question, QuestionType newType)
@@ -637,8 +779,9 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 new InterviewItemId(question.PublicKey), question.QuestionText,
                 newType,
                 true, question.Instructions,
-                true, question.Mandatory, question.Capital, question.ValidationMessage,
-                () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value));
+                true, question.Mandatory,question.ValidationMessage,
+                () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value), 
+                question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         private SelectebleQuestionViewModel CreateSelectableQuestion(IQuestion question, QuestionType newType)
@@ -650,7 +793,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                         new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage))
                     .ToList(),
                 true, question.Instructions, null,
-                true, question.Mandatory, question.Capital, null, question.ValidationMessage);
+                true, question.Mandatory,  null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle());
         }
 
         protected IEnumerable<LinkedAnswerViewModel> GetAnswerOptionsForLinkedQuestion(Guid referencedQuestionId)
@@ -677,9 +820,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private readonly QuestionType[] singleOptionTypeVariation = new[]
             {QuestionType.SingleOption, QuestionType.DropDownList, QuestionType.YesNo};
-
-
-        #endregion
 
         public bool IsQuestionReferencedByAnyLinkedQuestion(Guid questionId)
         {

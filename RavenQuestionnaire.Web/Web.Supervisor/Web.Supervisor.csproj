@@ -148,7 +148,8 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntiXssLibrary">
+    <Reference Include="AntiXssLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -161,7 +162,8 @@
     <Reference Include="Elmah.Mvc">
       <HintPath>..\..\packages\Elmah.MVC.2.0.2\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlSanitizationLibrary">
+    <Reference Include="HtmlSanitizationLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -304,9 +306,13 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\CommandController.cs" />
+    <Compile Include="Controllers\CommandApiController.cs" />
+    <Compile Include="Controllers\DesignerQuestionnairesApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
+    <Compile Include="Models\JsonBundleCommandResponse.cs" />
+    <Compile Include="Models\JsonCommandResponse.cs" />
+    <Compile Include="Models\JsonBaseResponse.cs" />
     <Compile Include="Controllers\ReportDataApiController.cs" />
     <Compile Include="Controllers\StatusHelper.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -325,6 +331,8 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Models\DesignerQuestionnairesRequestModel.cs" />
+    <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\UserCreateModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
@@ -413,148 +421,81 @@
     <Content Include="Content\listview.css" />
     <Content Include="Content\main-not-logged.css" />
     <Content Include="Content\supervisor.css" />
-    <Content Include="Content\themes\base\images\animated-overlay.gif" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.menu.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
-    <Content Include="Content\themes\base\minified\images\animated-overlay.gif" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\Ira.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Include="Scripts\changeState\app\viewmodel.js" />
-    <Content Include="Scripts\details\app\config.js" />
-    <Content Include="Scripts\details\app\datacontext.js" />
-    <Content Include="Scripts\details\app\dataservice.js" />
-    <Content Include="Scripts\details\app\mapper.js" />
-    <Content Include="Scripts\details\app\model.js" />
+    <Content Include="Scripts\director.js" />
+    <Content Include="Scripts\lodash.underscore.js" />
+    <Content Include="Scripts\lodash.underscore.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment+langs.js" />
+    <Content Include="Scripts\moment+langs.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\viewmodels\pages\interviewchangestate.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\details\config.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\details\mapper.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\details\model.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\lib\jquery.pnotify.js" />
-    <Content Include="Scripts\lib\Math.uuid.js" />
+    <Content Include="Scripts\jquery.pnotify.js" />
+    <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\date.js" />
-    <Content Include="Scripts\details\app\viewmodel.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\details\interviewdetails.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable-inline.js" />
     <Content Include="Scripts\bootstrap-editable-inline.min.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\lib\director.js" />
-    <Content Include="Scripts\FixedHeader.min.js" />
-    <Content Include="Scripts\grid.js" />
-    <Content Include="Scripts\highcharts.js" />
-    <Content Include="Scripts\jquery-ui-1.10.0.js" />
-    <Content Include="Scripts\jquery-ui-1.10.0.min.js" />
-    <Content Include="Scripts\jquery.dataTables.min.js" />
-    <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\assign\app\datacontext.js" />
-    <Content Include="Scripts\assign\app\dataservice.js" />
-    <Content Include="Scripts\assign\app\mapper.js" />
-    <Content Include="Scripts\assign\app\model.js" />
-    <Content Include="Scripts\assign\app\viewmodel.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\mapper.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\model.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\newinterview.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\ko.pager.js" />
-    <Content Include="Scripts\lib\amplify.js" />
-    <Content Include="Scripts\lib\jquery.js" />
-    <Content Include="Scripts\lib\knockout.js" />
-    <Content Include="Scripts\lib\knockout.validation.js" />
-    <Content Include="Scripts\lib\lodash.js" />
-    <Content Include="Scripts\lib\moment.js" />
-    <Content Include="Scripts\lib\require.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\query-string.js" />
-    <Content Include="Scripts\vm\svDocumentlistview.js" />
-    <Content Include="Scripts\vm\statuslistview.js" />
-    <Content Include="Scripts\vm\hqDocumentlistview.js" />
-    <Content Include="Scripts\vm\userlistview.js" />
-    <Content Include="Scripts\vm\surveylistview.js" />
-    <Content Include="Scripts\vm\summarylistview.js" />
-    <Content Include="Scripts\vm\listview.js" />
-    <Content Include="Scripts\plotSettings.js" />
-    <Content Include="Scripts\shorten.js" />
-    <Content Include="Scripts\sorter.js" />
-    <None Include="Service References\DesignerPublicService\PublicService.disco" />
-    <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
-    <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
-    <None Include="Service References\DesignerPublicService\Reference.svcmap">
+    <Content Include="Scripts\supervisor.framework.js" />
+    <Content Include="Scripts\viewmodels\pagebase.js" />
+    <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
+    <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
+    <Content Include="Scripts\viewmodels\viewmodelbase.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
+    <Content Include="Scripts\viewmodels\pages\interview\hq.interviews.js" />
+    <Content Include="Scripts\viewmodels\pages\users.js" />
+    <Content Include="Scripts\viewmodels\pages\surveysandstatuses.js" />
+    <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
+    <Content Include="Scripts\viewmodels\listview.js" />
+    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
+    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -565,7 +506,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Template\Import.cshtml" />
-    <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Configuration\Vitalii.Supervisor.Web.config">
@@ -575,28 +515,10 @@
     <Content Include="Configuration\Stacy.Supervisor.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\font\fontawesome-webfont.woff" />
-    <Content Include="Content\font\fontawesome-webfont.ttf" />
-    <Content Include="Content\font\fontawesome-webfont.eot" />
-    <Content Include="Content\font\FontAwesome.otf" />
-    <Content Include="Scripts\lib\jquery.min.map" />
-    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Views\ControlPanel\ReadLayer.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
-    <Content Include="Views\Interview\Details.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
     <Content Include="Views\Shared\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
@@ -613,10 +535,26 @@
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Views\Interview\InterviewDetails.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewItemMessage.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
   </ItemGroup>
@@ -752,20 +690,14 @@
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Interview\_StatusHistory.cshtml" />
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
-    <Content Include="Views\Interview\Approve.cshtml" />
     <Content Include="Views\Interview\ChangeState.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml">
       <SubType>
       </SubType>
     </Content>
-    <Content Include="Views\Interview\Redo.cshtml" />
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
-    <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
-    <None Include="Service References\DesignerPublicService\PublicService.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

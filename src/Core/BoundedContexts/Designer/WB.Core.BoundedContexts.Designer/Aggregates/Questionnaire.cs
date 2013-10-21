@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
@@ -11,7 +12,6 @@ using Main.Core.Domain;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Utility;
 using Ncqrs;
@@ -24,11 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
     public class Questionnaire : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>
     {
+        
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
-        private readonly ICompleteQuestionFactory questionFactory;
+        private readonly IQuestionFactory questionFactory;
 
-        private ILogger logger;
+        private readonly ILogger logger;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
         {
@@ -41,10 +42,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionType.GpsCoordinates
         };
 
+        private static readonly HashSet<QuestionType> ReroutedQuestionTypes = new HashSet<QuestionType>
+        {
+            QuestionType.Numeric,
+            QuestionType.AutoPropagate
+        };
+        
+        private static readonly int maxCountOfDecimaPlaces = 15;
+
         public Questionnaire()
             : base()
         {
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
         }
 
@@ -52,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(Guid publicKey)
             : base(publicKey)
         {
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
         }
 
         public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
@@ -61,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
             var clock = NcqrsEnvironment.Get<IClock>();
-            this.questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new QuestionFactory();
 
             this.ApplyEvent(
                 new NewQuestionnaireCreated
@@ -284,31 +293,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid groupId, string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
+            string instructions, Option[] options, Order optionsOrder, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Guid? linkedToQuestionId)
         {
-            alias = alias.Trim();
-
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type); 
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            alias = alias.Trim();
+            title = title.Trim();
 
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
-
-            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
-
-            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
-            
-            var group = this.innerDocument.Find<IGroup>(groupId);
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
-            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
-
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
-
-            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
             this.ApplyEvent(new QuestionCloned
             {
@@ -331,8 +329,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 Answers = ConvertOptionsToAnswers(options),
                 AnswerOrder = optionsOrder,
-                MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 SourceQuestionId = sourceQuestionId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
@@ -340,44 +336,36 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void NewAddQuestion(Guid questionId,
-           Guid groupId, string title, QuestionType type, string alias,
-           bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
-           QuestionScope scope, string condition, string validationExpression, string validationMessage,
-           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+        public void CloneNumericQuestion(Guid questionId,
+            Guid groupId, string title, bool isAutopropagating, string alias,
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxValue, Guid[] triggeredGroupIds,
+            bool isInteger, int? countOfDecimalPlaces)
         {
-            alias = alias.Trim();
-
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            alias = alias.Trim();
+            title = title.Trim();
 
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
 
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
-            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
 
-            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
 
-            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
-
-            var group = this.innerDocument.Find<IGroup>(groupId);
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
-            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
-
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
-
-            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
+            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
 
 
-            this.ApplyEvent(new NewQuestionAdded
+            this.ApplyEvent(new NumericQuestionCloned
             {
                 PublicKey = questionId,
-
                 GroupPublicKey = groupId,
                 QuestionText = title,
-                QuestionType = type,
+                IsAutopropagating = isAutopropagating,
                 StataExportCaption = alias,
 
                 Mandatory = isMandatory,
@@ -389,14 +377,117 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex,
+                ResponsibleId = responsibleId,
+                MaxValue = maxValue ?? 10,
+                Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces
+            });
+        }
 
+        public void NewAddQuestion(Guid questionId,
+           Guid groupId, string title, QuestionType type, string alias,
+           bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+           QuestionScope scope, string condition, string validationExpression, string validationMessage,
+           string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId)
+        {
+            this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            alias = alias.Trim();
+            title = title.Trim();
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+
+
+            this.ApplyEvent(new NewQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                QuestionType = type,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
                 Answers = ConvertOptionsToAnswers(options),
                 AnswerOrder = optionsOrder,
-                MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId
             });
+        }
+
+        public void AddNumericQuestion(Guid questionId,
+            Guid groupId, string title, bool isAutopropagating, string alias,
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId,
+            bool isInteger, int? countOfDecimalPlaces)
+        {
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+            alias = alias.Trim();
+            title = title.Trim();
+
+            var parentGroup = this.innerDocument.Find<IGroup>(groupId);
+            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
+            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger,countOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
+
+            this.ApplyEvent(new NumericQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                IsAutopropagating = isAutopropagating,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+
+                MaxValue = maxValue ?? 10,
+                Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces
+            });
+        }
+
+        private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, QuestionType type,
+            string alias, bool isFeatured, bool isHeaderOfPropagatableGroup, string validationExpression, Guid responsibleId)
+        {
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
+            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
+            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
+
+
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, parentGroup);
+            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, parentGroup);
+
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isFeatured, parentGroup);
         }
 
         public void NewDeleteQuestion(Guid questionId, Guid responsibleId)
@@ -413,8 +504,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-
             this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId);
+            
+            #warning reorganize checkings - now we are searching for items several times
+            
+            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
+            var parentGroup = this.innerDocument.Find<IGroup>(targetGroupId);
+            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption, questionId, question.Featured, parentGroup);
 
             this.ApplyEvent(new QuestionnaireItemMoved
             {
@@ -429,32 +525,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid responsibleId, Guid? linkedToQuestionId)
+            string instructions, Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(type);
+            
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
             alias = alias.Trim();
-
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
-            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+            title = title.Trim();
             
-            ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
+            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, type, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+            
+            this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
-
-            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
-
-            this.ThrowDomainExceptionIfQuestionCanNotBeFeatured(type, isFeatured);
-
-            this.ThrowDomainExceptionIfQuestionCanNotContainValidations(type, validationExpression);
-            
-            IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
-            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
-
-            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
-
             this.ApplyEvent(new QuestionChanged
             {
                 PublicKey = questionId,
@@ -475,10 +561,54 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 Answers = ConvertOptionsToAnswers(options),
                 AnswerOrder = optionsOrder,
-                MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId
+            });
+        }
+
+        public void UpdateNumericQuestion(Guid questionId,
+            string title, bool isAutopropagating, string alias,
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions, int? maxValue, Guid[] triggeredGroupIds, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
+            alias = alias.Trim();
+            title = title.Trim();
+
+            IGroup parentGroup = this.innerDocument.GetParentOfQuestion(questionId);
+            var questionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(isAutopropagating);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, questionType, alias, isFeatured, isHeaderOfPropagatableGroup, validationExpression, responsibleId);
+
+            this.ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(isAutopropagating, isInteger);
+            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(isAutopropagating, triggeredGroupIds);
+
+            this.ApplyEvent(new NumericQuestionChanged
+            {
+                PublicKey = questionId,
+                QuestionText = title,
+                IsAutopropagating = isAutopropagating,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+                ResponsibleId = responsibleId,
+
+
+                MaxValue = maxValue ?? 10,
+                Triggers = triggeredGroupIds != null ? triggeredGroupIds.ToList() : null,
+                IsInteger = isInteger,
+                CountOfDecimalPlaces = countOfDecimalPlaces
             });
         }
 
@@ -650,7 +780,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion question =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -668,7 +798,39 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
+        }
+
+        protected internal void OnNumericQuestionAdded(NumericQuestionAdded e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ, 
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger,e.CountOfDecimalPlaces));
             if (question == null)
             {
                 return;
@@ -680,7 +842,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         protected internal void OnQuestionCloned(QuestionCloned e)
         {
             AbstractQuestion question =
-                new CompleteQuestionFactory().CreateQuestion(
+                new QuestionFactory().CreateQuestion(
                     new QuestionData(
                         e.PublicKey,
                         e.QuestionType,
@@ -698,7 +860,40 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
+        }
+
+        protected internal void OnNumericQuestionCloned(NumericQuestionCloned e)
+        {
+            AbstractQuestion question =
+                new QuestionFactory().CreateQuestion(
+                    new QuestionData(
+                        e.PublicKey,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ, 
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger, e.CountOfDecimalPlaces));
+
             if (question == null)
             {
                 return;
@@ -739,7 +934,35 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Triggers,
                         e.MaxValue,
                         e.Answers,
-                        e.LinkedToQuestionId));
+                        e.LinkedToQuestionId,
+                        e.IsInteger));
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
+        }
+
+        protected void OnNumericQuestionChanged(NumericQuestionChanged e)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
+            IQuestion newQuestion =
+                this.questionFactory.CreateQuestion(
+                    new QuestionData(
+                        question.PublicKey,
+                        NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(e.IsAutopropagating),
+                        e.QuestionScope,
+                        e.QuestionText,
+                        e.StataExportCaption,
+                        e.ConditionExpression,
+                        e.ValidationExpression,
+                        e.ValidationMessage,
+                        Order.AZ, 
+                        e.Featured,
+                        e.Mandatory,
+                        e.Capital,
+                        e.Instructions,
+                        e.Triggers,
+                        e.MaxValue,
+                        null,
+                        null,
+                        e.IsInteger, e.CountOfDecimalPlaces));
             this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
@@ -822,14 +1045,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(QuestionType type, Guid[] triggedGroupIds)
+        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(bool isAutopropagating, Guid[] triggeredGroupIds)
         {
-            bool questionIsNotAutoPropagated = type != QuestionType.AutoPropagate;
-            bool noGroupsShouldBeTrigged = triggedGroupIds == null || triggedGroupIds.Length == 0;
-            if (questionIsNotAutoPropagated || noGroupsShouldBeTrigged)
+            bool noGroupsShouldBeTrigged = triggeredGroupIds == null || triggeredGroupIds.Length == 0;
+            if (!isAutopropagating || noGroupsShouldBeTrigged)
                 return;
 
-            foreach (Guid groupId in triggedGroupIds)
+            foreach (Guid groupId in triggeredGroupIds)
             {
                 var group = this.innerDocument.Find<Group>(groupId);
                 if (@group == null)
@@ -989,32 +1211,70 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Question type {0} is not allowed", type));
         }
 
+        private void ThrowDomainExceptionIfQuestionTypeIsReroutedOnQuestionTypeSpecificCommand(QuestionType type)
+        {
+            bool isQuestionTypeRerouted = ReroutedQuestionTypes.Contains(type);
+
+            if (isQuestionTypeRerouted)
+                throw new DomainException(DomainExceptionType.QuestionTypeIsReroutedOnQuestionTypeSpecificCommand,
+                    string.Format("Question type {0} rerouted on QuestionType specific command", type));
+        }
+
         private bool IsUnderPropagatableGroup(IComposite item)
         {
-            this.innerDocument.ConnectChildsWithParent();
+            this.innerDocument.ConnectChildrenWithParent();
 
-            return this.IsUnderPropagatableGroupImpl(item);
+            return this.GetFirstPropagatableParentGroupIdOrNull(item) != null;
         }
 
-        private bool IsUnderPropagatableGroupImpl(IComposite item)
+        private Guid? GetFirstPropagatableParentGroupIdOrNull(IComposite item)
         {
             if (item == null)
-                return false;
+                return null;
 
-            var parentGroup = (IGroup) item.GetParent();
-
-            return parentGroup != null
-                && ((parentGroup.Propagated == Propagate.AutoPropagated) || this.IsUnderPropagatableGroupImpl(parentGroup.GetParent()));
+            var itemAsGroup = item as IGroup;
+            if (itemAsGroup != null)
+            {
+                if (itemAsGroup.Propagated == Propagate.AutoPropagated)
+                    return itemAsGroup.PublicKey;
+            }
+            
+            return this.GetFirstPropagatableParentGroupIdOrNull(item.GetParent());
         }
 
-        private static void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
+
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(IComposite item)
+        {
+            var allQuestion = new List<Guid>();
+            var itemAsGroup = item;
+
+            while (itemAsGroup != null)
+            {
+                IGroup @group = itemAsGroup as IGroup;
+                if (@group.Propagated == Propagate.AutoPropagated)
+                {
+                    var autoPropagationQuestion =
+                        this.innerDocument.Find<AutoPropagateQuestion>(
+                            question => question.Triggers.Contains(@group.PublicKey)).FirstOrDefault();
+
+                    if(autoPropagationQuestion != null)
+                        allQuestion.Add(autoPropagationQuestion.PublicKey);
+                }
+
+                itemAsGroup = itemAsGroup.GetParent();
+            }
+            return allQuestion;
+        }
+
+
+        private void ThrowIfNotCategoricalQuestionHasLinkedInformation(QuestionType questionType, Guid? linkedToQuestionId)
         {
             bool isCategoricalQuestion = questionType == QuestionType.MultyOption ||
                 questionType == QuestionType.SingleOption;
 
-            bool notCategoricalQuestionHasLinkedQuestonId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
+            bool notCategoricalQuestionHasLinkedQuestionId = linkedToQuestionId.HasValue && !isCategoricalQuestion;
 
-            if (notCategoricalQuestionHasLinkedQuestonId)
+            if (notCategoricalQuestionHasLinkedQuestionId)
             {
                 throw new DomainException(
                     DomainExceptionType.NotCategoricalQuestionLinkedToAnoterQuestion,
@@ -1101,7 +1361,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options)
         {
-            if (!options.Any())
+            if (options == null || !options.Any())
             {
                 throw new DomainException(
                     DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
@@ -1182,6 +1442,54 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
         }
 
+        private void ThrowIfPrecisionSettingsAreInConflictWithPropagationSettings(bool isAutoPropagateQuestion, bool isInteger)
+        {
+            if (isAutoPropagateQuestion)
+            {
+                if (!isInteger)
+                    throw new DomainException(
+                    DomainExceptionType.AutoPropagateQuestionCantBeReal,
+                    "AutoPropagate question can't be real");
+            }
+        }
+
+        private void ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(bool isInteger, int? countOfDecimalPlaces)
+        {
+            if (isInteger && countOfDecimalPlaces.HasValue)
+            {
+                    throw new DomainException(
+                    DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
+                    "AutoPropagate question can't have decimal places settings");
+            }
+        }
+
+        private void ThrowIfDecimalPlacesValueIsIncorrect(int? countOfDecimalPlaces)
+        {
+            if(!countOfDecimalPlaces.HasValue)
+                return;
+
+            if (countOfDecimalPlaces.Value > maxCountOfDecimaPlaces)
+            {
+                throw new DomainException(
+                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
+                    string.Format("Count of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, maxCountOfDecimaPlaces));
+            }
+
+            if (countOfDecimalPlaces.Value < 0)
+            {
+                throw new DomainException(
+                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
+                    string.Format("Count of decimal places cant be negative."));
+            }
+
+            if (countOfDecimalPlaces.Value == 0)
+            {
+                throw new DomainException(
+                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
+                    string.Format("If you want Count of decimal places equals to 0 please select integer."));
+            }
+        }
+
         private void ThrowDomainExceptionIfMoreThanOneGroupExists(Guid groupId)
         {
             this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IGroup>(
@@ -1233,5 +1541,98 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Question cannot contain validations");
         }
 
+        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string questionTitle, string alias, Guid questionPublicKey, bool isFeatured, IGroup group)
+        {
+            string[] substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionTitle);
+            if(substitutionReferences.Length == 0)
+                return;
+
+            if (isFeatured)
+                throw new DomainException(
+                    DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
+                    "Pre-filled question title contains substitution references. It's illegal");
+
+            if (substitutionReferences.Contains(alias))
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
+                    "Question title contains illegal substitution references to self");
+
+            List<string> unknownReferences = new List<string>();
+            List<string> questionsIncorrectTypeOfReferenced = new List<string>();
+            List<string> questionsIllegalPropagationScope = new List<string>();
+
+            this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
+
+            ValidateSubstitutionReferences(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
+
+            if(unknownReferences.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsUnknownSubstitutionReference,
+                    "Question title contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
+
+            if (questionsIncorrectTypeOfReferenced.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsSubstitutionReferenceQuestionOfInvalidType,
+                    "Question title contains substitution references to questions of illegal type: " + String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
+
+            if (questionsIllegalPropagationScope.Count > 0)
+                throw new DomainException(
+                    DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference,
+                    "Question title contains illegal substitution references to questions: " + String.Join(", ", questionsIllegalPropagationScope.ToArray()));
+        }
+
+        private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
+                                                    List<string> unknownReferences, List<string> questionsIncorrectTypeOfReferenced,
+                                                    List<string> questionsIllegalPropagationScope)
+        {
+            var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                                .Where(q => q.PublicKey != questionPublicKey)
+                                .ToDictionary(q => q.StataExportCaption, q => q);
+
+            List<Guid> propagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(@group);
+
+            foreach (var substitutionReference in substitutionReferences)
+            {
+                //extract validity of variable name to separate method and make check validity of substitutionReference  
+                if (substitutionReference.Length > 32)
+                {
+                    unknownReferences.Add(substitutionReference);
+                    continue;
+                }
+
+                if (!questions.ContainsKey(substitutionReference))
+                    unknownReferences.Add(substitutionReference);
+                else
+                {
+                    var currentQuestion = questions[substitutionReference];
+                    bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
+                                                             currentQuestion.QuestionType == QuestionType.Numeric ||
+                                                             currentQuestion.QuestionType == QuestionType.SingleOption ||
+                                                             currentQuestion.QuestionType == QuestionType.Text ||
+                                                             currentQuestion.QuestionType == QuestionType.AutoPropagate);
+
+                    if (typeOfRefQuestionIsNotSupported)
+                        questionsIncorrectTypeOfReferenced.Add(substitutionReference);
+
+                    if (!IsReferencedSubstitutionLegal(propagationQuestionsVector, currentQuestion.GetParent()))
+                        questionsIllegalPropagationScope.Add(substitutionReference);
+                }
+            }
+        }
+
+        private bool IsReferencedSubstitutionLegal(List<Guid> propagationQuestionsVector, IComposite referencedQuestionGroup)
+        {
+            List<Guid> referencedPropagationQuestionsVector = GetAllAutopropagationQuestionsAsVector(referencedQuestionGroup);
+
+            if (referencedPropagationQuestionsVector.Count == 0) //referenced Question not in propagation - OK
+                return true;
+
+            var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
+
+            if(lengthDiff < 0)
+                return false;
+
+            return propagationQuestionsVector.Except(propagationQuestionsVector).Count() <= lengthDiff;
+        }
     }
 }
