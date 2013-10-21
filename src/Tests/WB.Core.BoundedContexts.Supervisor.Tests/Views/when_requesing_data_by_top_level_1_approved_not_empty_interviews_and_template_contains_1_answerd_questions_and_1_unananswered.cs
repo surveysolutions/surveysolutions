@@ -10,34 +10,24 @@ using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 {
     [Subject(typeof (InterviewDataExportFactory))]
-    internal class when_requesing_data_by_top_level_of_interview_with_1_approved_not_empty_interviews_and_template_contains_1_answerd_questions_and_1_unananswered_and_1_disabled :
+    internal class when_requesing_data_by_top_level_1_approved_not_empty_interviews_and_template_contains_1_answerd_questions_and_1_unananswered :
         InterviewDataExportFactoryTestContext
     {
         private Establish context = () =>
         {
             answeredQuestionId = Guid.Parse("10000000000000000000000000000000");
             unansweredQuestionId = Guid.Parse("11111111111111111111111111111111");
-            disabledQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             variableNameAndQuestionId = new Dictionary<string, Guid>
             {
                 { "q1", answeredQuestionId },
-                { "q3", disabledQuestionId },
                 { "q2", unansweredQuestionId }
             };
 
             interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
                 () => CreateQuestionnaireDocument(variableNameAndQuestionId),
-                CreateInterviewWith1Answered1Disabled1Ananswered, 1);
+                () => CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), 1);
         };
-
-        private static InterviewData CreateInterviewWith1Answered1Disabled1Ananswered()
-        {
-            var interviewData = CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(2));
-            var questionForDisable = interviewData.Levels[firstLevelkey].GetQuestion(disabledQuestionId);
-            questionForDisable.Enabled = false;
-            return interviewData;
-        }
 
         private Because of = () =>
             result = interviewDataExportFactory.Load(new InterviewDataExportInputModel(Guid.NewGuid(), 1, null));
@@ -57,17 +47,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
         private It should_unanswered_question_be_empty = () =>
           result.Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
 
-        private It should_disabled_question_be_empty = () =>
-          result.Records[0].Questions.ShouldQuestionHasNoAnswers(disabledQuestionId);
-
-        private It should_header_column_count_be_equal_3 = () =>
-            result.Header.Count().ShouldEqual(3);
+        private It should_header_column_count_be_equal_2 = () =>
+            result.Header.Count().ShouldEqual(2);
 
         private static InterviewDataExportFactory interviewDataExportFactory;
         private static InterviewDataExportView result;
         private static Dictionary<string, Guid> variableNameAndQuestionId;
         private static Guid answeredQuestionId;
         private static Guid unansweredQuestionId;
-        private static Guid disabledQuestionId;
     }
 }

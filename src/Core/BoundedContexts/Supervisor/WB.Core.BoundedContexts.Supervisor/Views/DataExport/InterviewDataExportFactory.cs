@@ -164,9 +164,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
             foreach (var question in level.GetAllQuestions())
             {
-                if (!question.Enabled)
-                    continue;
-
                 var headerItem = header[question.Id];
 
                 if (headerItem == null)
