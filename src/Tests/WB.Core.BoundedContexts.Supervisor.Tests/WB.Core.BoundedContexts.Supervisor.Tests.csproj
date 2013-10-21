@@ -65,6 +65,7 @@
     <Compile Include="Views\InterviewDataExportFactoryTestContext.cs" />
     <Compile Include="Views\when_requesing_data_by_top_level_1_approved_not_empty_interviews_and_template_contains_1_answerd_questions_and_1_unananswered.cs" />
     <Compile Include="Views\when_requesing_data_by_top_level_of_interview_with_2_approved_empty_interviews_and_template_contains_2_questions.cs" />
+    <Compile Include="Views\when_requesting_data_by_first_level_of_propagation_with_2_approved_interview_and_2levels_per_each_interview.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

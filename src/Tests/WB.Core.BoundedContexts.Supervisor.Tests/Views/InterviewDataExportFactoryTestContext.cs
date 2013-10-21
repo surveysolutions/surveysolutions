@@ -18,7 +18,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
     internal class InterviewDataExportFactoryTestContext {
         protected const string firstLevelkey = "#";
 
-        protected static InterviewDataExportFactory CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(Func<QuestionnaireDocument> templateCreationAction, Func<InterviewData> interviewCreationAction, int interviewCount = 0)
+        protected static InterviewDataExportFactory CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
+            Func<QuestionnaireDocument> templateCreationAction, 
+            Func<InterviewData> interviewCreationAction,
+            int interviewCount = 0,
+            Func<QuestionnairePropagationStructure> questionnairePropagationStructure = null)
         {
             ServiceLocator.SetLocatorProvider(() => new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object);
 
@@ -38,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
 
             var propagationStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure>>();
             propagationStructureStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(new QuestionnairePropagationStructure());
+                .Returns(questionnairePropagationStructure==null? new QuestionnairePropagationStructure() : questionnairePropagationStructure());
 
             var linkedQuestionStructureStorageMock = new Mock<IVersionedReadSideRepositoryReader<ReferenceInfoForLinkedQuestions>>();
             linkedQuestionStructureStorageMock.Setup(x => x.GetById(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
@@ -64,18 +68,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             return questionnaire;
         }
 
-        protected static InterviewSummary[] CreateListOfApprovedInterviews(int count)
-        {
-            var interviewsSummary = new InterviewSummary[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                interviewsSummary[i] = new InterviewSummary();
-            }
-
-            return interviewsSummary;
-        }
-
         protected static InterviewData CreateInterviewData()
         {
             var interview = new InterviewData();
@@ -96,6 +88,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
             }
 
             return interview;
+        }
+
+        protected static InterviewSummary[] CreateListOfApprovedInterviews(int count)
+        {
+            var interviewsSummary = new InterviewSummary[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                interviewsSummary[i] = new InterviewSummary();
+            }
+
+            return interviewsSummary;
         }
     }
 
