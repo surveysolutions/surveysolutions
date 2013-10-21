@@ -26,7 +26,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Tests.Views
     {
         private Establish context = () =>
         {
-            interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieWithColumns(2, "q1", "q1");
+            interviewDataExportFactory = CreateInterviewDataExportFactoryForQuestionnarieCreatedByMethod(
+                () =>
+                    CreateQuestionnaireDocument(new Dictionary<string, Guid>
+                    {
+                        { "q1", Guid.NewGuid() },
+                        { "q2", Guid.NewGuid() }
+                    }),
+                CreateInterviewData,
+                2);
         };
 
         Because of = () =>
