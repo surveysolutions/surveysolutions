@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
                 => 
                    _.HasQuestion(questionWhichIsForcesPropagationId) == true
                    && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
+                   && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
                    && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId, disabledPropagatedGroupId }
                    && _.HasGroup(propagatedGroupId) == true
                    && _.HasGroup(disabledPropagatedGroupId) == true
@@ -76,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
             
 
             interview = CreateInterview(questionnaireId: questionnaireId);
-            interview.AnswerNumericQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
 
             expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
                 .Returns(true);
@@ -85,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         private Because of = () =>
-            interview.AnswerNumericQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
+            interview.AnswerNumericRealQuestion(userId, answeringQuestionId, new int[] {0}, DateTime.Now, 0);
 
         private Cleanup stuff = () =>
         {

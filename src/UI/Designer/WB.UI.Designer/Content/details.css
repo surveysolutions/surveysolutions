@@ -157,6 +157,12 @@ body.loading .loading-backdrop {
             overflow: auto;
     }
 
+    @-moz-document url-prefix() {
+        .stack .body .container-fluid {
+            position: relative;
+        }
+    }
+
     .stack .pane-bottom {
         -webkit-border-radius: 0 0 5px 5px;
         -moz-border-radius: 0 0 5px 5px;
@@ -552,6 +558,7 @@ h1 {
     text-shadow: 0 1px 0 rgba(255,255,255,0.8);
     outline: none;
 }
+
 .alias {
     background-color: #A38F8F;
     border-radius: 2px 2px 2px 2px;
@@ -565,6 +572,10 @@ h1 {
     padding: 1px 3px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.hasErrors .alias {
+    background-color: #bd362f;
 }
 
 .edit-triggers .row-fluid {
@@ -721,6 +732,10 @@ h1 {
     -o-border-radius: 4px 0 0 4px;
     border-radius: 4px 0 0 4px;
 }
+.q-item-wrap.q-group.hasErrors > .handler ,
+.q-item-wrap.q-question.hasErrors > .handler {
+    background: #bd362f;
+}
 .controls .btn.btn-danger {
     margin-left: 5px;
 }
@@ -740,12 +755,12 @@ h1 {
     margin-bottom: 0
 }
 .editor-container{
-    height: 20px;
+    height: 28px;
     margin-bottom: 10px;
     position: relative
 }
 .editor {
-    height: 20px;
+    height: 28px;
     width: 100%;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid #CCCCCC;
@@ -755,6 +770,7 @@ a.btn.btn-help {
     border-radius: 16px 16px 16px 16px;
     padding: 0 3px;
     font-size: 14px;
+    margin-right: 5px;
 }
 .row-fluid .btn-group {
     margin-bottom: 10px;
