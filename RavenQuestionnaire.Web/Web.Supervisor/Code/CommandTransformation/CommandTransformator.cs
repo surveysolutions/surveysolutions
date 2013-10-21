@@ -94,10 +94,6 @@ namespace Web.Supervisor.Code.CommandTransformation
                 case QuestionType.DateTime:
                     answerValue = answer.Answer is DateTime ? answer.Answer : answerAsString.Parse<DateTime>();
                     break;
-                case QuestionType.DateTime:
-                    answerValue = answer.Answer is DateTime ? answer.Answer : answerAsString.Parse<DateTime>();
-                    break;
-
                 case QuestionType.SingleOption:
                     answerValue = answerAsString.Parse<decimal>();
                     break;
