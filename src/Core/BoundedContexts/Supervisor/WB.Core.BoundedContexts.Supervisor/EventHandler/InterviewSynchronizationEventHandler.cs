@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.SyncStorage;
 //using InterviewDeleted = Main.Core.Events.Questionnaire.Completed.InterviewDeleted;
@@ -104,7 +105,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
             foreach (var interviewLevel in interview.Levels.Values)
             {
-                foreach (var interviewQuestion in interviewLevel.Questions)
+                foreach (var interviewQuestion in interviewLevel.GetAllQuestions())
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Id, interviewLevel.PropagationVector,
                         interviewQuestion.Answer,

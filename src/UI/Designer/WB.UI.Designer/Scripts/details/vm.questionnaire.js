@@ -24,6 +24,8 @@
                 parent.fillChildren();
                 router.navigateTo(clonedQuestion.getHref());
                 calcStatistics();
+
+                clonedQuestion.attachValidation();
             },
             cloneGroup = function(group) {
                 if (group.isNew())
@@ -132,6 +134,8 @@
                 parent.fillChildren();
                 router.navigateTo(question.getHref());
                 calcStatistics();
+
+                question.attachValidation();
             },
             addChapter = function() {
                 var group = new model.Group();
@@ -288,14 +292,29 @@
                 }
 
                 var command = '';
-                if (question.isNew()) {
-                    if (question.isClone()) {
-                        command = config.commands.cloneQuestion;
-                    } else {
-                        command = config.commands.createQuestion;
-                    }
-                } else {
-                    command = config.commands.updateQuestion;
+                switch (question.qtype()) {
+                    case config.questionTypes.AutoPropagate:
+                    case config.questionTypes.Numeric:
+                        if (question.isNew()) {
+                            if (question.isClone()) {
+                                command = config.commands.cloneNumericQuestion;
+                            } else {
+                                command = config.commands.createNumericQuestion;
+                            }
+                        } else {
+                            command = config.commands.updateNumericQuestion;
+                        }
+                        break;
+                    default:
+                        if (question.isNew()) {
+                            if (question.isClone()) {
+                                command = config.commands.cloneQuestion;
+                            } else {
+                                command = config.commands.createQuestion;
+                            }
+                        } else {
+                            command = config.commands.updateQuestion;
+                        }
                 }
 
                 question.canUpdate(false);
@@ -521,6 +540,14 @@
                         }
                     }
                 };
+                
+                _.each(datacontext.questions.getAllLocal(), function (question) {
+                    question.attachValidation();
+                });
+
+                _.each(datacontext.groups.getAllLocal(), function (group) {
+                    group.attachValidation();
+                });
             },
             isAllChaptersExpanded = ko.computed(function() {
                 return _.some(chapters(), function(chapter) {

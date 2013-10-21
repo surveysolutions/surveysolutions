@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericQuestion(userId, validatingQuestionId, new int[] { }, DateTime.Now, 0);
+            interview.AnswerNumericRealQuestion(userId, validatingQuestionId, new int[] { }, DateTime.Now, 0);
 
         It should_not_raise_AnswerDeclaredValid_event_with_QuestionId_equal_to_validatingQuestionId = () =>
             eventContext.ShouldNotContainEvent<AnswerDeclaredValid>(@event
