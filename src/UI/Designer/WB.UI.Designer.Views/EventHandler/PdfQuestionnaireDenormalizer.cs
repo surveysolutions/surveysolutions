@@ -6,9 +6,11 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.View;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.View;
 using WB.UI.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Shared.Web.Membership;
@@ -28,19 +30,22 @@ namespace WB.UI.Designer.Views.EventHandler
         IEventHandler<QuestionnaireItemMoved>,
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<TemplateImported>,
-        IEventHandler<QuestionnaireCloned>
+        IEventHandler<QuestionnaireCloned>,
+        IEventHandler<NumericQuestionAdded>,
+        IEventHandler<NumericQuestionCloned>,
+        IEventHandler<NumericQuestionChanged>, IEventHandler
     {
         private readonly IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter;
+        private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
         private readonly ILogger logger;
-        private readonly IViewFactory<AccountViewInputModel, AccountView> userViewFactory;
 
         public PdfQuestionnaireDenormalizer(IReadSideRepositoryWriter<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
-            IViewFactory<AccountViewInputModel, AccountView> userViewFactory)
+            IReadSideRepositoryWriter<AccountDocument> accounts)
         {
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
-            this.userViewFactory = userViewFactory;
+            this.accounts = accounts;
         }
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
@@ -49,7 +54,8 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 Guid questionnaireId = evnt.EventSourceId;
                 PdfQuestionnaireView initialQuestionnaire = this.repositoryWriter.GetById(questionnaireId);
-
+                if(initialQuestionnaire!=null)
+                    initialQuestionnaire.ReconnectWithParent();
                 PdfQuestionnaireView updatedQuestionnaire = handle(evnt.Payload, initialQuestionnaire);
                 if (updatedQuestionnaire != null)
                 {
@@ -70,7 +76,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 var newGroup = new PdfGroupView
                 {
                     Title = @event.GroupText,
-                    Id = @event.PublicKey,
+                    PublicId = @event.PublicKey,
                     Depth = questionnaire.GetEntityDepth(@event.ParentGroupPublicKey) + 1
                 };
 
@@ -112,7 +118,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 var newGroup = new PdfGroupView
                     {
                         Title = @event.GroupText,
-                        Id = @event.PublicKey,
+                        PublicId = @event.PublicKey,
                         Depth = questionnaire.GetEntityDepth(@event.ParentGroupPublicKey) + 1
                     };
 
@@ -128,7 +134,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var newQuestion = new PdfQuestionView
                     {
-                        Id = @event.PublicKey,
+                        PublicId = @event.PublicKey,
                         Title = @event.QuestionText,
                         QuestionType = @event.QuestionType,
                         Answers = (@event.Answers ?? Enumerable.Empty<Answer>())
@@ -138,11 +144,11 @@ namespace WB.UI.Designer.Views.EventHandler
                                             AnswerType = x.AnswerType,
                                             AnswerValue = x.AnswerValue
                                         }).ToList(),
-                        Condition = @event.ConditionExpression,
-                        Variable = @event.StataExportCaption,
-                        ValidationExpression = @event.ValidationExpression
+                        Variable = @event.StataExportCaption
                     };
 
+                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
             });
@@ -153,7 +159,7 @@ namespace WB.UI.Designer.Views.EventHandler
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
-                existingQuestion.Condition = @event.ConditionExpression;
+                existingQuestion.ConditionExpression = @event.ConditionExpression;
                 existingQuestion.ValidationExpression = @event.ValidationExpression;
 
                 existingQuestion.Title = @event.QuestionText;
@@ -175,7 +181,7 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 var newQuestion = new PdfQuestionView
                 {
-                    Id = @event.PublicKey,
+                    PublicId = @event.PublicKey,
                     Title = @event.QuestionText,
                     QuestionType = @event.QuestionType,
                     Answers = (@event.Answers ?? Enumerable.Empty<Answer>()).Select(x => new PdfAnswerView
@@ -184,11 +190,68 @@ namespace WB.UI.Designer.Views.EventHandler
                         AnswerType = x.AnswerType,
                         AnswerValue = x.AnswerValue
                     }).ToList(),
-                    Condition= @event.ConditionExpression,
                     Variable = @event.StataExportCaption
                 };
 
+                newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
+        }
+
+
+
+        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.PublicKey,
+                    Title = @event.QuestionText,
+                    QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating),
+                    Answers = new List<PdfAnswerView>(),
+                    Variable = @event.StataExportCaption
+                };
+
+                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ConditionExpression = @event.ConditionExpression;
+                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var newQuestion = new PdfQuestionView
+                {
+                    PublicId = @event.PublicKey,
+                    Title = @event.QuestionText,
+                    QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating),
+                    Answers = new List<PdfAnswerView>(0),
+                    Variable = @event.StataExportCaption
+                };
+
+                newQuestion.ConditionExpression = @event.ConditionExpression;
+                questionnaire.AddQuestion(newQuestion, @event.GroupPublicKey);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var existingQuestion = questionnaire.GetQuestion(@event.PublicKey);
+                existingQuestion.ConditionExpression = @event.ConditionExpression;
+                existingQuestion.ValidationExpression = @event.ValidationExpression;
+
+                existingQuestion.Title = @event.QuestionText;
+                existingQuestion.QuestionType = NumericQuestionUtils.GetQuestionTypeFromIsAutopropagatingParameter(@event.IsAutopropagating);
+                existingQuestion.Answers = new List<PdfAnswerView>(0);
+
                 return questionnaire;
             });
         }
@@ -215,14 +278,14 @@ namespace WB.UI.Designer.Views.EventHandler
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var accountView = userViewFactory.Load(new AccountViewInputModel(@event.CreatedBy));
+                AccountDocument accountView = @event.CreatedBy.HasValue ? accounts.GetById(@event.CreatedBy.Value) : null;
                 var createdBy = accountView != null ? accountView.UserName : "n/a";
                 var newQuestionnaire = new PdfQuestionnaireView
                 {
                     Title = @event.Title,
                     CreationDate = @event.CreationDate,
                     CreatedBy = createdBy,
-                    Id = @event.PublicKey
+                    PublicId = @event.PublicKey
                 };
 
                 return newQuestionnaire;
@@ -234,26 +297,25 @@ namespace WB.UI.Designer.Views.EventHandler
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
                 PdfEntityView itemToMove = questionnaire.Children.TreeToEnumerable()
-                                                       .FirstOrDefault(x => x.Id == @event.PublicKey);
+                                                       .FirstOrDefault(x => x.PublicId == @event.PublicKey);
                 var targetContainer = questionnaire.Children.TreeToEnumerable()
-                                                            .FirstOrDefault(x => x.Id == @event.GroupKey) ?? questionnaire;
+                                                            .FirstOrDefault(x => x.PublicId == @event.GroupKey) ?? questionnaire;
 
 
-                itemToMove.Parent.Children.Remove(itemToMove);
+                itemToMove.GetParent().Children.Remove(itemToMove);
                 itemToMove.Depth = targetContainer.Depth + 1;
-                itemToMove.Parent = targetContainer;
                 if (@event.TargetIndex < 0)
                 {
-                    targetContainer.Children.Insert(0, itemToMove);
-                    
+                    targetContainer.InsertChild(itemToMove, 0);
+
                 }
                 else if (@event.TargetIndex >= targetContainer.Children.Count)
                 {
-                    targetContainer.Children.Add(itemToMove);
+                    targetContainer.AddChild(itemToMove);
                 }
                 else
                 {
-                    targetContainer.Children.Insert(@event.TargetIndex, itemToMove);
+                    targetContainer.InsertChild(itemToMove, @event.TargetIndex);
                 }
 
                 return questionnaire;
@@ -290,7 +352,7 @@ namespace WB.UI.Designer.Views.EventHandler
 
         private PdfQuestionnaireView CreatePdfQuestionnaireViewFromQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
-            var accountView = this.userViewFactory.Load(new AccountViewInputModel(questionnaireDocument.CreatedBy));
+            AccountDocument accountView = questionnaireDocument.CreatedBy.HasValue ? accounts.GetById(questionnaireDocument.CreatedBy.Value) : null;
             var pdf = new PdfQuestionnaireView
             {
                 Title = questionnaireDocument.Title,
@@ -300,6 +362,21 @@ namespace WB.UI.Designer.Views.EventHandler
 
             pdf.FillFrom(questionnaireDocument);
             return pdf;
+        }
+
+        public string Name
+        {
+            get { return this.GetType().Name; }
+        }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[] { typeof(AccountDocument) }; }
+        }
+
+        public Type[] BuildsViews
+        {
+            get { return new Type[] { typeof(PdfQuestionnaireView) }; }
         }
     }
 }

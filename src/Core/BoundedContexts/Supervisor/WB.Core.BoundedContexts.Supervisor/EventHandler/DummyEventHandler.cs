@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -13,13 +9,21 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<AnswerCommented>,
         IEventHandler<FlagRemovedFromAnswer>,
         IEventHandler<FlagSetToAnswer>,
-        IEventHandler<AnswerDeclaredValid>, IEventHandler<GroupPropagated>, IEventHandler<QuestionEnabled>,
-        IEventHandler<AnswerDeclaredInvalid>, IEventHandler<QuestionDisabled>, IEventHandler<GroupDisabled>,
-        IEventHandler<GroupEnabled>, IEventHandler<InterviewSynchronized>,
-        IEventHandler<InterviewCompleted>, IEventHandler<InterviewDeclaredValid>, IEventHandler<SingleOptionLinkedQuestionAnswered>,IEventHandler<MultipleOptionsLinkedQuestionAnswered>, IEventHandler
+        IEventHandler<AnswerDeclaredValid>,
+        IEventHandler<GroupPropagated>,
+        IEventHandler<QuestionEnabled>,
+        IEventHandler<AnswerDeclaredInvalid>,
+        IEventHandler<QuestionDisabled>,
+        IEventHandler<GroupDisabled>,
+        IEventHandler<GroupEnabled>,
+        IEventHandler<InterviewSynchronized>,
+        IEventHandler<InterviewCompleted>,
+        IEventHandler<InterviewDeclaredValid>,
+        IEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IEventHandler<SynchronizationMetadataApplied>,
+        IEventHandler
     {
-
-
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
 
         public void Handle(IPublishedEvent<GroupPropagated> evnt) {}
@@ -46,15 +50,20 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt) {}
 
-        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) { }
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) {}
 
-        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) { }
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) {}
 
-        public string Name {
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt) {}
+
+        public string Name
+        {
             get { return "Dummy event handler"; }
         }
-        public Type[] UsesViews {
-            get { return  new Type[0]; }
+
+        public Type[] UsesViews
+        {
+            get { return new Type[0]; }
         }
 
         public Type[] BuildsViews

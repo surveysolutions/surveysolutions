@@ -41,14 +41,14 @@ namespace WB.UI.Designer.Providers.CQRS
         public void AddUserToRole(string applicationName, string roleName, string username)
         {
             var user = GetUser(username);
-            this.commandService.Execute(new AddRoleToAccountCommnad(accountPublicKey: user.PublicKey,
+            this.commandService.Execute(new AddRoleToAccountCommnad(accountPublicKey: user.GetPublicKey(),
                                                                 role: GetRoleByRoleName(roleName)));
         }
 
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
             var user = GetUser(username);
-            this.commandService.Execute(new RemoveRoleFromAccountCommnad(accountPublicKey: user.PublicKey,
+            this.commandService.Execute(new RemoveRoleFromAccountCommnad(accountPublicKey: user.GetPublicKey(),
                                                                      role: GetRoleByRoleName(roleName)));
         }
 
