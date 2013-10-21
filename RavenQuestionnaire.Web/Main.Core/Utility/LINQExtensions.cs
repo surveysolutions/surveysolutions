@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Utility
+﻿using System.ComponentModel;
+
+namespace Main.Core.Utility
 {
     using System;
     using System.Collections.Generic;
@@ -55,46 +57,59 @@
             return source.Provider.CreateQuery<TEntity>(resultExp) as IOrderedQueryable<TEntity>;
         }
 
-        /// <summary>
-        /// The order using sort expression.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <param name="sortExpression">
-        /// The sort expression.
-        /// </param>
-        /// <typeparam name="TEntity">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Linq.IOrderedQueryable`1[T -&gt; TEntity].
-        /// </returns>
-        public static IEnumerable<TEntity> OrderUsingSortExpression<TEntity>(
+        public static IQueryable<TEntity> OrderUsingSortExpression<TEntity>(
             this IQueryable<TEntity> source, string sortExpression) where TEntity : class
         {
-            string[] orderFields = sortExpression.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            IEnumerable<SortOrder> orderFields = ParseSortExpression(sortExpression);
+
+            if (orderFields == null)
+                return source;
+
             IOrderedQueryable<TEntity> result = null;
-            var delimiters = new[] { " " };
+
+            bool isFirstOrderField = true;
+            foreach (var orderField in orderFields)
+            {
+                var sortField = orderField.SortingField;
+
+                if (orderField.SortDirection == ListSortDirection.Ascending)
+                {
+                    result = isFirstOrderField ? source.OrderBy(sortField) : result.ThenBy(sortField);
+                }
+                else
+                {
+                    result = isFirstOrderField
+                        ? source.OrderByDescending(sortField)
+                        : result.ThenByDescending(sortField);
+                }
+                isFirstOrderField = false;
+            }
+            return result ?? source;
+        }
+
+
+        private static IEnumerable<SortOrder> ParseSortExpression(string sortExpression)
+        {
+            string[] orderFields = sortExpression.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            if (!orderFields.Any())
+                return null;
+
+            var orders = new List<SortOrder>();
+
+            var delimiters = new[] {" "};
+
             for (int currentFieldIndex = 0; currentFieldIndex < orderFields.Count(); currentFieldIndex++)
             {
                 string[] expressionPart =
                     orderFields[currentFieldIndex].Trim().Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
                 string sortField = expressionPart[0];
                 bool sortDescending = (expressionPart.Length == 2)
-                                      && expressionPart[1].Equals("DESC", StringComparison.OrdinalIgnoreCase);
-                if (sortDescending)
-                {
-                    result = currentFieldIndex == 0
-                                 ? source.OrderByDescending(sortField)
-                                 : result.ThenByDescending(sortField);
-                }
-                else
-                {
-                    result = currentFieldIndex == 0 ? source.OrderBy(sortField) : result.ThenBy(sortField);
-                }
+                    && expressionPart[1].Equals("DESC", StringComparison.OrdinalIgnoreCase);
+
+                orders.Add(new SortOrder(sortField, sortDescending ? ListSortDirection.Descending : ListSortDirection.Ascending));
             }
 
-            return result ?? source;
+            return orders;
         }
 
         /// <summary>
@@ -309,5 +324,17 @@
         }
 
         #endregion
+    }
+
+    internal class SortOrder
+    {
+        public SortOrder(string sortingField, ListSortDirection sortDirection)
+        {
+            this.SortingField = sortingField;
+            this.SortDirection = sortDirection;
+        }
+
+        public string SortingField { get; private set; }
+        public ListSortDirection SortDirection { get; private set; }
     }
 }

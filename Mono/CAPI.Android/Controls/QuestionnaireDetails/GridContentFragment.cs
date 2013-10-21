@@ -128,8 +128,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             const int columnCount = 2;
             this.LlTablesContainer.Adapter = new GridContentAdapter(Model, columnCount, this.Activity, OnScreenChanged);
             this.LlTablesContainer.ScrollingCacheEnabled = false;
-
+            this.LlTablesContainer.ChildViewRemoved += LlTablesContainer_ChildViewRemoved;
             this.Top.AddView(this.LlTablesContainer);
+        }
+
+        void LlTablesContainer_ChildViewRemoved(object sender, ViewGroup.ChildViewRemovedEventArgs e)
+        {
+            e.Child.Dispose();
         }
 
         private bool IsRostersAreVisible()
@@ -168,24 +173,24 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
+                Console.WriteLine("disposing roster");
                 UnSubscribeModelOnRowDisable();
 
                 if (this.LlTablesContainer != null)
                 {
+                    LlTablesContainer.TryClearBindingsIfPossibleForChildren();
+
                     if (this.LlTablesContainer.Adapter != null)
                     {
                         this.LlTablesContainer.Adapter.Dispose();
                         this.LlTablesContainer.Adapter = null;
                     }
-
-                    this.LlTablesContainer.Dispose();
-                    this.LlTablesContainer = null;
                 }
             }
+
+            base.Dispose(disposing);
         }
     }
 }

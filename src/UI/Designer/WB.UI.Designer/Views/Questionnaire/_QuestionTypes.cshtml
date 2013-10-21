@@ -1,5 +1,5 @@
 ﻿<script type="text/html" id="Categorical">
-      <div class="btn-group">
+    <div class="btn-group">
         <button type="button" class="btn btn-small" data-value="0" data-bind="checkedButtons: isLinked">manual</button>
         <button type="button" class="btn btn-small" data-value="1" data-bind="checkedButtons: isLinked">linked</button>
     </div>
@@ -48,7 +48,23 @@
 </script>
 
 <script type="text/html" id="Numeric">
-    <div></div>
+    <div class="row-fluid">
+        <div class="span5">
+            <label class="control-label">Numeric type</label>
+            <div class="btn-group">
+                <button type="button" class="btn btn-small" data-value="1" data-bind="checkedButtons: isInteger">Integer</button>
+                <button type="button" class="btn btn-small" data-value="0" data-bind="checkedButtons: isInteger">Real</button>
+            </div>
+        </div>
+        <div class="span7">
+            <div class="control-group" data-bind="validationElement: countOfDecimalPlaces, visible: $data.isInteger() == 0 ">
+                <label class="control-label">Count Of Decimal Places</label>
+                <div class="controls">
+                    <input id="countOfDecimalPlaces" placeholder="" type="text" data-bind="value: countOfDecimalPlaces, valueUpdate: 'afterkeydown'" class="input-block-level" maxlength="32" />
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 <script type="text/html" id="DateTime">
     <div></div>

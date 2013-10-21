@@ -75,8 +75,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             questionView = questionViewFactory.CreateQuestionView(context, Model, questionnaireId);
             questionView.AnswerSet += questionView_AnswerSet;
             setAnswerPopup.SetView(questionView);
-
+            
             dialog = setAnswerPopup.Create();
+            
         }
 
         private void questionView_AnswerSet(object sender, AnswerSetEventArgs e)
@@ -89,20 +90,25 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
                 Console.WriteLine(string.Format("disposing roster question '{0}'", Model.Text));
 
                 this.ClearAllBindings();
 
-                if (Content != null)
+                if (dialog != null)
                 {
-                    Content.Dispose();
-                    Content = null;
+                    dialog.Dispose();
+                    dialog = null;
+                }
+                if (questionView != null)
+                {
+                    questionView.Dispose();
+                    questionView = null;
                 }
             }
+            base.Dispose(disposing);
+            
         }
     }
 }

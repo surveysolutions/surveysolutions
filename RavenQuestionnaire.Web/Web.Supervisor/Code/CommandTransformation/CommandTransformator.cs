@@ -2,39 +2,47 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Newtonsoft.Json.Linq;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace Web.Supervisor.Code.CommandTransformation
 {
     public class CommandTransformator
     {
-        public ICommand TransformCommnadIfNeeded(string type, ICommand command, IGlobalInfoProvider globalInfo)
+        private static IGlobalInfoProvider globalInfo
+        {
+            get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
+        }
+
+        public ICommand TransformCommnadIfNeeded(string type, ICommand command)
         {
             switch (type)
             {
                 case "CreateInterviewCommand":
-                    return GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
+                    command = GetCreateInterviewCommand((CreateInterviewControllerCommand)command);
                     break;
                 case "AnswerDateTimeQuestionCommand":
-                    break;
                 case "AnswerMultipleOptionsQuestionCommand":
+                case "AnswerNumericRealQuestionCommand":
                     break;
-                case "AnswerNumericQuestionCommand":
-                    break;
+                case "AnswerNumericIntegerQuestionCommand":
                 case "AnswerSingleOptionQuestionCommand":
-                    break;
                 case "AnswerTextQuestionCommand":
-                    break;
                 case "AnswerGeoLocationQuestionCommand":
-                    break;
                 case "AssignInterviewerCommand":
-                    var assignCommand = (AssignInterviewerCommand) command;
-                    return new AssignInterviewerCommand(assignCommand.InterviewId, globalInfo.GetCurrentUser().Id, assignCommand.InterviewerId);
+                case "DeleteInterviewCommand":
+                    break;
+            }
+            var interviewCommand = command as InterviewCommand;
+            if (interviewCommand != null)
+            {
+                interviewCommand.UserId = globalInfo.GetCurrentUser().Id;
             }
 
             return command;
@@ -47,7 +55,7 @@ namespace Web.Supervisor.Code.CommandTransformation
                 .ToDictionary(a => a.Key, a => a.Value);
 
             var resultCommand = new CreateInterviewCommand(command.InterviewId,
-                                                           command.UserId,
+                                                           globalInfo.GetCurrentUser().Id,
                                                            command.QuestionnaireId,
                                                            answers,
                                                            DateTime.UtcNow,
@@ -63,9 +71,22 @@ namespace Web.Supervisor.Code.CommandTransformation
                     return new KeyValuePair<Guid, object>(answer.Id, answer.Answer);
 
                 case QuestionType.AutoPropagate:
+                    return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
                 case QuestionType.Numeric:
-                    return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
-
+                    try
+                    {
+                        if (answer.Settings != null)
+                        {
+                            if ((bool)answer.Settings.IsInteger)
+                                return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
+                        }
+                        return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
+                    }
+                    catch (OverflowException)
+                    {
+                        throw new OverflowException(string.Format("Values {0} is too big or too small", answer.Answer));
+                    }
+                    break;
                 case QuestionType.DateTime:
                     if (answer.Answer is DateTime)
                     {
@@ -82,7 +103,7 @@ namespace Web.Supervisor.Code.CommandTransformation
                 case QuestionType.MultyOption:
                     decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(decimal.Parse).ToArray();
                     return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
-                
+
             }
 
             throw new Exception("Unknown question type");
@@ -90,7 +111,7 @@ namespace Web.Supervisor.Code.CommandTransformation
 
         private static string[] JsonArrayToStringArray(object jsonArray)
         {
-            return ((JArray) jsonArray).ToObject<string[]>();
+            return ((JArray)jsonArray).ToObject<string[]>();
         }
     }
 }

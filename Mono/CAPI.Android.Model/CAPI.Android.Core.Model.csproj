@@ -145,7 +145,6 @@
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\TemplateCollection.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionViewModel.cs" />
     <Compile Include="ViewModel\Statistics\StatisticsInput.cs" />
     <Compile Include="ViewModel\Statistics\StatisticsQuestionViewModel.cs" />

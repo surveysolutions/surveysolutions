@@ -681,8 +681,7 @@ namespace CapiDataGenerator
 
                     case QuestionType.AutoPropagate:
                     case QuestionType.Numeric:
-                        command = new AnswerNumericQuestionCommand(interviewId, userId, questionId, emptyPropagationVector, answersTime,
-                                                                   (decimal) answer);
+                        command = this.CreateAnswerCommandForAnswerNumericQuestion(question, interviewId, userId, emptyPropagationVector, answersTime, answer);
                         break;
 
                     case QuestionType.DateTime:
@@ -703,6 +702,24 @@ namespace CapiDataGenerator
             }
 
             return command;
+        }
+
+        private ICommand CreateAnswerCommandForAnswerNumericQuestion(IQuestion question, Guid interviewId, Guid userId,
+            int[] emptyPropagationVector,
+            DateTime answersTime, object answer)
+        {
+            var isInteger = true;
+            
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+                isInteger = numericQuestion.IsInteger;
+
+            if (isInteger)
+                return new AnswerNumericIntegerQuestionCommand(interviewId, userId, question.PublicKey, emptyPropagationVector, answersTime,
+                    (int) answer);
+
+                return new AnswerNumericRealQuestionCommand(interviewId, userId, question.PublicKey, emptyPropagationVector, answersTime,
+                    (decimal) answer);
         }
 
         private QuestionnaireDocument ReadTemplate(string path)

@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
 
                                                         => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                                                         && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
+                                                        && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true
                                                         && _.GetGroupsPropagatedByQuestion(questionWhichIsForcesPropagationId) == new Guid[] { propagatedGroupId }
 
                                                         && _.HasGroup(propagatedGroupId) == true
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
+           interview.AnswerNumericIntegerQuestion(userId, questionWhichIsForcesPropagationId, new int[] { }, DateTime.Now, 1);
 
 
         private It should_not_raise_AnswerDeclaredValid_event = () =>

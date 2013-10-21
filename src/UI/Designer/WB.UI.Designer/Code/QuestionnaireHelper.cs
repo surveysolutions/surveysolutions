@@ -69,7 +69,7 @@
         {
             return new QuestionnairePublicListViewModel
                        {
-                           Id = x.Id, 
+                           Id = x.PublicId, 
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
@@ -94,7 +94,7 @@
         {
             return new QuestionnaireListViewModel
                        {
-                           Id = x.Id,
+                           Id = x.PublicId,
                            Owner = x.Owner,
                            CreationDate = x.CreationDate, 
                            LastEntryDate = x.LastEntryDate, 
@@ -126,7 +126,7 @@
                                 ViewerId = viewerId, 
                                 IsPublic = isPublic, 
                                 IsAdminMode = this.userService.WebUser.IsAdmin, 
-                                Page = pageIndex ?? 1, 
+                                Page = pageIndex ?? 1,
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
                                 Filter = filter

@@ -124,6 +124,8 @@
                     item.validationMessage(dto.ValidationMessage);
                     item.selectedLinkTo(dto.LinkedToQuestionId);
                     item.isLinked(_.isNull(dto.LinkedToQuestionId) == false ? 1 : 0);
+                    item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
+                    item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
                     item.isNew(false);
                     item.dirtyFlag().reset();
@@ -132,6 +134,7 @@
                     if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
                     //    item.isNew(true);
                     }
+                    
                     return item;
                 },
                 objectsFromDto: function (dto) {

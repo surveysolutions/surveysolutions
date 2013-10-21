@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Newtonsoft.Json.Linq;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using System.Linq;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
-
-
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
         protected QuestionViewModel(
@@ -20,19 +19,25 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool valid,
             bool mandatory,
-            bool capital,
             object answerObject,
-            string validationMessage)
+            string validationMessage,
+            string variable,
+            IEnumerable<string> substitutionReferences)
         {
             PublicKey = publicKey;
             ValidationMessage = validationMessage;
-            Text = text;
+            SubstitutionReferences = substitutionReferences;
+            referencedQuestionAnswers = SubstitutionReferences.ToDictionary(x => x, y => StringUtil.DefaultSubstitutionText);
+            SourceText = Text = text;
+
+            this.ReplaceSubstitutionVariables();
+
             QuestionType = questionType;
             AnswerObject = answerObject;
-            Capital = capital;
             Mandatory = mandatory;
             Instructions = instructions;
             Comments = comments;
+            Variable = variable;
 
             Status = Status | QuestionStatus.ParentEnabled;
             if (enabled)
@@ -46,14 +51,17 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var answered = answerObject != null;
             if (answered)
                 Status = Status | QuestionStatus.Answered;
-
         }
+
         public InterviewItemId PublicKey { get; private set; }
+        public string SourceText { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
-        public bool Capital { get; private set; }
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
+        public string Variable { get; private set; }
+        public IEnumerable<string> SubstitutionReferences { get; private set; }
+        private readonly Dictionary<string, string> referencedQuestionAnswers = new Dictionary<string, string>();
 
         public virtual string AnswerString
         {
@@ -69,13 +77,41 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public virtual void SetAnswer(object answer)
         {
+            if (answer == null)
+            {
+                return;
+            }
+
             this.AnswerObject = answer;
+            
             if (!Status.HasFlag(QuestionStatus.Answered))
             {
                 Status = Status | QuestionStatus.Answered;
                 RaisePropertyChanged("Status");
             }
+
             RaisePropertyChanged("AnswerString");
+        }
+
+        public virtual void SubstituteQuestionText(QuestionViewModel referencedQuestion)
+        {
+            this.referencedQuestionAnswers[referencedQuestion.Variable] = string.IsNullOrEmpty(referencedQuestion.AnswerString)
+                ? StringUtil.DefaultSubstitutionText
+                : referencedQuestion.AnswerString;
+
+            this.ReplaceSubstitutionVariables();
+
+            RaisePropertyChanged(() => Text);
+        }
+
+        private void ReplaceSubstitutionVariables()
+        {
+            this.Text = this.SourceText;
+            foreach (var substitutionReference in this.SubstitutionReferences)
+            {
+                this.Text = this.Text.ReplaceSubstitutionVariable(substitutionReference,
+                    this.referencedQuestionAnswers[substitutionReference]);
+            }
         }
 
         public virtual void RemoveAnswer()

@@ -70,12 +70,13 @@
                 var question = group.Children[i] as ICompleteQuestion;
                 if (question != null)
                 {
-                    ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    throw new NotImplementedException("CompleteQuestionFactory was deleted as redundant at this commit");
+                   /* ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     newQuestion.PropagationPublicKey = propogationPublicKey;
                     
                     newQuestion.SetParent(this);
                     this.Children.Add(newQuestion);
-                    continue;
+                    continue;*/
                 }
 
                 var groupChild = group.Children[i] as ICompleteGroup;
@@ -202,10 +203,11 @@
                 var question = child as IQuestion;
                 if (question != null)
                 {
-                    IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    throw new NotImplementedException("CompleteQuestionFactory was deleted as redundant at this commit");
+                   /* IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     questionItem.SetParent(result);
                     result.Children.Add(questionItem);
-                    continue;
+                    continue;*/
                 }
 
                 var group = child as IGroup;
@@ -291,12 +293,12 @@
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
-        public void ConnectChildsWithParent()
+        public void ConnectChildrenWithParent()
         {
             foreach (var item in this.Children)
             {
                 item.SetParent(this);
-                item.ConnectChildsWithParent();
+                item.ConnectChildrenWithParent();
             }
         }
 

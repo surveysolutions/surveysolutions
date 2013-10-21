@@ -877,6 +877,10 @@ hr.separator {
   line-height: 30px;
 }
 
+.menubar .search-bar {
+  margin-bottom: 0;
+}
+
 .widget-stats {
   background: #f5f5f5;
   padding: 10px 15px;

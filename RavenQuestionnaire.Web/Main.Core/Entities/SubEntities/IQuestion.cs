@@ -110,5 +110,6 @@ namespace Main.Core.Entities.SubEntities
         /// The answer key.
         /// </param>
         void RemoveAnswer(Guid answerKey);*/
+        IEnumerable<string> GetVariablesUsedInTitle();
     }
 }

@@ -13,23 +13,25 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 {
-    public class InterviewSummaryDenormalizer : IEventHandler,
-                                                IEventHandler<InterviewCreated>,
-                                                IEventHandler<InterviewStatusChanged>,
-                                                IEventHandler<SupervisorAssigned>,
-                                                IEventHandler<TextQuestionAnswered>,
-                                                IEventHandler<MultipleOptionsQuestionAnswered>,
-                                                IEventHandler<SingleOptionQuestionAnswered>,
-                                                IEventHandler<NumericQuestionAnswered>,
-                                                IEventHandler<DateTimeQuestionAnswered>,
-                                                IEventHandler<GeoLocationQuestionAnswered>,
-                                                IEventHandler<InterviewerAssigned>,
-                                                IEventHandler<InterviewDeleted>,
-                                                IEventHandler<InterviewRestored>,
+    public class InterviewSummaryDenormalizer :
+        IEventHandler,
+        IEventHandler<InterviewCreated>,
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<SupervisorAssigned>,
+        IEventHandler<TextQuestionAnswered>,
+        IEventHandler<MultipleOptionsQuestionAnswered>,
+        IEventHandler<SingleOptionQuestionAnswered>,
+                                                IEventHandler<NumericRealQuestionAnswered>,
+        IEventHandler<NumericQuestionAnswered>,
+                                                IEventHandler<NumericIntegerQuestionAnswered>,
+        IEventHandler<DateTimeQuestionAnswered>,
+        IEventHandler<GeoLocationQuestionAnswered>,
+        IEventHandler<AnswerRemoved>,
+        IEventHandler<InterviewerAssigned>,
+        IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewRestored>,
         IEventHandler<InterviewDeclaredInvalid>,
         IEventHandler<InterviewDeclaredValid>
-        
-
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviews;
         private readonly IVersionedReadSideRepositoryWriter<QuestionnaireBrowseItem> questionnaires;
@@ -59,6 +61,16 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
             get { return new[] {typeof (InterviewSummary)}; }
         }
 
+        private void UpdateInterviewSummary(Guid interviewId, DateTime updateDateTime, Action<InterviewSummary> update)
+        {
+            InterviewSummary interviewSummary = this.interviews.GetById(interviewId);
+
+            update(interviewSummary);
+            interviewSummary.UpdateDate = updateDateTime;
+
+            this.interviews.Store(interviewSummary, interviewId);
+        }
+
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
             UserDocument responsible = this.users.GetById(evnt.Payload.UserId);
@@ -82,59 +94,51 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                interview.Status = evnt.Payload.Status;
 
-            interview.Status = evnt.Payload.Status;
-            interview.UpdateDate = evnt.EventTimeStamp;
-
-            interview.CommentedStatusesHistory.Add(new InterviewCommentedStatus()
+                interview.CommentedStatusesHistory.Add(new InterviewCommentedStatus
                 {
                     Status = interview.Status,
                     Date = interview.UpdateDate,
                     Comment = evnt.Payload.Comment
                 });
-
-            this.interviews.Store(interview, interview.InterviewId);
+            });
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                var interviewerName = this.users.GetById(evnt.Payload.InterviewerId).UserName;
 
-            var interviewerName = this.users.GetById(evnt.Payload.InterviewerId).UserName;
-
-            interview.ResponsibleId = evnt.Payload.InterviewerId;
-            interview.ResponsibleName = interviewerName;
-            interview.ResponsibleRole = UserRoles.Operator;
-            interview.UpdateDate = evnt.EventTimeStamp;
-
-            this.interviews.Store(interview, interview.InterviewId);
+                interview.ResponsibleId = evnt.Payload.InterviewerId;
+                interview.ResponsibleName = interviewerName;
+                interview.ResponsibleRole = UserRoles.Operator;
+            });
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                var supervisorName = this.users.GetById(evnt.Payload.SupervisorId).UserName;
 
-            var supervisorName = this.users.GetById(evnt.Payload.SupervisorId).UserName;
-
-            interview.ResponsibleId = evnt.Payload.SupervisorId;
-            interview.ResponsibleName = supervisorName;
-            interview.ResponsibleRole = UserRoles.Supervisor;
-            interview.TeamLeadId = evnt.Payload.SupervisorId;
-            interview.TeamLeadName = supervisorName;
-            interview.UpdateDate = evnt.EventTimeStamp;
-
-            this.interviews.Store(interview, interview.InterviewId);
+                interview.ResponsibleId = evnt.Payload.SupervisorId;
+                interview.ResponsibleName = supervisorName;
+                interview.ResponsibleRole = UserRoles.Supervisor;
+                interview.TeamLeadId = evnt.Payload.SupervisorId;
+                interview.TeamLeadName = supervisorName;
+            });
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
         {
-            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
-
-            interview.IsDeleted = true;
-            interview.UpdateDate = evnt.EventTimeStamp;
-
-            this.interviews.Store(interview, interview.InterviewId);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                interview.IsDeleted = true;
+            });
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
@@ -148,7 +152,17 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
                                 string.Join(",", evnt.Payload.SelectedValues.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray()), evnt.EventTimeStamp);
         }
 
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+        }
+
         public void Handle(IPublishedEvent<NumericQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
         }
@@ -156,8 +170,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
-                                evnt.Payload.SelectedValue.ToString(CultureInfo.InvariantCulture),
-        evnt.EventTimeStamp);
+                                evnt.Payload.SelectedValue.ToString(CultureInfo.InvariantCulture), evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
@@ -174,44 +187,48 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, string answer, DateTime updateDate)
         {
-            InterviewSummary interview = this.interviews.GetById(interviewId);
-
-            if (interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
+            this.UpdateInterviewSummary(interviewId, updateDate, interview =>
             {
-                interview.AnswersToFeaturedQuestions[questionId].Answer = answer;
-            }
-
-            interview.UpdateDate = updateDate;
-            this.interviews.Store(interview, interview.InterviewId);
+                if (interview.AnswersToFeaturedQuestions.ContainsKey(questionId))
+                {
+                    interview.AnswersToFeaturedQuestions[questionId].Answer = answer;
+                }
+            });
         }
         
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                if (interview.AnswersToFeaturedQuestions.ContainsKey(evnt.Payload.QuestionId))
+                {
+                    interview.AnswersToFeaturedQuestions[evnt.Payload.QuestionId].Answer = string.Empty;
+                }
+            });
+        }
+
         public void Handle(IPublishedEvent<InterviewRestored> evnt)
         {
-            InterviewSummary interview = this.interviews.GetById(evnt.EventSourceId);
-
-            interview.IsDeleted = false;
-            interview.UpdateDate = evnt.EventTimeStamp;
-
-            this.interviews.Store(interview, interview.InterviewId);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                interview.IsDeleted = false;
+            });
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
         {
-            this.SetInterviewValidity(evnt.EventSourceId, false);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                interview.HasErrors = true;
+            });
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
         {
-            this.SetInterviewValidity(evnt.EventSourceId, true);
-        }
-
-        private void SetInterviewValidity(Guid interviewId, bool isValid)
-        {
-            InterviewSummary interview = this.interviews.GetById(interviewId);
-
-            interview.HasErrors = !isValid;
-
-            this.interviews.Store(interview, interview.InterviewId);
+            this.UpdateInterviewSummary(evnt.EventSourceId, evnt.EventTimeStamp, interview =>
+            {
+                interview.HasErrors = false;
+            });
         }
     }
 }

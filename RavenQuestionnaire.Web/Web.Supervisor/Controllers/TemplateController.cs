@@ -3,42 +3,30 @@ using System.Net;
 using System.ServiceModel.Security;
 using System.Web.Mvc;
 using Core.Supervisor.Views.Template;
-using Main.Core.Documents;
-using Main.Core.Utility;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernel.Utils.Compression;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using Web.Supervisor.Code;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
 
 namespace Web.Supervisor.Controllers
 {
-    /// <summary>
-    ///     The template controller.
-    /// </summary>
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
-        private readonly IStringCompressor zipUtils;
-
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
             : base(commandService, globalInfo, logger)
         {
-            this.zipUtils = zipUtils;
-
             this.ViewBag.ActivePage = MenuItem.Administration;
 
-            #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
-            ServicePointManager.ServerCertificateValidationCallback =
-                (self, certificate, chain, sslPolicyErrors) => true;
+            if (AppSettings.Instance.AcceptUnsignedCertificate)
+            {
+                ServicePointManager.ServerCertificateValidationCallback =
+                    (self, certificate, chain, sslPolicyErrors) => true;
+            }
         }
 
-        private IPublicService DesignerService
-        {
-            get { return this.DesignerServiceClient; }
-        }
 
         private PublicServiceClient DesignerServiceClient
         {
@@ -55,13 +43,7 @@ namespace Web.Supervisor.Controllers
             }
 
             return
-                this.View(
-                    this.DesignerService.GetQuestionnaireList(
-                        new QuestionnaireListRequest(
-                            Filter: string.Empty,
-                            PageIndex: model.Page,
-                            PageSize: model.PageSize,
-                            SortOrder: model.Order)));
+                this.View();
         }
 
         public ActionResult LoginToDesigner()
@@ -102,47 +84,6 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.View(model);
-        }
-
-
-        public ActionResult List(GridDataRequestModel data)
-        {
-            QuestionnaireListView list =
-                this.DesignerService.GetQuestionnaireList(
-                    new QuestionnaireListRequest(
-                        Filter: string.Empty,
-                        PageIndex: data.Pager.Page,
-                        PageSize: data.Pager.PageSize,
-                        SortOrder: StringUtil.GetOrderRequestString(data.SortOrder)));
-
-            return this.PartialView("_PartialGrid_Questionnaires", list);
-        }
-
-        public ActionResult Get(Guid id)
-        {
-            QuestionnaireDocument document = null;
-
-            try
-            {
-                RemoteFileInfo docSource = this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
-                document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
-            }
-            catch (Exception ex)
-            {
-                this.Error("Error when downloading questionnaire from designer. Please try again");
-                this.Logger.Error("Unexpected error occurred", ex);
-            }
-
-            if (document == null)
-            {
-                return this.RedirectToAction("Import");
-            }
-            else
-            {
-                this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
-
-                return this.RedirectToAction("Index", "HQ");
-            }
         }
     }
 }

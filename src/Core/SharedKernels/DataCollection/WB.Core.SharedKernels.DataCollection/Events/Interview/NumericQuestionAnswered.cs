@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class NumericQuestionAnswered : QuestionAnswered
+    [Obsolete]
+    public class NumericQuestionAnswered: QuestionAnswered
     {
         public decimal Answer { get; private set; }
 

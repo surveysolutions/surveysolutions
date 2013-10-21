@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using WB.Core.BoundedContexts.Supervisor.Views.Interview;
 
 namespace Core.Supervisor.Views.Interview
 {
+    [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView
     {
-        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap)
+        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
+            Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution)
         {
             this.Id = question.PublicKey;
-            this.Title = question.QuestionText;
+            this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
             this.QuestionType = question.QuestionType;
             this.IsMandatory = question.Mandatory;
             this.IsFeatured = question.Featured;
@@ -32,6 +36,16 @@ namespace Core.Supervisor.Views.Interview
                 }).ToList();
             }
 
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                this.Settings = new
+                {
+                    IsInteger = numericQuestion.IsInteger,
+                    CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;
@@ -47,6 +61,23 @@ namespace Core.Supervisor.Views.Interview
             }).ToList();
             this.IsValid = answeredQuestion.Valid;
             this.Answer = answeredQuestion.Answer;
+        }
+
+        private static string GetTitleWithSubstitutedVariables(IQuestion question, Dictionary<string, string> answersForTitleSubstitution)
+        {
+            IEnumerable<string> usedVariables = question.GetVariablesUsedInTitle();
+
+            string title = question.QuestionText;
+
+            foreach (string usedVariable in usedVariables)
+            {
+                string escapedVariable = string.Format("%{0}%", usedVariable);
+                string actualAnswerOrDots = answersForTitleSubstitution.ContainsKey(usedVariable) ? answersForTitleSubstitution[usedVariable] : "[...]";
+
+                title = title.Replace(escapedVariable, actualAnswerOrDots);
+            }
+
+            return title;
         }
 
         private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
@@ -92,6 +123,8 @@ namespace Core.Supervisor.Views.Interview
         public List<InterviewQuestionCommentView> Comments { get; set; }
 
         public object Answer { get; set; }
+
+        public dynamic Settings { get; set; }
     }
 
     public class InterviewQuestionCommentView

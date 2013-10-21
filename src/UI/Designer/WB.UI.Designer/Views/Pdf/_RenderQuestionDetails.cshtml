@@ -5,7 +5,7 @@
 <div class="question no-page-break">
     <span>
         @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.Variable</span>
-        @if (Model.HasCodition)
+        @if (Model.GetHasCondition())
         {
             <a href="#@("c" + Model.ItemNumber)" id="@("cq" + Model.ItemNumber)">[c @Model.ItemNumber]</a>
         }

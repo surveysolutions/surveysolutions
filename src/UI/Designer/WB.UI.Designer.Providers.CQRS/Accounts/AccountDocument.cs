@@ -135,12 +135,14 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         /// Gets the public key.
         /// </summary>
-        public Guid PublicKey
+        public Guid GetPublicKey()
         {
-            get
-            {
-                return (Guid)this.ProviderUserKey;
-            }
+            if (this.ProviderUserKey == null)
+                return Guid.Empty;
+            Guid result;
+            if (Guid.TryParse(this.ProviderUserKey.ToString(), out result))
+                return result;
+            return Guid.Empty;
         }
 
         /// <summary>

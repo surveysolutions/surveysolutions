@@ -18,8 +18,6 @@ namespace Core.Supervisor.Views.Interview
 
         public string Title { get; set; }
 
-        public UserLight User { get; set; }
-
         public string Description { get; set; }
 
         public List<InterviewGroupView> Groups;

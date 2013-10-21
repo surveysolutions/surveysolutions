@@ -27,11 +27,11 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireDenormalizerTests
 
         protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
             IReadSideRepositoryWriter<QuestionnaireDocument> documentStorage = null,
-            ICompleteQuestionFactory questionFactory = null, ILogger logger = null)
+            IQuestionFactory questionFactory = null, ILogger logger = null)
         {
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDocument>>(),
-                questionFactory ?? Mock.Of<ICompleteQuestionFactory>(),
+                questionFactory ?? Mock.Of<IQuestionFactory>(),
                 logger ?? Mock.Of<ILogger>());
         }
 

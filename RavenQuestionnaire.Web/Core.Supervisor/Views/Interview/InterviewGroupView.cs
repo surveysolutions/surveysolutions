@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Core.Supervisor.Views.Interview
 {
+    [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewGroupView 
     {
         public int Depth { set; get; }

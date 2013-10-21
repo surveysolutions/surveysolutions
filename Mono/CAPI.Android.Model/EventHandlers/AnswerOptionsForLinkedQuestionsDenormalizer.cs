@@ -10,6 +10,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
     public class AnswerOptionsForLinkedQuestionsDenormalizer :
         IEventHandler<AnswerRemoved>,
         IEventHandler<TextQuestionAnswered>,
+        IEventHandler<NumericIntegerQuestionAnswered>,
+        IEventHandler<NumericRealQuestionAnswered>,
         IEventHandler<NumericQuestionAnswered>,
         IEventHandler<DateTimeQuestionAnswered>
     {
@@ -28,6 +30,16 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> @event)
+        {
+            this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> @event)
+        {
+            this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
+        }
+
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
             this.AddAnswerOptionForLinkedQuestions(@event.EventSourceId, @event.Payload.QuestionId, @event.Payload.PropagationVector);
         }

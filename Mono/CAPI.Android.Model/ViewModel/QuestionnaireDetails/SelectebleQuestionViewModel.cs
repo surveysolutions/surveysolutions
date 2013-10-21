@@ -21,11 +21,12 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string comments,
             bool valid,
             bool mandatory,
-            bool capital,
             object answerObject,
-            string validationMessage)
+            string validationMessage,
+            string variable, 
+            IEnumerable<string> substitutionReferences)
             : base(
-                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerObject, validationMessage)
+                publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, answerObject, validationMessage, variable, substitutionReferences)
         {
             Answers = answers;
         }
@@ -49,10 +50,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
             }
             return new SelectebleQuestionViewModel(new InterviewItemId(this.PublicKey.Id, propagationVector),
-                this.Text, this.QuestionType, newAnswers,
+                this.SourceText, this.QuestionType, newAnswers,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                this.Mandatory, this.Capital, this.AnswerObject, this.ValidationMessage);
+                this.Mandatory,  this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences);
         }
 
         public override void SetAnswer(object answer)
@@ -102,21 +103,36 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private decimal[] CastAnswerToSingleDimensionalArray(object answer)
         {
-            var simpleCast = answer as decimal[];
-            if (simpleCast != null)
-                return simpleCast;
+            var decimalCast = answer as IEnumerable<decimal>;
+            if (decimalCast != null)
+                return decimalCast.ToArray();
+
+            var objectCast = answer as IEnumerable<object>;
+            if (objectCast != null)
+                return objectCast.Select(ConvertObjectToAnswer).Where(a => a.HasValue).Select(a => a.Value).ToArray();
+
             var jArrayCast = this.GetValueFromJArray<decimal>(answer);
             if (jArrayCast.Length > 0)
                 return jArrayCast;
             return null;
         }
 
+        private decimal? ConvertObjectToAnswer(object answer)
+        {
+            if (answer == null)
+                return null;
+            decimal value;
+            if (decimal.TryParse(answer.ToString(), out value))
+                return value;
+            return null;
+        }
+
         private decimal[] CastAnswerToDecimal(object answer)
         {
-            decimal decimalAnswer;
-            if (!decimal.TryParse(answer.ToString(), out decimalAnswer))
-                return null;
-            return new decimal[] { decimalAnswer };
+            var decimalAnswer = ConvertObjectToAnswer(answer);
+            if (decimalAnswer.HasValue)
+                return new decimal[] {decimalAnswer.Value};
+            return null;
         }
     }
 }

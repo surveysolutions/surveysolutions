@@ -25,7 +25,9 @@
             List<Guid> triggers,
             int maxValue,
             Answer[] answers,
-            Guid? linkedToQuestionId)
+            Guid? linkedToQuestionId,
+            bool? isInteger,
+            int? countOfDecimalPlaces = null)
         {
             this.publicKey = publicKey;
             this.questionType = questionType;
@@ -44,6 +46,8 @@
             this.maxValue = maxValue;
             this.answers = answers;
             this.linkedToQuestionId = linkedToQuestionId;
+            this.isInteger = isInteger;
+            this.countOfDecimalPlaces = countOfDecimalPlaces;
         }
         public Guid publicKey { get; set; }
         public QuestionType questionType { get; set; }
@@ -62,5 +66,7 @@
         public int maxValue { get; set; }
         public Answer[] answers { get; set; }
         public Guid? linkedToQuestionId { get; set; }
+        public bool? isInteger { get; set; }
+        public int? countOfDecimalPlaces { get; set; }
     }
 }
