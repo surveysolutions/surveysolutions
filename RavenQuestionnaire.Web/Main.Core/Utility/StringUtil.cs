@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Globalization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -183,6 +184,32 @@ namespace Main.Core.Utility
         public static string ReplaceSubstitutionVariable(this string text, string variable, string replaceTo)
         {
             return text.Replace(string.Format("{1}{0}{1}", variable, SubstitutionVariableDelimiter), replaceTo);
+        }
+
+        public static T Parse<T>(this string text) where T:struct
+        {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentNullException("text");
+
+            Type objectType = typeof(T);
+            object returnValue = null;
+
+            if (objectType == typeof(int))
+            {
+                returnValue = int.Parse(text, CultureInfo.InvariantCulture);
+            }
+
+            if (objectType == typeof (decimal))
+            {
+                returnValue = decimal.Parse(text, CultureInfo.InvariantCulture);
+            }
+
+            if (objectType == typeof (DateTime))
+            {
+                returnValue = DateTime.Parse(text, CultureInfo.InvariantCulture);
+            }
+
+            return (T) returnValue;
         }
 
         #endregion
