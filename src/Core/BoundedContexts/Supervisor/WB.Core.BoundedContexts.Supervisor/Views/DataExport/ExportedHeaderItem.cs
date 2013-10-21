@@ -15,10 +15,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
         public ExportedHeaderItem(IQuestion question)
         {
             PublicKey = question.PublicKey;
-            Caption = string.IsNullOrEmpty(question.StataExportCaption)
-                ? question.QuestionText
-                : question.StataExportCaption;
-            Title = question.QuestionText;
+            QuestionType = question.QuestionType;
+            Titles = new string[]{question.QuestionText};
+            ColumnNames = new string[] { question.StataExportCaption };
+
             this.Labels = new Dictionary<Guid, LabelItem>();
             foreach (IAnswer answer in question.Answers)
             {
@@ -26,17 +26,41 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             }
         }
 
-        public ExportedHeaderItem(IQuestion question, int index)
+        public ExportedHeaderItem(IQuestion question, int columnCount)
             : this(question)
         {
-            this.Caption += GetIntAsWord(index);
-            if(!question.LinkedToQuestionId.HasValue)
-                this.Title += string.Format(":{0}", question.Answers[index].AnswerText);
+            ThrowIfQuestionIsNotMultiSelect(question);
+            
+            ColumnNames = new string[columnCount];
+            Titles=new string[columnCount];
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                ColumnNames[i] = question.StataExportCaption + GetIntAsWord(i);
+
+                if (!IsQuestionLinked(question))
+                    Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
+            }
+        }
+
+        private static bool IsQuestionLinked(IQuestion question)
+        {
+            return question.LinkedToQuestionId.HasValue;
+        }
+
+        private void ThrowIfQuestionIsNotMultiSelect(IQuestion question)
+        {
+            if (question.QuestionType != QuestionType.MultyOption)
+                throw new InvalidOperationException(string.Format(
+                    "question '{1}' with type '{0}' can't be exported as more then one column",
+                    question.QuestionType, question.QuestionText));
         }
 
         public Guid PublicKey { get; private set; }
-        public string Caption { get; private set; }
-        public string Title { get; private set; }
+        public QuestionType QuestionType { get; private set; }
+        public string[] ColumnNames { get; private set; }
+        public string[] Titles { get; private set; }
+       
         public Dictionary<Guid, LabelItem> Labels { get; private set; }
 
         protected string GetIntAsWord(int num)
