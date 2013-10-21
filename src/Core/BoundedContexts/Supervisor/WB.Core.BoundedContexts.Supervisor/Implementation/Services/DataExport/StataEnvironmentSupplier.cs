@@ -57,35 +57,39 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             var createdLabels = new List<Guid>();
             foreach (ExportedHeaderItem headerItem in result.Header)
             {
-                if (headerItem.Labels.Count > 0)
+                for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                 {
-                    string labelName = this.CreateLabelName(headerItem);
-                    if (!createdLabels.Contains(headerItem.PublicKey))
+                    if (headerItem.Labels.Count > 0)
                     {
-                        doContent.AppendLine();
-                        doContent.AppendFormat(string.Format("label define {0} ", labelName));
-                        foreach (var label in headerItem.Labels)
+                        string labelName = this.CreateLabelName(headerItem.ColumnNames[i]);
+
+                        if (!createdLabels.Contains(headerItem.PublicKey))
                         {
-                            doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, RemoveNonUnicode(label.Value.Title));
+                            doContent.AppendLine();
+                            doContent.AppendFormat(string.Format("label define {0} ", labelName));
+                            foreach (var label in headerItem.Labels)
+                            {
+                                doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, RemoveNonUnicode(label.Value.Title));
+                            }
+
+                            doContent.AppendLine();
                         }
 
-                        doContent.AppendLine();
+                        doContent.AppendLine(string.Format("label values {0} {1}", headerItem.ColumnNames[i], labelName));
+
+                        createdLabels.Add(headerItem.PublicKey);
                     }
 
-                    doContent.AppendLine(string.Format("label values {0} {1}", headerItem.Caption, labelName));
-
-                    createdLabels.Add(headerItem.PublicKey);
+                    doContent.AppendLine(
+                        string.Format("label var {0} `\"{1}\"'", headerItem.ColumnNames[i], RemoveNonUnicode(headerItem.Titles[i])));
                 }
-
-                doContent.AppendLine(
-                    string.Format("label var {0} `\"{1}\"'", headerItem.Caption, RemoveNonUnicode(headerItem.Title)));
             }
         
         }
 
-        protected string CreateLabelName(ExportedHeaderItem item)
+        protected string CreateLabelName(string columnName)
         {
-            return string.Format("l{0}", item.Caption);
+            return string.Format("l{0}", columnName);
         }
 
         protected string RemoveNonUnicode(string s)

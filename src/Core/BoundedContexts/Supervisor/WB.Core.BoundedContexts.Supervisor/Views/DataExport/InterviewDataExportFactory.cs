@@ -164,63 +164,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
             foreach (var question in level.GetAllQuestions())
             {
-                var column = header.GetAvailableHeaderForQuestion(question.Id).ToArray();
-                if (!column.Any())
-                    continue;
                 if (!question.Enabled)
                     continue;
 
-                var exportedQuestion = new ExportedQuestion(question.Id, GetAnswers(question, column));
+                var headerItem = header[question.Id];
+
+                if (headerItem == null)
+                    continue;
+
+                var exportedQuestion = new ExportedQuestion(question, headerItem);
                 answeredQuestions.Add(question.Id, exportedQuestion);
             }
 
             return answeredQuestions;
-        }
-
-        private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem[] columns)
-        {
-            if (question.Answer == null)
-                return columns.Select(c => string.Empty).ToArray();
-
-            if (columns.Length == 1)
-                return new string[] {AnswerToStringValue(question.Answer)};
-
-            var listOfAnswers = question.Answer as IEnumerable<object>;
-            if (listOfAnswers != null)
-                return this.BuildAnswerListForQuestionByHeader(listOfAnswers.ToArray(), columns);
-
-            return new string[0];
-        }
-
-        private string[] BuildAnswerListForQuestionByHeader(object[] answers, ExportedHeaderItem[] columns)
-        {
-            var result = new string[columns.Length];
-
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = answers.Length > i ? AnswerToStringValue(answers[i]) : string.Empty;
-            }
-
-            return result;
-        }
-
-        private string AnswerToStringValue(object answer)
-        {
-            const string DefaultDelimiter = ",";
-
-            var arrayOfDecimal = answer as decimal[];
-            if (arrayOfDecimal != null)
-                return string.Join(DefaultDelimiter, arrayOfDecimal);
-
-            var arrayOfInteger = answer as int[];
-            if (arrayOfInteger != null)
-                return string.Join(DefaultDelimiter, arrayOfInteger);
-
-            var listOfAnswers = answer as IEnumerable<object>;
-            if (listOfAnswers != null)
-                return string.Join(DefaultDelimiter, listOfAnswers);
-
-            return answer.ToString();
         }
 
         private QuestionnaireDocumentVersioned GetQuestionnaireOrThrow(Guid questionnaireId, long version)
