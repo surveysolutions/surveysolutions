@@ -74,6 +74,15 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\ConcurrencyResolveCommandService.cs">
       <Link>Commands\ConcurrencyResolveCommandService.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\DeleteFileCommand.cs">
+      <Link>Commands\File\DeleteFileCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UpdateFileMetaCommand.cs">
+      <Link>Commands\File\UpdateFileMetaCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\File\UploadFileCommand.cs">
+      <Link>Commands\File\UploadFileCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\ChangeEventStatusCommand.cs">
       <Link>Commands\Synchronization\ChangeEventStatusCommand.cs</Link>
     </Compile>

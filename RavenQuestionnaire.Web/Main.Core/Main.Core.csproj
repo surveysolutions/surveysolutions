@@ -146,6 +146,9 @@
     <Compile Include="Backup\IBackupManager.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\ConcurrencyResolveCommandService.cs" />
+    <Compile Include="Commands\File\DeleteFileCommand.cs" />
+    <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
+    <Compile Include="Commands\File\UploadFileCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
     <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\PushStatisticsCommand.cs" />
