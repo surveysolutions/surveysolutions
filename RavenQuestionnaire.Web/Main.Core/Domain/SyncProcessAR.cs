@@ -1,16 +1,14 @@
-﻿namespace Main.Core.Domain
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Events.Synchronization;
+using Main.Core.View.SyncProcess;
+using Ncqrs.Domain;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+
+namespace Main.Core.Domain
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.Core.Events.Synchronization;
-    using Main.Core.View.SyncProcess;
-
-    using Ncqrs.Domain;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
-
     /// <summary>
     /// The sync process ar.
     /// </summary>

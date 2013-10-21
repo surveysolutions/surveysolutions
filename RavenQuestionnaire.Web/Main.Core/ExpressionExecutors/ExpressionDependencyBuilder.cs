@@ -1,15 +1,13 @@
-﻿namespace Main.Core.ExpressionExecutors
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.ExpressionExecutors.ExpressionExtentions;
+using NCalc;
+using NCalc.Domain;
+
+namespace Main.Core.ExpressionExecutors
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.ExpressionExecutors.ExpressionExtentions;
-
-    using NCalc;
-    using NCalc.Domain;
-
     /// <summary>
     /// The expression dependency builder.
     /// </summary>

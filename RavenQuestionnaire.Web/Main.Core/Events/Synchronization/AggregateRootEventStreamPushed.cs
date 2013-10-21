@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Events.Synchronization
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Documents;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Synchronization
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Documents;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The aggregate root event stream pushed.
     /// </summary>

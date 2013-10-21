@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
+using Main.Core.View.Export;
+
 namespace Main.Core.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Text.RegularExpressions;
-
-    using Main.Core.View.Export;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

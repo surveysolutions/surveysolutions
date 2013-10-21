@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Conventions;
-using Main.Core.EventHandlers;
-using Main.Core.ExpressionExecutors;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
@@ -14,16 +12,10 @@ using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
-
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core
 {
-    using Ninject.Planning.Bindings;
-
     public abstract class CoreRegistry : NinjectModule
     {
         protected virtual IEnumerable<Assembly> GetAssembliesForRegistration()

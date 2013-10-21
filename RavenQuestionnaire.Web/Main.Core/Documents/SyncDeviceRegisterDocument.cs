@@ -1,12 +1,8 @@
-﻿using WB.Core.Infrastructure;
+﻿using System;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

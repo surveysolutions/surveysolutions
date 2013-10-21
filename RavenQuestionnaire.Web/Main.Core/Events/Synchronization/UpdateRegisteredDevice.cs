@@ -1,11 +1,8 @@
-﻿namespace Main.Core.Events.Synchronization
+﻿using System;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Synchronization
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The new device registered
     /// </summary>

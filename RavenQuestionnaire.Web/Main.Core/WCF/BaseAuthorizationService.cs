@@ -1,12 +1,10 @@
-﻿namespace Main.Core.WCF
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    
-    using Main.Core.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities;
 
+namespace Main.Core.WCF
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

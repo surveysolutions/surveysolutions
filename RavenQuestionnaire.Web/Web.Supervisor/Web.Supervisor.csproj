@@ -342,10 +342,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\SupervisorCoreRegistry.cs" />
-    <Compile Include="Models\ApproveRedoModel.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\AssignSuveyData.cs" />
-    <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />

@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Events.Location
+﻿using System;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Location
 {
-    using System;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The new location created.
     /// </summary>

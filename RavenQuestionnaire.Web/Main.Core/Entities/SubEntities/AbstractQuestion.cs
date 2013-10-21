@@ -1,16 +1,12 @@
-﻿using Main.Core.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Main.Core.Entities.Composite;
+using Main.Core.Utility;
 
 namespace Main.Core.Entities.SubEntities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-
-    using Main.Core.Entities.Composite;
-
-    using Newtonsoft.Json;
-
     [DebuggerDisplay("Question {PublicKey}")]
     public abstract class AbstractQuestion : IQuestion
     {

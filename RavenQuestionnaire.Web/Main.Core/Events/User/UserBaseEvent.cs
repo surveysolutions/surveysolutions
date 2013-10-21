@@ -1,12 +1,7 @@
-﻿namespace Main.Core.Events.User
+﻿using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Events.User
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

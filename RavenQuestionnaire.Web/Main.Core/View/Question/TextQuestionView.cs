@@ -1,7 +1,5 @@
 ﻿namespace Main.Core.View.Question
 {
-    using System;
-
     /// <summary>
     /// Question view for type text
     /// </summary>

@@ -1,11 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Events;
+
 namespace Main.Core.Documents
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Events;
-
     /// <summary>
     /// The processed event chunk.
     /// </summary>

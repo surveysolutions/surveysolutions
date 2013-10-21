@@ -1,13 +1,11 @@
-﻿namespace Main.Core.Commands.User
+﻿using System;
+using Main.Core.Domain;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+namespace Main.Core.Commands.User
 {
-    using System;
-
-    using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     /// <summary>
     /// The change user command.
     /// </summary>

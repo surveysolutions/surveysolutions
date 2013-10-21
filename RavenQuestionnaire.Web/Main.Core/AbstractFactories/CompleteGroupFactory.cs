@@ -1,10 +1,9 @@
+using System;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+
 namespace Main.Core.AbstractFactories
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-
     /// <summary>
     /// Factory creates ICompleteGroup.
     /// </summary>

@@ -1,15 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Main.Core.Entities;
+using Newtonsoft.Json;
 
 namespace Main.Core.Utility
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities;
-
-    using Newtonsoft.Json;
-
     /// <summary>
     /// The string util.
     /// </summary>

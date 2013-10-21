@@ -1,10 +1,9 @@
-﻿namespace Main.Core.Entities.SubEntities.Complete
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Documents;
+
+namespace Main.Core.Entities.SubEntities.Complete
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Documents;
-
     /// <summary>
     /// The CompleteQuestion interface.
     /// </summary>

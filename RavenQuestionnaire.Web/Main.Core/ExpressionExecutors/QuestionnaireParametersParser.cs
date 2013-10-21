@@ -1,14 +1,12 @@
-﻿namespace Main.Core.ExpressionExecutors
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using NCalc;
+using NCalc.Domain;
+
+namespace Main.Core.ExpressionExecutors
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
-
-    using NCalc;
-    using NCalc.Domain;
-
     /// <summary>
     /// The questionnaire parameters parser.
     /// </summary>

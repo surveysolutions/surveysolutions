@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Utility.OrderStrategy
-{
-    using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 
+namespace Main.Core.Utility.OrderStrategy
+{
     /// <summary>
     /// The OrderStrategyFactory interface.
     /// </summary>

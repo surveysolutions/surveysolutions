@@ -1,11 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities.Complete;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    using System;
-    using System.Collections.Generic;
-    using Complete;
-
     public class GpsCoordinateQuestion : AbstractQuestion, IGpsCoordinatesQuestion
     {
         #region Constructors and Destructors

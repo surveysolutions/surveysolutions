@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Events.User
+﻿using System;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.User
 {
-    using System;
-    using System.Linq;
-
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The new user created.
     /// </summary>

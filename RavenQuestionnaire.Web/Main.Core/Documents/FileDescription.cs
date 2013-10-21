@@ -1,11 +1,8 @@
-﻿using WB.Core.Infrastructure;
+﻿using System.IO;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
-    using System;
-    using System.IO;
-
     /// <summary>
     /// The file description.
     /// </summary>

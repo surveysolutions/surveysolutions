@@ -1,10 +1,9 @@
+using System;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+
 namespace Main.Core.View.SyncProcess
 {
-    using System;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// User sync process statistics
     /// </summary>

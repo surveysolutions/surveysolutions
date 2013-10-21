@@ -1,7 +1,8 @@
-﻿namespace Main.Core.View.Question
+﻿using System;
+using System.Collections.Generic;
+
+namespace Main.Core.View.Question
 {
-    using System;
-    using System.Collections.Generic;
     /*using System.ComponentModel.DataAnnotations;*/
 
     /// <summary>

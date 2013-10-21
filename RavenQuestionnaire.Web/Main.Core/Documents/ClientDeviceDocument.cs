@@ -1,5 +1,4 @@
 ﻿using System;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents

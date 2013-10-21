@@ -1,11 +1,10 @@
-﻿namespace Main.Core.View.Device
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities;
+using Main.Core.Utility;
+
+namespace Main.Core.View.Device
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities;
-    using Main.Core.Utility;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

@@ -1,15 +1,11 @@
-﻿using System.Diagnostics;
-
-using WB.Core.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.SubEntities;
-
     [DebuggerDisplay("User {UserName}")]
     public class UserDocument : IView
     {

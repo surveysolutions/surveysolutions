@@ -3,11 +3,7 @@ using System.IO;
 using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Services;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers

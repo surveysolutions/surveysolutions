@@ -1,11 +1,10 @@
-﻿using Ncqrs.Commanding;
+﻿using System;
+using Main.Core.Domain;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
 namespace Main.Core.Commands.Sync
 {
-    using System;
-    using Domain;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-    
     [Serializable]
     [MapsToAggregateRootMethod(typeof(ClientDeviceAR), "UpdatelastSyncItemIdentifier")]
     public class UpdateClientDeviceLastSyncItemCommand : CommandBase

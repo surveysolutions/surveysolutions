@@ -1,11 +1,9 @@
-﻿namespace Main.Core.Entities.SubEntities.Question
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities.Complete;
+
+namespace Main.Core.Entities.SubEntities.Question
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities.Complete;
-
     /// <summary>
     /// The text question.
     /// </summary>

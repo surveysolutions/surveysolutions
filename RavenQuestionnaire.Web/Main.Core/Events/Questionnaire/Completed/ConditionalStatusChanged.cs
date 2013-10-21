@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Events.Questionnaire.Completed
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Main.Core.Events.Questionnaire.Completed
+{
     /// <summary>
     /// The enable status changed.
     /// </summary>

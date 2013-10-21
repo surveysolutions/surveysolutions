@@ -1,7 +1,7 @@
+using System;
+
 namespace Main.Core.Entities
 {
-    using System;
-
     /// <summary>
     /// The template light.
     /// </summary>

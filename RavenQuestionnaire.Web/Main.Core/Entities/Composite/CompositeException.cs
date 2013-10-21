@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Entities.Composite
-{
-    using System;
-    using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
+namespace Main.Core.Entities.Composite
+{
     /// <summary>
     /// The composite exception.
     /// </summary>

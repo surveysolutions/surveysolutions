@@ -1,11 +1,9 @@
-﻿namespace Main.Core.Events.Synchronization
+﻿using System;
+using Main.Core.Documents;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Synchronization
 {
-    using System;
-
-    using Main.Core.Documents;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The aggregate root status changed.
     /// </summary>

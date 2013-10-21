@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Entities.Observers
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Main.Core.Entities.Observers
+{
     /// <summary>
     /// The Triggerable interface.
     /// </summary>

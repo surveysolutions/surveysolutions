@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Entities.Composite
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Main.Core.Entities.Composite
+{
     /// <summary>
     /// The Composite interface.
     /// </summary>

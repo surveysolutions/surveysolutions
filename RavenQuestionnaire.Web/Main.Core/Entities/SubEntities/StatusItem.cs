@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Entities.SubEntities
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Main.Core.Entities.SubEntities
+{
     /// <summary>
     /// The status item.
     /// </summary>

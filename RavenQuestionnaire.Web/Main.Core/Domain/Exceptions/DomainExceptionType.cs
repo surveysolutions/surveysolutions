@@ -1,4 +1,4 @@
-﻿namespace Main.Core.Domain
+﻿namespace Main.Core.Domain.Exceptions
 {
     /// <summary>
     /// The domain exception type.

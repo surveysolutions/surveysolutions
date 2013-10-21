@@ -1,7 +1,7 @@
-﻿namespace Main.Core.WCF
-{
-    using Main.Core.Entities;
+﻿using Main.Core.Entities;
 
+namespace Main.Core.WCF
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

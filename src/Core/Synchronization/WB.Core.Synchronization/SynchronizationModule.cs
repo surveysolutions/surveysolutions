@@ -25,7 +25,7 @@ namespace WB.Core.Synchronization
         public override void Load()
         {
             this.Bind<ISyncManager>().To<SyncManager>();
-            this.Bind<ISyncProvider>().To<WB.Core.Synchronization.SyncProvider.SyncProvider>();
+            this.Bind<ISyncProvider>().To<SyncProvider.SyncProvider>();
             this.Bind<IBackupManager>().To<DefaultBackupManager>();
 
 

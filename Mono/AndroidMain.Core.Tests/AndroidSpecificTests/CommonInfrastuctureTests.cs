@@ -26,9 +26,7 @@ namespace AndroidMain.Core.Tests.CommonTests
     using AndroidNcqrs.Eventing.Storage.SQLite;
 
     using Main.Core;
-    using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Services;
 
     using Ncqrs;

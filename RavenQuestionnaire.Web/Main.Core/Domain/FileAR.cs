@@ -1,12 +1,9 @@
-﻿namespace Main.Core.Domain
+﻿using System;
+using Main.Core.Events.File;
+using Ncqrs.Domain;
+
+namespace Main.Core.Domain
 {
-    using System;
-
-    using Main.Core.Documents;
-    using Main.Core.Events.File;
-
-    using Ncqrs.Domain;
-
     /// <summary>
     /// The file ar.
     /// </summary>

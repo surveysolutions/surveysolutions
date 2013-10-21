@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Events.Synchronization
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.View.SyncProcess;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Synchronization
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.View.SyncProcess;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The process ended.
     /// </summary>

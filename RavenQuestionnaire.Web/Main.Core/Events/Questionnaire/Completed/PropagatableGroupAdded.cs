@@ -1,9 +1,7 @@
-﻿namespace Main.Core.Events.Questionnaire.Completed
+﻿using System;
+
+namespace Main.Core.Events.Questionnaire.Completed
 {
-    using System;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The propagate group added.
     /// </summary>

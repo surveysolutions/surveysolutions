@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Events.Questionnaire.Completed
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Events.Questionnaire.Completed
+{
     /// <summary>
     /// The valid status changed.
     /// </summary>
