@@ -29,8 +29,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public InterviewViewModel(Guid id, IQuestionnaireDocument questionnaire, QuestionnairePropagationStructure propagationStructure, InterviewSynchronizationDto interview)
             : this(id)
         {
-
             this.Status = interview.Status;
+
+            #region interview structure initialization
+
             this.propagationStructure = propagationStructure;
 
             this.BuildInterviewStructureFromTemplate(questionnaire);
@@ -54,6 +56,10 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             this.SubscribeToQuestionAnswersForQuestionsWithSubstitutionReferences(this.GetAllQuestionsWithSubstitution());
 
+            #endregion
+
+            #region interview data initialization
+
             this.PropagateGroups(interview);
 
             this.SetAnswers(interview);
@@ -66,7 +72,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
             this.CreateInterviewTitle(questionnaire);
 
-            
+            #endregion
         }
 
         private Dictionary<QuestionViewModel, IList<QuestionViewModel>> questionsParticipationInSubstitutionReferences =
