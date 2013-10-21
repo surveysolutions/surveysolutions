@@ -230,18 +230,16 @@
                     });
                     
                     self.isSupervisorQuestion.subscribe(function (value) {
-                        if (value && (_.isEmpty(self.condition()) == false || _.isEmpty(self.validationExpression()) == false)) {
-                            var weWillClearConditionAndValidation = config.warnings.weWillClearConditionAndValidation;
-
-                            bootbox.confirm(weWillClearConditionAndValidation.message,
-                                weWillClearConditionAndValidation.cancelBtn,
-                                weWillClearConditionAndValidation.okBtn,
+                        if (value && (_.isEmpty(self.validationExpression()) == false)) {
+                            var weWillClearValidation = config.warnings.weWillClearValidation;
+                            bootbox.confirm(weWillClearValidation.message,
+                                weWillClearValidation.cancelBtn,
+                                weWillClearValidation.okBtn,
                                 function (result) {
                                     if (result == false) {
                                         self.isSupervisorQuestion(false);
                                         return;
                                     }
-                                    self.condition('');
                                     self.validationExpression('');
                                 });
                         }
