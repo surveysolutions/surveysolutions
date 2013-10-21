@@ -81,7 +81,6 @@
     <Compile Include="CompleteQuestionnaireViewTests.cs" />
     <Compile Include="FilterableDenormalizerStorageStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InterviewPropagationScopeDescriptionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">

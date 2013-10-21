@@ -38,6 +38,7 @@ using Ninject;
 using WB.Core.GenericSubdomains.Logging.AndroidLogger;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -106,11 +107,12 @@ namespace CAPI.Android
 
         }
 
-        private void InitQuestionnariesStorage(InProcessEventBus bus)
+        private void InitInterviewStorage(InProcessEventBus bus)
         {
             var eventHandler =
                 new InterviewViewModelDenormalizer(
-                    kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+                    kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>(), kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>(),
+                    kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>>());
 
             bus.RegisterHandler(eventHandler, typeof (InterviewSynchronized));
             bus.RegisterHandler(eventHandler, typeof (MultipleOptionsQuestionAnswered));
@@ -149,8 +151,14 @@ namespace CAPI.Android
 
         private void InitTemplateStorage(InProcessEventBus bus)
         {
-            var fileSorage = new QuestionnaireDenormalizer(kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
-            bus.RegisterHandler(fileSorage, typeof(TemplateImported));
+            var templateDenoramalizer = new QuestionnaireDenormalizer(kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnaireDocumentVersioned>>());
+            bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
+            
+            var propagationStructureDenormalizer =
+                new QuestionnairePropagationStructureDenormalizer(
+                    kernel.Get<IVersionedReadSideRepositoryWriter<QuestionnairePropagationStructure>>());
+
+            bus.RegisterHandler(propagationStructureDenormalizer, typeof(TemplateImported));
         }
 
         private void InitFileStorage(InProcessEventBus bus)
@@ -223,7 +231,7 @@ namespace CAPI.Android
 
             InitTemplateStorage(bus);
 
-            InitQuestionnariesStorage(bus);
+            this.InitInterviewStorage(bus);
 
             InitUserStorage(bus);
 
