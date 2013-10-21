@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Commanding;
 using Newtonsoft.Json.Linq;
@@ -65,20 +66,23 @@ namespace Web.Supervisor.Code.CommandTransformation
 
         private static KeyValuePair<Guid, object> ParseQuestionAnswer(UntypedQuestionAnswer answer)
         {
+            string answerAsString = answer.Answer.ToString();
+            object answerValue = null;
+
             switch (answer.Type)
             {
                 case QuestionType.Text:
-                    return new KeyValuePair<Guid, object>(answer.Id, answer.Answer);
-
+                    answerValue = answer.Answer;
+                    break;
                 case QuestionType.AutoPropagate:
-                    return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
+                    answerValue = answerAsString.Parse<int>();
+                    break;
                 case QuestionType.Numeric:
                     try
                     {
-                        if (answer.Settings != null)
+                        if (answer.Settings != null && (bool) answer.Settings.IsInteger)
                         {
-                            if ((bool)answer.Settings.IsInteger)
-                                return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
+                             return new KeyValuePair<Guid, object>(answer.Id, int.Parse(answer.Answer.ToString()));
                         }
                         return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
                     }
@@ -88,25 +92,27 @@ namespace Web.Supervisor.Code.CommandTransformation
                     }
                     break;
                 case QuestionType.DateTime:
-                    if (answer.Answer is DateTime)
-                    {
-                        return new KeyValuePair<Guid, object>(answer.Id, (DateTime)answer.Answer);
-                    }
-                    DateTime resultDate;
-                    if (DateTime.TryParse(answer.Answer.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out resultDate))
-                        return new KeyValuePair<Guid, object>(answer.Id, resultDate);
+                    answerValue = answer.Answer is DateTime ? answer.Answer : answerAsString.Parse<DateTime>();
+                    break;
+                case QuestionType.DateTime:
+                    answerValue = answer.Answer is DateTime ? answer.Answer : answerAsString.Parse<DateTime>();
                     break;
 
                 case QuestionType.SingleOption:
-                    return new KeyValuePair<Guid, object>(answer.Id, decimal.Parse(answer.Answer.ToString()));
-
+                    answerValue = answerAsString.Parse<decimal>();
+                    break;
                 case QuestionType.MultyOption:
-                    decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(decimal.Parse).ToArray();
-                    return new KeyValuePair<Guid, object>(answer.Id, answerAsDecimalArray);
-
+                    decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(x=>x.Parse<decimal>()).ToArray();
+                    answerValue = answerAsDecimalArray;
+                    break;
             }
 
-            throw new Exception("Unknown question type");
+            if (answerValue == null)
+            {
+                throw new Exception("Error when parse question answer");    
+            }
+
+            return new KeyValuePair<Guid, object>(answer.Id, answerValue);
         }
 
         private static string[] JsonArrayToStringArray(object jsonArray)
