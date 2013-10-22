@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Main.Core.Export;
 using Main.Core.View.Export;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
@@ -13,6 +14,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
     internal class CSVIterviewExporter : IExportProvider<InterviewDataExportView>
     {
+        private readonly char delimeter;
+
+        public CSVIterviewExporter(FileType exportingFileType)
+        {
+            this.delimeter = exportingFileType == FileType.Csv ? ',' : '\t';
+        }
+
         public bool DoExport(InterviewDataExportView items, string fileName)
         {
             byte[] bytes = this.DoExportToStream(items);
@@ -30,7 +38,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
+                writer.Configuration.Delimiter = this.delimeter.ToString();
 
+               
                 writer.WriteField("InterviewId");
                 writer.WriteField("Id");
 
