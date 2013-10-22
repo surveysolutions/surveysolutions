@@ -23,15 +23,15 @@ android:focusableInTouchMode="true"
     <LinearLayout  android:id="@+id/llNavigationButton"
       android:orientation="vertical"
       android:layout_alignParentRight="true"
-      android:layout_width="40dp"
+      android:layout_width="30dp"
       android:layout_height="fill_parent">
-      <LinearLayout android:id="@+id/llSpaceFiller" android:layout_width="40dp" android:layout_height="fill_parent">
+      <LinearLayout android:id="@+id/llSpaceFiller" android:layout_width="30dp" android:layout_height="fill_parent">
       </LinearLayout>
       <TextView android:id="@+id/btnNavigation"
         android:clickable="true"
         android:focusable="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="80dp"
         android:background="@drawable/bookmarkStyle"
         android:text="..."  android:gravity="center"/>
     </LinearLayout >

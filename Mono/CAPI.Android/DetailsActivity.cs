@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
 using Android.Graphics;
@@ -28,11 +30,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace CAPI.Android
 {
     [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class DetailsActivity : MvxFragmentActivity
+    public class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener
     {
-        protected InterviewItemId? ScreenId;
-        protected ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-
         protected Guid QuestionnaireId
         {
             get { return Guid.Parse(Intent.GetStringExtra("publicKey")); }
@@ -69,10 +68,12 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<TextView>(Resource.Id.btnNavigation); }
         }
-        protected ContentFrameAdapter Adapter { get; set; }
-        protected QuestionnaireNavigationView NavList { get; set; }
 
-        protected CleanUpExecutor cleanUpExecutor { get; set; }
+        private ContentFrameAdapter adapter;
+        private QuestionnaireNavigationView navList;
+        private bool isChaptersVisible = false;
+        private InterviewItemId? screenId;
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -95,12 +96,12 @@ namespace CAPI.Android
                 var savedScreen = bundle.GetString("ScreenId");
                 if (!string.IsNullOrEmpty(savedScreen))
                 {
-                    ScreenId = InterviewItemId.Parse(savedScreen);
+                    this.screenId = InterviewItemId.Parse(savedScreen);
                 }
             }
             else
             {
-                ScreenId = Model.Chapters.FirstOrDefault().ScreenId;
+                this.screenId = Model.Chapters.FirstOrDefault().ScreenId;
             }
 
             this.Title = Model.Title;
@@ -108,38 +109,37 @@ namespace CAPI.Android
 
             if (bundle == null)
             {
-                NavList = new QuestionnaireNavigationView(this, Model);
-                llNavigationHolder.AddView(NavList);
-                NavList.ScreenChanged += ContentFrameAdapter_ScreenChanged;
+                this.navList = new QuestionnaireNavigationView(this, Model);
+                llNavigationHolder.AddView(this.navList);
+                this.navList.ScreenChanged += this.ContentFrameAdapterScreenChanged;
             }
             else
             {
-                NavList = llNavigationHolder.GetChildAt(0) as QuestionnaireNavigationView;
+                this.navList = llNavigationHolder.GetChildAt(0) as QuestionnaireNavigationView;
             }
 
-            btnNavigation.Click += llNavigationHolder_Click;
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, ScreenId);
-            VpContent.Adapter = Adapter;
-            VpContent.PageSelected += VpContent_PageSelected;
-
-            cleanUpExecutor = new CleanUpExecutor(CapiApplication.Kernel.Get<IChangeLogManipulator>());
+            btnNavigation.Click += this.LlNavigationHolderClick;
+            this.adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, this.screenId);
+            VpContent.Adapter = this.adapter;
+            VpContent.PageSelected += this.VpContentPageSelected;
+            llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
         }
 
-        protected override void OnResume()
+        public void OnGlobalLayout()
         {
-            base.OnResume();
-            UpdateLayout(false);
+            llContainer.ViewTreeObserver.RemoveGlobalOnLayoutListener(this);
+            UpdateLayout(isChaptersVisible);
         }
+
         public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
         {
             base.OnConfigurationChanged(newConfig);
             isChaptersVisible = false;
-            UpdateLayout(false);
+            llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
         }
 
         private void UpdateLayout(bool isNavigationVisible)
         {
-
             var point = GetScreenSizePoint();
             var vpContentParams =
                 new RelativeLayout.LayoutParams(
@@ -162,30 +162,17 @@ namespace CAPI.Android
                                                         ? 0 : btnNavigation.LayoutParameters.Width - lNavigationContainerParams.Width;
 
             lNavigationContainer.LayoutParameters = lNavigationContainerParams;
-            NavList.Visibility = isNavigationVisible ? ViewStates.Visible : ViewStates.Gone;
+            this.navList.Visibility = isNavigationVisible ? ViewStates.Visible : ViewStates.Gone;
 
-            llSpaceFiller.LayoutParameters = new LinearLayout.LayoutParams(40, point.Y - 100);
+            llSpaceFiller.LayoutParameters = new LinearLayout.LayoutParams(llSpaceFiller.LayoutParameters.Width, (point.Y - btnNavigation.LayoutParameters.Height) / 2);
         }
 
-        protected Point GetScreenSizePoint()
+        private Point GetScreenSizePoint()
         {
-            var rectSize = new Rect();
-            this.WindowManager.DefaultDisplay.GetRectSize(rectSize);
-
-            TypedValue tv = new TypedValue();
-            int actionBarHeight = 0;
-
-            if (this.Theme.ResolveAttribute(global::Android.Resource.Attribute.ActionBarSize, tv, true))
-            {
-                actionBarHeight = TypedValue.ComplexToDimensionPixelSize(tv.Data, this.Resources.DisplayMetrics);
-
-            }
-            return new Point(rectSize.Width(), rectSize.Height() - actionBarHeight);
+            return new Point(llContainer.Width,llContainer.Height);
         }
 
-        private bool isChaptersVisible = false;
-
-        private void llNavigationHolder_Click(object sender, EventArgs e)
+        private void LlNavigationHolderClick(object sender, EventArgs e)
         {
             var point = GetScreenSizePoint();
             int right, left;
@@ -217,9 +204,9 @@ namespace CAPI.Android
         {
             base.OnSaveInstanceState(outState);
 
-            if (!Adapter.ScreenId.HasValue)
+            if (!this.adapter.ScreenId.HasValue)
                 return;
-            outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
+            outState.PutString("ScreenId", this.adapter.ScreenId.Value.ToString());
         }
 
         public override void OnAttachFragment(global::Android.Support.V4.App.Fragment p0)
@@ -227,23 +214,33 @@ namespace CAPI.Android
             var screen = p0 as IScreenChanging;
             if (screen != null)
             {
-                screen.ScreenChanged += ContentFrameAdapter_ScreenChanged;
+                screen.ScreenChanged += this.ContentFrameAdapterScreenChanged;
             }
             base.OnAttachFragment(p0);
         }
-        void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
-        {
 
-            var index = Adapter.GetScreenIndex(e.ScreenId);
+        void ContentFrameAdapterScreenChanged(object sender, ScreenChangedEventArgs e)
+        {
+            var index = this.adapter.GetScreenIndex(e.ScreenId);
 
             if (index >= 0)
             {
-                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
+                if (sender == navList)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        Thread.Sleep(1000);
+                        isChaptersVisible = false;
+                        this.RunOnUiThread(() => this.UpdateLayout(false));
+                    });
+                }
+
+                VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
                 return;
             }
 
-            Adapter.UpdateScreenData(e.ScreenId);
-            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
+            this.adapter.UpdateScreenData(e.ScreenId);
+            VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
 
             if (e.ScreenId.HasValue)
             {
@@ -253,20 +250,19 @@ namespace CAPI.Android
                 {
                     if (Model.Chapters[i].ScreenId == chapterKey)
                     {
-                        NavList.SelectItem(i);
+                        this.navList.SelectItem(i);
                     }
                 }
             }
+
             GC.Collect(0);
         }
 
-
-        private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
+        private void VpContentPageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
-
-            if (Adapter.IsRoot)
-                NavList.SelectItem(e.Position);
-            var statistic = Adapter.GetItem(e.Position) as StatisticsContentFragment;
+            if (this.adapter.IsRoot)
+                this.navList.SelectItem(e.Position);
+            var statistic = this.adapter.GetItem(e.Position) as StatisticsContentFragment;
             if (statistic != null)
                 statistic.RecalculateStatistics();
         }
@@ -276,11 +272,11 @@ namespace CAPI.Android
             base.OnDestroy();
 
             if(btnNavigation!= null)
-                btnNavigation.Click -= llNavigationHolder_Click;
+                btnNavigation.Click -= this.LlNavigationHolderClick;
             if(VpContent != null)
-                VpContent.PageSelected -= VpContent_PageSelected;
-            if(NavList != null)
-                NavList.ScreenChanged -= ContentFrameAdapter_ScreenChanged;
+                VpContent.PageSelected -= this.VpContentPageSelected;
+            if(this.navList != null)
+                this.navList.ScreenChanged -= this.ContentFrameAdapterScreenChanged;
             
             GC.Collect();
         }
@@ -299,7 +295,5 @@ namespace CAPI.Android
             if (snapshotStore != null)
                 snapshotStore.PersistShapshot(QuestionnaireId);
         }
-
-        
     }
 }
