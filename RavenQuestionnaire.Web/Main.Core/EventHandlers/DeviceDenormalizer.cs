@@ -1,15 +1,10 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+﻿using Main.Core.Documents;
+using Main.Core.Events.Synchronization;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.EventHandlers
 {
-    using System;
-    using Main.Core.Documents;
-    using Main.Core.Events.Synchronization;
-    using Main.DenormalizerStorage;
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

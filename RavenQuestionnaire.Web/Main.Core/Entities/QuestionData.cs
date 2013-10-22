@@ -1,10 +1,9 @@
-﻿namespace Main.Core.Entities
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Entities
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.SubEntities;
-
     public class QuestionData
     {
         public QuestionData(){}

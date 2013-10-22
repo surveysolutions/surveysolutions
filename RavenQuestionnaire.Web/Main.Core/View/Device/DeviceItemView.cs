@@ -1,11 +1,8 @@
-﻿namespace Main.Core.View.Device
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using Main.Core.Documents;
+﻿using System;
+using Main.Core.Documents;
 
+namespace Main.Core.View.Device
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

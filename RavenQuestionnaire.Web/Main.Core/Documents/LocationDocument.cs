@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Documents
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Documents
+{
     /// <summary>
     /// The location document.
     /// </summary>

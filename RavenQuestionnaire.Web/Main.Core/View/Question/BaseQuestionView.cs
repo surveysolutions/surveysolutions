@@ -1,8 +1,8 @@
-﻿namespace Main.Core.View.Question
-{
-    using System;
-    using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 
+namespace Main.Core.View.Question
+{
     /// <summary>
     /// Class for creation base question view
     /// </summary>

@@ -1,7 +1,7 @@
+using System;
+
 namespace Main.Core.Entities.SubEntities
 {
-    using System;
-
     /// <summary>
     /// The Answer interface.
     /// </summary>

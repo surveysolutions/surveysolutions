@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Documents
+﻿using System;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Documents
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// The comment document.
     /// </summary>

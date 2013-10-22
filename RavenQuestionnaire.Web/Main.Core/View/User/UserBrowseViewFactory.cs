@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using Main.DenormalizerStorage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.User

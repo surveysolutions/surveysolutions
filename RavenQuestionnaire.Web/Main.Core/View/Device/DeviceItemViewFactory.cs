@@ -1,16 +1,8 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+﻿using Main.Core.Documents;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Device
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-using Main.DenormalizerStorage;
-using Main.Core.Documents;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

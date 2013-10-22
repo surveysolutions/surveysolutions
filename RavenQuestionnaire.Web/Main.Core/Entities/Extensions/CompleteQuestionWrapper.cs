@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Entities.Extensions
+﻿using System;
+using Main.Core.Entities.SubEntities.Complete;
+
+namespace Main.Core.Entities.Extensions
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities.Complete;
-
     /// <summary>
     /// The complete question wrapper.
     /// </summary>

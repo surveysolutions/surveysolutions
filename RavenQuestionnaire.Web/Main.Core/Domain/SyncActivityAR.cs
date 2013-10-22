@@ -1,11 +1,10 @@
 ﻿using System;
 using Main.Core.Events.Sync;
 using Ncqrs;
+using Ncqrs.Domain;
 
 namespace Main.Core.Domain
 {
-    using Ncqrs.Domain;
-
     public class SyncActivityAR : AggregateRootMappedByConvention
     {
         private Guid publicKey;

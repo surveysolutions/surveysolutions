@@ -1,14 +1,11 @@
-﻿namespace Main.Core.Entities.SubEntities.Complete
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.AbstractFactories;
+using Main.Core.Entities.Composite;
+
+namespace Main.Core.Entities.SubEntities.Complete
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.AbstractFactories;
-    using Main.Core.Entities.Composite;
-
-    using Newtonsoft.Json;
-
     /// <summary>
     /// The complete group.
     /// </summary>

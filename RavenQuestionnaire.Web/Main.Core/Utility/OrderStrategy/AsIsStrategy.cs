@@ -1,9 +1,8 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
 
 namespace Main.Core.Utility.OrderStrategy
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// The as is strategy.
     /// </summary>

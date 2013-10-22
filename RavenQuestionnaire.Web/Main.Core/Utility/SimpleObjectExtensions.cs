@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-using System.Reflection;
+﻿using System;
+using System.Linq;
 
 namespace Main.Core.Utility
 {
-    using System;
-    using System.Linq;
-
     /// <summary>
     /// The simple object extensions.
     /// </summary>

@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Domain
+﻿using System;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.User;
+using Ncqrs.Domain;
+
+namespace Main.Core.Domain
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.User;
-
-    using Ncqrs.Domain;
-
     /// <summary>
     /// Aggregate root for User.
     /// </summary>

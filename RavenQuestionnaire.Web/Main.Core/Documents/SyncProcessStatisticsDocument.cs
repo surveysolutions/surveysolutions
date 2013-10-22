@@ -1,14 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Main.Core.View.SyncProcess;
-
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
-    using System;
-    using System.Collections.Generic;
-
-
     /// <summary>
     /// Collect user statistics
     /// </summary>

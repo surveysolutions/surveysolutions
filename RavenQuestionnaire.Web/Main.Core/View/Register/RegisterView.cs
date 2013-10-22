@@ -1,7 +1,7 @@
-﻿namespace Main.Core.View.Register
-{
-    using Main.Core.Documents;
+﻿using Main.Core.Documents;
 
+namespace Main.Core.View.Register
+{
     /// <summary>
     /// view register
     /// </summary>

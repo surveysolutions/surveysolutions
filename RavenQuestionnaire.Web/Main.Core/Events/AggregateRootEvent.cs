@@ -1,9 +1,8 @@
+using System;
+using Ncqrs.Eventing;
+
 namespace Main.Core.Events
 {
-    using System;
-
-    using Ncqrs.Eventing;
-
     /// <summary>
     /// The aggregate root event.
     /// </summary>

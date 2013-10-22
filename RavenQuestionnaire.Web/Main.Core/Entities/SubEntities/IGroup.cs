@@ -1,8 +1,8 @@
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.Observers;
+
 namespace Main.Core.Entities.SubEntities
 {
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.Observers;
-
     /// <summary>
     /// The Group interface.
     /// </summary>

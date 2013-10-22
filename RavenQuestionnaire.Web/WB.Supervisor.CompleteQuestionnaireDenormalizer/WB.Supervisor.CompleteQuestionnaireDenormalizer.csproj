@@ -43,11 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompleteQuestionnaireDenormalizer.cs" />
-    <Compile Include="CompleteQuestionnarieDenormalizerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RavenReadSideRepositoryWriterWithCacheAndZip.cs" />
-    <Compile Include="TemporaryViewWriter.cs" />
     <Compile Include="ZipView.cs" />
   </ItemGroup>
   <ItemGroup>

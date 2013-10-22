@@ -1,13 +1,11 @@
-﻿namespace Main.Core.Utility
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Events;
+using Ncqrs.Eventing;
+
+namespace Main.Core.Utility
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Events;
-
-    using Ncqrs.Eventing;
-
     /// <summary>
     /// The event merge utils.
     /// </summary>

@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Commands.User
+﻿using System;
+using Main.Core.Domain;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+namespace Main.Core.Commands.User
 {
-    using System;
-
-    using Main.Core.Domain;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     [Serializable]
     [MapsToAggregateRootMethod(typeof(UserAR), "Lock")]
     public class LockUserCommand : CommandBase

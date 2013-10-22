@@ -1,10 +1,9 @@
-﻿namespace Main.Core.Domain
+﻿using System;
+using Main.Core.Events.Synchronization;
+using Ncqrs.Domain;
+
+namespace Main.Core.Domain
 {
-    using System;
-
-    using Main.Core.Events.Synchronization;
-    using Ncqrs.Domain;
-
     /// <summary>
     /// Class for registered device information
     /// </summary>

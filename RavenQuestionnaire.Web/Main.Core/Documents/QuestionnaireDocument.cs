@@ -1,17 +1,15 @@
-﻿using Main.Core.Entities.SubEntities.Complete;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities;
-
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
 
@@ -30,8 +28,6 @@ namespace Main.Core.Documents
             this.SharedPersons = new List<Guid>();
         }
 
-
-        #region Public Properties
 
         public List<IComposite> Children { get; set; }
 
@@ -98,8 +94,6 @@ namespace Main.Core.Documents
         public List<Guid> SharedPersons { get; set; }
 
         public long LastEventSequence { get; set; }
-
-        #endregion
 
         public void Insert(int index, IComposite c, Guid? parent)
         {
@@ -308,7 +302,7 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        private IEnumerable<IQuestion> GetAllQuestions()
+        internal IEnumerable<IQuestion> GetAllQuestions()
         {
             var treeStack = new Stack<IComposite>();
             treeStack.Push(this);

@@ -1,9 +1,9 @@
+using System;
+using System.Security.Cryptography;
+using System.Text;
+
 namespace Main.Core.Utility
 {
-    using System;
-    using System.Security.Cryptography;
-    using System.Text;
-
     /// <summary>
     /// The simple hash.
     /// </summary>

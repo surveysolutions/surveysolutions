@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Entities.SubEntities
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Entities.SubEntities
+{
     public class GeoPosition
     {
         public DateTimeOffset Timestamp { get; set; }

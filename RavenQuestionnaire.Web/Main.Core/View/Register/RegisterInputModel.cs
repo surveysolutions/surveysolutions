@@ -1,7 +1,7 @@
-﻿namespace Main.Core.View.Register
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.View.Register
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

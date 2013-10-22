@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities.Question;
+﻿using Main.Core.Domain.Exceptions;
+using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -1557,13 +1558,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionTitleContainsSubstitutionReferenceToSelf,
                     "Question title contains illegal substitution references to self");
 
-            List<string> unknownReferences = new List<string>();
-            List<string> questionsIncorrectTypeOfReferenced = new List<string>();
-            List<string> questionsIllegalPropagationScope = new List<string>();
+            List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope;
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
-            ValidateSubstitutionReferences(questionPublicKey, @group, substitutionReferences, unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope);
+            ValidateSubstitutionReferences(questionPublicKey, @group, substitutionReferences,
+                out unknownReferences, out questionsIncorrectTypeOfReferenced, out questionsIllegalPropagationScope);
 
             if(unknownReferences.Count > 0)
                 throw new DomainException(
@@ -1582,9 +1582,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private void ValidateSubstitutionReferences(Guid questionPublicKey, IGroup @group, string[] substitutionReferences,
-                                                    List<string> unknownReferences, List<string> questionsIncorrectTypeOfReferenced,
-                                                    List<string> questionsIllegalPropagationScope)
+            out List<string> unknownReferences, out List<string> questionsIncorrectTypeOfReferenced, out List<string> questionsIllegalPropagationScope)
         {
+            unknownReferences = new List<string>();
+            questionsIncorrectTypeOfReferenced = new List<string>();
+            questionsIllegalPropagationScope = new List<string>();
+
             var questions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
                                 .Where(q => q.PublicKey != questionPublicKey)
                                 .ToDictionary(q => q.StataExportCaption, q => q);
@@ -1627,12 +1630,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (referencedPropagationQuestionsVector.Count == 0) //referenced Question not in propagation - OK
                 return true;
 
-            var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
-
-            if(lengthDiff < 0)
+            if (propagationQuestionsVector.Count() < referencedPropagationQuestionsVector.Count())
                 return false;
 
-            return propagationQuestionsVector.Except(propagationQuestionsVector).Count() <= lengthDiff;
+            return propagationQuestionsVector.Except(propagationQuestionsVector).Count() <= propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
         }
     }
 }

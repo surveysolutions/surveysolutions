@@ -1,9 +1,8 @@
-﻿namespace Main.Core.View.Device
+﻿using System.Collections.Generic;
+using Main.Core.Entities;
+
+namespace Main.Core.View.Device
 {
-    using System.Collections.Generic;
-
-    using Main.Core.Entities;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

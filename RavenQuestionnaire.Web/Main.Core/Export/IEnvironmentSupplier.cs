@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace Main.Core.Export
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// The EnvironmentSupplier interface.
     /// </summary>

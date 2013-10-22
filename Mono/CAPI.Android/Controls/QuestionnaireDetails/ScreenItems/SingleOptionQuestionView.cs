@@ -6,7 +6,6 @@ using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 

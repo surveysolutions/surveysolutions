@@ -1,12 +1,9 @@
-﻿using WB.Core.Infrastructure;
+﻿using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.ReadSide;
 
 namespace Main.Core.Documents
 {
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// The collection document.
     /// </summary>

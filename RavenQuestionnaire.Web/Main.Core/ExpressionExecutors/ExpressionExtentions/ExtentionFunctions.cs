@@ -1,11 +1,9 @@
-﻿namespace Main.Core.ExpressionExecutors.ExpressionExtentions
+﻿using System;
+using System.Collections;
+using NCalc;
+
+namespace Main.Core.ExpressionExecutors.ExpressionExtentions
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-
-    using NCalc;
-
     /// <summary>
     /// The extension functions.
     /// </summary>

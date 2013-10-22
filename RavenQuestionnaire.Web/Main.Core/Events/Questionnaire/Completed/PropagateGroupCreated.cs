@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Events.Questionnaire.Completed
+﻿using System;
+using Main.Core.Entities.SubEntities.Complete;
+
+namespace Main.Core.Events.Questionnaire.Completed
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities.Complete;
-
     /// <summary>
     /// The propagate group created.
     /// </summary>

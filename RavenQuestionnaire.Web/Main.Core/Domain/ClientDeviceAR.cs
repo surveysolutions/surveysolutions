@@ -1,11 +1,10 @@
-﻿using Main.Core.Events.Sync;
+﻿using System;
+using Main.Core.Events.Sync;
 using Ncqrs;
+using Ncqrs.Domain;
 
 namespace Main.Core.Domain
 {
-    using System;
-    using Ncqrs.Domain;
-
     public class ClientDeviceAR : AggregateRootMappedByConvention
     {
         private IClock clock = NcqrsEnvironment.Get<IClock>();

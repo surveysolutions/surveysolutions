@@ -1,11 +1,9 @@
+using System;
+using System.Collections.Generic;
+using Main.Core.Entities.Composite;
+
 namespace Main.Core.Entities.SubEntities
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.Composite;
-    
-
     /// <summary>
     /// The Question interface.
     /// </summary>

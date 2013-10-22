@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Domain
+﻿using System;
+using Main.Core.Events.Location;
+using Ncqrs;
+using Ncqrs.Domain;
+
+namespace Main.Core.Domain
 {
-    using System;
-
-    using Main.Core.Events.Location;
-
-    using Ncqrs;
-    using Ncqrs.Domain;
-
     /// <summary>
     /// The location AR.
     /// </summary>

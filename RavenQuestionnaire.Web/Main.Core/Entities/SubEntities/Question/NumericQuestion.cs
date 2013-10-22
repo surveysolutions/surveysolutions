@@ -1,11 +1,9 @@
-﻿namespace Main.Core.Entities.SubEntities.Question
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities.Complete;
+
+namespace Main.Core.Entities.SubEntities.Question
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities.Complete;
-
     public class NumericQuestion : AbstractQuestion, INumericQuestion
     {
         public NumericQuestion()

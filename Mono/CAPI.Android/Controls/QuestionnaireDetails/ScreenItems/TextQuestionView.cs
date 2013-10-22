@@ -5,9 +5,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Main.Core.Commands.Questionnaire.Completed;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {

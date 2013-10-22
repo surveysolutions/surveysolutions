@@ -1,12 +1,11 @@
-﻿namespace Main.Core.WCF
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using Main.Core.Entities;
+
+namespace Main.Core.WCF
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using System.ServiceModel;
-
-    using Main.Core.Entities;
-
     /// <summary>
     /// The auth packets.
     /// </summary>

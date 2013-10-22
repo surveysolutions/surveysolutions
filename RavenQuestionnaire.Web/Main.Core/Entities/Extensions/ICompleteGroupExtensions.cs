@@ -1,13 +1,12 @@
-﻿namespace Main.Core.Entities.Extensions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+
+namespace Main.Core.Entities.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-
     /// <summary>
     /// The i complete group extensions.
     /// </summary>

@@ -1,13 +1,12 @@
-﻿namespace Main.Core.Utility
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.View.Group;
+
+namespace Main.Core.Utility
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.View.Group;
-
     /// <summary>
     /// The group with rout.
     /// </summary>

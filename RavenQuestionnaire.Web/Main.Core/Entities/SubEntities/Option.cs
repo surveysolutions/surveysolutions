@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Entities.SubEntities
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Entities.SubEntities
+{
     public class Option
     {
         public Option(Guid id, string value, string title)

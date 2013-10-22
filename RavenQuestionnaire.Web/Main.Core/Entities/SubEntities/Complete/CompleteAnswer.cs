@@ -1,11 +1,7 @@
+using System;
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
-    using System;
-
-    using Main.Core.Entities.Composite;
-
-    using Newtonsoft.Json;
-
     /// <summary>
     /// The complete answer.
     /// </summary>

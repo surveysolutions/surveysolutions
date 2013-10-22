@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Events.File
+﻿using System;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.File
 {
-    using System;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The file uploaded.
     /// </summary>

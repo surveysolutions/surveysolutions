@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Events.Sync
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Events.Sync
+{
     [Serializable]
     public class NewClientDeviceCreated
     {

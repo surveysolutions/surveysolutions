@@ -1,9 +1,9 @@
-﻿namespace Main.Core.View.Question
-{
-    using System.Collections.Generic;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.View.Answer;
+﻿using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using Main.Core.View.Answer;
 
+namespace Main.Core.View.Question
+{
     /// <summary>
     /// MultyOptions view
     /// </summary>
