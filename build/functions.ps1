@@ -57,10 +57,12 @@ function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
     Write-Host "##teamcity[progressStart 'Checking prerequisities']"
 
-    return CheckCompilationDebugFlagInWebConfigs
+    $havePrerequisitesSucceeded = CheckCompilationDebugFlagInWebConfigs
 
     Write-Host "##teamcity[progressFinish 'Checking prerequisities']"
     Write-Host "##teamcity[blockClosed name='Checking prerequisities']"
+
+    return $havePrerequisitesSucceeded
 }
 
 
