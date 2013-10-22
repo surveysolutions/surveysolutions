@@ -9,6 +9,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 try {
 
+    CheckPrerequisites | %{ if (-not $_) { Exit } }
     CleanBinAndObjFolders
 
 if ($Deep) {

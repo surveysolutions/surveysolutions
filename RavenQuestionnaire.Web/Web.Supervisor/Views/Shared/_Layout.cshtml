@@ -125,11 +125,11 @@
                 @ViewContext.Controller.GetType().Assembly.GetName().Version (@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) 
                     @if (AppSettings.IsDebugBuilded)
                     {
-                        <span id="build-config">[D]</span>
+                        <span id="build-config">[.NET Debug]</span>
                     }
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
-                    <span id="compile-config" style="color: red">D</span>
+                    <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 | <a href="@Url.Action("GetLatestVersion", "Sync")">Get CAPI</a>
             </div>
