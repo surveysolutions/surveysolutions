@@ -36,7 +36,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
                 foreach (ExportedHeaderItem question in items.Header)
                 {
-                    writer.WriteField(question.Caption);
+                    foreach (var columnName in question.ColumnNames)
+                    {
+                        writer.WriteField(columnName);
+                    }
                 }
 
              //   writer.WriteField("ForeignKey");
@@ -46,18 +49,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                 {
                     writer.WriteField(item.InterviewId);
                     writer.WriteField(item.RecordId);
-                    foreach (Guid guid in items.Header.Keys)
+                    foreach (var headerItem in items.Header)
                     {
-                        if (!item.Questions.ContainsKey(guid))
+                        if (!item.Questions.ContainsKey(headerItem.PublicKey))
                         {
-                            for (int i = 0; i < items.Header.GetAvailableHeaderForQuestion(guid).Count(); i++)
+                            for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
                             {
                                 writer.WriteField(string.Empty);
                             }
 
                             continue;
                         }
-                        foreach (string itemValue in item.Questions[guid].Answers)
+                        foreach (string itemValue in item.Questions[headerItem.PublicKey].Answers)
                         {
                             writer.WriteField(itemValue);
                         }

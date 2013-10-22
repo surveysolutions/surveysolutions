@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core;
-using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Events;
 using Main.Core.Utility;
 using Ncqrs;
