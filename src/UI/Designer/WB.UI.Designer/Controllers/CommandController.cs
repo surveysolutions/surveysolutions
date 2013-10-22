@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                var domainEx = e.As<DomainException>();
+                var domainEx = e.GetSelfOrInnerAs<DomainException>();
                 if (domainEx == null)
                 {
                     logger.Error(string.Format("Error on command of type ({0}) handling ", type), e);
