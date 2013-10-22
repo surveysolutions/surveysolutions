@@ -94,6 +94,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         protected string RemoveNonUnicode(string s)
         {
+            if (string.IsNullOrEmpty(s))
+                return string.Empty;
             var onlyUnicode = Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
             return Regex.Replace(onlyUnicode, @"\t|\n|\r", "");
         }
