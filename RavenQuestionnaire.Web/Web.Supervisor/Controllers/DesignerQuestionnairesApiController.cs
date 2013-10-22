@@ -75,7 +75,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
-                var domainEx = ex.As<QuestionnaireException>();
+                var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
                     this.Logger.Error(
