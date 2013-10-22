@@ -10,6 +10,8 @@ using Questionnaire.Core.Web.Helpers;
 using WB.Core.GenericSubdomains.Logging;
 using WB.Core.SharedKernel.Utils.Compression;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.UI.Shared.Web;
 using Web.Supervisor.DesignerPublicService;
 using Web.Supervisor.Models;
 
@@ -57,9 +59,9 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public JsonBaseResponse GetQuestionnaire(ImportQuestionnaireRequest request)
+        public JsonCommandResponse GetQuestionnaire(ImportQuestionnaireRequest request)
         {
-            var returnedJson = new JsonBaseResponse();
+            var response = new JsonCommandResponse();
 
             try
             {
@@ -69,15 +71,24 @@ namespace Web.Supervisor.Controllers
 
                 this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
 
-                returnedJson.IsSuccess = true;
+                response.IsSuccess = true;
             }
             catch (Exception ex)
             {
-                this.Logger.Error(
-                    string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                var domainEx = ex.As<QuestionnaireException>();
+                if (domainEx == null)
+                {
+                    this.Logger.Error(
+                        string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                }
+                else
+                {
+                    response.IsSuccess = true;
+                    response.DomainException = domainEx.Message;
+                }
             }
 
-            return returnedJson;
+            return response;
         }
 
         public class ImportQuestionnaireRequest

@@ -16,32 +16,11 @@
 
     self.getQuestionnaire = function(questionnaireViewItem) {
 
-        if (!self.IsAjaxComplete()) {
-            self.CheckForRequestComplete();
-            return;
-        }
-
-        self.IsAjaxComplete(false);
-
         var request = { questionnaireId: questionnaireViewItem.Id() };
-        
-        $.post(self.getQuestionnaireUrl, request, null, "json")
-            .done(function(data) {
-                if (data.IsSuccess) {
-                    self.onQuestionnaireImported();
-                } else {
-                    self.showImportQuestionnaireError();
-                }
-            }).fail(function() {
-                self.showImportQuestionnaireError();
-            }).always(function() {
-                self.IsAjaxComplete(true);
-            });
 
-    };
-
-    self.showImportQuestionnaireError = function() {
-        self.ShowError(input.settings.messages.unhandledExceptionMessage);
+        self.SendCommand(request, function() {
+            self.onQuestionnaireImported();
+        });
     };
 
     self.onQuestionnaireImported = function() {
