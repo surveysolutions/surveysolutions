@@ -35,6 +35,35 @@ function CleanBinAndObjFolders() {
 }
 
 
+function CheckCompilationDebugFlagInWebConfigs() {
+    Write-Host "##teamcity[blockOpened name='Checking web.configs']"
+
+    $incorrectWebConfigs = Get-ChildItem -Filter Web.config -Recurse `
+        | %{ GetPathRelativeToCurrectLocation $_.FullName } `
+        | ?{ ([xml] (Get-Content $_)).configuration.'system.web'.compilation.debug -eq 'true' } `
+
+    $areAllWebConfigsCorrect = $incorrectWebConfigs.Count -eq 0
+
+    if (-not $areAllWebConfigsCorrect) {
+        Write-Host "##teamcity[buildStatus status='FAILURE' text='Following $($incorrectWebConfigs.Count) web.config(s) have compilation debug flag set to true: $($incorrectWebConfigs -join ', ')']"
+    }
+
+    Write-Host "##teamcity[blockClosed name='Checking web.configs']"
+
+    return $areAllWebConfigsCorrect;
+}
+
+function CheckPrerequisites() {
+    Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
+    Write-Host "##teamcity[progressStart 'Checking prerequisities']"
+
+    return CheckCompilationDebugFlagInWebConfigs
+
+    Write-Host "##teamcity[progressFinish 'Checking prerequisities']"
+    Write-Host "##teamcity[blockClosed name='Checking prerequisities']"
+}
+
+
 function IsSetupSolution($Solution) {
     return $Solution.EndsWith('Setup.sln')
 }
