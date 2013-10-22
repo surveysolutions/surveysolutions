@@ -1,8 +1,8 @@
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
+
 namespace Main.Core.AbstractFactories
 {
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
-
     /// <summary>
     /// The CompleteGroupFactory interface.
     /// </summary>

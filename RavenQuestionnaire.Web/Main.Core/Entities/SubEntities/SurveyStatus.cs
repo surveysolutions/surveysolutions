@@ -1,9 +1,9 @@
-﻿namespace Main.Core.Entities.SubEntities
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace Main.Core.Entities.SubEntities
+{
     /// <summary>
     /// The survey status.
     /// </summary>

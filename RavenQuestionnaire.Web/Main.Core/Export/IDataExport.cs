@@ -1,7 +1,7 @@
+using System;
+
 namespace Main.Core.Export
 {
-    using System;
-
     /// <summary>
     /// The DataExport interface.
     /// </summary>

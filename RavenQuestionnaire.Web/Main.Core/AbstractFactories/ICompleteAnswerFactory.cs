@@ -1,8 +1,8 @@
-﻿namespace Main.Core.AbstractFactories
-{
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
+﻿using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 
+namespace Main.Core.AbstractFactories
+{
     /// <summary>
     /// The CompleteAnswerFactory interface.
     /// </summary>

@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Entities
-{
-    using System;
-    using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
+namespace Main.Core.Entities
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

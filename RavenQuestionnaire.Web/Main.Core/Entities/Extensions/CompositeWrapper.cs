@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Entities.Extensions
+﻿using System;
+using Main.Core.Entities.Composite;
+
+namespace Main.Core.Entities.Extensions
 {
-    using System;
-
-    using Main.Core.Entities.Composite;
-
     /// <summary>
     /// The composite wrapper.
     /// </summary>

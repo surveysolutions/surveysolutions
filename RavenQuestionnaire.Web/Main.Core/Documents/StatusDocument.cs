@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Documents
+﻿using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Documents
 {
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// Describes the status in the system
     /// </summary>

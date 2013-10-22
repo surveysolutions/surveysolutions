@@ -1,14 +1,9 @@
-﻿using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+﻿using System.Linq;
+using Main.Core.Documents;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Register
 {
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.DenormalizerStorage;
-
     public class RegisterViewFactory : IViewFactory<RegisterInputModel, RegisterView>
     {
 

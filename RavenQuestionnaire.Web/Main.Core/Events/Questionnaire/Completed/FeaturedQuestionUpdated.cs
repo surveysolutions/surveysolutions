@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Events.Questionnaire.Completed
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Events.Questionnaire.Completed
+{
     /// <summary>
     /// The featured question updated.
     /// </summary>

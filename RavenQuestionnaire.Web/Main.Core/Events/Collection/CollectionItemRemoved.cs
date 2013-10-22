@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Events.Collection
+﻿using System;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Collection
 {
-    using System;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The collection item removed.
     /// </summary>

@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Documents
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Main.Core.Documents
+{
     /// <summary>
     /// The export schema document.
     /// </summary>

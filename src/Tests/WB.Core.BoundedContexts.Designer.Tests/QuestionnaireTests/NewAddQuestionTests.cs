@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Domain;
+using Main.Core.Domain.Exceptions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;

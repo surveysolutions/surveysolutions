@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using Main.Core.Domain;
-using Main.Core.Domain.Exceptions;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using Questionnaire.Core.Web.Helpers;

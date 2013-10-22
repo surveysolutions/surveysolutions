@@ -15,7 +15,6 @@ using Main.Core.Documents;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Utility;
 using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
@@ -416,7 +415,7 @@ namespace CapiDataGenerator
 
                     var onlyForSupervisor = this.OnlyForSupervisor;
 
-                    var questions = ((CompleteQuestionnaireDocument) template).GetQuestions().Where(x => !x.Featured);
+                    var questions = template.GetAllQuestions().Where(x => !x.Featured);
                     var questionsCount = questions.Count();
 
                     acount = (int) (questionsCount*((double) acount/100));
@@ -480,7 +479,7 @@ namespace CapiDataGenerator
             }
         }
 
-        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<ICompleteQuestion> questions)
+        private void CreateComments(int commentsCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions)
         {
             for (int j = 0; j < interviews.Count; j++)
             {
@@ -629,13 +628,13 @@ namespace CapiDataGenerator
                     answer = "value " + _rand.Next();
                     break;
                 case QuestionType.AutoPropagate:
-                    return new decimal(_rand.Next(((AutoPropagateCompleteQuestion) question).MaxValue));
+                    return new decimal(_rand.Next(((IAutoPropagate) question).MaxValue));
                     break;
             }
             return answer;
         }
 
-        private void CreateAnswers(int answersCount, Dictionary<Guid, Guid> interviews, IEnumerable<ICompleteQuestion> questions)
+        private void CreateAnswers(int answersCount, Dictionary<Guid, Guid> interviews, IEnumerable<IQuestion> questions)
         {
             for (var j = 0; j < interviews.Count; j++)
             {

@@ -1,10 +1,9 @@
-﻿namespace Main.Core.Utility.OrderStrategy
+﻿using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Utility.OrderStrategy
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// The az strategy.
     /// </summary>

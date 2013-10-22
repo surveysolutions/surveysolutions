@@ -2,8 +2,6 @@ using Main.Core.Entities.Observers;
 
 namespace Main.Core.Entities.SubEntities.Complete
 {
-    using System;
-
     /// <summary>
     /// The AutoPropagate interface.
     /// </summary>

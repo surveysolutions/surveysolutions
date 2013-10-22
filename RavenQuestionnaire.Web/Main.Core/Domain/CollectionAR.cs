@@ -1,14 +1,12 @@
-﻿namespace Main.Core.Domain
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Collection;
+using Ncqrs;
+using Ncqrs.Domain;
+
+namespace Main.Core.Domain
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Collection;
-
-    using Ncqrs;
-    using Ncqrs.Domain;
-
     /// <summary>
     /// The collection ar.
     /// </summary>

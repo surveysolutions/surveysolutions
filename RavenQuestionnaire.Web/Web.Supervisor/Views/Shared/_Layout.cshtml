@@ -107,7 +107,7 @@
                     <div class="body">
                         <ul data-bind="foreach: Errors" class="error-list">
                             <li class="error">
-                                <span data-bind="html: error"></span>
+                                <pre data-bind="html: error"></pre>
                             </li>
                         </ul>
                     </div>
@@ -125,11 +125,11 @@
                 @ViewContext.Controller.GetType().Assembly.GetName().Version (@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) 
                     @if (AppSettings.IsDebugBuilded)
                     {
-                        <span id="build-config">[D]</span>
+                        <span id="build-config">[.NET Debug]</span>
                     }
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
-                    <span id="compile-config" style="color: red">D</span>
+                    <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 | <a href="@Url.Action("GetLatestVersion", "Sync")">Get CAPI</a>
             </div>

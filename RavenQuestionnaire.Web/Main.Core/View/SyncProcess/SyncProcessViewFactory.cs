@@ -1,16 +1,8 @@
-using Main.DenormalizerStorage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
+using Main.Core.Documents;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.SyncProcess
 {
-    using System;
-
-    using Main.Core.Documents;
-    using Main.Core.View.User;
-
     /// <summary>
     /// The user view factory.
     /// </summary>

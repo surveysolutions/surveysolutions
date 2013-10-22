@@ -1,36 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Commands;
+using Main.Core.Services;
 using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
+using Ncqrs.Commanding.CommandExecution.Mapping;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Eventing.Storage;
+using Ninject;
 using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Commands;
-    using Main.Core.Services;
-
-    using Ncqrs;
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-    using Ncqrs.Commanding.ServiceModel;
-    using Ncqrs.Eventing;
-    using Ncqrs.Eventing.ServiceModel.Bus;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
-    using Ncqrs.Eventing.Storage;
-
-    using Main.Core.Entities.Extensions;
-    using Ncqrs.Domain.Storage;
-
-#if MONODROID
+    #if MONODROID
     using AndroidNcqrs.Eventing.Storage.SQLite;
 #endif
 
 
     //using Ncqrs.Eventing.Storage.RavenDB;
-
-    using Ninject;
 
     /*using Raven.Client.Document;*/
 

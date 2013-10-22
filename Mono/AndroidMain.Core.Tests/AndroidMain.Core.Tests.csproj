@@ -65,23 +65,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\QuestionTest.cs">
       <Link>Entities\QuestionTest.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\SubEntities\DateTimeCompleteQuestionTest.cs">
-      <Link>Entities\SubEntities\DateTimeCompleteQuestionTest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\SubEntities\NumericCompleteQuestionTest.cs">
-      <Link>Entities\SubEntities\NumericCompleteQuestionTest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Entities\SubEntities\SingleCompleteQuestionTest.cs">
-      <Link>Entities\SubEntities\SingleCompleteQuestionTest.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Events\EventMergeUtilsTest.cs">
       <Link>Events\EventMergeUtilsTest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs">
-      <Link>ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs">
-      <Link>ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\ExpressionExecutors\QuestionnaireParametersParserTest.cs">
       <Link>ExpressionExecutors\QuestionnaireParametersParserTest.cs</Link>
@@ -142,11 +127,13 @@
       <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\SubEntities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

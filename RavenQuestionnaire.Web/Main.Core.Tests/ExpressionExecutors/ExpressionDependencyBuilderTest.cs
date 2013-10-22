@@ -8,7 +8,6 @@ namespace Main.Core.Tests.ExpressionExecutors
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete.Question;
     using Main.Core.Entities.SubEntities.Question;
     using Main.Core.ExpressionExecutors;
 

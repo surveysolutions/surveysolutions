@@ -1,9 +1,7 @@
+using System;
+
 namespace Main.Core.View.SyncProcess
 {
-    using System;
-
-    using Main.Core.View.User;
-
     /// <summary>
     /// The user view input model.
     /// </summary>

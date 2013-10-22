@@ -1,12 +1,8 @@
-﻿namespace Main.Core.View.CompleteQuestionnaire.Statistics
+﻿using System;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

@@ -123,8 +123,6 @@
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_initial_statuses.cs" />
     <Compile Include="RavenIndexes\RavenIndexesTestContext.cs" />
     <Compile Include="RavenIndexes\SupervisorReportsSurveysAndStatusesGroupByTeamMemberTests\when_applying_index_to_8_misc_unassigned_statuses.cs" />
-    <Compile Include="SummaryDenormalizerTests.cs" />
-    <Compile Include="SyncProcessDenormalizerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

@@ -1,13 +1,11 @@
-﻿namespace Main.Core.Commands.Synchronization
+﻿using System;
+using Main.Core.Documents;
+using Main.Core.Domain;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+namespace Main.Core.Commands.Synchronization
 {
-    using System;
-
-    using Main.Core.Documents;
-    using Main.Core.Domain;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     /// <summary>
     /// The change event status command.
     /// </summary>

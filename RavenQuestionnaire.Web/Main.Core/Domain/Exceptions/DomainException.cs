@@ -1,8 +1,7 @@
-﻿namespace Main.Core.Domain
-{
-    using System;
-    using System.Runtime.Serialization;
+﻿using System;
 
+namespace Main.Core.Domain.Exceptions
+{
     /// <summary>
     /// Exception which represents domain logic and is usually thrown by aggregate root command handlers.
     /// </summary>

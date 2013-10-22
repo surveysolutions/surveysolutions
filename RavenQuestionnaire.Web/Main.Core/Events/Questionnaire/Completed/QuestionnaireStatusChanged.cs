@@ -1,11 +1,9 @@
-﻿namespace Main.Core.Events.Questionnaire.Completed
+﻿using System;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Questionnaire.Completed
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The questionnaire status changed.
     /// </summary>

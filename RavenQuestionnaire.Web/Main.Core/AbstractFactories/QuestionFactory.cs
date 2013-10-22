@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;

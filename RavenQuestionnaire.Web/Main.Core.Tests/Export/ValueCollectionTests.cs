@@ -1,6 +1,5 @@
 ﻿using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.View.Export;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -49,39 +48,7 @@ namespace Main.Core.Tests.Export
             target.Add(key,null);
             Assert.AreEqual(target.Container[key], new string[] { string.Empty });
         }
-        [Test]
-        public void Add_QuestionIsDisabled_EmptyStringIsAdded()
-        {
-            ValueCollectionTestable target = new ValueCollectionTestable();
-            var key = Guid.NewGuid();
-            target.Add(key, new TextCompleteQuestion("text") {PublicKey = key, Answer = "val", Enabled = false});
-            Assert.AreEqual(target.Container[key], new string[] { string.Empty });
-        }
-        [Test]
-        public void Add_QuestionIsDisabledMultyOptions_EmptyStringIsAdded()
-        {
-            ValueCollectionTestable target = new ValueCollectionTestable();
-            var key = Guid.NewGuid();
-            target.Add(key, new MultyOptionsCompleteQuestion("text") { PublicKey = key, Answers = new List<IAnswer>{new CompleteAnswer(),new CompleteAnswer()}, Enabled = false });
-            Assert.AreEqual(target.Container[key].Count(),2);
-            Assert.IsTrue(target.Container[key].All(t => t == string.Empty));
-        }
-        [Test]
-        public void Add_SingleQuestion_AnswerValueIsAdded()
-        {
-            ValueCollectionTestable target = new ValueCollectionTestable();
-            var key = Guid.NewGuid();
-            target.Add(key, new TextCompleteQuestion("text"){ PublicKey = key,Answer = "val"});
-            Assert.AreEqual(target.Container[key], new string[] { "val" });
-        }
-        [Test]
-        public void Add_MultyQuestion_AnswerValueIsAdded()
-        {
-            ValueCollectionTestable target = new ValueCollectionTestable();
-            var key = Guid.NewGuid();
-            target.Add(key, new MultyOptionsCompleteQuestion() { QuestionType=QuestionType.MultyOption, PublicKey = key, Answers = new List<IAnswer>() { new CompleteAnswer(), new CompleteAnswer() } });
-            Assert.AreEqual(target.Container[key].Count(), 2);
-        }
+      
         public class ValueCollectionTestable : ValueCollection
         {
             public IDictionary<Guid, IEnumerable<string>> Container

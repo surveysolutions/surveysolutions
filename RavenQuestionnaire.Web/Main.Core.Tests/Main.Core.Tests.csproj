@@ -158,17 +158,12 @@
     <Compile Include="Entities\CompleteGroupTest.cs" />
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
-    <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Export\HeaderCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
     <Compile Include="Export\HeaderItemTests.cs" />
     <Compile Include="Export\StataSuplierTests.cs" />
     <Compile Include="Export\ValueCollectionTests.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
-    <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
     <Compile Include="ExpressionExecutors\ExpressionDependencyBuilderTest.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
@@ -207,7 +202,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\SubEntities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

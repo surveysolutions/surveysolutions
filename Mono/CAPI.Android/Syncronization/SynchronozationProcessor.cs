@@ -264,7 +264,7 @@ namespace CAPI.Android.Syncronization
             if (!NetworkHelper.IsNetworkEnabled(context))
             {
                 
-                throw new InvalidOperationException("Network is not avalable.");
+                throw new InvalidOperationException("Network is not available.");
                 return;
             }
         }

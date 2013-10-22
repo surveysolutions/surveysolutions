@@ -14,13 +14,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 {
     public class ExportedHeaderCollection : IEnumerable<ExportedHeaderItem>
     {
-        protected IDictionary<Guid, IEnumerable<ExportedHeaderItem>> container;
+        protected IDictionary<Guid, ExportedHeaderItem> container;
         private readonly ReferenceInfoForLinkedQuestions questionnaireReferences;
         private readonly Dictionary<Guid, AutoPropagateQuestion> autoPropagatedQuestions;
 
         public ExportedHeaderCollection(ReferenceInfoForLinkedQuestions questionnaireReferences, QuestionnaireDocument document)
         {
-            this.container = new Dictionary<Guid, IEnumerable<ExportedHeaderItem>>();
+            this.container = new Dictionary<Guid, ExportedHeaderItem>();
             this.questionnaireReferences = questionnaireReferences;
             this.autoPropagatedQuestions =
                 document.Find<AutoPropagateQuestion>(question => true).ToDictionary(question => question.PublicKey, question => question);
@@ -38,6 +38,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
                 AddHeaderForNotMultiOptions(question);
         }
 
+        public ExportedHeaderItem this[Guid id]
+        {
+            get
+            {
+                return !this.container.ContainsKey(id) ? null : this.container[id];
+            }
+        }
+
+        public IEnumerator<ExportedHeaderItem> GetEnumerator()
+        {
+            return this.container.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
         private bool IsQuestionMultiOption(IQuestion question)
         {
             return question is IMultyOptionsQuestion;
@@ -45,46 +63,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
 
         private void AddHeadersForLinkedMultiOptions(IQuestion question)
         {
-            var headerItems = new List<ExportedHeaderItem>();
-
-            for (int i = 0; i < GetMaxAvailablePropagationCountForLinkedQuestion(question); i++)
-            {
-                headerItems.Add(new ExportedHeaderItem(question, i));
-
-            }
-            this.container.Add(question.PublicKey, headerItems);
+            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, GetMaxAvailablePropagationCountForLinkedQuestion(question)));
         }
 
         protected void AddHeaderForNotMultiOptions(IQuestion question)
         {
-            this.container.Add(question.PublicKey, new ExportedHeaderItem[] { new ExportedHeaderItem(question) });
+            this.container.Add(question.PublicKey, new ExportedHeaderItem(question));
         }
 
         protected void AddHeadersForMultiOptions(IQuestion question)
         {
-            var headerItems = new List<ExportedHeaderItem>();
-
-            for (int i = 0; i < question.Answers.Count; i++)
-            {
-                headerItems.Add(new ExportedHeaderItem(question, i));
-
-            }
-            this.container.Add(question.PublicKey, headerItems);
-        }
-
-        public IEnumerable<Guid> Keys
-        {
-            get { return this.container.Select(c => c.Key); }
-        }
-
-        public IEnumerator<ExportedHeaderItem> GetEnumerator()
-        {
-            return this.container.SelectMany(c => c.Value).GetEnumerator();
-        }
-
-        public IEnumerable<ExportedHeaderItem> GetAvailableHeaderForQuestion(Guid questionId)
-        {
-            return this.container.Where(c => c.Key == questionId).SelectMany(c => c.Value);
+            this.container.Add(question.PublicKey, new ExportedHeaderItem(question, question.Answers.Count));
         }
 
         private int GetMaxAvailablePropagationCountForLinkedQuestion(IQuestion question)
@@ -92,11 +81,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views.DataExport
             var questioIdnWhichTriggersPropagation =
                 questionnaireReferences.ReferencesOnLinkedQuestions[question.PublicKey].ScopeId;
             return this.autoPropagatedQuestions[questioIdnWhichTriggersPropagation].MaxValue;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
         }
     }
 }

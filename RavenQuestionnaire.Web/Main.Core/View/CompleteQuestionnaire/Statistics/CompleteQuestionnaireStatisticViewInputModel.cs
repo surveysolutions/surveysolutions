@@ -1,7 +1,7 @@
+using System;
+
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
-    using System;
-
     /// <summary>
     /// The complete questionnaire statistic view input model.
     /// </summary>

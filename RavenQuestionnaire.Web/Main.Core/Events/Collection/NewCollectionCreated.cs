@@ -1,12 +1,10 @@
-﻿namespace Main.Core.Events.Collection
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.Storage;
+
+namespace Main.Core.Events.Collection
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.SubEntities;
-
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The new collection created.
     /// </summary>

@@ -1,16 +1,14 @@
-﻿namespace Main.Core.Commands.Synchronization
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Domain;
+using Main.Core.Events;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+
+namespace Main.Core.Commands.Synchronization
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.Core.Domain;
-    using Main.Core.Events;
-
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
     /// <summary>
     /// The push events command.
     /// </summary>

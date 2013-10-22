@@ -1,13 +1,10 @@
-﻿using WB.Core.GenericSubdomains.Logging;
+﻿using Ncqrs.Commanding;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Logging;
 
 namespace Main.Core.Commands
 {
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.ServiceModel;
-    using Ncqrs.Eventing.Storage;
-
-    
-
     /// <summary>
     /// Repeates command execution until success.
     /// </summary>

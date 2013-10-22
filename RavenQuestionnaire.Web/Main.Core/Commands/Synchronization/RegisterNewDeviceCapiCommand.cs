@@ -1,10 +1,10 @@
-﻿namespace Main.Core.Commands.Synchronization
-{
-    using System;
-    using Main.Core.Domain;
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+﻿using System;
+using Main.Core.Domain;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
+namespace Main.Core.Commands.Synchronization
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

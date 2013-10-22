@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Entities.SubEntities.Complete
-{
-    using System;
+﻿using System;
 
+namespace Main.Core.Entities.SubEntities.Complete
+{
     /// <summary>
     /// The CompleteItem interface.
     /// </summary>

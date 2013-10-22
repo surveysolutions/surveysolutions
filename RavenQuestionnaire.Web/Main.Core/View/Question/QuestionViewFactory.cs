@@ -1,15 +1,9 @@
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.DenormalizerStorage;
-
-using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace Main.Core.View.Question
 {
-    using System;
-
     /// <summary>
     /// The question view factory.
     /// </summary>

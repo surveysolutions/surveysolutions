@@ -1,7 +1,5 @@
 namespace Main.Core.Entities.SubEntities.Complete
 {
-    using System;
-
     /// <summary>
     /// The CompleteAnswer interface.
     /// </summary>
