@@ -16,22 +16,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
     internal class CsvDataExportService : IDataExportService
     {
         private const string CSVFORMAT = "csv";
-        private const string TABFORMAT = "tab";
-        private const string CSVFILEEXTENSION = "." + CSVFORMAT;
-
+        private const string TABFORMAT = "tsv";
+        
         private readonly IEnvironmentSupplier<InterviewDataExportView> supplier;
-        private readonly IExportProvider<InterviewDataExportView> provider;
         private readonly IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory;
         private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage;
 
         public CsvDataExportService(
             IEnvironmentSupplier<InterviewDataExportView> supplier, 
-            IExportProvider<InterviewDataExportView> provider, 
             IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory, 
             IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage)
         {
             this.supplier = supplier;
-            this.provider = provider;
             this.interviewDataExportViewFactory = interviewDataExportViewFactory;
             this.questionnaireLevelStorage = questionnaireLevelStorage;
         }
@@ -39,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         public IDictionary<string, byte[]> ExportData(Guid questionnaireId, long version, string type)
         {
             var fileType = GetFileTypeOrThrow(type);
-          
+
             var allLevels = new Dictionary<string, byte[]>();
 
             var questionnarieLevel = GetAllQuestionnaireLevels(questionnaireId, version);
@@ -48,9 +44,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             {
                 CollectLevels(
                     interviewDataExportViewFactory.Load(new InterviewDataExportInputModel(questionnaireId, version,
-                                                                                          levelId)),
+                        levelId)),
                     allLevels,
-                    fileType);
+                    new CSVIterviewExporter(fileType), fileType);
             }
 
             supplier.AddCompletedResults(allLevels);
@@ -72,9 +68,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
         protected void CollectLevels(
             InterviewDataExportView records,
             Dictionary<string, byte[]> container,
+             IExportProvider<InterviewDataExportView> provider,
             FileType type)
         {
-            string fileName = GetName(records.LevelName, container, 0);
+            string fileName = GetName(records.LevelName,type, container, 0);
 
             container.Add(fileName, provider.DoExportToStream(records));
 
@@ -88,17 +85,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
             return type == CSVFORMAT ? FileType.Csv : FileType.Tab;
         }
 
-        protected string GetName(string name, Dictionary<string, byte[]> container, int i)
+        protected string GetName(string name,FileType type, Dictionary<string, byte[]> container, int i)
         {
             string fileNameWithoutInvalidFileNameChars = Path.GetInvalidFileNameChars()
                                                              .Aggregate(name, (current, c) => current.Replace(c, '_'));
             string fileNameWithExtension = string.Concat(RemoveNonAscii(fileNameWithoutInvalidFileNameChars),
-                                                         i == 0 ? (object) string.Empty : i, CSVFILEEXTENSION);
+                                                         i == 0 ? (object)string.Empty : i, GetFileExtension(type));
 
             return !container.ContainsKey(fileNameWithExtension)
                        ? fileNameWithExtension
-                       : this.GetName(name, container, i + 1);
+                       : this.GetName(name, type, container, i + 1);
         }
+
+        protected string GetFileExtension(FileType type)
+        {
+            return "." + (type == FileType.Csv ? CSVFORMAT : TABFORMAT);
+        } 
 
         protected string RemoveNonAscii(string s)
         {
