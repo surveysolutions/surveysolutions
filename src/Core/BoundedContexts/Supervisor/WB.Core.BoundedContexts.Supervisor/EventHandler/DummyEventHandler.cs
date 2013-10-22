@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -25,6 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         IEventHandler<InterviewDeclaredValid>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler
     {
         public void Handle(IPublishedEvent<AnswerDeclaredValid> evnt) {}
@@ -56,6 +53,8 @@ namespace WB.Core.BoundedContexts.Supervisor.EventHandler
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) {}
 
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) {}
+
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt) {}
 
         public string Name
         {
