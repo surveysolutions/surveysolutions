@@ -18,13 +18,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var errorList = new List<QuestionnaireVerificationError>();
 
-            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups);
-            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire,
-                this.ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt);
-            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire,
-                this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt);
 
-            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, this.ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType);
 
             return errorList;
         }
@@ -77,14 +76,34 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem);
         }
 
-        private QuestionnaireVerificationError ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
+        private QuestionnaireVerificationError ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument questionnaire)
         {
             var linkedQuestionsWithNotExistingSources =
-                document.Find<IQuestion>(
-                    question => question.LinkedToQuestionId.HasValue && document.Find<IQuestion>(question.LinkedToQuestionId.Value) == null);
+                questionnaire.Find<IQuestion>(
+                    question => question.LinkedToQuestionId.HasValue && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value) == null);
 
             return CreateQuestionnaireVerificationErrorForQuestions("WB0011",
                 VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist, linkedQuestionsWithNotExistingSources);
+        }
+
+        private QuestionnaireVerificationError ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType(QuestionnaireDocument questionnaire)
+        {
+            Func<Guid, bool> isReferencedQuestionTypeSupported = questionId =>
+            {
+                var question = questionnaire.Find<IQuestion>(questionId);
+                if (question == null)
+                    return true;
+                return question.QuestionType == QuestionType.Text
+                    || question.QuestionType == QuestionType.Numeric
+                    || question.QuestionType == QuestionType.DateTime;
+            };
+
+            var linkedQuestionsReferenceQuestionOfNotSupportedType =
+                questionnaire.Find<IQuestion>(
+                    question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
+
+            return CreateQuestionnaireVerificationErrorForQuestions("WB0012",
+                VerificationMessages.WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType, linkedQuestionsReferenceQuestionOfNotSupportedType);
         }
 
         private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,
