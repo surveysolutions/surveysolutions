@@ -33,7 +33,7 @@ android:focusableInTouchMode="true"
         android:layout_width="30dp"
         android:layout_height="80dp"
         android:background="@drawable/bookmarkStyle"
-        android:text="..."  android:gravity="center"/>
+        android:text=" "  android:gravity="center"/>
     </LinearLayout >
 
     <LinearLayout android:id="@+id/llNavigationHolder"
