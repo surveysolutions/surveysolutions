@@ -151,11 +151,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question referenced by linked questions do not exist.
+        ///   Looks up a localized string similar to Question referenced by linked question does not exist.
         /// </summary>
-        internal static string WB0011_QuestionReferencedByLinkedQuestionsDoNotExist {
+        internal static string WB0011_QuestionReferencedByLinkedQuestionDoesNotExist {
             get {
-                return ResourceManager.GetString("WB0011_QuestionReferencedByLinkedQuestionsDoNotExist", resourceCulture);
+                return ResourceManager.GetString("WB0011_QuestionReferencedByLinkedQuestionDoesNotExist", resourceCulture);
             }
         }
         
