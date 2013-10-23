@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects.Verification
 {
     public class QuestionnaireVerificationError
     {
-        public QuestionnaireVerificationError(string code, string message, IEnumerable<QuestionnaireVerificationReference> references)
+        public QuestionnaireVerificationError(string code, string message, params QuestionnaireVerificationReference[] references)
         {
             this.Code = code;
             this.Message = message;
