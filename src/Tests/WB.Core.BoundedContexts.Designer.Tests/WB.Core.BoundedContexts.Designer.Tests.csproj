@@ -92,6 +92,7 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_propagated_group_has_no_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\QuestionnaireVerifierTestsContext.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_propagating_question_has_no_associated_groups.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
