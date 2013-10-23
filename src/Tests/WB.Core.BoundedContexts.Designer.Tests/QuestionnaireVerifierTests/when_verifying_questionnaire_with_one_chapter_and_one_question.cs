@@ -1,17 +1,19 @@
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_empty_questionnaire : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_one_chapter_and_one_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                new TextQuestion()
+                );
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -19,14 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
-
-        It should_return_error_with_code__WB0001__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0001");
-
-        It should_return_error_with_empty_references = () =>
-            resultErrors.Single().References.ShouldBeEmpty();
+        It should_return_no_errors = () =>
+            resultErrors.ShouldBeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
