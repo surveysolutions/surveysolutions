@@ -19,7 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var errorList = new List<QuestionnaireVerificationError>();
 
             errorList.AddRange(this.GetListOfErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(questionnaire));
-            errorList.AddRange(this.GetListOfErrorsByPropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(questionnaire));
+            errorList.AddRange(this.GetListOfErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(questionnaire));
+            errorList.AddRange(this.GetListOfErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(questionnaire));
             
             return errorList;
         }
@@ -38,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, question.PublicKey)));
         }
 
-        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(
+        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(
            QuestionnaireDocument questionnaire)
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = questionnaire.Find<IGroup>(group
@@ -50,6 +51,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         new QuestionnaireVerificationError("WB0009",
                             VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem,
                             new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey)));
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(QuestionnaireDocument questionnaire)
+        {
+            IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = questionnaire.Find<IGroup>(group
+               => IsGroupPropagatable(group)
+               && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, questionnaire).Count() > 1);
+            return
+               propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(
+                   group =>
+                       new QuestionnaireVerificationError("WB0010",
+                           VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem,
+                           new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey)));
         }
 
         private static bool IsGroupPropagatable(IGroup group)
