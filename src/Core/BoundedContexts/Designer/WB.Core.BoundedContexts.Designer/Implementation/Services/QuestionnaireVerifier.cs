@@ -17,7 +17,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
 
             var errorList = new List<QuestionnaireVerificationError>();
+
             errorList.AddRange(this.GetListOfErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(questionnaire));
+            errorList.AddRange(this.GetListOfErrorsByPropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(questionnaire));
+            
             return errorList;
         }
 
@@ -33,6 +36,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 question =>
                     new QuestionnaireVerificationError("WB0008", VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
                         new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, question.PublicKey)));
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatedGroupsHaveNoPropagatingQuestionsPointingToThem(
+           QuestionnaireDocument questionnaire)
+        {
+            IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = questionnaire.Find<IGroup>(group
+                => IsGroupPropagatable(group)
+                && !GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any());
+            return
+                propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Select(
+                    group =>
+                        new QuestionnaireVerificationError("WB0009",
+                            VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem,
+                            new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey)));
+        }
+
+        private static bool IsGroupPropagatable(IGroup group)
+        {
+            return group.Propagated == Propagate.AutoPropagated;
+        }
+
+        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
+        {
+            return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(groupId));
         }
     }
 }
