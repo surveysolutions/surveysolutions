@@ -18,10 +18,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var errorList = new List<QuestionnaireVerificationError>();
 
-            errorList.AddRange(this.GetListOfErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(questionnaire));
-            errorList.AddRange(this.GetListOfErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(questionnaire));
-            errorList.AddRange(this.GetListOfErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(questionnaire));
-            
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire,
+                this.ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt);
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire,
+                this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt);
+
+            this.AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, this.ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist);
+
             return errorList;
         }
 
@@ -30,40 +34,73 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
 
-        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
-            QuestionnaireDocument questionnaire)
+        private void AddGroupOfErrorsByQuestionnaire(List<QuestionnaireVerificationError> errorList, QuestionnaireDocument questionnaire,
+            Func<QuestionnaireDocument, QuestionnaireVerificationError> errorChecker)
         {
-            return questionnaire.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0).Select(
-                question =>
-                    new QuestionnaireVerificationError("WB0008", VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
-                        new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, question.PublicKey)));
+            var error = errorChecker(questionnaire);
+            if (error.References.Any())
+                errorList.Add(error);
         }
 
-        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(
-           QuestionnaireDocument questionnaire)
+        private QuestionnaireVerificationError ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
+            QuestionnaireDocument questionnaire)
+        {
+            var autoPropagateQuestionsWithEmptyTriggers = questionnaire.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0);
+
+            return CreateQuestionnaireVerificationErrorForQuestions("WB0008",
+                VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
+                autoPropagateQuestionsWithEmptyTriggers);
+        }
+
+        private QuestionnaireVerificationError ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(
+            QuestionnaireDocument questionnaire)
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = questionnaire.Find<IGroup>(group
                 => IsGroupPropagatable(group)
-                && !GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any());
+                    && !GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any());
+
             return
-                propagatedGroupsWithNoPropagatingQuestionsPointingToThem.Select(
-                    group =>
-                        new QuestionnaireVerificationError("WB0009",
-                            VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem,
-                            new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey)));
+                CreateQuestionnaireVerificationErrorForGroups("WB0009",
+                    VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem,
+                    propagatedGroupsWithNoPropagatingQuestionsPointingToThem);
         }
 
-        private IEnumerable<QuestionnaireVerificationError> GetListOfErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(QuestionnaireDocument questionnaire)
+        private QuestionnaireVerificationError ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(
+            QuestionnaireDocument questionnaire)
         {
             IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = questionnaire.Find<IGroup>(group
-               => IsGroupPropagatable(group)
-               && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, questionnaire).Count() > 1);
-            return
-               propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem.Select(
-                   group =>
-                       new QuestionnaireVerificationError("WB0010",
-                           VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem,
-                           new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey)));
+                => IsGroupPropagatable(group)
+                    && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, questionnaire).Count() > 1);
+
+            return this.CreateQuestionnaireVerificationErrorForGroups("WB0010",
+                VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem,
+                propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem);
+        }
+
+        private QuestionnaireVerificationError ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument document)
+        {
+            var linkedQuestionsWithNotExistingSources =
+                document.Find<IQuestion>(
+                    question => question.LinkedToQuestionId.HasValue && document.Find<IQuestion>(question.LinkedToQuestionId.Value) == null);
+
+            return CreateQuestionnaireVerificationErrorForQuestions("WB0011",
+                VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist, linkedQuestionsWithNotExistingSources);
+        }
+
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,
+            IEnumerable<IQuestion> questions)
+        {
+            return new QuestionnaireVerificationError(code, message,
+                questions.Select(q => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, q.PublicKey))
+                    .ToArray());
+        }
+
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message,
+            IEnumerable<IGroup> groups)
+        {
+            return new QuestionnaireVerificationError(code, message,
+                groups.Select(g => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, g.PublicKey))
+                    .ToArray());
         }
 
         private static bool IsGroupPropagatable(IGroup group)
