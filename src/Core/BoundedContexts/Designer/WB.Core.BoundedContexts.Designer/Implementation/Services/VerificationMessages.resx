@@ -117,24 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WB00010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem" xml:space="preserve">
-    <value>Propagated group has more than one propagating question pointing to them</value>
-  </data>
-  <data name="WB00011_QuestionReferencedByLinkedQuestionsDoNotExist" xml:space="preserve">
-    <value>Question referenced by linked questions do not exist</value>
-  </data>
-  <data name="WB00012_LinkedQuestionReferenceQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Linked question reference questions of not supported type</value>
-  </data>
-  <data name="WB00013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup" xml:space="preserve">
-    <value>Linked question reference questions not under propagated group</value>
-  </data>
-  <data name="WB00014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question have custom validation referencing question with deeper propagation level</value>
-  </data>
-  <data name="WB00015_QuestionHaveIncorrectSubstitutionReference" xml:space="preserve">
-    <value>Question has incorrect substitution reference</value>
-  </data>
   <data name="WB0001_NoQuestions" xml:space="preserve">
     <value>Questionnaire should contain at least one question.</value>
   </data>
@@ -160,6 +142,24 @@
     <value>Propagating question have no associated groups</value>
   </data>
   <data name="WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem" xml:space="preserve">
-    <value>Propagated group has no propagating questions pointing to them</value>
+    <value>Propagated group has no propagating questions pointing to it</value>
+  </data>
+  <data name="WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem" xml:space="preserve">
+    <value>Propagated group has more than one propagating question pointing to it</value>
+  </data>
+  <data name="WB0011_QuestionReferencedByLinkedQuestionsDoNotExist" xml:space="preserve">
+    <value>Question referenced by linked questions do not exist</value>
+  </data>
+  <data name="WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType" xml:space="preserve">
+    <value>Linked question reference questions of not supported type</value>
+  </data>
+  <data name="WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup" xml:space="preserve">
+    <value>Linked question reference questions not under propagated group</value>
+  </data>
+  <data name="WB0014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel" xml:space="preserve">
+    <value>Question have custom validation referencing question with deeper propagation level</value>
+  </data>
+  <data name="WB0015_QuestionHaveIncorrectSubstitutionReference" xml:space="preserve">
+    <value>Question has incorrect substitution reference</value>
   </data>
 </root>
