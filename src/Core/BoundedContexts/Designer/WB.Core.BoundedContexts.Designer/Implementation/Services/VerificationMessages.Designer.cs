@@ -68,5 +68,59 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
                 return ResourceManager.GetString("WB0001_NoQuestions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom validation expression syntax is incorrect..
+        /// </summary>
+        internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
+            get {
+                return ResourceManager.GetString("WB0002_CustomValidationExpressionHasIncorrectSyntax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom enablement condition syntax is incorrect..
+        /// </summary>
+        internal static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
+            get {
+                return ResourceManager.GetString("WB0003_CustomEnablementConditionHasIncorrectSyntax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom validation expression references not existing question..
+        /// </summary>
+        internal static string WB0004_CustomValidationExpressionReferencesNotExistingQuestion {
+            get {
+                return ResourceManager.GetString("WB0004_CustomValidationExpressionReferencesNotExistingQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom enablement condition references not existing question..
+        /// </summary>
+        internal static string WB0005_CustomEnablementConditionReferencesNotExistingQuestion {
+            get {
+                return ResourceManager.GetString("WB0005_CustomEnablementConditionReferencesNotExistingQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Propagating question references group which does not exists..
+        /// </summary>
+        internal static string WB0006_PropagatingQuestionReferencesNotExistingGroup {
+            get {
+                return ResourceManager.GetString("WB0006_PropagatingQuestionReferencesNotExistingGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Propagating question references group which is not propagated..
+        /// </summary>
+        internal static string WB0007_PropagatingQuestionReferencesNotPropagatableGroup {
+            get {
+                return ResourceManager.GetString("WB0007_PropagatingQuestionReferencesNotPropagatableGroup", resourceCulture);
+            }
+        }
     }
 }

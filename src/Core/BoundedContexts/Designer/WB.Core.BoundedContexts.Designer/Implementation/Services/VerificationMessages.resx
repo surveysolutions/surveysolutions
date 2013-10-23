@@ -120,4 +120,22 @@
   <data name="WB0001_NoQuestions" xml:space="preserve">
     <value>Questionnaire should contain at least one question.</value>
   </data>
+  <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Custom validation expression syntax is incorrect.</value>
+  </data>
+  <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+    <value>Custom enablement condition syntax is incorrect.</value>
+  </data>
+  <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>Custom validation expression references not existing question.</value>
+  </data>
+  <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>Custom enablement condition references not existing question.</value>
+  </data>
+  <data name="WB0006_PropagatingQuestionReferencesNotExistingGroup" xml:space="preserve">
+    <value>Propagating question references group which does not exists.</value>
+  </data>
+  <data name="WB0007_PropagatingQuestionReferencesNotPropagatableGroup" xml:space="preserve">
+    <value>Propagating question references group which is not propagated.</value>
+  </data>
 </root>
