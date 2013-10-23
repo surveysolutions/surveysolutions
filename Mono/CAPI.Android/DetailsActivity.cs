@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Support.V4.View;
 using Android.Util;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
 using CAPI.Android.Core.Model;
@@ -30,7 +31,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace CAPI.Android
 {
     [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener
+    public class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener, Animation.IAnimationListener
     {
         protected Guid QuestionnaireId
         {
@@ -122,13 +123,14 @@ namespace CAPI.Android
             this.adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, this.screenId);
             VpContent.Adapter = this.adapter;
             VpContent.PageSelected += this.VpContentPageSelected;
+
             llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
         }
 
         public void OnGlobalLayout()
         {
             llContainer.ViewTreeObserver.RemoveGlobalOnLayoutListener(this);
-            UpdateLayout(isChaptersVisible);
+            this.UpdateLayout(isChaptersVisible);
         }
 
         public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
@@ -138,33 +140,61 @@ namespace CAPI.Android
             llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
         }
 
-        private void UpdateLayout(bool isNavigationVisible)
+        private void UpdateLayout(bool isNavigationVisible, bool animated = false)
         {
-            var point = GetScreenSizePoint();
-            var vpContentParams =
-                new RelativeLayout.LayoutParams(
-                    isNavigationVisible
-                        ? (point.X / 2 + btnNavigation.LayoutParameters.Width)
-                        : point.X,
-                    ViewGroup.LayoutParams.FillParent);
+            var screenDimensions = GetScreenSizePoint();
 
-            vpContentParams.LeftMargin = point.X - vpContentParams.Width;
-            if(VpContent == null)
-                logger.Error("Container was destroyed. Null ref will be thrown.");
+            LogErrorMassageIfContainerDestoryed();
 
-            VpContent.LayoutParameters = vpContentParams;
+            AlignScreenContainer(screenDimensions.X, isNavigationVisible);
 
-            var lNavigationContainerParams =
-               new RelativeLayout.LayoutParams(point.X / 2,
-                                               ViewGroup.LayoutParams.FillParent);
+            AlignBookmark(screenDimensions.Y);
 
-            lNavigationContainerParams.LeftMargin = isNavigationVisible
-                                                        ? 0 : btnNavigation.LayoutParameters.Width - lNavigationContainerParams.Width;
+            AlignNavigationContainer(screenDimensions.X, isNavigationVisible, animated);
+        }
 
-            lNavigationContainer.LayoutParameters = lNavigationContainerParams;
-            this.navList.Visibility = isNavigationVisible ? ViewStates.Visible : ViewStates.Gone;
+        private void LogErrorMassageIfContainerDestoryed()
+        {
+            if (this.VpContent == null)
+                this.logger.Error("Container was destroyed. Null ref will be thrown.");
+        }
 
-            llSpaceFiller.LayoutParameters = new LinearLayout.LayoutParams(llSpaceFiller.LayoutParameters.Width, (point.Y - btnNavigation.LayoutParameters.Height) / 2);
+        private void AlignScreenContainer(int screenWidth, bool isNavigationVisible)
+        {
+            var screenContainerWith = isNavigationVisible
+                ? (screenWidth / 2 + btnNavigation.LayoutParameters.Width)
+                : screenWidth;
+            var screenContainerLeftMargin = screenWidth - screenContainerWith;
+
+            var screenContainerLayoutParameters = new RelativeLayout.LayoutParams(screenContainerWith,
+                VpContent.LayoutParameters.Height)
+            {
+                LeftMargin = screenContainerLeftMargin
+            };
+
+            VpContent.LayoutParameters = screenContainerLayoutParameters;
+        }
+
+        private void AlignNavigationContainer(int screenWidth, bool isNavigationVisible, bool animated)
+        {
+            var navigationContainerWidth = screenWidth/2;
+            var navigationContainerLeftMargin = isNavigationVisible
+                ? 0
+                : btnNavigation.LayoutParameters.Width - navigationContainerWidth;
+
+
+            var navigationContainerLayoutParameters = new RelativeLayout.LayoutParams(navigationContainerWidth,
+                lNavigationContainer.LayoutParameters.Height)
+            {
+                LeftMargin = navigationContainerLeftMargin
+            };
+
+            lNavigationContainer.LayoutParameters = navigationContainerLayoutParameters;
+        }
+
+        private void AlignBookmark(int screenHeight)
+        {
+            llSpaceFiller.LayoutParameters.Height = (screenHeight - btnNavigation.LayoutParameters.Height) / 2;
         }
 
         private Point GetScreenSizePoint()
@@ -191,7 +221,7 @@ namespace CAPI.Android
                 isChaptersVisible = true;
             }
 
-            UpdateLayout(isChaptersVisible);
+            this.UpdateLayout(isChaptersVisible);
 
             lNavigationContainer.Layout(left, lNavigationContainer.Top, right, lNavigationContainer.Bottom);
 
@@ -231,7 +261,8 @@ namespace CAPI.Android
                     {
                         Thread.Sleep(1000);
                         isChaptersVisible = false;
-                        this.RunOnUiThread(() => this.UpdateLayout(false));
+                        this.RunOnUiThread(() =>
+                            UpdateLayout(isChaptersVisible, true));
                     });
                 }
 
@@ -294,6 +325,19 @@ namespace CAPI.Android
             var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
             if (snapshotStore != null)
                 snapshotStore.PersistShapshot(QuestionnaireId);
+        }
+
+        public void OnAnimationEnd(Animation animation)
+        {
+            this.UpdateLayout(false);
+        }
+
+        public void OnAnimationRepeat(Animation animation)
+        {
+        }
+
+        public void OnAnimationStart(Animation animation)
+        {
         }
     }
 }
