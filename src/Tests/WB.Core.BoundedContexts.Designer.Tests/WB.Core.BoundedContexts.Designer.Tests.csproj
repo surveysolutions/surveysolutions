@@ -92,11 +92,12 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_propagated_group_has_more_than_one_propagating_question_pointing_to_it.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_propagated_group_has_no_propagating_question_pointing_to_it.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_question_of_not_supported_type.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_has_more_than_one_propagating_question_pointing_to_it.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_has_no_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\QuestionnaireVerifierTestsContext.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_propagating_question_has_no_associated_groups.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_question_referenced_by_linked_question_does_not_exist.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagating_question_has_no_associated_groups.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_referenced_by_linked_question_does_not_exist.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
   </ItemGroup>
