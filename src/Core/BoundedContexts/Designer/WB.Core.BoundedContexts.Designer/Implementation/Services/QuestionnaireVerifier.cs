@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
         {
             if (NoQuestionsExist(questionnaire))
-                return new[] { new QuestionnaireVerificationError("WB0001", "Questionnaire should contain at least one question.") };
+                return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
 
             return Enumerable.Empty<QuestionnaireVerificationError>();
         }
