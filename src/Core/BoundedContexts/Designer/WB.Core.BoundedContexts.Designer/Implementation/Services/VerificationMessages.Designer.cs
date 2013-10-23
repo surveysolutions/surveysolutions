@@ -70,6 +70,61 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Propagated group has more than one propagating question pointing to them.
+        /// </summary>
+        internal static string WB00010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem {
+            get {
+                return ResourceManager.GetString("WB00010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question referenced by linked questions do not exist.
+        /// </summary>
+        internal static string WB00011_QuestionReferencedByLinkedQuestionsDoNotExist {
+            get {
+                return ResourceManager.GetString("WB00011_QuestionReferencedByLinkedQuestionsDoNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked question reference questions of not supported type.
+        /// </summary>
+        internal static string WB00012_LinkedQuestionReferenceQuestionOfNotSupportedType {
+            get {
+                return ResourceManager.GetString("WB00012_LinkedQuestionReferenceQuestionOfNotSupportedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked question reference questions not under propagated group.
+        /// </summary>
+        internal static string WB00013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup {
+            get {
+                return ResourceManager.GetString("WB00013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question have custom validation referencing question with deeper propagation level.
+        /// </summary>
+        internal static string WB00014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel {
+            get {
+                return ResourceManager.GetString("WB00014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel" +
+                        "", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has incorrect substitution reference.
+        /// </summary>
+        internal static string WB00015_QuestionHaveIncorrectSubstitutionReference {
+            get {
+                return ResourceManager.GetString("WB00015_QuestionHaveIncorrectSubstitutionReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom validation expression syntax is incorrect..
         /// </summary>
         internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
@@ -120,6 +175,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
         internal static string WB0007_PropagatingQuestionReferencesNotPropagatableGroup {
             get {
                 return ResourceManager.GetString("WB0007_PropagatingQuestionReferencesNotPropagatableGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Propagating question have no associated groups.
+        /// </summary>
+        internal static string WB0008_PropagatingQuestionHasNoAssociatedGroups {
+            get {
+                return ResourceManager.GetString("WB0008_PropagatingQuestionHasNoAssociatedGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Propagated group has no propagating questions pointing to them.
+        /// </summary>
+        internal static string WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem {
+            get {
+                return ResourceManager.GetString("WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem", resourceCulture);
             }
         }
     }
