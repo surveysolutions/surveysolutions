@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_questions_substitution_reference_of_not_supported_type : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {

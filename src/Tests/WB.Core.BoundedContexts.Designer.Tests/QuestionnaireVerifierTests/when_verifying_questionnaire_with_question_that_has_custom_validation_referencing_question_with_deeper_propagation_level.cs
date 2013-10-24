@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
@@ -14,7 +15,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    [Ignore("ignored because I've not decided yet how to move IExpressionProcessor to WB.Core.BoundedContexts.Designer. And do I actually need to move it there")]
     class when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_propagation_level : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
@@ -33,9 +33,14 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
             var autopropagatedGroup = new Group() { PublicKey = autoPropagatedGroup, Propagated = Propagate.AutoPropagated };
             autopropagatedGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperPropagationLevelQuestionId });
             questionnaire.Children.Add(autopropagatedGroup);
-            questionnaire.Children.Add(new SingleQuestion() { PublicKey = questionWithCustomValidation, ValidationExpression = "i need to mock some how expression here"});
+            questionnaire.Children.Add(new SingleQuestion() { PublicKey = questionWithCustomValidation, ValidationExpression = "some random expression"});
 
-            verifier = CreateQuestionnaireVerifier();
+            var expressionProcessor = new Mock<IExpressionProcessor>();
+
+            expressionProcessor.Setup(x => x.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()))
+                .Returns(new string[] { underDeeperPropagationLevelQuestionId.ToString() });
+
+            verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
 
         private Because of = () =>
@@ -53,13 +58,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
         private It should_return_first_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_first_error_reference_with_id_of_linkedQuestionId = () =>
+        private It should_return_first_error_reference_with_id_of_questionWithCustomValidation = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(questionWithCustomValidation);
 
         private It should_return_last_error_reference_with_type_Question = () =>
             resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_last_error_reference_with_id_of_linkedQuestionId = () =>
+        private It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
             resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperPropagationLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
