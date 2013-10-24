@@ -194,5 +194,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
                 return ResourceManager.GetString("WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with substitutions can&apos;t have self-references.
+        /// </summary>
+        internal static string WB0016_QuestionWithSubstitutionsCantHaveSelfReferences {
+            get {
+                return ResourceManager.GetString("WB0016_QuestionWithSubstitutionsCantHaveSelfReferences", resourceCulture);
+            }
+        }
     }
 }
