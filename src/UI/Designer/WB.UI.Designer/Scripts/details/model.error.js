@@ -5,6 +5,7 @@
             error = function () {
                 var self = this;
 
+                self.code = ko.observable();
                 self.message = ko.observable();
                 self.references = ko.observableArray();
                 

@@ -2,6 +2,7 @@
 using Main.Core.Domain;
 using Main.Core.Domain.Exceptions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using System.Linq;
 using WB.Core.GenericSubdomains.Logging;
@@ -30,6 +31,8 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly IQuestionnaireVerifier questionnaireVerifier;
+        
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IExpressionReplacer expressionReplacer;
@@ -38,6 +41,7 @@ namespace WB.UI.Designer.Controllers
         public QuestionnaireController(
             ICommandService commandService,
             IMembershipUserService userHelper,
+            IQuestionnaireVerifier questionnaireVerifier,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
@@ -46,6 +50,7 @@ namespace WB.UI.Designer.Controllers
             : base(userHelper)
         {
             this.commandService = commandService;
+            this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
@@ -62,9 +67,10 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public JsonResult RemoteVerification(string id)
+        public JsonResult RemoteVerification(Guid id)
         {
-            return this.Json(new {});
+            var questoinnaireErrors = questionnaireVerifier.Verify(this.GetQuestionnaire(id).Source).ToArray();
+            return this.Json(questoinnaireErrors);
         }
 
         [HttpPost]
