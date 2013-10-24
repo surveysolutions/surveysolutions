@@ -168,4 +168,7 @@
   <data name="WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist" xml:space="preserve">
     <value>Question referenced by question with substitutions does not exist</value>
   </data>
+  <data name="WB0018_QuestionsSubstitutionReferenceOfNotSupportedType" xml:space="preserve">
+    <value>Question's substitution reference of not supported type</value>
+  </data>
 </root>
