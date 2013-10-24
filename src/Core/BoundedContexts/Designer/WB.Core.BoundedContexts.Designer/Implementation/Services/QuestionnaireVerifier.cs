@@ -57,13 +57,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     
                 }
                 var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
-                if (substitutionReferences.Contains(questionsWithSubstitution.StataExportCaption))
+                foreach (var substitutionReference in substitutionReferences)
                 {
-                    yield return
-                        new QuestionnaireVerificationError("WB0016", VerificationMessages.WB0016_QuestionWithSubstitutionsCantHaveSelfReferences,
-                            new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                                questionsWithSubstitution.PublicKey));
-                    continue;
+                    if (substitutionReference == questionsWithSubstitution.StataExportCaption)
+                    {
+                        yield return
+                            new QuestionnaireVerificationError("WB0016",
+                                VerificationMessages.WB0016_QuestionWithSubstitutionsCantHaveSelfReferences,
+                                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                                    questionsWithSubstitution.PublicKey));
+                        continue;
+                    }
+                    var questionSourceOfSubstitution = questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
+                    if (questionSourceOfSubstitution == null)
+                    {
+                        yield return
+                            new QuestionnaireVerificationError("WB0017",
+                                VerificationMessages.WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist,
+                                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                                    questionsWithSubstitution.PublicKey));
+                        continue;
+                    }
                 }
             }
         }
