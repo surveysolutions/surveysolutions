@@ -18,14 +18,20 @@
                             } else {
                                 error(data.Error, status);
                             }
-                            
+
                         }
                     }
                 }
             });
+            amplify.request.define('runRemoteVerification', 'ajax', {
+                url: input.remoteVerificationUrl,
+                dataType: 'json',
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8'
+            });
         };
 
-        sendCommand = function (callbacks, commandJSON) {
+        var sendCommand = function (callbacks, commandJSON) {
             return amplify.request({
                 resourceId: 'sendCommand',
                 data: ko.toJSON(commandJSON),
@@ -34,9 +40,20 @@
             });
         };
 
+        var runRemoteVerification = function (callbacks, id) {
+            return amplify.request({
+                resourceId: 'runRemoteVerification',
+                data: ko.toJSON({ id: id }),
+                success: callbacks.success,
+                error: callbacks.error
+            });
+        };
+
+
         init();
 
         return {
-            sendCommand: sendCommand
+            sendCommand: sendCommand,
+            runRemoteVerification: runRemoteVerification
         };
     });
