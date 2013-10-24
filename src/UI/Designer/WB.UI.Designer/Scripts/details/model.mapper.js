@@ -127,6 +127,9 @@
                     item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
                     item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
+                    item.isAnswersOrdered(dto.isAnswersOrdered);
+                    item.maxAllowedAnswers(dto.maxAllowedAnswers);
+
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();

@@ -67,6 +67,8 @@
                 });
 
                 self.answerOrder = ko.observable();
+                self.isAnswersOrdered = ko.observable(false);
+                self.maxAllowedAnswers = ko.observable('').extend({ number: true });
                 self.answerOptions = ko.observableArray([]);
                 self.cards = ko.observableArray([]);
 
@@ -120,7 +122,7 @@
                 self.isNullo = false;
                 self.cloneSource = ko.observable();
 
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger, self.countOfDecimalPlaces]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers, self.selectedLinkTo, self.isLinkedDurty, self.isInteger, self.countOfDecimalPlaces, self.isAnswersOrdered, self.maxAllowedAnswers]);
                 self.dirtyFlag().reset();
                 self.errors = ko.validation.group(self);
                 this.cache = function () {
@@ -373,6 +375,9 @@
                     item.maxValue(this.maxValue());
                     item.isInteger(this.isInteger());
                     item.countOfDecimalPlaces(this.countOfDecimalPlaces());
+                    
+                    item.isAnswersOrdered(this.isAnswersOrdered());
+                    item.maxAllowedAnswers(this.maxAllowedAnswers());
 
                     item.validationExpression(this.validationExpression());
                     item.validationMessage(this.validationMessage());
@@ -427,6 +432,9 @@
                 this.isInteger(data.isInteger);
                 this.countOfDecimalPlaces(data.countOfDecimalPlaces);
                 
+                this.isAnswersOrdered(data.isAnswersOrdered);
+                this.maxAllowedAnswers(data.maxAllowedAnswers);
+
                 this.answerOptions(_.map(data.answerOptions, function (answer) {
                     return new answerOption().id(answer.id).title(answer.title).value(answer.value);
                 }));
