@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private static readonly IEnumerable<AtomicVerifier> AtomicVerifiers = new AtomicVerifier[]
         {
+            VerifyNoQuestionsExist,
+
             ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
             ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
             ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -25,14 +27,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
         {
-            if (NoQuestionsExist(questionnaire))
-                return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
-
             return
                 from verifier in AtomicVerifiers
                 let error = verifier.Invoke(questionnaire)
                 where error != null
                 select error;
+        }
+
+        private static QuestionnaireVerificationError VerifyNoQuestionsExist(QuestionnaireDocument questionnaire)
+        {
+            return NoQuestionsExist(questionnaire)
+                ? new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions)
+                : null;
         }
 
         private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
