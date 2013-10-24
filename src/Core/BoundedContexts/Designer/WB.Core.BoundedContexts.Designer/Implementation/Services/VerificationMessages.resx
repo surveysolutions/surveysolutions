@@ -171,4 +171,7 @@
   <data name="WB0018_QuestionsSubstitutionReferenceOfNotSupportedType" xml:space="preserve">
     <value>Question's substitution reference of not supported type</value>
   </data>
+  <data name="WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel" xml:space="preserve">
+    <value>Question with substitutions can't have references with deeper propagation level</value>
+  </data>
 </root>

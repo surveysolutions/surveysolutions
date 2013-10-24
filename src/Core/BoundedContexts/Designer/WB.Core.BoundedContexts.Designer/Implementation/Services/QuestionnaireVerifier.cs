@@ -54,14 +54,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 if (questionsWithSubstitution.Featured)
                 {
-                    yield return
-                        new QuestionnaireVerificationError("WB0015", VerificationMessages.WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured,
-                            new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                                questionsWithSubstitution.PublicKey));
+                    yield return QuestionHaveIncorrectSubstitutionCantBeFeatured(questionsWithSubstitution);
                     continue;
-                    
+
                 }
+
                 var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
+
+                List<Guid> autopropagationQuestionsAsVectorForQuestionWithSubstitution =
+                    GetAllAutopropagationQuestionsAsVector(questionsWithSubstitution, questionnaire);
+
                 foreach (var substitutionReference in substitutionReferences)
                 {
                     if (substitutionReference == questionsWithSubstitution.StataExportCaption)
@@ -70,7 +72,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         continue;
                     }
 
-                    var questionSourceOfSubstitution = questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
+                    var questionSourceOfSubstitution =
+                        questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
 
                     if (questionSourceOfSubstitution == null)
                     {
@@ -84,8 +87,41 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             QuestionsSubstitutionReferenceOfNotSupportedType(questionsWithSubstitution, questionSourceOfSubstitution);
                         continue;
                     }
+
+                    List<Guid> autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution =
+                        GetAllAutopropagationQuestionsAsVector(questionSourceOfSubstitution, questionnaire);
+                    if (autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Count > 0
+                        &&
+                        autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
+                            autopropagationQuestionsAsVectorForQuestionWithSubstitution).Any())
+                    {
+                        yield return
+                            QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel(questionsWithSubstitution,
+                                questionSourceOfSubstitution);
+                    }
                 }
             }
+        }
+
+        private QuestionnaireVerificationError QuestionHaveIncorrectSubstitutionCantBeFeatured(IQuestion questionsWithSubstitution)
+        {
+            return new QuestionnaireVerificationError("WB0015",
+                VerificationMessages.WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured,
+                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                    questionsWithSubstitution.PublicKey));
+        }
+
+        private QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel(IQuestion questionsWithSubstitution,
+            IQuestion questionSourceOfSubstitution)
+        {
+            var references = new[]
+                        {
+                            this.CreateVerificationReferenceForQuestion(questionsWithSubstitution),
+                            this.CreateVerificationReferenceForQuestion(questionSourceOfSubstitution)
+                        };
+
+             return new QuestionnaireVerificationError("WB0019",
+               VerificationMessages.WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel, references);
         }
 
         private QuestionnaireVerificationError QuestionsSubstitutionReferenceOfNotSupportedType(IQuestion questionsWithSubstitution,
@@ -128,11 +164,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var errorsFromAtomicVerifiers = AtomicVerifiers.Select(verifier => verifier.Invoke(questionnaire)).Where(error => error != null);
 
             return errorsFromEnumerableVerifiers.Union(errorsFromAtomicVerifiers);
-        }
-
-        private bool NoQuestionsExist(QuestionnaireDocument questionnaire)
-        {
-            return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
@@ -256,16 +287,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 : null;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message,
-            params  IQuestion[] questions)
-        {
-            return questions.Select(q => CreateQuestionnaireVerificationErrorForQuestions(code, message, q));
-        }
-
         private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message,
             params IGroup[] groups)
         {
-            QuestionnaireVerificationReference[] references = 
+            QuestionnaireVerificationReference[] references =
                 groups
                     .Select(CreateVerificationReferenceForGroup)
                     .ToArray();
@@ -273,6 +298,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return references.Any()
                 ? new QuestionnaireVerificationError(code, message, references)
                 : null;
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message,
+            params  IQuestion[] questions)
+        {
+            return questions.Select(q => CreateQuestionnaireVerificationErrorForQuestions(code, message, q));
         }
 
         private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForGroups(string code, string message,
@@ -291,6 +322,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, question.PublicKey);
         }
 
+        private bool NoQuestionsExist(QuestionnaireDocument questionnaire)
+        {
+            return !questionnaire.Find<IQuestion>(_ => true).Any();
+        }
+
         private bool IsGroupPropagatable(IGroup group)
         {
             return group.Propagated == Propagate.AutoPropagated;
@@ -304,6 +340,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private  IEnumerable<IGroup> GetAllParentGroupsForQuestion(IQuestion question, QuestionnaireDocument document)
         {
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
+        }
+
+        private List<Guid> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            List<Guid> propagationQuestions = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), questionnaire)
+                .Where(IsGroupPropagatable)
+                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, questionnaire).FirstOrDefault().PublicKey)
+                .ToList();
+
+            return propagationQuestions;
         }
 
         private IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
