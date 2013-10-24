@@ -15,8 +15,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        private readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
+        private readonly IEnumerable<QuestionType> questionTypesValidToBeLinkedQuestionSource = new[]
         { QuestionType.DateTime, QuestionType.Numeric, QuestionType.Text };
+
+        private readonly IEnumerable<QuestionType> questionTypesValidToBeSubstitutionReferences = new[]
+        {
+            QuestionType.DateTime, QuestionType.Numeric, QuestionType.SingleOption, QuestionType.Text, QuestionType.AutoPropagate
+        };
 
         private readonly IEnumerable<AtomicVerifier> AtomicVerifiers;
 
@@ -61,25 +66,55 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     if (substitutionReference == questionsWithSubstitution.StataExportCaption)
                     {
-                        yield return
-                            new QuestionnaireVerificationError("WB0016",
-                                VerificationMessages.WB0016_QuestionWithSubstitutionsCantHaveSelfReferences,
-                                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                                    questionsWithSubstitution.PublicKey));
+                        yield return QuestionWithSubstitutionsCantHaveSelfReferences(questionsWithSubstitution);
                         continue;
                     }
+
                     var questionSourceOfSubstitution = questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == substitutionReference);
+
                     if (questionSourceOfSubstitution == null)
                     {
+                        yield return QuestionReferencedByQuestionWithSubstitutionsDoesNotExist(questionsWithSubstitution);
+                        continue;
+                    }
+
+                    if (!questionTypesValidToBeSubstitutionReferences.Contains(questionSourceOfSubstitution.QuestionType))
+                    {
                         yield return
-                            new QuestionnaireVerificationError("WB0017",
-                                VerificationMessages.WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist,
-                                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                                    questionsWithSubstitution.PublicKey));
+                            QuestionsSubstitutionReferenceOfNotSupportedType(questionsWithSubstitution, questionSourceOfSubstitution);
                         continue;
                     }
                 }
             }
+        }
+
+        private QuestionnaireVerificationError QuestionsSubstitutionReferenceOfNotSupportedType(IQuestion questionsWithSubstitution,
+            IQuestion questionSourceOfSubstitution)
+        {
+            var references = new[]
+                        {
+                            this.CreateVerificationReferenceForQuestion(questionsWithSubstitution),
+                            this.CreateVerificationReferenceForQuestion(questionSourceOfSubstitution)
+                        };
+
+             return new QuestionnaireVerificationError("WB0018",
+                VerificationMessages.WB0018_QuestionsSubstitutionReferenceOfNotSupportedType, references);
+        }
+
+        private QuestionnaireVerificationError QuestionReferencedByQuestionWithSubstitutionsDoesNotExist(IQuestion questionsWithSubstitution)
+        {
+            return new QuestionnaireVerificationError("WB0017",
+                VerificationMessages.WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist,
+                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                    questionsWithSubstitution.PublicKey));
+        }
+
+        private QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveSelfReferences(IQuestion questionsWithSubstitution)
+        {
+            return new QuestionnaireVerificationError("WB0016",
+                VerificationMessages.WB0016_QuestionWithSubstitutionsCantHaveSelfReferences,
+                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                    questionsWithSubstitution.PublicKey));
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
@@ -161,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                bool isSourceQuestionValidType = QuestionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
+                bool isSourceQuestionValidType = this.questionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
                 if (!isSourceQuestionValidType)
                 {
                     yield return LinkedQuestionReferenceQuestionOfNotSupportedTypeError(linkedQuestion, sourceQuestion);
