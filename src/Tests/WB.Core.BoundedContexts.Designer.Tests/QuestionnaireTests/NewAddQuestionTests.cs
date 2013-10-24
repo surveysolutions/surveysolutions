@@ -1717,5 +1717,31 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleContainsInvalidSubstitutionReference));
         }
+
+        [Test]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_Ordered_and_MaxAnswer_Are_Set_Then_event_contains_values(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                var questionnaireKey = Guid.NewGuid();
+                var groupKey = Guid.NewGuid();
+                var isAnswersOrdered = true;
+                var maxAllowedAnswers = 1;
+                Guid responsibleId = Guid.NewGuid();
+                // arrange
+                Questionnaire questionnsire = CreateQuestionnaireWithOneGroup(questionnaireId: questionnaireKey, groupId: groupKey, responsibleId: responsibleId);
+                Option[] options = new Option[2] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") };
+
+                // act
+                questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, options, Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: isAnswersOrdered, maxAllowedAnswers: maxAllowedAnswers);
+                // assert
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.AreEqual(isAnswersOrdered, risedEvent.IsAnswersOrdered);
+                Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
+            }
+        }
     }
 }
