@@ -187,11 +187,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has incorrect substitution reference.
+        ///   Looks up a localized string similar to Question with substitutions can&apos;t be marked as pre-filled.
         /// </summary>
-        internal static string WB0015_QuestionHaveIncorrectSubstitutionReference {
+        internal static string WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured {
             get {
-                return ResourceManager.GetString("WB0015_QuestionHaveIncorrectSubstitutionReference", resourceCulture);
+                return ResourceManager.GetString("WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured", resourceCulture);
             }
         }
     }

@@ -159,7 +159,7 @@
   <data name="WB0014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel" xml:space="preserve">
     <value>Question have custom validation referencing question with deeper propagation level</value>
   </data>
-  <data name="WB0015_QuestionHaveIncorrectSubstitutionReference" xml:space="preserve">
-    <value>Question has incorrect substitution reference</value>
+  <data name="WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured" xml:space="preserve">
+    <value>Question with substitutions can't be marked as pre-filled</value>
   </data>
 </root>
