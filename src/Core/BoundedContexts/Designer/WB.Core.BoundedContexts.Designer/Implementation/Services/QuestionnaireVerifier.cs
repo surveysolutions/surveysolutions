@@ -32,7 +32,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
                 ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
-                this.ErrorsByLinkedQuestions
+
+                ErrorsByLinkedQuestions
             };
         }
 
