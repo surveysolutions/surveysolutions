@@ -230,5 +230,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
                 return ResourceManager.GetString("WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question referenced by question custom validation expression does not exist.
+        /// </summary>
+        internal static string WB0020_QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist {
+            get {
+                return ResourceManager.GetString("WB0020_QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter used in validation expression isn&apos;t recognized.
+        /// </summary>
+        internal static string WB0021_ParameterUsedInValidationExpressionIsntRecognized {
+            get {
+                return ResourceManager.GetString("WB0021_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
+            }
+        }
     }
 }
