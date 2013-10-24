@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Utility;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
@@ -33,8 +34,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
                 ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
 
-                ErrorsByLinkedQuestions
+                ErrorsByLinkedQuestions,
+
+                ErrorsByQuestionsWithSubstitutions
             };
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(QuestionnaireDocument questionnaire)
+        {
+            IEnumerable<IQuestion> questionsWithSubstitutions =
+                questionnaire.Find<IQuestion>(question => StringUtil.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
+
+            foreach (var questionsWithSubstitution in questionsWithSubstitutions)
+            {
+                if (questionsWithSubstitution.Featured)
+                {
+                    yield return
+                        new QuestionnaireVerificationError("WB0015", VerificationMessages.WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured,
+                            new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                                questionsWithSubstitution.PublicKey));
+                }
+            }
         }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
