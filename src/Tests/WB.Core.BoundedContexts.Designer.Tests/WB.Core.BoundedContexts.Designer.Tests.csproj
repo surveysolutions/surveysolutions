@@ -92,6 +92,7 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_questions_not_under_propagated_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_question_of_not_supported_type.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_has_more_than_one_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_has_no_propagating_question_pointing_to_it.cs" />

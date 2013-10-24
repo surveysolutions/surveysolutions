@@ -14,6 +14,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
+        private readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
+        { QuestionType.DateTime, QuestionType.Numeric, QuestionType.Text };
+
         private readonly IEnumerable<AtomicVerifier> AtomicVerifiers;
 
         private readonly IEnumerable<EnumerableVerifier> EnumerableVerifiers;
@@ -29,8 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
                 ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
-                ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist,
-                ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType
+                this.ErrorsByLinkedQuestions
             };
         }
 
@@ -38,6 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (NoQuestionsExist(questionnaire))
                 return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
+            
+            questionnaire.ConnectChildrenWithParent();
 
             var errorsFromEnumerableVerifiers = EnumerableVerifiers.SelectMany(verifier => verifier.Invoke(questionnaire));
             var errorsFromAtomicVerifiers = AtomicVerifiers.Select(verifier => verifier.Invoke(questionnaire)).Where(error => error != null);
@@ -53,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
             QuestionnaireDocument questionnaire)
         {
-            var autoPropagateQuestionsWithEmptyTriggers = questionnaire.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0);
+            var autoPropagateQuestionsWithEmptyTriggers = questionnaire.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0).ToArray();
 
             return CreateQuestionnaireVerificationErrorsForQuestions("WB0008",
                 VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
@@ -95,48 +99,67 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist(
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestions(
             QuestionnaireDocument questionnaire)
         {
-            var linkedQuestionsWithNotExistingSources =
-                questionnaire.Find<IQuestion>(
-                    question =>
-                        question.LinkedToQuestionId.HasValue && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value) == null);
-
-            return CreateQuestionnaireVerificationErrorsForQuestions("WB0011",
-                VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist,
-                linkedQuestionsWithNotExistingSources);
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType(
-            QuestionnaireDocument questionnaire)
-        {
-
             var linkedQuestions = questionnaire.Find<IQuestion>(
                 question => question.LinkedToQuestionId.HasValue);
 
             foreach (var linkedQuestion in linkedQuestions)
             {
                 var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
+
                 if (sourceQuestion == null)
-                    continue;
-
-                bool isSourceQuestionValidType = sourceQuestion.QuestionType == QuestionType.Text
-                    || sourceQuestion.QuestionType == QuestionType.Numeric
-                    || sourceQuestion.QuestionType == QuestionType.DateTime;
-                
-                if (isSourceQuestionValidType)
-                    continue;
-
-                var references = new[]
                 {
-                    this.CreateVerificationReferenceForQuestion(linkedQuestion), 
-                    this.CreateVerificationReferenceForQuestion(sourceQuestion)
-                };
+                    yield return QuestionReferencedByLinkedQuestionDoesNotExistError(linkedQuestion);
+                    continue;
+                }
 
-                yield return new QuestionnaireVerificationError("WB0012",
-                    VerificationMessages.WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType, references);
+                bool isSourceQuestionValidType = QuestionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
+                if (!isSourceQuestionValidType)
+                {
+                    yield return LinkedQuestionReferenceQuestionOfNotSupportedTypeError(linkedQuestion, sourceQuestion);
+                    continue;
+                }
+
+                var isSourceQuestionInsidePropagatedGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsGroupPropagatable);
+                if (!isSourceQuestionInsidePropagatedGroup)
+                {
+                    yield return LinkedQuestionReferenceQuestionNotUnderPropagatedGroup(linkedQuestion, sourceQuestion);
+                }
             }
+        }
+
+        private QuestionnaireVerificationError QuestionReferencedByLinkedQuestionDoesNotExistError(IQuestion linkedQuestion)
+        {
+            return new QuestionnaireVerificationError("WB0011",
+                       VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist,
+                       this.CreateVerificationReferenceForQuestion(linkedQuestion));
+        }
+
+        private QuestionnaireVerificationError LinkedQuestionReferenceQuestionOfNotSupportedTypeError(IQuestion linkedQuestion,
+            IQuestion sourceQuestion)
+        {
+            var references = new[]
+            {
+                this.CreateVerificationReferenceForQuestion(linkedQuestion),
+                this.CreateVerificationReferenceForQuestion(sourceQuestion)
+            };
+
+            return new QuestionnaireVerificationError("WB0012",
+                VerificationMessages.WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType, references);
+        }
+
+        private QuestionnaireVerificationError LinkedQuestionReferenceQuestionNotUnderPropagatedGroup(IQuestion linkedQuestion,
+            IQuestion sourceQuestion)
+        {
+            var references = new[]
+            {
+                this.CreateVerificationReferenceForQuestion(linkedQuestion),
+                this.CreateVerificationReferenceForQuestion(sourceQuestion)
+            };
+            return new QuestionnaireVerificationError("WB0013",
+                VerificationMessages.WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup, references);
         }
 
         private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,
@@ -153,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message,
-            IEnumerable<IQuestion> questions)
+            params  IQuestion[] questions)
         {
             return questions.Select(q => CreateQuestionnaireVerificationErrorForQuestions(code, message, q));
         }
@@ -195,6 +218,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
         {
             return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(groupId));
+        }
+
+        private  IEnumerable<IGroup> GetAllParentGroupsForQuestion(IQuestion question, QuestionnaireDocument document)
+        {
+            return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
+        }
+
+        private IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
+        {
+            var parentGroups = new List<IGroup>();
+
+            while (group != document)
+            {
+                parentGroups.Add(group);
+                group = (IGroup)group.GetParent();
+            }
+
+            return parentGroups;
         }
     }
 }
