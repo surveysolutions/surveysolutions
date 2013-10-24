@@ -39,14 +39,20 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
         private It should_return_error_with_code__WB0012__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0012");
 
-        private It should_return_error_with_one_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+        private It should_return_error_with_two_references = () =>
+            resultErrors.Single().References.Count().ShouldEqual(2);
 
-        private It should_return_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        private It should_return_first_error_reference_with_type_Question = () =>
+            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_error_reference_with_id_of_linkedQuestionId = () =>
-            resultErrors.Single().References.Single().Id.ShouldEqual(linkedQuestionId);
+        private It should_return_first_error_reference_with_id_of_linkedQuestionId = () =>
+            resultErrors.Single().References.First().Id.ShouldEqual(linkedQuestionId);
+
+        private It should_return_last_error_reference_with_type_Question = () =>
+           resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+
+        private It should_return_last_error_reference_with_id_of_notSupportedForLinkingQuestionId = () =>
+            resultErrors.Single().References.Last().Id.ShouldEqual(notSupportedForLinkingQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
