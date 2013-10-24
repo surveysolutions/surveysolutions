@@ -1,20 +1,17 @@
 ﻿<script type="text/html" id="Categorical">
     <div data-bind="visible: qtype() == 'MultyOption'">
-        <button type="button" class="btn btn-small" data-toggle="checkbox" data-value="true" data-bind="checkedButtons: isAnswersOrdered, popover: { content: 'We will be saving and displaying the order in which answers were given.', title: 'Ordered', placement: 'right', trigger: 'hover' }"><i class="icon-list-ol"></i>&nbsp;ordered</button>
+        <button type="button" class="btn btn-small" data-toggle="checkbox" data-value="true" data-bind="checkedButtons: isAnswersOrdered, popover: { content: 'We will be saving and displaying the order in which answers were given.', title: 'Ordered question', placement: 'right', trigger: 'hover' }"><i class="icon-list-ol"></i>&nbsp;ordered</button>
         <div style="margin-top: 10px" class="control-group" data-bind="validationElement: maxAllowedAnswers">
                 <label class="control-label">Maximum number of answers</label>
                 <div class="controls">
                     <input id="maxAllowedAnswers" placeholder="" type="text" data-bind="value: maxAllowedAnswers, valueUpdate: 'afterkeydown'" class="input-block-level" maxlength="32" />
                 </div>
-        </div>
-                
-    </div>
-    
+        </div>                
+    </div>    
     <div class="btn-group">
         <button type="button" class="btn btn-small" data-value="0" data-bind="checkedButtons: isLinked">manual</button>
         <button type="button" class="btn btn-small" data-value="1" data-bind="checkedButtons: isLinked">linked</button>
     </div>
-
     <div style="margin-top: 20px">
         <div data-bind="visible: isLinked() == 0">
             <label class="control-label required">Categories</label>
