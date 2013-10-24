@@ -28,27 +28,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (NoQuestionsExist(questionnaire))
                 return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
 
-            var errorList = new List<QuestionnaireVerificationError>();
-
-            foreach (var verifier in AtomicVerifiers)
-            {
-                AddGroupOfErrorsByQuestionnaire(errorList, questionnaire, verifier);
-            }
-
-            return errorList;
+            return
+                from verifier in AtomicVerifiers
+                let error = verifier.Invoke(questionnaire)
+                where error != null
+                select error;
         }
 
         private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
-        }
-
-        private static void AddGroupOfErrorsByQuestionnaire(List<QuestionnaireVerificationError> errorList, QuestionnaireDocument questionnaire,
-            Func<QuestionnaireDocument, QuestionnaireVerificationError> errorChecker)
-        {
-            var error = errorChecker(questionnaire);
-            if (error != null)
-                errorList.Add(error);
         }
 
         private static QuestionnaireVerificationError ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
