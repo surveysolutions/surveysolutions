@@ -162,4 +162,7 @@
   <data name="WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured" xml:space="preserve">
     <value>Question with substitutions can't be marked as pre-filled</value>
   </data>
+  <data name="WB0016_QuestionWithSubstitutionsCantHaveSelfReferences" xml:space="preserve">
+    <value>Question with substitutions can't have self-references</value>
+  </data>
 </root>

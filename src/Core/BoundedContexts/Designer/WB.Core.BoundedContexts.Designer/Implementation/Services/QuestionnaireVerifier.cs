@@ -53,6 +53,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         new QuestionnaireVerificationError("WB0015", VerificationMessages.WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured,
                             new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
                                 questionsWithSubstitution.PublicKey));
+                    continue;
+                    
+                }
+                var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionsWithSubstitution.QuestionText);
+                if (substitutionReferences.Contains(questionsWithSubstitution.StataExportCaption))
+                {
+                    yield return
+                        new QuestionnaireVerificationError("WB0016", VerificationMessages.WB0016_QuestionWithSubstitutionsCantHaveSelfReferences,
+                            new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                                questionsWithSubstitution.PublicKey));
+                    continue;
                 }
             }
         }
