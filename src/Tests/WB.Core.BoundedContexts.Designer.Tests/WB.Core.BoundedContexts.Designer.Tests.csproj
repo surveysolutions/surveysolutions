@@ -103,6 +103,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_referenced_by_linked_question_does_not_exist.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_substitutions_that_has_self_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_two_propagating_questions_which_have_no_associated_groups.cs" />
   </ItemGroup>
   <ItemGroup />
