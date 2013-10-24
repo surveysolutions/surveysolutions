@@ -62,6 +62,12 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        public JsonResult RemoteVerification(string id)
+        {
+            return this.Json(new {});
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Clone(QuestionnaireCloneModel model)
         {

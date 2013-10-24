@@ -28,6 +28,7 @@
                 questionnaire: q,
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
+                remoteVerificationUrl: '@Url.Action("RemoteVerification", "Questionnaire", new {}, Request.Url.Scheme)',
                 url: {
                     checkUserUrl: '@Url.Action("FindByEmail", "Account", null, Request.Url.Scheme)',
                     lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
@@ -115,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="span4">
                     <div class="statistics">
                         <ul class="nav nav-pills" data-bind="with: statistics">
                             <li><a>Groups: <span class="badge" data-bind="text: groups"></span></a></li>
@@ -124,10 +125,13 @@
                     </div>
 
                 </div>
-                <div class="span2">
+                <div class="span4">
                     <div id="footer-buttons" class="pull-right">
+                        <button type="button" class="btn btn-primary btn-small" data-bind="click: $root.runVerifier">
+                            Verify
+                        </button>
                         <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
-                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> messages
                         </button>
                     </div>
                 </div>
@@ -138,10 +142,10 @@
         <div class="inner">
             <div class="title">
                 <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
-                <span>Errors log</span>
+                <span>Messages</span>
             </div>
             <div class="body">
-                <ul data-bind="foreach: errors" class="error-list">
+                <ul data-bind="foreach: messages" class="error-list">
                     <li class="error">
                         <span data-bind="html: $data"></span>
                     </li>
