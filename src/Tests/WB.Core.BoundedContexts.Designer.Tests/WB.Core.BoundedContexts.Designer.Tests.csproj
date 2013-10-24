@@ -92,6 +92,7 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_questions_substitution_reference_of_not_supported_type.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_propagation_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_questions_not_under_propagated_group.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_referenced_by_linked_question_does_not_exist.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_propagation_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_referenced_by_question_with_substitutions_does_not_exist.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_substitutions_that_has_self_references.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_two_propagating_questions_which_have_no_associated_groups.cs" />

@@ -221,5 +221,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
                 return ResourceManager.GetString("WB0018_QuestionsSubstitutionReferenceOfNotSupportedType", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with substitutions can&apos;t have references with deeper propagation level.
+        /// </summary>
+        internal static string WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel {
+            get {
+                return ResourceManager.GetString("WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel", resourceCulture);
+            }
+        }
     }
 }
