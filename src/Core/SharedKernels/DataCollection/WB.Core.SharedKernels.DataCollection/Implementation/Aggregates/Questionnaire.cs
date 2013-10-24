@@ -704,8 +704,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     var lengthDiff = propagationQuestionsVector.Count() - referencedPropagationQuestionsVector.Count();
 
-                    return lengthDiff >= 0 
-                        && propagationQuestionsVector.Except(propagationQuestionsVector).Count() == lengthDiff;
+                    return lengthDiff >= 0
+                        && propagationQuestionsVector.Except(referencedPropagationQuestionsVector).Count() == lengthDiff;
                 };
 
             return substitutionReferencedQuestions.All(q =>
