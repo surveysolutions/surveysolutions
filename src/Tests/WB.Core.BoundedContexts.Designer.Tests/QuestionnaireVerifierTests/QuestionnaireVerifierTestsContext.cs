@@ -1,31 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using System.Linq;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests
+namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    [Subject(typeof(Questionnaire))]
-    internal class QuestionnaireTestsContext
+    [Subject(typeof(QuestionnaireVerifier))]
+    internal class QuestionnaireVerifierTestsContext
     {
-        public static T GetSingleEvent<T>(EventContext eventContext)
+        protected static QuestionnaireVerifier CreateQuestionnaireVerifier()
         {
-            return (T)eventContext.Events.Single(e => e.Payload is T).Payload;
+            return new QuestionnaireVerifier();
         }
 
-        public static T GetLastEvent<T>(EventContext eventContext)
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
         {
-            return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
-        }
-
-        public static Questionnaire CreateQuestionnaire()
-        {
-            return new Questionnaire(new Guid(), new QuestionnaireDocument());
+            return new QuestionnaireDocument
+            {
+                Children = questionnaireChildren.ToList(),
+            };
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

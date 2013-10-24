@@ -123,6 +123,11 @@
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
+    <Compile Include="Implementation\Services\VerificationMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IJsonExportService.cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
@@ -171,7 +176,13 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Implementation\Services\VerificationMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
