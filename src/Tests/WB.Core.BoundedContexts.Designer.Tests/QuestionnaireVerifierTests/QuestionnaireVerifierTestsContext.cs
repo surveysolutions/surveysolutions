@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using System.Linq;
 
@@ -12,9 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
     [Subject(typeof(QuestionnaireVerifier))]
     internal class QuestionnaireVerifierTestsContext
     {
-        protected static QuestionnaireVerifier CreateQuestionnaireVerifier()
+        protected static QuestionnaireVerifier CreateQuestionnaireVerifier(IExpressionProcessor expressionProcessor = null)
         {
-            return new QuestionnaireVerifier();
+            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

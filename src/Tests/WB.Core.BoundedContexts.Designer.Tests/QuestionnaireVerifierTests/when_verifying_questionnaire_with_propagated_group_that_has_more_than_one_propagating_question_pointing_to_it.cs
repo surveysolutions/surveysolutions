@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_propagated_group_has_more_than_one_propagating_question_pointing_to_it : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_propagated_group_that_has_more_than_one_propagating_question_pointing_to_it : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {
