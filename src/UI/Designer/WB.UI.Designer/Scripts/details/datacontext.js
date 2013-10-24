@@ -352,7 +352,8 @@
             case "DropDownList":
             case "MultyOption":
                 command.optionsOrder = question.answerOrder();
-
+                command.isAnswersOrdered = question.isAnswersOrdered();
+                command.maxAllowedAnswers = question.maxAllowedAnswers();
                 if (question.isLinked() == 1) {
                     command.linkedToQuestionId = question.selectedLinkTo();
                 } else {
@@ -377,8 +378,8 @@
                     command.isAutopropagating = true;
                     command.isInteger = true;
                     command.maxValue = question.maxValue();
-                    command.triggeredGroupIds = _.map(question.triggers(), function (trriger) {
-                    return trriger.key;
+                    command.triggeredGroupIds = _.map(question.triggers(), function (trigger) {
+                    return trigger.key;
                 });
                 break;
             }
