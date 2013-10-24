@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    [Ignore("Unignore doing task KP-2781")]
     internal class when_verifying_questionnaire_with_two_propagating_questions_which_have_no_associated_groups : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
             secondQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new AutoPropagateQuestion { PublicKey = firstQuestionId },
-                new AutoPropagateQuestion { PublicKey = secondQuestionId }
+                new AutoPropagateQuestion { PublicKey = firstQuestionId, QuestionType = QuestionType.AutoPropagate},
+                new AutoPropagateQuestion { PublicKey = secondQuestionId, QuestionType = QuestionType.AutoPropagate }
             );
 
             verifier = CreateQuestionnaireVerifier();

@@ -10,47 +10,57 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     using AtomicVerifier = Func<QuestionnaireDocument, QuestionnaireVerificationError>;
+    using EnumerableVerifier = Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>;
 
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        private static readonly IEnumerable<AtomicVerifier> AtomicVerifiers = new AtomicVerifier[]
-        {
-            ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
-            ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
-            ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
+        private readonly IEnumerable<AtomicVerifier> AtomicVerifiers;
 
-            ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist,
-            ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType,
-        };
+        private readonly IEnumerable<EnumerableVerifier> EnumerableVerifiers;
+
+        public QuestionnaireVerifier()
+        {
+            AtomicVerifiers = new AtomicVerifier[]
+            {
+            };
+
+            EnumerableVerifiers = new EnumerableVerifier[]
+            {
+                ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
+                ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
+                ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
+                ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist,
+                ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType
+            };
+        }
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
         {
             if (NoQuestionsExist(questionnaire))
                 return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
 
-            return
-                from verifier in AtomicVerifiers
-                let error = verifier.Invoke(questionnaire)
-                where error != null
-                select error;
+            var errorsFromEnumerableVerifiers = EnumerableVerifiers.SelectMany(verifier => verifier.Invoke(questionnaire));
+            var errorsFromAtomicVerifiers = AtomicVerifiers.Select(verifier => verifier.Invoke(questionnaire)).Where(error => error != null);
+
+            return errorsFromEnumerableVerifiers.Union(errorsFromAtomicVerifiers);
         }
 
-        private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
+        private bool NoQuestionsExist(QuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
 
-        private static QuestionnaireVerificationError ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(
             QuestionnaireDocument questionnaire)
         {
             var autoPropagateQuestionsWithEmptyTriggers = questionnaire.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0);
 
-            return CreateQuestionnaireVerificationErrorForQuestions("WB0008",
+            return CreateQuestionnaireVerificationErrorsForQuestions("WB0008",
                 VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
                 autoPropagateQuestionsWithEmptyTriggers);
         }
 
-        private static QuestionnaireVerificationError ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(
             QuestionnaireDocument questionnaire)
         {
             IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = questionnaire.Find<IGroup>(group
@@ -58,59 +68,83 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     && !GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any());
 
             return
-                CreateQuestionnaireVerificationErrorForGroups("WB0009",
+                CreateQuestionnaireVerificationErrorsForGroups("WB0009",
                     VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem,
                     propagatedGroupsWithNoPropagatingQuestionsPointingToThem);
         }
 
-        private static QuestionnaireVerificationError ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(
             QuestionnaireDocument questionnaire)
         {
-            IEnumerable<IGroup> propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem = questionnaire.Find<IGroup>(group
-                => IsGroupPropagatable(group)
-                    && GetPropagatingQuestionsPointingToPropagatedGroup(group.PublicKey, questionnaire).Count() > 1);
+            IEnumerable<IGroup> propagatedGroups = questionnaire.Find<IGroup>(IsGroupPropagatable);
+            foreach (var propagatedGroup in propagatedGroups)
+            {
+                var propagatingQuestionsPointingToPropagatedGroup =
+                    GetPropagatingQuestionsPointingToPropagatedGroup(propagatedGroup.PublicKey, questionnaire);
 
-            return CreateQuestionnaireVerificationErrorForGroups("WB0010",
-                VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem,
-                propagatedGroupsWithMoreThanOnePropagatingQuestionPointingToThem);
+                if (propagatingQuestionsPointingToPropagatedGroup.Count() < 2)
+                    continue;
+
+                var references = new List<QuestionnaireVerificationReference>();
+
+                references.Add(this.CreateVerificationReferenceForGroup(propagatedGroup));
+                references.AddRange(propagatingQuestionsPointingToPropagatedGroup.Select(this.CreateVerificationReferenceForQuestion));
+
+                yield return new QuestionnaireVerificationError("WB0010",
+                    VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem, references.ToArray());
+            }
         }
 
-        private static QuestionnaireVerificationError ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist(QuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsReferencedByLinkedQuestionsDoNotExist(
+            QuestionnaireDocument questionnaire)
         {
             var linkedQuestionsWithNotExistingSources =
                 questionnaire.Find<IQuestion>(
-                    question => question.LinkedToQuestionId.HasValue && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value) == null);
+                    question =>
+                        question.LinkedToQuestionId.HasValue && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value) == null);
 
-            return CreateQuestionnaireVerificationErrorForQuestions("WB0011",
-                VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist, linkedQuestionsWithNotExistingSources);
+            return CreateQuestionnaireVerificationErrorsForQuestions("WB0011",
+                VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist,
+                linkedQuestionsWithNotExistingSources);
         }
 
-        private static QuestionnaireVerificationError ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType(QuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByLinkedQuestionReferenceQuestionOfNotSupportedType(
+            QuestionnaireDocument questionnaire)
         {
-            Func<Guid, bool> isReferencedQuestionTypeSupported = questionId =>
+
+            var linkedQuestions = questionnaire.Find<IQuestion>(
+                question => question.LinkedToQuestionId.HasValue);
+
+            foreach (var linkedQuestion in linkedQuestions)
             {
-                var question = questionnaire.Find<IQuestion>(questionId);
-                if (question == null)
-                    return true;
-                return question.QuestionType == QuestionType.Text
-                    || question.QuestionType == QuestionType.Numeric
-                    || question.QuestionType == QuestionType.DateTime;
-            };
+                var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
+                if (sourceQuestion == null)
+                    continue;
 
-            var linkedQuestionsReferenceQuestionOfNotSupportedType =
-                questionnaire.Find<IQuestion>(
-                    question => question.LinkedToQuestionId.HasValue && !isReferencedQuestionTypeSupported(question.LinkedToQuestionId.Value));
+                bool isSourceQuestionValidType = sourceQuestion.QuestionType == QuestionType.Text
+                    || sourceQuestion.QuestionType == QuestionType.Numeric
+                    || sourceQuestion.QuestionType == QuestionType.DateTime;
+                
+                if (isSourceQuestionValidType)
+                    continue;
 
-            return CreateQuestionnaireVerificationErrorForQuestions("WB0012",
-                VerificationMessages.WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType, linkedQuestionsReferenceQuestionOfNotSupportedType);
+                var references = new[]
+                {
+                    this.CreateVerificationReferenceForQuestion(linkedQuestion), 
+                    this.CreateVerificationReferenceForQuestion(sourceQuestion)
+                };
+
+                yield return new QuestionnaireVerificationError("WB0012",
+                    VerificationMessages.WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType, references);
+            }
         }
 
-        private static QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,
-            IEnumerable<IQuestion> questions)
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,
+            params IQuestion[] questions)
         {
             QuestionnaireVerificationReference[] references =
                 questions
-                    .Select(q => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, q.PublicKey))
+                    .Select(CreateVerificationReferenceForQuestion)
                     .ToArray();
 
             return references.Any()
@@ -118,12 +152,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 : null;
         }
 
-        private static QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message,
-            IEnumerable<IGroup> groups)
+        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message,
+            IEnumerable<IQuestion> questions)
+        {
+            return questions.Select(q => CreateQuestionnaireVerificationErrorForQuestions(code, message, q));
+        }
+
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message,
+            params IGroup[] groups)
         {
             QuestionnaireVerificationReference[] references = 
                 groups
-                    .Select(g => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, g.PublicKey))
+                    .Select(CreateVerificationReferenceForGroup)
                     .ToArray();
 
             return references.Any()
@@ -131,12 +171,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 : null;
         }
 
-        private static bool IsGroupPropagatable(IGroup group)
+        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForGroups(string code, string message,
+           IEnumerable<IGroup> questions)
+        {
+            return questions.Select(q => CreateQuestionnaireVerificationErrorForGroups(code, message, q));
+        }
+
+        private QuestionnaireVerificationReference CreateVerificationReferenceForGroup(IGroup group)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey);
+        }
+
+        private QuestionnaireVerificationReference CreateVerificationReferenceForQuestion(IQuestion question)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, question.PublicKey);
+        }
+
+        private bool IsGroupPropagatable(IGroup group)
         {
             return group.Propagated == Propagate.AutoPropagated;
         }
 
-        private static IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
+        private IEnumerable<IQuestion> GetPropagatingQuestionsPointingToPropagatedGroup(Guid groupId, QuestionnaireDocument document)
         {
             return document.Find<IAutoPropagateQuestion>(question => question.Triggers.Contains(groupId));
         }
