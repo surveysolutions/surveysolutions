@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Func<QuestionnaireDocument, QuestionnaireVerificationError> errorChecker)
         {
             var error = errorChecker(questionnaire);
-            if (error.References.Any())
+            if (error != null)
                 errorList.Add(error);
         }
 
@@ -119,17 +119,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,
             IEnumerable<IQuestion> questions)
         {
-            return new QuestionnaireVerificationError(code, message,
-                questions.Select(q => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, q.PublicKey))
-                    .ToArray());
+            QuestionnaireVerificationReference[] references =
+                questions
+                    .Select(q => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, q.PublicKey))
+                    .ToArray();
+
+            return references.Any()
+                ? new QuestionnaireVerificationError(code, message, references)
+                : null;
         }
 
         private static QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message,
             IEnumerable<IGroup> groups)
         {
-            return new QuestionnaireVerificationError(code, message,
-                groups.Select(g => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, g.PublicKey))
-                    .ToArray());
+            QuestionnaireVerificationReference[] references = 
+                groups
+                    .Select(g => new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, g.PublicKey))
+                    .ToArray();
+
+            return references.Any()
+                ? new QuestionnaireVerificationError(code, message, references)
+                : null;
         }
 
         private static bool IsGroupPropagatable(IGroup group)
