@@ -165,4 +165,7 @@
   <data name="WB0016_QuestionWithSubstitutionsCantHaveSelfReferences" xml:space="preserve">
     <value>Question with substitutions can't have self-references</value>
   </data>
+  <data name="WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist" xml:space="preserve">
+    <value>Question referenced by question with substitutions does not exist</value>
+  </data>
 </root>
