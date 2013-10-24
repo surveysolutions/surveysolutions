@@ -412,6 +412,7 @@
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\config.js" />
+    <Content Include="Scripts\details\model.error.js" />
     <Content Include="Scripts\details\dataprimer.js" />
     <Content Include="Scripts\details\expressionParser.js" />
     <Content Include="Scripts\details\model.sharePerson.js" />

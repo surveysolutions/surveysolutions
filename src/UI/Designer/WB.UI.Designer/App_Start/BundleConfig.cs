@@ -101,6 +101,7 @@
                     "~/Scripts/details/dataservice.js",
                     "~/Scripts/details/ko.bindingHandlers.js",
                     "~/Scripts/details/ko.debug.helpers.js",
+                    "~/Scripts/details/model.error.js",
                     "~/Scripts/details/model.answerOption.js",
                     "~/Scripts/details/model.statistic.js",
                     "~/Scripts/details/model.group.js",
