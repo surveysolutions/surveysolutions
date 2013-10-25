@@ -9,6 +9,7 @@ using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {

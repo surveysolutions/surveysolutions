@@ -121,9 +121,6 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
-    <Compile Include="Implementation\Services\ExpressionProcessor.cs" />
-    <Compile Include="Implementation\Services\IdentifierCollector.cs" />
-    <Compile Include="Implementation\Services\IExpressionProcessor.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\VerificationMessages.Designer.cs">
@@ -151,10 +148,6 @@
     <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
-      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
-      <Name>NCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
       <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
       <Name>Ncqrs.Portable</Name>
@@ -174,6 +167,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
       <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>

@@ -31,6 +31,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
@@ -116,6 +117,7 @@ namespace Web.Supervisor.App_Start
                 new ServiceLocationModule(),
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
+                new ExpressionProcessorModule(),
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),

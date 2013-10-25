@@ -537,20 +537,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\StataSuplier.cs">
       <Link>Export\StataSuplier.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ExpressionDependencyBuilder.cs">
-      <Link>ExpressionExecutors\ExpressionDependencyBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs">
-      <Link>ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
       <Link>ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\IExpressionExecutor.cs">
       <Link>ExpressionExecutors\IExpressionExecutor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\QuestionnaireParametersParser.cs">
-      <Link>ExpressionExecutors\QuestionnaireParametersParser.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ICommandListSupplier.cs">
       <Link>ICommandListSupplier.cs</Link>
@@ -780,11 +771,12 @@
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Documents\Statistics\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
+    <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@
 using System.Collections;
 using NCalc;
 
-namespace Main.Core.ExpressionExecutors.ExpressionExtentions
+namespace WB.Core.SharedKernels.ExpressionProcessor
 {
     /// <summary>
     /// The extension functions.

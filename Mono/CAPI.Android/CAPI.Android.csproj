@@ -339,6 +339,10 @@
       <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
       <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
+      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>
       <Name>CAPI.Android.Core.Model</Name>

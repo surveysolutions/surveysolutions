@@ -9,7 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.QuestionnaireTests

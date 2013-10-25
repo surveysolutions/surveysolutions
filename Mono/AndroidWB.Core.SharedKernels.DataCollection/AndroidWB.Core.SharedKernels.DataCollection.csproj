@@ -319,15 +319,6 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Repositories\QuestionnaireRepository.cs">
       <Link>Implementation\Repositories\QuestionnaireRepository.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\ExpressionProcessor.cs">
-      <Link>Implementation\Services\ExpressionProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IdentifierCollector.cs">
-      <Link>Implementation\Services\IdentifierCollector.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Implementation\Services\IExpressionProcessor.cs">
-      <Link>Implementation\Services\IExpressionProcessor.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\ReadSide\IVersionedReadSideRepositoryReader.cs">
       <Link>ReadSide\IVersionedReadSideRepositoryReader.cs</Link>
     </Compile>
@@ -406,12 +397,18 @@
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
+      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Implementation\Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
+      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

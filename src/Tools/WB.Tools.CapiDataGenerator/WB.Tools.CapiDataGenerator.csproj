@@ -260,6 +260,10 @@
       <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{D55B9582-70FD-4340-A3BC-55A33D49B2E6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
