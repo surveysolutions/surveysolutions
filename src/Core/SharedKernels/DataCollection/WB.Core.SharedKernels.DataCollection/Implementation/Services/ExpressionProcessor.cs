@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
     {
         public IEnumerable<string> GetIdentifiersUsedInExpression(string expression)
         {
-            LogicalExpression parsedExpression = ParseExpressionOrReturnNull(expression);
+            LogicalExpression parsedExpression = ParseExpressionOrThrow(expression);
 
             var identifierCollector = new IdentifierCollector();
 
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         }
 
         #warning TLK: this implementation is old and should not be used in verification kernel
-        private static LogicalExpression ParseExpressionOrReturnNull(string stringExpression)
+        private static LogicalExpression ParseExpressionOrThrow(string stringExpression)
         {
             var expression = new Expression(stringExpression);
 
