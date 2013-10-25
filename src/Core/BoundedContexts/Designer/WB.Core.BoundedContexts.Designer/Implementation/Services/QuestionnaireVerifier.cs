@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.ErrorsByQuestionsWithSubstitutions,
 
                 this.VerifyCustomEnablementConditionSyntax,
+                this.VerifyCustomValidationExpressionSyntax,
             };
         }
 
@@ -188,14 +189,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return errorByAllQuestionsWithCustomValidation;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> VerifyCustomEnablementConditionSyntax(QuestionnaireDocument document)
+        private IEnumerable<QuestionnaireVerificationError> VerifyCustomEnablementConditionSyntax(QuestionnaireDocument questionnaire)
         {
-            return document
+            return questionnaire
                 .Find<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition)
                 .Select(entity => new QuestionnaireVerificationError(
                     "WB0003",
                     VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax,
                     CreateReference(entity)));
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> VerifyCustomValidationExpressionSyntax(QuestionnaireDocument questionnaire)
+        {
+            return questionnaire
+                .Find<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression)
+                .Select(entity => new QuestionnaireVerificationError(
+                    "WB0002",
+                    VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax,
+                    CreateReference(entity)));
+        }
+
+        private bool HasInvalidSyntaxOfCustomValidationExpression(IQuestion question)
+        {
+            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
+                return false;
+
+            return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
