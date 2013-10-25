@@ -51,7 +51,7 @@
                 self.validationMessage = ko.observable('');
                 self.instruction = ko.observable('');
                 self.isInteger = ko.observable(1);
-                self.countOfDecimalPlaces = ko.observable('').extend({ number: true });
+                self.countOfDecimalPlaces = ko.observable('').extend({ digit: true, min: 1, max: 16});
                 self.isLinked = ko.observable(0);
                 self.isLinkedDurty = ko.computed(function () {
                     return self.isLinked() == 1;
@@ -68,7 +68,7 @@
 
                 self.answerOrder = ko.observable();
                 self.isAnswersOrdered = ko.observable(false);
-                self.maxAllowedAnswers = ko.observable('').extend({ number: true });
+                self.maxAllowedAnswers = ko.observable('').extend({ digit: true, min: 1 , max: 2147483647});
                 self.answerOptions = ko.observableArray([]);
                 self.cards = ko.observableArray([]);
 
