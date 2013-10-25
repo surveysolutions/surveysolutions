@@ -403,6 +403,7 @@
     <Content Include="Content\font\FontAwesome.otf" />
     <Content Include="Configuration\Amazon.Designer.Web.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
