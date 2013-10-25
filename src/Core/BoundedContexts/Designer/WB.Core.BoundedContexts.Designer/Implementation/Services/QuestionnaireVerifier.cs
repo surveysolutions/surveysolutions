@@ -11,47 +11,37 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    using AtomicVerifier = Func<QuestionnaireDocument, QuestionnaireVerificationError>;
     using EnumerableVerifier = Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>;
 
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        /// <remarks>
-        /// All operations with expressions are time-consuming.
-        /// So this processor may be used only in command handlers or in domain methods.
-        /// And should never be used in event handlers!!
-        /// </remarks>
         private readonly IExpressionProcessor expressionProcessor;
 
-        private readonly IEnumerable<QuestionType> questionTypesValidToBeLinkedQuestionSource = new[]
+        private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         { QuestionType.DateTime, QuestionType.Numeric, QuestionType.Text };
 
-        private readonly IEnumerable<QuestionType> questionTypesValidToBeSubstitutionReferences = new[]
+        private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
         {
             QuestionType.DateTime, QuestionType.Numeric, QuestionType.SingleOption, QuestionType.Text, QuestionType.AutoPropagate
         };
 
-        private readonly IEnumerable<AtomicVerifier> AtomicVerifiers;
-
-        private readonly IEnumerable<EnumerableVerifier> EnumerableVerifiers;
+        private readonly IEnumerable<EnumerableVerifier> enumerableVerifiers;
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor)
         {
             this.expressionProcessor = expressionProcessor;
-            AtomicVerifiers = new AtomicVerifier[]
-            { };
 
-            EnumerableVerifiers = new EnumerableVerifier[]
+            this.enumerableVerifiers = new EnumerableVerifier[]
             {
-                ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
-                ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
-                ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
+                this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
+                this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
+                this.ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
 
-                ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel,
+                this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel,
 
-                ErrorsByLinkedQuestions,
+                this.ErrorsByLinkedQuestions,
 
-                ErrorsByQuestionsWithSubstitutions
+                this.ErrorsByQuestionsWithSubstitutions
             };
         }
 
@@ -62,11 +52,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             questionnaire.ConnectChildrenWithParent();
 
-            var errorsFromEnumerableVerifiers = this.EnumerableVerifiers.SelectMany(verifier => verifier.Invoke(questionnaire));
-            var errorsFromAtomicVerifiers =
-                this.AtomicVerifiers.Select(verifier => verifier.Invoke(questionnaire)).Where(error => error != null);
-
-            return errorsFromEnumerableVerifiers.Union(errorsFromAtomicVerifiers);
+            return
+                from verifier in enumerableVerifiers
+                let errors = verifier.Invoke(questionnaire)
+                from error in errors
+                select error;
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(QuestionnaireDocument questionnaire)
@@ -122,7 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                bool isSourceQuestionValidType = this.questionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
+                bool isSourceQuestionValidType = this.QuestionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
                 if (!isSourceQuestionValidType)
                 {
                     yield return this.LinkedQuestionReferenceQuestionOfNotSupportedTypeError(linkedQuestion, sourceQuestion);
@@ -238,7 +228,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return this.QuestionReferencedByQuestionWithSubstitutionsDoesNotExist(questionWithSubstitution);
             }
 
-            if (!this.questionTypesValidToBeSubstitutionReferences.Contains(questionSourceOfSubstitution.QuestionType))
+            if (!QuestionTypesValidToBeSubstitutionReferences.Contains(questionSourceOfSubstitution.QuestionType))
             {
                 return
                     this.QuestionsSubstitutionReferenceOfNotSupportedType(questionWithSubstitution, questionSourceOfSubstitution);
