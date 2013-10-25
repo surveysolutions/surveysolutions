@@ -130,11 +130,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
-            this.ImportQuestionnaire(createdBy, source);
+            this.ImportFromDesigner(createdBy, source);
         }
 
 
-        public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
+        public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             document.ConnectChildrenWithParent();
