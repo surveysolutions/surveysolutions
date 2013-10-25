@@ -32,9 +32,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             this.expressionProcessor = expressionProcessor;
 
-            this.enumerableVerifiers = new EnumerableVerifier[]
+            this.enumerableVerifiers = new[]
             {
-                VerifyNoQuestionsExist,
+                Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -46,8 +46,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 this.ErrorsByQuestionsWithSubstitutions,
 
-                this.VerifyCustomEnablementConditionSyntax,
-                this.VerifyCustomValidationExpressionSyntax,
+                Verifier<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
+                Verifier<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
             };
         }
 
@@ -62,10 +62,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select error;
         }
 
-        private static IEnumerable<QuestionnaireVerificationError> VerifyNoQuestionsExist(QuestionnaireDocument questionnaire)
+        private static EnumerableVerifier Verifier(Func<QuestionnaireDocument, bool> hasError, string code, string message)
         {
-            if (NoQuestionsExist(questionnaire))
-                yield return new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions);
+            return questionnaire =>
+                hasError(questionnaire)
+                    ? new[] { new QuestionnaireVerificationError(code, message) }
+                    : Enumerable.Empty<QuestionnaireVerificationError>();
+        }
+
+        private static EnumerableVerifier Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(hasError)
+                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(QuestionnaireDocument questionnaire)
@@ -187,26 +198,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return errorByAllQuestionsWithCustomValidation;
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> VerifyCustomEnablementConditionSyntax(QuestionnaireDocument questionnaire)
-        {
-            return questionnaire
-                .Find<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition)
-                .Select(entity => new QuestionnaireVerificationError(
-                    "WB0003",
-                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax,
-                    CreateReference(entity)));
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> VerifyCustomValidationExpressionSyntax(QuestionnaireDocument questionnaire)
-        {
-            return questionnaire
-                .Find<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression)
-                .Select(entity => new QuestionnaireVerificationError(
-                    "WB0002",
-                    VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax,
-                    CreateReference(entity)));
         }
 
         private bool HasInvalidSyntaxOfCustomValidationExpression(IQuestion question)
