@@ -40,7 +40,7 @@
                 });
                 
                 self.getHref = function () {
-                    return config.hashes.detailsGroup + "/" + self.id();
+                    return utils.groupUrl(self.id());
                 };
 
                 self.cloneSource = ko.observable();
