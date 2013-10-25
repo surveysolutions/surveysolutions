@@ -390,7 +390,7 @@
                 var callbacks = {
                     success: function (response) {
                         if (uiCallbacks && uiCallbacks.success) {
-                            uiCallbacks.success(_.map(response, function (error) {
+                            uiCallbacks.success(_.map(response.Errors, function (error) {
                                 return modelmapper.error.fromDto(error);
                             }));
                         }

@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
-        
+
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IExpressionReplacer expressionReplacer;
@@ -70,7 +70,11 @@ namespace WB.UI.Designer.Controllers
         public JsonResult RemoteVerification(Guid id)
         {
             var questoinnaireErrors = questionnaireVerifier.Verify(this.GetQuestionnaire(id).Source).ToArray();
-            return this.Json(questoinnaireErrors);
+            return this.Json(new
+            {
+                IsSuccess = true,
+                Errors = questoinnaireErrors
+            });
         }
 
         [HttpPost]
