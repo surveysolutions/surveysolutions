@@ -142,6 +142,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromDesigner.cs">
       <Link>Commands\Questionnaire\ImportFromDesigner.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Commands\Questionnaire\ImportFromSupervisor.cs">
+      <Link>Commands\Questionnaire\ImportFromSupervisor.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\DataCollectionSharedKernelModule.cs">
       <Link>DataCollectionSharedKernelModule.cs</Link>
     </Compile>

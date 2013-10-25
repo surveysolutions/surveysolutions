@@ -133,6 +133,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ImportFromDesigner(createdBy, source);
         }
 
+        public Questionnaire(IQuestionnaireDocument source)
+            : base(source.PublicKey)
+        {
+            this.ImportFromSupervisor(source);
+        }
+
 
         public void ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source)
         {
@@ -146,6 +152,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new TemplateImported() {Source = document});
         }
 
+        public void ImportFromSupervisor(IQuestionnaireDocument source)
+        {
+            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
+            this.ApplyEvent(new TemplateImported() { Source = document });
+        }
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
