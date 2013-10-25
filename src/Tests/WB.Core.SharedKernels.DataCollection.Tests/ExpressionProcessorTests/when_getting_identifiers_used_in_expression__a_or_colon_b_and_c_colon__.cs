@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Machine.Specifications;
-using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.ExpressionProcessorTests
 {
@@ -18,6 +18,6 @@ namespace WB.Core.SharedKernels.DataCollection.Tests.ExpressionProcessorTests
             result.ShouldContainOnly("a", "b", "c");
 
         private static IEnumerable<string> result;
-        private static ExpressionProcessor expressionProcessor;
+        private static IExpressionProcessor expressionProcessor;
     }
 }
