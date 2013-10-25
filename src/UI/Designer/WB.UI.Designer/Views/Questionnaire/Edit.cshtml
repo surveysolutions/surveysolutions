@@ -27,8 +27,8 @@
             return {
                 questionnaire: q,
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
-                remoteVerificationUrl: '@Url.Action("RemoteVerification", "Questionnaire", new {}, Request.Url.Scheme)',
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
+                remoteVerificationUrl: '@Url.Action("RemoteVerification", "Questionnaire", new { }, Request.Url.Scheme)',
                 url: {
                     checkUserUrl: '@Url.Action("FindByEmail", "Account", null, Request.Url.Scheme)',
                     lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
@@ -147,7 +147,10 @@
             <div class="body">
                 <ul data-bind="foreach: messages" class="error-list">
                     <li class="error">
-                        <span data-bind="html: $data"></span>
+                        <b class="error-code" data-bind="text: code"></b><span data-bind="    html: message"></span>
+                        <ul class="error-reference-items" data-bind="foreach: references">
+                            <li><a data-bind="attr: {href: href }, text: title"></a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -197,7 +200,7 @@
         <div class="inner">
             @{
                 this.Html.RenderPartial(this.Model.IsOwner ? "_QuestionnaireDetailsForOwner" : "_QuestionnaireDetails");
-            } 
+            }
         </div>
     </div>
     <div id="details-group" class="details stack" data-bind="with:selectedGroup ">

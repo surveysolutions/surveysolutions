@@ -11,7 +11,7 @@
             searchResult = ko.observableArray(),
             statistics = new model.Statistic(),
             isInitialized = false,
-            cloneQuestion = function (question) {
+            cloneQuestion = function(question) {
                 if (question.isNew())
                     return;
                 var parent = question.parent();
@@ -27,7 +27,7 @@
 
                 clonedQuestion.attachValidation();
             },
-            cloneGroup = function (group) {
+            cloneGroup = function(group) {
                 if (group.isNew())
                     return;
 
@@ -48,7 +48,7 @@
                 router.navigateTo(clonedGroup.getHref());
                 calcStatistics();
             },
-            activate = function (routeData, callback) {
+            activate = function(routeData, callback) {
 
 
                 if (!isInitialized) {
@@ -77,20 +77,20 @@
 
                 $("a[data-toggle=popover]")
                     .popover()
-                    .click(function (e) {
+                    .click(function(e) {
                         e.preventDefault();
                     });
             },
-            getChapters = function () {
+            getChapters = function() {
                 if (!chapters().length) {
                     chapters(datacontext.groups.getChapters());
                 }
             },
-            editQuestionnaire = function () {
+            editQuestionnaire = function() {
                 questionnaire().isSelected(true);
                 openDetails("show-questionnaire");
             },
-            editQuestion = function (id) {
+            editQuestion = function(id) {
                 var question = datacontext.questions.getLocalById(id);
                 if (_.isNull(question) || question.isNullo) {
                     return;
@@ -103,7 +103,7 @@
                 openDetails("show-question");
                 $('#alias').focus();
             },
-            editGroup = function (id) {
+            editGroup = function(id) {
                 var group = datacontext.groups.getLocalById(id);
                 if (_.isNull(group) || group.isNullo) {
                     return;
@@ -112,19 +112,19 @@
                 selectedGroup(group);
                 openDetails("show-group");
             },
-            openDetails = function (style) {
+            openDetails = function(style) {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').addClass('detail-visible').addClass(style);
             },
-            closeDetails = function () {
+            closeDetails = function() {
                 $('#stacks').removeClass("show-question").removeClass("show-group");
                 $('#stacks').removeClass('detail-visible');
             },
             isOutputVisible = ko.observable(false),
-            toggleOutput = function () {
+            toggleOutput = function() {
                 isOutputVisible(!isOutputVisible());
             },
-            addQuestion = function (parent) {
+            addQuestion = function(parent) {
                 var question = new model.Question();
                 question.parent(parent);
 
@@ -137,7 +137,7 @@
 
                 question.attachValidation();
             },
-            addChapter = function () {
+            addChapter = function() {
                 var group = new model.Group();
                 group.level(0);
                 group.title('New Chapter');
@@ -149,7 +149,7 @@
                 router.navigateTo(group.getHref());
                 calcStatistics();
             },
-            addGroup = function (parent) {
+            addGroup = function(parent) {
                 var group = new model.Group();
                 group.parent(parent);
                 datacontext.groups.add(group);
@@ -158,8 +158,8 @@
                 router.navigateTo(group.getHref());
                 calcStatistics();
             },
-            deleteGroup = function (item) {
-                bootbox.confirm("Are you sure you want to delete this question?", function (result) {
+            deleteGroup = function(item) {
+                bootbox.confirm("Are you sure you want to delete this question?", function(result) {
                     if (result == false)
                         return;
 
@@ -170,17 +170,17 @@
                             config.commands.deleteGroup,
                             item,
                             {
-                                success: function () {
+                                success: function() {
                                     deleteGroupSuccessCallback(item);
                                 },
-                                error: function (d) {
+                                error: function(d) {
                                     showMessages(d);
                                 }
                             });
                     }
                 });
             },
-            deleteGroupSuccessCallback = function (item) {
+            deleteGroupSuccessCallback = function(item) {
                 datacontext.groups.removeGroup(item.id());
 
                 var parent = item.parent();
@@ -188,7 +188,7 @@
                     var child = _.find(parent.childrenID(), { 'id': item.id() });
                     parent.childrenID.remove(child);
 
-                    _.each(datacontext.groups.getAllLocal(), function (group) {
+                    _.each(datacontext.groups.getAllLocal(), function(group) {
                         group.fillChildren();
                     });
                     //parent.fillChildren();
@@ -204,8 +204,8 @@
                 calcStatistics();
                 isOutputVisible(false);
             },
-            deleteQuestion = function (item) {
-                bootbox.confirm("Are you sure you want to delete this question?", function (result) {
+            deleteQuestion = function(item) {
+                bootbox.confirm("Are you sure you want to delete this question?", function(result) {
                     if (result == false)
                         return;
 
@@ -216,18 +216,18 @@
                             config.commands.deleteQuestion,
                             item,
                             {
-                                success: function () {
+                                success: function() {
                                     deleteQuestionSuccessCallback(item);
 
                                 },
-                                error: function (d) {
+                                error: function(d) {
                                     showMessages(d);
                                 }
                             });
                     }
                 });
             },
-            deleteQuestionSuccessCallback = function (item) {
+            deleteQuestionSuccessCallback = function(item) {
                 datacontext.questions.removeById(item.id());
 
                 var parent = item.parent();
@@ -244,7 +244,7 @@
 
                 isOutputVisible(false);
             },
-            saveGroup = function (group) {
+            saveGroup = function(group) {
 
                 if (group.hasParent() && group.parent().isNew()) {
                     config.logger(config.warnings.saveParentFirst);
@@ -268,7 +268,7 @@
                     command,
                     group,
                     {
-                        success: function () {
+                        success: function() {
                             group.isNew(false);
                             group.dirtyFlag().reset();
                             group.fillChildren();
@@ -278,13 +278,13 @@
                             group.commit();
 
                         },
-                        error: function (d) {
+                        error: function(d) {
                             showMessages(d);
                             group.canUpdate(true);
                         }
                     });
             },
-            saveQuestion = function (question) {
+            saveQuestion = function(question) {
 
                 if (question.hasParent() && question.parent().isNew()) {
                     config.logger(config.warnings.saveParentFirst);
@@ -293,28 +293,28 @@
 
                 var command = '';
                 switch (question.qtype()) {
-                    case config.questionTypes.AutoPropagate:
-                    case config.questionTypes.Numeric:
-                        if (question.isNew()) {
-                            if (question.isClone()) {
-                                command = config.commands.cloneNumericQuestion;
-                            } else {
-                                command = config.commands.createNumericQuestion;
-                            }
+                case config.questionTypes.AutoPropagate:
+                case config.questionTypes.Numeric:
+                    if (question.isNew()) {
+                        if (question.isClone()) {
+                            command = config.commands.cloneNumericQuestion;
                         } else {
-                            command = config.commands.updateNumericQuestion;
+                            command = config.commands.createNumericQuestion;
                         }
-                        break;
-                    default:
-                        if (question.isNew()) {
-                            if (question.isClone()) {
-                                command = config.commands.cloneQuestion;
-                            } else {
-                                command = config.commands.createQuestion;
-                            }
+                    } else {
+                        command = config.commands.updateNumericQuestion;
+                    }
+                    break;
+                default:
+                    if (question.isNew()) {
+                        if (question.isClone()) {
+                            command = config.commands.cloneQuestion;
                         } else {
-                            command = config.commands.updateQuestion;
+                            command = config.commands.createQuestion;
                         }
+                    } else {
+                        command = config.commands.updateQuestion;
+                    }
                 }
 
                 question.canUpdate(false);
@@ -323,7 +323,7 @@
                     command,
                     question,
                     {
-                        success: function () {
+                        success: function() {
                             question.isNew(false);
                             question.dirtyFlag().reset();
                             calcStatistics();
@@ -331,13 +331,13 @@
                             question.canUpdate(true);
                             question.commit();
                         },
-                        error: function (d) {
+                        error: function(d) {
                             showMessages(d);
                             question.canUpdate(true);
                         }
                     });
             },
-            saveQuestionnaire = function (questionnaire) {
+            saveQuestionnaire = function(questionnaire) {
 
                 questionnaire.canUpdate(false);
 
@@ -345,50 +345,50 @@
                     config.commands.updateQuestionnaire,
                     questionnaire,
                     {
-                        success: function () {
+                        success: function() {
                             questionnaire.dirtyFlag().reset();
                             isOutputVisible(false);
                             questionnaire.canUpdate(true);
                         },
-                        error: function (d) {
+                        error: function(d) {
                             showMessages(d);
                             questionnaire.canUpdate(true);
                         }
                     });
             },
-            addSharedPerson = function (sharedUser) {
-                sharedUser.check(function () {
+            addSharedPerson = function(sharedUser) {
+                sharedUser.check(function() {
                     datacontext.sendCommand(
                         config.commands.addSharedPersonToQuestionnaire,
                         sharedUser,
                         {
-                            success: function () {
+                            success: function() {
                                 questionnaire().addSharedPerson();
                             },
-                            error: function (d) {
+                            error: function(d) {
                                 showMessages(d);
                             }
                         });
                 });
             },
-            removeSharedPerson = function (sharedUser) {
+            removeSharedPerson = function(sharedUser) {
                 datacontext.sendCommand(
                     config.commands.removeSharedPersonFromQuestionnaire,
                     sharedUser,
                     {
-                        success: function () {
+                        success: function() {
                             questionnaire().removeSharedPerson(sharedUser);
                         },
-                        error: function (d) {
+                        error: function(d) {
                             showMessages(d);
                         }
                     });
             },
-            clearFilter = function () {
+            clearFilter = function() {
                 filter('');
                 focusOnSearch();
             },
-            filterContent = function () {
+            filterContent = function() {
                 var query = filter().trim().toLowerCase();
                 isFilterMode(query !== '');
                 searchResult.removeAll();
@@ -396,7 +396,7 @@
                     searchResult(datacontext.questions.search(query));
                 }
             },
-            isMovementPossible = function (arg, event, ui) {
+            isMovementPossible = function(arg, event, ui) {
 
                 var fromId = arg.sourceParent.id;
                 var toId = arg.targetParent.id;
@@ -486,7 +486,7 @@
                     config.commands[moveItemType + "Move"],
                     moveCommand,
                     {
-                        success: function (d) {
+                        success: function(d) {
                             if (isDraggedFromChapter) {
                                 var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
                                 datacontext.questionnaire.childrenID.remove(child);
@@ -509,8 +509,8 @@
                                 target.fillChildren();
                             }
                         },
-                        error: function (d) {
-                            _.each(datacontext.groups.getAllLocal(), function (group) {
+                        error: function(d) {
+                            _.each(datacontext.groups.getAllLocal(), function(group) {
                                 group.fillChildren();
                             });
 
@@ -520,19 +520,19 @@
                         }
                     });
             },
-            calcStatistics = function () {
+            calcStatistics = function() {
                 var questions = datacontext.questions.getAllLocal();
                 var groups = datacontext.groups.getAllLocal();
                 statistics.questions(questions.length);
                 statistics.groups(groups.length);
-                var counter = _.countBy(questions, function (q) { return q.isNew(); });
+                var counter = _.countBy(questions, function(q) { return q.isNew(); });
                 statistics.unsavedQuestion(_.isUndefined(counter['true']) ? 0 : counter['true']);
-                counter = _.countBy(groups, function (g) { return g.isNew(); });
+                counter = _.countBy(groups, function(g) { return g.isNew(); });
                 statistics.unsavedGroups(_.isUndefined(counter['true']) ? 0 : counter['true']);
             },
-            init = function () {
+            init = function() {
                 filter.subscribe(filterContent);
-                ko.bindingHandlers.sortable.options.start = function (arg, ui) {
+                ko.bindingHandlers.sortable.options.start = function(arg, ui) {
                     if ($(ui.item).children('.ui-expander').length > 0) {
                         var button = $(ui.item).children('.ui-expander').children('.ui-expander-head');
                         if ($(button).hasClass('ui-expander-head-collapsed') == false) {
@@ -541,57 +541,95 @@
                     }
                 };
 
-                _.each(datacontext.questions.getAllLocal(), function (question) {
+                _.each(datacontext.questions.getAllLocal(), function(question) {
                     question.attachValidation();
                 });
 
-                _.each(datacontext.groups.getAllLocal(), function (group) {
+                _.each(datacontext.groups.getAllLocal(), function(group) {
                     group.attachValidation();
                 });
             },
-            isAllChaptersExpanded = ko.computed(function () {
-                return _.some(chapters(), function (chapter) {
+            isAllChaptersExpanded = ko.computed(function() {
+                return _.some(chapters(), function(chapter) {
                     return chapter.isExpanded();
                 });
             }),
-            toggleAllChapters = function () {
+            toggleAllChapters = function() {
                 if (isAllChaptersExpanded()) {
-                    _.each(chapters(), function (chapter) {
+                    _.each(chapters(), function(chapter) {
                         chapter.isExpanded(false);
                     });
                 } else {
-                    _.each(chapters(), function (chapter) {
+                    _.each(chapters(), function(chapter) {
                         chapter.isExpanded(true);
                     });
                 }
             },
-            toggleAllChaptersTooltip = ko.computed(function () {
+            toggleAllChaptersTooltip = ko.computed(function() {
                 var tooltip = {
                     title: (isAllChaptersExpanded() == true ? 'Collapse' : 'Expand') + ' all chapters',
                     placement: 'right'
                 };
                 return tooltip;
             }).extend({ throttle: 400 }),
-            focusOnSearch = function () {
+            focusOnSearch = function() {
                 $('#filter input').get(0).focus();
             },
-            showMessages = function (message) {
+            showMessages = function(message) {
                 messages.removeAll();
-                if (!_.isUndefined(message.error)) {
-                    messages.push(message.error);
-                } else {
-                    messages.push(message);
-                }
+               
+                messages.push(new model.Error(
+                    _.isUndefined(message.error) ? message : message.error
+                ));
+                
                 isOutputVisible(true);
             },
-            runVerifier = function () {
-                datacontext.runARemoteVerification({
-                    success: function (response) {
-                    },
-                    error: function (response) {
-                        
-                    }
+            getErrorWithUnsavedItems = function () {
+                var unsavedQuestionReferences = _.filter(datacontext.questions.getAllLocal(), function(q) {
+                    return q.dirtyFlag().isDirty() || q.isNew();
+                }).map(function(q) {
+                    return {
+                        id: q.id(),
+                        type: config.verificationReferenceType.question
+                    };
                 });
+                var unsavedGroupsReferences = _.filter(datacontext.groups.getAllLocal(), function (g) {
+                    return g.dirtyFlag().isDirty() || g.isNew();
+                }).map(function (g) {
+                    return {
+                        id: g.id(),
+                        type: config.verificationReferenceType.group
+                    };
+                });
+                var message = "Following items are not saved, please save them before proceeding with verification:";
+                var code = "WB0000";
+                var references = _.union(unsavedQuestionReferences,unsavedGroupsReferences);
+                return _.isEmpty(references) ? null : new model.Error(message, code, references);
+            },
+            runVerifier = function() {
+                var unsavedItemsError = getErrorWithUnsavedItems();
+                if (_.isNull(unsavedItemsError)) {
+                    datacontext.runARemoteVerification({
+                        success: function (response) {
+                            if (response.length == 0) {
+                                showMessages("Verification succeeded! <br />Questionnaire is ready to be imported to Supervisor.");
+                            } else {
+                                messages.removeAll();
+                                _.each(response, function(error) {
+                                    messages.push(error);
+                                });
+                                isOutputVisible(true);
+                            }
+                        },
+                        error: function(response) {
+
+                        }
+                    });
+                } else {
+                    messages.removeAll();
+                    messages.push(unsavedItemsError);
+                    isOutputVisible(true);
+                }
             };
 
         init();
