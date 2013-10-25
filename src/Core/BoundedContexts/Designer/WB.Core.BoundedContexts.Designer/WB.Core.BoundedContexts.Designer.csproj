@@ -121,6 +121,9 @@
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Implementation\Services\ExpressionProcessor.cs" />
+    <Compile Include="Implementation\Services\IdentifierCollector.cs" />
+    <Compile Include="Implementation\Services\IExpressionProcessor.cs" />
     <Compile Include="Implementation\Services\JsonExportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\VerificationMessages.Designer.cs">
@@ -148,6 +151,10 @@
     <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
+      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
+      <Name>NCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
       <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
       <Name>Ncqrs.Portable</Name>
