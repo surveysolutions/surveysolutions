@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    using EnumerableVerifier = Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>;
+    using AtomicVerifier = Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>;
 
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
@@ -26,15 +26,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime, QuestionType.Numeric, QuestionType.SingleOption, QuestionType.Text, QuestionType.AutoPropagate
         };
 
-        private readonly IEnumerable<EnumerableVerifier> enumerableVerifiers;
+        private readonly IEnumerable<AtomicVerifier> atomicVerifiers;
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor)
         {
             this.expressionProcessor = expressionProcessor;
 
-            this.enumerableVerifiers = new EnumerableVerifier[]
+            this.atomicVerifiers = new[]
             {
-                VerifyNoQuestionsExist,
+                Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
+                Verifier<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
+                Verifier<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -45,8 +47,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.ErrorsByLinkedQuestions,
 
                 this.ErrorsByQuestionsWithSubstitutions,
-
-                this.VerifyCustomEnablementConditionSyntax,
             };
         }
 
@@ -55,16 +55,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             questionnaire.ConnectChildrenWithParent();
 
             return
-                from verifier in enumerableVerifiers
+                from verifier in this.atomicVerifiers
                 let errors = verifier.Invoke(questionnaire)
                 from error in errors
                 select error;
         }
 
-        private static IEnumerable<QuestionnaireVerificationError> VerifyNoQuestionsExist(QuestionnaireDocument questionnaire)
+        private static AtomicVerifier Verifier(Func<QuestionnaireDocument, bool> hasError, string code, string message)
         {
-            if (NoQuestionsExist(questionnaire))
-                yield return new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions);
+            return questionnaire =>
+                hasError(questionnaire)
+                    ? new[] { new QuestionnaireVerificationError(code, message) }
+                    : Enumerable.Empty<QuestionnaireVerificationError>();
+        }
+
+        private static AtomicVerifier Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(hasError)
+                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(QuestionnaireDocument questionnaire)
@@ -188,14 +199,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return errorByAllQuestionsWithCustomValidation;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> VerifyCustomEnablementConditionSyntax(QuestionnaireDocument document)
+        private bool HasInvalidSyntaxOfCustomValidationExpression(IQuestion question)
         {
-            return document
-                .Find<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition)
-                .Select(entity => new QuestionnaireVerificationError(
-                    "WB0003",
-                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax,
-                    CreateReference(entity)));
+            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
+                return false;
+
+            return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)

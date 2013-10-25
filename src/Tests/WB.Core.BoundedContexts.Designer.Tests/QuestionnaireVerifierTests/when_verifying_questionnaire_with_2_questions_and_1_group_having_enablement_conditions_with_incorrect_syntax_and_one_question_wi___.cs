@@ -16,8 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
     {
         Establish context = () =>
         {
-            const string InvalidConditionExpression = "[hehe] &=+< 5";
-            const string ValidConditionExpression = "[33333333333333333333333333333333] == 2";
+            const string InvalidExpression = "[hehe] &=+< 5";
+            const string ValidExpression = "[33333333333333333333333333333333] == 2";
 
             firstIncorrectQuestionId = Guid.Parse("11111111111111111111111111111111");
             secondIncorrectQuestionId = Guid.Parse("22222222222222222222222222222222");
@@ -26,16 +26,16 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
             correctGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                new TextQuestion { PublicKey = firstIncorrectQuestionId, ConditionExpression = InvalidConditionExpression },
-                new TextQuestion { PublicKey = secondIncorrectQuestionId, ConditionExpression = InvalidConditionExpression },
-                new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidConditionExpression },
-                new NumericQuestion { PublicKey = correctQuestionId, ConditionExpression = ValidConditionExpression },
-                new Group { PublicKey = correctGroupId, ConditionExpression = ValidConditionExpression }
+                new TextQuestion { PublicKey = firstIncorrectQuestionId, ConditionExpression = InvalidExpression },
+                new TextQuestion { PublicKey = secondIncorrectQuestionId, ConditionExpression = InvalidExpression },
+                new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
+                new NumericQuestion { PublicKey = correctQuestionId, ConditionExpression = ValidExpression },
+                new Group { PublicKey = correctGroupId, ConditionExpression = ValidExpression }
             );
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.IsSyntaxValid(InvalidConditionExpression) == false
-                && processor.IsSyntaxValid(ValidConditionExpression) == true);
+                => processor.IsSyntaxValid(InvalidExpression) == false
+                && processor.IsSyntaxValid(ValidExpression) == true);
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
         };

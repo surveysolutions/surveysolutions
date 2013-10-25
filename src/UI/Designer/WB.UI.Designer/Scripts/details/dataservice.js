@@ -1,33 +1,35 @@
 ﻿define('dataservice', ['amplify', 'input'],
     function (amplify, input) {
         var init = function () {
+            var decoder = function (data, status, xhr, success, error) {
+                if (data == null) {
+                    error({ error: input.settings.messages.unhandledExceptionMessage }, status);
+                } else {
+                    if (data.IsSuccess) {
+                        success(data, status);
+                    } else {
+                        if (!data.HasPermissions) {
+                            window.location.href = input.url.lackOfPermitsUrl;
+                        } else {
+                            error(data.Error, status);
+                        }
+
+                    }
+                }
+            };
             amplify.request.define('sendCommand', 'ajax', {
                 url: input.commandExecutionUrl,
                 dataType: 'json',
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
-                decoder: function (data, status, xhr, success, error) {
-                    if (data == null) {
-                        error({ error: input.settings.messages.unhandledExceptionMessage }, status);
-                    } else {
-                        if (data.IsSuccess) {
-                            success(data, status);
-                        } else {
-                            if (!data.HasPermissions) {
-                                window.location.href = input.url.lackOfPermitsUrl;
-                            } else {
-                                error(data.Error, status);
-                            }
-
-                        }
-                    }
-                }
+                decoder: decoder
             });
             amplify.request.define('runRemoteVerification', 'ajax', {
                 url: input.remoteVerificationUrl,
                 dataType: 'json',
                 type: 'POST',
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                decoder: decoder
             });
         };
 
