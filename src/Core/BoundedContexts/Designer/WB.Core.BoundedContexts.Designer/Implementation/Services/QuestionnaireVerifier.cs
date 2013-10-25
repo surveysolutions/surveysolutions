@@ -12,7 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    using EnumerableVerifier = Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>;
+    using AtomicVerifier = Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>>;
 
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
@@ -26,13 +26,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime, QuestionType.Numeric, QuestionType.SingleOption, QuestionType.Text, QuestionType.AutoPropagate
         };
 
-        private readonly IEnumerable<EnumerableVerifier> enumerableVerifiers;
+        private readonly IEnumerable<AtomicVerifier> atomicVerifiers;
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor)
         {
             this.expressionProcessor = expressionProcessor;
 
-            this.enumerableVerifiers = new[]
+            this.atomicVerifiers = new[]
             {
                 Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
 
@@ -56,13 +56,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             questionnaire.ConnectChildrenWithParent();
 
             return
-                from verifier in enumerableVerifiers
+                from verifier in this.atomicVerifiers
                 let errors = verifier.Invoke(questionnaire)
                 from error in errors
                 select error;
         }
 
-        private static EnumerableVerifier Verifier(Func<QuestionnaireDocument, bool> hasError, string code, string message)
+        private static AtomicVerifier Verifier(Func<QuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire =>
                 hasError(questionnaire)
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     : Enumerable.Empty<QuestionnaireVerificationError>();
         }
 
-        private static EnumerableVerifier Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message)
+        private static AtomicVerifier Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return questionnaire =>
