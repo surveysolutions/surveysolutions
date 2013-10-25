@@ -176,5 +176,7 @@
         QuestionTitleContainsSubstitutionReferenceToSelf,
 
         FeaturedQuestionTitleContainsSubstitutionReference,
+
+        MaxAllowedAnswersIsNotPositive
     }
 }
