@@ -128,6 +128,10 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

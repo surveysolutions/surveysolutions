@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NCalc.Domain;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services
+namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
 {
     internal class IdentifierCollector : LogicalExpressionVisitor
     {

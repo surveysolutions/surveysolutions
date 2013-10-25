@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Logging.NLog;
 using WB.Core.Infrastructure.Raven;
 using WB.Core.Infrastructure.Raven.Implementation.ReadSide.Indexes;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.ExpressionProcessor;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
@@ -70,6 +71,7 @@ namespace WB.UI.Designer.App_Start
                 new RavenReadSideInfrastructureModule(ravenSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(),
+                new ExpressionProcessorModule(),
                 new MembershipModule(),
                 new MainModule(),
                 new DesignerRegistry()
