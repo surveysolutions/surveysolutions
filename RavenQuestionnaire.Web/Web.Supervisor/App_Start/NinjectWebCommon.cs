@@ -32,6 +32,7 @@ using WB.Core.Infrastructure.Raven.Implementation.ReadSide.RepositoryAccessors;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.ExpressionProcessor;
+using WB.Core.SharedKernels.QuestionnaireVerification;
 using WB.Core.Synchronization;
 using WB.UI.Shared.Web.CommandDeserialization;
 using Web.Supervisor.App_Start;
@@ -118,6 +119,7 @@ namespace Web.Supervisor.App_Start
                 new NLogLoggingModule(),
                 new DataCollectionSharedKernelModule(),
                 new ExpressionProcessorModule(),
+                new QuestionnaireVerificationModule(),
                 pageSize.HasValue
                     ? new RavenWriteSideInfrastructureModule(ravenSettings, pageSize.Value)
                     : new RavenWriteSideInfrastructureModule(ravenSettings),

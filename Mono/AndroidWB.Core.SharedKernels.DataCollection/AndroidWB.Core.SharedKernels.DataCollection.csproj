@@ -289,6 +289,9 @@
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireException.cs">
       <Link>Exceptions\QuestionnaireException.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Exceptions\QuestionnaireVerificationException.cs">
+      <Link>Exceptions\QuestionnaireVerificationException.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\Factories\IQuestionnaireFactory.cs">
       <Link>Factories\IQuestionnaireFactory.cs</Link>
     </Compile>
@@ -397,6 +400,10 @@
       <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
       <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.QuestionnaireVerification\AndroidWB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{2f566dd5-1692-4890-9ff7-bcb21b8c372b}</Project>
+      <Name>AndroidWB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\Services\" />
@@ -404,7 +411,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="89b14b50-5305-45e2-9835-7a05bd0b97a9" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
