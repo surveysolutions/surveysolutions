@@ -33,6 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             this.enumerableVerifiers = new EnumerableVerifier[]
             {
+                VerifyNoQuestionsExist,
+
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
                 this.ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
@@ -47,9 +49,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IEnumerable<QuestionnaireVerificationError> Verify(QuestionnaireDocument questionnaire)
         {
-            if (this.NoQuestionsExist(questionnaire))
-                return new[] { new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions) };
-
             questionnaire.ConnectChildrenWithParent();
 
             return
@@ -57,6 +56,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 let errors = verifier.Invoke(questionnaire)
                 from error in errors
                 select error;
+        }
+
+        private static IEnumerable<QuestionnaireVerificationError> VerifyNoQuestionsExist(QuestionnaireDocument questionnaire)
+        {
+            if (NoQuestionsExist(questionnaire))
+                yield return new QuestionnaireVerificationError("WB0001", VerificationMessages.WB0001_NoQuestions);
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(QuestionnaireDocument questionnaire)
@@ -112,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                bool isSourceQuestionValidType = this.QuestionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
+                bool isSourceQuestionValidType = QuestionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
                 if (!isSourceQuestionValidType)
                 {
                     yield return this.LinkedQuestionReferenceQuestionOfNotSupportedTypeError(linkedQuestion, sourceQuestion);
@@ -413,7 +418,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             errorList.AddRange(enumerableOfTelemetryToVerification.Select(getByEnumerableItemErrorOrNull).Where(errorOrNull => errorOrNull != null));
         }
 
-        private bool NoQuestionsExist(QuestionnaireDocument questionnaire)
+        private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
