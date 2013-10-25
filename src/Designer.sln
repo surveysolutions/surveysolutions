@@ -96,7 +96,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Expre
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuestionnaireVerification", "QuestionnaireVerification", "{C575E020-36C4-40BB-AE64-3508759E1D67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification.Tests", "Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests.csproj", "{9071B005-CC4E-416B-B29F-449B7696D7DB}"
 EndProject
