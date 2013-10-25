@@ -89,7 +89,7 @@
     <Compile Include="Commands\Interview\ApplySynchronizationMetadata.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ImportFromDesigner.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />

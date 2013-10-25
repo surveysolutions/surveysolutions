@@ -7,10 +7,10 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
 {
-    [MapsToAggregateRootMethodOrConstructor(typeof(Implementation.Aggregates.Questionnaire), "ImportQuestionnaire")]
-    public class ImportQuestionnaireCommand : CommandBase
+    [MapsToAggregateRootMethodOrConstructor(typeof(Implementation.Aggregates.Questionnaire), "ImportFromDesigner")]
+    public class ImportFromDesigner : CommandBase
     {
-        public ImportQuestionnaireCommand(Guid createdBy, IQuestionnaireDocument source)
+        public ImportFromDesigner(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
             CreatedBy = createdBy;
