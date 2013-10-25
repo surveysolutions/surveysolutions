@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer
         {
             this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
             this.Bind<IQuestionnaireVerifier>().To<QuestionnaireVerifier>().InSingletonScope();
+            this.Bind<IExpressionProcessor>().To<ExpressionProcessor>().InSingletonScope();
         }
     }
 }
