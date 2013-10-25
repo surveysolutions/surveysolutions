@@ -174,7 +174,7 @@
                                     deleteGroupSuccessCallback(item);
                                 },
                                 error: function(d) {
-                                    showMessages(d);
+                                    showMessage(d);
                                 }
                             });
                     }
@@ -221,7 +221,7 @@
 
                                 },
                                 error: function(d) {
-                                    showMessages(d);
+                                    showMessage(d);
                                 }
                             });
                     }
@@ -279,7 +279,7 @@
 
                         },
                         error: function(d) {
-                            showMessages(d);
+                            showMessage(d);
                             group.canUpdate(true);
                         }
                     });
@@ -332,7 +332,7 @@
                             question.commit();
                         },
                         error: function(d) {
-                            showMessages(d);
+                            showMessage(d);
                             question.canUpdate(true);
                         }
                     });
@@ -351,7 +351,7 @@
                             questionnaire.canUpdate(true);
                         },
                         error: function(d) {
-                            showMessages(d);
+                            showMessage(d);
                             questionnaire.canUpdate(true);
                         }
                     });
@@ -366,7 +366,7 @@
                                 questionnaire().addSharedPerson();
                             },
                             error: function(d) {
-                                showMessages(d);
+                                showMessage(d);
                             }
                         });
                 });
@@ -380,7 +380,7 @@
                             questionnaire().removeSharedPerson(sharedUser);
                         },
                         error: function(d) {
-                            showMessages(d);
+                            showMessage(d);
                         }
                     });
             },
@@ -516,7 +516,7 @@
 
                             chapters(datacontext.groups.getChapters());
 
-                            showMessages(d);
+                            showMessage(d);
                         }
                     });
             },
@@ -575,16 +575,23 @@
             focusOnSearch = function() {
                 $('#filter input').get(0).focus();
             },
-            showMessages = function(message) {
+            showMessage = function(message) {
                 messages.removeAll();
-               
+
                 messages.push(new model.Error(
                     _.isUndefined(message.error) ? message : message.error
                 ));
-                
+
                 isOutputVisible(true);
             },
-            getErrorWithUnsavedItems = function () {
+            showMessages = function(errors) {
+                messages.removeAll();
+                _.each(errors, function (error) {
+                    messages.push(error);
+                });
+                isOutputVisible(true);
+            },
+            getErrorWithUnsavedItems = function() {
                 var unsavedQuestionReferences = _.filter(datacontext.questions.getAllLocal(), function(q) {
                     return q.dirtyFlag().isDirty() || q.isNew();
                 }).map(function(q) {
@@ -593,9 +600,9 @@
                         type: config.verificationReferenceType.question
                     };
                 });
-                var unsavedGroupsReferences = _.filter(datacontext.groups.getAllLocal(), function (g) {
+                var unsavedGroupsReferences = _.filter(datacontext.groups.getAllLocal(), function(g) {
                     return g.dirtyFlag().isDirty() || g.isNew();
-                }).map(function (g) {
+                }).map(function(g) {
                     return {
                         id: g.id(),
                         type: config.verificationReferenceType.group
@@ -603,32 +610,26 @@
                 });
                 var message = "Following items are not saved, please save them before proceeding with verification:";
                 var code = "WB0000";
-                var references = _.union(unsavedQuestionReferences,unsavedGroupsReferences);
+                var references = _.union(unsavedQuestionReferences, unsavedGroupsReferences);
                 return _.isEmpty(references) ? null : new model.Error(message, code, references);
             },
             runVerifier = function() {
                 var unsavedItemsError = getErrorWithUnsavedItems();
                 if (_.isNull(unsavedItemsError)) {
                     datacontext.runARemoteVerification({
-                        success: function (response) {
+                        success: function(response) {
                             if (response.length == 0) {
-                                showMessages("Verification succeeded! <br />Questionnaire is ready to be imported to Supervisor.");
+                                showMessage("Verification succeeded! <br />Questionnaire is ready to be imported to Supervisor.");
                             } else {
-                                messages.removeAll();
-                                _.each(response, function(error) {
-                                    messages.push(error);
-                                });
-                                isOutputVisible(true);
+                                showMessages(response);
                             }
                         },
                         error: function(response) {
-
+                            showMessage(response.error);
                         }
                     });
                 } else {
-                    messages.removeAll();
-                    messages.push(unsavedItemsError);
-                    isOutputVisible(true);
+                    showMessages([unsavedItemsError]);
                 }
             };
 
