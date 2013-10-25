@@ -159,7 +159,25 @@
   <data name="WB0014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel" xml:space="preserve">
     <value>Question have custom validation referencing question with deeper propagation level</value>
   </data>
-  <data name="WB0015_QuestionHaveIncorrectSubstitutionReference" xml:space="preserve">
-    <value>Question has incorrect substitution reference</value>
+  <data name="WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured" xml:space="preserve">
+    <value>Question with substitutions can't be marked as pre-filled</value>
+  </data>
+  <data name="WB0016_QuestionWithSubstitutionsCantHaveSelfReferences" xml:space="preserve">
+    <value>Question with substitutions can't have self-references</value>
+  </data>
+  <data name="WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist" xml:space="preserve">
+    <value>Question referenced by question with substitutions does not exist</value>
+  </data>
+  <data name="WB0018_QuestionsSubstitutionReferenceOfNotSupportedType" xml:space="preserve">
+    <value>Question's substitution reference of not supported type</value>
+  </data>
+  <data name="WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel" xml:space="preserve">
+    <value>Question with substitutions can't have references with deeper propagation level</value>
+  </data>
+  <data name="WB0020_QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist" xml:space="preserve">
+    <value>Question referenced by question custom validation expression does not exist</value>
+  </data>
+  <data name="WB0021_ParameterUsedInValidationExpressionIsntRecognized" xml:space="preserve">
+    <value>Parameter used in validation expression isn't recognized</value>
   </data>
 </root>

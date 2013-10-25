@@ -12,15 +12,13 @@ using WB.Core.BoundedContexts.Designer.ValueObjects.Verification;
 
 namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_propagated_group_has_more_than_one_propagating_question_pointing_to_it : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {
-            autopropagatedGroupId = Guid.Parse("10000000000000000000000000000000");
+            linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new AutoPropagateQuestion("question 1") { Triggers = new List<Guid>() { autopropagatedGroupId } });
-            questionnaire.Children.Add(new AutoPropagateQuestion("question 2") { Triggers = new List<Guid>() { autopropagatedGroupId } });
-            questionnaire.Children.Add(new Group() { PublicKey = autopropagatedGroupId, Propagated = Propagate.AutoPropagated });
+            questionnaire.Children.Add(new SingleQuestion() { PublicKey = linkedQuestionId, LinkedToQuestionId = Guid.NewGuid() });
             verifier = CreateQuestionnaireVerifier();
         };
 
@@ -30,21 +28,21 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireVerifierTests
         private It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_error_with_code__WB0010__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0010");
+        private It should_return_error_with_code__WB0011__ = () =>
+            resultErrors.Single().Code.ShouldEqual("WB0011");
 
         private It should_return_error_with_one_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
-        private It should_return_error_reference_with_type_group = () =>
-            resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        private It should_return_error_reference_with_type_Question = () =>
+            resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_error_reference_with_id_of_autopropagatedGroupId = () =>
-            resultErrors.Single().References.Single().Id.ShouldEqual(autopropagatedGroupId);
+        private It should_return_error_reference_with_id_of_linkedQuestionId = () =>
+            resultErrors.Single().References.Single().Id.ShouldEqual(linkedQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
-        private static Guid autopropagatedGroupId;
+        private static Guid linkedQuestionId;
     }
 }
