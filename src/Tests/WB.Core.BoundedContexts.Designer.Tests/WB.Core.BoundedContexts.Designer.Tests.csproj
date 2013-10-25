@@ -92,14 +92,24 @@
     <Compile Include="QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="QuestionnaireTests\QuestionnaireTestsContext.cs" />
     <Compile Include="QuestionnaireTests\UpdateQuestionnaireTests.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_question_of_not_supported_type.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_has_more_than_one_propagating_question_pointing_to_it.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_has_no_propagating_question_pointing_to_it.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and_one_question_wi___.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_and_referenced_question_is_missing.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_parameter.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_propagation_level.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_that_has_more_than_one_propagating_question_pointing_to_it.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_that_has_no_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\QuestionnaireVerifierTestsContext.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagating_question_has_no_associated_groups.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_referenced_by_linked_question_does_not_exist.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagating_question_that_has_no_associated_groups.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_propagation_level.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_referenced_by_question_with_substitutions_does_not_exist.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_contains_self_references_in_substitution.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_two_propagating_questions_which_have_no_associated_groups.cs" />
   </ItemGroup>
   <ItemGroup />

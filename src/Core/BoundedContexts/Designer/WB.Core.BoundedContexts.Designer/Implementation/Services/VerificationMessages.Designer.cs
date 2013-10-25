@@ -187,11 +187,65 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has incorrect substitution reference.
+        ///   Looks up a localized string similar to Question with substitutions can&apos;t be marked as pre-filled.
         /// </summary>
-        internal static string WB0015_QuestionHaveIncorrectSubstitutionReference {
+        internal static string WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured {
             get {
-                return ResourceManager.GetString("WB0015_QuestionHaveIncorrectSubstitutionReference", resourceCulture);
+                return ResourceManager.GetString("WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with substitutions can&apos;t have self-references.
+        /// </summary>
+        internal static string WB0016_QuestionWithSubstitutionsCantHaveSelfReferences {
+            get {
+                return ResourceManager.GetString("WB0016_QuestionWithSubstitutionsCantHaveSelfReferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question referenced by question with substitutions does not exist.
+        /// </summary>
+        internal static string WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist {
+            get {
+                return ResourceManager.GetString("WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question&apos;s substitution reference of not supported type.
+        /// </summary>
+        internal static string WB0018_QuestionsSubstitutionReferenceOfNotSupportedType {
+            get {
+                return ResourceManager.GetString("WB0018_QuestionsSubstitutionReferenceOfNotSupportedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with substitutions can&apos;t have references with deeper propagation level.
+        /// </summary>
+        internal static string WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel {
+            get {
+                return ResourceManager.GetString("WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question referenced by question custom validation expression does not exist.
+        /// </summary>
+        internal static string WB0020_QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist {
+            get {
+                return ResourceManager.GetString("WB0020_QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter used in validation expression isn&apos;t recognized.
+        /// </summary>
+        internal static string WB0021_ParameterUsedInValidationExpressionIsntRecognized {
+            get {
+                return ResourceManager.GetString("WB0021_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
             }
         }
     }
