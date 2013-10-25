@@ -35,7 +35,7 @@ namespace Web.Supervisor.Injections
             {
                 typeof(UserViewFactory).Assembly,
                 typeof(QuestionnaireMembershipProvider).Assembly,
-                typeof(ImportQuestionnaireCommand).Assembly,
+                typeof(ImportFromDesigner).Assembly,
                 typeof(UserDenormalizer).Assembly
             });
         }
