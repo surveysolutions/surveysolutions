@@ -36,8 +36,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.atomicVerifiers = new[]
             {
                 Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
-                Verifier<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
-                Verifier<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
+                Verifier<IQuestion>(this.CustomValidationExpressionHasIncorrectSyntax, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
+                Verifier<IComposite>(this.CustomEnablementConditionHasIncorrectSyntax, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
+                Verifier<IComposite>(this.CustomEnablementConditionReferencesNotExistingQuestion, "WB0005", VerificationMessages.WB0005_CustomEnablementConditionReferencesNotExistingQuestion),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -73,9 +74,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static AtomicVerifier Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
+            return Verifier<TEntity>((entity, questionnaire) => hasError(entity), code, message);
+        }
+
+        private static AtomicVerifier Verifier<TEntity>(Func<TEntity, QuestionnaireDocument, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
             return questionnaire =>
                 questionnaire
-                    .Find<TEntity>(hasError)
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
         }
 
@@ -200,14 +207,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return errorByAllQuestionsWithCustomValidation;
         }
 
-        private bool HasInvalidSyntaxOfCustomValidationExpression(IQuestion question)
-        {
-            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
-                return false;
-
-            return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
-        }
-
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
             return new QuestionnaireVerificationReference(
@@ -215,7 +214,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 entity.PublicKey);
         }
 
-        private bool HasInvalidSyntaxOfCustomEnablementCondition(IComposite entity)
+        private bool CustomValidationExpressionHasIncorrectSyntax(IQuestion question)
+        {
+            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
+                return false;
+
+            return !this.expressionProcessor.IsSyntaxValid(question.ValidationExpression);
+        }
+
+        private bool CustomEnablementConditionHasIncorrectSyntax(IComposite entity)
         {
             string customEnablementCondition = GetCustomEnablementCondition(entity);
 
@@ -223,6 +230,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
 
             return !this.expressionProcessor.IsSyntaxValid(customEnablementCondition);
+        }
+
+        private bool CustomEnablementConditionReferencesNotExistingQuestion(IComposite entity, QuestionnaireDocument questionnaire)
+        {
+            string customEnablementCondition = GetCustomEnablementCondition(entity);
+
+            if (string.IsNullOrWhiteSpace(customEnablementCondition))
+                return false;
+
+            IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(customEnablementCondition);
+
+            return identifiersUsedInExpression.Any(
+                identifier => !QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(questionnaire, identifier));
+        }
+
+        private static bool QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(QuestionnaireDocument questionnaire, string identifier)
+        {
+            Guid questionId;
+            if (!Guid.TryParse(identifier, out questionId))
+                return false;
+
+            return questionnaire.Find<IQuestion>(questionId) != null;
         }
 
         private static string GetCustomEnablementCondition(IComposite entity)

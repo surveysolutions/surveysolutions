@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
 
         public IEnumerable<string> GetIdentifiersUsedInExpression(string expression)
         {
-            LogicalExpression parsedExpression = ParseExpressionOrReturnNull(expression);
+            LogicalExpression parsedExpression = ParseExpressionOrThrow(expression);
 
             if (parsedExpression == null)
                 return Enumerable.Empty<string>();
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services
             evaluatableExpression.EvaluateFunction += ExtensionFunctions.EvaluateFunctionContains;
         }
 
-        private static LogicalExpression ParseExpressionOrReturnNull(string stringExpression)
+        private static LogicalExpression ParseExpressionOrThrow(string stringExpression)
         {
             var expression = new Expression(stringExpression);
 
