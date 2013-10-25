@@ -35,6 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.atomicVerifiers = new[]
             {
                 Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
+                Verifier<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
+                Verifier<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -45,9 +47,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.ErrorsByLinkedQuestions,
 
                 this.ErrorsByQuestionsWithSubstitutions,
-
-                Verifier<IQuestion>(this.HasInvalidSyntaxOfCustomValidationExpression, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
-                Verifier<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
             };
         }
 
