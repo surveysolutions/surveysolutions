@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
@@ -43,7 +44,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 this.ErrorsByLinkedQuestions,
 
-                this.ErrorsByQuestionsWithSubstitutions
+                this.ErrorsByQuestionsWithSubstitutions,
+
+                this.VerifyCustomEnablementConditionSyntax,
             };
         }
 
@@ -183,6 +186,43 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return errorByAllQuestionsWithCustomValidation;
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> VerifyCustomEnablementConditionSyntax(QuestionnaireDocument document)
+        {
+            return document
+                .Find<IComposite>(this.HasInvalidSyntaxOfCustomEnablementCondition)
+                .Select(entity => new QuestionnaireVerificationError(
+                    "WB0003",
+                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax,
+                    CreateReference(entity)));
+        }
+
+        private static QuestionnaireVerificationReference CreateReference(IComposite entity)
+        {
+            return new QuestionnaireVerificationReference(
+                entity is IGroup ? QuestionnaireVerificationReferenceType.Group : QuestionnaireVerificationReferenceType.Question,
+                entity.PublicKey);
+        }
+
+        private bool HasInvalidSyntaxOfCustomEnablementCondition(IComposite entity)
+        {
+            string customEnablementCondition = GetCustomEnablementCondition(entity);
+
+            if (string.IsNullOrWhiteSpace(customEnablementCondition))
+                return false;
+
+            return !this.expressionProcessor.IsSyntaxValid(customEnablementCondition);
+        }
+
+        private static string GetCustomEnablementCondition(IComposite entity)
+        {
+            if (entity is IGroup)
+                return ((IGroup)entity).ConditionExpression;
+            else if (entity is IQuestion)
+                return ((IQuestion)entity).ConditionExpression;
+            else
+                return null;
         }
 
         private QuestionnaireVerificationError GetVerificationErrorByCustomValidationReferenceOrNull(

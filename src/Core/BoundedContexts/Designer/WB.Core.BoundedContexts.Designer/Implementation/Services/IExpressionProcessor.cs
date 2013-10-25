@@ -8,6 +8,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     /// </summary>
     internal interface IExpressionProcessor
     {
+        bool IsSyntaxValid(string expression);
+
         IEnumerable<string> GetIdentifiersUsedInExpression(string expression);
     }
 }

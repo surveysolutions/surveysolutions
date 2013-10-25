@@ -8,6 +8,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class ExpressionProcessor : IExpressionProcessor
     {
+        public bool IsSyntaxValid(string expression)
+        {
+            var ncalcExpression = new Expression(expression);
+
+            return !ncalcExpression.HasErrors();
+        }
+
         public IEnumerable<string> GetIdentifiersUsedInExpression(string expression)
         {
             LogicalExpression parsedExpression = ParseExpressionOrThrow(expression);
