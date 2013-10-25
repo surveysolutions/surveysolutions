@@ -216,12 +216,15 @@ body.loading .loading-backdrop {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 margin: 0 3px;
-                height: 40px;
-                line-height: 40px;
+                line-height: 20px;
                 position: relative;
                 -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
                 -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
                 box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+                padding: 5px;
+            }
+            #output .body .error-list .error .error-code{
+                margin-right: 10px;
             }
 
     #output .inner .title {
