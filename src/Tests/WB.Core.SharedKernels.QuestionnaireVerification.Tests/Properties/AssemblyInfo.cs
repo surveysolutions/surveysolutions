@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WB.Core.SharedKernels.QuestionnaireVerification")]
+[assembly: AssemblyTitle("WB.Core.SharedKernels.QuestionnaireVerification.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WB.Core.SharedKernels.QuestionnaireVerification")]
+[assembly: AssemblyProduct("WB.Core.SharedKernels.QuestionnaireVerification.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cb78c9a0-896c-4a22-86e2-763de4906515")]
+[assembly: Guid("fc2a37fc-437e-438f-947a-7391f7837312")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.QuestionnaireVerification.Tests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

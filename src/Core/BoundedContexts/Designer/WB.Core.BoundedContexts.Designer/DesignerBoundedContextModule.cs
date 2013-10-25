@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Designer
         public override void Load()
         {
             this.Bind<IJsonExportService>().To<JsonExportService>().InSingletonScope();
-            this.Bind<IQuestionnaireVerifier>().To<QuestionnaireVerifier>().InSingletonScope();
         }
     }
 }
