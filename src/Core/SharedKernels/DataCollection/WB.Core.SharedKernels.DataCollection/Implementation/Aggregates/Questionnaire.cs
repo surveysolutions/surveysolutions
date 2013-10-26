@@ -203,6 +203,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
 
+        public int? GetMaxSelectedAnswerOptions(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions)
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return answer options for question with id '{0}' because it's type {1} does not support max selected answer options.",
+                    questionId, question.QuestionType));
+
+            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
+        }
+
         public bool IsCustomValidationDefined(Guid questionId)
         {
             var validationExpression = this.GetCustomValidationExpression(questionId);
