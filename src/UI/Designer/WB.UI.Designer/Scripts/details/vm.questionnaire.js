@@ -7,10 +7,14 @@
             selectedQuestion = ko.observable(),
             questionnaire = ko.observable(model.Questionnaire.Nullo),
             chapters = ko.observableArray(),
-            messages = ko.observableArray(),
+            verificationMessages = ko.observableArray(),
+            saveMessages = ko.observableArray(),
             searchResult = ko.observableArray(),
+            isVerificationSucceeded = ko.observable(),
             statistics = new model.Statistic(),
             isInitialized = false,
+            selectedMessageTab = ko.observable(config.messageTabs.saveMessagesTab),
+            
             cloneQuestion = function(question) {
                 if (question.isNew())
                     return;
@@ -576,18 +580,20 @@
                 $('#filter input').get(0).focus();
             },
             showMessage = function(message) {
-                messages.removeAll();
+                saveMessages.removeAll();
 
-                messages.push(new model.Error(
+                saveMessages.push(new model.Error(
                     _.isUndefined(message.error) ? message : message.error
                 ));
-
+                
+                isVerificationSucceeded(false);
                 isOutputVisible(true);
+                selectedMessageTab(config.messageTabs.saveMessagesTab);
+
             },
-            showMessages = function(errors) {
-                messages.removeAll();
-                _.each(errors, function (error) {
-                    messages.push(error);
+            showVerificationMessages = function(messages) {
+                _.each(messages, function (message) {
+                    verificationMessages.push(message);
                 });
                 isOutputVisible(true);
             },
@@ -616,21 +622,23 @@
             runVerifier = function() {
                 var unsavedItemsError = getErrorWithUnsavedItems();
                 if (_.isNull(unsavedItemsError)) {
+                    saveMessages.removeAll();
+                    verificationMessages.removeAll();
+                    
                     datacontext.runARemoteVerification({
-                        success: function(response) {
-                            if (response.length == 0) {
-                                showMessage("Verification succeeded! <br />Questionnaire is ready to be imported to Supervisor.");
-                            } else {
-                                showMessages(response);
-                            }
+                        success: function (response) {
+                            isVerificationSucceeded(response.length == 0);
+                            showVerificationMessages(response);
                         },
-                        error: function(response) {
+                        error: function (response) {
                             showMessage(response.error);
                         }
                     });
                 } else {
-                    showMessages([unsavedItemsError]);
+                    verificationMessages.removeAll();
+                    showVerificationMessages([unsavedItemsError]);
                 }
+                selectedMessageTab(config.messageTabs.verificationMessagesTab);
             };
 
         init();
@@ -657,7 +665,8 @@
             deleteQuestion: deleteQuestion,
             isOutputVisible: isOutputVisible,
             toggleOutput: toggleOutput,
-            messages: messages,
+            verificationMessages: verificationMessages,
+            saveMessages: saveMessages,
             statistics: statistics,
             searchResult: searchResult,
             saveQuestionnaire: saveQuestionnaire,
@@ -666,6 +675,9 @@
             toggleAllChaptersTooltip: toggleAllChaptersTooltip,
             addSharedPerson: addSharedPerson,
             removeSharedPerson: removeSharedPerson,
-            runVerifier: runVerifier
+            runVerifier: runVerifier,
+            switchMessageTab: selectedMessageTab,
+            selectedMessageTab: selectedMessageTab,
+            isVerificationSucceeded: isVerificationSucceeded
         };
     });
