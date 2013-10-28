@@ -10,36 +10,28 @@ using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_2_propagating_questions_referencing_not_propagatable_group_and_3_referencing_propagatable_group:  QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_2_propagating_questions_referencing_not_propagatable_group_and_1_referencing_propagatable_group:  QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             firstIncorrectQuestionId = Guid.Parse("1111EEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             secondIncorrectQuestionId = Guid.Parse("2222EEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-            firstCorrectQuestionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            secondCorrectQuestionId = Guid.Parse("2222CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            thirdCorrectQuestionId = Guid.Parse("3333CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            correctQuestionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            var firstNotPropagatableGroupId = Guid.Parse("EEEE1111111111111111111111111111");
-            var secondNotPropagatableGroupId = Guid.Parse("EEEE2222222222222222222222222222");
-            var firstPropagatableGroupId = Guid.Parse("CCCC1111111111111111111111111111");
-            var secondPropagatableGroupId = Guid.Parse("CCCC2222222222222222222222222222");
-            var thirdPropagatableGroupId = Guid.Parse("CCCC3333333333333333333333333333");
+            firstNotPropagatableGroupId = Guid.Parse("EEEE1111111111111111111111111111");
+            secondNotPropagatableGroupId = Guid.Parse("EEEE2222222222222222222222222222");
+
+            propagatableGroupId = Guid.Parse("CCCC1111111111111111111111111111");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new AutoPropagateQuestion { PublicKey = firstIncorrectQuestionId, Triggers = new List<Guid> { firstNotPropagatableGroupId } },
                 new AutoPropagateQuestion { PublicKey = secondIncorrectQuestionId, Triggers = new List<Guid> { secondNotPropagatableGroupId } },
-
-                new AutoPropagateQuestion { PublicKey = firstCorrectQuestionId, Triggers = new List<Guid> { firstPropagatableGroupId } },
-                new AutoPropagateQuestion { PublicKey = secondCorrectQuestionId, Triggers = new List<Guid> { secondPropagatableGroupId } },
-                new AutoPropagateQuestion { PublicKey = thirdCorrectQuestionId, Triggers = new List<Guid> { thirdPropagatableGroupId } },
-
                 new Group { PublicKey = firstNotPropagatableGroupId, Propagated = Propagate.None },
                 new Group { PublicKey = secondNotPropagatableGroupId, Propagated = Propagate.None },
-                new Group { PublicKey = firstPropagatableGroupId, Propagated = Propagate.AutoPropagated },
-                new Group { PublicKey = secondPropagatableGroupId, Propagated = Propagate.AutoPropagated },
-                new Group { PublicKey = thirdPropagatableGroupId, Propagated = Propagate.AutoPropagated },
+
+                new AutoPropagateQuestion { PublicKey = correctQuestionId, Triggers = new List<Guid> { propagatableGroupId } },
+                new Group { PublicKey = propagatableGroupId, Propagated = Propagate.AutoPropagated },
 
                 new TextQuestion { PublicKey = Guid.NewGuid() },
                 new Group { PublicKey = Guid.NewGuid() }
@@ -58,41 +50,42 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0007");
 
-        It should_return_errors_each_having_single_reference = () =>
+        It should_return_errors_each_having_two_references = () =>
             resultErrors.ShouldEachConformTo(error
-                => error.References.Count() == 1);
+                => error.References.Count() == 2);
 
-        It should_return_errors_each_referencing_question = () =>
-            resultErrors.ShouldEachConformTo(error
-                => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_error_referencing_first_incorrect_question = () =>
+        It should_return_error_referencing_first_incorrect_question_and_first_not_propagatable_group = () =>
             resultErrors.ShouldContain(error
-                => error.References.Single().Id == firstIncorrectQuestionId);
+                => error.References.First().Type == QuestionnaireVerificationReferenceType.Question
+                && error.References.First().Id == firstIncorrectQuestionId
+                && error.References.Last().Type == QuestionnaireVerificationReferenceType.Group
+                && error.References.Last().Id == firstNotPropagatableGroupId);
 
-        It should_return_error_referencing_second_incorrect_question = () =>
+        It should_return_error_referencing_second_incorrect_question_and_second_not_propagatable_group = () =>
             resultErrors.ShouldContain(error
-                => error.References.Single().Id == secondIncorrectQuestionId);
+                => error.References.First().Type == QuestionnaireVerificationReferenceType.Question
+                && error.References.First().Id == secondIncorrectQuestionId
+                && error.References.Last().Type == QuestionnaireVerificationReferenceType.Group
+                && error.References.Last().Id == secondNotPropagatableGroupId);
 
-        It should_not_return_error_referencing_first_correct_question = () =>
+        It should_not_return_error_referencing_correct_question = () =>
             resultErrors.ShouldNotContain(error
-                => error.References.Single().Id == firstCorrectQuestionId);
+                => error.References.First().Type == QuestionnaireVerificationReferenceType.Question
+                && error.References.First().Id == correctQuestionId);
 
-        It should_not_return_error_referencing_second_correct_question = () =>
+        It should_not_return_error_referencing_propagatable_group = () =>
             resultErrors.ShouldNotContain(error
-                => error.References.Single().Id == secondCorrectQuestionId);
-
-        It should_not_return_error_referencing_third_correct_question = () =>
-            resultErrors.ShouldNotContain(error
-                => error.References.Single().Id == thirdCorrectQuestionId);
+                => error.References.Last().Type == QuestionnaireVerificationReferenceType.Group
+                && error.References.Last().Id == propagatableGroupId);
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
         private static Guid firstIncorrectQuestionId;
         private static Guid secondIncorrectQuestionId;
-        private static Guid firstCorrectQuestionId;
-        private static Guid secondCorrectQuestionId;
-        private static Guid thirdCorrectQuestionId;
+        private static Guid correctQuestionId;
+        private static Guid firstNotPropagatableGroupId;
+        private static Guid secondNotPropagatableGroupId;
+        private static Guid propagatableGroupId;
     }
 }
