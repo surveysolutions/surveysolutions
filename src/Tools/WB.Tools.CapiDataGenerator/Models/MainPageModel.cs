@@ -525,7 +525,7 @@ namespace CapiDataGenerator
         private Dictionary<Guid, Guid> CreateInterviews(IQuestionnaireDocument template, int questionnariesCount, List<UserLight> users, bool onlyForSupervisor)
         {
             Log("import template");
-            commandService.Execute(new ImportQuestionnaireCommand(_headquarterUser.Id, template));
+            commandService.Execute(new ImportFromDesigner(_headquarterUser.Id, template));
 
             var featuredQuestions = template.GetFeaturedQuestions();
 

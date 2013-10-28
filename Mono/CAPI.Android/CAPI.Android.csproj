@@ -315,10 +315,6 @@
       <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
       <Name>AndroidMain.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
-      <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
-      <Name>AndroidNCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
@@ -338,6 +334,10 @@
     <ProjectReference Include="..\AndroidWB.Core.SharedKernels.DataCollection\AndroidWB.Core.SharedKernels.DataCollection.csproj">
       <Project>{6b901897-7b53-41fb-8e33-d5aa93218adc}</Project>
       <Name>AndroidWB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
+      <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
       <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>

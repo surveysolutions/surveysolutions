@@ -42,6 +42,7 @@ using WB.Core.SharedKernels.DataCollection.EventHandler;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.ExpressionProcessor;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
@@ -210,7 +211,8 @@ namespace CAPI.Android
                 new AndroidCoreRegistry(),
                 new AndroidModelModule(),
                 new AndroidLoggingModule(),
-                new DataCollectionSharedKernelModule());
+                new DataCollectionSharedKernelModule(),
+                new ExpressionProcessorModule());
 
             kernel.Bind<Context>().ToConstant(this);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(this.kernel));

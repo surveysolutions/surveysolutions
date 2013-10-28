@@ -537,20 +537,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\StataSuplier.cs">
       <Link>Export\StataSuplier.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ExpressionDependencyBuilder.cs">
-      <Link>ExpressionExecutors\ExpressionDependencyBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs">
-      <Link>ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs">
       <Link>ExpressionExecutors\ICompleteQuestionnaireConditionExecuteCollector.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\IExpressionExecutor.cs">
       <Link>ExpressionExecutors\IExpressionExecutor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ExpressionExecutors\QuestionnaireParametersParser.cs">
-      <Link>ExpressionExecutors\QuestionnaireParametersParser.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\ICommandListSupplier.cs">
       <Link>ICommandListSupplier.cs</Link>
@@ -755,10 +746,6 @@
       <Project>{F0DB4D2A-A47A-4268-A688-91D097A93237}</Project>
       <Name>AndroidMain.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
-      <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>
-      <Name>AndroidNCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
@@ -780,6 +767,7 @@
     <Folder Include="Commands\Questionnaire\Completed\" />
     <Folder Include="Documents\Statistics\" />
     <Folder Include="Entities\SubEntities\Complete\Question\" />
+    <Folder Include="ExpressionExecutors\ExpressionExtentions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
