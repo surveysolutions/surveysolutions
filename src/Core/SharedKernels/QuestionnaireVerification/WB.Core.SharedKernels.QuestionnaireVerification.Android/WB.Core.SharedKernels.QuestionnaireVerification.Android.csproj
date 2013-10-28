@@ -44,8 +44,8 @@
     <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
       <Link>Implementation\Services\QuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.Designer.cs">
-      <Link>Implementation\Services\VerificationMessages.Designer.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Properties\VerificationMessages.Designer.cs">
+      <Link>Properties\VerificationMessages.Designer.cs</Link>
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\QuestionnaireVerificationModule.cs">
@@ -89,14 +89,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.resx">
-      <Link>Implementation\Services\VerificationMessages.resx</Link>
+    <EmbeddedResource Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Properties\VerificationMessages.resx">
+      <Link>Properties\VerificationMessages.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="44a49db2-2e7e-4be7-b931-7e225ef057f4" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="44a49db2-2e7e-4be7-b931-7e225ef057f4" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
