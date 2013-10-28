@@ -308,6 +308,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
+            this.ThrowIfMaxAllowedAnswersInvalid(maxAllowedAnswers);
+
             this.ApplyEvent(new QuestionCloned
             {
                 PublicKey = questionId,
@@ -409,6 +411,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
+            this.ThrowIfMaxAllowedAnswersInvalid(maxAllowedAnswers);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -550,6 +553,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
+            this.ThrowIfMaxAllowedAnswersInvalid(maxAllowedAnswers);
+
             this.ApplyEvent(new QuestionChanged
             {
                 PublicKey = questionId,
@@ -1340,6 +1345,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             else
             {
                 ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
+            }
+        }
+
+        private void ThrowIfMaxAllowedAnswersInvalid(int? maxAllowedAnswers)
+        {
+            if (maxAllowedAnswers.HasValue && maxAllowedAnswers.Value < 1)
+            {
+                throw new DomainException(
+                    DomainExceptionType.MaxAllowedAnswersIsNotPositive, 
+                    "Maximum Allowed Answers for question has to be positive");
             }
         }
 
