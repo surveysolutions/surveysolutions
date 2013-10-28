@@ -349,8 +349,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private QuestionnaireVerificationError ParameterUsedInValidationExpressionIsntRecognized(IQuestion questionWithValidationExpression)
         {
-            return new QuestionnaireVerificationError("WB0021",
-                VerificationMessages.WB0021_ParameterUsedInValidationExpressionIsntRecognized,
+            return new QuestionnaireVerificationError("WB0020",
+                VerificationMessages.WB0020_ParameterUsedInValidationExpressionIsntRecognized,
                 this.CreateVerificationReferenceForQuestion(questionWithValidationExpression));
         }
 
