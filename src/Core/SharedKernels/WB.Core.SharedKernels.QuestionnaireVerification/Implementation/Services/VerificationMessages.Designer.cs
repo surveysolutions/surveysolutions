@@ -235,9 +235,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         /// <summary>
         ///   Looks up a localized string similar to Parameter used in validation expression isn&apos;t recognized.
         /// </summary>
-        internal static string WB0021_ParameterUsedInValidationExpressionIsntRecognized {
+        internal static string WB0020_ParameterUsedInValidationExpressionIsntRecognized {
             get {
-                return ResourceManager.GetString("WB0021_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
+                return ResourceManager.GetString("WB0020_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
             }
         }
     }

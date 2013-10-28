@@ -174,7 +174,7 @@
   <data name="WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel" xml:space="preserve">
     <value>Question with substitutions can't have references with deeper propagation level</value>
   </data>
-  <data name="WB0021_ParameterUsedInValidationExpressionIsntRecognized" xml:space="preserve">
+  <data name="WB0020_ParameterUsedInValidationExpressionIsntRecognized" xml:space="preserve">
     <value>Parameter used in validation expression isn't recognized</value>
   </data>
 </root>
