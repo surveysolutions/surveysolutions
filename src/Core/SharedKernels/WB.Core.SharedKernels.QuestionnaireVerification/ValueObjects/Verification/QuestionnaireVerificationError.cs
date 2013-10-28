@@ -12,6 +12,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verificat
             this.References = references.ToList();
         }
 
+        public QuestionnaireVerificationError(string code, string message, IEnumerable<QuestionnaireVerificationReference> references)
+            : this(code, message, references.ToArray()) { }
+
         public string Code { get; private set; }
         public string Message { get; private set; }
         public IEnumerable<QuestionnaireVerificationReference> References { get; private set; }
