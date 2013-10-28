@@ -208,9 +208,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestion question = this.GetQuestionOrThrow(questionId);
             bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
 
-            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions)
+            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion))
                 throw new QuestionnaireException(string.Format(
-                    "Cannot return answer options for question with id '{0}' because it's type {1} does not support max selected answer options.",
+                    "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
                     questionId, question.QuestionType));
 
             return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
