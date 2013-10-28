@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification
+namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects
 {
     public class QuestionnaireVerificationError
     {

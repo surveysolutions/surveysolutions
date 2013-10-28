@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
-    <Compile Include="Implementation\Services\VerificationMessages.Designer.cs">
+    <Compile Include="Properties\VerificationMessages.Designer.cs">
       <DependentUpon>VerificationMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -56,20 +56,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireVerificationModule.cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="ValueObjects\Verification\QuestionnaireVerificationError.cs" />
-    <Compile Include="ValueObjects\Verification\QuestionnaireVerificationReference.cs" />
-    <Compile Include="ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+    <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+    <ProjectReference Include="..\..\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
       <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
@@ -78,7 +78,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Implementation\Services\VerificationMessages.resx">
+    <EmbeddedResource Include="Properties\VerificationMessages.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
