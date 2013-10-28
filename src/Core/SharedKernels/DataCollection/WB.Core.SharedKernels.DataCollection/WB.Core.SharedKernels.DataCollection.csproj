@@ -54,10 +54,12 @@
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
     <Compile Include="EventHandler\QuestionnairePropagationStructureDenormalizer.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericQuestionAnswered.cs" />
+    <Compile Include="Exceptions\QuestionnaireVerificationException.cs" />
     <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
@@ -88,7 +90,7 @@
     <Compile Include="Commands\Interview\ApplySynchronizationMetadata.cs" />
     <Compile Include="Commands\Questionnaire\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateInterviewWithFeaturedQuestionsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ImportFromDesigner.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
@@ -140,9 +142,6 @@
     <Compile Include="Implementation\ReadSide\VersionedReadSideRepositoryWriter.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\IQuestionnaireRepository.cs" />
-    <Compile Include="Implementation\Services\ExpressionProcessor.cs" />
-    <Compile Include="Implementation\Services\IdentifierCollector.cs" />
-    <Compile Include="Implementation\Services\IExpressionProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="ReadSide\IVersionedReadSideRepositoryReader.cs" />
@@ -169,10 +168,6 @@
     <Compile Include="Views\Questionnaire\QuestionnairePropagationStructure.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
-      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
-      <Name>NCalc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
@@ -189,11 +184,21 @@
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj">
+      <Project>{44a49db2-2e7e-4be7-b931-7e225ef057f4}</Project>
+      <Name>WB.Core.SharedKernels.QuestionnaireVerification</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Implementation\Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
