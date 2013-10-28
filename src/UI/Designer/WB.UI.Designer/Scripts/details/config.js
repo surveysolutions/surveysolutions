@@ -14,8 +14,12 @@
                 "GpsCoordinates": "GpsCoordinates"
             },
             verificationReferenceType = {
-                question: "Question",
-                group: "Group",
+                question: 1,
+                group: 10,
+            },
+            messageTabs = {
+                saveMessagesTab: 1,
+                verificationMessagesTab: 2
             },
         questionTypeOptions = [
                 {
@@ -227,6 +231,7 @@
             groupTypes: groupTypes,
             commands: commands,
             tips: tips,
-            verificationReferenceType: verificationReferenceType
+            verificationReferenceType: verificationReferenceType,
+            messageTabs: messageTabs
         };
     });
