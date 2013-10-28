@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
                 Verifier<IQuestion>(this.CustomValidationExpressionHasIncorrectSyntax, "WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax),
                 Verifier<IComposite>(this.CustomEnablementConditionHasIncorrectSyntax, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
+                Verifier<IQuestion>(this.CustomValidationExpressionReferencesNotExistingQuestion, "WB0004", VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion),
                 Verifier<IComposite>(this.CustomEnablementConditionReferencesNotExistingQuestion, "WB0005", VerificationMessages.WB0005_CustomEnablementConditionReferencesNotExistingQuestion),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
@@ -229,17 +230,37 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return !this.expressionProcessor.IsSyntaxValid(customEnablementCondition);
         }
 
-        private bool CustomEnablementConditionReferencesNotExistingQuestion(IComposite entity, QuestionnaireDocument questionnaire)
+        private bool CustomValidationExpressionReferencesNotExistingQuestion(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            string customEnablementCondition = GetCustomEnablementCondition(entity);
+            string validationExpression = question.ValidationExpression;
 
-            if (string.IsNullOrWhiteSpace(customEnablementCondition))
+            if (string.IsNullOrWhiteSpace(validationExpression))
                 return false;
 
-            IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(customEnablementCondition);
+            IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(validationExpression);
+
+            return identifiersUsedInExpression.Any(identifier
+                => IsGuid(identifier)
+                && !QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(questionnaire, identifier));
+        }
+
+        private bool CustomEnablementConditionReferencesNotExistingQuestion(IComposite entity, QuestionnaireDocument questionnaire)
+        {
+            string enablementCondition = GetCustomEnablementCondition(entity);
+
+            if (string.IsNullOrWhiteSpace(enablementCondition))
+                return false;
+
+            IEnumerable<string> identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(enablementCondition);
 
             return identifiersUsedInExpression.Any(
                 identifier => !QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(questionnaire, identifier));
+        }
+
+        private static bool IsGuid(string identifier)
+        {
+            Guid _;
+            return Guid.TryParse(identifier, out _);
         }
 
         private static bool QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(QuestionnaireDocument questionnaire, string identifier)
@@ -279,7 +300,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             var questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == parsedId);
             if (questionsReferencedInValidation == null)
             {
-                return this.QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist(questionWithValidationExpression);
+                return null;
             }
 
             if (this.QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(questionsReferencedInValidation,
@@ -330,13 +351,6 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return new QuestionnaireVerificationError("WB0021",
                 VerificationMessages.WB0021_ParameterUsedInValidationExpressionIsntRecognized,
-                this.CreateVerificationReferenceForQuestion(questionWithValidationExpression));
-        }
-
-        private QuestionnaireVerificationError QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist(IQuestion questionWithValidationExpression)
-        {
-            return new QuestionnaireVerificationError("WB0020",
-                VerificationMessages.WB0020_QuestionReferencedByQuestionCustomValidationExpressionDoesNotExist,
                 this.CreateVerificationReferenceForQuestion(questionWithValidationExpression));
         }
 
