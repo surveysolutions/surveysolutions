@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
@@ -45,6 +45,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 Verifier<IAutoPropagateQuestion>(PropagatingQuestionsThatHasNoAssociatedGroups,"WB0008",VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups),
                 Verifier<IGroup>(PropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,"WB0009", VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem),
                 
+                Verifier<IQuestion>(this.ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount),
+
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
 
                 this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel,
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 this.ErrorsByLinkedQuestions,
 
                 this.ErrorsByQuestionsWithSubstitutions,
-                this.ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount
+                //this.ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount
             };
         }
 
@@ -112,16 +114,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return question.Triggers.Count == 0;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount(QuestionnaireDocument questionnaire)
+        private bool ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            var multioptionQuestionsWithIncorrectMaxAllowedAnswers = questionnaire.Find<IQuestion>(question => question is IMultyOptionsQuestion && 
+            return (question is IMultyOptionsQuestion && 
                     ((IMultyOptionsQuestion)question).MaxAllowedAnswers.HasValue &&
-                    (((IMultyOptionsQuestion)question).MaxAllowedAnswers < 1 ||(question.Answers.Count < ((IMultyOptionsQuestion)question).MaxAllowedAnswers)))
-                    .ToArray();
-
-            return this.CreateQuestionnaireVerificationErrorsForQuestions("WB0021",
-                VerificationMessages.WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount,
-                multioptionQuestionsWithIncorrectMaxAllowedAnswers);
+                    (((IMultyOptionsQuestion)question).MaxAllowedAnswers < 1 ||(question.Answers.Count < ((IMultyOptionsQuestion)question).MaxAllowedAnswers)));
         }
 
         private bool PropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(IGroup group, QuestionnaireDocument questionnaire)
