@@ -16,8 +16,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
     {
         private readonly IExpressionProcessor expressionProcessor;
 
-        private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
-        { QuestionType.DateTime, QuestionType.Numeric, QuestionType.Text };
+        private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[] { QuestionType.DateTime, QuestionType.Numeric, QuestionType.Text };
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
         {
@@ -76,7 +75,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             Func<TEntity, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return Verifier<TEntity>((entity, questionnaire) => hasError(entity), code, message);
+            return questionnaire =>
+             questionnaire
+                 .Find<TEntity>(hasError)
+                 .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
@@ -132,12 +134,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 var propagatingQuestionsPointingToPropagatedGroup =
                     this.GetPropagatingQuestionsPointingToPropagatedGroup(propagatedGroup.PublicKey, questionnaire);
 
-                if (propagatingQuestionsPointingToPropagatedGroup.Count() < 2)
-                    continue;
-
-                yield return
-                    this.PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem(propagatedGroup,
-                        propagatingQuestionsPointingToPropagatedGroup);
+                if (propagatingQuestionsPointingToPropagatedGroup.Count() > 1)
+                {
+                    yield return
+                        this.PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem(propagatedGroup,
+                            propagatingQuestionsPointingToPropagatedGroup);
+                }
             }
         }
 
@@ -175,7 +177,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             IEnumerable<IQuestion> questionsWithSubstitutions =
                 questionnaire.Find<IQuestion>(question => StringUtil.GetAllSubstitutionVariableNames(question.QuestionText).Length > 0);
-            
+
             var errorByAllQuestionsWithSubstitutions = new List<QuestionnaireVerificationError>();
 
             foreach (var questionWithSubstitution in questionsWithSubstitutions)
@@ -433,7 +435,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem, references.ToArray());
         }
 
-        private QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
+        private QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel(IQuestion questionsWithSubstitution, IQuestion questionSourceOfSubstitution)
         {
             var references = new[]
                         {
@@ -441,11 +443,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                             this.CreateVerificationReferenceForQuestion(questionSourceOfSubstitution)
                         };
 
-             return new QuestionnaireVerificationError("WB0019",
-               VerificationMessages.WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel, references);
+            return new QuestionnaireVerificationError("WB0019",
+              VerificationMessages.WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel, references);
         }
 
-        private QuestionnaireVerificationError QuestionsSubstitutionReferenceOfNotSupportedType(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
+        private QuestionnaireVerificationError QuestionsSubstitutionReferenceOfNotSupportedType(IQuestion questionsWithSubstitution, IQuestion questionSourceOfSubstitution)
         {
             var references = new[]
                         {
@@ -453,8 +455,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                             this.CreateVerificationReferenceForQuestion(questionSourceOfSubstitution)
                         };
 
-             return new QuestionnaireVerificationError("WB0018",
-                VerificationMessages.WB0018_QuestionsSubstitutionReferenceOfNotSupportedType, references);
+            return new QuestionnaireVerificationError("WB0018",
+               VerificationMessages.WB0018_QuestionsSubstitutionReferenceOfNotSupportedType, references);
         }
 
         private QuestionnaireVerificationError QuestionReferencedByQuestionWithSubstitutionsDoesNotExist(IQuestion questionsWithSubstitution)
@@ -480,7 +482,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                        this.CreateVerificationReferenceForQuestion(linkedQuestion));
         }
 
-        private QuestionnaireVerificationError LinkedQuestionReferenceQuestionOfNotSupportedTypeError(IQuestion linkedQuestion,IQuestion sourceQuestion)
+        private QuestionnaireVerificationError LinkedQuestionReferenceQuestionOfNotSupportedTypeError(IQuestion linkedQuestion, IQuestion sourceQuestion)
         {
             var references = new[]
             {
@@ -492,7 +494,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 VerificationMessages.WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType, references);
         }
 
-        private QuestionnaireVerificationError LinkedQuestionReferenceQuestionNotUnderPropagatedGroup(IQuestion linkedQuestion,IQuestion sourceQuestion)
+        private QuestionnaireVerificationError LinkedQuestionReferenceQuestionNotUnderPropagatedGroup(IQuestion linkedQuestion, IQuestion sourceQuestion)
         {
             var references = new[]
             {
@@ -503,7 +505,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 VerificationMessages.WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup, references);
         }
 
-        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message,params IQuestion[] questions)
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message, params IQuestion[] questions)
         {
             QuestionnaireVerificationReference[] references =
                 questions
@@ -515,7 +517,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 : null;
         }
 
-        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message,params IGroup[] groups)
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message, params IGroup[] groups)
         {
             QuestionnaireVerificationReference[] references =
                 groups
@@ -527,12 +529,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 : null;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message,params  IQuestion[] questions)
+        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message, params  IQuestion[] questions)
         {
             return questions.Select(q => this.CreateQuestionnaireVerificationErrorForQuestions(code, message, q));
         }
 
-        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForGroups(string code, string message,IEnumerable<IGroup> questions)
+        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForGroups(string code, string message, IEnumerable<IGroup> questions)
         {
             return questions.Select(q => this.CreateQuestionnaireVerificationErrorForGroups(code, message, q));
         }
@@ -601,7 +603,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             List<Guid> autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution =
                 this.GetAllAutopropagationQuestionsAsVector(question, questionnaire);
-         
+
             return autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Count > 0
                 &&
                 autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
