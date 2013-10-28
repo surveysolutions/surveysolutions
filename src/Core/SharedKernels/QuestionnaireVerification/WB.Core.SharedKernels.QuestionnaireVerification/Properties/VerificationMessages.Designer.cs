@@ -239,5 +239,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
                 return ResourceManager.GetString("WB0020_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi answer question has negative max allowed answers count or options count less than max allowed answers count.
+        /// </summary>
+        internal static string WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount {
+            get {
+                return ResourceManager.GetString("WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
+            }
+        }
     }
 }
