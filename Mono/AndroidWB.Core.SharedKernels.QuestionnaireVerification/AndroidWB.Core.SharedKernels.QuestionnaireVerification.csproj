@@ -41,26 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
       <Link>Implementation\Services\QuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.Designer.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.Designer.cs">
       <Link>Implementation\Services\VerificationMessages.Designer.cs</Link>
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\QuestionnaireVerificationModule.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\QuestionnaireVerificationModule.cs">
       <Link>QuestionnaireVerificationModule.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
       <Link>Services\IQuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationError.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationError.cs">
       <Link>ValueObjects\Verification\QuestionnaireVerificationError.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReference.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReference.cs">
       <Link>ValueObjects\Verification\QuestionnaireVerificationReference.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs">
+    <Compile Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs">
       <Link>ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
