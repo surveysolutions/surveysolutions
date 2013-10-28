@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification
+namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects
 {
     public enum QuestionnaireVerificationReferenceType
     {

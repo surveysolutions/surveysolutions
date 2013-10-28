@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Services
 {
