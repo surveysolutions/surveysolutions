@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 Verifier<IComposite>(this.CustomEnablementConditionHasIncorrectSyntax, "WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax),
                 Verifier<IQuestion>(this.CustomValidationExpressionReferencesNotExistingQuestion, "WB0004", VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion),
                 Verifier<IComposite>(this.CustomEnablementConditionReferencesNotExistingQuestion, "WB0005", VerificationMessages.WB0005_CustomEnablementConditionReferencesNotExistingQuestion),
+                Verifier<IAutoPropagateQuestion>(PropagatingQuestionReferencesNotExistingGroup, "WB0006", VerificationMessages.WB0006_PropagatingQuestionReferencesNotExistingGroup),
+                Verifier<IAutoPropagateQuestion>(PropagatingQuestionReferencesNotPropagatableGroup, "WB0007", VerificationMessages.WB0007_PropagatingQuestionReferencesNotPropagatableGroup),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -257,6 +259,21 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 identifier => !QuestionnaireContainsQuestionCorrespondingToExpressionIdentifier(questionnaire, identifier));
         }
 
+        private static bool PropagatingQuestionReferencesNotExistingGroup(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return question.Triggers.Any(groupId
+                => !QuestionnaireContainsGroup(questionnaire, groupId));
+        }
+
+        private bool PropagatingQuestionReferencesNotPropagatableGroup(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
+        {
+            return question.Triggers.Any(groupId =>
+            {
+                var group = questionnaire.Find<IGroup>(groupId);
+                return group != null && group.Propagated == Propagate.None;
+            });
+        }
+
         private static bool IsGuid(string identifier)
         {
             Guid _;
@@ -270,6 +287,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 return false;
 
             return questionnaire.Find<IQuestion>(questionId) != null;
+        }
+
+        private static bool QuestionnaireContainsGroup(QuestionnaireDocument questionnaire, Guid groupId)
+        {
+            return questionnaire.Find<IGroup>(groupId) != null;
         }
 
         private static string GetCustomEnablementCondition(IComposite entity)
