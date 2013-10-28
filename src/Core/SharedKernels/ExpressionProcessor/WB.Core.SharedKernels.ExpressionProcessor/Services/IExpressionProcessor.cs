@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
+namespace WB.Core.SharedKernels.ExpressionProcessor.Services
 {
     /// <summary>
     /// Expression processor which incapsulates all operations with expressions such as analysis and evaluation.
     /// </summary>
-    internal interface IExpressionProcessor
+    public interface IExpressionProcessor
     {
+        bool IsSyntaxValid(string expression);
+
         IEnumerable<string> GetIdentifiersUsedInExpression(string expression);
 
         bool EvaluateBooleanExpression(string expression, Func<string, object> getValueForIdentifier);

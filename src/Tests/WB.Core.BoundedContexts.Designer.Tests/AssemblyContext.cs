@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 
-namespace Main.Core.Tests
+namespace WB.Core.BoundedContexts.Designer.Tests
 {
     public class AssemblyContext : IAssemblyContext
     {

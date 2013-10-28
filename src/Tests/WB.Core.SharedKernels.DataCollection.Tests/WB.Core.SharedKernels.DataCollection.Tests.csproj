@@ -91,7 +91,6 @@
     <Compile Include="InterviewTests\when_validation_expression_execution_throw_exception_for_question_in_invalid_state.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_its_type_does_not_support_GetMaxSelectedAnswerOptions_method.cs" />
     <Compile Include="QuestionnaireTests\when_questionnaire_has_multi_question_and_we_can_get_max_answers_number_for_it.cs" />
-    <Compile Include="QuestionnaireTests\when_importing_questionannaire_and_question_in_it_has_custom_validation_involving_another_question_with_deeper_propagation_level.cs" />
     <Compile Include="ShouldExtensions.cs" />
     <Compile Include="InterviewTests\when_creating_interview.cs" />
     <Compile Include="InterviewTests\when_creating_interview_and_questionnaire_does_not_exist.cs" />
@@ -131,6 +130,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\WB.Core.SharedKernels.DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor\WB.Core.SharedKernels.ExpressionProcessor.csproj">
+      <Project>{d55b9582-70fd-4340-a3bc-55a33d49b2e6}</Project>
+      <Name>WB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

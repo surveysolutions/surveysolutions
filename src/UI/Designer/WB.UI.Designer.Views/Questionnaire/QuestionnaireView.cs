@@ -13,7 +13,7 @@ namespace WB.UI.Designer.Views.Questionnaire
     {
         private IEnumerable<ICompositeView> children;
 
-        public QuestionnaireView(IQuestionnaireDocument doc)
+        public QuestionnaireView(QuestionnaireDocument doc)
         {
             this.Source = doc;
         }
@@ -62,7 +62,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
-        public IQuestionnaireDocument Source { get; private set; }
+        public QuestionnaireDocument Source { get; private set; }
 
         public string Title
         {

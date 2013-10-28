@@ -27,7 +27,8 @@
             return {
                 questionnaire: q,
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new {}, Request.Url.Scheme)',
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
+                remoteVerificationUrl: '@Url.Action("RemoteVerification", "Questionnaire", new { }, Request.Url.Scheme)',
                 url: {
                     checkUserUrl: '@Url.Action("FindByEmail", "Account", null, Request.Url.Scheme)',
                     lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
@@ -115,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="span4">
                     <div class="statistics">
                         <ul class="nav nav-pills" data-bind="with: statistics">
                             <li><a>Groups: <span class="badge" data-bind="text: groups"></span></a></li>
@@ -124,10 +125,13 @@
                     </div>
 
                 </div>
-                <div class="span2">
+                <div class="span4">
                     <div id="footer-buttons" class="pull-right">
+                        <button type="button" class="btn btn-primary btn-small" data-bind="click: $root.runVerifier">
+                            Verify
+                        </button>
                         <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
-                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> errors
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> messages
                         </button>
                     </div>
                 </div>
@@ -138,14 +142,37 @@
         <div class="inner">
             <div class="title">
                 <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
-                <span>Errors log</span>
+                <ul class="nav nav-pills">
+                    <li data-bind="css: { active: selectedMessageTab()==1}, click: function(){ $root.selectedMessageTab(1);}"><a href="#">Save messages</a></li>
+                    <li data-bind="css: { active: selectedMessageTab()==2}, click: function(){ $root.selectedMessageTab(2);}"><a href="#">Verification messages</a></li>
+                </ul>
             </div>
             <div class="body">
-                <ul data-bind="foreach: errors" class="error-list">
+                <ul data-bind="foreach: saveMessages, visible: selectedMessageTab()==1" class="error-list">
                     <li class="error">
-                        <span data-bind="html: $data"></span>
+                        <span data-bind="html: message"></span>
                     </li>
                 </ul>
+                <div data-bind="visible: selectedMessageTab()==2">
+                    <!-- ko ifnot: isVerificationSucceeded -->
+                    <ul data-bind="foreach: verificationMessages" class="error-list">
+                        <li class="error">
+                            <b class="error-code" data-bind="text: code"></b><span data-bind="    html: message"></span>
+                            <ul class="error-reference-items" data-bind="foreach: references">
+                                <li><a data-bind="attr: {href: href }, text: title"></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- /ko -->
+                    <!-- ko if: isVerificationSucceeded -->
+                    <ul class="error-list">
+                        <li class="error">
+                            <span>Verification succeeded!<br />
+                                Questionnaire is ready to be imported to Supervisor.</span>
+                        </li>
+                    </ul>
+                    <!-- /ko -->
+                </div>
             </div>
         </div>
     </div>
@@ -193,7 +220,7 @@
         <div class="inner">
             @{
                 this.Html.RenderPartial(this.Model.IsOwner ? "_QuestionnaireDetailsForOwner" : "_QuestionnaireDetails");
-            } 
+            }
         </div>
     </div>
     <div id="details-group" class="details stack" data-bind="with:selectedGroup ">

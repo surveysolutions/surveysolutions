@@ -1,8 +1,7 @@
 ﻿define('model.mapper',
     ['model', 'config'],
     function (model, config) {
-        var
-        // private methods
+        var // private methods
             getGroups = function (group, level) {
                 var items = _.filter(group.Children, { '__type': 'GroupView' }).map(function (item) {
                     return { level: level, group: item };
@@ -41,17 +40,28 @@
                 return questions;
             },
             // public mapping methods
-             questionnaire = {
-                 getDtoId: function (dto) { return dto.PublicKey; },
-                 fromDto: function (dto, item) {
-                     item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title).isPublic(dto.IsPublic);
-                     item.childrenID(_.map(dto.Children, function (c) {
-                         return { type: c.__type, id: c.PublicKey };
-                     }));
-                     item.dirtyFlag().reset();
-                     return item;
-                 }
-             },
+            error = {
+                getDtoId: function (dto) { return dto.Code; },
+                fromDto: function (dto) {
+                    return new model.Error(dto.Message, dto.Code, _.map(dto.References, function (reference) {
+                        return {
+                            type: reference.Type,
+                            id: reference.Id
+                        };
+                    }));
+                }
+            },
+            questionnaire = {
+                getDtoId: function (dto) { return dto.PublicKey; },
+                fromDto: function (dto, item) {
+                    item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title).isPublic(dto.IsPublic);
+                    item.childrenID(_.map(dto.Children, function (c) {
+                        return { type: c.__type, id: c.PublicKey };
+                    }));
+                    item.dirtyFlag().reset();
+                    return item;
+                }
+            },
             group = {
                 getDtoId: function (dto) { return dto.group.PublicKey; },
                 fromDto: function (dto, item) {
@@ -131,11 +141,11 @@
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();
-                    
+
                     if (dto.Featured && dto.QuestionScope == config.questionScopes.supervisor) {
-                    //    item.isNew(true);
+                        //    item.isNew(true);
                     }
-                    
+
                     return item;
                 },
                 objectsFromDto: function (dto) {
@@ -146,6 +156,7 @@
         return {
             questionnaire: questionnaire,
             question: question,
-            group: group
+            group: group,
+            error: error
         };
     });
