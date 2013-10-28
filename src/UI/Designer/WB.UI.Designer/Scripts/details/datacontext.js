@@ -129,7 +129,7 @@
             });
             return items;
         };
-        
+
         groups.removeGroup = function (id) {
             var group = groups.getLocalById(id);
             _.each(group.childrenID(), function (item) {
@@ -140,8 +140,8 @@
             groups.removeById(id);
         };
 
-        groups.getChapters = function() {
-            var chapters = _.map(questionnaire.childrenID(), function(children) {
+        groups.getChapters = function () {
+            var chapters = _.map(questionnaire.childrenID(), function (children) {
                 var item = groups.getLocalById(children.id);
                 //item.parent(parent);
                 return item;
@@ -172,8 +172,8 @@
             return items;
         };
 
-        questions.getLocalByVariable = function(variable) {
-            return _.find(questions.getAllLocal(), function(question) { return question.alias() == variable; });
+        questions.getLocalByVariable = function (variable) {
+            return _.find(questions.getAllLocal(), function (question) { return question.alias() == variable; });
         };
 
         questions.cleanTriggers = function (group) {
@@ -189,14 +189,14 @@
             });
         };
 
-        questions.getAllVariables = function() {
+        questions.getAllVariables = function () {
             return _.map(questions.getAllLocal(), function (question) {
                 return question.alias();
             });
         };
 
 
-        var getChildItemByIdAndType = function(item) {
+        var getChildItemByIdAndType = function (item) {
             if (item.type === "GroupView")
                 return groups.getLocalById(item.id);
             return questions.getLocalById(item.id);
@@ -219,7 +219,7 @@
             return {
                 questionnaireId: questionnaire.id(),
                 title: questionnaire.title(),
-                isPublic : questionnaire.isPublic()
+                isPublic: questionnaire.isPublic()
             };
         };
 
@@ -280,7 +280,7 @@
         commands[config.commands.updateQuestion] = function (question) {
             return converQuestionToCommand(question);
         };
-        
+
         commands[config.commands.cloneNumericQuestion] = function (question) {
             var command = commands[config.commands.createNumericQuestion](question);
             command.sourceQuestionId = question.cloneSource().id();
@@ -304,24 +304,24 @@
                 questionId: question.id()
             };
         };
-        
+
         commands[config.commands.questionMove] = function (command) {
             command.questionnaireId = questionnaire.id();
             return command;
         };
-        
+
         commands[config.commands.groupMove] = function (command) {
             command.questionnaireId = questionnaire.id();
             return command;
         };
-        
+
         commands[config.commands.addSharedPersonToQuestionnaire] = function (sharedUser) {
             return {
                 email: sharedUser.userEmail(),
-                questionnaireId : questionnaire.id()
+                questionnaireId: questionnaire.id()
             };
         };
-        
+
         commands[config.commands.removeSharedPersonFromQuestionnaire] = function (sharedUser) {
             return {
                 email: sharedUser.userEmail(),
@@ -329,7 +329,7 @@
             };
         };
 
-        var converQuestionToCommand = function(question) {
+        var converQuestionToCommand = function (question) {
             var command = {
                 questionnaireId: questionnaire.id(),
 
@@ -347,67 +347,90 @@
                 instructions: question.instruction()
             };
             switch (command.type) {
-            case "SingleOption":
-            case "YesNo":
-            case "DropDownList":
-            case "MultyOption":
-                command.optionsOrder = question.answerOrder();
+                case "SingleOption":
+                case "YesNo":
+                case "DropDownList":
+                case "MultyOption":
+                    command.optionsOrder = question.answerOrder();
                 command.isAnswersOrdered = question.isAnswersOrdered();
                 command.maxAllowedAnswers = question.maxAllowedAnswers();
-                if (question.isLinked() == 1) {
-                    command.linkedToQuestionId = question.selectedLinkTo();
-                } else {
-                    command.options = _.map(question.answerOptions(), function(item) {
-                        return {
-                            id: item.id(),
-                            title: item.title(),
-                            value: item.value()
-                        };
-                    });
-                }
-                break;
-            case "Numeric":
-                command.isInteger = question.isInteger() == 1 ? true : false;
-                command.isAutopropagating = false;
-                command.countOfDecimalPlaces =  command.isInteger == false ? question.countOfDecimalPlaces() : null;
-            case "DateTime":
-            case "GpsCoordinates":
-            case "Text":
-                break;
+                    if (question.isLinked() == 1) {
+                        command.linkedToQuestionId = question.selectedLinkTo();
+                    } else {
+                        command.options = _.map(question.answerOptions(), function (item) {
+                            return {
+                                id: item.id(),
+                                title: item.title(),
+                                value: item.value()
+                            };
+                        });
+                    }
+                    break;
+                case "Numeric":
+                    command.isInteger = question.isInteger() == 1 ? true : false;
+                    command.isAutopropagating = false;
+                    command.countOfDecimalPlaces = command.isInteger == false ? question.countOfDecimalPlaces() : null;
+                case "DateTime":
+                case "GpsCoordinates":
+                case "Text":
+                    break;
                 case "AutoPropagate":
                     command.isAutopropagating = true;
                     command.isInteger = true;
                     command.maxValue = question.maxValue();
                     command.triggeredGroupIds = _.map(question.triggers(), function (trigger) {
                     return trigger.key;
-                });
-                break;
+                    });
+                    break;
             }
             return command;
         };
-        
-        var sendCommand = function (commandName, args, callbacks) {
-            return $.Deferred(function (def) {
-                var command = {
-                    type: commandName,
-                    command: ko.toJSON(commands[commandName](args))
-                };
 
-                dataservice.sendCommand({
-                    success: function (response, status) {
-                        if (callbacks && callbacks.success) {
-                            callbacks.success();
+        var runARemoteVerification = function (uiCallbacks) {
+            return $.Deferred(function (def) {
+                var callbacks = {
+                    success: function (response) {
+                        if (uiCallbacks && uiCallbacks.success) {
+                            uiCallbacks.success(_.map(response.Errors, function (error) {
+                                return modelmapper.error.fromDto(error);
+                            }));
                         }
                         def.resolve(response);
                     },
-                    error: function (response, xhr) {
-                        if (callbacks && callbacks.error) {
-                            callbacks.error(response);
+                    error: function (response) {
+                        if (uiCallbacks && uiCallbacks.error) {
+                            uiCallbacks.error(response);
                         }
                         def.reject(response);
                         return;
                     }
-                }, command);
+                };
+
+                dataservice.runRemoteVerification(callbacks, questionnaire.id());
+
+            }).promise();
+        };
+        var sendCommand = function(commandName, args, uiCallbacks) {
+            return $.Deferred(function(def) {
+                var command = {
+                    type: commandName,
+                    command: ko.toJSON(commands[commandName](args))
+                }, callbacks = {
+                    success: function(response) {
+                        if (uiCallbacks && uiCallbacks.success) {
+                            uiCallbacks.success();
+                        }
+                        def.resolve(response);
+                    },
+                    error: function(response) {
+                        if (uiCallbacks && uiCallbacks.error) {
+                            uiCallbacks.error(response);
+                        }
+                        def.reject(response);
+                        return;
+                    }
+                };
+                dataservice.sendCommand(callbacks, command);
             }).promise();
         };
 
@@ -415,7 +438,8 @@
             groups: groups,
             questions: questions,
             questionnaire: questionnaire,
-            sendCommand: sendCommand
+            sendCommand: sendCommand,
+            runARemoteVerification: runARemoteVerification
         };
 
         // We did this so we can access the datacontext during its construction
@@ -424,6 +448,6 @@
         _.each(groups.getAllLocal(), function (group) {
             group.fillChildren();
         });
-        
+
         return datacontext;
     });

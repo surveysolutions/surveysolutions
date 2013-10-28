@@ -13,7 +13,15 @@
                 "AutoPropagate": "AutoPropagate",
                 "GpsCoordinates": "GpsCoordinates"
             },
-            questionTypeOptions = [
+            verificationReferenceType = {
+                question: 1,
+                group: 10,
+            },
+            messageTabs = {
+                saveMessagesTab: 1,
+                verificationMessagesTab: 2
+            },
+        questionTypeOptions = [
                 {
                     key: "SingleOption",
                     value: "Categorical: one answer"
@@ -42,7 +50,7 @@
                     key: "GpsCoordinates",
                     value: "Geo Location"
                 }
-            ],
+        ],
             questionScopes = {
                 interviewer: "Interviewer",
                 supervisor: "Supervisor",
@@ -180,7 +188,7 @@
                     okBtn: "Yes, disable it",
                     cancelBtn: "No, don't disable it"
                 },
-                weWillClearHeadFlag:{
+                weWillClearHeadFlag: {
                     message: "Questions answered by supervisor can't serve as a header of a roster group. Would you like to disable the 'head' option for this question?",
                     okBtn: "Yes, disable it",
                     cancelBtn: "No, don't disable it"
@@ -222,6 +230,8 @@
             answerOrders: answerOrders,
             groupTypes: groupTypes,
             commands: commands,
-            tips: tips
+            tips: tips,
+            verificationReferenceType: verificationReferenceType,
+            messageTabs: messageTabs
         };
     });

@@ -26,7 +26,7 @@ namespace CAPI.Android.Injections
         protected override IEnumerable<Assembly> GetAssembliesForRegistration()
         {
             return
-                Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { typeof(ImportQuestionnaireCommand).Assembly, GetType().Assembly });
+                Enumerable.Concat(base.GetAssembliesForRegistration(), new[] { typeof(ImportFromSupervisor).Assembly, GetType().Assembly });
         }
     }
 }

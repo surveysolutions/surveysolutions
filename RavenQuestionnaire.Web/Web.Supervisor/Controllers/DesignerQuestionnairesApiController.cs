@@ -69,7 +69,7 @@ namespace Web.Supervisor.Controllers
                     this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId));
                 var document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
-                this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
+                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
 
                 response.IsSuccess = true;
             }

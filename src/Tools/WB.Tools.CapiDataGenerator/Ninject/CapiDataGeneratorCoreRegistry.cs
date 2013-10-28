@@ -20,7 +20,7 @@ namespace CapiDataGenerator
             {
                 GetType().Assembly,
                 typeof(UserDenormalizer).Assembly,
-                typeof(ImportQuestionnaireCommand).Assembly,
+                typeof(ImportFromDesigner).Assembly,
                 typeof(UserListViewFactory).Assembly
             });
         }

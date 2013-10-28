@@ -116,7 +116,7 @@
                 self.orderOptions = config.answerOrders;
 
                 self.getHref = function () {
-                    return config.hashes.detailsQuestion + "/" + self.id();
+                    return utils.questionUrl(self.id());
                 };
                 self.isSelected = ko.observable();
                 self.isNullo = false;
