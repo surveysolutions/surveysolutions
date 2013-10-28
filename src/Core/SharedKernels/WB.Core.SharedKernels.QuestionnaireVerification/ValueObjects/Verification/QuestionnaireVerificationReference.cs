@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification
 {
+    [DebuggerDisplay("{Type} {Id}")]
     public class QuestionnaireVerificationReference
     {
         public QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType type, Guid id)
