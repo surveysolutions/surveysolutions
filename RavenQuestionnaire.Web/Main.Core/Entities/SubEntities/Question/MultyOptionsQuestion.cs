@@ -33,16 +33,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the add multy attr.
-        /// </summary>
-        public string AddMultyAttr { get; set; }
-
         
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -152,5 +143,8 @@ namespace Main.Core.Entities.SubEntities.Question
         }
 
         #endregion
+
+        public bool IsAnswersOrdered { get; set; }
+        public int? MaxAllowedAnswers { get; set; }
     }
 }

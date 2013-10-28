@@ -26,7 +26,10 @@ namespace Main.Core.Entities
             Answer[] answers,
             Guid? linkedToQuestionId,
             bool? isInteger,
-            int? countOfDecimalPlaces = null)
+            int? countOfDecimalPlaces,
+            bool? isAnswersOrdered,
+            int? maxAllowedAnswers
+            )
         {
             this.publicKey = publicKey;
             this.questionType = questionType;
@@ -47,6 +50,9 @@ namespace Main.Core.Entities
             this.linkedToQuestionId = linkedToQuestionId;
             this.isInteger = isInteger;
             this.countOfDecimalPlaces = countOfDecimalPlaces;
+
+            this.isAnswersOrdered = isAnswersOrdered;
+            this.maxAllowedAnswers = maxAllowedAnswers;
         }
         public Guid publicKey { get; set; }
         public QuestionType questionType { get; set; }
@@ -67,5 +73,8 @@ namespace Main.Core.Entities
         public Guid? linkedToQuestionId { get; set; }
         public bool? isInteger { get; set; }
         public int? countOfDecimalPlaces { get; set; }
+
+        public bool? isAnswersOrdered { get; set; }
+        public int? maxAllowedAnswers { get; set; }
     }
 }

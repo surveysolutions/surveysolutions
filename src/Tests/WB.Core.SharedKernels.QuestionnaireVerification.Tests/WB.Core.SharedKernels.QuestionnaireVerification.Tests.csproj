@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multianswer_and_negative_max_allowed_answers.cs" />
     <Compile Include="QuestionnaireVerifierTests\QuestionnaireVerifierTestsContext.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_propagating_questions_referencing_not_propagatable_group_and_3_referencing_pr___.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multianswer_invalid_max_allowed_answers.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_one_chapter_and_one_question.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_that_has_more_than_one_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_that_has_no_propagating_question_pointing_to_it.cs" />

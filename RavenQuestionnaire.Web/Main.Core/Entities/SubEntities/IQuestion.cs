@@ -90,7 +90,7 @@ namespace Main.Core.Entities.SubEntities
         List<Guid> ConditionalDependentGroups { get; set; }
 
         Guid? LinkedToQuestionId { get; set; }
-
+        
         #endregion
 
         /// <summary>

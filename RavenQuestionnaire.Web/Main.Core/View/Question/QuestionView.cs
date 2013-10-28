@@ -567,6 +567,12 @@ namespace Main.Core.View.Question
                 this.Settings = new {numericQuestion.IsInteger, numericQuestion.CountOfDecimalPlaces};
             }
 
+            var multyoptionQuestion = doc as IMultyOptionsQuestion;
+            if (multyoptionQuestion != null)
+            {
+                this.Settings = new { multyoptionQuestion.IsAnswersOrdered, multyoptionQuestion.MaxAllowedAnswers };
+            }
+
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
 
