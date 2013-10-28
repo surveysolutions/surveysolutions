@@ -177,4 +177,7 @@
   <data name="WB0020_ParameterUsedInValidationExpressionIsntRecognized" xml:space="preserve">
     <value>Parameter used in validation expression isn't recognized</value>
   </data>
+  <data name="WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
+    <value>Multi answer question has negative max allowed answers count or options count less than max allowed answers count</value>
+  </data>
 </root>

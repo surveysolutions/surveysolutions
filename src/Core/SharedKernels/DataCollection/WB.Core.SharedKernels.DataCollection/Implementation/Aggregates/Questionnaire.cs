@@ -145,9 +145,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             document.ConnectChildrenWithParent();
 
-            ThrowIfVerifierFindsErrors(document);
-            this.ThrowIfSomeMultiQuestionsHaveNegativeMaxAllowedAnswersOrMaxAllowedAnswersMoreThanOptionsCount(document);
-
+            this.ThrowIfVerifierFindsErrors(document);
+            
             document.CreatedBy = this.innerDocument.CreatedBy;
 
             this.ApplyEvent(new TemplateImported() {Source = document});
@@ -604,16 +603,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return document;
         }
 
-        }
-
-        private void ThrowIfSomeMultiQuestionsHaveNegativeMaxAllowedAnswersOrMaxAllowedAnswersMoreThanOptionsCount(QuestionnaireDocument document)
-        {
-            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
-                "Following multi questions have negative max allowed answers count or options count less than max allowed answers count",
-                question =>
-                    question is IMultyOptionsQuestion && ((IMultyOptionsQuestion) question).MaxAllowedAnswers.HasValue &&
-                        (((IMultyOptionsQuestion) question).MaxAllowedAnswers < 1 ||
-                            (question.Answers.Count < ((IMultyOptionsQuestion) question).MaxAllowedAnswers)));
         private IEnumerable<Guid> GetQuestionsInvolvedInCustomValidationImpl(Guid questionId)
         {
             string validationExpression = this.GetCustomValidationExpression(questionId);
