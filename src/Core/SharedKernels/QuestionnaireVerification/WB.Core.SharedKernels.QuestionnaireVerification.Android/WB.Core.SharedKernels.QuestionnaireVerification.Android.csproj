@@ -54,14 +54,14 @@
     <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
       <Link>Services\IQuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationError.cs">
-      <Link>ValueObjects\Verification\QuestionnaireVerificationError.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationError.cs">
+      <Link>ValueObjects\QuestionnaireVerificationError.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReference.cs">
-      <Link>ValueObjects\Verification\QuestionnaireVerificationReference.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReference.cs">
+      <Link>ValueObjects\QuestionnaireVerificationReference.cs</Link>
     </Compile>
-    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs">
-      <Link>ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReferenceType.cs">
+      <Link>ValueObjects\QuestionnaireVerificationReferenceType.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

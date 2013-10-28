@@ -56,9 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionnaireVerificationModule.cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
-    <Compile Include="ValueObjects\Verification\QuestionnaireVerificationError.cs" />
-    <Compile Include="ValueObjects\Verification\QuestionnaireVerificationReference.cs" />
-    <Compile Include="ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
