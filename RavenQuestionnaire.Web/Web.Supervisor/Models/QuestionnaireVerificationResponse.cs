@@ -5,7 +5,7 @@ using System.Web;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace Web.Supervisor.Models
 {

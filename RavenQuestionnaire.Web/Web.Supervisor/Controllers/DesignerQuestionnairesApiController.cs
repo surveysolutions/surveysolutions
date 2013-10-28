@@ -82,16 +82,14 @@ namespace Web.Supervisor.Controllers
                         string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
                     return new QuestionnaireVerificationResponse(false);
                 }
-                else
+
+                var response = new QuestionnaireVerificationResponse(true);
+                var verificationException = domainEx as QuestionnaireVerificationException;
+                if (verificationException != null)
                 {
-                    var response = new QuestionnaireVerificationResponse(true);
-                    var verificationException = domainEx as QuestionnaireVerificationException;
-                    if (verificationException != null)
-                    {
-                        response.SetErrorsForQuestionnaire(verificationException.Errors, document);
-                    }
-                    return response;
+                    response.SetErrorsForQuestionnaire(verificationException.Errors, document);
                 }
+                return response;
             }
         }
 
