@@ -22,16 +22,17 @@
                 break;
             case "MultyOption":
                 item = new model.MultyOptionQuestion(_.isEmpty(dto.Settings) ? true : dto.Settings.IsAnswersOrdered, _.isEmpty(dto.Settings) ? null : dto.Settings.MaxAllowedAnswers);
+                
                 item.options(_.map(dto.Options, function(option) {
                     var o = new model.Option(uiId);
                     o.value(option.Value + "");
                     o.label(_.unescape(option.Label) + "");
 
-                    if (_.any(dto.Answer, function(optionValue) { return _.isEqual(optionValue, option.Value); })) {
-                        item.selectedOptions.push(o.value());
-                    }
                     return o;
                 }));
+                _.each(dto.Answer, function (optionValue) {
+                    item.selectedOptions.push(optionValue + "");
+                });
                 break;
             case "Text":
                 item = new model.TextQuestion();

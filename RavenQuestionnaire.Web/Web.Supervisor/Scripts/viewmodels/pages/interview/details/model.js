@@ -167,41 +167,43 @@
                         message: 'Number of selected answers more than number of maximum permitted answers'
                     }]
             });
-            if (self.isAnswersOrdered()) {
-                self.selectedOptions.subscribe(function() {
-                    if (self.selectedOptionsCount != self.selectedOptions().length) {
-                        if (self.selectedOptionsCount > self.selectedOptions().length) {
-                            _.each(self.orderedOptionsSelection(), function(answer) {
-                                if (!_.contains(self.selectedOptions(), answer)) {
-                                    self.orderedOptionsSelection.remove(answer);
-                                }
-                            });
-                        }
-                        _.each(self.options(), function(option) {
-                            if (_.contains(self.selectedOptions(), option.value())) {
-                                if (_.isUndefined(option.orderNo())) {
-                                    option.orderNo(self.selectedOptions().length);
-                                    self.orderedOptionsSelection.push(option.value());
-                                } else {
-                                    var orderIndex = self.orderedOptionsSelection().indexOf(option.value());
-                                    if (orderIndex > -1) {
-                                        option.orderNo(orderIndex + 1);
-                                    }
-                                }
-                            } else {
-                                if (self.selectedOptionsCount > self.selectedOptions().length) {
-                                    var orderIndex = self.orderedOptionsSelection().indexOf(option.value());
-                                    if (orderIndex == -1) {
-                                        option.orderNo(undefined);
-                                    }
-                                }
+            self.orderSelectedOptions = function () {
+                if (self.selectedOptionsCount != self.selectedOptions().length) {
+                    if (self.selectedOptionsCount > self.selectedOptions().length) {
+                        _.each(self.orderedOptionsSelection(), function (answer) {
+                            if (!_.contains(self.selectedOptions(), answer)) {
+                                self.orderedOptionsSelection.remove(answer);
                             }
                         });
-                        self.selectedOptionsCount = self.selectedOptions().length;
                     }
+                    _.each(self.options(), function (option) {
+                        var orderIndex = self.orderedOptionsSelection().indexOf(option.value());
+                        if (_.contains(self.selectedOptions(), option.value())) {
+                            if (_.isUndefined(option.orderNo())) {
+                                option.orderNo(self.selectedOptions().length);
+                                self.orderedOptionsSelection.push(option.value());
+                            } else {
+                                if (orderIndex > -1) {
+                                    option.orderNo(orderIndex + 1);
+                                }
+                            }
+                        } else {
+                            if (self.selectedOptionsCount > self.selectedOptions().length) {
+                                if (orderIndex == -1) {
+                                    option.orderNo(undefined);
+                                }
+                            }
+                        }
+                    });
+                    self.selectedOptionsCount = self.selectedOptions().length;
+                }
+            };
+            if (self.isAnswersOrdered()) {
+                self.selectedOptions.subscribe(function() {
+                    self.orderSelectedOptions();
                 });
             }
-
+            
             self.options = ko.observableArray();
             self.answer = ko.computed(function () {
                 var selected = _.filter(ko.toJS(self.options), function (option) {
