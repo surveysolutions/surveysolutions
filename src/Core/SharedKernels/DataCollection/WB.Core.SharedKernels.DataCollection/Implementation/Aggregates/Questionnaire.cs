@@ -141,12 +141,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeLinkedQuestionsReferenceQuestionsNotUnderPropagatedGroup(document);
             ThrowIfSomeQuestionsHaveCustomValidationReferencingQuestionsWithDeeperPropagationLevel(document);
             ThrowIfSomeQuestionsHaveIncorrectSubstitutionReference(document);
+            this.ThrowIfSomeMultiQuestionsHaveNegativeMaxAllowedAnswersOrMaxAllowedAnswersMoreThanOptionsCount(document);
 
             document.CreatedBy = this.innerDocument.CreatedBy;
 
             this.ApplyEvent(new TemplateImported() {Source = document});
         }
-
 
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
@@ -669,6 +669,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
                 "Following linked questions are referencing questions, but referenced questions are not under propagated group",
                 question => question.LinkedToQuestionId.HasValue && !isQuestionUnderPropagatedGroup(question.LinkedToQuestionId.Value));
+        }
+
+        private void ThrowIfSomeMultiQuestionsHaveNegativeMaxAllowedAnswersOrMaxAllowedAnswersMoreThanOptionsCount(QuestionnaireDocument document)
+        {
+            ThrowIfSomeQuestionsSatisfySpecifiedCondition(document,
+                "Following multi questions have negative max allowed answers count or options count less than max allowed answers count",
+                question =>
+                    question is IMultyOptionsQuestion && ((IMultyOptionsQuestion) question).MaxAllowedAnswers.HasValue &&
+                        (((IMultyOptionsQuestion) question).MaxAllowedAnswers < 1 ||
+                            (question.Answers.Count < ((IMultyOptionsQuestion) question).MaxAllowedAnswers)));
         }
 
         //could be split into several methods but it involves several scans of questionnaire 
