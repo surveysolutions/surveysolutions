@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 Verifier<IQuestion>(this.CustomValidationExpressionReferencesNotExistingQuestion, "WB0004", VerificationMessages.WB0004_CustomValidationExpressionReferencesNotExistingQuestion),
                 Verifier<IComposite>(this.CustomEnablementConditionReferencesNotExistingQuestion, "WB0005", VerificationMessages.WB0005_CustomEnablementConditionReferencesNotExistingQuestion),
                 Verifier<IAutoPropagateQuestion>(PropagatingQuestionReferencesNotExistingGroup, "WB0006", VerificationMessages.WB0006_PropagatingQuestionReferencesNotExistingGroup),
-                Verifier<IAutoPropagateQuestion>(PropagatingQuestionReferencesNotPropagatableGroup, "WB0007", VerificationMessages.WB0007_PropagatingQuestionReferencesNotPropagatableGroup),
+                Verifier<IAutoPropagateQuestion, IComposite>(PropagatingQuestionReferencesNotPropagatableGroup, "WB0007", VerificationMessages.WB0007_PropagatingQuestionReferencesNotPropagatableGroup),
 
                 this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
@@ -63,7 +63,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 select error;
         }
 
-        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier(Func<QuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier(
+            Func<QuestionnaireDocument, bool> hasError, string code, string message)
         {
             return questionnaire =>
                 hasError(questionnaire)
@@ -71,19 +72,35 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     : Enumerable.Empty<QuestionnaireVerificationError>();
         }
 
-        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message)
+        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
+            Func<TEntity, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return Verifier<TEntity>((entity, questionnaire) => hasError(entity), code, message);
         }
 
-        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(Func<TEntity, QuestionnaireDocument, bool> hasError, string code, string message)
+        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
+            Func<TEntity, QuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+        }
+
+        private static Func<QuestionnaireDocument, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity, TReferencedEntity>(
+            Func<TEntity, QuestionnaireDocument, Tuple<bool, IEnumerable<TReferencedEntity>>> verifyEntity, string code, string message)
+            where TEntity : class, IComposite
+            where TReferencedEntity : class, IComposite
+        {
+            return questionnaire =>
+                from entity in questionnaire.Find<TEntity>(_ => true)
+                let verificationResult = verifyEntity(entity, questionnaire)
+                let hasError = verificationResult.Item1
+                let referencedEntities = verificationResult.Item2
+                where hasError
+                select new QuestionnaireVerificationError(code, message, referencedEntities.Select(CreateReference));
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(QuestionnaireDocument questionnaire)
@@ -265,13 +282,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 => !QuestionnaireContainsGroup(questionnaire, groupId));
         }
 
-        private bool PropagatingQuestionReferencesNotPropagatableGroup(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
+        private static Tuple<bool, IEnumerable<IComposite>> PropagatingQuestionReferencesNotPropagatableGroup(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
         {
-            return question.Triggers.Any(groupId =>
-            {
-                var group = questionnaire.Find<IGroup>(groupId);
-                return group != null && group.Propagated == Propagate.None;
-            });
+            IEnumerable<IGroup> notPropagatableGroups = question
+                .Triggers
+                .Select(questionnaire.Find<IGroup>)
+                .Where(group => group != null && group.Propagated == Propagate.None)
+                .ToList();
+
+            IEnumerable<IComposite> references = Enumerable.Concat(
+                new[] { question },
+                notPropagatableGroups.AsEnumerable<IComposite>());
+
+            return Tuple.Create(notPropagatableGroups.Any(), references);
         }
 
         private static bool IsGuid(string identifier)
