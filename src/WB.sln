@@ -213,7 +213,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Quest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidWB.Core.SharedKernels.QuestionnaireVerification", "..\Mono\AndroidWB.Core.SharedKernels.QuestionnaireVerification\AndroidWB.Core.SharedKernels.QuestionnaireVerification.csproj", "{2F566DD5-1692-4890-9FF7-BCB21B8C372B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification", "Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification.csproj", "{44A49DB2-2E7E-4BE7-B931-7E225EF057F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
