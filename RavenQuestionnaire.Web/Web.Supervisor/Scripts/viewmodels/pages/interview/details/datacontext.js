@@ -106,7 +106,8 @@
     commands[config.commands.answerMultipleOptionsQuestionCommand] = function(args) {
         var question = questions.getLocalById(args.questionId);
         var command = prepareQuestionCommand(question);
-        command.selectedValues = question.selectedOptions();
+        command.selectedValues = question.isAnswersOrdered() ? question.orderedOptionsSelection() :
+            question.selectedOptions();
         return command;
     };
 

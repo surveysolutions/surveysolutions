@@ -32,7 +32,9 @@ namespace Main.Core.AbstractFactories
                 data.maxValue,
                 data.linkedToQuestionId,
                 data.isInteger,
-                data.countOfDecimalPlaces);
+                data.countOfDecimalPlaces,
+                data.isAnswersOrdered,
+                data.maxAllowedAnswers);
 
             UpdateAnswerList(data.answers, q, data.linkedToQuestionId);
 
@@ -114,7 +116,9 @@ namespace Main.Core.AbstractFactories
             int maxValue,
             Guid? linkedToQuestionId,
             bool? isInteger,
-            int? countOfDecimalPlaces)
+            int? countOfDecimalPlaces,
+            bool? isAnswersOrdered,
+            int? maxAllowedAnswers)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -129,7 +133,7 @@ namespace Main.Core.AbstractFactories
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
-
+            
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null)
             {
@@ -152,6 +156,13 @@ namespace Main.Core.AbstractFactories
             {
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
+            }
+
+            var multioptionQuestion = question as IMultyOptionsQuestion;
+            if (multioptionQuestion != null)
+            {
+                multioptionQuestion.IsAnswersOrdered = isAnswersOrdered ?? false;
+                multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
             }
         }
     }

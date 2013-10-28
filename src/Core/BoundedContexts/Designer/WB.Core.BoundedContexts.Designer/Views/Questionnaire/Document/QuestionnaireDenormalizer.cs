@@ -3,8 +3,6 @@ using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.ServiceModel.Bus.ViewConstructorEventBus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -161,7 +159,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.MaxValue,
                     e.Answers,
                     e.LinkedToQuestionId,
-                    e.IsInteger));
+                    e.IsInteger,
+                    null,
+                    e.IsAnswersOrdered,
+                    e.MaxAllowedAnswers));
         }
 
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
@@ -186,7 +187,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.MaxValue,
                     e.Answers,
                     e.LinkedToQuestionId,
-                    e.IsInteger));
+                    e.IsInteger,
+                    null,
+                    e.IsAnswersOrdered,
+                    e.MaxAllowedAnswers));
         }
 
         //// move it out of there
@@ -211,7 +215,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 e.MaxValue,
                 e.Answers,
                 e.LinkedToQuestionId,
-                e.IsInteger, null));
+                e.IsInteger,
+                null,
+                e.IsAnswersOrdered,
+                e.MaxAllowedAnswers));
         }
 
         protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
@@ -284,7 +291,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.MaxValue,
                     null,
                     null,
-                    e.IsInteger, e.CountOfDecimalPlaces));
+                    e.IsInteger, 
+                    e.CountOfDecimalPlaces,
+                    null,
+                    null));
         }
 
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
@@ -309,7 +319,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.MaxValue,
                     null,
                     null,
-                    e.IsInteger, e.CountOfDecimalPlaces));
+                    e.IsInteger, 
+                    e.CountOfDecimalPlaces,
+                    null,
+                    null));
         }
 
         public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
@@ -332,7 +345,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 e.Triggers,
                 e.MaxValue,
                 null, null,
-                e.IsInteger, e.CountOfDecimalPlaces));
+                e.IsInteger, 
+                e.CountOfDecimalPlaces,
+                null,
+                null));
         }
 
         public void Handle(IPublishedEvent<ImageUpdated> evnt)

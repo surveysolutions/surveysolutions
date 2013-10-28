@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
@@ -50,6 +51,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 this.ErrorsByLinkedQuestions,
 
                 this.ErrorsByQuestionsWithSubstitutions,
+                this.ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount
             };
         }
 
@@ -111,6 +113,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return this.CreateQuestionnaireVerificationErrorsForQuestions("WB0008",
                 VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
                 autoPropagateQuestionsWithEmptyTriggers);
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount(QuestionnaireDocument questionnaire)
+        {
+            var multioptionQuestionsWithIncorrectMaxAllowedAnswers = questionnaire.Find<IQuestion>(question => question is IMultyOptionsQuestion && 
+                    ((IMultyOptionsQuestion)question).MaxAllowedAnswers.HasValue &&
+                    (((IMultyOptionsQuestion)question).MaxAllowedAnswers < 1 ||(question.Answers.Count < ((IMultyOptionsQuestion)question).MaxAllowedAnswers)))
+                    .ToArray();
+
+            return this.CreateQuestionnaireVerificationErrorsForQuestions("WB0021",
+                VerificationMessages.WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount,
+                multioptionQuestionsWithIncorrectMaxAllowedAnswers);
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(QuestionnaireDocument questionnaire)
