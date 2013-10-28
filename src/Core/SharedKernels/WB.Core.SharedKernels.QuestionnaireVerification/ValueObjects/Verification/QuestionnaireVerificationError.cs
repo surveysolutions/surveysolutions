@@ -15,5 +15,10 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verificat
         public string Code { get; private set; }
         public string Message { get; private set; }
         public IEnumerable<QuestionnaireVerificationReference> References { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}", this.Code, this.Message);
+        }
     }
 }
