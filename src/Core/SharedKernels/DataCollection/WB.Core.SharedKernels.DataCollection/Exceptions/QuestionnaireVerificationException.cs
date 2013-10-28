@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.DataCollection.Exceptions
 {

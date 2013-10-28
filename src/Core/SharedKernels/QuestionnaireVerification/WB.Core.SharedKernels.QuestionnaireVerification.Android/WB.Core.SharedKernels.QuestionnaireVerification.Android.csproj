@@ -41,56 +41,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\QuestionnaireVerifier.cs">
       <Link>Implementation\Services\QuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.Designer.cs">
-      <Link>Implementation\Services\VerificationMessages.Designer.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Properties\VerificationMessages.Designer.cs">
+      <Link>Properties\VerificationMessages.Designer.cs</Link>
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\QuestionnaireVerificationModule.cs">
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\QuestionnaireVerificationModule.cs">
       <Link>QuestionnaireVerificationModule.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Services\IQuestionnaireVerifier.cs">
       <Link>Services\IQuestionnaireVerifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationError.cs">
-      <Link>ValueObjects\Verification\QuestionnaireVerificationError.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationError.cs">
+      <Link>ValueObjects\QuestionnaireVerificationError.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReference.cs">
-      <Link>ValueObjects\Verification\QuestionnaireVerificationReference.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReference.cs">
+      <Link>ValueObjects\QuestionnaireVerificationReference.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs">
-      <Link>ValueObjects\Verification\QuestionnaireVerificationReferenceType.cs</Link>
+    <Compile Include="..\WB.Core.SharedKernels.QuestionnaireVerification\ValueObjects\QuestionnaireVerificationReferenceType.cs">
+      <Link>ValueObjects\QuestionnaireVerificationReferenceType.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
+    <ProjectReference Include="..\..\..\..\..\Mono\AndroidWB.Core.SharedKernels.ExpressionProcessor\AndroidWB.Core.SharedKernels.ExpressionProcessor.csproj">
       <Project>{82cabf37-a3a7-43e3-8e9d-850bdab3a935}</Project>
       <Name>AndroidWB.Core.SharedKernels.ExpressionProcessor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\packages.config">
+    <None Include="..\WB.Core.SharedKernels.QuestionnaireVerification\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.resx">
-      <Link>Implementation\Services\VerificationMessages.resx</Link>
+    <EmbeddedResource Include="..\WB.Core.SharedKernels.QuestionnaireVerification\Properties\VerificationMessages.resx">
+      <Link>Properties\VerificationMessages.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
