@@ -81,6 +81,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             resultErrors.ShouldNotContain(error
                 => error.References.Single().Id == secondCorrectQuestionId);
 
+C:\TeamCity\buildAgent\work\5316427cc9b1e7d1\Mono\AndroidWB.Core.SharedKernels.QuestionnaireVerification\"..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.resx
+
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;

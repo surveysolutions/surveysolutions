@@ -84,12 +84,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\packages.config">
+    <None Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\packages.config">
       <Link>packages.config</Link>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Core\SharedKernels\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.resx">
+    <EmbeddedResource Include="..\..\src\Core\SharedKernels\QuestionnaireVerification\WB.Core.SharedKernels.QuestionnaireVerification\Implementation\Services\VerificationMessages.resx">
       <Link>Implementation\Services\VerificationMessages.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
