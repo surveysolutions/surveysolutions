@@ -1,12 +1,12 @@
-﻿using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+﻿using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Tests.ExpressionProcessorTests
 {
     internal class ExpressionProcessorTestsContext
     {
-        protected static ExpressionProcessor CreateExpressionProcessor()
+        protected static IExpressionProcessor CreateExpressionProcessor()
         {
-            return new ExpressionProcessor();
+            return new WB.Core.SharedKernels.ExpressionProcessor.Implementation.Services.ExpressionProcessor();
         }
     }
 }
