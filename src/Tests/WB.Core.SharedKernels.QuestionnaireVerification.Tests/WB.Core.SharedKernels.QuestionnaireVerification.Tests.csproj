@@ -63,6 +63,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_empty_questionnaire.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_questions_and_1_group_having_enablement_conditions_with_incorrect_syntax_and_one___.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_in_enablement_condi___.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_questions_referencing_not_existing_question_in_validation_expression.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_3_questions_with_invalid_validation_expression_and_2_with_correct.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_that_has_no_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagating_question_that_has_no_associated_groups.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_contains_self_references_in_substitution.cs" />
-    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_and_referenced_question_is_missing.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_propagation_level.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_parameter.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_substitutions_and_marked_as_featured.cs" />
