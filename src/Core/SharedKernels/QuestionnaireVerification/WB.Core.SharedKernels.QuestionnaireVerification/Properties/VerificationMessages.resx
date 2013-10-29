@@ -141,43 +141,43 @@
   <data name="WB0008_PropagatingQuestionHasNoAssociatedGroups" xml:space="preserve">
     <value>Propagating question have no associated groups</value>
   </data>
-  <data name="WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem" xml:space="preserve">
-    <value>Propagated group has no propagating questions pointing to it</value>
+  <data name="WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt" xml:space="preserve">
+    <value>Propagated group has no propagating questions pointing to it.</value>
   </data>
-  <data name="WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem" xml:space="preserve">
-    <value>Propagated group has more than one propagating question pointing to it</value>
+  <data name="WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt" xml:space="preserve">
+    <value>Propagated group has more than one propagating question pointing to it.</value>
   </data>
   <data name="WB0011_QuestionReferencedByLinkedQuestionDoesNotExist" xml:space="preserve">
-    <value>Question referenced by linked question does not exist</value>
+    <value>Question referenced by linked question does not exist.</value>
   </data>
-  <data name="WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Linked question reference questions of not supported type</value>
+  <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>Linked question references question of not supported type.</value>
   </data>
-  <data name="WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup" xml:space="preserve">
-    <value>Linked question reference questions not under propagated group</value>
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup" xml:space="preserve">
+    <value>Linked question references question not under propagated group.</value>
   </data>
-  <data name="WB0014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question have custom validation referencing question with deeper propagation level</value>
+  <data name="WB0014_QuestionHasCustomValidationReferencingQuestionWithDeeperPropagationLevel" xml:space="preserve">
+    <value>Question has custom validation referencing question with deeper propagation level.</value>
   </data>
-  <data name="WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured" xml:space="preserve">
-    <value>Question with substitutions can't be marked as pre-filled</value>
+  <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+    <value>Question with title substitution can't be marked as pre-filled.</value>
   </data>
-  <data name="WB0016_QuestionWithSubstitutionsCantHaveSelfReferences" xml:space="preserve">
-    <value>Question with substitutions can't have self-references</value>
+  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
+    <value>Question with title substitution can't reference itself.</value>
   </data>
-  <data name="WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist" xml:space="preserve">
-    <value>Question referenced by question with substitutions does not exist</value>
+  <data name="WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>Question with title substitution references not existing question.</value>
   </data>
-  <data name="WB0018_QuestionsSubstitutionReferenceOfNotSupportedType" xml:space="preserve">
-    <value>Question's substitution reference of not supported type</value>
+  <data name="WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>Question with title substitution references question of not supported type.</value>
   </data>
-  <data name="WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question with substitutions can't have references with deeper propagation level</value>
+  <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
+    <value>Question with title substitution can't have reference questions with deeper propagation level.</value>
   </data>
-  <data name="WB0020_ParameterUsedInValidationExpressionIsntRecognized" xml:space="preserve">
-    <value>Parameter used in validation expression isn't recognized</value>
+  <data name="WB0020_CustomValidationExpressionUsesNotRecognizedParameter" xml:space="preserve">
+    <value>Custom validation expression references not recognized parameter.</value>
   </data>
-  <data name="WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
-    <value>Multi answer question has negative max allowed answers count or options count less than max allowed answers count</value>
+  <data name="WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount" xml:space="preserve">
+    <value>Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count.</value>
   </data>
 </root>

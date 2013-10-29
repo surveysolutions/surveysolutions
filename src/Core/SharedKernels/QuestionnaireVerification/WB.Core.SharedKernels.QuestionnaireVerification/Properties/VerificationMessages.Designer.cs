@@ -133,25 +133,25 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Propagated group has no propagating questions pointing to it.
+        ///   Looks up a localized string similar to Propagated group has no propagating questions pointing to it..
         /// </summary>
-        internal static string WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem {
+        internal static string WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt {
             get {
-                return ResourceManager.GetString("WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem", resourceCulture);
+                return ResourceManager.GetString("WB0009_PropagatedGroupHasNoPropagatingQuestionsPointingToIt", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Propagated group has more than one propagating question pointing to it.
+        ///   Looks up a localized string similar to Propagated group has more than one propagating question pointing to it..
         /// </summary>
-        internal static string WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem {
+        internal static string WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt {
             get {
-                return ResourceManager.GetString("WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem", resourceCulture);
+                return ResourceManager.GetString("WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question referenced by linked question does not exist.
+        ///   Looks up a localized string similar to Question referenced by linked question does not exist..
         /// </summary>
         internal static string WB0011_QuestionReferencedByLinkedQuestionDoesNotExist {
             get {
@@ -160,92 +160,93 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question reference questions of not supported type.
+        ///   Looks up a localized string similar to Linked question references question of not supported type..
         /// </summary>
-        internal static string WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType {
+        internal static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
             get {
-                return ResourceManager.GetString("WB0012_LinkedQuestionReferenceQuestionOfNotSupportedType", resourceCulture);
+                return ResourceManager.GetString("WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question reference questions not under propagated group.
+        ///   Looks up a localized string similar to Linked question references question not under propagated group..
         /// </summary>
-        internal static string WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup {
+        internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup {
             get {
-                return ResourceManager.GetString("WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup", resourceCulture);
+                return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question have custom validation referencing question with deeper propagation level.
+        ///   Looks up a localized string similar to Question has custom validation referencing question with deeper propagation level..
         /// </summary>
-        internal static string WB0014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel {
+        internal static string WB0014_QuestionHasCustomValidationReferencingQuestionWithDeeperPropagationLevel {
             get {
-                return ResourceManager.GetString("WB0014_QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel", resourceCulture);
+                return ResourceManager.GetString("WB0014_QuestionHasCustomValidationReferencingQuestionWithDeeperPropagationLevel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with substitutions can&apos;t be marked as pre-filled.
+        ///   Looks up a localized string similar to Question with title substitution can&apos;t be marked as pre-filled..
         /// </summary>
-        internal static string WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured {
+        internal static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
-                return ResourceManager.GetString("WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured", resourceCulture);
+                return ResourceManager.GetString("WB0015_QuestionWithTitleSubstitutionCantBePrefilled", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with substitutions can&apos;t have self-references.
+        ///   Looks up a localized string similar to Question with title substitution can&apos;t reference itself..
         /// </summary>
-        internal static string WB0016_QuestionWithSubstitutionsCantHaveSelfReferences {
+        internal static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
             get {
-                return ResourceManager.GetString("WB0016_QuestionWithSubstitutionsCantHaveSelfReferences", resourceCulture);
+                return ResourceManager.GetString("WB0016_QuestionWithTitleSubstitutionCantReferenceSelf", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question referenced by question with substitutions does not exist.
+        ///   Looks up a localized string similar to Question with title substitution references not existing question..
         /// </summary>
-        internal static string WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist {
+        internal static string WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion {
             get {
-                return ResourceManager.GetString("WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question&apos;s substitution reference of not supported type.
+        ///   Looks up a localized string similar to Question with title substitution references question of not supported type..
         /// </summary>
-        internal static string WB0018_QuestionsSubstitutionReferenceOfNotSupportedType {
+        internal static string WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType {
             get {
-                return ResourceManager.GetString("WB0018_QuestionsSubstitutionReferenceOfNotSupportedType", resourceCulture);
+                return ResourceManager.GetString("WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with substitutions can&apos;t have references with deeper propagation level.
+        ///   Looks up a localized string similar to Question with title substitution can&apos;t have reference questions with deeper propagation level..
         /// </summary>
-        internal static string WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel {
+        internal static string WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
             get {
-                return ResourceManager.GetString("WB0019_QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel", resourceCulture);
+                return ResourceManager.GetString("WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLe" +
+                        "vel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter used in validation expression isn&apos;t recognized.
+        ///   Looks up a localized string similar to Custom validation expression references not recognized parameter..
         /// </summary>
-        internal static string WB0020_ParameterUsedInValidationExpressionIsntRecognized {
+        internal static string WB0020_CustomValidationExpressionUsesNotRecognizedParameter {
             get {
-                return ResourceManager.GetString("WB0020_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
+                return ResourceManager.GetString("WB0020_CustomValidationExpressionUsesNotRecognizedParameter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi answer question has negative max allowed answers count or options count less than max allowed answers count.
+        ///   Looks up a localized string similar to Categorical multiple answers question has negative max allowed answers count or options count less than max allowed answers count..
         /// </summary>
-        internal static string WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount {
+        internal static string WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount {
             get {
-                return ResourceManager.GetString("WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
+                return ResourceManager.GetString("WB0021_CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
             }
         }
     }
