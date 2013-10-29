@@ -158,12 +158,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 var propagatingQuestionsPointingToPropagatedGroup =
                     GetPropagatingQuestionsPointingToPropagatedGroup(propagatedGroup.PublicKey, questionnaire);
 
-                if (propagatingQuestionsPointingToPropagatedGroup.Count() < 2)
-                    continue;
-
-                yield return
-                    PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt(propagatedGroup,
-                        propagatingQuestionsPointingToPropagatedGroup);
+                if (propagatingQuestionsPointingToPropagatedGroup.Count() > 1)
+                    yield return PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt(propagatedGroup, propagatingQuestionsPointingToPropagatedGroup);
             }
         }
 
@@ -217,10 +213,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 List<Guid> vectorOfAutopropagatedQuestionsForQuestionWithSubstitution =
                     GetAllAutopropagationQuestionsAsVector(questionWithSubstitution, questionnaire);
 
-                VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences,
-                       (identifier) =>
-                           GetVerificationErrorBySubstitutionReferenceOrNull(questionWithSubstitution, identifier,
-                               vectorOfAutopropagatedQuestionsForQuestionWithSubstitution, questionnaire), errorByAllQuestionsWithSubstitutions);
+                VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences, errorByAllQuestionsWithSubstitutions,
+                    identifier => GetVerificationErrorBySubstitutionReferenceOrNull(
+                        questionWithSubstitution, identifier, vectorOfAutopropagatedQuestionsForQuestionWithSubstitution, questionnaire));
             }
 
             return errorByAllQuestionsWithSubstitutions;
@@ -241,10 +236,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 List<Guid> vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation =
                     GetAllAutopropagationQuestionsAsVector(questionWithValidationExpression, questionnaire);
 
-                VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression,
-                    (identifier) =>
-                        GetVerificationErrorByCustomValidationReferenceOrNull(questionWithValidationExpression, identifier,
-                            vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, questionnaire), errorByAllQuestionsWithCustomValidation);
+                VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
+                    identifier => GetVerificationErrorByCustomValidationReferenceOrNull(
+                        questionWithValidationExpression, identifier, vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, questionnaire));
             }
 
             return errorByAllQuestionsWithCustomValidation;
@@ -310,19 +304,20 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static EntityVerificationResult<IComposite> PropagatingQuestionReferencesNotPropagatableGroup(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
         {
-            IEnumerable<IGroup> notPropagatableGroups = question
-                .Triggers
-                .Select(questionnaire.Find<IGroup>)
-                .Where(group => group != null && group.Propagated == Propagate.None)
-                .ToList();
+            IEnumerable<IGroup> referencedNotPropagatableGroups =
+                question
+                    .Triggers
+                    .Select(questionnaire.Find<IGroup>)
+                    .Where(group => group != null && group.Propagated == Propagate.None)
+                    .ToList();
 
             return new EntityVerificationResult<IComposite>()
             {
-                HasErrors = notPropagatableGroups.Any(),
+                HasErrors = referencedNotPropagatableGroups.Any(),
 
                 ReferencedEntities = Enumerable.Concat(
                     new[] { question },
-                    notPropagatableGroups.AsEnumerable<IComposite>()),
+                    referencedNotPropagatableGroups.AsEnumerable<IComposite>()),
             };
         }
 
@@ -507,12 +502,12 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 CreateReference(sourceQuestion));
         }
 
-        private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableOfTelemetryToVerification,
-            Func<T, QuestionnaireVerificationError> getByEnumerableItemErrorOrNull, List<QuestionnaireVerificationError> errorList)
+        private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableToVerify,
+            List<QuestionnaireVerificationError> errorList, Func<T, QuestionnaireVerificationError> getErrorOrNull)
         {
             errorList.AddRange(
-                enumerableOfTelemetryToVerification
-                    .Select(getByEnumerableItemErrorOrNull)
+                enumerableToVerify
+                    .Select(getErrorOrNull)
                     .Where(errorOrNull => errorOrNull != null));
         }
 
