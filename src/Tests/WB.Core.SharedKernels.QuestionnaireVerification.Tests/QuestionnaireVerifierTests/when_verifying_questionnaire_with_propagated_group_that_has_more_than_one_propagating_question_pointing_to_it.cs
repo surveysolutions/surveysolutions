@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 {
     internal class when_verifying_questionnaire_with_propagated_group_that_has_more_than_one_propagating_question_pointing_to_it : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             autopropagatedGroupId = Guid.Parse("10000000000000000000000000000000");
             autopropagatedQuestion1Id = Guid.Parse("13333333333333333333333333333333");
@@ -24,34 +24,34 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             verifier = CreateQuestionnaireVerifier();
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_1_error = () =>
+        It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_error_with_code__WB0010__ = () =>
+        It should_return_error_with_code__WB0010__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0010");
 
-        private It should_return_error_with_3_references = () =>
+        It should_return_error_with_3_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(3);
 
-        private It should_return_first_error_reference_with_type_group = () =>
+        It should_return_first_error_reference_with_type_group = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        private It should_return_first_error_reference_with_id_of_autopropagatedGroupId = () =>
+        It should_return_first_error_reference_with_id_of_autopropagatedGroupId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(autopropagatedGroupId);
 
-        private It should_return_second_error_reference_with_type_question = () =>
+        It should_return_second_error_reference_with_type_question = () =>
             resultErrors.Single().References.Skip(1).First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_second_error_reference_with_id_of_autopropagatedQuestion1Id = () =>
+        It should_return_second_error_reference_with_id_of_autopropagatedQuestion1Id = () =>
             resultErrors.Single().References.Skip(1).First().Id.ShouldEqual(autopropagatedQuestion1Id);
 
-        private It should_return_third_error_reference_with_type_question = () =>
+        It should_return_third_error_reference_with_type_question = () =>
             resultErrors.Single().References.Skip(2).First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_third_error_reference_with_id_of_autopropagatedQuestion1Id = () =>
+        It should_return_third_error_reference_with_id_of_autopropagatedQuestion1Id = () =>
             resultErrors.Single().References.Skip(2).First().Id.ShouldEqual(autopropagatedQuestion2Id);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
