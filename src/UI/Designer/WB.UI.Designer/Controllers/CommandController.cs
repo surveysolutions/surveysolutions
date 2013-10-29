@@ -1,5 +1,6 @@
 ﻿using System.Web.Security;
 using Main.Core.Domain.Exceptions;
+using Main.Core.View;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Logging;
