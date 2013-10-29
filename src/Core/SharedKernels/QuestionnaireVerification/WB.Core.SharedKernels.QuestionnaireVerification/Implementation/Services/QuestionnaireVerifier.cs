@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                     continue;
 
                 yield return
-                    PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem(propagatedGroup,
+                    PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt(propagatedGroup,
                         propagatingQuestionsPointingToPropagatedGroup);
             }
         }
@@ -178,14 +178,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
                 if (sourceQuestion == null)
                 {
-                    yield return QuestionReferencedByLinkedQuestionDoesNotExistError(linkedQuestion);
+                    yield return LinkedQuestionReferencesNotExistingQuestion(linkedQuestion);
                     continue;
                 }
 
                 bool isSourceQuestionValidType = QuestionTypesValidToBeLinkedQuestionSource.Contains(sourceQuestion.QuestionType);
                 if (!isSourceQuestionValidType)
                 {
-                    yield return LinkedQuestionReferenceQuestionOfNotSupportedTypeError(linkedQuestion, sourceQuestion);
+                    yield return LinkedQuestionReferencesQuestionOfNotSupportedType(linkedQuestion, sourceQuestion);
                     continue;
                 }
 
@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             {
                 if (questionWithSubstitution.Featured)
                 {
-                    errorByAllQuestionsWithSubstitutions.Add(QuestionHaveIncorrectSubstitutionCantBeFeatured(questionWithSubstitution));
+                    errorByAllQuestionsWithSubstitutions.Add(QuestionWithTitleSubstitutionCantBePrefilled(questionWithSubstitution));
                     continue;
                 }
 
@@ -368,7 +368,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             Guid parsedId;
             if (!Guid.TryParse(identifier, out parsedId))
             {
-                return ParameterUsedInValidationExpressionIsntRecognized(questionWithValidationExpression);
+                return CustomValidationExpressionUsesNotRecognizedParameter(questionWithValidationExpression);
             }
 
             var questionsReferencedInValidation = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == parsedId);
@@ -380,7 +380,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             if (QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(questionsReferencedInValidation,
                 vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, questionnaire))
             {
-                return QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel(
+                return CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel(
                     questionWithValidationExpression, questionsReferencedInValidation);
             }
 
@@ -393,7 +393,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             if (substitutionReference == questionWithSubstitution.StataExportCaption)
             {
-                return QuestionWithSubstitutionsCantHaveSelfReferences(questionWithSubstitution);
+                return QuestionWithTitleSubstitutionCantReferenceSelf(questionWithSubstitution);
             }
 
             var questionSourceOfSubstitution =
@@ -401,138 +401,119 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
             if (questionSourceOfSubstitution == null)
             {
-                return QuestionReferencedByQuestionWithSubstitutionsDoesNotExist(questionWithSubstitution);
+                return QuestionWithTitleSubstitutionReferencesNotExistingQuestion(questionWithSubstitution);
             }
 
             if (!QuestionTypesValidToBeSubstitutionReferences.Contains(questionSourceOfSubstitution.QuestionType))
             {
                 return
-                    QuestionsSubstitutionReferenceOfNotSupportedType(questionWithSubstitution, questionSourceOfSubstitution);
+                    QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(questionWithSubstitution, questionSourceOfSubstitution);
             }
 
             if (QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(questionSourceOfSubstitution,
                 vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions, questionnaire))
             {
                 return
-                    QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel(questionWithSubstitution,
+                    QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(questionWithSubstitution,
                         questionSourceOfSubstitution);
             }
 
             return null;
         }
 
-        private static QuestionnaireVerificationError ParameterUsedInValidationExpressionIsntRecognized(IQuestion questionWithValidationExpression)
+        private static QuestionnaireVerificationError CustomValidationExpressionUsesNotRecognizedParameter(IQuestion questionWithValidationExpression)
         {
             return new QuestionnaireVerificationError("WB0020",
                 VerificationMessages.WB0020_CustomValidationExpressionUsesNotRecognizedParameter,
                 CreateReference(questionWithValidationExpression));
         }
 
-        private static QuestionnaireVerificationError QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel(
+        private static QuestionnaireVerificationError CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel(
             IQuestion questionWithValidationExpression, IQuestion questionsReferencedInValidation)
         {
-            var references = new[]
-            {
+            return new QuestionnaireVerificationError("WB0014",
+                VerificationMessages.WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel,
                 CreateReference(questionWithValidationExpression),
-                CreateReference(questionsReferencedInValidation)
-            };
-
-            return
-                new QuestionnaireVerificationError("WB0014",
-                    VerificationMessages.WB0014_QuestionHasCustomValidationReferencingQuestionWithDeeperPropagationLevel,
-                    references);
+                CreateReference(questionsReferencedInValidation));
 
         }
 
-        private static QuestionnaireVerificationError QuestionHaveIncorrectSubstitutionCantBeFeatured(IQuestion questionsWithSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantBePrefilled(IQuestion questionsWithSubstitution)
         {
             return new QuestionnaireVerificationError("WB0015",
                 VerificationMessages.WB0015_QuestionWithTitleSubstitutionCantBePrefilled,
                 CreateReference(questionsWithSubstitution));
         }
 
-        private static QuestionnaireVerificationError PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem(IGroup propagatedGroup, IEnumerable<IQuestion> propagatingQuestionsPointingToPropagatedGroup)
+        private static QuestionnaireVerificationError PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt(IGroup propagatedGroup, IEnumerable<IQuestion> propagatingQuestionsPointingToPropagatedGroup)
         {
-            var references = new List<QuestionnaireVerificationReference> { CreateReference(propagatedGroup) };
-
-            references.AddRange(propagatingQuestionsPointingToPropagatedGroup.Select(CreateReference));
-
             return new QuestionnaireVerificationError("WB0010",
-                VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt, references.ToArray());
+                VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToIt,
+                Enumerable.Concat(
+                    new[] { CreateReference(propagatedGroup) },
+                    propagatingQuestionsPointingToPropagatedGroup.Select(CreateReference)));
         }
 
-        private static QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveReferencesWithDeeperPropagationLevel(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
         {
-            var references = new[]
-                        {
-                            CreateReference(questionsWithSubstitution),
-                            CreateReference(questionSourceOfSubstitution)
-                        };
-
-             return new QuestionnaireVerificationError("WB0019",
-               VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel, references);
+            return new QuestionnaireVerificationError("WB0019",
+                VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
+                CreateReference(questionsWithSubstitution),
+                CreateReference(questionSourceOfSubstitution));
         }
 
-        private static QuestionnaireVerificationError QuestionsSubstitutionReferenceOfNotSupportedType(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType(IQuestion questionsWithSubstitution,IQuestion questionSourceOfSubstitution)
         {
-            var references = new[]
-                        {
-                            CreateReference(questionsWithSubstitution),
-                            CreateReference(questionSourceOfSubstitution)
-                        };
-
-             return new QuestionnaireVerificationError("WB0018",
-                VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType, references);
+            return new QuestionnaireVerificationError("WB0018",
+                VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType,
+                CreateReference(questionsWithSubstitution),
+                CreateReference(questionSourceOfSubstitution));
         }
 
-        private static QuestionnaireVerificationError QuestionReferencedByQuestionWithSubstitutionsDoesNotExist(IQuestion questionsWithSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionReferencesNotExistingQuestion(IQuestion questionsWithSubstitution)
         {
             return new QuestionnaireVerificationError("WB0017",
                 VerificationMessages.WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion,
                 CreateReference(questionsWithSubstitution));
         }
 
-        private static QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveSelfReferences(IQuestion questionsWithSubstitution)
+        private static QuestionnaireVerificationError QuestionWithTitleSubstitutionCantReferenceSelf(IQuestion questionsWithSubstitution)
         {
             return new QuestionnaireVerificationError("WB0016",
                 VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
                 CreateReference(questionsWithSubstitution));
         }
 
-        private static QuestionnaireVerificationError QuestionReferencedByLinkedQuestionDoesNotExistError(IQuestion linkedQuestion)
+        private static QuestionnaireVerificationError LinkedQuestionReferencesNotExistingQuestion(IQuestion linkedQuestion)
         {
             return new QuestionnaireVerificationError("WB0011",
-                       VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist,
-                       CreateReference(linkedQuestion));
+                VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
+                CreateReference(linkedQuestion));
         }
 
-        private static QuestionnaireVerificationError LinkedQuestionReferenceQuestionOfNotSupportedTypeError(IQuestion linkedQuestion,IQuestion sourceQuestion)
+        private static QuestionnaireVerificationError LinkedQuestionReferencesQuestionOfNotSupportedType(IQuestion linkedQuestion,IQuestion sourceQuestion)
         {
-            var references = new[]
-            {
-                CreateReference(linkedQuestion),
-                CreateReference(sourceQuestion)
-            };
-
             return new QuestionnaireVerificationError("WB0012",
-                VerificationMessages.WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType, references);
+                VerificationMessages.WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType,
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion));
         }
 
         private static QuestionnaireVerificationError LinkedQuestionReferenceQuestionNotUnderPropagatedGroup(IQuestion linkedQuestion,IQuestion sourceQuestion)
         {
-            var references = new[]
-            {
-                CreateReference(linkedQuestion),
-                CreateReference(sourceQuestion)
-            };
             return new QuestionnaireVerificationError("WB0013",
-                VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup, references);
+                VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderPropagatedGroup,
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion));
         }
 
         private static void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableOfTelemetryToVerification,
             Func<T, QuestionnaireVerificationError> getByEnumerableItemErrorOrNull, List<QuestionnaireVerificationError> errorList)
         {
-            errorList.AddRange(enumerableOfTelemetryToVerification.Select(getByEnumerableItemErrorOrNull).Where(errorOrNull => errorOrNull != null));
+            errorList.AddRange(
+                enumerableOfTelemetryToVerification
+                    .Select(getByEnumerableItemErrorOrNull)
+                    .Where(errorOrNull => errorOrNull != null));
         }
 
         private static bool NoQuestionsExist(QuestionnaireDocument questionnaire)
