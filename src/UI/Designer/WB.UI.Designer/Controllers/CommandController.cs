@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Views.Questionnaire;
 using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Membership;
@@ -27,17 +28,16 @@ namespace WB.UI.Designer.Controllers
         private readonly IMembershipUserService userHelper;
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
-        private readonly IExpressionReplacer expressionReplacer;
         private readonly ILogger logger;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer,
-            IExpressionReplacer expressionReplacer, IMembershipUserService userHelper)
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IMembershipUserService userHelper, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
         {
             this.userHelper = userHelper;
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
-            this.expressionReplacer = expressionReplacer;
             this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         [HttpPost]
@@ -84,22 +84,33 @@ namespace WB.UI.Designer.Controllers
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
         {
-
             var questionCommand = command as AbstractQuestionCommand;
             if (questionCommand != null)
             {
-                questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
-                questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+                var expressionReplace = this.CreateExpressionReplace(questionCommand.QuestionnaireId);
+                questionCommand.Condition = expressionReplace.ReplaceStataCaptionsWithGuids(questionCommand.Condition,
+                    questionCommand.QuestionnaireId);
+                questionCommand.ValidationExpression = expressionReplace.ReplaceStataCaptionsWithGuids(
+                    questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
 
                 return;
             }
-            
+
             var newGroupCommand = command as FullGroupDataCommand;
             if (newGroupCommand != null)
             {
-                newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
-             } 
-         }
+                var expressionReplace = this.CreateExpressionReplace(newGroupCommand.QuestionnaireId);
+                newGroupCommand.Condition = expressionReplace.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition,
+                    newGroupCommand.QuestionnaireId);
+            }
+        }
+
+        private IExpressionReplacer CreateExpressionReplace(Guid questionnaireId)
+        {
+            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(
+                new QuestionnaireViewInputModel(questionnaireId));
+            return new ExpressionReplacer(questionnaire.Source);
+        }
 
         private void ValidateAddSharedPersonCommand(ICommand command)
         {
