@@ -46,6 +46,16 @@ namespace Core.Supervisor.Views.Interview
                 };
             }
 
+            var categoricalMultiQuestion = question as IMultyOptionsQuestion;
+            if (categoricalMultiQuestion != null)
+            {
+                this.Settings = new
+                {
+                    IsAnswersOrdered = categoricalMultiQuestion.IsAnswersOrdered,
+                    MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers
+                };
+            }
+
             if (answeredQuestion == null) return;
 
             this.IsAnswered = answeredQuestion.IsAnswered;

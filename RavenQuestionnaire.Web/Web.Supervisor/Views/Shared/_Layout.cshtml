@@ -105,11 +105,26 @@
                         <span>Errors log</span>
                     </div>
                     <div class="body">
-                        <ul data-bind="foreach: Errors" class="error-list">
-                            <li class="error">
-                                <pre data-bind="html: error"></pre>
-                            </li>
-                        </ul>
+                        <div class="container-fluid">
+                            <div class="form-horizontal">
+                                <ul data-bind="foreach: Errors" class="error-list">
+                                    <li class="error">
+                                        <pre data-bind="html: error"></pre>
+                                    </li>
+                                </ul>
+                                <ul data-bind="foreach: VerificationErrors" class="error-list">
+                                    @* <li class="error">
+                                 <pre data-bind="html: message"></pre>
+                             </li>*@
+                                    <li class="error">
+                                        <b class="error-code" data-bind="text: code"></b> <span data-bind="    html: message"></span>
+                                        <ul class="error-reference-items" data-bind="foreach: references">
+                                            <li><span data-bind="    text: title"></span></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,7 +137,7 @@
                 © 2013 <a href="http://www.worldbankgroup.org">The World Bank Group</a>, All Rights Reserved. <a href="http://go.worldbank.org/OS6V7NIUD0">Legal</a>.
             </div>
             <div class="text-center">
-                @ViewContext.Controller.GetType().Assembly.GetName().Version (@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) 
+                @ViewContext.Controller.GetType().Assembly.GetName().Version @*(@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) *@
                     @if (AppSettings.IsDebugBuilded)
                     {
                         <span id="build-config">[.NET Debug]</span>

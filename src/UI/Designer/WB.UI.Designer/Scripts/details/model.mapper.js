@@ -127,9 +127,7 @@
                     item.condition(dto.ConditionExpression);
                     item.instruction(dto.Instructions);
                     item.maxValue(dto.MaxValue);
-
                     item.alias(dto.StataExportCaption);
-
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
                     item.selectedLinkTo(dto.LinkedToQuestionId);
@@ -137,6 +135,9 @@
                     item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
                     item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
+                    item.isAnswersOrdered(_.isEmpty(dto.Settings) ? false : dto.Settings.IsAnswersOrdered);
+                    item.maxAllowedAnswers(_.isEmpty(dto.Settings) ? null : dto.Settings.MaxAllowedAnswers);
+                    
                     item.isNew(false);
                     item.dirtyFlag().reset();
                     item.commit();

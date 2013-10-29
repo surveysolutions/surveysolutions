@@ -84,6 +84,7 @@ namespace CAPI.Android
         private bool isChaptersVisible = false;
         private InterviewItemId? screenId;
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        //private MoveNavigationPanelAnimation movePanelAnimation;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -167,20 +168,12 @@ namespace CAPI.Android
         private void HidePanelAnimated()
         {
             isChaptersVisible = false;
-            HideNavigationPanelAfterScreenInitialized();
-        }
 
-        private void HideNavigationPanelAfterScreenInitialized()
-        {
-            var navigationPanelOffsetByX = llSpaceFiller.Width - ScreenWidth/2;
-            var movePanelAnimation = new MoveNavigationPanelAnimation(VpContent, lNavigationContainer, ScreenWidth,
-                navigationPanelOffsetByX);
-            movePanelAnimation.Duration = 500;
-            movePanelAnimation.FillEnabled = movePanelAnimation.FillBefore = false;
-            movePanelAnimation.FillAfter = true;
-            movePanelAnimation.AnimationEnd += (s, e) => this.lNavigationContainer.ClearAnimation();
+            lNavigationContainer.Animate().TranslationX(btnNavigation.LayoutParameters.Width - lNavigationContainer.LayoutParameters.Width);
 
-            lNavigationContainer.StartAnimation(movePanelAnimation);
+            AlignScreenContainer(false);
+
+            adapter.NotifyDataSetChanged();
         }
 
         private void AlignScreenContainer(bool isNavigationVisible)
@@ -238,11 +231,11 @@ namespace CAPI.Android
         {
             var index = this.adapter.GetScreenIndex(e.ScreenId);
 
-          /*  if (sender == navList)
+            if (sender == navList)
             {
                 this.HidePanelAnimated();
             }
-            */
+            
             if (index >= 0)
             {
                 VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
@@ -304,29 +297,6 @@ namespace CAPI.Android
             var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
             if (snapshotStore != null)
                 snapshotStore.PersistShapshot(QuestionnaireId);
-        }
-    }
-
-    public class MoveNavigationPanelAnimation : Animation
-    {
-        private readonly ViewPager vpContent;
-        private readonly RelativeLayout lNavigationContainer;
-        private readonly int screenWidth;
-        private readonly int navigationPanelOffsetX;
-        public MoveNavigationPanelAnimation(ViewPager vpContent, RelativeLayout lNavigationContainer, int screenWidth, int navigationPanelOffsetX)
-        {
-            this.vpContent = vpContent;
-            this.lNavigationContainer = lNavigationContainer;
-            this.screenWidth = screenWidth;
-            this.navigationPanelOffsetX = navigationPanelOffsetX;
-        }
-        protected override void ApplyTransformation(float interpolatedTime, Transformation t)
-        {
-            var currentOffset = navigationPanelOffsetX*interpolatedTime;
-            lNavigationContainer.SetX(lNavigationContainer.GetX() + currentOffset);
-            vpContent.LayoutParameters.Width = (int) (vpContent.Width - currentOffset);
-            vpContent.SetX(vpContent.GetX() + currentOffset);
-            vpContent.RequestLayout();
         }
     }
 }

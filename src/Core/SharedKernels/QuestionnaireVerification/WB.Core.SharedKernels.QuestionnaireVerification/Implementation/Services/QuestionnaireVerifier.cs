@@ -1,14 +1,16 @@
-using System;
+ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Utility;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
+using WB.Core.SharedKernels.QuestionnaireVerification.Properties;
 using WB.Core.SharedKernels.QuestionnaireVerification.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services
 {
@@ -39,15 +41,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 Verifier<IAutoPropagateQuestion>(PropagatingQuestionReferencesNotExistingGroup, "WB0006", VerificationMessages.WB0006_PropagatingQuestionReferencesNotExistingGroup),
                 Verifier<IAutoPropagateQuestion, IComposite>(PropagatingQuestionReferencesNotPropagatableGroup, "WB0007", VerificationMessages.WB0007_PropagatingQuestionReferencesNotPropagatableGroup),
 
-                this.ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups,
+                Verifier<IAutoPropagateQuestion>(PropagatingQuestionsThatHasNoAssociatedGroups,"WB0008",VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups),
+                Verifier<IGroup>(PropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,"WB0009", VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem),
+                
+                Verifier<IQuestion>(this.ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount, "WB0021", VerificationMessages.WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount),
+
                 this.ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt,
-                this.ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt,
 
                 this.ErrorsByQuestionsWithCustomValidationReferencingQuestionsWithDeeperPropagationLevel,
 
                 this.ErrorsByLinkedQuestions,
 
                 this.ErrorsByQuestionsWithSubstitutions,
+                //this.ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount
             };
         }
 
@@ -105,25 +111,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 select new QuestionnaireVerificationError(code, message, referencedEntities.Select(CreateReference));
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatingQuestionsThatHasNoAssociatedGroups(QuestionnaireDocument questionnaire)
+        private static bool PropagatingQuestionsThatHasNoAssociatedGroups(IAutoPropagateQuestion question, QuestionnaireDocument questionnaire)
         {
-            var autoPropagateQuestionsWithEmptyTriggers = questionnaire.Find<IAutoPropagateQuestion>(question => question.Triggers.Count == 0).ToArray();
-
-            return this.CreateQuestionnaireVerificationErrorsForQuestions("WB0008",
-                VerificationMessages.WB0008_PropagatingQuestionHasNoAssociatedGroups,
-                autoPropagateQuestionsWithEmptyTriggers);
+            return question.Triggers.Count == 0;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(QuestionnaireDocument questionnaire)
+        private bool ErrorsByMultioptionQuestionsHavingIncorrectMaxAnswerCount(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            IEnumerable<IGroup> propagatedGroupsWithNoPropagatingQuestionsPointingToThem = questionnaire.Find<IGroup>(group
-                => this.IsGroupPropagatable(@group)
-                    && !this.GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any());
+            return (question is IMultyOptionsQuestion && 
+                    ((IMultyOptionsQuestion)question).MaxAllowedAnswers.HasValue &&
+                    (((IMultyOptionsQuestion)question).MaxAllowedAnswers < 1 ||(question.Answers.Count < ((IMultyOptionsQuestion)question).MaxAllowedAnswers)));
+        }
 
-            return
-                this.CreateQuestionnaireVerificationErrorsForGroups("WB0009",
-                    VerificationMessages.WB0009_PropagatedGroupHaveNoPropagatingQuestionsPointingToThem,
-                    propagatedGroupsWithNoPropagatingQuestionsPointingToThem);
+        private bool PropagatedGroupsThatHasNoPropagatingQuestionsPointingToIt(IGroup group, QuestionnaireDocument questionnaire)
+        {
+            return this.IsGroupPropagatable(group) &&
+                !this.GetPropagatingQuestionsPointingToPropagatedGroup(@group.PublicKey, questionnaire).Any();
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByPropagatedGroupsThatHasMoreThanOnePropagatingQuestionPointingToIt(QuestionnaireDocument questionnaire)
@@ -398,7 +401,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return new QuestionnaireVerificationError("WB0020",
                 VerificationMessages.WB0020_ParameterUsedInValidationExpressionIsntRecognized,
-                this.CreateVerificationReferenceForQuestion(questionWithValidationExpression));
+                CreateReference(questionWithValidationExpression));
         }
 
         private QuestionnaireVerificationError QuestionHaveCustomValidationReferencingQuestionWithDeeperPropagationLevel(
@@ -406,8 +409,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             var references = new[]
             {
-                this.CreateVerificationReferenceForQuestion(questionWithValidationExpression),
-                this.CreateVerificationReferenceForQuestion(questionsReferencedInValidation)
+                CreateReference(questionWithValidationExpression),
+                CreateReference(questionsReferencedInValidation)
             };
 
             return
@@ -421,15 +424,14 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return new QuestionnaireVerificationError("WB0015",
                 VerificationMessages.WB0015_QuestionHaveIncorrectSubstitutionCantBeFeatured,
-                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                    questionsWithSubstitution.PublicKey));
+                CreateReference(questionsWithSubstitution));
         }
 
         private QuestionnaireVerificationError PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem(IGroup propagatedGroup, IEnumerable<IQuestion> propagatingQuestionsPointingToPropagatedGroup)
         {
-            var references = new List<QuestionnaireVerificationReference> { this.CreateVerificationReferenceForGroup(propagatedGroup) };
+            var references = new List<QuestionnaireVerificationReference> { CreateReference(propagatedGroup) };
 
-            references.AddRange(propagatingQuestionsPointingToPropagatedGroup.Select(this.CreateVerificationReferenceForQuestion));
+            references.AddRange(propagatingQuestionsPointingToPropagatedGroup.Select(CreateReference));
 
             return new QuestionnaireVerificationError("WB0010",
                 VerificationMessages.WB0010_PropagatedGroupHasMoreThanOnePropagatingQuestionPointingToThem, references.ToArray());
@@ -439,8 +441,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             var references = new[]
                         {
-                            this.CreateVerificationReferenceForQuestion(questionsWithSubstitution),
-                            this.CreateVerificationReferenceForQuestion(questionSourceOfSubstitution)
+                            CreateReference(questionsWithSubstitution),
+                            CreateReference(questionSourceOfSubstitution)
                         };
 
             return new QuestionnaireVerificationError("WB0019",
@@ -451,8 +453,8 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             var references = new[]
                         {
-                            this.CreateVerificationReferenceForQuestion(questionsWithSubstitution),
-                            this.CreateVerificationReferenceForQuestion(questionSourceOfSubstitution)
+                            CreateReference(questionsWithSubstitution),
+                            CreateReference(questionSourceOfSubstitution)
                         };
 
             return new QuestionnaireVerificationError("WB0018",
@@ -463,31 +465,29 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             return new QuestionnaireVerificationError("WB0017",
                 VerificationMessages.WB0017_QuestionReferencedByQuestionWithSubstitutionsDoesNotExist,
-                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                    questionsWithSubstitution.PublicKey));
+                CreateReference(questionsWithSubstitution));
         }
 
         private QuestionnaireVerificationError QuestionWithSubstitutionsCantHaveSelfReferences(IQuestion questionsWithSubstitution)
         {
             return new QuestionnaireVerificationError("WB0016",
                 VerificationMessages.WB0016_QuestionWithSubstitutionsCantHaveSelfReferences,
-                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
-                    questionsWithSubstitution.PublicKey));
+                CreateReference(questionsWithSubstitution));
         }
 
         private QuestionnaireVerificationError QuestionReferencedByLinkedQuestionDoesNotExistError(IQuestion linkedQuestion)
         {
             return new QuestionnaireVerificationError("WB0011",
                        VerificationMessages.WB0011_QuestionReferencedByLinkedQuestionDoesNotExist,
-                       this.CreateVerificationReferenceForQuestion(linkedQuestion));
+                       CreateReference(linkedQuestion));
         }
 
         private QuestionnaireVerificationError LinkedQuestionReferenceQuestionOfNotSupportedTypeError(IQuestion linkedQuestion, IQuestion sourceQuestion)
         {
             var references = new[]
             {
-                this.CreateVerificationReferenceForQuestion(linkedQuestion),
-                this.CreateVerificationReferenceForQuestion(sourceQuestion)
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion)
             };
 
             return new QuestionnaireVerificationError("WB0012",
@@ -498,30 +498,18 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             var references = new[]
             {
-                this.CreateVerificationReferenceForQuestion(linkedQuestion),
-                this.CreateVerificationReferenceForQuestion(sourceQuestion)
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion)
             };
             return new QuestionnaireVerificationError("WB0013",
                 VerificationMessages.WB0013_LinkedQuestionReferenceQuestionNotUnderPropagatedGroup, references);
         }
 
-        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForQuestions(string code, string message, params IQuestion[] questions)
-        {
-            QuestionnaireVerificationReference[] references =
-                questions
-                    .Select(this.CreateVerificationReferenceForQuestion)
-                    .ToArray();
-
-            return references.Any()
-                ? new QuestionnaireVerificationError(code, message, references)
-                : null;
-        }
-
-        private QuestionnaireVerificationError CreateQuestionnaireVerificationErrorForGroups(string code, string message, params IGroup[] groups)
+        private QuestionnaireVerificationError CreateQuestionnaireVerificationError(string code, string message, params IComposite[] groups)
         {
             QuestionnaireVerificationReference[] references =
                 groups
-                    .Select(this.CreateVerificationReferenceForGroup)
+                    .Select(CreateReference)
                     .ToArray();
 
             return references.Any()
@@ -529,24 +517,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 : null;
         }
 
-        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForQuestions(string code, string message, params  IQuestion[] questions)
+        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrors(string code, string message, params  IComposite[] questions)
         {
-            return questions.Select(q => this.CreateQuestionnaireVerificationErrorForQuestions(code, message, q));
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> CreateQuestionnaireVerificationErrorsForGroups(string code, string message, IEnumerable<IGroup> questions)
-        {
-            return questions.Select(q => this.CreateQuestionnaireVerificationErrorForGroups(code, message, q));
-        }
-
-        private QuestionnaireVerificationReference CreateVerificationReferenceForGroup(IGroup group)
-        {
-            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, group.PublicKey);
-        }
-
-        private QuestionnaireVerificationReference CreateVerificationReferenceForQuestion(IQuestion question)
-        {
-            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, question.PublicKey);
+            return questions.Select(q => this.CreateQuestionnaireVerificationError(code, message, q));
         }
 
         private void VerifyEnumerableAndAccumulateErrorsToList<T>(IEnumerable<T> enumerableOfTelemetryToVerification,

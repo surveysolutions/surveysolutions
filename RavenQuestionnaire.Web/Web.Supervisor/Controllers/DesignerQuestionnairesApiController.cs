@@ -59,19 +59,19 @@ namespace Web.Supervisor.Controllers
         }
 
         [HttpPost]
-        public JsonCommandResponse GetQuestionnaire(ImportQuestionnaireRequest request)
+        public QuestionnaireVerificationResponse GetQuestionnaire(ImportQuestionnaireRequest request)
         {
-            var response = new JsonCommandResponse();
-
+            QuestionnaireDocument document = null;
             try
             {
                 RemoteFileInfo docSource =
                     this.DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(request.QuestionnaireId));
-                var document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
+
+                document = this.zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
 
                 this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document));
 
-                response.IsSuccess = true;
+                return new QuestionnaireVerificationResponse(true);
             }
             catch (Exception ex)
             {
@@ -80,15 +80,17 @@ namespace Web.Supervisor.Controllers
                 {
                     this.Logger.Error(
                         string.Format("Designer: error when importing template #{0}", request.QuestionnaireId), ex);
+                    return new QuestionnaireVerificationResponse(false);
                 }
-                else
-                {
-                    response.IsSuccess = true;
-                    response.DomainException = domainEx.Message;
-                }
-            }
 
-            return response;
+                var response = new QuestionnaireVerificationResponse(true);
+                var verificationException = domainEx as QuestionnaireVerificationException;
+                if (verificationException != null)
+                {
+                    response.SetErrorsForQuestionnaire(verificationException.Errors, document);
+                }
+                return response;
+            }
         }
 
         public class ImportQuestionnaireRequest

@@ -2,6 +2,7 @@
 
     var self = this;
 
+    self.VerificationErrors = ko.observableArray([]);
     self.IsPageLoaded = ko.observable(false);
     self.IsAjaxComplete = ko.observable(true);
     self.IsFilterOpen = ko.observable(true);
@@ -99,7 +100,7 @@
                 if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException!=null) {
                     self.ShowError(data.DomainException);
                 } else if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
-                        onSuccess();
+                    onSuccess(data);
                 }
             } else {
                 self.ShowError(input.settings.messages.unhandledExceptionMessage);

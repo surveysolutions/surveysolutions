@@ -7,10 +7,8 @@ namespace Main.Core.Entities.SubEntities.Complete
     {
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets the add multy attr.
-        /// </summary>
-        string AddMultyAttr { get; set; }
+        bool IsAnswersOrdered { get; set; }
+        int? MaxAllowedAnswers { get; set; }
 
         #endregion
     }
