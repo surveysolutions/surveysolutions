@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Propagating question have no associated groups.
+        ///   Looks up a localized string similar to Propagating question has no associated groups.
         /// </summary>
         internal static string WB0008_PropagatingQuestionHasNoAssociatedGroups {
             get {
@@ -151,11 +151,11 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question referenced by linked question does not exist..
+        ///   Looks up a localized string similar to Linked question references not existing question..
         /// </summary>
-        internal static string WB0011_QuestionReferencedByLinkedQuestionDoesNotExist {
+        internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
             get {
-                return ResourceManager.GetString("WB0011_QuestionReferencedByLinkedQuestionDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("WB0011_LinkedQuestionReferencesNotExistingQuestion", resourceCulture);
             }
         }
         
@@ -180,9 +180,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Question has custom validation referencing question with deeper propagation level..
         /// </summary>
-        internal static string WB0014_QuestionHasCustomValidationReferencingQuestionWithDeeperPropagationLevel {
+        internal static string WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel {
             get {
-                return ResourceManager.GetString("WB0014_QuestionHasCustomValidationReferencingQuestionWithDeeperPropagationLevel", resourceCulture);
+                return ResourceManager.GetString("WB0014_CustomValidationExpressionReferencesQuestionWithDeeperPropagationLevel", resourceCulture);
             }
         }
         
