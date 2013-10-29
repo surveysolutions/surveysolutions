@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 {
     internal class when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notUnderPropagatedGroupLinkingQuestionId = Guid.Parse("12222222222222222222222222222222");
@@ -28,28 +28,28 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             verifier = CreateQuestionnaireVerifier();
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_1_error = () =>
+        It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_error_with_code__WB0013 = () =>
+        It should_return_error_with_code__WB0013 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0013");
 
-        private It should_return_error_with_two_references = () =>
+        It should_return_error_with_two_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        private It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_first_error_reference_with_id_of_linkedQuestionId = () =>
+        It should_return_first_error_reference_with_id_of_linkedQuestionId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(linkedQuestionId);
 
-        private It should_return_last_error_reference_with_type_Question = () =>
+        It should_return_last_error_reference_with_type_Question = () =>
             resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_last_error_reference_with_id_of_notUnderPropagatedGroupLinkingQuestionId = () =>
+        It should_return_last_error_reference_with_id_of_notUnderPropagatedGroupLinkingQuestionId = () =>
             resultErrors.Single().References.Last().Id.ShouldEqual(notUnderPropagatedGroupLinkingQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;

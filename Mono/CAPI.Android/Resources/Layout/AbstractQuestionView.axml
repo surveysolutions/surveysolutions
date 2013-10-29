@@ -1,10 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-               xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
-               android:id="@+id/llRoot"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" android:padding="10px" android:layout_marginBottom="10px"
+              xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+              android:id="@+id/llRoot"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical" 
+              android:layout_marginBottom="10dp" 
+              android:layout_marginLeft="15dp"  
+              android:layout_marginRight="15dp" 
+              android:paddingLeft="15dp" 
+              android:paddingBottom="10dp" 
+              android:paddingTop="10dp" 
+              android:paddingRight="10dp"
               local:MvxBind="Background Status"
               >
   <Button
