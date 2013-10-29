@@ -140,7 +140,9 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         private static bool CategoricalMultianswerQuestionHasIncorrectMaxAnswerCount(IMultyOptionsQuestion question, QuestionnaireDocument questionnaire)
         {
             return question.MaxAllowedAnswers.HasValue
-                && (question.MaxAllowedAnswers.Value < 1 || question.MaxAllowedAnswers.Value > question.Answers.Count);
+                &&
+                (question.MaxAllowedAnswers.Value < 1 ||
+                    (!question.LinkedToQuestionId.HasValue && question.MaxAllowedAnswers.Value > question.Answers.Count));
         }
 
         private static bool PropagatedGroupHasNoPropagatingQuestionsPointingToIt(IGroup group, QuestionnaireDocument questionnaire)
