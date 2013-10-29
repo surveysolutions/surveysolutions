@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WB.Core.SharedKernels.ExpressionProcessor")]
+[assembly: AssemblyTitle("WB.Core.SharedKernels.ExpressionProcessorTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WB.Core.SharedKernels.ExpressionProcessor")]
+[assembly: AssemblyProduct("WB.Core.SharedKernels.ExpressionProcessorTests")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d69f5007-57dc-46a6-96ea-da02f1221e0f")]
+[assembly: Guid("ffddbe7e-3330-4ea9-bdc2-40b93fa65b50")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,7 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.DataCollection.Tests")]
-[assembly: InternalsVisibleTo("WB.Core.SharedKernels.ExpressionProcessorTests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

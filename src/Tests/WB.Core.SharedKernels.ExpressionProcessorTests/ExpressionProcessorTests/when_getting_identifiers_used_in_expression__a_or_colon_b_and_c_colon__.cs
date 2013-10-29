@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 
-namespace WB.Core.SharedKernels.DataCollection.Tests.ExpressionProcessorTests
+namespace WB.Core.SharedKernels.ExpressionProcessorTests.ExpressionProcessorTests
 {
     internal class when_getting_identifiers_used_in_expression__a_or_colon_b_and_c_colon__ : ExpressionProcessorTestsContext
     {
