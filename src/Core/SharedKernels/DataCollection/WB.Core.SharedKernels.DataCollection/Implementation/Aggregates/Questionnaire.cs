@@ -143,8 +143,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             document.ConnectChildrenWithParent();
 
-            ThrowIfVerifierFindsErrors(document);
-
+            this.ThrowIfVerifierFindsErrors(document);
+            
             document.CreatedBy = this.innerDocument.CreatedBy;
 
             this.ApplyEvent(new TemplateImported() {Source = document});
@@ -155,7 +155,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
             this.ApplyEvent(new TemplateImported() { Source = document });
         }
-
         public IQuestion GetQuestionByStataCaption(string stataCaption)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
@@ -209,6 +208,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     questionId, question.QuestionType));
 
             return question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
+        }
+
+        public int? GetMaxSelectedAnswerOptions(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion))
+                throw new QuestionnaireException(string.Format(
+                    "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
+                    questionId, question.QuestionType));
+
+            return ((IMultyOptionsQuestion) question).MaxAllowedAnswers;
         }
 
         public bool IsCustomValidationDefined(Guid questionId)

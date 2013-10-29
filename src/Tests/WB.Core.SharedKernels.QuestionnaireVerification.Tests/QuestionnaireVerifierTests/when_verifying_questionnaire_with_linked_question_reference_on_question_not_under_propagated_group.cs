@@ -6,7 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {

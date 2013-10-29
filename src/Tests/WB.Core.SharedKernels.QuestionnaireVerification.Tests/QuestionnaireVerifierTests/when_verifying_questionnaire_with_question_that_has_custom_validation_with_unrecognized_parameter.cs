@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.SharedKernels.ExpressionProcessor.Services;
 using WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects.Verification;
+using WB.Core.SharedKernels.QuestionnaireVerification.ValueObjects;
 using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
