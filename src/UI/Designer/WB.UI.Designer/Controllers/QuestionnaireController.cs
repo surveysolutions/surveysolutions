@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Controllers
 
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
-        private readonly IExpressionReplacer expressionReplacer;
+      
         private readonly ILogger logger;
 
         public QuestionnaireController(
@@ -46,7 +46,6 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
-            IExpressionReplacer expressionReplacer,
             ILogger logger)
             : base(userHelper)
         {
@@ -55,7 +54,6 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.sharedPersonsViewFactory = sharedPersonsViewFactory;
-            this.expressionReplacer = expressionReplacer;
             this.logger = logger;
         }
 
@@ -239,7 +237,7 @@ namespace WB.UI.Designer.Controllers
         private void ReplaceGuidsInValidationAndConditionRules(QuestionnaireView model)
         {
             var elements = new Queue<ICompositeView>();
-
+            var expressionReplacer = new ExpressionReplacer(model.Source);
             foreach (ICompositeView compositeView in model.Children)
             {
                 elements.Enqueue(compositeView);
@@ -253,16 +251,16 @@ namespace WB.UI.Designer.Controllers
                 if (question != null)
                 {
                     question.ConditionExpression =
-                        this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
+                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
                     question.ValidationExpression =
-                        this.expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
+                        expressionReplacer.ReplaceGuidsWithStataCaptions(question.ValidationExpression, model.PublicKey);
                 }
 
                 var group = element as GroupView;
                 if (group != null)
                 {
                     group.ConditionExpression =
-                        this.expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
+                        expressionReplacer.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
                     foreach (ICompositeView child in element.Children)
                     {
                         elements.Enqueue(child);
