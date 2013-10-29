@@ -122,8 +122,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
             this.mFragments = new AbstractScreenChangingFragment[this.Count];
-            this.NotifyDataSetChanged();
-            GC.Collect();
         }
     }
 }
