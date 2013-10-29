@@ -3,14 +3,12 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The MultyOptionsQuestion interface.
     /// </summary>
-    public interface IMultyOptionsQuestion
+    public interface IMultyOptionsQuestion : IQuestion
     {
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets the add multy attr.
-        /// </summary>
-        string AddMultyAttr { get; set; }
+        bool IsAnswersOrdered { get; set; }
+        int? MaxAllowedAnswers { get; set; }
 
         #endregion
     }
