@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Main.Core.Utility;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -256,32 +254,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question.ValidationExpression;
         }
 
-        public IEnumerable<Guid> GetQuestionsWithInvalidCustomValidationExpressions()
-        {
-            var invalidQuestions = new List<Guid>();
-
-            foreach (IQuestion question in this.GetAllQuestions())
-            {
-                try
-                {
-                    this.GetQuestionsInvolvedInCustomValidation(question.PublicKey);
-                }
-                catch (Exception exception)
-                {
-                    invalidQuestions.Add(question.PublicKey);
-
-                    this.Logger.Info(
-                        string.Format(
-                            "Validation expression '{0}' for question '{1}' treated invalid " +
-                            "because exception occurred when tried to determine questions involved in validation expression.",
-                            question.ValidationExpression, question.PublicKey),
-                        exception);
-                }
-            }
-
-            return invalidQuestions;
-        }
-
         public IEnumerable<Guid> GetQuestionsWhichCustomValidationDependsOnSpecifiedQuestion(Guid questionId)
         {
             if (!this.cacheOfQuestionsWhichCustomValidationDependsOnQuestion.ContainsKey(questionId))
@@ -346,58 +318,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.cacheOfQuestionsWhichCustomEnablementConditionDependsOnQuestion[questionId];
         }
 
-        public IEnumerable<Guid> GetGroupsWithInvalidCustomEnablementConditions()
-        {
-            var invalidGroups = new List<Guid>();
-
-            foreach (IGroup @group in this.GetAllGroups())
-            {
-                try
-                {
-                    this.GetQuestionsInvolvedInCustomEnablementConditionOfGroup(@group.PublicKey);
-                }
-                catch (Exception exception)
-                {
-                    invalidGroups.Add(@group.PublicKey);
-
-                    this.Logger.Info(
-                        string.Format(
-                            "Enablement condition '{0}' for group '{1}' treated invalid " +
-                            "because exception occurred when tried to determine questions involved in enablement condition.",
-                            @group.ConditionExpression, @group.PublicKey),
-                        exception);
-                }
-            }
-
-            return invalidGroups;
-        }
-
-        public IEnumerable<Guid> GetQuestionsWithInvalidCustomEnablementConditions()
-        {
-            var invalidQuestions = new List<Guid>();
-
-            foreach (IQuestion question in this.GetAllQuestions())
-            {
-                try
-                {
-                    this.GetQuestionsInvolvedInCustomEnablementConditionOfQuestion(question.PublicKey);
-                }
-                catch (Exception exception)
-                {
-                    invalidQuestions.Add(question.PublicKey);
-
-                    this.Logger.Info(
-                        string.Format(
-                            "Enablement condition '{0}' for question '{1}' treated invalid " +
-                            "because exception occurred when tried to determine questions involved in enablement condition.",
-                            question.ConditionExpression, question.PublicKey),
-                        exception);
-                }
-            }
-
-            return invalidQuestions;
-        }
-
         public bool ShouldQuestionPropagateGroups(Guid questionId)
         {
             return this.DoesQuestionSupportPropagation(questionId)
@@ -427,16 +347,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var autoPropagatingQuestion = (IAutoPropagateQuestion) question;
 
             return autoPropagatingQuestion.MaxValue;
-        }
-
-        public IEnumerable<Guid> GetPropagatingQuestionsWhichReferToMissingOrNotPropagatableGroups()
-        {
-            return (
-                from question in this.GetAllPropagatingQuestions()
-                let questionHasMissingGroup = question.Triggers.Any(groupId => !this.HasGroup(groupId) || !this.IsGroupPropagatable(groupId))
-                where questionHasMissingGroup
-                select question.PublicKey
-            ).ToList();
         }
 
         public IEnumerable<Guid> GetParentPropagatableGroupsForQuestionStartingFromTop(Guid questionId)
