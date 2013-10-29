@@ -112,6 +112,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Quest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.QuestionnaireVerification.Tests", "Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests\WB.Core.SharedKernels.QuestionnaireVerification.Tests.csproj", "{9071B005-CC4E-416B-B29F-449B7696D7DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.ExpressionProcessorTests", "Tests\WB.Core.SharedKernels.ExpressionProcessorTests\WB.Core.SharedKernels.ExpressionProcessorTests.csproj", "{C6139AFE-902E-4E59-BBDB-8E8125061548}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -258,6 +260,10 @@ Global
 		{9071B005-CC4E-416B-B29F-449B7696D7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9071B005-CC4E-416B-B29F-449B7696D7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9071B005-CC4E-416B-B29F-449B7696D7DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6139AFE-902E-4E59-BBDB-8E8125061548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -275,6 +281,7 @@ Global
 		{07E9E182-67EC-4D94-8A19-014C902F691D} = {25D3F33B-024C-45AA-B955-529A7EA4F5E9}
 		{E797439A-61C1-4309-BF62-32E57EE0402A} = {25D3F33B-024C-45AA-B955-529A7EA4F5E9}
 		{9071B005-CC4E-416B-B29F-449B7696D7DB} = {25D3F33B-024C-45AA-B955-529A7EA4F5E9}
+		{C6139AFE-902E-4E59-BBDB-8E8125061548} = {25D3F33B-024C-45AA-B955-529A7EA4F5E9}
 		{C124A725-4A8A-4451-9276-9A9C0F8BE072} = {CE728F59-FCC2-480A-88AE-D9C315D0A61F}
 		{CF96E784-AEB4-4267-B335-9CD48D329ECA} = {857597F1-44C1-4E34-AC03-E089E4500A24}
 		{E8BA9E2E-3A2A-4F19-BF77-509B8FF991B2} = {857597F1-44C1-4E34-AC03-E089E4500A24}
