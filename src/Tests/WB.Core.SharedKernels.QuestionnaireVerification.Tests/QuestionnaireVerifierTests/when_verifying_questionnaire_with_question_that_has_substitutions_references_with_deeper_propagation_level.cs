@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 {
     internal class when_verifying_questionnaire_with_question_that_has_substitutions_references_with_deeper_propagation_level : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionWithSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
             underDeeperPropagationLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
@@ -42,28 +42,28 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             verifier = CreateQuestionnaireVerifier();
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_1_error = () =>
+        It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_error_with_code__WB0019 = () =>
+        It should_return_error_with_code__WB0019 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0019");
 
-        private It should_return_error_with_two_references = () =>
+        It should_return_error_with_two_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        private It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_first_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
+        It should_return_first_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(questionWithSubstitutionsId);
 
-        private It should_return_last_error_reference_with_type_Question = () =>
+        It should_return_last_error_reference_with_type_Question = () =>
             resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
+        It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
             resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperPropagationLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;

@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
     class when_verifying_questionnaire_with_multianswer_negative_max_allowed_answers : QuestionnaireVerifierTestsContext
     {
 
-        private Establish context = () =>
+        Establish context = () =>
         {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();

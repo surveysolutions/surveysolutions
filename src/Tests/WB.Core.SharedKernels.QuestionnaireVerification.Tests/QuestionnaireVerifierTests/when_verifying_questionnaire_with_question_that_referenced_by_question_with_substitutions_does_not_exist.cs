@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 {
     internal class when_verifying_questionnaire_with_question_that_referenced_by_question_with_substitutions_does_not_exist : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionWithNotExistingSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument();
@@ -25,22 +25,22 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             verifier = CreateQuestionnaireVerifier();
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_1_error = () =>
+        It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_error_with_code__WB0017 = () =>
+        It should_return_error_with_code__WB0017 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0017");
 
-        private It should_return_error_with_1_references = () =>
+        It should_return_error_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
-        private It should_return_error_reference_with_type_Question = () =>
+        It should_return_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_error_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
+        It should_return_error_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(questionWithNotExistingSubstitutionsId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
