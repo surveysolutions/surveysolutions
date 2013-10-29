@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
 {
     internal class when_verifying_questionnaire_with_question_that_has_substitution_reference_of_not_supported_type : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionWithSubstitutionReferenceToNotSupportedTypeId = Guid.Parse("10000000000000000000000000000000");
             questionSubstitutionReferencerOfNotSupportedTypeId = Guid.Parse("13333333333333333333333333333333");
@@ -34,28 +34,28 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
             verifier = CreateQuestionnaireVerifier();
         };
 
-        private Because of = () =>
+        Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_1_error = () =>
+        It should_return_1_error = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        private It should_return_error_with_code__WB0018 = () =>
+        It should_return_error_with_code__WB0018 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0018");
 
-        private It should_return_error_with_2_references = () =>
+        It should_return_error_with_2_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        private It should_return_firts_error_reference_with_type_Question = () =>
+        It should_return_firts_error_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_firts_error_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
+        It should_return_firts_error_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(questionWithSubstitutionReferenceToNotSupportedTypeId);
 
-        private It should_return_last_error_reference_with_type_Question = () =>
+        It should_return_last_error_reference_with_type_Question = () =>
             resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_last_error_reference_with_id_of_questionSubstitutionReferencerOfNotSupportedTypeId = () =>
+        It should_return_last_error_reference_with_id_of_questionSubstitutionReferencerOfNotSupportedTypeId = () =>
             resultErrors.Single().References.Last().Id.ShouldEqual(questionSubstitutionReferencerOfNotSupportedTypeId);
 
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;
