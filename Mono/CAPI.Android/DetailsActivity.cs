@@ -31,7 +31,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace CAPI.Android
 {
     [Activity(NoHistory = true, ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener
+    public class DetailsActivity : MvxFragmentActivity, ViewTreeObserver.IOnGlobalLayoutListener, GestureDetector.IOnGestureListener
     {
         protected Guid QuestionnaireId
         {
@@ -84,6 +84,7 @@ namespace CAPI.Android
         private bool isChaptersVisible = false;
         private InterviewItemId? screenId;
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        private GestureDetector gestureDetector;
         //private MoveNavigationPanelAnimation movePanelAnimation;
 
         protected override void OnCreate(Bundle bundle)
@@ -127,9 +128,10 @@ namespace CAPI.Android
             else
             {
                 this.navList = llNavigationHolder.GetChildAt(0) as QuestionnaireNavigationView;
-            }
-
-            btnNavigation.Click += this.LlNavigationHolderClick;
+            } 
+            gestureDetector = new GestureDetector(this);
+            llNavigationHolder.Touch += btnNavigation_Touch;
+            btnNavigation.Touch += btnNavigation_Touch;
             this.adapter = new ContentFrameAdapter(this.SupportFragmentManager, Model, this.screenId);
             VpContent.Adapter = this.adapter;
             VpContent.PageSelected += this.VpContentPageSelected;
@@ -158,22 +160,17 @@ namespace CAPI.Android
             llContainer.ViewTreeObserver.AddOnGlobalLayoutListener(this);
         }
 
-        private void UpdateLayout(bool isNavigationVisible)
+        private void UpdateLayout(bool isNavigationVisible, bool animated = false)
         {
+            AlignNavigationContainer(isNavigationVisible, animated);
             AlignScreenContainer(isNavigationVisible);
-
-            AlignNavigationContainer(isNavigationVisible);
         }
 
         private void HidePanelAnimated()
         {
             isChaptersVisible = false;
-
-            lNavigationContainer.Animate().TranslationX(btnNavigation.LayoutParameters.Width - lNavigationContainer.LayoutParameters.Width);
-
+            AlignNavigationContainer(false, true);
             AlignScreenContainer(false);
-
-            adapter.NotifyDataSetChanged();
         }
 
         private void AlignScreenContainer(bool isNavigationVisible)
@@ -187,13 +184,15 @@ namespace CAPI.Android
             VpContent.RequestLayout();
         }
 
-        private void AlignNavigationContainer(bool isNavigationVisible)
+        private void AlignNavigationContainer(bool isNavigationVisible, bool animated)
         {
             var navigationContainerX = isNavigationVisible
                 ? 0
                 : btnNavigation.LayoutParameters.Width - lNavigationContainer.LayoutParameters.Width;
-
-            lNavigationContainer.SetX(navigationContainerX);
+            if (animated)
+                lNavigationContainer.Animate().TranslationX(navigationContainerX);
+            else
+                lNavigationContainer.SetX(navigationContainerX);
         }
 
         private void AlignBookmark()
@@ -201,11 +200,9 @@ namespace CAPI.Android
             llSpaceFiller.LayoutParameters.Height = (ScreenHeight - btnNavigation.LayoutParameters.Height) / 2;
         }
 
-        private void LlNavigationHolderClick(object sender, EventArgs e)
+        void btnNavigation_Touch(object sender, View.TouchEventArgs e)
         {
-            this.isChaptersVisible = !this.isChaptersVisible;
-
-            this.UpdateLayout(isChaptersVisible);
+            gestureDetector.OnTouchEvent(e.Event);
         }
 
         protected override void OnSaveInstanceState(Bundle outState)
@@ -227,7 +224,7 @@ namespace CAPI.Android
             base.OnAttachFragment(p0);
         }
 
-        void ContentFrameAdapterScreenChanged(object sender, ScreenChangedEventArgs e)
+        private void ContentFrameAdapterScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             var index = this.adapter.GetScreenIndex(e.ScreenId);
 
@@ -235,14 +232,17 @@ namespace CAPI.Android
             {
                 this.HidePanelAnimated();
             }
-            
+
             if (index >= 0)
             {
                 VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
+
+                adapter.NotifyDataSetChanged();
                 return;
             }
-
             this.adapter.UpdateScreenData(e.ScreenId);
+            adapter.NotifyDataSetChanged();
+
             VpContent.CurrentItem = this.adapter.GetScreenIndex(e.ScreenId);
 
             if (e.ScreenId.HasValue)
@@ -259,6 +259,7 @@ namespace CAPI.Android
             }
 
             GC.Collect(0);
+
         }
 
         private void VpContentPageSelected(object sender, ViewPager.PageSelectedEventArgs e)
@@ -275,7 +276,9 @@ namespace CAPI.Android
             base.OnDestroy();
 
             if(btnNavigation!= null)
-                btnNavigation.Click -= this.LlNavigationHolderClick;
+                btnNavigation.Touch -= this.btnNavigation_Touch;
+            if (llNavigationHolder!=null)
+            llNavigationHolder.Touch += btnNavigation_Touch;
             if(VpContent != null)
                 VpContent.PageSelected -= this.VpContentPageSelected;
             if(this.navList != null)
@@ -297,6 +300,49 @@ namespace CAPI.Android
             var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
             if (snapshotStore != null)
                 snapshotStore.PersistShapshot(QuestionnaireId);
+        }
+
+        public bool OnDown(MotionEvent e)
+        {
+            return true;
+        }
+
+        public bool OnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
+            if (velocityX > 0 && !this.isChaptersVisible)
+            {
+                this.isChaptersVisible = true;
+                this.UpdateLayout(true, true);
+                return true;
+            }
+            else if (velocityX < 0 && this.isChaptersVisible)
+            {
+                this.isChaptersVisible = false;
+                this.UpdateLayout(false, true);
+                return true;
+            }
+            Console.WriteLine(string.Format("velocityX:{0},velocityY:{1},isChaptersVisible:{2}", velocityX, velocityY, isChaptersVisible));
+            return true;
+        }
+
+        public void OnLongPress(MotionEvent e)
+        {
+        }
+
+        public bool OnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+        {
+            return true;
+        }
+
+        public void OnShowPress(MotionEvent e)
+        {
+        }
+
+        public bool OnSingleTapUp(MotionEvent e)
+        {
+            this.isChaptersVisible = !this.isChaptersVisible;
+            this.UpdateLayout(this.isChaptersVisible, true);
+            return true;
         }
     }
 }
