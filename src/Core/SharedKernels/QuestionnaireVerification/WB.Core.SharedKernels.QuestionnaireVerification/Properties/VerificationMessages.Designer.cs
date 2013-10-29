@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services {
+namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
     using System;
     
     
@@ -39,8 +39,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Services.Verificat" +
-                            "ionMessages", typeof(VerificationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.SharedKernels.QuestionnaireVerification.Properties.VerificationMessages", typeof(VerificationMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -238,6 +237,15 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         internal static string WB0020_ParameterUsedInValidationExpressionIsntRecognized {
             get {
                 return ResourceManager.GetString("WB0020_ParameterUsedInValidationExpressionIsntRecognized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi answer question has negative max allowed answers count or options count less than max allowed answers count.
+        /// </summary>
+        internal static string WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount {
+            get {
+                return ResourceManager.GetString("WB0021_MultianswerQuestionHasIncorrectMaxAnswerCount", resourceCulture);
             }
         }
     }
