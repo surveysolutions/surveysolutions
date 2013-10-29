@@ -97,6 +97,7 @@
         <span data-bind="html: unsavedWarningMessage">Loading...</span>
     </div>
 </div>
+<div id="verification-umbrella" data-bind="visible: $root.isVerificationRunning"></div>
 <div id="stacks" data-bind="css: {'output-visible': isOutputVisible}">
 
     <div id="footer">
@@ -127,11 +128,11 @@
                 </div>
                 <div class="span4">
                     <div id="footer-buttons" class="pull-right">
+                        <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput, visible: (saveMessages().length +  verificationMessages().length) > 0">
+                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> messages
+                        </button>
                         <button type="button" class="btn btn-primary btn-small" data-bind="click: $root.runVerifier">
                             Verify
-                        </button>
-                        <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput">
-                            <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> messages
                         </button>
                     </div>
                 </div>
@@ -142,9 +143,9 @@
         <div class="inner">
             <div class="title">
                 <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
-                <ul class="nav nav-pills">
-                    <li data-bind="css: { active: selectedMessageTab()==1}, click: function(){ $root.selectedMessageTab(1);}"><a href="#">Save messages</a></li>
-                    <li data-bind="css: { active: selectedMessageTab()==2}, click: function(){ $root.selectedMessageTab(2);}"><a href="#">Verification messages</a></li>
+                <ul class="nav nav-tabs">
+                    <li data-bind="css: { active: selectedMessageTab()==1}, visible: saveMessages().length > 0 , click: function(){ $root.selectedMessageTab(1);}"><a href="#">Save messages</a></li>
+                    <li data-bind="css: { active: selectedMessageTab()==2}, visible: verificationMessages().length > 0 , click: function(){ $root.selectedMessageTab(2);}"><a href="#">Verification messages</a></li>
                 </ul>
             </div>
             <div class="body">

@@ -13,6 +13,16 @@
     z-index: 9999999;
 }
 
+#verification-umbrella {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 999;
+}
+
 footer {
     display: none;
 }
@@ -202,25 +212,40 @@ body.loading .loading-backdrop {
         -ms-border-radius: 5px 5px 0 0;
         -o-border-radius: 5px 5px 0 0;
         border-radius: 5px 5px 0 0;
+        position: relative;
     }
 
-    #output .title {
-        padding-top: 3px;
-        padding-bottom: 3px;
-    }
-
-        #output .title .nav.nav-pills {
-            margin-bottom: 0;
+        #output .inner .title {
+            height: 32px;
+            padding: 3px 0 0 0;
+            border-bottom: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            -ms-box-shadow: none;
+            -o-box-shadow: none;
+            box-shadow: none;
         }
+        #output .inner .title .close {
+            padding: 3px;
+        }
+    #output .title .nav {
+        margin-bottom: 0;
+        padding-left: 3px;
+        padding-right: 3px;
+    }
 
-        #output .title .nav-pills > li > a {
+        #output .title .nav > li > a {
             padding-bottom: 5px;
             padding-top: 5px;
-            text-shadow: none;
         }
 
     #output .body {
         bottom: 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 37px;
     }
 
         #output .body .error-list {
@@ -245,9 +270,7 @@ body.loading .loading-backdrop {
                     margin-right: 10px;
                 }
 
-    #output .inner .title {
-        height: 28px;
-    }
+
 
 .details.stack .body .input-append {
     display: inline;
