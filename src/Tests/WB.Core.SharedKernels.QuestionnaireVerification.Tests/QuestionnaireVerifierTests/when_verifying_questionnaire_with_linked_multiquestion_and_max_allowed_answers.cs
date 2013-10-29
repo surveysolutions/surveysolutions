@@ -17,26 +17,33 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVer
         {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
             var linkedQuestionId = Guid.Parse("20000000000000000000000000000000");
-
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new Group("Group")
+            var groupTrigger = Guid.Parse("30000000000000000000000000000000");
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("Group")
             {
-                Propagated = Propagate.AutoPropagated,
                 Children = new List<IComposite>()
                 {
-                    new TextQuestion("TextQuestion")
+                    new AutoPropagateQuestion("AutoQuestion") { Triggers = new List<Guid>() { groupTrigger } },
+                    new Group("AutoGroup")
                     {
-                        PublicKey = linkedQuestionId
+                        PublicKey = groupTrigger,
+                        Propagated = Propagate.AutoPropagated,
+                        Children = new List<IComposite>()
+                        {
+                            new TextQuestion("TextQuestion")
+                            {
+                                QuestionType = QuestionType.Text,
+                                PublicKey = linkedQuestionId
+                            }
+                        }
+                    },
+                    new MultyOptionsQuestion()
+                    {
+                        PublicKey = multyOptionsQuestionId,
+                        Answers = new List<IAnswer>() { new Answer(), new Answer() },
+                        MaxAllowedAnswers = 3,
+                        LinkedToQuestionId = linkedQuestionId
                     }
                 }
-            });
-            questionnaire.Children.Add(new MultyOptionsQuestion()
-            {
-                PublicKey = multyOptionsQuestionId,
-                Answers = new List<IAnswer>() { new Answer(),new Answer()},
-                MaxAllowedAnswers = 3,
-                LinkedToQuestionId = linkedQuestionId
             });
 
             verifier = CreateQuestionnaireVerifier();

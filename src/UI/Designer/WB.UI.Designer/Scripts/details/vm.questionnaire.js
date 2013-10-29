@@ -13,6 +13,7 @@
             isVerificationSucceeded = ko.observable(),
             statistics = new model.Statistic(),
             isInitialized = false,
+            isVerificationRunning = ko.observable(false),
             selectedMessageTab = ko.observable(config.messageTabs.saveMessagesTab),
             
             cloneQuestion = function(question) {
@@ -176,6 +177,7 @@
                             {
                                 success: function() {
                                     deleteGroupSuccessCallback(item);
+                                    clearSaveMessages();
                                 },
                                 error: function(d) {
                                     showMessage(d);
@@ -184,7 +186,8 @@
                     }
                 });
             },
-            deleteGroupSuccessCallback = function(item) {
+            
+        deleteGroupSuccessCallback = function(item) {
                 datacontext.groups.removeGroup(item.id());
 
                 var parent = item.parent();
@@ -222,7 +225,7 @@
                             {
                                 success: function() {
                                     deleteQuestionSuccessCallback(item);
-
+                                    clearSaveMessages();
                                 },
                                 error: function(d) {
                                     showMessage(d);
@@ -277,10 +280,9 @@
                             group.dirtyFlag().reset();
                             group.fillChildren();
                             calcStatistics();
-                            isOutputVisible(false);
                             group.canUpdate(true);
                             group.commit();
-
+                            clearSaveMessages();
                         },
                         error: function(d) {
                             showMessage(d);
@@ -331,9 +333,9 @@
                             question.isNew(false);
                             question.dirtyFlag().reset();
                             calcStatistics();
-                            isOutputVisible(false);
                             question.canUpdate(true);
                             question.commit();
+                            clearSaveMessages();
                         },
                         error: function(d) {
                             showMessage(d);
@@ -351,8 +353,8 @@
                     {
                         success: function() {
                             questionnaire.dirtyFlag().reset();
-                            isOutputVisible(false);
                             questionnaire.canUpdate(true);
+                            clearSaveMessages();
                         },
                         error: function(d) {
                             showMessage(d);
@@ -366,8 +368,9 @@
                         config.commands.addSharedPersonToQuestionnaire,
                         sharedUser,
                         {
-                            success: function() {
+                            success: function () {
                                 questionnaire().addSharedPerson();
+                                clearSaveMessages();
                             },
                             error: function(d) {
                                 showMessage(d);
@@ -382,6 +385,7 @@
                     {
                         success: function() {
                             questionnaire().removeSharedPerson(sharedUser);
+                            clearSaveMessages();
                         },
                         error: function(d) {
                             showMessage(d);
@@ -490,7 +494,8 @@
                     config.commands[moveItemType + "Move"],
                     moveCommand,
                     {
-                        success: function(d) {
+                        success: function (d) {
+                            saveMessages.removeAll();
                             if (isDraggedFromChapter) {
                                 var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
                                 datacontext.questionnaire.childrenID.remove(child);
@@ -591,6 +596,11 @@
                 selectedMessageTab(config.messageTabs.saveMessagesTab);
 
             },
+            clearSaveMessages = function () {
+                isOutputVisible(false);
+                saveMessages.removeAll();
+                selectedMessageTab(config.messageTabs.verificationMessagesTab);
+            },
             showVerificationMessages = function(messages) {
                 _.each(messages, function (message) {
                     verificationMessages.push(message);
@@ -624,14 +634,16 @@
                 if (_.isNull(unsavedItemsError)) {
                     saveMessages.removeAll();
                     verificationMessages.removeAll();
-                    
+                    isVerificationRunning(true);
                     datacontext.runARemoteVerification({
                         success: function (response) {
                             isVerificationSucceeded(response.length == 0);
                             showVerificationMessages(response);
+                            isVerificationRunning(false);
                         },
                         error: function (response) {
                             showMessage(response.error);
+                            isVerificationRunning(false);
                         }
                     });
                 } else {
@@ -678,6 +690,7 @@
             runVerifier: runVerifier,
             switchMessageTab: selectedMessageTab,
             selectedMessageTab: selectedMessageTab,
-            isVerificationSucceeded: isVerificationSucceeded
+            isVerificationSucceeded: isVerificationSucceeded,
+            isVerificationRunning: isVerificationRunning
         };
     });
