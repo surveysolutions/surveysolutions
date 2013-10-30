@@ -14,8 +14,7 @@
             statistics = new model.Statistic(),
             isInitialized = false,
             isVerificationRunning = ko.observable(false),
-            selectedMessageTab = ko.observable(config.messageTabs.saveMessagesTab),
-            
+            selectedMessageTab = ko.observable(config.messageTabs.saveMessagesTab),            
             cloneQuestion = function(question) {
                 if (question.isNew())
                     return;
@@ -180,14 +179,13 @@
                                     clearSaveMessages();
                                 },
                                 error: function(d) {
-                                    showMessage(d);
+                                    showSaveMessage(d);
                                 }
                             });
                     }
                 });
-            },
-            
-        deleteGroupSuccessCallback = function(item) {
+            },            
+            deleteGroupSuccessCallback = function(item) {
                 datacontext.groups.removeGroup(item.id());
 
                 var parent = item.parent();
@@ -228,7 +226,7 @@
                                     clearSaveMessages();
                                 },
                                 error: function(d) {
-                                    showMessage(d);
+                                    showSaveMessage(d);
                                 }
                             });
                     }
@@ -285,7 +283,7 @@
                             clearSaveMessages();
                         },
                         error: function(d) {
-                            showMessage(d);
+                            showSaveMessage(d);
                             group.canUpdate(true);
                         }
                     });
@@ -338,7 +336,7 @@
                             clearSaveMessages();
                         },
                         error: function(d) {
-                            showMessage(d);
+                            showSaveMessage(d);
                             question.canUpdate(true);
                         }
                     });
@@ -357,7 +355,7 @@
                             clearSaveMessages();
                         },
                         error: function(d) {
-                            showMessage(d);
+                            showSaveMessage(d);
                             questionnaire.canUpdate(true);
                         }
                     });
@@ -368,12 +366,12 @@
                         config.commands.addSharedPersonToQuestionnaire,
                         sharedUser,
                         {
-                            success: function () {
+                            success: function() {
                                 questionnaire().addSharedPerson();
                                 clearSaveMessages();
                             },
                             error: function(d) {
-                                showMessage(d);
+                                showSaveMessage(d);
                             }
                         });
                 });
@@ -388,7 +386,7 @@
                             clearSaveMessages();
                         },
                         error: function(d) {
-                            showMessage(d);
+                            showSaveMessage(d);
                         }
                     });
             },
@@ -494,7 +492,7 @@
                     config.commands[moveItemType + "Move"],
                     moveCommand,
                     {
-                        success: function (d) {
+                        success: function(d) {
                             saveMessages.removeAll();
                             if (isDraggedFromChapter) {
                                 var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
@@ -525,7 +523,7 @@
 
                             chapters(datacontext.groups.getChapters());
 
-                            showMessage(d);
+                            showSaveMessage(d);
                         }
                     });
             },
@@ -584,25 +582,25 @@
             focusOnSearch = function() {
                 $('#filter input').get(0).focus();
             },
-            showMessage = function(message) {
+            showSaveMessage = function(message) {
                 saveMessages.removeAll();
 
                 saveMessages.push(new model.Error(
                     _.isUndefined(message.error) ? message : message.error
                 ));
-                
+
                 isVerificationSucceeded(false);
                 isOutputVisible(true);
                 selectedMessageTab(config.messageTabs.saveMessagesTab);
 
             },
-            clearSaveMessages = function () {
+            clearSaveMessages = function() {
                 isOutputVisible(false);
                 saveMessages.removeAll();
                 selectedMessageTab(config.messageTabs.verificationMessagesTab);
             },
             showVerificationMessages = function(messages) {
-                _.each(messages, function (message) {
+                _.each(messages, function(message) {
                     verificationMessages.push(message);
                 });
                 isOutputVisible(true);
@@ -635,23 +633,27 @@
                     saveMessages.removeAll();
                     verificationMessages.removeAll();
                     isVerificationRunning(true);
-                    datacontext.runARemoteVerification({
-                        success: function (response) {
+                    datacontext.runRemoteVerification({
+                        success: function(response) {
                             isVerificationSucceeded(response.length == 0);
                             showVerificationMessages(response);
                             isVerificationRunning(false);
                         },
-                        error: function (response) {
-                            showMessage(response.error);
+                        error: function(response) {
+                            showSaveMessage(response.error);
                             isVerificationRunning(false);
                         }
                     });
                 } else {
+                    isVerificationSucceeded(false);
                     verificationMessages.removeAll();
                     showVerificationMessages([unsavedItemsError]);
                 }
                 selectedMessageTab(config.messageTabs.verificationMessagesTab);
-            };
+            },
+            isToggleMessagesButtonIsVisible = ko.computed(function () {
+                return (saveMessages().length + verificationMessages().length) + (isVerificationSucceeded() ? 1 : 0) > 0;
+            });
 
         init();
 
@@ -691,6 +693,7 @@
             switchMessageTab: selectedMessageTab,
             selectedMessageTab: selectedMessageTab,
             isVerificationSucceeded: isVerificationSucceeded,
-            isVerificationRunning: isVerificationRunning
+            isVerificationRunning: isVerificationRunning,
+            isToggleMessagesButtonIsVisible: isToggleMessagesButtonIsVisible
         };
     });

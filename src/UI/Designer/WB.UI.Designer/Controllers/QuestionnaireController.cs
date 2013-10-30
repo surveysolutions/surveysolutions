@@ -66,12 +66,12 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public JsonResult RemoteVerification(Guid id)
+        public JsonResult Verify(Guid id)
         {
             var questoinnaireErrors = questionnaireVerifier.Verify(this.GetQuestionnaire(id).Source).ToArray();
-            return this.Json(new
+
+            return this.Json(new JsonVerificationResult
             {
-                IsSuccess = true,
                 Errors = questoinnaireErrors
             });
         }

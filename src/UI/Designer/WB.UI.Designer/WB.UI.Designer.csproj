@@ -251,6 +251,7 @@
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
+    <Compile Include="Models\JsonVerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnaireEditView.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
