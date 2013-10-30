@@ -402,7 +402,6 @@
                             uiCallbacks.error(response);
                         }
                         deferred.reject(response);
-                        return;
                     }
                 };
 
@@ -427,7 +426,6 @@
                             uiCallbacks.error(response);
                         }
                         deferred.reject(response);
-                        return;
                     }
                 };
                 dataservice.sendCommand(callbacks, command);
