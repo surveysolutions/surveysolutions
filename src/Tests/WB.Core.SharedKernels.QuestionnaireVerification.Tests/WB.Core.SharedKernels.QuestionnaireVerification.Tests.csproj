@@ -79,6 +79,7 @@
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagated_group_that_has_no_propagating_question_pointing_to_it.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagating_question_referencing_2_not_propagatable_group_and_1_propagatable_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_propagating_question_that_has_no_associated_groups.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_with_substitutions_inside_autoropagated_unattached_group.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_contains_self_references_in_substitution.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_referencing_question_with_deeper_propagatio___.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_question_that_has_custom_validation_with_unrecognized_variable_name.cs" />
