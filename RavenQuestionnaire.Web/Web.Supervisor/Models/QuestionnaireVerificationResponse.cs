@@ -11,9 +11,10 @@ namespace Web.Supervisor.Models
 {
     public class QuestionnaireVerificationResponse
     {
-        public QuestionnaireVerificationResponse(bool isSuccess)
+        public QuestionnaireVerificationResponse(bool isSuccess, string questionnaireTitle = null)
         {
             this.IsSuccess = isSuccess;
+            QuestionnaireTitle = questionnaireTitle;
         }
 
         public void SetErrorsForQuestionnaire(QuestionnaireVerificationError[] errors, QuestionnaireDocument questionnaire)
@@ -22,6 +23,7 @@ namespace Web.Supervisor.Models
         }
 
         public bool IsSuccess { get; private set; }
+        public string QuestionnaireTitle { get; private set; }
         public QuestionnaireVerificationErrorResponse[] Errors { get; private set; }
     }
 
