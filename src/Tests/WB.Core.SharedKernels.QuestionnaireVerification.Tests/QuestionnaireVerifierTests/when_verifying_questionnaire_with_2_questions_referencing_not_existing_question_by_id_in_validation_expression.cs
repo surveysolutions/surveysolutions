@@ -13,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Core.SharedKernels.QuestionnaireVerification.Tests.QuestionnaireVerifierTests
 {
-    internal class when_verifying_questionnaire_with_2_questions_referencing_not_existing_question_in_validation_expression :  QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_2_questions_referencing_not_existing_question_by_id_in_validation_expression :  QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
