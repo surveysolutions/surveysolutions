@@ -15,17 +15,24 @@
 
                 self.code = ko.observable(code || "WB0000");
                 self.message = ko.observable(message || "");
-                
-                var uiReferences = _.map(references, function(item) {
+
+                var uiReferences = _.map(references, function (item) {
                     var reference = new Reference();
-                    var qitem = item.type === config.verificationReferenceType.group
+                    var isItemIsGroup = item.type === config.verificationReferenceType.group;
+                    var qitem = isItemIsGroup
                         ? error.datacontext().groups.getLocalById(item.id)
                         : error.datacontext().questions.getLocalById(item.id);
-                    reference.href(qitem.getHref());
-                    reference.title(qitem.title());
+
+                    if (_.isNull(qitem)) {
+                        reference.href("#");
+                        reference.title("Missing " + (isItemIsGroup? "group" : "question") + ". Please refresh page and retry validation.");
+                    } else {
+                        reference.href(qitem.getHref());
+                        reference.title(qitem.title());
+                    }
                     return reference;
                 });
-                
+
                 self.references = ko.observableArray(uiReferences || []);
 
                 return self;
