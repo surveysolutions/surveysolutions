@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_orphan_auto_propagated_groups_they_must_be_treated_as_grops_with_separate_pro___.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_2_questions_and_one_group_all_referencing_not_existing_question_by_var_name_in___.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_linked_multiquestion_and_max_allowed_answers.cs" />
     <Compile Include="QuestionnaireVerifierTests\when_verifying_questionnaire_with_multianswer_and_negative_max_allowed_answers.cs" />
