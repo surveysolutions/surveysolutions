@@ -386,8 +386,8 @@
             return command;
         };
 
-        var runARemoteVerification = function (uiCallbacks) {
-            return $.Deferred(function (def) {
+        var runRemoteVerification = function (uiCallbacks) {
+            return $.Deferred(function (deferred) {
                 var callbacks = {
                     success: function (response) {
                         if (uiCallbacks && uiCallbacks.success) {
@@ -395,13 +395,13 @@
                                 return modelmapper.error.fromDto(error);
                             }));
                         }
-                        def.resolve(response);
+                        deferred.resolve(response);
                     },
                     error: function (response) {
                         if (uiCallbacks && uiCallbacks.error) {
                             uiCallbacks.error(response);
                         }
-                        def.reject(response);
+                        deferred.reject(response);
                         return;
                     }
                 };
@@ -411,7 +411,7 @@
             }).promise();
         };
         var sendCommand = function(commandName, args, uiCallbacks) {
-            return $.Deferred(function(def) {
+            return $.Deferred(function (deferred) {
                 var command = {
                     type: commandName,
                     command: ko.toJSON(commands[commandName](args))
@@ -420,13 +420,13 @@
                         if (uiCallbacks && uiCallbacks.success) {
                             uiCallbacks.success();
                         }
-                        def.resolve(response);
+                        deferred.resolve(response);
                     },
                     error: function(response) {
                         if (uiCallbacks && uiCallbacks.error) {
                             uiCallbacks.error(response);
                         }
-                        def.reject(response);
+                        deferred.reject(response);
                         return;
                     }
                 };
@@ -439,7 +439,7 @@
             questions: questions,
             questionnaire: questionnaire,
             sendCommand: sendCommand,
-            runARemoteVerification: runARemoteVerification
+            runRemoteVerification: runRemoteVerification
         };
 
         // We did this so we can access the datacontext during its construction
