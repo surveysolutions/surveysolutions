@@ -308,7 +308,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
-            this.ThrowIfMaxAllowedAnswersInvalid(maxAllowedAnswers);
+            this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
+            
 
             this.ApplyEvent(new QuestionCloned
             {
@@ -411,7 +412,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
 
-            this.ThrowIfMaxAllowedAnswersInvalid(maxAllowedAnswers);
+            this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -553,7 +554,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowIfNotCategoricalQuestionHasLinkedInformation(type, linkedToQuestionId);
             this.ThrowIfQuestionIsCategoricalAndInvalid(type, options, linkedToQuestionId, isFeatured, isHeaderOfPropagatableGroup);
-            this.ThrowIfMaxAllowedAnswersInvalid(maxAllowedAnswers);
+            this.ThrowIfMaxAllowedAnswersInvalid(type, linkedToQuestionId, maxAllowedAnswers, options);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1348,13 +1349,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfMaxAllowedAnswersInvalid(int? maxAllowedAnswers)
+        private void ThrowIfMaxAllowedAnswersInvalid(QuestionType questionType, Guid? linkedToQuestionId, int? maxAllowedAnswers, Option[] options)
         {
-            if (maxAllowedAnswers.HasValue && maxAllowedAnswers.Value < 1)
+            if (questionType != QuestionType.MultyOption) return;
+            if (!maxAllowedAnswers.HasValue) return;
+
+            if (maxAllowedAnswers.Value < 1)
             {
                 throw new DomainException(
-                    DomainExceptionType.MaxAllowedAnswersIsNotPositive, 
+                    DomainExceptionType.MaxAllowedAnswersIsNotPositive,
                     "Maximum Allowed Answers for question has to be positive");
+            }
+
+            if (!linkedToQuestionId.HasValue && options != null && maxAllowedAnswers > options.Length)
+            {
+                throw new DomainException(
+                    DomainExceptionType.MaxAllowedAnswersMoreThanOptions,
+                    "Maximum Allowed Answers more than question's options");
             }
         }
 
