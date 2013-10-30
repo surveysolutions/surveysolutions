@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Propagating question has no associated groups.
+        ///   Looks up a localized string similar to Propagating question has no associated groups..
         /// </summary>
         internal static string WB0008_PropagatingQuestionHasNoAssociatedGroups {
             get {
