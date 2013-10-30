@@ -112,17 +112,8 @@
                                         <pre data-bind="html: error"></pre>
                                     </li>
                                 </ul>
-                                <ul data-bind="foreach: VerificationErrors" class="error-list">
-                                    @* <li class="error">
-                                 <pre data-bind="html: message"></pre>
-                             </li>*@
-                                    <li class="error">
-                                        <b class="error-code" data-bind="text: code"></b> <span data-bind="    html: message"></span>
-                                        <ul class="error-reference-items" data-bind="foreach: references">
-                                            <li><span data-bind="    text: title"></span></li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                                @RenderSection("output", false)
+                               
                             </div>
                         </div>
                     </div>
@@ -138,10 +129,10 @@
             </div>
             <div class="text-center">
                 @ViewContext.Controller.GetType().Assembly.GetName().Version @*(@File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString("dd-MMM-yyyy HH:mm")) *@
-                    @if (AppSettings.IsDebugBuilded)
-                    {
-                        <span id="build-config">[.NET Debug]</span>
-                    }
+                @if (AppSettings.IsDebugBuilded)
+                {
+                    <span id="build-config">[.NET Debug]</span>
+                }
                 @if (HttpContext.Current.IsDebuggingEnabled)
                 {
                     <span id="compile-config" style="color: red">Web Debug</span>

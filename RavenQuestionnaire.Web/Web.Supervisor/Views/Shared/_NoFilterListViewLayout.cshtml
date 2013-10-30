@@ -12,6 +12,10 @@
     @Scripts.Render("~/js/list")
     @RenderSection("scripts", false)
 }
+@section output
+{
+    @RenderSection("output", false)
+}
 <div class="innerLR">
     @RenderSection("header", false)
 </div>
