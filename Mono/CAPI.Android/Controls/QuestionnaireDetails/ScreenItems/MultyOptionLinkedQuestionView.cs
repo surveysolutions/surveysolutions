@@ -32,7 +32,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (!answerOptionsChanged)
                 return;
 
-            this.CreateCheckBoxesByOptions();
+            this.CreateAnswersByOptions();
         }
 
         protected LinkedQuestionViewModel TypedModel {
@@ -73,7 +73,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected override AnswerQuestionCommand CreateSaveAnswerCommand(LinkedAnswerViewModel[] selectedAnswers)
         {
-            var elements = selectedAnswers.Select(a => new Tuple<int[],int> (a.PropagationVector, GetAnswerOrder(a)));
+            var elements = selectedAnswers.Select(a => new Tuple<int[],int> (a.PropagationVector, GetAnswerOrder(a))).ToList();
 
             var answered = elements.OrderBy(tuple => tuple.Item2).Where(w => w.Item2 > 0).Select(a => a.Item1).
                 Union(elements.Where(w => w.Item2 == 0).Select(a => a.Item1));
