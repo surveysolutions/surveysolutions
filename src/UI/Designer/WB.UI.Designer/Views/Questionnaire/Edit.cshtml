@@ -28,7 +28,7 @@
                 questionnaire: q,
                 sharedPersons: @Html.Raw(Json.Encode(Model.SharedPersons)),
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)',
-                remoteVerificationUrl: '@Url.Action("RemoteVerification", "Questionnaire", new { }, Request.Url.Scheme)',
+                remoteVerificationUrl: '@Url.Action("Verify", "Questionnaire", new { }, Request.Url.Scheme)',
                 url: {
                     checkUserUrl: '@Url.Action("FindByEmail", "Account", null, Request.Url.Scheme)',
                     lackOfPermitsUrl: '@Url.Action("LackOfPermits", "Questionnaire", null, Request.Url.Scheme)'
@@ -128,7 +128,7 @@
                 </div>
                 <div class="span4">
                     <div id="footer-buttons" class="pull-right">
-                        <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput, visible: (saveMessages().length +  verificationMessages().length) > 0">
+                        <button type="button" class="btn btn-info btn-small" data-bind="click: $root.toggleOutput, visible: isToggleMessagesButtonIsVisible">
                             <span data-bind="visible: isOutputVisible">Hide</span><span data-bind="    hidden: isOutputVisible">Show</span> messages
                         </button>
                         <button type="button" class="btn btn-primary btn-small" data-bind="click: $root.runVerifier">
@@ -145,7 +145,7 @@
                 <button type="button" class="close" data-bind="click: $root.toggleOutput">&times</button>
                 <ul class="nav nav-tabs">
                     <li data-bind="css: { active: selectedMessageTab()==1}, visible: saveMessages().length > 0 , click: function(){ $root.selectedMessageTab(1);}"><a href="#">Save messages</a></li>
-                    <li data-bind="css: { active: selectedMessageTab()==2}, visible: verificationMessages().length > 0 , click: function(){ $root.selectedMessageTab(2);}"><a href="#">Verification messages</a></li>
+                    <li data-bind="css: { active: selectedMessageTab()==2}, visible: verificationMessages().length > 0 ||  isVerificationSucceeded(), click: function(){ $root.selectedMessageTab(2);}"><a href="#">Verification messages</a></li>
                 </ul>
             </div>
             <div class="body">

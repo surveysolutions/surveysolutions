@@ -1,6 +1,6 @@
 ﻿define('config',
     ['pnotify', 'ko', 'amplify'],
-    function (toastr, ko, amplify) {
+    function(toastr, ko, amplify) {
 
         var // properties
             //-----------------
@@ -21,7 +21,7 @@
                 saveMessagesTab: 1,
                 verificationMessagesTab: 2
             },
-        questionTypeOptions = [
+            questionTypeOptions = [
                 {
                     key: "SingleOption",
                     value: "Categorical: one answer"
@@ -50,7 +50,7 @@
                     key: "GpsCoordinates",
                     value: "Geo Location"
                 }
-        ],
+            ],
             questionScopes = {
                 interviewer: "Interviewer",
                 supervisor: "Supervisor",
@@ -197,7 +197,7 @@
             // methods
             //-----------------
 
-            init = function () {
+            init = function() {
                 logger.defaults.delay = loggerTmeout;
 
                 ko.validation.configure({
