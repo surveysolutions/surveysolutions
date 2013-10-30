@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
                 var substitutionReferences = StringUtil.GetAllSubstitutionVariableNames(questionWithSubstitution.QuestionText);
 
-                List<Guid> vectorOfAutopropagatedQuestionsForQuestionWithSubstitution =
+                List<Guid?> vectorOfAutopropagatedQuestionsForQuestionWithSubstitution =
                     GetAllAutopropagationQuestionsAsVector(questionWithSubstitution, questionnaire);
 
                 VerifyEnumerableAndAccumulateErrorsToList(substitutionReferences, errorByAllQuestionsWithSubstitutions,
@@ -234,7 +234,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
                 IEnumerable<string> identifiersUsedInExpression =
                     this.expressionProcessor.GetIdentifiersUsedInExpression(questionWithValidationExpression.ValidationExpression);
 
-                List<Guid> vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation =
+                List<Guid?> vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation =
                     GetAllAutopropagationQuestionsAsVector(questionWithValidationExpression, questionnaire);
 
                 VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllQuestionsWithCustomValidation,
@@ -340,7 +340,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static QuestionnaireVerificationError GetVerificationErrorByCustomValidationReferenceOrNull(
             IQuestion questionWithValidationExpression, string identifier,
-            List<Guid> vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, QuestionnaireDocument questionnaire)
+            List<Guid?> vectorOfAutopropagatedQuestionsForQuestionWithCustomValidation, QuestionnaireDocument questionnaire)
         {
             if (IsSpecialThisIdentifier(identifier))
             {
@@ -374,7 +374,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         }
 
         private static QuestionnaireVerificationError GetVerificationErrorBySubstitutionReferenceOrNull(IQuestion questionWithSubstitution,
-            string substitutionReference, List<Guid> vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
+            string substitutionReference, List<Guid?> vectorOfAutopropagatedQuestionsByQuestionWithSubstitutions,
             QuestionnaireDocument questionnaire)
         {
             if (substitutionReference == questionWithSubstitution.StataExportCaption)
@@ -522,14 +522,19 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
             return GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), document);
         }
 
-        private static List<Guid> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument questionnaire)
+        private static List<Guid?> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            List<Guid> propagationQuestions =
+            List<Guid?> propagationQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), questionnaire)
                     .Where(IsGroupPropagatable)
-                    .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, questionnaire))
-                    .Where(g => g.Any())
-                    .Select(g => g.FirstOrDefault().PublicKey)
+                    .Select<IGroup, Guid?>(g =>
+                    {
+                        var propagationTriggers = GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, questionnaire);
+                        var firstTrigger = propagationTriggers.FirstOrDefault();
+                        if (firstTrigger == null)
+                            return null;
+                        return firstTrigger.PublicKey;
+                    })
                     .ToList();
 
             return propagationQuestions;
@@ -549,20 +554,37 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         }
 
         private static bool QuestionHasDeeperPropagationLevelThenVectorOfAutopropagatedQuestions(IQuestion question,
-            List<Guid> vectorOfAutopropagatedQuestions, QuestionnaireDocument questionnaire)
+            List<Guid?> vectorOfAutopropagatedQuestions, QuestionnaireDocument questionnaire)
         {
-            List<Guid> autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution =
+            List<Guid?> autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution =
                 GetAllAutopropagationQuestionsAsVector(question, questionnaire);
          
             return autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Count > 0
                 &&
                 autopropagationQuestionsAsVectorForQuestionSourceOfSubstitution.Except(
-                    vectorOfAutopropagatedQuestions).Any();
+                    vectorOfAutopropagatedQuestions, new NullableGuidsEqualityComparer()).Any();
         }
 
         private static bool IsSpecialThisIdentifier(string identifier)
         {
             return identifier.ToLower() == "this";
+        }
+
+        protected class NullableGuidsEqualityComparer : IEqualityComparer<Guid?>
+        {
+            public bool Equals(Guid? x, Guid? y)
+            {
+                if (!x.HasValue)
+                    return false;
+                if (!y.HasValue)
+                    return false;
+                return x.Value == y.Value;
+            }
+
+            public int GetHashCode(Guid? obj)
+            {
+                return obj.GetHashCode();
+            }
         }
     }
 }
