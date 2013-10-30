@@ -318,7 +318,7 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
         {
             Guid questionId;
             if (!Guid.TryParse(identifier, out questionId))
-                return false;
+                return questionnaire.FirstOrDefault<IQuestion>(question=>question.StataExportCaption==identifier) != null;
 
             return questionnaire.Find<IQuestion>(questionId) != null;
         }
@@ -524,10 +524,13 @@ namespace WB.Core.SharedKernels.QuestionnaireVerification.Implementation.Service
 
         private static List<Guid> GetAllAutopropagationQuestionsAsVector(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            List<Guid> propagationQuestions = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)question.GetParent(), questionnaire)
-                .Where(IsGroupPropagatable)
-                .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, questionnaire).FirstOrDefault().PublicKey)
-                .ToList();
+            List<Guid> propagationQuestions =
+                GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup) question.GetParent(), questionnaire)
+                    .Where(IsGroupPropagatable)
+                    .Select(g => GetPropagatingQuestionsPointingToPropagatedGroup(g.PublicKey, questionnaire))
+                    .Where(g => g.Any())
+                    .Select(g => g.FirstOrDefault().PublicKey)
+                    .ToList();
 
             return propagationQuestions;
         }
