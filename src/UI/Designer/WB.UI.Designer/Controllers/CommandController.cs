@@ -88,11 +88,8 @@ namespace WB.UI.Designer.Controllers
             var questionCommand = command as AbstractQuestionCommand;
             if (questionCommand != null)
             {
-                var expressionReplace = this.CreateExpressionReplace(questionCommand.QuestionnaireId);
-                questionCommand.Condition = expressionReplace.ReplaceStataCaptionsWithGuids(questionCommand.Condition,
-                    questionCommand.QuestionnaireId);
-                questionCommand.ValidationExpression = expressionReplace.ReplaceStataCaptionsWithGuids(
-                    questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+                questionCommand.Condition = questionCommand.Condition;
+                questionCommand.ValidationExpression = questionCommand.ValidationExpression;
 
                 return;
             }
@@ -100,17 +97,8 @@ namespace WB.UI.Designer.Controllers
             var newGroupCommand = command as FullGroupDataCommand;
             if (newGroupCommand != null)
             {
-                var expressionReplace = this.CreateExpressionReplace(newGroupCommand.QuestionnaireId);
-                newGroupCommand.Condition = expressionReplace.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition,
-                    newGroupCommand.QuestionnaireId);
+                newGroupCommand.Condition = newGroupCommand.Condition;
             }
-        }
-
-        private IExpressionReplacer CreateExpressionReplace(Guid questionnaireId)
-        {
-            QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(
-                new QuestionnaireViewInputModel(questionnaireId));
-            return new ExpressionReplacer(questionnaire.Source);
         }
 
         private void ValidateAddSharedPersonCommand(ICommand command)
