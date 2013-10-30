@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
@@ -12,8 +14,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public abstract class AbstractMultyQuestionView<T>: AbstractQuestionView where T: class 
     {
-        protected LinearLayout CheckBoxContainer;
+        protected LinearLayout AnswersCheckboxContainer;
         protected abstract IEnumerable<T> Answers { get; }
+        protected abstract int? MaxAllowedAnswers { get; }
+        protected abstract bool? IsAnswersOrdered { get; }
 
         protected AbstractMultyQuestionView(
             Context context, 
@@ -21,7 +25,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             QuestionViewModel source, 
             Guid questionnairePublicKey, 
             IAnswerOnQuestionCommandService commandService)
-
             : base(context, bindingActivity, source, questionnairePublicKey, commandService)
         {
         }
@@ -30,12 +33,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
             this.Orientation = Orientation.Vertical;
-
-            this.CheckBoxContainer = this.CreateCheckBoxes();
+            answeredCount = 0;
+            this.AnswersCheckboxContainer = this.CreateCheckBoxes();
 
             this.PutAnswerStoredInModelToUI();
 
-            llWrapper.AddView(this.CheckBoxContainer);
+            llWrapper.AddView(this.AnswersCheckboxContainer);
         }
 
         protected override string GetAnswerStoredInModelAsString()
@@ -61,13 +64,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected void CreateCheckBoxesByOptions()
         {
-            this.CheckBoxContainer.RemoveAllViews();
+            this.AnswersCheckboxContainer.RemoveAllViews();
 
             foreach (var answer in this.Answers)
             {
-                var checkBox = this.CreateCheckBox(answer);
+                var answerBlock = this.CreateAnswerBlock(answer);
 
-                this.CheckBoxContainer.AddView(checkBox);
+                this.AnswersCheckboxContainer.AddView(answerBlock);
             }
         }
 
@@ -81,38 +84,109 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         protected abstract bool IsAnswerSelected(T answer);
 
+        protected abstract int GetAnswerOrder(T answer);
+
         protected virtual void AddAdditionalAttributes(CheckBox checkBox, T answer) { }
 
-        private CheckBox CreateCheckBox(T answer)
+        private RelativeLayout CreateAnswerBlock(T answer)
         {
+            var container = new RelativeLayout(this.Context);
+            container.LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                              ViewGroup.LayoutParams.FillParent);
+
             CheckBox cb = new CheckBox(this.Context);
-            cb.Text = this.GetAnswerTitle(answer);
+            var cbLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+
+            cbLayoutParams.AddRule(LayoutRules.AlignParentLeft);
+            cbLayoutParams.SetMargins(20,0,0,0);
+            cb.LayoutParameters = cbLayoutParams;
             cb.Checked = this.IsAnswerSelected(answer);
+            
+            if (cb.Checked)
+                answeredCount++;
+
+            cb.Text = this.GetAnswerTitle(answer);
+
+            if (this.MaxAllowedAnswers.HasValue)
+                cb.Click += (sender, args) => { 
+                    CheckBox checkBox = (CheckBox)sender;
+                                              if (checkBox.Checked)
+                                              {
+                                                  if (this.MaxAllowedAnswers.HasValue && answeredCount >= this.MaxAllowedAnswers)
+                                                  {
+                                                      return;
+
+                                                  }
+                                              }
+                };
+
             cb.CheckedChange += RadioGroupCheckedChange;
             cb.SetTag(Resource.Id.AnswerId, GetAnswerId(answer));
-            AddAdditionalAttributes(cb,answer);
-            return cb;
+            AddAdditionalAttributes(cb, answer);
+
+            if (this.IsAnswersOrdered == true)
+            {
+                int AnswerOrder = GetAnswerOrder(answer);
+                TextView AnswerOrderText = new TextView(this.Context);
+                AnswerOrderText.SetTypeface(null, TypefaceStyle.Bold);
+                
+                var layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+                layoutParams.AddRule(LayoutRules.AlignParentLeft);
+                AnswerOrderText.LayoutParameters = layoutParams;
+
+                if (AnswerOrder > 0 && cb.Checked)
+                {
+                    AnswerOrderText.Text = AnswerOrder.ToString(CultureInfo.InvariantCulture);
+                    AnswerOrderText.SetBackgroundColor(Color.LightBlue);
+                }
+                container.AddView(AnswerOrderText);
+            }
+            container.AddView(cb);
+            return container;
         }
 
+        private T GetFirstChildTypeOf<T>(RelativeLayout layout) where T:class
+        {
+            if (layout == null)
+                return null;
+            for (int i = 0; i < layout.ChildCount; i++)
+            {
+                var child = layout.GetChildAt(i) as T;
+                if (child != null)
+                    return child; 
+            }
+            return null;
+        }
+        
         void RadioGroupCheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
         {
             var selectedAnswers = new List<T>();
-            for (int i = 0; i < CheckBoxContainer.ChildCount; i++)
+            for (int i = 0; i < AnswersCheckboxContainer.ChildCount; i++)
             {
-                var checkBox = CheckBoxContainer.GetChildAt(i) as CheckBox;
+                var itemContainer = AnswersCheckboxContainer.GetChildAt(i) as RelativeLayout;
+                var checkBox = GetFirstChildTypeOf<CheckBox>(itemContainer);
                 if(checkBox==null)
                     continue;
+
                 if(checkBox.Checked)
                     selectedAnswers.Add(this.FindAnswerInModelByCheckBoxTag(checkBox.GetTag(Resource.Id.AnswerId).ToString()));
-                
+            }
+
+            if (this.MaxAllowedAnswers.HasValue && selectedAnswers.Count > this.MaxAllowedAnswers)
+            {
+                return;
             }
 
             this.SaveAnswer(this.FormatSelectedAnswersAsString(selectedAnswers), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
+
+            answeredCount = selectedAnswers.Count;
         }
 
         private string FormatSelectedAnswersAsString(IEnumerable<T> selectedAnswers)
         {
             return string.Join(",", selectedAnswers.Select(this.GetAnswerTitle));
         }
+
+        private int answeredCount;
     }
 }
