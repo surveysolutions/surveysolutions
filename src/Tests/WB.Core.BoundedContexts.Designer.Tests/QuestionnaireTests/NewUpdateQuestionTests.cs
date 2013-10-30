@@ -1547,5 +1547,119 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithLinkedQuestionCanNotBeHead));
         }
+
+        [Test]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_Ordered_and_MaxAnswer_Are_Set_Then_event_contains_values(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                var isAnswersOrdered = true;
+                var maxAllowedAnswers = 1;
+
+                // arrange
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                Guid responsibleId = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireWithOneQuestion(questionId: targetQuestionPublicKey, responsibleId: responsibleId);
+
+                // act
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.MultyOption, "Question",
+                    false, false, false, QuestionScope.Interviewer, "", "", "", "",
+                    new Option[2] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") }, Order.AZ,
+                    responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: isAnswersOrdered, maxAllowedAnswers: maxAllowedAnswers);
+
+                // assert
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual(isAnswersOrdered, risedEvent.IsAnswersOrdered);
+                Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
+            }
+        }
+
+        [Test]
+        public void NewUpdateQuestion_When_MaxAllowedAnswers_For_MultiQuestion_Is_Negative_Then_DomainException_of_type_MaxAllowedAnswersIsNotPositive_should_be_thrown()
+        {
+            // arrange
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireWithOneQuestion(questionId: targetQuestionPublicKey, responsibleId: responsibleId);
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.MultyOption, "Question",
+                false, false, false, QuestionScope.Interviewer, "", "", "", "",
+                new Option[2] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") }, Order.AZ,
+                responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: false, maxAllowedAnswers: -1);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MaxAllowedAnswersIsNotPositive));
+        }
+
+        [Test]
+        public void NewUpdateQuestion_When_MaxAllowedAnswers_For_MultiQuestion_More_Than_Options_Then_DomainException_of_type_MaxAllowedAnswersIsNotPositive_should_be_thrown()
+        {
+            // arrange
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireWithOneQuestion(questionId: targetQuestionPublicKey, responsibleId: responsibleId);
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.MultyOption, "Question",
+                false, false, false, QuestionScope.Interviewer, "", "", "", "",
+                new Option[2] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title1") }, Order.AZ,
+                responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: false, maxAllowedAnswers: 3);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MaxAllowedAnswersMoreThanOptions));
+        }
+
+        [Test]
+        public void NewUpdateQuestion_When_categorical_multi_question_with_linked_question_that_has_max_allowed_answers()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                const int maxAllowedAnswers = 5;
+                // arrange
+                Guid autoQuestionId = Guid.Parse("00000000-1111-0000-2222-111000000000");
+                Guid questionId = Guid.Parse("00000000-1111-0000-2222-000000000000");
+                Guid autoGroupId = Guid.Parse("00000000-1111-0000-3333-111000000000");
+                Guid groupId = Guid.Parse("00000000-1111-0000-3333-000000000000");
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire =
+                    CreateQuestionnaireWithAutoGroupAndRegularGroupAndQuestionsInThem(
+                        autoGroupPublicKey: autoGroupId,
+                        secondGroup: groupId,
+                        autoQuestionId: autoQuestionId,
+                        questionId: questionId,
+                        responsibleId: responsibleId,
+                        questionType: QuestionType.MultyOption);
+
+                // act
+                questionnaire.NewUpdateQuestion(
+                        questionId: questionId,
+                        title: "Question",
+                        type: QuestionType.MultyOption,
+                        alias: "test",
+                        isMandatory: false,
+                        isFeatured: false,
+                        isHeaderOfPropagatableGroup: false,
+                        scope: QuestionScope.Interviewer,
+                        condition: string.Empty,
+                        validationExpression: string.Empty,
+                        validationMessage: string.Empty,
+                        instructions: string.Empty,
+                        options: null,
+                        optionsOrder: Order.AZ,
+                        responsibleId: responsibleId,
+                        linkedToQuestionId: autoQuestionId, 
+                        isAnswersOrdered: false, 
+                        maxAllowedAnswers: maxAllowedAnswers);
+
+                // assert
+                var risedEvent = GetLastEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
+            }
+        }
     }
 }
