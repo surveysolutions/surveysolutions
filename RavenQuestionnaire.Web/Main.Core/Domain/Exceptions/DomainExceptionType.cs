@@ -177,6 +177,8 @@
 
         FeaturedQuestionTitleContainsSubstitutionReference,
 
-        MaxAllowedAnswersIsNotPositive
+        MaxAllowedAnswersIsNotPositive,
+
+        MaxAllowedAnswersMoreThanOptions
     }
 }
