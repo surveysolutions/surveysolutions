@@ -11,6 +11,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             Selected = selected;
             Value = decimal.Parse(value);
             ImagePublicKey = imagePublicKey;
+            AnswerOrder = 0;
         }
 
         public Guid PublicKey { get; private set; }
@@ -18,6 +19,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public string Title { get; private set; }
         public decimal Value { get; private set; }
         public bool Selected { get;  set; }
+        public int AnswerOrder { get; set; }
 
         #region Implementation of ICloneable
 
