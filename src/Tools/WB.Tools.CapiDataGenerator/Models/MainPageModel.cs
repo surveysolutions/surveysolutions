@@ -715,7 +715,7 @@ namespace CapiDataGenerator
 
             if (isInteger)
                 return new AnswerNumericIntegerQuestionCommand(interviewId, userId, question.PublicKey, emptyPropagationVector, answersTime,
-                    (int) answer);
+                    Convert.ToInt32(answer));
 
                 return new AnswerNumericRealQuestionCommand(interviewId, userId, question.PublicKey, emptyPropagationVector, answersTime,
                     (decimal) answer);
