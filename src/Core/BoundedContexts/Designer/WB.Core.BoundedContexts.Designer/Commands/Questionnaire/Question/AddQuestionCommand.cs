@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public AddQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
-            Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool isAnswersOrdered, int? maxAllowedAnswers)
+            Option[] options, Order optionsOrder, Guid responsibleId, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
 
             : base(questionnaireId, questionId, title, type, alias, isMandatory, isFeatured, isHeaderOfPropagatableGroup,
                 scope, condition, validationExpression, validationMessage, instructions, options, optionsOrder,
-                responsibleId, linkedToQuestionId, isAnswersOrdered, maxAllowedAnswers)
+                responsibleId, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers)
         {
             this.GroupId = groupId;
         }
