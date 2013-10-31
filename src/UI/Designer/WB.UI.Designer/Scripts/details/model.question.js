@@ -22,9 +22,8 @@
                 self.isFeatured = ko.observable(false);
                 self.isMandatory = ko.observable(false);
 
-                self.isSupervisorQuestion = ko.observable();
-
                 self.qtype = ko.observable("Text"); // Questoin type
+                
                 self.isSupervisorQuestion = ko.observable(false);
 
                 self.scope = ko.computed({
