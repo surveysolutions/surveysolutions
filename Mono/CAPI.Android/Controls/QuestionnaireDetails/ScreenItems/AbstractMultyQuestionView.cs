@@ -77,11 +77,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        protected int GetNumberOfSelectedAnswers()
-        {
-            return this.Answers.Count(IsAnswerSelected);
-        }
-
         protected abstract string GetAnswerId(T answer);
 
         protected abstract string GetAnswerTitle(T answer);
@@ -196,25 +191,46 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
+        private bool MaxAllowedAnswersCountExceeded()
+        {
+            return this.MaxAllowedAnswers.HasValue && orderedGivenAnswers.Count() >= this.MaxAllowedAnswers;
+        }
+
+        private bool IsUpdateAnswerOrderListNeeded()
+        {
+            return this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue;
+        }
+
         private void CheckBoxCheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
         {
-            if (e.IsChecked && this.MaxAllowedAnswers.HasValue && (orderedGivenAnswers.Count() >= this.MaxAllowedAnswers))
+            var checkedBox = sender as CheckBox;
+            if (checkedBox == null)
+                return;
+
+            if (e.IsChecked && MaxAllowedAnswersCountExceeded())
             {
-                (sender as CheckBox).Checked = false;
+                checkedBox.Checked = false;
                 return;
             }
-
-            if (this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue)
+           
+            if (IsUpdateAnswerOrderListNeeded())
             {
-                string changedAnswerTag = (sender as CheckBox).GetTag(Resource.Id.AnswerId).ToString();
+                string changedAnswerTag = checkedBox.GetTag(Resource.Id.AnswerId).ToString();
                 UpdateAnswerOrderList(changedAnswerTag, e.IsChecked);
             }
 
+            var selectedAnswers = this.GetSelectedAnswers();
+
+            this.SaveAnswer(this.FormatSelectedAnswersAsString(selectedAnswers), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
+        }
+
+        private List<T> GetSelectedAnswers()
+        {
             var selectedAnswers = new List<T>();
-            for (int i = 0; i < AnswersContainer.ChildCount; i++)
+            for (int i = 0; i < this.AnswersContainer.ChildCount; i++)
             {
-                var itemContainer = AnswersContainer.GetChildAt(i) as RelativeLayout;
-                var checkBox = GetFirstChildTypeOf<CheckBox>(itemContainer);
+                var itemContainer = this.AnswersContainer.GetChildAt(i) as RelativeLayout;
+                var checkBox = this.GetFirstChildTypeOf<CheckBox>(itemContainer);
                 if (checkBox == null)
                     continue;
 
@@ -222,25 +238,19 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
                 if (this.AreAnswersOrdered == true)
                 {
-                    var answerOrderText = GetFirstChildTypeOf<TextView>(checkBox.Parent as RelativeLayout);
+                    var answerOrderText = this.GetFirstChildTypeOf<TextView>(checkBox.Parent as RelativeLayout);
                     if (answerOrderText != null)
-                        answerOrderText.Text = orderedGivenAnswers.ContainsKey(answerTag) ?
-                            orderedGivenAnswers[answerTag].ToString(CultureInfo.InvariantCulture) :
-                            "";
+                        answerOrderText.Text = this.orderedGivenAnswers.ContainsKey(answerTag)
+                            ? this.orderedGivenAnswers[answerTag].ToString(CultureInfo.InvariantCulture)
+                            : "";
                 }
 
                 if (checkBox.Checked)
                     selectedAnswers.Add(this.FindAnswerInModelByCheckBoxTag(answerTag));
             }
-
-            if (orderedGivenAnswers.Count() > this.MaxAllowedAnswers)
-            {
-                return; //additional check to avoid saving incorrect state
-            }
-
-            this.SaveAnswer(this.FormatSelectedAnswersAsString(selectedAnswers), CreateSaveAnswerCommand(selectedAnswers.ToArray()));
+            return selectedAnswers;
         }
-        
+
         private string FormatSelectedAnswersAsString(IEnumerable<T> selectedAnswers)
         {
             return string.Join(",", selectedAnswers.Select(this.GetAnswerTitle));
