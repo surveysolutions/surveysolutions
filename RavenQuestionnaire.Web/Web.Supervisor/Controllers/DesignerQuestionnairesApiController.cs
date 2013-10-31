@@ -83,7 +83,7 @@ namespace Web.Supervisor.Controllers
                     return new QuestionnaireVerificationResponse(false);
                 }
 
-                var response = new QuestionnaireVerificationResponse(true);
+                var response = new QuestionnaireVerificationResponse(true, document.Title);
                 var verificationException = domainEx as QuestionnaireVerificationException;
                 if (verificationException != null)
                 {
