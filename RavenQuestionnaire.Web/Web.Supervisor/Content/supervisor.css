@@ -4563,4 +4563,10 @@ a.pseudo-link:hover {
      background: red;
      z-index: 109999;
  }
- 
+ #output .verificatonErrors p {
+     line-height: 20px;
+    padding: 6px 4px;
+    margin: 0;
+    font-weight: bold;
+    font-size: 14px;
+ }

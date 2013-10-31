@@ -3,6 +3,7 @@
     
     var self = this;
 
+    self.ImportFailMessage = ko.observable();
     self.VerificationErrors = ko.observableArray([]);
 
     self.getQuestionnaireUrl = getQuestionnaireUrl;
@@ -24,9 +25,8 @@
 
             if (!Supervisor.Framework.Objects.isUndefined(data.Errors) && !Supervisor.Framework.Objects.isNull(data.Errors) && data.Errors.length > 0) {
                 self.VerificationErrors.removeAll();
-                self.VerificationErrors.push({ message: data.QuestionnaireTitle, code: 'Failed to import questionnaire: ', references: [] });
+                self.ImportFailMessage('Failed to import questionnaire: ' + data.QuestionnaireTitle);
                 $.each(data.Errors, function (index, error) {
-
                     var uiReferences = $.map(error.References, function (item) {
                         return { title: item.Title, type: item.Type, id: item.Id };
                     });
