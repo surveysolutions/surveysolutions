@@ -98,8 +98,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             
             string answerTagId = GetAnswerId(answer);
             CheckBox cb = CreateCheckBox(answer, answerTagId);
-            
-            if (this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue)
+
+            if (IsUpdateGivenAnswersWithOrderListNeeded())
             {
                 int answerOrder = GetAnswerOrder(answer);
                     
@@ -122,7 +122,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             TextView answerOrderText = new TextView(this.Context);
             answerOrderText.SetTypeface(null, TypefaceStyle.Bold);
 
-            var layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+            var layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, 
+                                                               LayoutParams.WrapContent);
             layoutParams.AddRule(LayoutRules.AlignParentLeft);
             answerOrderText.LayoutParameters = layoutParams;
             
@@ -138,7 +139,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             CheckBox cb = new CheckBox(this.Context);
             
-            var cbLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+            var cbLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WrapContent, 
+                                                                 LayoutParams.WrapContent);
             cbLayoutParams.AddRule(LayoutRules.AlignParentLeft);
             cbLayoutParams.SetMargins(20, 0, 0, 0);
             cb.LayoutParameters = cbLayoutParams;
@@ -192,12 +194,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
         }
 
-        private bool MaxAllowedAnswersCountExceeded()
+        private bool IsMaxAllowedAnswersCountExceeded()
         {
-            return this.MaxAllowedAnswers.HasValue && orderedGivenAnswers.Count() >= this.MaxAllowedAnswers;
+            return this.MaxAllowedAnswers.HasValue && givenAnswersWithOrder.Count() >= this.MaxAllowedAnswers;
         }
 
-        private bool IsUpdateAnswerOrderListNeeded()
+        private bool IsUpdateGivenAnswersWithOrderListNeeded()
         {
             return this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue;
         }
@@ -208,13 +210,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (checkedBox == null)
                 return;
 
-            if (e.IsChecked && MaxAllowedAnswersCountExceeded())
+            if (e.IsChecked && IsMaxAllowedAnswersCountExceeded())
             {
                 checkedBox.Checked = false;
                 return;
             }
            
-            if (IsUpdateAnswerOrderListNeeded())
+            if (IsUpdateGivenAnswersWithOrderListNeeded())
             {
                 string changedAnswerTag = checkedBox.GetTag(Resource.Id.AnswerId).ToString();
                 UpdateAnswerOrderList(changedAnswerTag, e.IsChecked);
@@ -241,8 +243,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 {
                     var answerOrderText = this.GetFirstChildTypeOf<TextView>(checkBox.Parent as RelativeLayout);
                     if (answerOrderText != null)
-                        answerOrderText.Text = this.givenAnswersWithOrder.ContainsKey(answerTag) ?
-                            givenAnswersWithOrder[answerTag].ToString(CultureInfo.InvariantCulture) :
+                        answerOrderText.Text = this.givenAnswersWithOrder.ContainsKey(answerTag) 
+                            ? givenAnswersWithOrder[answerTag].ToString(CultureInfo.InvariantCulture) 
                             : "";
                 }
 
