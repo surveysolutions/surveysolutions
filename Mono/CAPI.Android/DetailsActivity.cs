@@ -1,30 +1,21 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.View;
-using Android.Util;
 using Android.Views;
-using Android.Views.Animations;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
-using CAPI.Android.Core.Model;
 using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
-using CAPI.Android.Services;
 using Cirrious.MvvmCross.Droid.Fragging;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
-using Ninject;
 using WB.Core.GenericSubdomains.Logging;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 
@@ -83,25 +74,22 @@ namespace CAPI.Android
         private QuestionnaireNavigationView navList;
         private bool isChaptersVisible = false;
         private InterviewItemId? screenId;
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        //private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
         private GestureDetector gestureDetector;
-        //private MoveNavigationPanelAnimation movePanelAnimation;
-
+        
         protected override void OnCreate(Bundle bundle)
         {
-
-            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId));
-
             base.OnCreate(bundle);
-
-            this.Window.SetSoftInputMode(SoftInput.AdjustPan);
 
             if (this.FinishIfNotLoggedIn())
                 return;
 
-            SetContentView(Resource.Layout.Details);
+            this.Window.SetSoftInputMode(SoftInput.AdjustPan);
+            
+            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, InterviewViewModel>(
+                new QuestionnaireScreenInput(QuestionnaireId));
 
+            SetContentView(Resource.Layout.Details);
 
             if (bundle != null)
             {
@@ -275,10 +263,10 @@ namespace CAPI.Android
         {
             base.OnDestroy();
 
-            if(btnNavigation!= null)
+            if(btnNavigation != null)
                 btnNavigation.Touch -= this.btnNavigation_Touch;
-            if (llNavigationHolder!=null)
-            llNavigationHolder.Touch += btnNavigation_Touch;
+            if (llNavigationHolder != null)
+                llNavigationHolder.Touch -= btnNavigation_Touch;
             if(VpContent != null)
                 VpContent.PageSelected -= this.VpContentPageSelected;
             if(this.navList != null)
@@ -313,15 +301,13 @@ namespace CAPI.Android
             {
                 this.isChaptersVisible = true;
                 this.UpdateLayout(true, true);
-                return true;
             }
             else if (velocityX < 0 && this.isChaptersVisible)
             {
                 this.isChaptersVisible = false;
                 this.UpdateLayout(false, true);
-                return true;
             }
-            Console.WriteLine(string.Format("velocityX:{0},velocityY:{1},isChaptersVisible:{2}", velocityX, velocityY, isChaptersVisible));
+            
             return true;
         }
 
