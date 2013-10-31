@@ -135,7 +135,7 @@
                     item.isInteger(_.isNull(dto.IsInteger) ? 0 : (dto.IsInteger ? 1 : 0));
                     item.countOfDecimalPlaces(_.isEmpty(dto.Settings) ? null : dto.Settings.CountOfDecimalPlaces);
 
-                    item.isAnswersOrdered(_.isEmpty(dto.Settings) ? false : dto.Settings.IsAnswersOrdered);
+                    item.areAnswersOrdered(_.isEmpty(dto.Settings) ? false : dto.Settings.AreAnswersOrdered);
                     item.maxAllowedAnswers(_.isEmpty(dto.Settings) ? null : dto.Settings.MaxAllowedAnswers);
                     
                     item.isNew(false);

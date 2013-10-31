@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.LinkedToQuestionId,
                     e.IsInteger,
                     null,
-                    e.IsAnswersOrdered,
+                    e.AreAnswersOrdered,
                     e.MaxAllowedAnswers));
         }
 
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                     e.LinkedToQuestionId,
                     e.IsInteger,
                     null,
-                    e.IsAnswersOrdered,
+                    e.AreAnswersOrdered,
                     e.MaxAllowedAnswers));
         }
 
@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 e.LinkedToQuestionId,
                 e.IsInteger,
                 null,
-                e.IsAnswersOrdered,
+                e.AreAnswersOrdered,
                 e.MaxAllowedAnswers));
         }
 
@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
-            var question = item.Find<AbstractQuestion>(data.publicKey);
+            var question = item.Find<AbstractQuestion>(data.PublicKey);
             if (question == null)
             {
                 return;

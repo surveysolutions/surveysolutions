@@ -22,19 +22,19 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             string validationMessage,
             string variable, 
             IEnumerable<string> substitutionReferences,
-            bool? isAnswersOrdered,
+            bool? areAnswersOrdered,
             int? maxAllowedAnswers)
             : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, 
                    answerObject, validationMessage, variable, substitutionReferences)
         {
             Answers = answers;
             MaxAllowedAnswers = maxAllowedAnswers;
-            IsAnswersOrdered = isAnswersOrdered;
+            this.AreAnswersOrdered = areAnswersOrdered;
         }
 
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
         public int? MaxAllowedAnswers { get; private set; }
-        public bool? IsAnswersOrdered { get; private set; }
+        public bool? AreAnswersOrdered { get; private set; }
 
         public override string AnswerString
         {
@@ -57,7 +57,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                 this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                 this.Mandatory,  this.AnswerObject, this.ValidationMessage, this.Variable, this.SubstitutionReferences,
-                this.IsAnswersOrdered, this.MaxAllowedAnswers);
+                this.AreAnswersOrdered, this.MaxAllowedAnswers);
         }
 
         public override void SetAnswer(object answer)

@@ -139,10 +139,10 @@
             self.isValid = ko.observable(true);
             return self;
         },
-        MultyOptionQuestion: function(isAnswersOrdered, maxAllowedAnswers) {
+        MultyOptionQuestion: function(areAnswersOrdered, maxAllowedAnswers) {
             var self = this;
             ko.utils.extend(self, new QuestionModel());
-            self.isAnswersOrdered = ko.observable(isAnswersOrdered);
+            self.areAnswersOrdered = ko.observable(areAnswersOrdered);
             self.maxAllowedAnswers = ko.observable(maxAllowedAnswers);
             self.orderedOptionsSelection = ko.observableArray([]);
             self.selectedOptionsCount = 0;
@@ -198,7 +198,7 @@
                     self.selectedOptionsCount = self.selectedOptions().length;
                 }
             };
-            if (self.isAnswersOrdered()) {
+            if (self.areAnswersOrdered()) {
                 self.selectedOptions.subscribe(function() {
                     self.orderSelectedOptions();
                 });

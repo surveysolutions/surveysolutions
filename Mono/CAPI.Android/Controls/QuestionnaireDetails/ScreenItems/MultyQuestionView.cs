@@ -32,9 +32,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             get { return TypedMode.MaxAllowedAnswers; }
         }
 
-        protected override bool? IsAnswersOrdered
+        protected override bool? AreAnswersOrdered
         {
-            get { return TypedMode.IsAnswersOrdered; }
+            get { return TypedMode.AreAnswersOrdered; }
         }
         
         protected override string GetAnswerId(AnswerViewModel answer)

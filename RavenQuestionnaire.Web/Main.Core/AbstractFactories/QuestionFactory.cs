@@ -12,31 +12,31 @@ namespace Main.Core.AbstractFactories
     {
         public AbstractQuestion CreateQuestion(QuestionData data)
         {
-            AbstractQuestion q = CreateQuestion(data.questionType, data.publicKey);
+            AbstractQuestion q = CreateQuestion(data.QuestionType, data.PublicKey);
 
             UpdateQuestion(
                 q,
-                data.questionType,
-                data.questionScope,
-                data.questionText,
-                data.stataExportCaption,
-                data.conditionExpression,
-                data.validationExpression,
-                data.validationMessage,
-                data.answerOrder,
-                data.featured,
-                data.mandatory,
-                data.capital,
-                data.instructions,
-                data.triggers,
-                data.maxValue,
-                data.linkedToQuestionId,
-                data.isInteger,
-                data.countOfDecimalPlaces,
-                data.isAnswersOrdered,
-                data.maxAllowedAnswers);
+                data.QuestionType,
+                data.QuestionScope,
+                data.QuestionText,
+                data.StataExportCaption,
+                data.ConditionExpression,
+                data.ValidationExpression,
+                data.ValidationMessage,
+                data.AnswerOrder,
+                data.Featured,
+                data.Mandatory,
+                data.Capital,
+                data.Instructions,
+                data.Triggers,
+                data.MaxValue,
+                data.LinkedToQuestionId,
+                data.IsInteger,
+                data.CountOfDecimalPlaces,
+                data.AreAnswersOrdered,
+                data.MaxAllowedAnswers);
 
-            UpdateAnswerList(data.answers, q, data.linkedToQuestionId);
+            UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
             return q;
         }
@@ -117,7 +117,7 @@ namespace Main.Core.AbstractFactories
             Guid? linkedToQuestionId,
             bool? isInteger,
             int? countOfDecimalPlaces,
-            bool? isAnswersOrdered,
+            bool? areAnswersOrdered,
             int? maxAllowedAnswers)
         {
             question.QuestionType = questionType;
@@ -161,7 +161,7 @@ namespace Main.Core.AbstractFactories
             var multioptionQuestion = question as IMultyOptionsQuestion;
             if (multioptionQuestion != null)
             {
-                multioptionQuestion.IsAnswersOrdered = isAnswersOrdered ?? false;
+                multioptionQuestion.AreAnswersOrdered = areAnswersOrdered ?? false;
                 multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
             }
         }

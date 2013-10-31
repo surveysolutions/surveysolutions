@@ -12,13 +12,13 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public LinkedQuestionViewModel(
             InterviewItemId publicKey, string text, QuestionType questionType, bool enabled, string instructions,
             bool valid, bool mandatory, string validationMessage, Func<IEnumerable<LinkedAnswerViewModel>> getAnswerOptions,
-            string variable, IEnumerable<string> substitutionReferences, bool? isAnsewrsOrdered,int? maxAllowedAnswers)
+            string variable, IEnumerable<string> substitutionReferences, bool? areAnsewrsOrdered,int? maxAllowedAnswers)
             : base(
                 publicKey, text, questionType, enabled, instructions, null, valid, mandatory, null, validationMessage, variable, substitutionReferences)
         {
             this.getAnswerOptions = getAnswerOptions;
             this.SelectedAnswers = new int[0][];
-            this.IsAnswersOrdered = isAnsewrsOrdered;
+            this.AreAnswersOrdered = areAnsewrsOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
         }
 
@@ -30,7 +30,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         public int[][] SelectedAnswers { get; private set; }
-        public bool? IsAnswersOrdered { get; private set; }
+        public bool? AreAnswersOrdered { get; private set; }
         public int? MaxAllowedAnswers { get; private set; }
 
         public override IQuestionnaireItemViewModel Clone(int[] propagationVector)
@@ -39,7 +39,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 this.SourceText, this.QuestionType,
                 this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions, this.Status.HasFlag(QuestionStatus.Valid),
                 this.Mandatory, this.ValidationMessage, this.getAnswerOptions, this.Variable, this.SubstitutionReferences, 
-                this.IsAnswersOrdered, this.MaxAllowedAnswers);
+                this.AreAnswersOrdered, this.MaxAllowedAnswers);
         }
 
         public override string AnswerString

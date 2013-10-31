@@ -570,7 +570,7 @@ namespace Main.Core.View.Question
             var multyoptionQuestion = doc as IMultyOptionsQuestion;
             if (multyoptionQuestion != null)
             {
-                this.Settings = new { multyoptionQuestion.IsAnswersOrdered, multyoptionQuestion.MaxAllowedAnswers };
+                this.Settings = new { AreAnswersOrdered = multyoptionQuestion.AreAnswersOrdered, multyoptionQuestion.MaxAllowedAnswers };
             }
 
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);

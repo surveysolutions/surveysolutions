@@ -17,7 +17,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected LinearLayout AnswersContainer;
         protected abstract IEnumerable<T> Answers { get; }
         protected abstract int? MaxAllowedAnswers { get; }
-        protected abstract bool? IsAnswersOrdered { get; }
+        protected abstract bool? AreAnswersOrdered { get; }
 
         private Dictionary<string, int> OrderOfGivenAnswers;
         
@@ -106,7 +106,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             string answerTagId = GetAnswerId(answer);
             CheckBox cb = CreateCheckBox(answer, answerTagId, numberOfSelectedAnswers);
 
-            if (this.IsAnswersOrdered == true)
+            if (this.AreAnswersOrdered == true)
             {
                 var answerOrderText = CreateOrderText(answer, cb.Checked, answerTagId);
                 container.AddView(answerOrderText);
@@ -202,7 +202,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 return;
             }
             
-            if (this.IsAnswersOrdered == true)
+            if (this.AreAnswersOrdered == true)
             {
                 string changedAnswerTag = (sender as CheckBox).GetTag(Resource.Id.AnswerId).ToString();
                 UpdateAnswerOrderList(changedAnswerTag, e.IsChecked);
@@ -218,7 +218,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
                 string answerTag = checkBox.GetTag(Resource.Id.AnswerId).ToString();
 
-                if (this.IsAnswersOrdered == true)
+                if (this.AreAnswersOrdered == true)
                 {
                     var answerOrderText = GetFirstChildTypeOf<TextView>(checkBox.Parent as RelativeLayout);
                     if (answerOrderText != null)

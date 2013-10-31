@@ -784,7 +784,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                 true, question.Mandatory,question.ValidationMessage,
                 () => this.GetAnswerOptionsForLinkedQuestion(question.LinkedToQuestionId.Value), 
                 question.StataExportCaption, question.GetVariablesUsedInTitle(),
-                multyOptionsQuestion != null? multyOptionsQuestion.IsAnswersOrdered : (bool?) null, 
+                multyOptionsQuestion != null? multyOptionsQuestion.AreAnswersOrdered : (bool?) null, 
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 
@@ -798,7 +798,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                     a => new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, false, a.AnswerImage)).ToList(),
                 true, question.Instructions, null,
                 true, question.Mandatory,  null, question.ValidationMessage, question.StataExportCaption, question.GetVariablesUsedInTitle(),
-                multyOptionsQuestion != null ? multyOptionsQuestion.IsAnswersOrdered : (bool?)null,
+                multyOptionsQuestion != null ? multyOptionsQuestion.AreAnswersOrdered : (bool?)null,
                 multyOptionsQuestion != null ? multyOptionsQuestion.MaxAllowedAnswers : null);
         }
 

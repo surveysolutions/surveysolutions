@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     linkedToQuestionId: null, 
                     sourceQuestionId: sourceQuestionId, 
                     targetIndex: 1, 
-                    isAnswersOrdered: false, 
+                    areAnswersOrdered: false, 
                     maxAllowedAnswers:null);
 
             // Assert
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupId, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId, isAnswersOrdered: false, maxAllowedAnswers: null);
+                                            string.Empty, null, Order.AsIs, questionId, 1, responsibleId, autoQuestionId, areAnswersOrdered: false, maxAllowedAnswers: null);
 
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
@@ -539,13 +539,13 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
         [Test]
         [TestCase(QuestionType.MultyOption)]
-        public void CloneQuestion_When_Ordered_and_MaxAnswer_Are_Set_Then_event_contains_values(QuestionType questionType)
+        public void CloneQuestion_When_MulitQuestion_With_Ordered_and_MaxAnswer_Are_Set_Then_DomainException_should_NOT_be_thrown(QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
                 var sourceQuestionId = Guid.NewGuid();
                 var groupKey = Guid.NewGuid();
-                var isAnswersOrdered = true;
+                var areAnswersOrdered = true;
                 var maxAllowedAnswers = 1;
                 Guid responsibleId = Guid.NewGuid();
                 // arrange
@@ -554,10 +554,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                 // act
                 questionnaire.CloneQuestion(Guid.NewGuid(), groupKey, "test", questionType, "test", false, false, false,
                                             QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                            string.Empty, CreateTwoOptions(), Order.AsIs, sourceQuestionId, 1, responsibleId, null, isAnswersOrdered, maxAllowedAnswers);
+                                            string.Empty, CreateTwoOptions(), Order.AsIs, sourceQuestionId, 1, responsibleId, null, areAnswersOrdered, maxAllowedAnswers);
                 // assert
                 var risedEvent = GetSingleEvent<QuestionCloned>(eventContext);
-                Assert.AreEqual(isAnswersOrdered, risedEvent.IsAnswersOrdered);
+                Assert.AreEqual(areAnswersOrdered, risedEvent.AreAnswersOrdered);
                 Assert.AreEqual(maxAllowedAnswers, risedEvent.MaxAllowedAnswers);
             }
         }
@@ -582,7 +582,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
         }
 
         [Test]
-        public void CloneQuestion_When_MaxAllowedAnswers_For_MultiQuestion_More_Than_Options_Then_DomainException_of_type_MaxAllowedAnswersIsNotPositive_should_be_thrown()
+        public void CloneQuestion_When_MaxAllowedAnswers_For_MultiQuestion_More_Than_Options_Then_DomainException_of_type_MaxAllowedAnswersMoreThanOptions_should_be_thrown()
         {
             var sourceQuestionId = Guid.NewGuid();
             var groupKey = Guid.NewGuid();
@@ -640,7 +640,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
                     optionsOrder: Order.AZ,
                     responsibleId: responsibleId,
                     linkedToQuestionId: autoQuestionId,
-                    isAnswersOrdered: false,
+                    areAnswersOrdered: false,
                     maxAllowedAnswers: maxAllowedAnswers,
                     sourceQuestionId: questionId, 
                     targetIndex: 1);

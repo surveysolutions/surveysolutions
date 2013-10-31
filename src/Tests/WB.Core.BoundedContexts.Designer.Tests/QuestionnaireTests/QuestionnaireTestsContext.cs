@@ -110,10 +110,10 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupId, responsibleId: responsibleId);
 
             questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Title", QuestionType.Text, "text", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: false, maxAllowedAnswers: null);
+                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             questionnaire.NewAddQuestion(secondQuestionId, groupId, "Title", QuestionType.Text, "name", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, isAnswersOrdered: false, maxAllowedAnswers: null);
+                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, responsibleId: responsibleId, linkedToQuestionId: null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             return questionnaire;
         }
@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
 
             questionnaire.NewAddQuestion(questionThatLinkedButNotFromPropagateGroup, secondGroup, "Title",
                                          autoQuestionType, "manual2", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", null, Order.AsIs, responsibleId, null, isAnswersOrdered: false, maxAllowedAnswers: null);
+                                         false, QuestionScope.Interviewer, "", "", "", "", null, Order.AsIs, responsibleId, null, areAnswersOrdered: false, maxAllowedAnswers: null);
 
             return questionnaire;
         }
@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Designer.Tests.QuestionnaireTests
             questionnaire.NewAddQuestion(questionId, groupId, "Title", questionType, alias, false,
                 false,
                 false, QuestionScope.Interviewer, "", "", "", "", AreOptionsRequiredByQuestionType(questionType) ? options : null,
-                Order.AsIs, responsible, null, isAnswersOrdered: false, maxAllowedAnswers: null);
+                Order.AsIs, responsible, null, areAnswersOrdered: false, maxAllowedAnswers: null);
         }
 
 
