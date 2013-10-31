@@ -21,6 +21,17 @@
     </script>
 }
 
+@section output{
+    <ul data-bind="foreach: VerificationErrors" class="error-list">
+        <li class="error">
+            <b class="error-code" data-bind="text: code"></b><span data-bind="    html: message"></span>
+            <ul class="error-reference-items" data-bind="foreach: references">
+                <li><span data-bind="    text: title"></span></li>
+            </ul>
+        </li>
+    </ul>
+}
+
 @section header
 {
     <h3 class="sinle-line-header">Designer Questionnaires</h3>
@@ -31,7 +42,7 @@
     <div class="menubar">
         <form data-bind="submit: filter">
             <div class="input-append search-bar">
-                <input class="span4" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'"  />
+                <input class="span4" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'" />
                 <button class="btn" type="button" data-bind="click: filter">Search</button>
             </div>
         </form>
@@ -52,7 +63,7 @@
             <tr>
                 <td data-bind="text: Title"></td>
                 <td>
-                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire"><i class="icon icon-info-sign icon-white"></i> Import</a>
+                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire"><i class="icon icon-info-sign icon-white"></i>Import</a>
                 </td>
             </tr>
             <!-- /ko -->

@@ -3,6 +3,8 @@
     
     var self = this;
 
+    self.VerificationErrors = ko.observableArray([]);
+
     self.getQuestionnaireUrl = getQuestionnaireUrl;
     self.Query = ko.observable('');
     
