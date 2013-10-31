@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Android.Content;
 using Android.Graphics;
-using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -19,7 +18,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected abstract int? MaxAllowedAnswers { get; }
         protected abstract bool? AreAnswersOrdered { get; }
 
-        private Dictionary<string, int> orderedGivenAnswers;
+        private Dictionary<string, int> givenAnswersWithOrder;
         
         protected AbstractMultyQuestionView(
             Context context, 
@@ -36,7 +35,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             base.Initialize();
             this.Orientation = Orientation.Vertical;
             this.AnswersContainer = this.CreateAnswersContainer();
-            this.orderedGivenAnswers = new Dictionary<string, int>();
+            this.givenAnswersWithOrder = new Dictionary<string, int>();
 
             this.PutAnswerStoredInModelToUI();
 
@@ -59,15 +58,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             var optionsWrapper = new LinearLayout(this.Context);
             optionsWrapper.Orientation = Orientation.Vertical;
-            optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
+            optionsWrapper.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
+                                                               LayoutParams.FillParent);
             return optionsWrapper;
         }
         
         protected void CreateAnswersByOptions()
         {
             this.AnswersContainer.RemoveAllViews();
-            orderedGivenAnswers.Clear();
+            givenAnswersWithOrder.Clear();
 
             foreach (var answer in this.Answers)
             {
@@ -99,8 +98,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         private RelativeLayout CreateAnswerBlock(T answer)
         {
             var container = new RelativeLayout(this.Context);
-            container.LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                          ViewGroup.LayoutParams.FillParent);
+            container.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
+                                                          LayoutParams.FillParent);
             
             string answerTagId = GetAnswerId(answer);
             CheckBox cb = CreateCheckBox(answer, answerTagId);
@@ -108,11 +107,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             if (this.AreAnswersOrdered == true || this.MaxAllowedAnswers.HasValue)
             {
                 int answerOrder = GetAnswerOrder(answer);
-                orderedGivenAnswers.Add(answerTagId, answerOrder);
-                
+                    
+                if (cb.Checked)
+                    givenAnswersWithOrder.Add(answerTagId, answerOrder);
+
                 if (this.AreAnswersOrdered == true)
                 {
-                    var answerOrderText = CreateOrderText(cb.Checked, answerOrder);
+                    var answerOrderText = CreateOrderText(answerOrder);
                     container.AddView(answerOrderText);
                 }
             }
@@ -121,7 +122,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             return container;
         }
 
-        private TextView CreateOrderText(bool isAnswerSelected, int answerOrder)
+        private TextView CreateOrderText(int answerOrder)
         {
             TextView answerOrderText = new TextView(this.Context);
             answerOrderText.SetTypeface(null, TypefaceStyle.Bold);
@@ -130,7 +131,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             layoutParams.AddRule(LayoutRules.AlignParentLeft);
             answerOrderText.LayoutParameters = layoutParams;
             
-            if (answerOrder > 0 && isAnswerSelected)
+            if (answerOrder > 0)
             {
                 answerOrderText.Text = answerOrder.ToString(CultureInfo.InvariantCulture);
             }
@@ -176,10 +177,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         {
             if (!isChecked)
             {
-                if (orderedGivenAnswers.ContainsKey(changedAnswerTag))
+                if (givenAnswersWithOrder.ContainsKey(changedAnswerTag))
                 {
-                    int order = orderedGivenAnswers[changedAnswerTag];
-                    orderedGivenAnswers = orderedGivenAnswers.Where(answer => answer.Key != changedAnswerTag)
+                    int order = givenAnswersWithOrder[changedAnswerTag];
+                    givenAnswersWithOrder = givenAnswersWithOrder.Where(answer => answer.Key != changedAnswerTag)
                                                              .ToDictionary(answer => answer.Key,
                                                                            answer =>
                                                                            answer.Value > order
@@ -189,16 +190,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
             else
             {
-                if (!orderedGivenAnswers.ContainsKey(changedAnswerTag))
+                if (!givenAnswersWithOrder.ContainsKey(changedAnswerTag))
                 {
-                    orderedGivenAnswers.Add(changedAnswerTag, orderedGivenAnswers.Count() + 1);
+                    givenAnswersWithOrder.Add(changedAnswerTag, givenAnswersWithOrder.Count() + 1);
                 }
             }
         }
 
         private void CheckBoxCheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
         {
-            if (e.IsChecked && this.MaxAllowedAnswers.HasValue && (orderedGivenAnswers.Count() >= this.MaxAllowedAnswers))
+            if (e.IsChecked && this.MaxAllowedAnswers.HasValue && (givenAnswersWithOrder.Count() >= this.MaxAllowedAnswers))
             {
                 (sender as CheckBox).Checked = false;
                 return;
@@ -224,8 +225,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 {
                     var answerOrderText = GetFirstChildTypeOf<TextView>(checkBox.Parent as RelativeLayout);
                     if (answerOrderText != null)
-                        answerOrderText.Text = orderedGivenAnswers.ContainsKey(answerTag) ?
-                            orderedGivenAnswers[answerTag].ToString(CultureInfo.InvariantCulture) :
+                        answerOrderText.Text = givenAnswersWithOrder.ContainsKey(answerTag) ?
+                            givenAnswersWithOrder[answerTag].ToString(CultureInfo.InvariantCulture) :
                             "";
                 }
 
@@ -233,7 +234,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     selectedAnswers.Add(this.FindAnswerInModelByCheckBoxTag(answerTag));
             }
 
-            if (orderedGivenAnswers.Count() > this.MaxAllowedAnswers)
+            if (givenAnswersWithOrder.Count() > this.MaxAllowedAnswers)
             {
                 return; //additional check to avoid saving incorrect state
             }
