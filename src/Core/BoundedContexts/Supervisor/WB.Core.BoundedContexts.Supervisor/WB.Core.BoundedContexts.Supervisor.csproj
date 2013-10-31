@@ -61,8 +61,9 @@
     <Compile Include="Implementation\ReadSide\InterviewDataRepositoryWriterWithCache.cs" />
     <Compile Include="Implementation\ReadSide\TemporaryInterviewWriter.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvSampleRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\CsvDataExportService.cs" />
-    <Compile Include="Implementation\Services\DataExport\CSVIterviewExporter.cs" />
+    <Compile Include="Implementation\Services\DataExport\DataExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
+    <Compile Include="Implementation\Services\DataExport\IterviewExporter.cs" />
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentSupplier.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Services\IDataExportService.cs" />

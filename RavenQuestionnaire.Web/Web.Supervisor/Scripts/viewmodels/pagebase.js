@@ -2,7 +2,6 @@
 
     var self = this;
 
-    self.VerificationErrors = ko.observableArray([]);
     self.IsPageLoaded = ko.observable(false);
     self.IsAjaxComplete = ko.observable(true);
     self.IsFilterOpen = ko.observable(true);

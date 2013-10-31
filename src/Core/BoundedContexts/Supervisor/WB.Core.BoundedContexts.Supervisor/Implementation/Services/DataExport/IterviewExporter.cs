@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CsvHelper;
-using CsvHelper.Configuration;
 using Main.Core.Export;
-using Main.Core.View.Export;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class CSVIterviewExporter : IExportProvider<InterviewDataExportView>
+    internal class IterviewExporter : IExportProvider<InterviewDataExportView>
     {
         private readonly char delimeter;
 
-        public CSVIterviewExporter(FileType exportingFileType)
+        public IterviewExporter(FileType exportingFileType)
         {
             this.delimeter = exportingFileType == FileType.Csv ? ',' : '\t';
         }
