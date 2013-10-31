@@ -7,22 +7,18 @@ using Main.Core.Export;
 using Main.Core.View;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views.DataExport;
-using WB.Core.BoundedContexts.Supervisor.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 {
-    internal class CsvDataExportService : IDataExportService
+    internal class DataExportService : IDataExportService
     {
-        private const string CSVFORMAT = "csv";
-        private const string TABFORMAT = "tsv";
-        
         private readonly IEnvironmentSupplier<InterviewDataExportView> supplier;
         private readonly IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory;
         private readonly IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage;
 
-        public CsvDataExportService(
+        public DataExportService(
             IEnvironmentSupplier<InterviewDataExportView> supplier, 
             IViewFactory<InterviewDataExportInputModel, InterviewDataExportView> interviewDataExportViewFactory, 
             IVersionedReadSideRepositoryReader<QuestionnairePropagationStructure> questionnaireLevelStorage)
@@ -46,7 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
                     interviewDataExportViewFactory.Load(new InterviewDataExportInputModel(questionnaireId, version,
                         levelId)),
                     allLevels,
-                    new CSVIterviewExporter(fileType), fileType);
+                    new IterviewExporter(fileType), fileType);
             }
 
             supplier.AddCompletedResults(allLevels);
@@ -80,9 +76,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         private FileType GetFileTypeOrThrow(string type)
         {
-            if (type != CSVFORMAT && type != TABFORMAT)
+            if (type != InterviewExportConstants.CSVFORMAT && type != InterviewExportConstants.TABFORMAT)
                 throw new InvalidOperationException("file type doesn't support");
-            return type == CSVFORMAT ? FileType.Csv : FileType.Tab;
+            return type == InterviewExportConstants.CSVFORMAT ? FileType.Csv : FileType.Tab;
         }
 
         protected string GetName(string name,FileType type, Dictionary<string, byte[]> container, int i)
@@ -99,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Implementation.Services.DataExport
 
         protected string GetFileExtension(FileType type)
         {
-            return "." + (type == FileType.Csv ? CSVFORMAT : TABFORMAT);
+            return "." + (type == FileType.Csv ? InterviewExportConstants.CSVFORMAT : InterviewExportConstants.TABFORMAT);
         } 
 
         protected string RemoveNonAscii(string s)
