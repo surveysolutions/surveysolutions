@@ -74,7 +74,7 @@
                         {
                             validator: function (val) {
                                 var parsedMaxAllowedAnswers = parseInt(val);
-                                if (isNaN(parsedMaxAllowedAnswers)) {
+                                if (self.isLinkedDurty() || isNaN(parsedMaxAllowedAnswers)) {
                                     return true;
                                 }
                                 return parsedMaxAllowedAnswers <= self.answerOptions().length;
